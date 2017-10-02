@@ -1,0 +1,9 @@
+import './env';
+import './fixtures';
+import '/imports/api/mailing/server';
+import '/imports/api/s3-uploads/server';
+import '/imports/api/users/server';
+import '/imports/api/grapherLive/server';
+import '/imports/api/admin/server';
+import '/imports/api/settings/server';
+import '/imports/api/posts/server';
