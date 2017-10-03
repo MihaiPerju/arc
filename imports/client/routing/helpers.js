@@ -3,8 +3,11 @@ import router from './router';
 /**
  * Create a page specific css class from route name and append to  document body
  */
+
+const routeName = router.current().route.name;
+
 let addPageClass = () => {
-    let routeClass = router.current().route.name && router.current().route.name.replace(/_|\./g, "-");
+    let routeClass = routeName && router.current().route.name.replace(/_|\./g, "-");
     document.body.classList.add(`cc-${routeClass}-page`);
 };
 
@@ -12,7 +15,7 @@ let addPageClass = () => {
  * Remove the page specific css class from document body
  */
 let removePageClass = () => {
-    let routeClass = router.current().route.name && router.current().route.name.replace(/_|\./g, "-");
+    let routeClass = routeName && router.current().route.name.replace(/_|\./g, "-");
     document.body.classList.remove(`cc-${routeClass}-page`);
 };
 

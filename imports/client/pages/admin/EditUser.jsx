@@ -27,20 +27,12 @@ class EditUser extends Component {
     }
 
     onSubmit(formData) {
-        const data = {
-            email: formData.email,
-            profile: {
-                firstName: formData['profile.firstName'],
-                lastName: formData['profile.lastName']
-            }
-        };
-
-        Meteor.call('admin.editUser', this.props.data._id, data, (err) => {
+        Meteor.call('admin.editUser', this.props.data._id, formData, (err) => {
             if (!err) {
                 Notifier.success('Data saved !');
                 FlowRouter.go('/admin/user/list');
             } else {
-                Notifier.error(err.error);
+                Notifier.error(err.reason);
             }
         });
     }
@@ -54,11 +46,10 @@ class EditUser extends Component {
 
     render() {
         const {data, loading, error} = this.props;
-        const model = {
-            'profile.firstName': data && data.profile.firstName,
-            'profile.lastName': data && data.profile.lastName,
-            email: data && data.emails[0].address
-        };
+        const model = data;
+        if (model) {
+            model.email = data && data.emails[0].address;
+        }
 
         if (loading) {
             return <div>
@@ -97,6 +88,7 @@ class EditUser extends Component {
 }
 
 const EditSchema = new SimpleSchema({
+    'profile': {type: Object},
     'profile.firstName': {type: String},
     'profile.lastName': {type: String},
     'email': {

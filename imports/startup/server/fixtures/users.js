@@ -1,7 +1,7 @@
 import {Accounts} from 'meteor/accounts-base';
 import {Roles} from 'meteor/alanning:roles';
 import faker from 'faker';
-import ROLES from '/imports/api/users/enums/roles';
+import Roles from '/imports/api/users/enums/roles';
 
 const createUser = (email, password, roles) => {
     const userId = Accounts.createUser({email, password});
@@ -30,15 +30,15 @@ Meteor.startup(function () {
     let userFixtures = [
         {
             name: 'tech',
-            role: ROLES.TECH
+            role: Roles.TECH
         },
         {
             name: 'rep',
-            role: ROLES.REP
+            role: Roles.REP
         },
         {
             name: 'manager',
-            role: ROLES.MANAGER
+            role: Roles.MANAGER
         }
     ];
 
