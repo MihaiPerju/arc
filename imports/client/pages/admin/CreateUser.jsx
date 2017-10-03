@@ -1,5 +1,5 @@
 import React from 'react';
-import { AutoForm, AutoField, ErrorField } from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 
@@ -11,10 +11,12 @@ class CreateUser extends React.Component {
     }
 
     onSubmit(data) {
-        Meteor.call('admin.createUser', data, (err)=> {
+        Meteor.call('admin.createUser', data, (err, userId) => {
             if (!err) {
                 Notifier.success('User created !');
                 FlowRouter.go('/admin/user/list');
+            } else {
+                Notifier.error(err.reason);
             }
         });
     }

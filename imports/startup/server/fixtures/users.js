@@ -1,6 +1,7 @@
-import { Accounts } from 'meteor/accounts-base';
-import { Roles } from 'meteor/alanning:roles';
+import {Accounts} from 'meteor/accounts-base';
+import {Roles} from 'meteor/alanning:roles';
 import faker from 'faker';
+import UserRoles from '/imports/api/users/enums/roles';
 
 const createUser = (email, password, roles) => {
     const userId = Accounts.createUser({email, password});
@@ -26,12 +27,28 @@ Meteor.startup(function () {
         return true;
     }
 
+    let userFixtures = [
+        {
+            name: 'tech',
+            role: UserRoles.TECH
+        },
+        {
+            name: 'rep',
+            role: UserRoles.REP
+        },
+        {
+            name: 'manager',
+            role: UserRoles.MANAGER
+        }
+    ];
+
     createUser('admin@app.com', '12345', 'ADMIN');
-    createUser('user-1@app.com', '12345');
-    createUser('user-2@app.com', '12345');
-    createUser('user-3@app.com', '12345');
-    createUser('user-4@app.com', '12345');
-    createUser('user-5@app.com', '12345');
+
+    for (let user of userFixtures) {
+        for (let i = 0; i < 3; i++) {
+            createUser(`${user.name}-${i + 1}@app.com`, '12345', user.role);
+        }
+    }
 
     console.log('[ok] user fixtures have been loaded.');
 });

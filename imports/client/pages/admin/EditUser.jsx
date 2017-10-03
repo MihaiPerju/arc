@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/users/queries/singleUser.js';
-import { AutoForm, AutoField, ErrorField } from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 
@@ -17,7 +17,7 @@ class EditUser extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if(!this.props.data && newProps.data) {
+        if (!this.props.data && newProps.data) {
             this.setState({
                 email: newProps.data.emails[0].address,
                 firstName: newProps.data.profile.firstName,
@@ -27,17 +27,17 @@ class EditUser extends Component {
     }
 
     onSubmit(formData) {
-        const {data} = this.props;
-
-        Meteor.call('admin.editUser', data._id, formData, (err) => {
-            if(!err) {
+        Meteor.call('admin.editUser', this.props.data._id, formData, (err) => {
+            if (!err) {
                 Notifier.success('Data saved !');
                 FlowRouter.go('/admin/user/list');
+            } else {
+                Notifier.error(err.reason);
             }
         });
     }
 
-    onChangField(fieldName, value) {
+    onChangeField(fieldName, value) {
         const stateObj = {};
         stateObj[fieldName] = value;
 
@@ -46,7 +46,10 @@ class EditUser extends Component {
 
     render() {
         const {data, loading, error} = this.props;
-        const {email, firstName, lastName} = this.state;
+        const model = data;
+        if (model) {
+            model.email = data && data.emails[0].address;
+        }
 
         if (loading) {
             return <div>
@@ -61,7 +64,7 @@ class EditUser extends Component {
         }
 
         return (
-            <AutoForm schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+            <AutoForm model={model} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
                 {this.state.error
                     ? <div className="error">{this.state.error}</div>
                     : ''
@@ -85,6 +88,7 @@ class EditUser extends Component {
 }
 
 const EditSchema = new SimpleSchema({
+    'profile': {type: Object},
     'profile.firstName': {type: String},
     'profile.lastName': {type: String},
     'email': {
@@ -98,5 +102,5 @@ export default (props) => {
         single: true
     });
 
-    return <Container />
+    return <Container/>
 };

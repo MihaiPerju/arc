@@ -3,13 +3,13 @@ import Security from '/imports/api/security/security.js';
 import Settings from '/imports/api/settings/collection.js';
 
 Meteor.methods({
-    'admin.createUser'({ firstname, lastname, email, password }) {
+    'admin.createUser'({firstName, lastName, email, password}) {
         Security.checkAdmin(this.userId);
 
         return Accounts.createUser({
             email,
             password,
-            profile: {firstname, lastname}
+            profile: {firstName, lastName}
         });
     },
 
@@ -28,7 +28,7 @@ Meteor.methods({
         });
 
         if (existingUser) {
-            throw new Meteor.Error('Email already in use !');
+            throw new Meteor.Error('Email already in use!');
         }
 
         Users.update({_id: userId}, {
