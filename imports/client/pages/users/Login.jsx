@@ -2,6 +2,7 @@ import React from 'react';
 import SimpleSchema from 'simpl-schema';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import Notifier from '/imports/client/lib/Notifier';
+import ROLES from '/imports/api/users/enums/roles';
 
 class Login extends React.Component {
     constructor() {
@@ -26,11 +27,12 @@ class Login extends React.Component {
     };
 
     render() {
-        const { error } = this.state;
+        const {error} = this.state;
 
         return (
             <AutoForm schema={LoginSchema} onSubmit={this.onSubmit}>
-                {error && <div className="error">{error}</div>
+                {
+                    error && <div className="error">{error}</div>
                 }
                 <AutoField name="email"/>
                 <ErrorField name="email"/>
