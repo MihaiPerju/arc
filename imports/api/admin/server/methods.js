@@ -22,7 +22,9 @@ Meteor.methods({
 
         const existingUser = Users.findOne({
             'emails.address': email,
-            _id: userId
+            _id: {
+                $ne: userId
+            }
         });
 
         if (existingUser) {
