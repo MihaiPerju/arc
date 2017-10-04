@@ -1,6 +1,6 @@
 import S3Uploader from './s3';
 import middleware from './extensions/busboy.middleware';
-import { Accounts } from 'meteor/accounts-base';
+import {Accounts} from 'meteor/accounts-base';
 import fs from 'fs';
 
 let postRoutes = Picker.filter(function (req, res) {
@@ -45,14 +45,16 @@ export function createRoute(path, handler) {
                     msg
                 }));
             },
-            success() {
+            success(uploadId) {
                 res.end(JSON.stringify({
-                    status: 'ok'
+                    status: 'ok',
+                    uploadId
                 }));
             },
             upload() {
-                return _.map(req.filenames, function(filename) {
-                    const { resourceType, resourceId } = req.postData;
+                return _.map(req.filenames, function (filename) {
+                    const {resourceType, resourceId} = req.postData;
+                    uploadId = resourceId;
                     const uploadedFile = S3Uploader.upload(filename);
 
                     return uploadedFile.save({

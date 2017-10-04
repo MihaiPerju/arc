@@ -1,6 +1,6 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { GrapherLive } from 'meteor/cultofcoders:grapher-live';
+import {render} from 'react-dom';
+import {GrapherLive} from 'meteor/cultofcoders:grapher-live';
 
 import route from './router';
 import './logoutRoute';
@@ -70,3 +70,10 @@ import EditPost from '/imports/client/pages/posts/EditPost.jsx';
 route('/post/list', PostListContainer);
 route('/post/create', CreatePost);
 route('/post/:postId/edit', EditPost);
+
+//Clients
+import CreateClient from '/imports/client/pages/clients/CreateClient';
+import EditClient from '/imports/client/pages/clients/EditClient';
+
+route('/client/create', CreateClient);
+route('/client/:userId/edit',EditClient);
