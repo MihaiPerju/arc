@@ -1,5 +1,5 @@
 import React from 'react';
-import ClientSchema from '/imports/api/clients/schema';
+import ClientSchema from '/imports/api/clients/schemas/schema';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import Notifier from '/imports/client/lib/Notifier';
 
@@ -26,9 +26,13 @@ export default class CreateClient extends React.Component {
             <div>
                 <h2>Add a client</h2>
                 <AutoForm schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                    {this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : ''
+
+                    {
+                        this.state.error
+                            ?
+                            <div className="error">{this.state.error}</div>
+                            :
+                            ''
                     }
 
                     <AutoField name="clientName"/>

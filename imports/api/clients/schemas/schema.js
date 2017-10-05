@@ -1,4 +1,5 @@
 import SimpleSchema from 'simpl-schema';
+import ContactSchema from './contactSchema';
 
 export default new SimpleSchema({
     clientName: {
@@ -23,26 +24,6 @@ export default new SimpleSchema({
         optional: true
     },
     'contacts.$': {
-        type: Object,
-        blackbox: true
-    },
-    'contacts.$.email': {
-        type: String,
-        regEx: SimpleSchema.RegEx.Emai
-    },
-    'contacts.$.contactDescription': {
-        type: String
-    },
-    'contacts.$.firstName': {
-        type: String
-    },
-    'contacts.$.lastName': {
-        type: String
-    },
-    'contacts.$.phone': {
-        type: String
-    },
-    'contacts.$.notes': {
-        type: String
+        type: ContactSchema,
     }
 });

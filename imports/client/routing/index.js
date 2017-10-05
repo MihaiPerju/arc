@@ -72,8 +72,10 @@ route('/post/create', CreatePost);
 route('/post/:postId/edit', EditPost);
 
 //Clients
-import CreateClient from '/imports/client/pages/clients/CreateClient';
-import EditClient from '/imports/client/pages/clients/EditClient';
+import CreateClient from '/imports/client/pages/clients/ClientCreate';
+import EditClient from '/imports/client/pages/clients/ClientEdit';
+import ClientListContainer from '/imports/client/pages/clients/ClientListContainer.jsx';
 
 route('/client/create', CreateClient);
-route('/client/:userId/edit',EditClient);
+route('/client/:userId/edit', EditClient);
+route('/client/list', ClientListContainer);

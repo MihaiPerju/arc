@@ -1,4 +1,4 @@
-import ClientsSchema from './schema.js'
+import ClientsSchema from './schemas/schema.js'
 
 const Clients = new Mongo.Collection('clients');
 

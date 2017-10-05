@@ -42,10 +42,18 @@ Meteor.methods({
     },
 
     'client.removeLogo'(clientId) {
+        Security.checkAllowedModifyClient(this.userId);
+
         Clients.update({_id: clientId}, {
             $unset: {
                 logoPath: null
             }
         })
+    },
+
+    'client.delete'(id) {
+        Security.checkAllowedModifyClient(this.userId);
+
+        Clients.remove({_id: id});
     }
 });

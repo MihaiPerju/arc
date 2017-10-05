@@ -1,5 +1,5 @@
 import React from 'react';
-import ClientSchema from '/imports/api/clients/schema';
+import ClientSchema from '/imports/api/clients/schemas/schema';
 import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField} from 'uniforms-unstyled';
 import Notifier from '/imports/client/lib/Notifier';
 import DropzoneComponent from 'react-dropzone-component';
@@ -74,7 +74,7 @@ export default class EditClient extends React.Component {
         Meteor.call('client.update', clientId, data, (err) => {
             if (!err) {
                 Notifier.success("Data saved");
-                //aditional forwarding needed
+                FlowRouter.go('/client/list');
             } else {
                 Notifier.error(err.reason);
             }
