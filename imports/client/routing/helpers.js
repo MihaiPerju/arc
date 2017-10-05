@@ -4,8 +4,6 @@ import router from './router';
  * Create a page specific css class from route name and append to  document body
  */
 
-
-
 let addPageClass = () => {
     const routeName = router.current().route.name;
     let routeClass = routeName && routeName.replace(/_|\./g, "-");
