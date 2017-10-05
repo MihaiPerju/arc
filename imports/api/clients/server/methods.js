@@ -26,7 +26,7 @@ Meteor.methods({
         return existingUpload.path;
     },
 
-    'client.update'(clientId, {clientName, firstName, lastName, email, logoPath}) {
+    'client.update'(clientId, {clientName, firstName, lastName, email, logoPath, contacts}) {
         Security.checkAllowedModifyClient(this.userId);
 
         Clients.update({_id: clientId}, {
@@ -35,7 +35,8 @@ Meteor.methods({
                 firstName,
                 lastName,
                 email,
-                logoPath
+                logoPath,
+                contacts
             }
         })
     },

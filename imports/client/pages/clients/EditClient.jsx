@@ -1,6 +1,6 @@
 import React from 'react';
 import ClientSchema from '/imports/api/clients/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField} from 'uniforms-unstyled';
 import Notifier from '/imports/client/lib/Notifier';
 import DropzoneComponent from 'react-dropzone-component';
 import {path, getToken} from '/imports/api/s3-uploads/utils';
@@ -111,7 +111,6 @@ export default class EditClient extends React.Component {
                     : (
                         <AutoForm model={model} schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 
-
                             <AutoField name="clientName"/>
                             <ErrorField name="clientName"/>
 
@@ -124,6 +123,7 @@ export default class EditClient extends React.Component {
                             <AutoField name="email"/>
                             <ErrorField name="email"/>
 
+                            <h3>Client Logo</h3>
                             {
                                 uploadPath
                                     ?
@@ -133,6 +133,19 @@ export default class EditClient extends React.Component {
                                     </div>
                                     : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                             }
+
+                            <ListField name="contacts">
+                                <ListItemField name="$">
+                                    <NestField>
+                                        <TextField name="firstName"/>
+                                        <TextField name="lastName"/>
+                                        <TextField name="contactDescription"/>
+                                        <TextField name="phone"/>
+                                        <TextField name="email"/>
+                                        <TextField name="notes"/>
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
 
                             <button type="submit">
                                 Save

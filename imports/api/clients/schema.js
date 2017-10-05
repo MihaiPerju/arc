@@ -17,5 +17,32 @@ export default new SimpleSchema({
     logoPath: {
         type: String,
         optional: true
+    },
+    contacts: {
+        type: Array,
+        optional: true
+    },
+    'contacts.$': {
+        type: Object,
+        blackbox: true
+    },
+    'contacts.$.email': {
+        type: String,
+        regEx: SimpleSchema.RegEx.Emai
+    },
+    'contacts.$.contactDescription': {
+        type: String
+    },
+    'contacts.$.firstName': {
+        type: String
+    },
+    'contacts.$.lastName': {
+        type: String
+    },
+    'contacts.$.phone': {
+        type: String
+    },
+    'contacts.$.notes': {
+        type: String
     }
 });
