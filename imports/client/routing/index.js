@@ -88,3 +88,22 @@ import LetterTemplateEdit from '/imports/client/pages/letterTemplates/LetterTemp
 route('/letter-templates/list', LetterTemplatesListContainer);
 route('/letter-template/:id/edit', LetterTemplateEdit);
 route('/letter-template/create', LetterTemplateCreate);
+
+//Facilities
+import FacilityList from "/imports/client/pages/clients/facilities/FacilityList.jsx";
+import FacilityCreate from "/imports/client/pages/clients/facilities/FacilityCreate.jsx";
+import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.jsx";
+import FacilityView from "/imports/client/pages/clients/facilities/FacilityView.jsx";
+
+route('/client/:_id/manage-facilities', FacilityList, {}, {
+    name: 'facility.list'
+});
+route('/client/:_id/manage-facilities/:facilityId/create', FacilityCreate, {}, {
+    name: 'facility.create'
+});
+route('/client/:_id/manage-facilities/:facilityId/edit', FacilityEdit, {}, {
+    name: 'facility.edit'
+});
+route('/client/:_id/manage-facilities/:facilityId/view', FacilityView, {}, {
+    name: 'facility.view'
+});
