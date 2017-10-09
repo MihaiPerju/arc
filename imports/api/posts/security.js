@@ -14,7 +14,7 @@ export default {
         const post = Posts.findOne({_id: postId});
 
         if (post.userId !== userId) {
-            throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
+            throw new Meteor.Error('Not allowed !');
         }
     }
 }
