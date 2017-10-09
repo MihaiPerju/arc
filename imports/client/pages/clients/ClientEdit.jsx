@@ -54,8 +54,9 @@ export default class EditClient extends React.Component {
 
     onRemoveLogo() {
         const clientId = this.props.userId;
+        const {uploadId} = this.state;
 
-        Meteor.call('client.removeLogo', clientId, (err) => {
+        Meteor.call('client.removeLogo', clientId, uploadId, (err) => {
             if (!err) {
                 Notifier.success("Logo removed!");
                 this.setState({

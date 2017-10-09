@@ -41,19 +41,25 @@ Meteor.methods({
         })
     },
 
-    'client.removeLogo'(clientId) {
+    'client.removeLogo'(clientId, uploadId) {
         Security.checkAllowedModifyClient(this.userId);
+
+        Uploads.remove({_id: uploadId});
 
         Clients.update({_id: clientId}, {
             $unset: {
                 logoPath: null
             }
-        })
+        });
     },
 
     'client.delete'(id) {
         Security.checkAllowedModifyClient(this.userId);
 
+        const existingClient = Clients.findOne({_id: id});
+        const logoPath = existingClient.logoPath;
+
+        Uploads.remove({path: logoPath});
         Clients.remove({_id: id});
     }
 });
