@@ -4,7 +4,7 @@ export default new SimpleSchema({
 
     email: {
         type: String,
-        regEx: SimpleSchema.RegEx.Emai
+        regEx: SimpleSchema.RegEx.Email
     },
     contactDescription: {
         type: String

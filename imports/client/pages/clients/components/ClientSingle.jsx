@@ -1,16 +1,25 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
+import autoBind from 'react-autobind';
 
 export default class ClientSingle extends Component {
-    deleteClient() {
-        const {client} = this.props;
 
-        Meteor.call('client.delete', client._id, (err) => {
+    constructor() {
+        super();
+        autoBind(this);
+    }
+
+    deleteClient() {
+        Meteor.call('client.delete', this.props.client._id, (err) => {
             if (!err) {
                 Notifier.success('Client deleted !');
                 FlowRouter.reload();
             }
         });
+    }
+
+    onEditClient() {
+        FlowRouter.go("/client/:_id/edit", {_id: this.props.client._id});
     }
 
     render() {
@@ -23,9 +32,9 @@ export default class ClientSingle extends Component {
                 <td>{client.lastName}</td>
                 <td>{client.email}</td>
                 <td>
-                    <a href={"/client/" + client._id + "/edit"}>Edit Client</a>
+                    <a onClick={this.onEditClient}>Edit Client</a>
 
-                    <button onClick={this.deleteClient.bind(this)}>Delete</button>
+                    <button onClick={this.deleteClient}>Delete</button>
                 </td>
             </tr>
         );
