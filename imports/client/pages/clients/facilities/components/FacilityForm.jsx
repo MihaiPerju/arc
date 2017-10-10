@@ -1,5 +1,5 @@
 import React from 'react';
-import FacilityContact from "./FacilityContact.jsx";
+import FacilityContactList from "./FacilityContactList.jsx";
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-unstyled';
 import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
@@ -44,7 +44,7 @@ export default class FacilityForm extends React.Component {
                     {/*TODO multiSelect*/}
 
                     <h4>Contacts</h4>
-                    <FacilityContact/>
+                    <FacilityContactList/>
 
                     <button type="submit">Submit</button>
                 </AutoForm>

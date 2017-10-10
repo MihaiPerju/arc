@@ -11,7 +11,7 @@ export default new SimpleSchema ({
         type: String
     },
     phone: {
-        type: SimpleSchema.Integer
+        type: String
     },
     email: {
         type: String,
