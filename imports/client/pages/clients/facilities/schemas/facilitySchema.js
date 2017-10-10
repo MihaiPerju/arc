@@ -1,13 +1,9 @@
 import SimpleSchema from 'simpl-schema';
 import FacilityContactSchema from '/imports/api/facilities/schemas/contactSchema.js';
-import regionEnum from "/imports/api/facilities/enums/regions.js";
-import statusEnum from "/imports/api/facilities/enums/statuses.js";
+import regionsEnum from "/imports/api/facilities/enums/regions.js";
 
-export default new SimpleSchema({
+export default new SimpleSchema ({
     name: {
-        type: String
-    },
-    clientId: {
         type: String
     },
     addressOne: {
@@ -30,13 +26,9 @@ export default new SimpleSchema({
         type: SimpleSchema.Integer,
         optional: true
     },
-    status: {
-        type: String,
-        //allowedValues: _.map(statusEnum, (value, key) => (value))
-    },
     region: {
         type: String,
-        //allowedValues: _.map(regionEnum, (value, key) => (value))
+        //allowedValues: _.map(regionsEnum, (value, key) => (value))
     },
     contacts: {
         type: Array,
@@ -44,10 +36,6 @@ export default new SimpleSchema({
     },
     'contacts.$': {
         type: FacilityContactSchema,
-        optional: true
-    },
-    createdAt: {
-        type: Date,
         optional: true
     }
 })
