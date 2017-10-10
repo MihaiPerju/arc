@@ -1,5 +1,6 @@
 import faker from 'faker';
 import Clients from '/imports/api/clients/collection';
+import Counter from './config';
 
 const createClient = ({clientName, firstName, lastName, email, contacts}) => {
     Clients.insert({
@@ -16,7 +17,7 @@ Meteor.startup(function () {
         return true;
     }
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < Counter.CLIENTS; i++) {
         createClient({
             clientName: `${faker.name.firstName()} ${faker.name.lastName()}`,
             firstName: faker.name.firstName(),
@@ -32,5 +33,6 @@ Meteor.startup(function () {
             }]
         })
     }
+
     console.log('[ok] client fixtures have been loaded.');
 });
