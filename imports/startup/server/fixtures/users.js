@@ -42,7 +42,7 @@ Meteor.startup(function () {
         }
     ];
 
-    createUser('admin@app.com', '12345', 'ADMIN');
+    createUser('admin@app.com', '12345', UserRoles.ADMIN);
 
     for (let user of userFixtures) {
         for (let i = 0; i < 3; i++) {

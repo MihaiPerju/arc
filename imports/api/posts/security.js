@@ -5,7 +5,7 @@ export default {
     checkEditPost(userId, postId) {
         const post = Posts.findOne({_id: postId});
 
-        if(post.userId !== userId) {
+        if (post.userId !== userId) {
             throw new Meteor.Error('Not allowed !');
         }
     },
@@ -13,7 +13,7 @@ export default {
     checkDeletePost(userId, postId) {
         const post = Posts.findOne({_id: postId});
 
-        if(post.userId !== userId) {
+        if (post.userId !== userId) {
             throw new Meteor.Error('Not allowed !');
         }
     }
