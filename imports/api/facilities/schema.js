@@ -32,7 +32,7 @@ export default new SimpleSchema({
     },
     status: {
         type: String,
-        //allowedValues: _.map(statusEnum, (value, key) => (value))
+        allowedValues: _.map(statusEnum, (value, key) => (value))
     },
     region: {
         type: String,

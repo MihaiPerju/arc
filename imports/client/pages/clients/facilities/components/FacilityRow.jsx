@@ -15,13 +15,14 @@ export default class FacilityRow extends React.Component {
 
     render() {
         const {facility} = this.props;
+        const address = facility.addressOne || facility.addressTwo;
 
         return (
             <tr>
                 <td>{facility.name}</td>
                 <td>{facility.state}</td>
                 <td>{facility.region}</td>
-                <td>{facility.addressOne && facility.addressTwo}</td>
+                <td>{address}</td>
                 <td>{facility.status}</td>
                 <td>
                     <button
