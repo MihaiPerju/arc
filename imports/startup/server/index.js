@@ -8,3 +8,4 @@ import '/imports/api/admin/server';
 import '/imports/api/settings/server';
 import '/imports/api/posts/server';
 import '/imports/api/clients/server';
+import '/imports/api/letterTemplates/server';
