@@ -98,7 +98,7 @@ import FacilityView from "/imports/client/pages/clients/facilities/FacilityView.
 route('/client/:_id/manage-facilities', FacilityListContainer, {}, {
     name: 'facility.list'
 });
-route('/client/:_id/manage-facilities/:facilityId/create', FacilityCreate, {}, {
+route('/client/:_id/manage-facilities/create', FacilityCreate, {}, {
     name: 'facility.create'
 });
 route('/client/:_id/manage-facilities/:facilityId/edit', FacilityEdit, {}, {

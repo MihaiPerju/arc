@@ -28,7 +28,7 @@ export default class FacilityListContainer extends Pager {
             <div>
                 <h3>Facility List</h3>
                 <button onClick={() => {
-                    FlowRouter.go("facility.create", {_id: clientId, facilityId: 'facility'})
+                    FlowRouter.go("facility.create", {_id: clientId})
                 }}>
                     Create
                 </button>

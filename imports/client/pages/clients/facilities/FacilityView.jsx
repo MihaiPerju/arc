@@ -17,7 +17,7 @@ export default class FacilityView extends React.Component {
     componentDidMount() {
         const {facilityId} = FlowRouter.current().params;
         Meteor.call('facility.get', facilityId, (err, facility) => {
-            if(err) {
+            if (err) {
                 return Notifier.error('Error while getting facility!');
             }
 
@@ -31,7 +31,7 @@ export default class FacilityView extends React.Component {
     render() {
         const {loading, facility} = this.state;
 
-        if(loading) {
+        if (loading) {
             return <Loading/>;
         }
 
@@ -55,7 +55,7 @@ export default class FacilityView extends React.Component {
                     <div>
                         <h4>Contacts</h4>
                         {contacts.map(contact => (
-                            <FacilityContact contact={contact}/>
+                            <FacilityContact key={contact._id} contact={contact}/>
                         ))}
                     </div>
                     :

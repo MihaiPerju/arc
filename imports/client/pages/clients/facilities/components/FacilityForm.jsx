@@ -3,17 +3,28 @@ import FacilityContactList from "./FacilityContactList.jsx";
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-unstyled';
 import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
+import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+
 
 export default class FacilityForm extends React.Component {
     onSubmit = (data) => {
         this.props.submitAction(data);
     };
 
+    getOptions = (enums) => {
+        return _.map(enums, (value, key) => ({value, label: value}));
+    };
+
     render() {
         const {model} = this.props;
-        const statuses = _.map(FacilityStatusEnum, (value, key) => ({value, label: value}));
+        const statuses = this.getOptions(FacilityStatusEnum);
+        const regions = this.getOptions(FacilityRegionEnum);
         const schema = FacilitySchema.omit("clientId", "createdAt");
-        let newModel = model ? model : {status: FacilityStatusEnum.NEW};
+        let newModel = model ? model : {
+            status: FacilityStatusEnum.NEW,
+            region: []
+        };
 
         return (
             <div>
@@ -39,9 +50,8 @@ export default class FacilityForm extends React.Component {
                     <AutoField name="zipCode"/>
                     <ErrorField name="zipCode"/>
 
-                    <AutoField name="region"/>
+                    <SelectMulti name="region" options={regions}/>
                     <ErrorField name="region"/>
-                    {/*TODO multiSelect*/}
 
                     <h4>Contacts</h4>
                     <FacilityContactList/>

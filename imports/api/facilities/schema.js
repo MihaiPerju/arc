@@ -35,8 +35,12 @@ export default new SimpleSchema({
         allowedValues: _.map(statusEnum, (value, key) => (value))
     },
     region: {
+        type: Array,
+        minCount: 1
+    },
+    'region.$': {
         type: String,
-        //allowedValues: _.map(regionEnum, (value, key) => (value))
+        allowedValues: _.map(regionEnum, (value, key) => (value))
     },
     contacts: {
         type: Array,
