@@ -79,3 +79,12 @@ import ClientListContainer from '/imports/client/pages/clients/ClientListContain
 route('/client/create', CreateClient);
 route('/client/:userId/edit', EditClient);
 route('/client/list', ClientListContainer);
+
+//Letter templates
+import LetterTemplatesListContainer from '/imports/client/pages/letterTemplates/LetterTemplatesListContainer';
+import LetterTemplateCreate from '/imports/client/pages/letterTemplates/LetterTemplateCreate';
+import LetterTemplateEdit from '/imports/client/pages/letterTemplates/LetterTemplateEdit';
+
+route('/letter-templates/list', LetterTemplatesListContainer);
+route('/letter-template/:id/edit', LetterTemplateEdit);
+route('/letter-template/create', LetterTemplateCreate);
