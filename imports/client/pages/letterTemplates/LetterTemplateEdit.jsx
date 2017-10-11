@@ -47,27 +47,24 @@ export default class EditLetterTemplate extends React.Component {
         return (
             <div>
                 <h2>Edit Letter template</h2>
-
                 {
                     this.state.error
                         ?
                         <div className="error">{this.state.error}</div>
                         :
-                        (
-                            <AutoForm model={model} schema={LetterTemplateSchema} onSubmit={this.onSubmit.bind(this)}
-                                      ref="form">
+                        <AutoForm model={model} schema={LetterTemplateSchema} onSubmit={this.onSubmit.bind(this)}
+                                  ref="form">
 
-                                <AutoField name="name"/>
-                                <ErrorField name="name"/>
+                            <AutoField name="name"/>
+                            <ErrorField name="name"/>
 
-                                <AutoField name="content"/>
-                                <ErrorField name="content"/>
+                            <AutoField name="content"/>
+                            <ErrorField name="content"/>
 
-                                <button type="submit">
-                                    Save
-                                </button>
-                            </AutoForm>
-                        )
+                            <button type="submit">
+                                Save
+                            </button>
+                        </AutoForm>
                 }
             </div>
         )

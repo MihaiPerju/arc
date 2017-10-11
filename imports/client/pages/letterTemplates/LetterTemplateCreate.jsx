@@ -27,13 +27,7 @@ export default class CreateLetterTemplate extends React.Component {
                 <h2>Add a letter template</h2>
                 <AutoForm schema={LetterTemplateSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 
-                    {
-                        this.state.error
-                            ?
-                            <div className="error">{this.state.error}</div>
-                            :
-                            ''
-                    }
+                    {this.state.error && <div className="error">{this.state.error}</div>}
 
                     <AutoField name="name"/>
                     <ErrorField name="name"/>

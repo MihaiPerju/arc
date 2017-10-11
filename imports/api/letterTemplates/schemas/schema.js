@@ -6,6 +6,5 @@ export default new SimpleSchema({
     },
     content: {
         type: String
-    },
-
+    }
 });
