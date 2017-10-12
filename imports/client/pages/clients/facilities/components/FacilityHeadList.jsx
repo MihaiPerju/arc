@@ -20,23 +20,31 @@ export default class FacilityHeadList extends React.Component {
                     isSortAscend={isSortAscend}
                     handleHeaderClick={handleHeaderClick}/>
                 <SortableTableHead
-                    title="Region"
-                    headerName="region"
+                    title="City"
+                    headerName="city"
+                    sortBy={sortBy}
+                    isSortAscend={isSortAscend}
+                    handleHeaderClick={handleHeaderClick}/>
+                <th>Region</th>
+                <SortableTableHead
+                    title="Zip code"
+                    headerName="zipCode"
                     sortBy={sortBy}
                     isSortAscend={isSortAscend}
                     handleHeaderClick={handleHeaderClick}/>
                 <SortableTableHead
-                    title="Address"
-                    headerName="address"
+                    title="First address"
+                    headerName="addressOne"
                     sortBy={sortBy}
                     isSortAscend={isSortAscend}
                     handleHeaderClick={handleHeaderClick}/>
                 <SortableTableHead
-                    title="Status"
-                    headerName="status"
+                    title="Second address"
+                    headerName="addressTwo"
                     sortBy={sortBy}
                     isSortAscend={isSortAscend}
                     handleHeaderClick={handleHeaderClick}/>
+                <th>Status</th>
                 <th>Actions</th>
             </tr>
         );

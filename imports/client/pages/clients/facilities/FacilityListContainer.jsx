@@ -67,18 +67,18 @@ export default class FacilityListContainer extends Pager {
 
     handleSelectBy = (selectionType, selectedValue) => {
         const {status, region} = this.state;
-        let andFilters = [{[selectionType]: selectedValue}];
+        let selectFilters = [{[selectionType]: selectedValue}];
 
         if (selectionType === 'status' && region !== '') {
-            andFilters.push({region})
+            selectFilters.push({region})
         } else if (selectionType === 'region' && status !== '') {
-            andFilters.push({status})
+            selectFilters.push({status})
         }
 
         this.setState({[selectionType]: selectedValue},
             this.updateFilters({
                 filters: {
-                    $and: andFilters
+                    $and: selectFilters
                 }
             })
         );
