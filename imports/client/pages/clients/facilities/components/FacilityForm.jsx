@@ -6,7 +6,6 @@ import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
 import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
-
 export default class FacilityForm extends React.Component {
     onSubmit = (data) => {
         this.props.submitAction(data);
