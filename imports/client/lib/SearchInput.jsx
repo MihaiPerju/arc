@@ -3,7 +3,7 @@ import SimpleSchema from "simpl-schema";
 import {AutoForm, AutoField} from 'uniforms-unstyled';
 
 const searchSchema = new SimpleSchema({
-    search: {
+    searchValue: {
         type: String,
         defaultValue: ''
     }
@@ -11,7 +11,7 @@ const searchSchema = new SimpleSchema({
 
 export default class FacilitySearch extends React.Component {
     handleSearch = (data) => {
-        this.props.handleChange(data);
+        this.props.handleSearch(data.searchValue);
     };
 
     render() {
@@ -21,7 +21,7 @@ export default class FacilitySearch extends React.Component {
                       schema={searchSchema}
                       onSubmit={this.handleSearch}
             >
-                <AutoField name="search"/>
+                <AutoField name="searchValue"/>
             </AutoForm>
         )
     }

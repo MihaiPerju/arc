@@ -1,10 +1,11 @@
 import React from 'react';
 import Loading from "/imports/client/lib/ui/Loading.jsx";
 import FacilityRow from "./FacilityRow.jsx";
+import FacilityHeadList from "./FacilityHeadList";
 
 export default class FacilityList extends React.Component {
     render() {
-        const {data, loading, error} = this.props;
+        const {data, loading, error, handleHeaderClick, sortBy, isSortAscend} = this.props;
 
         if (loading) {
             return <Loading/>;
@@ -19,14 +20,9 @@ export default class FacilityList extends React.Component {
             <div>
                 <table>
                     <thead>
-                    <tr>
-                        <th>Facility Name</th>
-                        <th>State</th>
-                        <th>Region</th>
-                        <th>Address</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
+                    <FacilityHeadList sortBy={sortBy}
+                                      isSortAscend={isSortAscend}
+                                      handleHeaderClick={handleHeaderClick}/>
                     </thead>
                     <tbody>
                     {!data.length

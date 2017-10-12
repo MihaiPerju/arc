@@ -2,17 +2,6 @@ import Facilities from '../collection';
 
 export default Facilities.createNamedQuery('facilityList', {
     $filter({filters, options, params}) {
-        if(params.search) {
-            const extend = {
-                $or: [
-                    {
-                        'name': {$regex: params.search, $options: 'i'}
-                    }
-                ]
-            };
-
-            _.extend(filters, extend);
-        }
         _.extend(filters, params.filters);
         _.extend(options, params.options);
     },
