@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import _ from 'underscore';
 import ClientSingle from './ClientSingle.jsx';
+import ClientHeadList from './ClientHeadList';
 
 export default class ClientList extends Component {
     render() {
-        const {data, loading, error} = this.props;
+        const {data, loading, error, handleHeaderClick, sortBy, isSortAscend} = this.props;
 
         if (loading) {
             return <div>Loading</div>
@@ -23,11 +24,9 @@ export default class ClientList extends Component {
                             ?
                             <div>
                                 <tr>
-                                    <th>Client name</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Email</th>
-                                    <th>Actions</th>
+                                    <ClientHeadList sortBy={sortBy}
+                                                    isSortAscend={isSortAscend}
+                                                    handleHeaderClick={handleHeaderClick}/>/>
                                 </tr>
                                 {_.map(data, (client, idx) => {
                                     return <ClientSingle client={client} key={idx}/>;
@@ -38,7 +37,6 @@ export default class ClientList extends Component {
                                 There are no clients
                             </div>
                     }
-
                     </tbody>
                 </table>
             </div>
