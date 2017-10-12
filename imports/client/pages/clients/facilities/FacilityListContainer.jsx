@@ -4,6 +4,9 @@ import FacilityListQuery from '/imports/api/facilities/queries/facilityList.js';
 import FacilityList from './components/FacilityList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
+import SelectDropDown from "/imports/client/lib/SelectDropDown.jsx";
+import FacilityStatusEnum from "/imports/api/facilities/enums/statuses.js";
+import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 
 export default class FacilityListContainer extends Pager {
     constructor() {
@@ -13,7 +16,9 @@ export default class FacilityListContainer extends Pager {
             perPage: 10,
             filters: {},
             sortBy: 'none',
-            isSortAscend: true
+            isSortAscend: true,
+            status: '',
+            region: ''
         });
 
         this.query = FacilityListQuery.clone();
@@ -27,7 +32,7 @@ export default class FacilityListContainer extends Pager {
             filters: {
                 name: {
                     '$regex': searchValue,
-                    '$options':'i'
+                    '$options': 'i'
                 }
             }
         })
@@ -60,6 +65,25 @@ export default class FacilityListContainer extends Pager {
         });
     };
 
+    handleSelectBy = (selectionType, selectedValue) => {
+        const {status, region} = this.state;
+        let andFilters = [{[selectionType]: selectedValue}];
+
+        if (selectionType === 'status' && region !== '') {
+            andFilters.push({region})
+        } else if (selectionType === 'region' && status !== '') {
+            andFilters.push({status})
+        }
+
+        this.setState({[selectionType]: selectedValue},
+            this.updateFilters({
+                filters: {
+                    $and: andFilters
+                }
+            })
+        );
+    };
+
     render() {
         const params = _.extend({}, this.getPagerOptions());
         const FacilityListWrapper = this.FacilityListWrapper;
@@ -75,6 +99,16 @@ export default class FacilityListContainer extends Pager {
                     Create
                 </button>
 
+                <div>
+                    <SelectDropDown name="Status"
+                                    selectionType="status"
+                                    enums={FacilityStatusEnum}
+                                    handleSelectBy={this.handleSelectBy}/>
+                    <SelectDropDown name="Region"
+                                    selectionType="region"
+                                    enums={FacilityRegionEnum}
+                                    handleSelectBy={this.handleSelectBy}/>
+                </div>
                 <SearchInput handleSearch={this.handleSearch}/>
 
                 {this.getPaginator()}
