@@ -32,6 +32,12 @@ export default class ClientSingle extends Component {
                 <td>{client.lastName}</td>
                 <td>{client.email}</td>
                 <td>
+                    <button
+                        onClick={() => {
+                            FlowRouter.go("facility.list", {_id: client._id})
+                        }}>
+                        Manage Facilities
+                    </button>
                     <a onClick={this.onEditClient}>Edit Client</a>
 
                     <button onClick={this.deleteClient}>Delete</button>
