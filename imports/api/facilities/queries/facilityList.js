@@ -9,6 +9,8 @@ export default Facilities.createNamedQuery('facilityList', {
     clientId: 1,
     name: 1,
     state: 1,
+    city: 1,
+    zipCode: 1,
     addressOne: 1,
     addressTwo: 1,
     region: 1,
