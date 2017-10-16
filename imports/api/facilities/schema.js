@@ -53,5 +53,12 @@ export default new SimpleSchema({
     createdAt: {
         type: Date,
         optional: true
+    },
+    allowedUsers: {
+        type: Array,
+        optional: true
+    },
+    'allowedUsers.$': {
+        type: String
     }
 })
