@@ -12,6 +12,6 @@ Facilities.addLinks({
     users: {
         type: 'many',
         collection: Users,
-        field: 'allowedUsers'
+        field: 'allowedUserIds'
     }
 });

@@ -5,7 +5,7 @@ import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
 import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import UserRolesEnum from '/imports/api/users/enums/roles';
+import SelectUsersContainer from './SelectUsersContainer';
 
 export default class FacilityForm extends React.Component {
     constructor() {
@@ -16,16 +16,6 @@ export default class FacilityForm extends React.Component {
         };
     }
 
-    componentWillMount() {
-        Meteor.call('users.getByRole', [UserRolesEnum.MANAGER, UserRolesEnum.REP], (err, users) => {
-            if (!err) {
-                this.setState({
-                    users
-                })
-            }
-        })
-    }
-
     onSubmit = (data) => {
         this.props.submitAction(data);
     };
@@ -34,18 +24,10 @@ export default class FacilityForm extends React.Component {
         return _.map(enums, (value, key) => ({value, label: value}));
     };
 
-    getUserOptions(users) {
-        return _.map(users, ({profile, roles}) => {
-            const value = `${profile.firstName} ${profile.lastName} (${roles[0]})`;
-            return {value, label: value};
-        })
-    }
-
     render() {
         const {model} = this.props;
         const statuses = this.getOptions(FacilityStatusEnum);
         const regions = this.getOptions(FacilityRegionEnum);
-        const users = this.getUserOptions(this.state.users);
         const schema = FacilitySchema.omit("clientId", "createdAt");
         let newModel = model ? model : {
             status: FacilityStatusEnum.NEW,
@@ -79,8 +61,7 @@ export default class FacilityForm extends React.Component {
                     <SelectMulti name="region" options={regions}/>
                     <ErrorField name="region"/>
 
-                    <SelectMulti name="allowedUsers" options={users}/>
-                    <ErrorField name="allowedUsers"/>
+                    <SelectUsersContainer />
 
                     <h4>Contacts</h4>
                     <FacilityContactList/>
