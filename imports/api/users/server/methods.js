@@ -29,13 +29,5 @@ Meteor.methods({
                 avatar: ''
             }
         })
-    },
-
-    'users.getByRole'(roles) {
-        return Users.find({
-            roles: {
-                $in: roles
-            }
-        }).fetch();
     }
 });

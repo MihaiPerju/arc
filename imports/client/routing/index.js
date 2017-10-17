@@ -6,7 +6,6 @@ import route from './router';
 import './logoutRoute';
 import Home from '/imports/client/pages/Home';
 
-
 //User
 import Register from '/imports/client/pages/users/Register';
 import MyProfile from '/imports/client/pages/users/MyProfile';
@@ -51,7 +50,6 @@ route('/password/reset/:token', ResetPassword, {}, {
     name: 'password.reset',
 
 });
-
 
 //Admin
 import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx'
@@ -107,3 +105,12 @@ route('/client/:_id/manage-facilities/:facilityId/edit', FacilityEdit, {}, {
 route('/client/:_id/manage-facilities/:facilityId/view', FacilityView, {}, {
     name: 'facility.view'
 });
+
+//Codes
+import CodeListContainer from '/imports/client/pages/codes/CodeListContainer';
+import CodeEdit from '/imports/client/pages/codes/CodeEdit';
+import CodeCreate from '/imports/client/pages/codes/CodeCreate';
+
+route('/code/list', CodeListContainer);
+route('/code/:id/edit', CodeEdit);
+route('/code/create', CodeCreate);
