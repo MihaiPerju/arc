@@ -10,7 +10,7 @@ export default class CodeListContainer extends Pager {
         super();
 
         _.extend(this.state, {
-            perPage: 3,
+            perPage: 20,
             filters: {},
             sortBy: 'none',
             isSortAscend: true
