@@ -5,8 +5,17 @@ import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
 import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import SelectUsersContainer from './SelectUsersContainer';
 
 export default class FacilityForm extends React.Component {
+    constructor() {
+        super();
+
+        this.state = {
+            users: []
+        };
+    }
+
     onSubmit = (data) => {
         this.props.submitAction(data);
     };
@@ -51,6 +60,8 @@ export default class FacilityForm extends React.Component {
 
                     <SelectMulti name="region" options={regions}/>
                     <ErrorField name="region"/>
+
+                    <SelectUsersContainer />
 
                     <h4>Contacts</h4>
                     <FacilityContactList/>

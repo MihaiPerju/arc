@@ -1,4 +1,4 @@
-import { Meteor } from 'meteor/meteor';
+import {Meteor} from 'meteor/meteor';
 import MyProfileSchema from '../schemas/MyProfileSchema';
 import Users from '../collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
@@ -7,7 +7,7 @@ Meteor.methods({
     'users.my_profile.update'(data) {
         MyProfileSchema.validate(data);
 
-        const { email, profile } = data;
+        const {email, profile} = data;
         const user = Users.findOne(this.userId);
 
         Users.update(this.userId, {
