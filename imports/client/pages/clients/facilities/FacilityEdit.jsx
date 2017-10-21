@@ -64,7 +64,7 @@ export default class FacilityEdit extends React.Component {
             },
             {
                 label: tabsEnum.IMP_RULES,
-                component: <ImportingRules/>
+                component: <ImportingRules model={facility}/>
             }
         ];
 

@@ -16,7 +16,8 @@ export default class TabSelect extends React.Component {
             <div>
                 {
                     options.map((tab, index) => {
-                        return <button onClick={this.onChangeActiveTab.bind(this, index)}>{tab.label}</button>
+                        return <button key={index}
+                                       onClick={this.onChangeActiveTab.bind(this, index)}>{tab.label}</button>
                     })
                 }
             </div>
