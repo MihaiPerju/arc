@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class TabSelect extends React.Component {
     constructor() {
@@ -24,3 +25,7 @@ export default class TabSelect extends React.Component {
         )
     }
 }
+
+TabSelect.propTypes = {
+    options: PropTypes.array
+};
