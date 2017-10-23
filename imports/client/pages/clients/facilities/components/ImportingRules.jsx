@@ -2,6 +2,7 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField, RadioField} from 'uniforms-unstyled';
 import schema from '/imports/api/facilities/schemas/importRulesSchema';
 import Notifier from '/imports/client/lib/Notifier';
+import PropTypes from 'prop-types';
 
 export default class ImportingRules extends React.Component {
     constructor() {
@@ -58,3 +59,7 @@ export default class ImportingRules extends React.Component {
         )
     }
 }
+
+ImportingRules.propTypes = {
+    model: PropTypes.object
+};

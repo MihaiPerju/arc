@@ -27,5 +27,6 @@ export default class TabSelect extends React.Component {
 }
 
 TabSelect.propTypes = {
-    options: PropTypes.array
+    options: PropTypes.array,
+    onChangeActiveTab: PropTypes.func
 };
