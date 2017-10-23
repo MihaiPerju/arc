@@ -20,73 +20,37 @@ export default class ImportingRules extends React.Component {
         })
     };
 
+    getSchemaFields(schemaFields) {
+        const fields = [];
+        for (let key in schemaFields) {
+            if (key != 'hasHeader')
+                fields.push(key);
+        }
+        return fields;
+    }
+
     render() {
+        const fields = this.getSchemaFields(schema._schema);
         const {model} = this.props;
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
 
         return (
             <div>
-                <AutoForm model={model.importRules} ref="form2" schema={schema} onSubmit={this.onSubmitImportingRules}>
+                <AutoForm model={model.importRules} schema={schema} onSubmit={this.onSubmitImportingRules}>
 
                     <RadioField name="hasHeader" options={options}/>
                     <ErrorField name="hasHeader"/>
 
-                    <AutoField name="acctNum"/>
-                    <ErrorField name="acctNum"/>
-
-                    <AutoField name="FacCode"/>
-                    <ErrorField name="FacCode"/>
-
-                    <AutoField name="PtType"/>
-                    <ErrorField name="PtType"/>
-
-                    <AutoField name="PtName"/>
-                    <ErrorField name="PtName"/>
-
-                    <AutoField name="DischrgDate"/>
-                    <ErrorField name="DischrgDate"/>
-
-                    <AutoField name="FBDate"/>
-                    <ErrorField name="FBDate"/>
-
-                    <AutoField name="AcctBal"/>
-                    <ErrorField name="AcctBal"/>
-
-                    <AutoField name="FinClass"/>
-                    <ErrorField name="FinClass"/>
-
-                    <AutoField name="AdmitDate"/>
-                    <ErrorField name="AdmitDate"/>
-
-                    <AutoField name="MedNo"/>
-                    <ErrorField name="MedNo"/>
-
-                    <AutoField name="InsName"/>
-                    <ErrorField name="InsName"/>
-
-                    <AutoField name="InsName2"/>
-                    <ErrorField name="InsName2"/>
-
-                    <AutoField name="InsName3"/>
-                    <ErrorField name="InsName3"/>
-
-                    <AutoField name="InsCode"/>
-                    <ErrorField name="InsCode"/>
-
-                    <AutoField name="InsCode2"/>
-                    <ErrorField name="InsCode2"/>
-
-                    <AutoField name="InsCode3"/>
-                    <ErrorField name="InsCode3"/>
-
-                    <AutoField name="InsBal"/>
-                    <ErrorField name="InsBal"/>
-
-                    <AutoField name="InsBal2"/>
-                    <ErrorField name="InsBal2"/>
-
-                    <AutoField name="InsBal3"/>
-                    <ErrorField name="InsBal3"/>
+                    {
+                        fields.map((field, index) => {
+                            return (
+                                <div key={index}>
+                                    <AutoField name={field}/>
+                                    <ErrorField name={field}/>
+                                </div>
+                            )
+                        })
+                    }
 
                     <button type="submit">Submit</button>
                 </AutoForm>

@@ -12,75 +12,75 @@ export default new SimpleSchema({
         optional: true,
         label: 'Account Number'
     },
-    FacCode: {
+    facCode: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    PtType: {
+    ptType: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    PtName: {
+    ptName: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    DischrgDate: {
+    dischrgDate: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    FBDate: {
+    fbDate: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    AcctBal: {
+    acctBal: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    FinClass: {
+    finClass: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    AdmitDate: {
+    admitDate: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    MedNo: {
+    medNo: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsName: {
+    insName: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsName2: {
+    insName2: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsName3: {
+    insName3: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsCode: {
+    insCode: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsCode2: {
+    insCode2: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsCode3: {
+    insCode3: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsBal: {
+    insBal: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsBal2: {
+    insBal2: {
         type: SimpleSchema.Integer,
         optional: true
     },
-    InsBal3: {
+    insBal3: {
         type: SimpleSchema.Integer,
         optional: true
     }
