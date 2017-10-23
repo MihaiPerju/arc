@@ -4,3 +4,4 @@ import './publications';
 import './avatarUpload';
 import './expose.js';
 import './logoUpload';
+import './csvUpload';
