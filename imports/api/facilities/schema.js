@@ -2,6 +2,7 @@ import SimpleSchema from 'simpl-schema';
 import FacilityContactSchema from '/imports/api/facilities/schemas/contactSchema.js';
 import regionEnum from "/imports/api/facilities/enums/regions.js";
 import statusEnum from "/imports/api/facilities/enums/statuses.js";
+import ImportRulesSchema from './schemas/importRulesSchema.js';
 
 export default new SimpleSchema({
     name: {
@@ -60,5 +61,9 @@ export default new SimpleSchema({
     },
     'allowedUsers.$': {
         type: String
+    },
+    importRules: {
+        type: ImportRulesSchema,
+        optional: true
     }
 })
