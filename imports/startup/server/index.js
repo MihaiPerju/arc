@@ -11,3 +11,4 @@ import '/imports/api/clients/server';
 import '/imports/api/letterTemplates/server';
 import '/imports/api/facilities/server';
 import '/imports/api/codes/server';
+import '/imports/api/tasks/server';
