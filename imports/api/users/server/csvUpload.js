@@ -3,10 +3,13 @@ import Papa from 'papaparse';
 import fs from 'fs';
 import ParseService from '/imports/api/facilities/server/services/CsvParseService';
 
-createRoute('/uploads/csv', ({error, filenames}) => {
+createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames}) => {
+
     if (filenames.length != 1) {
         return error('Invalid number of files');
     }
+
+    const importRules = ParseService.getImportRules(facilityId);
 
     //pause execution for reading small files
 
@@ -19,7 +22,7 @@ createRoute('/uploads/csv', ({error, filenames}) => {
     Papa.parse(csvString, {
             //using chunk to receive result by chunks to not crash the browser. Alternative to complete loading is 'complete' function
             chunk: (results) => {
-                ParseService.convertToTask(results.data);
+                ParseService.convertToTasks(results.data, importRules);
             }
         }
     );

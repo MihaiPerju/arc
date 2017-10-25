@@ -69,7 +69,7 @@ export default class FacilityEdit extends React.Component {
             },
             {
                 label: tabsEnum.PLACEMENT_FILE,
-                component: <UploadPlacementFile/>
+                component: <UploadPlacementFile facilityId={facility && facility._id}/>
             }
         ];
 

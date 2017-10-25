@@ -8,8 +8,11 @@ export default class UploadPlacementFile extends React.Component {
     }
 
     render() {
+        const {facilityId} = this.props;
+        console.log(facilityId);
+
         const componentConfig = {
-            postUrl: '/uploads/csv'
+            postUrl: `/uploads/csv/${facilityId}`
         };
 
         const djsConfig = {

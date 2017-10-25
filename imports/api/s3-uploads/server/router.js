@@ -22,12 +22,14 @@ export function getUserByToken(token) {
 export function createRoute(path, handler) {
     postRoutes.route(path, function (params, req, res, next) {
         let user;
+        let facilityId = params.facilityId;
 
         if (params.token) {
             user = getUserByToken(params.token);
         }
 
         const helper = {
+            facilityId,
             user,
             req,
             res,
