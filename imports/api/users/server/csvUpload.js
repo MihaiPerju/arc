@@ -13,12 +13,13 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames}) => {
     const stream = fs.readFileSync(filenames[0]);
     const csvString = stream.toString();
 
-    //pause execution for reading small files
+    //pause execution for reading small files on local
     Meteor._sleepForMs(500);
 
 
     Papa.parse(csvString, {
-            //using chunk to receive result by chunks to not crash the browser. Alternative to complete loading is 'complete' function
+            //using chunk to receive result by chunks to not crash the browser.
+            // Alternative to complete loading is 'complete' function
             chunk: (results) => {
                 ParseService.convertToTasks(results.data, importRules);
             }

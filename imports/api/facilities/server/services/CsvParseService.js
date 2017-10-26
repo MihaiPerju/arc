@@ -3,7 +3,6 @@ import Facilities from '/imports/api/facilities/collection';
 export default class CsvParseService {
 
     static convertToTasks(results, importRules) {
-        console.log(importRules.hasHeader);
         const startIndex = importRules.hasHeader ? 1 : 0;
 
         const tasks = [];
@@ -13,13 +12,7 @@ export default class CsvParseService {
             tasks.push(newTask);
         }
 
-        Meteor.call('tasks.create', tasks, (err, res) => {
-            if (!err) {
-                console.log("good. check db");
-            } else {
-                console.log(err);
-            }
-        })
+        Meteor.call('tasks.create', tasks);
     }
 
     static createTask(data, importRules) {
