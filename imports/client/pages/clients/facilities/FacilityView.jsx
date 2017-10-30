@@ -50,7 +50,7 @@ export default class FacilityView extends React.Component {
                 <h5>Zip: {zipCode}</h5>
                 <h5>Creation date: {moment(createdAt).format('MM/DD/YYYY hh:mm')}</h5>
 
-                {contacts.length
+                {contacts && contacts.length
                     ?
                     <div>
                         <h4>Contacts</h4>
