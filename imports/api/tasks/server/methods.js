@@ -6,5 +6,9 @@ Meteor.methods({
     'tasks.create'(data) {
         const RowTasks = Tasks.rawCollection();
         RowTasks.insert(data);
+    },
+
+    'tasks.update'(data) {
+        Tasks.update({acctNum:})
     }
 });

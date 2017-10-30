@@ -1,20 +1,27 @@
 import React from 'react';
-import Notifier from '/imports/client/lib/Notifier';
+import FacilityDetails from './FacilityDetails';
+import tabsEnum from './enums/facility';
+import TabSelect from '/imports/client/lib/TabSelect';
+import UploadInventoryFile from './components/UploadInventoryFile';
 import Loading from "/imports/client/lib/ui/Loading.jsx";
-import moment from 'moment';
-import FacilityContact from "./components/FacilityContact";
 
 export default class FacilityView extends React.Component {
     constructor() {
         super();
 
+
         this.state = {
+            activeTab: 0,
             facility: null,
             loading: true
-        }
+        };
     }
 
     componentDidMount() {
+        this.getFacility();
+    }
+
+    getFacility = () => {
         const {facilityId} = FlowRouter.current().params;
         Meteor.call('facility.get', facilityId, (err, facility) => {
             if (err) {
@@ -26,44 +33,38 @@ export default class FacilityView extends React.Component {
                 loading: false
             })
         })
+    };
+
+    onChangeActiveTab(activeTab) {
+        this.setState({
+            activeTab
+        })
     }
 
     render() {
-        const {loading, facility} = this.state;
+        const {activeTab, loading, facility} = this.state;
+        const tabOptions = [
+            {
+                label: tabsEnum.VIEW,
+                component: <FacilityDetails submitAction={this.updateFacility}/>
+            },
+            {
+                label: tabsEnum.INVENTORY_FILE,
+                component: <UploadInventoryFile facilityId={facility && facility._id}/>
+            }
+        ];
 
         if (loading) {
             return <Loading/>;
         }
 
-        const {name, addressOne, addressTwo, city, state} = facility;
-        const {zipCode, status, region, createdAt, contacts} = facility;
-
         return (
             <div>
-                <h3>Facility {name}</h3>
-                <h5>Status: {status}</h5>
-                <h5>State: {state}</h5>
-                <h5>Region: {region}</h5>
-                <h5>City {city}</h5>
-                <h5>Address 1: {addressOne}</h5>
-                <h5>Address 2: {addressTwo}</h5>
-                <h5>Zip: {zipCode}</h5>
-                <h5>Creation date: {moment(createdAt).format('MM/DD/YYYY hh:mm')}</h5>
-
-                {contacts && contacts.length
-                    ?
-                    <div>
-                        <h4>Contacts</h4>
-                        {contacts.map(contact => (
-                            <FacilityContact key={contact._id} contact={contact}/>
-                        ))}
-                    </div>
-                    :
-                    <div>
-                        <h4>No Contacts</h4>
-                    </div>
+                <TabSelect onChangeActiveTab={this.onChangeActiveTab.bind(this)} options={tabOptions}/>
+                {
+                    (tabOptions[activeTab].component)
                 }
             </div>
-        );
+        )
     }
 }
