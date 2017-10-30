@@ -1,4 +1,4 @@
-import { Random } from 'meteor/random';
+import {Random} from 'meteor/random';
 import Busboy from 'busboy';
 
 let fs = Npm.require("fs"),
@@ -6,7 +6,7 @@ let fs = Npm.require("fs"),
     path = Npm.require("path");
 
 export default function (req, res, next) {
-    let busboy = new Busboy({ headers: req.headers });
+    let busboy = new Busboy({headers: req.headers});
     req.filenames = [];
     req.postData = {};
 
@@ -47,6 +47,10 @@ const onFinish = (next, store) => {
 };
 
 const fileHandler = (req, store) => {
+
+    //pause execution for reading small files on local
+    Meteor._sleepForMs(500);
+
     return function (fieldname, file, filename, encoding, mimetype) {
         // generating unique file name
         const parts = filename.split('.');

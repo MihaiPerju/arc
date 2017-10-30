@@ -21,8 +21,6 @@ export default class UploadPlacementFile extends React.Component {
                 this.removeFile(file);
             }
         };
-        return (<div>
-            <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
-        </div>)
+        return <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
     }
 }
