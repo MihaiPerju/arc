@@ -21,17 +21,33 @@ export default class CsvParseService {
         Meteor.call('tasks.create', tasks);
     }
 
-    static update(results, importRules) {
-        const oldTasks = CsvParseService.convertToTasks(results, importRules);
-        const newTasks = [];
+    static filterTasks(tasks) {
+        let oldTasks = [];
+        let newTasks = [];
 
-        oldTasks.map((task) => {
-            if (!Tasks.findOne({acctNum: task.acctNum})) {
+        tasks.map((task) => {
+            if (Tasks.findOne({acctNum: task.acctNum})) {
+                oldTasks.push(task);
+            } else {
                 task.state = stateEnum.ARCHIVED;
-                oldTasks.pop(task);
                 newTasks.push(task);
             }
         });
+
+        return [oldTasks, newTasks];
+    }
+
+    static update(results, importRules) {
+        const tasks = CsvParseService.convertToTasks(results, importRules);
+
+        const [oldTasks, newTasks] = CsvParseService.filterTasks(tasks);
+
+
+        console.log("Old tasks:");
+        console.log(oldTasks);
+
+        console.log("New tasks:");
+        console.log(newTasks);
 
         Meteor.call('tasks.create', newTasks);
         Meteor.call('tasks.update', oldTasks);
