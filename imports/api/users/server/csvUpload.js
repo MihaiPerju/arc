@@ -1,6 +1,7 @@
 import {createRoute} from '/imports/api/s3-uploads/server/router';
 import Papa from 'papaparse';
 import fs from 'fs';
+import TaskService from '/imports/api/facilities/server/services/TaskService';
 import ParseService from '/imports/api/facilities/server/services/CsvParseService';
 
 createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames}) => {
@@ -17,7 +18,7 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames}) => {
             //using chunk to receive result by chunks to not crash the browser.
             // Alternative to complete loading is 'complete' function
             chunk: (results) => {
-                ParseService.upload(results.data, importRules);
+                TaskService.upload(results.data, importRules);
             }
         }
     );
