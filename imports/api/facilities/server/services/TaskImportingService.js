@@ -6,10 +6,11 @@ export default class TaskService {
     //For placement file
     static upload(results, importRules) {
         const tasks = CsvParseService.convertToTasks(results, importRules, true);
-
         //Creating tasks
-        const RowTasks = Tasks.rawCollection();
-        RowTasks.insert(tasks);
+        tasks.map((task) => {
+            Tasks.insert(task);
+        });
+
     }
 
     //For inventory file

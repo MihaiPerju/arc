@@ -42,10 +42,6 @@ export default class CsvParseService {
                 task[key] = data[importRules[key] - 1];
             }
         }
-        if (isPlacement) {
-            task.state = stateEnum.ACTIVE;
-        }
-
         return task;
     }
 

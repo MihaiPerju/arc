@@ -2,7 +2,7 @@ import {createRoute} from '/imports/api/s3-uploads/server/router';
 import Papa from 'papaparse';
 import fs from 'fs';
 import ParseService from '/imports/api/facilities/server/services/CsvParseService';
-import TaskService from '/imports/api/facilities/server/services/TaskService';
+import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
 
 createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames}) => {
 

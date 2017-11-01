@@ -80,6 +80,7 @@ export default new SimpleSchema({
     },
     state: {
         type: String,
+        defaultValue:stateEnum.ACTIVE,
         allowedValues: [stateEnum.ACTIVE, stateEnum.ARCHIVED]
     }
 })
