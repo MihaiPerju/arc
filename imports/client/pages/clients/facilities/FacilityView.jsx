@@ -1,6 +1,6 @@
 import React from 'react';
 import FacilityDetails from './FacilityDetails';
-import tabsEnum from './enums/facility';
+import tabsEnum from './enums/tabs';
 import TabSelect from '/imports/client/lib/TabSelect';
 import UploadInventoryFile from './components/UploadInventoryFile';
 import Loading from "/imports/client/lib/ui/Loading.jsx";

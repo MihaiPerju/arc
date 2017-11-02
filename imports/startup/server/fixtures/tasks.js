@@ -1,12 +1,12 @@
 import Tasks from '/imports/api/tasks/collection';
 import CsvParseService from '/imports/api/facilities/server/services/CsvParseService';
 
-/*WARNING!
-*
- *This fixtures are not finished, because of
-  * needed link between the task and client,
-   * facility and importing rules of a facility.
-   * Do not use.*/
+    //WARNING!
+    //
+    //This fixtures are not finished, because of
+    //needed link between the task and client,
+    //facility and importing rules of a facility.
+    //Do not use until ready.
 
 Meteor.startup(function () {
     if (Tasks.find().count() > 0) {
