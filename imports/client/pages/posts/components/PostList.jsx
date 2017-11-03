@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import _ from 'underscore';
 import PostSingle from './PostSingle.jsx';
+import {Icon, Label, Menu, Table} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 export default class PostList extends Component {
     render() {
@@ -15,21 +17,23 @@ export default class PostList extends Component {
         }
 
         return (
-            <div>
-                <table>
-                    <tbody>
-                    <tr>
-                        <th>Title</th>
-                        <th>Content</th>
-                        <th>User</th>
-                        <th>Actions</th>
-                    </tr>
-                    {_.map(data, (post) => {
-                        return <PostSingle post={post} key={post._id}/>;
-                    })}
-                    </tbody>
-                </table>
-            </div>
+            <Container>
+                <Table padded>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Title</Table.HeaderCell>
+                            <Table.HeaderCell>Content</Table.HeaderCell>
+                            <Table.HeaderCell>User</Table.HeaderCell>
+                            <Table.HeaderCell>Actions</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {_.map(data, (post) => {
+                            return <PostSingle post={post} key={post._id}/>;
+                        })}
+                    </Table.Body>
+                </Table>
+            </Container>
         );
     }
 }

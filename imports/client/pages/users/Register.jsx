@@ -2,6 +2,8 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 class Register extends React.Component {
     constructor() {
@@ -30,30 +32,32 @@ class Register extends React.Component {
     };
 
     render() {
-        const { error } = this.state;
+        const {error} = this.state;
         return (
-            <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit}>
-                { error && <div className="error">{error}</div> }
+            <Container textAlign="center">
+                <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit}>
+                    {error && <div className="error">{error}</div>}
 
-                <AutoField name="firstName"/>
-                <ErrorField name="firstName"/>
+                    <AutoField name="firstName"/>
+                    <ErrorField name="firstName"/>
 
-                <AutoField name="lastName"/>
-                <ErrorField name="lastName"/>
+                    <AutoField name="lastName"/>
+                    <ErrorField name="lastName"/>
 
-                <AutoField name="email"/>
-                <ErrorField name="email"/>
+                    <AutoField name="email"/>
+                    <ErrorField name="email"/>
 
-                <AutoField name="password" type="password"/>
-                <ErrorField name="password"/>
+                    <AutoField name="password" type="password"/>
+                    <ErrorField name="password"/>
 
-                <AutoField name="confirm_password" type="password"/>
-                <ErrorField name="confirm_password"/>
+                    <AutoField name="confirm_password" type="password"/>
+                    <ErrorField name="confirm_password"/>
 
-                <button type="submit">
-                    Register
-                </button>
-            </AutoForm>
+                    <Button fluid primary type="submit">
+                        Register
+                    </Button>
+                </AutoForm>
+            </Container>
         )
     }
 }

@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/posts/queries/postList';
 import PostList from './components/PostList.jsx';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 export default class PostListContainer extends Pager {
     constructor() {
@@ -24,7 +26,7 @@ export default class PostListContainer extends Pager {
         const PostListCont = this.PostListCont;
 
         return (
-            <div>
+            <Container textAlign="center">
                 <div>
                     <h2>Posts</h2>
                 </div>
@@ -34,9 +36,9 @@ export default class PostListContainer extends Pager {
                     {this.getPaginator()}
                 </div>
                 <div>
-                    <a href="/post/create">Create post</a>
+                    <Button fluid primary href="/post/create">Create post</Button>
                 </div>
-            </div>
+            </Container>
         );
     }
 }

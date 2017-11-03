@@ -4,6 +4,8 @@ import query from '/imports/api/users/queries/singleUser.js';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 class EditUser extends Component {
     constructor() {
@@ -64,25 +66,27 @@ class EditUser extends Component {
         }
 
         return (
-            <AutoForm model={model} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                {this.state.error
-                    ? <div className="error">{this.state.error}</div>
-                    : ''
-                }
+            <Container textAlign="center">
+                <AutoForm model={model} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                    {this.state.error
+                        ? <div className="error">{this.state.error}</div>
+                        : ''
+                    }
 
-                <AutoField name="profile.firstName"/>
-                <ErrorField name="profile.firstName"/>
+                    <AutoField name="profile.firstName"/>
+                    <ErrorField name="profile.firstName"/>
 
-                <AutoField name="profile.lastName"/>
-                <ErrorField name="profile.lastName"/>
+                    <AutoField name="profile.lastName"/>
+                    <ErrorField name="profile.lastName"/>
 
-                <AutoField name="email"/>
-                <ErrorField name="email"/>
+                    <AutoField name="email"/>
+                    <ErrorField name="email"/>
 
-                <button type="submit">
-                    Save
-                </button>
-            </AutoForm>
+                    <Button primary fluid type="submit">
+                        Save
+                    </Button>
+                </AutoForm>
+            </Container>
         );
     }
 }

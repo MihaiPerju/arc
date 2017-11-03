@@ -1,5 +1,10 @@
 import React from 'react';
+import {Dimmer, Loader} from 'semantic-ui-react'
 
 export default () => {
-    return <div className="cc-loader" />
+    return (
+        <Dimmer active inverted>
+            <Loader inverted>Loading</Loader>
+        </Dimmer>
+    )
 }

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import _ from 'underscore';
 import ClientSingle from './ClientSingle.jsx';
 import ClientHeadList from './ClientHeadList';
+import {Container} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
 
 export default class ClientList extends Component {
     render() {
@@ -16,30 +18,29 @@ export default class ClientList extends Component {
         }
 
         return (
-            <div>
-                <table>
-                    <tbody>
+            <Container>
+                <Table padded>
+                    <Table.Header>
+                        <ClientHeadList sortBy={sortBy}
+                                        isSortAscend={isSortAscend}
+                                        handleHeaderClick={handleHeaderClick}/>
+                    </Table.Header>
                     {
                         data.length
                             ?
-                            <div>
-                                <tr>
-                                    <ClientHeadList sortBy={sortBy}
-                                                    isSortAscend={isSortAscend}
-                                                    handleHeaderClick={handleHeaderClick}/>/>
-                                </tr>
+                            <Table.Body>
+
                                 {_.map(data, (client, idx) => {
                                     return <ClientSingle client={client} key={idx}/>;
                                 })}
-                            </div>
+                            </Table.Body>
                             :
-                            <div>
+                            <Table.Body>
                                 There are no clients
-                            </div>
+                            </Table.Body>
                     }
-                    </tbody>
-                </table>
-            </div>
+                </Table>
+            </Container>
         );
     }
 }

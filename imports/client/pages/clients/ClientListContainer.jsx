@@ -4,6 +4,8 @@ import query from '/imports/api/clients/queries/listClients.js';
 import ClientList from './components/ClientList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 export default class ClientListContainer extends Pager {
     constructor() {
@@ -65,7 +67,7 @@ export default class ClientListContainer extends Pager {
         const {sortBy, isSortAscend} = this.state;
 
         return (
-            <div>
+            <Container textAlign="center">
                 <div>
                     <SearchInput handleSearch={this.handleSearch}/>
                     <h2>Clients</h2>
@@ -79,9 +81,9 @@ export default class ClientListContainer extends Pager {
                     {this.getPaginator()}
                 </div>
                 <div>
-                    <a href="/client/create">Create client</a>
+                    <Button fluid href="/client/create">Create client</Button>
                 </div>
-            </div>
+            </Container>
         );
     }
 }

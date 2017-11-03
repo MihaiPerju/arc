@@ -1,9 +1,11 @@
 import React from 'react';
-import { AutoForm, AutoField, ErrorField, LongTextField } from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField, LongTextField} from 'uniforms-unstyled';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/posts/queries/postList';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 class EditPost extends React.Component {
     constructor() {
@@ -15,7 +17,7 @@ class EditPost extends React.Component {
     onSubmit(formData) {
         const {data} = this.props;
 
-        Meteor.call('post.edit', data._id,  formData, (err)=> {
+        Meteor.call('post.edit', data._id, formData, (err) => {
             if (!err) {
                 Notifier.success('Data saved !');
                 FlowRouter.go('/post/list');
@@ -27,22 +29,24 @@ class EditPost extends React.Component {
         const {data, loading, error} = this.props;
 
         return (
-            <AutoForm schema={CreatePostSchema} onSubmit={this.onSubmit.bind(this)} ref="form" model={data}>
-                {this.state.error
-                    ? <div className="error">{this.state.error}</div>
-                    : ''
-                }
+            <Container textAlign="center">
+                <AutoForm schema={CreatePostSchema} onSubmit={this.onSubmit.bind(this)} ref="form" model={data}>
+                    {this.state.error
+                        ? <div className="error">{this.state.error}</div>
+                        : ''
+                    }
 
-                <AutoField name="title"/>
-                <ErrorField name="title"/>
+                    <AutoField name="title"/>
+                    <ErrorField name="title"/>
 
-                <LongTextField name="content"/>
-                <ErrorField name="content"/>
+                    <LongTextField name="content"/>
+                    <ErrorField name="content"/>
 
-                <button type="submit">
-                    Save
-                </button>
-            </AutoForm>
+                    <Button primary fluid type="submit">
+                        Save
+                    </Button>
+                </AutoForm>
+            </Container>
         )
     }
 }
@@ -58,5 +62,5 @@ export default (props) => {
         single: true
     });
 
-    return <Container />
+    return <Container/>
 };
