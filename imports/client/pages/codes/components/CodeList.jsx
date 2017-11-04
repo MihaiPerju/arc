@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import _ from 'underscore';
 import CodeSingle from './CodeSingle.jsx';
 import CodeHeadList from './CodeHeadList';
+import {Container} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 export default class CodeList extends Component {
     render() {
@@ -16,28 +19,29 @@ export default class CodeList extends Component {
         }
 
         return (
-            <div>
-                <table>
-                    <tbody>
+            <Container>
+                <Table>
+                    <Table.Header>
+                        <CodeHeadList sortBy={sortBy}
+                                      isSortAscend={isSortAscend}
+                                      handleHeaderClick={handleHeaderClick}/>
+                    </Table.Header>
                     {
                         data.length
                             ?
-                            <div>
-                                <CodeHeadList sortBy={sortBy}
-                                              isSortAscend={isSortAscend}
-                                              handleHeaderClick={handleHeaderClick}/>
+                            <Table.Body>
+
                                 {_.map(data, (code, idx) => {
                                     return <CodeSingle code={code} key={idx}/>;
                                 })}
-                            </div>
+                            </Table.Body>
                             :
-                            <div>
+                            <Table.Body>
                                 There are no CARC/RARC codes.
-                            </div>
+                            </Table.Body>
                     }
-                    </tbody>
-                </table>
-            </div>
+                </Table>
+            </Container>
         );
     }
 }

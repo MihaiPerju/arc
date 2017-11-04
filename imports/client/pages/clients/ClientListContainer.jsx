@@ -81,7 +81,7 @@ export default class ClientListContainer extends Pager {
                     {this.getPaginator()}
                 </div>
                 <div>
-                    <Button fluid href="/client/create">Create client</Button>
+                    <Button fluid primary href="/client/create">Create client</Button>
                 </div>
             </Container>
         );

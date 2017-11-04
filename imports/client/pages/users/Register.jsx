@@ -2,8 +2,7 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Container, Button, Divider} from 'semantic-ui-react'
 
 class Register extends React.Component {
     constructor() {
@@ -34,7 +33,7 @@ class Register extends React.Component {
     render() {
         const {error} = this.state;
         return (
-            <Container textAlign="center">
+            <Container>
                 <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit}>
                     {error && <div className="error">{error}</div>}
 
@@ -52,6 +51,8 @@ class Register extends React.Component {
 
                     <AutoField name="confirm_password" type="password"/>
                     <ErrorField name="confirm_password"/>
+
+                    <Divider/>
 
                     <Button fluid primary type="submit">
                         Register

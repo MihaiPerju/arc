@@ -3,6 +3,8 @@ import {AutoForm, AutoField, ErrorField, LongTextField} from 'uniforms-unstyled'
 import CodesSchema from '/imports/api/codes/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
 import query from '/imports/api/codes/queries/listCodes';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 export default class CodeEdit extends React.Component {
     constructor() {
@@ -52,7 +54,7 @@ export default class CodeEdit extends React.Component {
         const {code} = this.state;
 
         return (
-            <div>
+            <Container textAlign="center">
                 {
                     this.state.error
                         ?
@@ -78,12 +80,12 @@ export default class CodeEdit extends React.Component {
                             <LongTextField name="denial_action"/>
                             <ErrorField name="denial_action"/>
 
-                            <button type="submit">
+                            <Button fluid primary type="submit">
                                 Save
-                            </button>
+                            </Button>
                         </AutoForm>
                 }
-            </div>
+            </Container>
         )
     }
 }

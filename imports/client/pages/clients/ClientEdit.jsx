@@ -4,6 +4,8 @@ import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, Te
 import Notifier from '/imports/client/lib/Notifier';
 import DropzoneComponent from 'react-dropzone-component';
 import {path, getToken} from '/imports/api/s3-uploads/utils';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 export default class EditClient extends React.Component {
     constructor() {
@@ -105,7 +107,7 @@ export default class EditClient extends React.Component {
         };
 
         return (
-            <div>
+            <Container textAlign="center">
                 <h2>Edit Client</h2>
                 {this.state.error
                     ? <div className="error">{this.state.error}</div>
@@ -148,13 +150,13 @@ export default class EditClient extends React.Component {
                                 </ListItemField>
                             </ListField>
 
-                            <button type="submit">
+                            <Button primary fluid type="submit">
                                 Save
-                            </button>
+                            </Button>
                         </AutoForm>
                     )
                 }
-            </div>
+            </Container>
         )
     }
 }

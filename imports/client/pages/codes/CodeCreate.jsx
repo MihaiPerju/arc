@@ -3,6 +3,8 @@ import CodesSchema from '/imports/api/codes/schemas/schema';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import Notifier from '/imports/client/lib/Notifier';
 import CodeEnum from '/imports/api/codes/enums/codes';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 export default class CodeCreate extends React.Component {
     constructor() {
@@ -24,7 +26,7 @@ export default class CodeCreate extends React.Component {
 
     render() {
         return (
-            <div>
+            <Container textAlign="center">
                 <h2>Add a code</h2>
                 <AutoForm schema={CodesSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 
@@ -48,11 +50,11 @@ export default class CodeCreate extends React.Component {
                     <AutoField name="denial_action"/>
                     <ErrorField name="denial_action"/>
 
-                    <button type="submit">
+                    <Button fluid primary type="submit">
                         Create
-                    </button>
+                    </Button>
                 </AutoForm>
-            </div>
+            </Container>
         )
     }
 }
