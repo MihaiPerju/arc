@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
+import {Table} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 export default class LetterSingle extends Component {
     constructor() {
@@ -27,14 +29,15 @@ export default class LetterSingle extends Component {
         const {letterTemplate} = this.props;
 
         return (
-            <tr>
-                <td>{letterTemplate.name}</td>
-                <td>
-                    <a onClick={this.onEditLetterTemplate}>Edit</a>
-
-                    <button onClick={this.deleteLetterTemplate}>Delete</button>
-                </td>
-            </tr>
+            <Table.Row>
+                <Table.Cell>{letterTemplate.name}</Table.Cell>
+                <Table.Cell>
+                    <Button.Group>
+                        <Button primary onClick={this.onEditLetterTemplate}>Edit</Button>
+                        <Button color="red" onClick={this.deleteLetterTemplate}>Delete</Button>
+                    </Button.Group>
+                </Table.Cell>
+            </Table.Row>
         );
     }
 }

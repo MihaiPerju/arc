@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import _ from 'underscore';
 import LetterTemplateSingle from './LetterTemplateSingle.jsx';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
 
 export default class LetterTemplateList extends Component {
     render() {
@@ -15,29 +18,30 @@ export default class LetterTemplateList extends Component {
         }
 
         return (
-            <div>
-                <table>
-                    <tbody>
+            <Container>
+                <Table padded>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Name</Table.HeaderCell>
+                            <Table.HeaderCell>Actions</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
                     {
                         data.length
                             ?
-                            <div>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Actions</th>
-                                </tr>
+                            <Table.Body>
+
                                 {_.map(data, (letterTemplate, idx) => {
                                     return <LetterTemplateSingle letterTemplate={letterTemplate} key={idx}/>;
                                 })}
-                            </div>
+                            </Table.Body>
                             :
-                            <div>
+                            <Table.Body>
                                 There are no letter templates
-                            </div>
+                            </Table.Body>
                     }
-                    </tbody>
-                </table>
-            </div>
+                </Table>
+            </Container>
         );
     }
 }

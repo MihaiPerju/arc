@@ -3,6 +3,8 @@ import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/letterTemplates/queries/listLetterTemplates.js';
 import LetterTemplatesList from './components/LetterTemplatesList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 export default class LetterTemplatesListContainer extends Pager {
     constructor() {
@@ -24,7 +26,7 @@ export default class LetterTemplatesListContainer extends Pager {
         const LetterTemplatesListCont = this.LetterTemplatesListCont;
 
         return (
-            <div>
+            <Container>
                 <div>
                     <h2>Letter templates</h2>
                 </div>
@@ -34,9 +36,9 @@ export default class LetterTemplatesListContainer extends Pager {
                     {this.getPaginator()}
                 </div>
                 <div>
-                    <a href="/letter-template/create">Create a letter template</a>
+                    <Button primary fluid href="/letter-template/create">Create a letter template</Button>
                 </div>
-            </div>
+            </Container>
         );
     }
 }
