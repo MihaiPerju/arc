@@ -3,6 +3,9 @@ import {AutoForm, AutoField, ErrorField, RadioField} from 'uniforms-unstyled';
 import schema from '/imports/api/facilities/schemas/importRulesSchema';
 import Notifier from '/imports/client/lib/Notifier';
 import PropTypes from 'prop-types';
+import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 export default class ImportingRules extends React.Component {
     constructor() {
@@ -15,6 +18,7 @@ export default class ImportingRules extends React.Component {
         Meteor.call('facility.update', {_id: facilityId, importRules}, (err) => {
             if (!err) {
                 Notifier.success("Facility updated!");
+                FlowRouter.reload();
             } else {
                 Notifier.error(err.reason);
             }
@@ -36,7 +40,7 @@ export default class ImportingRules extends React.Component {
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
 
         return (
-            <div>
+            <Container>
                 <AutoForm model={model.importRules} schema={schema} onSubmit={this.onSubmitImportingRules}>
 
                     <RadioField name="hasHeader" options={options}/>
@@ -53,9 +57,11 @@ export default class ImportingRules extends React.Component {
                         })
                     }
 
-                    <button type="submit">Submit</button>
+                    <Divider/>
+
+                    <Button primary fluid type="submit">Submit</Button>
                 </AutoForm>
-            </div>
+            </Container>
         )
     }
 }
