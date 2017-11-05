@@ -27,7 +27,7 @@ export default class CreateLetterTemplate extends React.Component {
 
     render() {
         return (
-            <Container>
+            <Container className="page-container">
                 <Header as="h2" textAlign="center">Add a letter template</Header>
                 <AutoForm schema={LetterTemplateSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 

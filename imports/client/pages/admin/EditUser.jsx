@@ -67,7 +67,7 @@ class EditUser extends Component {
         }
 
         return (
-            <Container>
+            <Container className="page-container">
                 <AutoForm model={model} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
                     {this.state.error
                         ? <div className="error">{this.state.error}</div>

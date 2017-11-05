@@ -72,7 +72,7 @@ export default class FacilityEdit extends React.Component {
         }
 
         return (
-            <Container>
+            <Container className="page-container">
                 <TabSelect header="Edit facility" options={tabOptions}/>
             </Container>
         );

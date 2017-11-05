@@ -33,7 +33,7 @@ class ResetPassword extends React.Component {
         const {error} = this.state;
 
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <AutoForm schema={ResetPasswordSchema} onSubmit={this.onSubmit}>
                     {error && <div className="error">{error}</div>}
 

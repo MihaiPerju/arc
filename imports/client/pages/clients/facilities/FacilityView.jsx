@@ -41,7 +41,7 @@ export default class FacilityView extends React.Component {
         const {zipCode, status, region, createdAt, contacts} = facility;
 
         return (
-            <Container>
+            <Container className="page-container">
                 <Header as="h3" textAlign="center">Facility {name}</Header>
                 <h5>Status: {status}</h5>
                 <h5>State: {state}</h5>

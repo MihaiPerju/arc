@@ -26,7 +26,7 @@ class CreateUser extends React.Component {
 
     render() {
         return (
-            <Container>
+            <Container className="page-container">
                 <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
                     {this.state.error
                         ? <div className="error">{this.state.error}</div>

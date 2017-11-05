@@ -27,7 +27,7 @@ export default class CreateClient extends React.Component {
 
     render() {
         return (
-            <Container>
+            <Container className="page-container">
                 <Header as="h2" textAlign="center">Add a client</Header>
                 <AutoForm schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 

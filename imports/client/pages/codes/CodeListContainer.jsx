@@ -7,6 +7,7 @@ import SearchInput from "/imports/client/lib/SearchInput.jsx";
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
 
 export default class CodeListContainer extends Pager {
     constructor() {
@@ -68,10 +69,10 @@ export default class CodeListContainer extends Pager {
         const {sortBy, isSortAscend} = this.state;
 
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <div>
                     <SearchInput handleSearch={this.handleSearch}/>
-                    <h2>Manage CARC/RARC Codes</h2>
+                    <Header as="h2" textAlign="center">Manage CARC/RARC Codes</Header>
                 </div>
                 <div>
                     {this.getPaginator()}

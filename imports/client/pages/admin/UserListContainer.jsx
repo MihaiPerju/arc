@@ -28,9 +28,9 @@ export default class UserListContainer extends Pager {
         const UserListCont = this.UserListCont;
 
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <div>
-                    <Header as="h2">Users</Header>
+                    <Header textAlign="center" as="h2">Users</Header>
                 </div>
                 <div>
                     {this.getPaginator()}

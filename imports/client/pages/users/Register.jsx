@@ -33,7 +33,7 @@ class Register extends React.Component {
     render() {
         const {error} = this.state;
         return (
-            <Container>
+            <Container className="page-container">
                 <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit}>
                     {error && <div className="error">{error}</div>}
 

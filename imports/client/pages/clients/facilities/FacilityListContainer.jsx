@@ -95,7 +95,7 @@ export default class FacilityListContainer extends Pager {
         const {sortBy, isSortAscend} = this.state;
 
         return (
-            <Container>
+            <Container className="page-container">
                 <Header as="h3" textAlign="center">Facility List</Header>
 
 

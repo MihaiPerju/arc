@@ -28,7 +28,7 @@ export default class CodeCreate extends React.Component {
 
     render() {
         return (
-            <Container>
+            <Container className="page-container">
                 <Header as="h2" textAlign="center">Add a code</Header>
                 <AutoForm schema={CodesSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 

@@ -30,7 +30,7 @@ class EditPost extends React.Component {
         const {data, loading, error} = this.props;
 
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <AutoForm schema={CreatePostSchema} onSubmit={this.onSubmit.bind(this)} ref="form" model={data}>
                     {this.state.error
                         ? <div className="error">{this.state.error}</div>

@@ -28,7 +28,7 @@ export default class LetterTemplatesListContainer extends Pager {
         const LetterTemplatesListCont = this.LetterTemplatesListCont;
 
         return (
-            <Container>
+            <Container className="page-container">
                 <div>
                     <Header as="h2" textAlign="center">Letter templates</Header>
                 </div>

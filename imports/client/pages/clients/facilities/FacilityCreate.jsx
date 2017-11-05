@@ -2,6 +2,7 @@ import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import FacilityForm from "./components/FacilityForm.jsx";
 import {Header} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
 
 export default class FacilityCreate extends React.Component {
     createFacility = (data) => {
@@ -18,10 +19,10 @@ export default class FacilityCreate extends React.Component {
 
     render() {
         return (
-            <div>
+            <Container className="page-container">
                 <Header as="h3" textAlign="center">Create facility</Header>
                 <FacilityForm submitAction={this.createFacility}/>
-            </div>
+            </Container>
         );
     }
 }

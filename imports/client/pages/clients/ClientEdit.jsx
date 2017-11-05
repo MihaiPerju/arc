@@ -109,7 +109,7 @@ export default class EditClient extends React.Component {
         };
 
         return (
-            <Container>
+            <Container className="page-container">
                 <Header as="h2" textAlign="center">Edit Client</Header>
                 {this.state.error
                     ? <div className="error">{this.state.error}</div>

@@ -30,7 +30,7 @@ class ForgotPassword extends React.Component {
     render() {
         const {error} = this.state;
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <AutoForm schema={ForgotPasswordSchema} onSubmit={this.onSubmit}>
                     {error && <div className="error">{error}</div>}
                     <AutoField name="email"/>

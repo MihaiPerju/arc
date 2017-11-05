@@ -49,7 +49,7 @@ export default class EditLetterTemplate extends React.Component {
         const {model} = this.state;
 
         return (
-            <Container>
+            <Container className="page-container">
                 <Header as="h2" textAlign="center">Edit Letter template</Header>
                 {
                     this.state.error

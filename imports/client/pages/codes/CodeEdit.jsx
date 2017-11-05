@@ -55,7 +55,7 @@ export default class CodeEdit extends React.Component {
         const {code} = this.state;
 
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 {
                     this.state.error
                         ?

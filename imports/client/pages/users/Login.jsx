@@ -33,7 +33,7 @@ class Login extends React.Component {
         const {error} = this.state;
 
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <AutoForm schema={LoginSchema} onSubmit={this.onSubmit}>
                     {
                         error && <div className="error">{error}</div>

@@ -42,7 +42,7 @@ class MyProfile extends React.Component {
         };
 
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <MyAvatar user={user}/>
                 <AutoForm schema={MyProfileSchema} onSubmit={this.onSubmit} model={model}>
                     {error && <div className="error">{error}</div>}

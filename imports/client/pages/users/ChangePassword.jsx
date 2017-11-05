@@ -33,7 +33,7 @@ class ChangePassword extends React.Component {
     render() {
         const {error} = this.state;
         return (
-            <Container textAlign="center">
+            <Container className="page-container">
                 <AutoForm schema={ChangePasswordSchema} onSubmit={this.onSubmit} ref={this.onFormMount}>
                     {error && <div className="error">{error}</div>}
 
