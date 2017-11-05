@@ -6,6 +6,7 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 export default class ClientListContainer extends Pager {
     constructor() {
@@ -80,9 +81,8 @@ export default class ClientListContainer extends Pager {
                                     handleHeaderClick={this.handleHeaderClick}/>
                     {this.getPaginator()}
                 </div>
-                <div>
-                    <Button fluid primary href="/client/create">Create client</Button>
-                </div>
+                <Divider/>
+                <Button fluid primary href="/client/create">Create client</Button>
             </Container>
         );
     }

@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/posts/queries/postList';
 import PostList from './components/PostList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 export default class PostListContainer extends Pager {
     constructor() {
@@ -35,9 +36,8 @@ export default class PostListContainer extends Pager {
                     <PostListCont params={params}/>
                     {this.getPaginator()}
                 </div>
-                <div>
-                    <Button fluid primary href="/post/create">Create post</Button>
-                </div>
+                <Divider/>
+                <Button fluid primary href="/post/create">Create post</Button>
             </Container>
         );
     }

@@ -1,9 +1,10 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 class ResetPassword extends React.Component {
     constructor() {
@@ -41,6 +42,8 @@ class ResetPassword extends React.Component {
 
                     <AutoField name="confirm_password" type="password"/>
                     <ErrorField name="confirm_password"/>
+
+                    <Divider/>
 
                     <Button fluid primary type="submit">
                         Reset

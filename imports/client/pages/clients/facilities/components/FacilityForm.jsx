@@ -1,6 +1,6 @@
 import React from 'react';
 import FacilityContactList from "./FacilityContactList.jsx";
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
 import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";

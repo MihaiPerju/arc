@@ -1,5 +1,5 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container, Button, Divider} from 'semantic-ui-react'

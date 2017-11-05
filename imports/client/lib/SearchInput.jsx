@@ -1,6 +1,6 @@
 import React from "react";
 import SimpleSchema from "simpl-schema";
-import {AutoForm, AutoField} from 'uniforms-unstyled';
+import {AutoForm, AutoField} from 'uniforms-semantic';
 
 const searchSchema = new SimpleSchema({
     searchValue: {

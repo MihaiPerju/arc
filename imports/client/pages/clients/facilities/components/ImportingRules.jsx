@@ -1,5 +1,5 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField, RadioField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField, RadioField} from 'uniforms-semantic';
 import schema from '/imports/api/facilities/schemas/importRulesSchema';
 import Notifier from '/imports/client/lib/Notifier';
 import PropTypes from 'prop-types';

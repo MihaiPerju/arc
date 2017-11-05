@@ -1,9 +1,10 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 class CreateUser extends React.Component {
     constructor() {
@@ -25,7 +26,7 @@ class CreateUser extends React.Component {
 
     render() {
         return (
-            <Container textAlign="center">
+            <Container>
                 <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
                     {this.state.error
                         ? <div className="error">{this.state.error}</div>
@@ -46,6 +47,8 @@ class CreateUser extends React.Component {
 
                     <AutoField name="confirm_password" type="password"/>
                     <ErrorField name="confirm_password"/>
+
+                    <Divider/>
 
                     <Button primary fluid type="submit">
                         Register

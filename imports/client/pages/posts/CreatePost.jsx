@@ -1,9 +1,10 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField, LongTextField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField, LongTextField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 class CreatePost extends React.Component {
     constructor() {
@@ -35,6 +36,8 @@ class CreatePost extends React.Component {
 
                     <LongTextField name="content"/>
                     <ErrorField name="content"/>
+
+                    <Divider/>
 
                     <Button primary fluid type="submit">
                         Add

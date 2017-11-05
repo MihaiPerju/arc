@@ -1,12 +1,13 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import MyProfileSchema from '/imports/api/users/schemas/MyProfileSchema';
 import {Notifier, Loading} from '/imports/client/utils';
 import createUserContainer from '/imports/client/lib/createUserContainer';
 import MyAvatar from './components/MyAvatar';
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 class MyProfile extends React.Component {
     constructor() {
@@ -54,6 +55,8 @@ class MyProfile extends React.Component {
 
                     <AutoField name="email"/>
                     <ErrorField name="email"/>
+
+                    <Divider/>
 
                     <Button fluid primary type="submit">
                         Update

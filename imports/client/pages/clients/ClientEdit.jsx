@@ -1,11 +1,13 @@
 import React from 'react';
 import ClientSchema from '/imports/api/clients/schemas/schema';
-import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import DropzoneComponent from 'react-dropzone-component';
 import {path, getToken} from '/imports/api/s3-uploads/utils';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
 
 export default class EditClient extends React.Component {
     constructor() {
@@ -107,8 +109,8 @@ export default class EditClient extends React.Component {
         };
 
         return (
-            <Container textAlign="center">
-                <h2>Edit Client</h2>
+            <Container>
+                <Header as="h2" textAlign="center">Edit Client</Header>
                 {this.state.error
                     ? <div className="error">{this.state.error}</div>
                     : (
@@ -149,6 +151,8 @@ export default class EditClient extends React.Component {
                                     </NestField>
                                 </ListItemField>
                             </ListField>
+
+                            <Divider/>
 
                             <Button primary fluid type="submit">
                                 Save

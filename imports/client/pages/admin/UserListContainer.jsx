@@ -6,6 +6,7 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import {Container} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 export default class UserListContainer extends Pager {
     constructor() {
@@ -36,9 +37,8 @@ export default class UserListContainer extends Pager {
                     <UserListCont params={params}/>
                     {this.getPaginator()}
                 </div>
-                <div>
-                    <Button fluid primary href="/admin/user/create">Create user</Button>
-                </div>
+                <Divider/>
+                <Button fluid primary href="/admin/user/create">Create user</Button>
             </Container>
         );
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import SimpleSchema from "simpl-schema";
-import {AutoForm, SelectField} from 'uniforms-unstyled';
+import {AutoForm, SelectField} from 'uniforms-semantic';
 
 const SelectDropDownSchema = new SimpleSchema({
     selectedOption: {

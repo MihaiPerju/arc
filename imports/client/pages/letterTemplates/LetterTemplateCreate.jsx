@@ -1,6 +1,6 @@
 import React from 'react';
 import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
