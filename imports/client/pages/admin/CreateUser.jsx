@@ -1,7 +1,10 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 class CreateUser extends React.Component {
     constructor() {
@@ -23,31 +26,35 @@ class CreateUser extends React.Component {
 
     render() {
         return (
-            <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                {this.state.error
-                    ? <div className="error">{this.state.error}</div>
-                    : ''
-                }
+            <Container className="page-container">
+                <AutoForm schema={RegisterSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                    {this.state.error
+                        ? <div className="error">{this.state.error}</div>
+                        : ''
+                    }
 
-                <AutoField name="firstName"/>
-                <ErrorField name="firstName"/>
+                    <AutoField name="firstName"/>
+                    <ErrorField name="firstName"/>
 
-                <AutoField name="lastName"/>
-                <ErrorField name="lastName"/>
+                    <AutoField name="lastName"/>
+                    <ErrorField name="lastName"/>
 
-                <AutoField name="email"/>
-                <ErrorField name="email"/>
+                    <AutoField name="email"/>
+                    <ErrorField name="email"/>
 
-                <AutoField name="password" type="password"/>
-                <ErrorField name="password"/>
+                    <AutoField name="password" type="password"/>
+                    <ErrorField name="password"/>
 
-                <AutoField name="confirm_password" type="password"/>
-                <ErrorField name="confirm_password"/>
+                    <AutoField name="confirm_password" type="password"/>
+                    <ErrorField name="confirm_password"/>
 
-                <button type="submit">
-                    Register
-                </button>
-            </AutoForm>
+                    <Divider/>
+
+                    <Button primary fluid type="submit">
+                        Register
+                    </Button>
+                </AutoForm>
+            </Container>
         )
     }
 }

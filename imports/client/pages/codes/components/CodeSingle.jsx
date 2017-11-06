@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
+import {Button} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
 
 export default class CodeSingle extends Component {
 
@@ -26,19 +28,21 @@ export default class CodeSingle extends Component {
         const {code} = this.props;
 
         return (
-            <tr>
-                <td>{code.code}</td>
-                <td>{code.action}</td>
-                <td>{code.type}</td>
-                <td>{code.description}</td>
-                <td>{code.description_short}</td>
-                <td>{code.denial_action}</td>
-                <td>
-                    <a onClick={this.onEditCode}>Edit Code</a>
+            <Table.Row>
+                <Table.Cell>{code.code}</Table.Cell>
+                <Table.Cell>{code.action}</Table.Cell>
+                <Table.Cell>{code.type}</Table.Cell>
+                <Table.Cell>{code.description}</Table.Cell>
+                <Table.Cell>{code.description_short}</Table.Cell>
+                <Table.Cell>{code.denial_action}</Table.Cell>
+                <Table.Cell>
+                    <Button.Group>
+                        <Button primary onClick={this.onEditCode}>Edit Code</Button>
 
-                    <button onClick={this.deleteCode}>Delete</button>
-                </td>
-            </tr>
+                        <Button color="red" onClick={this.deleteCode}>Delete</Button>
+                    </Button.Group>
+                </Table.Cell>
+            </Table.Row>
         );
     }
 }

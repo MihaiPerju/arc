@@ -1,11 +1,14 @@
 import React from 'react';
 import FacilityContactList from "./FacilityContactList.jsx";
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
 import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import SelectUsersContainer from './SelectUsersContainer';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 export default class FacilityForm extends React.Component {
     constructor() {
@@ -35,7 +38,7 @@ export default class FacilityForm extends React.Component {
         };
 
         return (
-            <div>
+            <Container>
                 <AutoForm schema={schema} model={newModel} onSubmit={this.onSubmit}>
                     <AutoField name="name"/>
                     <ErrorField name="name"/>
@@ -61,14 +64,16 @@ export default class FacilityForm extends React.Component {
                     <SelectMulti name="region" options={regions}/>
                     <ErrorField name="region"/>
 
-                    <SelectUsersContainer />
+                    <SelectUsersContainer/>
 
                     <h4>Contacts</h4>
                     <FacilityContactList/>
 
-                    <button type="submit">Submit</button>
+                    <Divider/>
+
+                    <Button primary fluid type="submit">Submit</Button>
                 </AutoForm>
-            </div>
+            </Container>
         );
     }
 }

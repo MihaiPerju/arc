@@ -2,7 +2,11 @@ import React, {Component} from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/users/queries/listUsers.js';
 import UserList from './components/UserList.jsx';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
+import {Container} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 export default class UserListContainer extends Pager {
     constructor() {
@@ -24,19 +28,18 @@ export default class UserListContainer extends Pager {
         const UserListCont = this.UserListCont;
 
         return (
-            <div>
+            <Container className="page-container">
                 <div>
-                    <h2>Users</h2>
+                    <Header textAlign="center" as="h2">Users</Header>
                 </div>
                 <div>
                     {this.getPaginator()}
-                    <UserListCont params={params} />
+                    <UserListCont params={params}/>
                     {this.getPaginator()}
                 </div>
-                <div>
-                    <a href="/admin/user/create">Create user</a>
-                </div>
-            </div>
+                <Divider/>
+                <Button fluid primary href="/admin/user/create">Create user</Button>
+            </Container>
         );
     }
 }

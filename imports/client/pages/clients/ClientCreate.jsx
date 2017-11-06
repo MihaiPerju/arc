@@ -1,7 +1,11 @@
 import React from 'react';
 import ClientSchema from '/imports/api/clients/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
 
 export default class CreateClient extends React.Component {
     constructor() {
@@ -23,8 +27,8 @@ export default class CreateClient extends React.Component {
 
     render() {
         return (
-            <div>
-                <h2>Add a client</h2>
+            <Container className="page-container">
+                <Header as="h2" textAlign="center">Add a client</Header>
                 <AutoForm schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 
                     {
@@ -46,11 +50,14 @@ export default class CreateClient extends React.Component {
 
                     <AutoField name="email"/>
                     <ErrorField name="email"/>
-                    <button type="submit">
+
+                    <Divider/>
+
+                    <Button primary fluid type="submit">
                         Continue
-                    </button>
+                    </Button>
                 </AutoForm>
-            </div>
+            </Container>
         )
     }
 }

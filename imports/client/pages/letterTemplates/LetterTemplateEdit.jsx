@@ -1,7 +1,11 @@
 import React from 'react';
 import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
-import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
 
 export default class EditLetterTemplate extends React.Component {
     constructor() {
@@ -45,8 +49,8 @@ export default class EditLetterTemplate extends React.Component {
         const {model} = this.state;
 
         return (
-            <div>
-                <h2>Edit Letter template</h2>
+            <Container className="page-container">
+                <Header as="h2" textAlign="center">Edit Letter template</Header>
                 {
                     this.state.error
                         ?
@@ -61,12 +65,14 @@ export default class EditLetterTemplate extends React.Component {
                             <AutoField name="content"/>
                             <ErrorField name="content"/>
 
-                            <button type="submit">
+                            <Divider/>
+
+                            <Button fluid primary type="submit">
                                 Save
-                            </button>
+                            </Button>
                         </AutoForm>
                 }
-            </div>
+            </Container>
         )
     }
 }

@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import _ from 'underscore';
 import UserSingle from './UserSingle.jsx';
+import {Container} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
 
 export default class UserList extends Component {
     render() {
@@ -15,19 +17,22 @@ export default class UserList extends Component {
         }
 
         return (
-            <div>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Email</th>
-                            <th>Actions</th>
-                        </tr>
+            <Container>
+                <Table padded>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Email</Table.HeaderCell>
+                            <Table.HeaderCell>Actions</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+
                         {_.map(data, (user, idx) => {
                             return <UserSingle user={user} key={idx}/>;
                         })}
-                    </tbody>
-                </table>
-            </div>
+                    </Table.Body>
+                </Table>
+            </Container>
         );
     }
 }

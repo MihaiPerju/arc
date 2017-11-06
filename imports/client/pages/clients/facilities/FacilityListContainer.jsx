@@ -7,6 +7,10 @@ import SearchInput from "/imports/client/lib/SearchInput.jsx";
 import SelectDropDown from "/imports/client/lib/SelectDropDown.jsx";
 import FacilityStatusEnum from "/imports/api/facilities/enums/statuses.js";
 import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 export default class FacilityListContainer extends Pager {
     constructor() {
@@ -91,13 +95,9 @@ export default class FacilityListContainer extends Pager {
         const {sortBy, isSortAscend} = this.state;
 
         return (
-            <div>
-                <h3>Facility List</h3>
-                <button onClick={() => {
-                    FlowRouter.go("facility.create", {_id: clientId})
-                }}>
-                    Create
-                </button>
+            <Container className="page-container">
+                <Header as="h3" textAlign="center">Facility List</Header>
+
 
                 <div>
                     <SelectDropDown name="Status"
@@ -117,7 +117,16 @@ export default class FacilityListContainer extends Pager {
                                      isSortAscend={isSortAscend}
                                      handleHeaderClick={this.handleHeaderClick}/>
                 {this.getPaginator()}
-            </div>
+
+                <Divider/>
+
+                <Button primary fluid onClick={() => {
+                    FlowRouter.go("facility.create", {_id: clientId})
+                }}>
+                    Create
+                </Button>
+
+            </Container>
         );
     }
 }

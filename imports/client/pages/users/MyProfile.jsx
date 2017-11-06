@@ -1,10 +1,13 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { AutoForm, AutoField, ErrorField } from 'uniforms-unstyled';
+import {Meteor} from 'meteor/meteor';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import MyProfileSchema from '/imports/api/users/schemas/MyProfileSchema';
 import {Notifier, Loading} from '/imports/client/utils';
 import createUserContainer from '/imports/client/lib/createUserContainer';
 import MyAvatar from './components/MyAvatar';
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 class MyProfile extends React.Component {
     constructor() {
@@ -30,7 +33,7 @@ class MyProfile extends React.Component {
         const {error} = this.state;
 
         if (!user) {
-            return <Loading />
+            return <Loading/>
         }
 
         const model = {
@@ -39,25 +42,27 @@ class MyProfile extends React.Component {
         };
 
         return (
-            <div>
-                <MyAvatar user={user} />
+            <Container className="page-container">
+                <MyAvatar user={user}/>
                 <AutoForm schema={MyProfileSchema} onSubmit={this.onSubmit} model={model}>
-                    { error && <div className="error">{error}</div> }
+                    {error && <div className="error">{error}</div>}
 
-                    <AutoField name="profile.firstName" />
-                    <ErrorField name="profile.firstName" />
+                    <AutoField name="profile.firstName"/>
+                    <ErrorField name="profile.firstName"/>
 
-                    <AutoField name="profile.lastName" />
-                    <ErrorField name="profile.lastName" />
+                    <AutoField name="profile.lastName"/>
+                    <ErrorField name="profile.lastName"/>
 
-                    <AutoField name="email" />
-                    <ErrorField name="email" />
+                    <AutoField name="email"/>
+                    <ErrorField name="email"/>
 
-                    <button type="submit">
+                    <Divider/>
+
+                    <Button fluid primary type="submit">
                         Update
-                    </button>
+                    </Button>
                 </AutoForm>
-            </div>
+            </Container>
         )
     }
 }

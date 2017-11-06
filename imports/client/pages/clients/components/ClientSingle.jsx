@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
+import {Table} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 export default class ClientSingle extends Component {
 
@@ -26,23 +28,24 @@ export default class ClientSingle extends Component {
         const {client} = this.props;
 
         return (
-            <tr>
-                <td>{client.clientName}</td>
-                <td>{client.firstName}</td>
-                <td>{client.lastName}</td>
-                <td>{client.email}</td>
-                <td>
-                    <button
-                        onClick={() => {
-                            FlowRouter.go("facility.list", {_id: client._id})
-                        }}>
-                        Manage Facilities
-                    </button>
-                    <a onClick={this.onEditClient}>Edit Client</a>
-
-                    <button onClick={this.deleteClient}>Delete</button>
-                </td>
-            </tr>
+            <Table.Row>
+                <Table.Cell>{client.clientName}</Table.Cell>
+                <Table.Cell>{client.firstName}</Table.Cell>
+                <Table.Cell>{client.lastName}</Table.Cell>
+                <Table.Cell>{client.email}</Table.Cell>
+                <Table.Cell>
+                    <Button.Group>
+                        <Button primary
+                                onClick={() => {
+                                    FlowRouter.go("facility.list", {_id: client._id})
+                                }}>
+                            Manage Facilities
+                        </Button>
+                        <Button onClick={this.onEditClient}>Edit Client</Button>
+                        <Button color="red" onClick={this.deleteClient}>Delete</Button>
+                    </Button.Group>
+                </Table.Cell>
+            </Table.Row>
         );
     }
 }

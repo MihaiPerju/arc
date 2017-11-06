@@ -1,7 +1,10 @@
 import React from 'react';
-import { AutoForm, AutoField, ErrorField } from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
 
 class ResetPassword extends React.Component {
     constructor() {
@@ -13,7 +16,7 @@ class ResetPassword extends React.Component {
     }
 
     onSubmit = (data) => {
-        const { password } = data;
+        const {password} = data;
         const token = FlowRouter.current().params.token;
 
         Accounts.resetPassword(token, password, (err) => {
@@ -27,22 +30,26 @@ class ResetPassword extends React.Component {
     };
 
     render() {
-        const { error } = this.state;
+        const {error} = this.state;
 
         return (
-            <AutoForm schema={ResetPasswordSchema} onSubmit={this.onSubmit}>
-                {error && <div className="error">{error}</div> }
+            <Container className="page-container">
+                <AutoForm schema={ResetPasswordSchema} onSubmit={this.onSubmit}>
+                    {error && <div className="error">{error}</div>}
 
-                <AutoField name="password" type="password" />
-                <ErrorField name="password" />
+                    <AutoField name="password" type="password"/>
+                    <ErrorField name="password"/>
 
-                <AutoField name="confirm_password" type="password" />
-                <ErrorField name="confirm_password" />
+                    <AutoField name="confirm_password" type="password"/>
+                    <ErrorField name="confirm_password"/>
 
-                <button type="submit">
-                    Reset
-                </button>
-            </AutoForm>
+                    <Divider/>
+
+                    <Button fluid primary type="submit">
+                        Reset
+                    </Button>
+                </AutoForm>
+            </Container>
         )
     }
 }

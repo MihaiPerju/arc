@@ -1,7 +1,11 @@
 import React from 'react';
 import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
+import {Container} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
 
 export default class CreateLetterTemplate extends React.Component {
     constructor() {
@@ -23,8 +27,8 @@ export default class CreateLetterTemplate extends React.Component {
 
     render() {
         return (
-            <div>
-                <h2>Add a letter template</h2>
+            <Container className="page-container">
+                <Header as="h2" textAlign="center">Add a letter template</Header>
                 <AutoForm schema={LetterTemplateSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 
                     {this.state.error && <div className="error">{this.state.error}</div>}
@@ -35,11 +39,13 @@ export default class CreateLetterTemplate extends React.Component {
                     <AutoField name="content"/>
                     <ErrorField name="content"/>
 
-                    <button type="submit">
+                    <Divider/>
+
+                    <Button fluid primary type="submit">
                         Continue
-                    </button>
+                    </Button>
                 </AutoForm>
-            </div>
+            </Container>
         )
     }
 }

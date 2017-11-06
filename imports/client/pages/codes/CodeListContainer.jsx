@@ -4,6 +4,10 @@ import query from '/imports/api/codes/queries/listCodes.js';
 import CodeList from './components/CodeList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
 
 export default class CodeListContainer extends Pager {
     constructor() {
@@ -65,10 +69,10 @@ export default class CodeListContainer extends Pager {
         const {sortBy, isSortAscend} = this.state;
 
         return (
-            <div>
+            <Container className="page-container">
                 <div>
                     <SearchInput handleSearch={this.handleSearch}/>
-                    <h2>Manage CARC/RARC Codes</h2>
+                    <Header as="h2" textAlign="center">Manage CARC/RARC Codes</Header>
                 </div>
                 <div>
                     {this.getPaginator()}
@@ -78,10 +82,9 @@ export default class CodeListContainer extends Pager {
                                   handleHeaderClick={this.handleHeaderClick}/>
                     {this.getPaginator()}
                 </div>
-                <div>
-                    <a href="/code/create">Create code</a>
-                </div>
-            </div>
+                <Divider/>
+                <Button primary fluid href="/code/create">Create code</Button>
+            </Container>
         );
     }
 }

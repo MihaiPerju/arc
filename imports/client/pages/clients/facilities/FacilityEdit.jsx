@@ -6,6 +6,7 @@ import TabSelect from '/imports/client/lib/TabSelect';
 import tabsEnum from '/imports/client/pages/clients/facilities/enums/tabs';
 import ImportingRules from '/imports/client/pages/clients/facilities/components/ImportingRules';
 import UploadPlacementFile from '/imports/client/pages/clients/facilities/components/UploadPlacementFile';
+import {Container} from 'semantic-ui-react'
 
 export default class FacilityEdit extends React.Component {
     constructor() {
@@ -13,8 +14,7 @@ export default class FacilityEdit extends React.Component {
 
         this.state = {
             facility: null,
-            loading: true,
-            activeTab: 0
+            loading: true
         };
     }
 
@@ -47,14 +47,8 @@ export default class FacilityEdit extends React.Component {
         })
     };
 
-    onChangeActiveTab(activeTab) {
-        this.setState({
-            activeTab
-        })
-    }
-
     render() {
-        const {loading, facility, activeTab} = this.state;
+        const {loading, facility} = this.state;
         const tabOptions = [
             {
                 label: tabsEnum.GENERAL,
@@ -77,13 +71,9 @@ export default class FacilityEdit extends React.Component {
         }
 
         return (
-            <div>
-                <TabSelect onChangeActiveTab={this.onChangeActiveTab.bind(this)} options={tabOptions}/>
-                <h3>Edit facility</h3>
-                {
-                    (tabOptions[activeTab].component)
-                }
-            </div>
+            <Container className="page-container">
+                <TabSelect header="Edit facility" options={tabOptions}/>
+            </Container>
         );
     }
 }

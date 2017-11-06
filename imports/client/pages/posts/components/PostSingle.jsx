@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
+import {Icon, Label, Menu, Table} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 export default class PostSingle extends Component {
     deletePost() {
         const {post} = this.props;
 
-        Meteor.call('post.delete', post._id, (err)=> {
+        Meteor.call('post.delete', post._id, (err) => {
             if (!err) {
                 Notifier.success('Post deleted !');
                 FlowRouter.reload();
@@ -23,21 +25,21 @@ export default class PostSingle extends Component {
         const {post} = this.props;
 
         return (
-            <tr>
-                <td>{post.title}</td>
-                <td>{post.content}</td>
-                <td>{post.user.emails[0].address}</td>
-                <td>
+            <Table.Row>
+                <Table.Cell>{post.title}</Table.Cell>
+                <Table.Cell>{post.content}</Table.Cell>
+                <Table.Cell>{post.user.emails[0].address}</Table.Cell>
+                <Table.Cell>
                     {this.isMyPost() ?
-                        <div>
-                            <a href={"/post/" + post._id + "/edit"}>Edit</a>
-                            <button onClick={this.deletePost.bind(this)}>Delete</button>
-                        </div>
+                        <Button.Group>
+                            <Button primary href={"/post/" + post._id + "/edit"}>Edit</Button>
+                            <Button color="red" onClick={this.deletePost.bind(this)}>Delete</Button>
+                        </Button.Group>
                         :
                         null
                     }
-                </td>
-            </tr>
+                </Table.Cell>
+            </Table.Row>
         );
     }
 }

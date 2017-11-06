@@ -32,5 +32,8 @@ juliancwirko:postcss
 generalledger:sleepforms
 practicalmeteor:mocha
 practicalmeteor:chai
+semantic:ui
+less
+twbs:bootstrap
 xolvio:cleaner
 cultofcoders:grapher-live
