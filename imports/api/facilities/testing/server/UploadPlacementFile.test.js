@@ -1,79 +1,104 @@
-import ParseService from '/imports/api/facilities/server/services/CsvParseService';
+import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
 import {chai} from 'meteor/practicalmeteor:chai';
-import shuffle from 'shuffle-array';
-import faker from 'faker';
+import Tasks from '/imports/api/tasks/collection';
+import {resetDatabase} from 'meteor/xolvio:cleaner';
 
-describe('CSV data to Tasks parser', function () {
-    it("Must parse array extracted from CSV to 'task' data object", function () {
+describe('Upload Placement file', function () {
 
-        //Fake Data that normally is received from parsing csv
-        let input;
+    beforeEach(function () {
+        resetDatabase();
+    });
 
-        //Fake Data that normally is expected to be received from parsing array into object
-        let output;
+    it("Must import all the tasks", function () {
 
-        //Generated orders, rules and importing rules
-        let orders = [];
+        const input1 = ['Number1', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18',]
+        const input2 = ['Number2', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18',]
 
-        //Array of labels for importing rules
-        let rules = ['acctNum',
-            'facCode',
-            'ptType',
-            'ptName',
-            'dischrgDate',
-            'fbDate',
-            'acctBal',
-            'finClass',
-            'admitDate',
-            'medNo',
-            'insName',
-            'insName2',
-            'insName3',
-            'insCode',
-            'insCode2',
-            'insCode3',
-            'insBal',
-            'insBal2',
-            'insBal3'];
-
-        //generate random order for importing rules
-        generateOrder = () => {
-            return shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
+        const importingRules = {
+            acctNum: 1,
+            facCode: 2,
+            ptType: 3,
+            ptName: 4,
+            dischrgDate: 5,
+            fbDate: 6,
+            acctBal: 7,
+            finClass: 8,
+            admitDate: 9,
+            medNo: 10,
+            insName: 11,
+            insName2: 12,
+            insName3: 13,
+            insCode: 14,
+            insCode2: 15,
+            insCode3: 16,
+            insBal: 17,
+            insBal2: 18,
+            insBal3: 19
         };
 
-        //generate importing rules based on random order generated before
-        generateImportingRules = () => {
-            let newImportingRules = {};
-            for (i in orders) {
-                newImportingRules[rules[i]] = orders[i];
-            }
-            return newImportingRules;
+        let expectedOutput1 = {
+            acctNum: 'Number1',
+            facCode: '1',
+            ptType: '2',
+            ptName: '3',
+            dischrgDate: '4',
+            fbDate: '5',
+            acctBal: '6',
+            finClass: '7',
+            admitDate: '8',
+            medNo: '9',
+            insName: '10',
+            insName2: '11',
+            insName3: '12',
+            insCode: '13',
+            insCode2: '14',
+            insCode3: '15',
+            insBal: '16',
+            insBal2: '17',
+            insBal3: '18',
+            state: 'active'
         };
 
-        //generate fake array that normally is received by csv parser.
-        generateInput = () => {
-            let newInput = [];
-            for (let i = 0; i < 19; i++) {
-                newInput.push(faker.lorem.word());
-            }
-            return newInput;
+        let expectedOutput2 = {
+            acctNum: 'Number2',
+            facCode: '1',
+            ptType: '2',
+            ptName: '3',
+            dischrgDate: '4',
+            fbDate: '5',
+            acctBal: '6',
+            finClass: '7',
+            admitDate: '8',
+            medNo: '9',
+            insName: '10',
+            insName2: '11',
+            insName3: '12',
+            insCode: '13',
+            insCode2: '14',
+            insCode3: '15',
+            insBal: '16',
+            insBal2: '17',
+            insBal3: '18',
+            state: 'active'
         };
 
-        test = () => {
+        TaskService.upload([input1, input2, ''], importingRules);
+
+        identical = (output, expectedOutput) => {
             for (key in output) {
-                if (output[key] !== input[importingRules[key] - 1])
+                if (key !== '_id' && output[key] !== expectedOutput[key]) {
                     return false;
+                }
             }
             return true;
         };
 
-        //generate order of rules, importing rules and input test value
-        orders = generateOrder();
-        importingRules = generateImportingRules();
-        input = generateInput();
+        test = () => {
+            const output1 = Tasks.findOne({acctNum: expectedOutput1.acctNum});
+            const output2 = Tasks.findOne({acctNum: expectedOutput2.acctNum});
 
-        //generate output based on input and importingRules
-        output = ParseService.createTask(input, importingRules);
+            return identical(output1, expectedOutput1) && identical(output2, expectedOutput2);
+        };
 
         // assert that test is true
         chai.assert(

@@ -2,7 +2,7 @@ import React from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import Notifier from '/imports/client/lib/Notifier';
 
-export default class UploadPlacementFile extends React.Component {
+export default class UploadInventoryFile extends React.Component {
     constructor() {
         super();
     }
@@ -11,7 +11,7 @@ export default class UploadPlacementFile extends React.Component {
         const {facilityId} = this.props;
 
         const componentConfig = {
-            postUrl: `/uploads/csv/${facilityId}`
+            postUrl: `/uploads/inventory/${facilityId}`
         };
 
         const djsConfig = {
