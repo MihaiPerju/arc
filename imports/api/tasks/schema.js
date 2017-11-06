@@ -1,4 +1,5 @@
 import SimpleSchema from 'simpl-schema';
+import stateEnum from './enums/states';
 
 export default new SimpleSchema({
     acctNum: {
@@ -76,5 +77,10 @@ export default new SimpleSchema({
     insBal3: {
         type: String,
         optional: true
+    },
+    state: {
+        type: String,
+        defaultValue:stateEnum.ACTIVE,
+        allowedValues: [stateEnum.ACTIVE, stateEnum.ARCHIVED]
     }
 })

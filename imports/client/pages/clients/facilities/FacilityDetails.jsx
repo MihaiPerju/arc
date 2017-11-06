@@ -1,25 +1,20 @@
 import React from 'react';
+import Notifier from '/imports/client/lib/Notifier';
+import Loading from "/imports/client/lib/ui/Loading.jsx";
 import moment from 'moment';
 import FacilityContact from "./components/FacilityContact";
-import {Header} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import Loading from "/imports/client/lib/ui/Loading.jsx";
 
-export default class FacilityView extends React.Component {
+export default class FacilityDetails extends React.Component {
     constructor() {
         super();
 
         this.state = {
             facility: null,
             loading: true
-        };
+        }
     }
 
     componentDidMount() {
-        this.getFacility();
-    }
-
-    getFacility = () => {
         const {facilityId} = FlowRouter.current().params;
         Meteor.call('facility.get', facilityId, (err, facility) => {
             if (err) {
@@ -31,7 +26,7 @@ export default class FacilityView extends React.Component {
                 loading: false
             })
         })
-    };
+    }
 
     render() {
         const {loading, facility} = this.state;
@@ -40,19 +35,22 @@ export default class FacilityView extends React.Component {
             return <Loading/>;
         }
 
-        return (
-            <Container className="page-container">
-                <Header as="h3" textAlign="center">Facility {facility && facility.name}</Header>
-                <h5>Status: {facility && facility.status}</h5>
-                <h5>State: {facility && facility.state}</h5>
-                <h5>Region: {facility && facility.region}</h5>
-                <h5>City {facility && facility.city}</h5>
-                <h5>Address 1: {facility && facility.addressOne}</h5>
-                <h5>Address 2: {facility && facility.addressTwo}</h5>
-                <h5>Zip: {facility && facility.zipCode}</h5>
-                <h5>Creation date: {facility && moment(facility.createdAt).format('MM/DD/YYYY hh:mm')}</h5>
+        const {name, addressOne, addressTwo, city, state} = facility;
+        const {zipCode, status, region, createdAt, contacts} = facility;
 
-                {facility && facility.contacts && contacts.length
+        return (
+            <div>
+                <h3>Facility {name}</h3>
+                <h5>Status: {status}</h5>
+                <h5>State: {state}</h5>
+                <h5>Region: {region}</h5>
+                <h5>City {city}</h5>
+                <h5>Address 1: {addressOne}</h5>
+                <h5>Address 2: {addressTwo}</h5>
+                <h5>Zip: {zipCode}</h5>
+                <h5>Creation date: {moment(createdAt).format('MM/DD/YYYY hh:mm')}</h5>
+
+                {contacts && contacts.length
                     ?
                     <div>
                         <h4>Contacts</h4>
@@ -65,7 +63,7 @@ export default class FacilityView extends React.Component {
                         <h4>No Contacts</h4>
                     </div>
                 }
-            </Container>
+            </div>
         );
     }
 }

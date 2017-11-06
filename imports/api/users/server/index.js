@@ -5,3 +5,4 @@ import './avatarUpload';
 import './expose.js';
 import './logoUpload';
 import './csvUpload';
+import './inventoryFileUpload';
