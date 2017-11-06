@@ -114,3 +114,18 @@ import CodeCreate from '/imports/client/pages/codes/CodeCreate';
 route('/code/list', CodeListContainer);
 route('/code/:id/edit', CodeEdit);
 route('/code/create', CodeCreate);
+
+//Actions
+import ActionListContainer from '/imports/client/pages/actions/ActionListContainer.jsx';
+import CreateAction from '/imports/client/pages/actions/CreateAction.jsx';
+import EditAction from '/imports/client/pages/actions/EditAction.jsx';
+
+route('/action/list', ActionListContainer, {}, {
+    name: 'action.list'
+});
+route('/action/create', CreateAction, {}, {
+    name: 'action.create'
+});
+route('/action/:actionId/edit', EditAction, {}, {
+    name: 'action.edit'
+});
