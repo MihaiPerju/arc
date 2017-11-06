@@ -18,7 +18,7 @@ export default class ImportingRules extends React.Component {
         Meteor.call('facility.update', {_id: facilityId, importRules}, (err) => {
             if (!err) {
                 Notifier.success("Facility updated!");
-                FlowRouter.reload();
+                this.props.updateFacility();
             } else {
                 Notifier.error(err.reason);
             }
