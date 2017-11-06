@@ -16,7 +16,6 @@ export default class FacilityEdit extends React.Component {
             loading: true,
             activeTab: 0
         };
-
     }
 
     componentDidMount() {
@@ -65,7 +64,7 @@ export default class FacilityEdit extends React.Component {
             },
             {
                 label: tabsEnum.IMP_RULES,
-                component: <ImportingRules model={facility}/>
+                component: <ImportingRules updateFacility={this.getFacility} model={facility}/>
             },
             {
                 label: tabsEnum.PLACEMENT_FILE,
