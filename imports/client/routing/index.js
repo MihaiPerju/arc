@@ -114,3 +114,8 @@ import CodeCreate from '/imports/client/pages/codes/CodeCreate';
 route('/code/list', CodeListContainer);
 route('/code/:id/edit', CodeEdit);
 route('/code/create', CodeCreate);
+
+//Tasks
+import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
+
+route('/tasks', TaskListContainer);
