@@ -1,13 +1,16 @@
-import Actions from '../collection.js';
+import Actions from '/imports/api/actions/collection.js';
 
 Meteor.methods({
     'action.create'(data) {
         Actions.insert(data);
     },
 
-    'action.edit'(actionId, data) {
-        Actions.update({_id: actionId}, {
-            $set: data
+    'action.edit'(id, {title, description}) {
+        Actions.update({_id: id}, {
+            $set: {
+                title,
+                description
+            }
         });
     },
 

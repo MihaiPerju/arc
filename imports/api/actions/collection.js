@@ -1,4 +1,4 @@
-import ActionSchema from './schema.js'
+import ActionSchema from './schemas/schema.js'
 
 const Actions = new Mongo.Collection('actions');
 

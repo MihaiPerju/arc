@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
+import {Table} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react'
 
 export default class ActionSingle extends Component {
     constructor() {
@@ -9,7 +11,6 @@ export default class ActionSingle extends Component {
     }
 
     deleteAction() {
-        
         const {action} = this.props;
 
         Meteor.call('action.delete', action._id, (err)=> {
@@ -21,20 +22,22 @@ export default class ActionSingle extends Component {
     }
 
     onEditAction() {
-        FlowRouter.go("action.edit", {actionId: this.props.action._id});
+        FlowRouter.go("/action/:_id/edit", {_id: this.props.action._id});
     }
     render() {
         const {action} = this.props;
 
         return (
-            <tr>
-                <td>{action.title}</td>
-                <td>{action.description}</td>
-                <td>
-                    <a onClick={this.onEditAction}>Edit</a>
-                    <button onClick={this.deleteAction}>Delete</button>
-                </td>
-            </tr>
+            <Table.Row>
+                <Table.Cell>{action.title}</Table.Cell>
+                <Table.Cell>{action.description}</Table.Cell>
+                <Table.Cell>
+                    <Button.Group>
+                        <Button onClick={this.onEditAction}>Edit</Button>      
+                        <Button color="red" onClick={this.deleteAction}>Delete</Button>                                          
+                    </Button.Group>
+                </Table.Cell>
+            </Table.Row>
         );
     }
 }

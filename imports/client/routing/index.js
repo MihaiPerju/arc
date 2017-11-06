@@ -117,15 +117,9 @@ route('/code/create', CodeCreate);
 
 //Actions
 import ActionListContainer from '/imports/client/pages/actions/ActionListContainer.jsx';
-import CreateAction from '/imports/client/pages/actions/CreateAction.jsx';
-import EditAction from '/imports/client/pages/actions/EditAction.jsx';
+import CreateAction from '/imports/client/pages/actions/ActionCreate.jsx';
+import EditAction from '/imports/client/pages/actions/ActionEdit.jsx';
 
-route('/action/list', ActionListContainer, {}, {
-    name: 'action.list'
-});
-route('/action/create', CreateAction, {}, {
-    name: 'action.create'
-});
-route('/action/:actionId/edit', EditAction, {}, {
-    name: 'action.edit'
-});
+route('/action/list', ActionListContainer);
+route('/action/create', CreateAction);
+route('/action/:actionId/edit', EditAction);

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Menu from "/imports/client/layout/header/Menu";
-
+import UserRoles from '/imports/api/users/enums/roles';
 
 class Header extends Component {
     render() {
@@ -18,15 +18,19 @@ class Header extends Component {
             {name: "admin/user/list", label: "User Management"},
             {name: "code/list", label: "CARC/RARC Codes"}
         ];
+        const adminAndTechRoutes = [
+            {name: "action/list", label: "Actions"}
+        ];
 
         return (
             <header className="cc-header">
-                <Menu routes={Meteor.user() ? loggedUserRoutes : unloggedUserRoutes}/>
+                <Menu routes={Roles.userIsInRole(Meteor.user()._id, [UserRoles.ADMIN, UserRoles.TECH]) 
+                              ? loggedUserRoutes.concat(adminAndTechRoutes) 
+                              : (Meteor.user() ? loggedUserRoutes : unloggedUserRoutes)}/>
             </header>
         )
     }
 }
-
 Header.propTypes = {};
 Header.defaultProps = {};
 
