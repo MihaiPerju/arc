@@ -10,7 +10,7 @@ class Header extends Component {
             {name: "login", label: "Login"},
             {name: "register", label: "Register"}
         ];
-        const loggedUserRoutes = [
+        let loggedUserRoutes = [
             {name: "home", label: "Home"},
             {name: "login", label: "Login"},
             {name: "register", label: "Register"},
@@ -22,11 +22,13 @@ class Header extends Component {
             {name: "action/list", label: "Actions"}
         ];
 
+        if (Meteor.user() && Roles.userIsInRole(Meteor.user()._id, [UserRoles.ADMIN, UserRoles.TECH])) {
+            loggedUserRoutes = loggedUserRoutes.concat(adminAndTechRoutes);
+        }
+
         return (
             <header className="cc-header">
-                <Menu routes={Roles.userIsInRole(Meteor.user()._id, [UserRoles.ADMIN, UserRoles.TECH]) 
-                              ? loggedUserRoutes.concat(adminAndTechRoutes) 
-                              : (Meteor.user() ? loggedUserRoutes : unloggedUserRoutes)}/>
+                <Menu routes={Meteor.user() ? loggedUserRoutes : unloggedUserRoutes}/>
             </header>
         )
     }
