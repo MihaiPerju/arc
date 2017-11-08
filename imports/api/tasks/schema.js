@@ -85,5 +85,9 @@ export default new SimpleSchema({
     },
     facilityId: {
         type: String
+    },
+    assigneeId: {
+        type: String,
+        optional: true
     }
 })
