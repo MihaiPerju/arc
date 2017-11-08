@@ -80,7 +80,10 @@ export default new SimpleSchema({
     },
     state: {
         type: String,
-        defaultValue:stateEnum.ACTIVE,
+        defaultValue: stateEnum.ACTIVE,
         allowedValues: [stateEnum.ACTIVE, stateEnum.ARCHIVED]
+    },
+    facilityId: {
+        type: String
     }
 })

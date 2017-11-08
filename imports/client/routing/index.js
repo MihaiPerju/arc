@@ -117,5 +117,7 @@ route('/code/create', CodeCreate);
 
 //Tasks
 import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
+import TaskView from '/imports/client/pages/tasks/TaskView';
 
 route('/tasks', TaskListContainer);
+route('/task/:_id/view', TaskView);

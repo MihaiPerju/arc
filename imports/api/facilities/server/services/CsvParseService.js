@@ -5,12 +5,13 @@ import Tasks from '/imports/api/tasks/collection';
 export default class CsvParseService {
 
     //Converting to tasks
-    static convertToTasks(results, importRules, isPlacement) {
+    static convertToTasks(results, importRules, isPlacement, facilityId) {
+
         const startIndex = importRules.hasHeader ? 1 : 0;
 
         const tasks = [];
         for (let i = startIndex; i < results.length - 1; i++) {
-            const newTask = CsvParseService.createTask(results[i], importRules, isPlacement);
+            const newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId);
             tasks.push(newTask);
         }
 
@@ -30,22 +31,25 @@ export default class CsvParseService {
                 newTasks.push(task);
             }
         });
-
         return [oldTasks, newTasks];
     }
 
+
     //Create a single task
-    static createTask(data, importRules, isPlacement) {
+    static createTask(data, importRules, isPlacement, facilityId) {
+
         let task = {};
+        task.facilityId = facilityId;
         for (key in importRules) {
             if (key !== 'hasHeader') {
                 task[key] = data[importRules[key] - 1];
             }
         }
+        console.log(task);
         return task;
     }
 
-    //Get import rules
+//Get import rules
     static getImportRules(id) {
         const facility = Facilities.findOne({_id: id}, {
             fields: {

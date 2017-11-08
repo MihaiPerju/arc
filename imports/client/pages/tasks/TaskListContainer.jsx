@@ -1,14 +1,13 @@
 import React from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/posts/queries/postList';
-import PostList from './components/PostList.jsx';
+import query from '/imports/api/tasks/queries/taskList';
+import TaskList from './components/TaskList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 
-export default class PostListContainer extends Pager {
+export default class TaskListContainer extends Pager {
     constructor() {
         super();
 
@@ -18,27 +17,26 @@ export default class PostListContainer extends Pager {
         });
 
         this.query = query.clone();
-        this.PostListCont = createQueryContainer(this.query, PostList, {
+        this.TaskListCont = createQueryContainer(this.query, TaskList, {
             reactive: false
         })
     }
 
     render() {
         const params = _.extend({}, this.getPagerOptions());
-        const PostListCont = this.PostListCont;
+        const TaskListCont = this.TaskListCont;
 
         return (
             <Container className="page-container">
                 <div>
-                    <Header as="h2" textAlign="center">Posts</Header>
+                    <Header as="h2" textAlign="center">Tasks</Header>
                 </div>
                 <div>
                     {this.getPaginator()}
-                    <PostListCont params={params}/>
+                    <TaskListCont params={params}/>
                     {this.getPaginator()}
                 </div>
                 <Divider/>
-                <Button fluid primary href="/post/create">Create post</Button>
             </Container>
         );
     }
