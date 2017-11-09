@@ -18,7 +18,7 @@ export default class ActionEdit extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         query.clone({
             filters: {
                 _id: this.props.actionId
@@ -57,24 +57,24 @@ export default class ActionEdit extends React.Component {
 
         return (
             <Container className="page-container">
-              {
-                  this.state.error
-                      ?
-                      <div className="error">{this.state.error}</div>
-                      :
-                      <AutoForm model={model} schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                        
-                        <AutoField name="title"/>
-                        <ErrorField name="title"/>
+                {
+                    this.state.error
+                        ?
+                        <div className="error">{this.state.error}</div>
+                        :
+                        <AutoForm model={model} schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                    
+                            <AutoField name="title"/>
+                            <ErrorField name="title"/>
 
-                        <LongTextField name="description"/>
-                        <ErrorField name="description"/>
+                            <LongTextField name="description"/>
+                            <ErrorField name="description"/>
 
-                        <Divider/>
+                            <Divider/>
 
-                        <Button fluid primary type="submit">
-                            Save
-                        </Button>
+                            <Button fluid primary type="submit">
+                                Save
+                            </Button>
                       </AutoForm>
               }
             </Container>

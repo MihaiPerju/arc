@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Menu from "/imports/client/layout/header/Menu";
 import UserRoles from '/imports/api/users/enums/roles';
+import { createContainer } from 'meteor/react-meteor-data';
 
 class Header extends Component {
     render() {
+        user = this.props.user;
         const unloggedUserRoutes = [
             {name: "home", label: "Home"},
             {name: "login", label: "Login"},
@@ -22,18 +24,26 @@ class Header extends Component {
             {name: "action/list", label: "Actions"}
         ];
 
-        if (Meteor.user() && Roles.userIsInRole(Meteor.user()._id, [UserRoles.ADMIN, UserRoles.TECH])) {
+        if (user && Roles.userIsInRole(user._id, [UserRoles.ADMIN, UserRoles.TECH])) {
             loggedUserRoutes = loggedUserRoutes.concat(adminAndTechRoutes);
         }
 
         return (
             <header className="cc-header">
-                <Menu routes={Meteor.user() ? loggedUserRoutes : unloggedUserRoutes}/>
+                <Menu routes={user ? loggedUserRoutes : unloggedUserRoutes}/>
             </header>
         )
     }
 }
-Header.propTypes = {};
+Header.propTypes = {
+    user: React.PropTypes.object,
+};
 Header.defaultProps = {};
 
-export default Header;
+export default HeaderContainer = createContainer(() => {
+  const user = Meteor.user();
+
+  return {
+    user,
+  };
+}, Header);
