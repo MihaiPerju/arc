@@ -21,7 +21,7 @@ export default class TaskList extends Component {
                 <Table padded>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>Account Number</Table.HeaderCell>
+                            <Table.HeaderCell>Id</Table.HeaderCell>
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>

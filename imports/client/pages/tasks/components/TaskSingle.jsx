@@ -8,7 +8,7 @@ export default class TaskSingle extends Component {
 
         return (
             <Table.Row>
-                <Table.Cell>{task.acctNum}</Table.Cell>
+                <Table.Cell>{task._id}</Table.Cell>
                 <Table.Cell>
                     <Button href={"/task/" + task._id + '/view'} primary>View</Button>
                 </Table.Cell>
