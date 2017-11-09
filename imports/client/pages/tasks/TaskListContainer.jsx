@@ -6,7 +6,7 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
-import {Dropdown} from 'semantic-ui-react'
+import {Input} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
 import UserRoles from '/imports/api/users/enums/roles';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
@@ -73,6 +73,24 @@ export default class TaskListContainer extends Pager {
         return Roles.userIsInRole(Meteor.userId(), [UserRoles.ADMIN, UserRoles.TECH]);
     }
 
+    searchByPatient(e, {value}) {
+        Meteor.call('client.getByName', value, (err, clients) => {
+            if (!err) {
+                const acctNums = [];
+                for (let client of clients) {
+                    acctNums.push(client._id);
+                }
+                this.updateFilters({
+                    filters: {
+                        acctNum: {
+                            $in: acctNums
+                        }
+                    }
+                })
+            }
+        })
+    }
+
     render() {
         const [facilities, assignees] = this.getData(this.state.tasks);
         const params = _.extend({}, this.getPagerOptions());
@@ -93,6 +111,8 @@ export default class TaskListContainer extends Pager {
 
                     <Divider/>
                 </AutoForm>
+
+                <Input label="Search by patient name" onChange={this.searchByPatient}/>
                 <div>
                     {this.getPaginator()}
                     <TaskListCont params={params}/>

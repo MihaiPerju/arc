@@ -61,5 +61,14 @@ Meteor.methods({
 
         Uploads.remove({path: logoPath});
         Clients.remove({_id: id});
+    },
+
+    'client.getByName'(name) {
+        return Clients.find({
+            clientName: {
+                '$regex': name,
+                '$options': 'i'
+            }
+        }).fetch()
     }
 });
