@@ -8,6 +8,9 @@ import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 import {Dropdown} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
+import UserRoles from '/imports/api/users/enums/roles';
+import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
+import SimpleSchema from 'simpl-schema';
 
 export default class TaskListContainer extends Pager {
     constructor() {
@@ -16,7 +19,7 @@ export default class TaskListContainer extends Pager {
         _.extend(this.state, {
             perPage: 3,
             filters: {},
-            facilities: []
+            tasks: []
         });
 
         this.query = query.clone();
@@ -28,35 +31,50 @@ export default class TaskListContainer extends Pager {
     }
 
     componentWillMount() {
-        const facilities = [];
-
-        //Getting all facilities to which I have access
         query.fetch((err, tasks) => {
-            for (let task of tasks) {
-                const {facility} = task;
-                facilities.push({
-                    value: facility._id,
-                    key: facility._id,
-                    text: facility.name
-                })
-            }
+            this.setState({tasks});
         });
-
-        this.setState({
-            facilities
-        })
     }
 
-    handleSearch(e, data) {
+    getData(tasks) {
+        const facilities = [];
+        const assignees = [];
+
+        for (let task of tasks) {
+            const {facility, assignee} = task;
+
+            //get facility options
+            facilities.push({
+                value: facility._id,
+                label: facility.name
+            });
+
+            if (assignee) {
+                const {profile} = assignee;
+                //get assignee options
+                assignees.push({
+                    label: profile.firstName + profile.lastName,
+                    value: assignee._id
+                });
+            }
+        }
+        return [facilities, assignees];
+    }
+
+    onHandleChange(field, value) {
         this.updateFilters({
             filters: {
-                facilityId: data.value
+                [field]: value
             }
-        })
+        });
+    }
+
+    isAdminOrTech() {
+        return Roles.userIsInRole(Meteor.userId(), [UserRoles.ADMIN, UserRoles.TECH]);
     }
 
     render() {
-        const {facilities} = this.state;
+        const [facilities, assignees] = this.getData(this.state.tasks);
         const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
 
@@ -65,13 +83,16 @@ export default class TaskListContainer extends Pager {
                 <div>
                     <Header as="h2" textAlign="center">Tasks</Header>
                 </div>
-                <Container>
-                    <Dropdown header="Search by facility"
-                              onChange={this.handleSearch}
-                              placeholder='Select facility'
-                              fluid selection
-                              options={facilities}/>
-                </Container>
+                <AutoForm schema={schema} onChange={this.onHandleChange}>
+
+                    <SelectField name="facilityId" options={facilities}/>
+                    <ErrorField name="facilityId"/>
+
+                    <SelectField name="assigneeId" options={assignees}/>
+                    <ErrorField name="assigneeId"/>
+
+                    <Divider/>
+                </AutoForm>
                 <div>
                     {this.getPaginator()}
                     <TaskListCont params={params}/>
@@ -82,3 +103,16 @@ export default class TaskListContainer extends Pager {
         );
     }
 }
+
+const schema = new SimpleSchema({
+    facilityId: {
+        type: String,
+        optional: true,
+        label: 'Filter by facility'
+    },
+    assigneeId: {
+        type: String,
+        optional: true,
+        label: 'Filter by assignee'
+    }
+});

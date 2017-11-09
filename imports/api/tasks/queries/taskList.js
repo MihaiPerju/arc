@@ -29,5 +29,13 @@ export default Tasks.createNamedQuery('taskList', {
     facilityId: 1,
     facility: {
         name: 1
+    },
+    assigneeId: 1,
+    assignee: {
+        profile: {
+            firstName: 1,
+            lastName: 1
+        },
+        emails: 1
     }
 });

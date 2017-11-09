@@ -8,7 +8,7 @@ Tasks.addLinks({
         collection: Facilities,
         field: 'facilityId'
     },
-    asignee: {
+    assignee: {
         type: 'one',
         collection: Users,
         field: 'assigneeId'
