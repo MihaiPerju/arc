@@ -1,6 +1,7 @@
 import Tasks from '/imports/api/tasks/collection';
 import Facilities from '/imports/api/facilities/collection';
 import Users from '/imports/api/users/collection';
+import Clients from '/imports/api/clients/collection';
 
 Tasks.addLinks({
     facility: {
@@ -12,5 +13,10 @@ Tasks.addLinks({
         type: 'one',
         collection: Users,
         field: 'assigneeId'
+    },
+    client: {
+        type: 'one',
+        collection: Clients,
+        field: 'acctNum'
     }
 });

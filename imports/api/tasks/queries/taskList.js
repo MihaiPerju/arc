@@ -40,5 +40,8 @@ export default Tasks.createNamedQuery('taskList', {
             lastName: 1
         },
         emails: 1
+    },
+    client: {
+        clientName: 1
     }
 });

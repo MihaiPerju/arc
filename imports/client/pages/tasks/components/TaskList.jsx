@@ -22,6 +22,8 @@ export default class TaskList extends Component {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Id</Table.HeaderCell>
+                            <Table.HeaderCell>Pacient Name</Table.HeaderCell>
+                            <Table.HeaderCell>Status</Table.HeaderCell>
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
