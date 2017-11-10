@@ -6,7 +6,6 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
-import {Input} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
 import UserRoles from '/imports/api/users/enums/roles';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
@@ -61,34 +60,40 @@ export default class TaskListContainer extends Pager {
         return [facilities, assignees];
     }
 
-    onHandleChange(field, value) {
-        this.updateFilters({
-            filters: {
-                [field]: value
-            }
-        });
+    onHandleChange() {
+        const newFilters = this.refs.filters.state.modelSync;
+
+        if (!newFilters.facilityId) {
+            delete newFilters.facilityId;
+        }
+        if (!newFilters.assigneeId) {
+            delete newFilters.assigneeId;
+        }
+        if (!newFilters.clientName) {
+            delete newFilters.clientName;
+            this.updateFilters({
+                filters: newFilters
+            })
+        } else {
+            Meteor.call('client.getByName', newFilters.clientName, (err, clients) => {
+                if (!err) {
+                    const acctNums = [];
+                    for (let client of clients) {
+                        acctNums.push(client._id);
+                    }
+                    newFilters.acctNum = {$in: acctNums};
+                    delete newFilters.clientName;
+                    this.updateFilters({
+                        filters: newFilters
+                    })
+                }
+            })
+
+        }
     }
 
     isAdminOrTech() {
         return Roles.userIsInRole(Meteor.userId(), [UserRoles.ADMIN, UserRoles.TECH]);
-    }
-
-    searchByPatient(e, {value}) {
-        Meteor.call('client.getByName', value, (err, clients) => {
-            if (!err) {
-                const acctNums = [];
-                for (let client of clients) {
-                    acctNums.push(client._id);
-                }
-                this.updateFilters({
-                    filters: {
-                        acctNum: {
-                            $in: acctNums
-                        }
-                    }
-                })
-            }
-        })
     }
 
     render() {
@@ -101,18 +106,18 @@ export default class TaskListContainer extends Pager {
                 <div>
                     <Header as="h2" textAlign="center">Tasks</Header>
                 </div>
-                <AutoForm schema={schema} onChange={this.onHandleChange}>
-
+                <AutoForm ref="filters" schema={schema} onChange={this.onHandleChange}>
                     <SelectField name="facilityId" options={facilities}/>
-                    <ErrorField name="facilityId"/>
+                    {
+                        this.isAdminOrTech() && <SelectField name="assigneeId" options={assignees}/>
+                    }
 
-                    <SelectField name="assigneeId" options={assignees}/>
-                    <ErrorField name="assigneeId"/>
+                    <AutoField name="clientName"/>
 
                     <Divider/>
                 </AutoForm>
 
-                <Input label="Search by patient name" onChange={this.searchByPatient}/>
+                {/*<Input label="Search by patient name" onChange={this.searchByPatient}/>*/}
                 <div>
                     {this.getPaginator()}
                     <TaskListCont params={params}/>
@@ -134,5 +139,10 @@ const schema = new SimpleSchema({
         type: String,
         optional: true,
         label: 'Filter by assignee'
+    },
+    clientName: {
+        type: String,
+        optional: true,
+        label: 'Search by patient name'
     }
 });

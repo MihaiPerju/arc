@@ -45,7 +45,6 @@ export default class CsvParseService {
                 task[key] = data[importRules[key] - 1];
             }
         }
-        console.log(task);
         return task;
     }
 

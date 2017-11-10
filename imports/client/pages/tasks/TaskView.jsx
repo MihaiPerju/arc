@@ -35,7 +35,6 @@ export default class TaskView extends React.Component {
 
     render() {
         const {loading, task} = this.state;
-        console.log(task);
         if (loading) {
             return <Loading/>;
         }
