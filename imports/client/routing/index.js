@@ -115,9 +115,20 @@ route('/code/list', CodeListContainer);
 route('/code/:id/edit', CodeEdit);
 route('/code/create', CodeCreate);
 
+
 //Tasks
 import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
 import TaskView from '/imports/client/pages/tasks/TaskView';
 
 route('/tasks', TaskListContainer);
 route('/task/:_id/view', TaskView);
+
+//Actions
+import ActionListContainer from '/imports/client/pages/actions/ActionListContainer.jsx';
+import CreateAction from '/imports/client/pages/actions/ActionCreate.jsx';
+import EditAction from '/imports/client/pages/actions/ActionEdit.jsx';
+
+route('/action/list', ActionListContainer);
+route('/action/create', CreateAction);
+route('/action/:actionId/edit', EditAction);
+
