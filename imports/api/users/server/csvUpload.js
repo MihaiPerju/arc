@@ -18,7 +18,7 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames}) => {
             //using chunk to receive result by chunks to not crash the browser.
             // Alternative to complete loading is 'complete' function
             chunk: (results) => {
-                TaskService.upload(results.data, importRules);
+                TaskService.upload(results.data, importRules, facilityId);
             }
         }
     );

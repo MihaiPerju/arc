@@ -30,9 +30,9 @@ export default class SelectUsersContainer extends React.Component {
     }
 
     getUserOptions(users) {
-        return _.map(users, ({profile, roles}) => {
+        return _.map(users, ({_id, profile, roles}) => {
             const value = `${profile.firstName} ${profile.lastName} (${roles[0]})`;
-            return {value, label: value};
+            return {value: _id, label: value};
         })
     }
 

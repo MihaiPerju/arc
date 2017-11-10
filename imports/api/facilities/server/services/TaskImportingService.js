@@ -4,8 +4,8 @@ import Tasks from '/imports/api/tasks/collection';
 export default class TaskService {
 
     //For placement file
-    static upload(results, importRules) {
-        const tasks = CsvParseService.convertToTasks(results, importRules, true);
+    static upload(results, importRules, facilityId) {
+        const tasks = CsvParseService.convertToTasks(results, importRules, true, facilityId);
         //Creating tasks
         tasks.map((task) => {
             Tasks.insert(task);
