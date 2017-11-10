@@ -15,11 +15,13 @@ TaskListQuery.expose({
                 userFacilitiesArr.push(element._id);
             }
 
-            params.filters = {
-                facilityId: {
-                    $in: userFacilitiesArr
+            _.extend(params, {
+                filters: {
+                    facilityId: {
+                        $in: userFacilitiesArr
+                    }
                 }
-            };
+            });
         }
     }
 });

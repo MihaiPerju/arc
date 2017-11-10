@@ -55,7 +55,7 @@ export default class TaskListContainer extends Pager {
 
                     //get assignee options
                     assignees.push({
-                        label: profile.firstName + profile.lastName,
+                        label: profile.firstName + ' ' + profile.lastName,
                         value: user._id
                     });
                 }
