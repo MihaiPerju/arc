@@ -40,7 +40,8 @@ export default class TaskListContainer extends Pager {
         const assignees = [];
 
         for (let task of tasks) {
-            const {facility, assignee} = task;
+            const {facility} = task;
+            const {users} = facility;
 
             //get facility options
             facilities.push({
@@ -48,16 +49,21 @@ export default class TaskListContainer extends Pager {
                 label: facility.name
             });
 
-            if (assignee) {
-                const {profile} = assignee;
-                //get assignee options
-                assignees.push({
-                    label: profile.firstName + profile.lastName,
-                    value: assignee._id
-                });
+            if (users) {
+                for (let user of users) {
+                    const {profile} = user;
+
+                    //get assignee options
+                    assignees.push({
+                        label: profile.firstName + profile.lastName,
+                        value: user._id
+                    });
+                }
             }
         }
-        return [facilities, assignees];
+        return [facilities
+            , assignees
+        ];
     }
 
     onHandleChange() {
@@ -92,10 +98,6 @@ export default class TaskListContainer extends Pager {
         }
     }
 
-    isAdminOrTech() {
-        return Roles.userIsInRole(Meteor.userId(), [UserRoles.ADMIN, UserRoles.TECH]);
-    }
-
     render() {
         const [facilities, assignees] = this.getData(this.state.tasks);
         const params = _.extend({}, this.getPagerOptions());
@@ -107,17 +109,15 @@ export default class TaskListContainer extends Pager {
                     <Header as="h2" textAlign="center">Tasks</Header>
                 </div>
                 <AutoForm ref="filters" schema={schema} onChange={this.onHandleChange}>
+
                     <SelectField name="facilityId" options={facilities}/>
-                    {
-                        this.isAdminOrTech() && <SelectField name="assigneeId" options={assignees}/>
-                    }
+
+                    <SelectField name="assigneeId" options={assignees}/>
 
                     <AutoField name="clientName"/>
 
                     <Divider/>
                 </AutoForm>
-
-                {/*<Input label="Search by patient name" onChange={this.searchByPatient}/>*/}
                 <div>
                     {this.getPaginator()}
                     <TaskListCont params={params}/>

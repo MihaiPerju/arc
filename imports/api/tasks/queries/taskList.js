@@ -28,7 +28,10 @@ export default Tasks.createNamedQuery('taskList', {
     state: 1,
     facilityId: 1,
     facility: {
-        name: 1
+        name: 1,
+        users: {
+            profile: 1
+        }
     },
     assigneeId: 1,
     assignee: {
