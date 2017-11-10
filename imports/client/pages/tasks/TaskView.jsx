@@ -20,7 +20,7 @@ export default class TaskView extends React.Component {
     }
 
     getTask = () => {
-        const {_id} = FlowRouter.current().params;
+        const {_id} = this.props;
         query.clone({filters: {_id}}).fetchOne((err, task) => {
             if (err) {
                 return Notifier.error('Error while getting task!');

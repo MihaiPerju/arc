@@ -7,7 +7,6 @@ import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
-import UserRoles from '/imports/api/users/enums/roles';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 
