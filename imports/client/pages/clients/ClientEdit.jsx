@@ -141,13 +141,13 @@ export default class EditClient extends React.Component {
 
                             <ListField name="contacts">
                                 <ListItemField name="$">
-                                    <NestField>
+                                    <NestField name="">
                                         <TextField name="firstName"/>
                                         <TextField name="lastName"/>
                                         <TextField name="contactDescription"/>
                                         <TextField name="phone"/>
                                         <TextField name="email"/>
-                                        <TextField name="notes"/>
+                                        <TextField name="notes"/> 
                                     </NestField>
                                 </ListItemField>
                             </ListField>

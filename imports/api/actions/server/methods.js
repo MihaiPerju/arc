@@ -5,11 +5,12 @@ Meteor.methods({
         Actions.insert(data);
     },
 
-    'action.edit'(id, {title, description}) {
+    'action.edit'(id, {title, description, state}) {
         Actions.update({_id: id}, {
             $set: {
                 title,
-                description
+                description,
+                state
             }
         });
     },

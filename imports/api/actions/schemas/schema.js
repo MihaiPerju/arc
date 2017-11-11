@@ -5,6 +5,11 @@ export default new SimpleSchema({
         type: String
     },
     description: {
-        type: String
+        type: String,
+        optional: true        
+    },
+    state: {
+        type: String,
+        optional: true
     }
 });
