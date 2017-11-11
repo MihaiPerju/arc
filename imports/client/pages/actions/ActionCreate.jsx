@@ -58,18 +58,20 @@ export default class ActionCreate extends React.Component {
 
                     <input type="checkbox" onClick={this.handleClick}/>Changes the status of the Account?
 
-                    {this.state.checked 
-                        ?
+                    {this.state.checked &&
                         <div>
                             <SelectField name="state" options={states}/>
                             <ErrorField name="state"/>
                         </div> 
-                        : 
+                    }
+
+                    {!this.state.checked &&
                         <div className="display-none">
-                            <SelectField value='N/A' name="state"/>
+                            <SelectField value='N/A' name="state" options={'N/A'}/>
                             <ErrorField name="state"/>
                         </div>
                     }
+                    
                     <Button fluid primary type="submit">
                         Create
                     </Button>
