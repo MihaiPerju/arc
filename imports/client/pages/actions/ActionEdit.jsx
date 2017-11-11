@@ -1,5 +1,5 @@
 import React from 'react';
-import { AutoForm, AutoField, ErrorField, LongTextField, SelectField, BoolField } from 'uniforms-semantic';
+import { AutoForm, AutoField, ErrorField, LongTextField, SelectField } from 'uniforms-semantic';
 import ActionSchema from '/imports/api/actions/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
 import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
