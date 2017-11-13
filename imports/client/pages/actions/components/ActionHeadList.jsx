@@ -14,6 +14,7 @@ export default class ActionHeadList extends React.Component {
                     isSortAscend={isSortAscend}
                     handleHeaderClick={handleHeaderClick}/>
                 <th>Description</th>
+                <th>States</th>
             </tr>
         );
     }
