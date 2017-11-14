@@ -36,7 +36,7 @@ export default class FacilityView extends React.Component {
     render() {
         const {loading, facility} = this.state;
 
-        if (loading) {
+         if (loading) {
             return <Loading/>;
         }
 
@@ -52,11 +52,11 @@ export default class FacilityView extends React.Component {
                 <h5>Zip: {facility && facility.zipCode}</h5>
                 <h5>Creation date: {facility && moment(facility.createdAt).format('MM/DD/YYYY hh:mm')}</h5>
 
-                {facility && facility.contacts && contacts.length
+                {facility && facility.contacts && facility.contacts.length
                     ?
                     <div>
                         <h4>Contacts</h4>
-                        {contacts.map(contact => (
+                        {facility.contacts.map(contact => (
                             <FacilityContact key={contact._id} contact={contact}/>
                         ))}
                     </div>
