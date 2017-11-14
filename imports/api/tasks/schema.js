@@ -89,5 +89,12 @@ export default new SimpleSchema({
     assigneeId: {
         type: String,
         optional: true
+    },
+    pdfFiles: {
+        type: Array,
+        optional: true
+    },
+    'pdfFiles.$': {
+        type: String,
     }
 })

@@ -1,6 +1,7 @@
 import React from 'react'
 import {Header} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
+import {path} from '/imports/api/s3-uploads/utils';
 
 const TaskViewContainer = ({task}) => {
     return (
@@ -26,6 +27,21 @@ const TaskViewContainer = ({task}) => {
             <h5>InsBal2: {task && task.insBal2}</h5>
             <h5>InsBal3: {task && task.insBal3}</h5>
             <h5>State: {task && task.state}</h5>
+
+            <Header as="h3" textAlign="center">PDF Files</Header>
+            {
+                task && task.pdf &&
+                task.pdf.map((pdf, index) => {
+                    return (
+                        <div>
+                            <a key={index} target="_blank"
+                               href={path(pdf.path)}>
+                                {pdf.name.slice(0, pdf.name.indexOf('.'))}
+                            </a>
+                        </div>
+                    )
+                })
+            }
         </Container>
     )
 };

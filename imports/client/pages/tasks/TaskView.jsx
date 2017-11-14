@@ -5,7 +5,6 @@ import TaskViewContainer from './components/TaskViewContainer';
 import DropzoneComponent from 'react-dropzone-component';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
-import { getToken } from '/imports/api/s3-uploads/utils';
 
 export default class TaskView extends React.Component {
     constructor() {
@@ -17,7 +16,7 @@ export default class TaskView extends React.Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getTask();
     }
 
@@ -30,6 +29,7 @@ export default class TaskView extends React.Component {
 
             this.setState({
                 task,
+                taskId: task._id,
                 loading: false
             })
         })
@@ -38,7 +38,7 @@ export default class TaskView extends React.Component {
     render() {
         const {loading, task} = this.state;
         const componentConfig = {
-            postUrl: `/uploads/task-pdf/`+ getToken()
+            postUrl: `/uploads/task-pdf/` + this.props._id
         };
 
         const djsConfig = {
