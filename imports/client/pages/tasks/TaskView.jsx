@@ -5,6 +5,8 @@ import TaskViewContainer from './components/TaskViewContainer';
 import DropzoneComponent from 'react-dropzone-component';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer';
 
 export default class TaskView extends React.Component {
     constructor() {
@@ -54,6 +56,8 @@ export default class TaskView extends React.Component {
             <Container>
                 <TaskViewContainer task={task}/>
                 <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
+                <Divider/>
+                <CommentsListContainer taskId={task && task._id}/>
             </Container>
         );
     }
