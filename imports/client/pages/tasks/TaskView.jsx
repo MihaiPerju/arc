@@ -2,6 +2,9 @@ import React from 'react';
 import Loading from "/imports/client/lib/ui/Loading.jsx";
 import query from '/imports/api/tasks/queries/taskList';
 import TaskViewContainer from './components/TaskViewContainer';
+import {Divider} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
+import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer';
 
 export default class TaskView extends React.Component {
     constructor() {
@@ -36,7 +39,13 @@ export default class TaskView extends React.Component {
         if (loading) {
             return <Loading/>;
         } else return (
-            <TaskViewContainer task={task}/>
+            <Container>
+                <TaskViewContainer task={task}/>
+
+                <Divider/>
+                <CommentsListContainer taskId={task && task._id}/>
+
+            </Container>
         );
     }
 }

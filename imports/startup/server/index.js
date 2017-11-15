@@ -13,3 +13,4 @@ import '/imports/api/facilities/server';
 import '/imports/api/codes/server';
 import '/imports/api/tasks/server';
 import '/imports/api/actions/server';
+import '/imports/api/comments/server';
