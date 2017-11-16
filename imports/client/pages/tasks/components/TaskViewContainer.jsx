@@ -30,8 +30,8 @@ const TaskViewContainer = ({task}) => {
 
             <Header as="h3" textAlign="center">PDF Files</Header>
             {
-                task && task.pdf &&
-                task.pdf.map((pdf, index) => {
+                task && task.attachments &&
+                task.attachments.map((pdf, index) => {
                     return (
                         <div>
                             <a key={index} target="_blank"

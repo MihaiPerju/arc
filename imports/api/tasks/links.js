@@ -20,9 +20,9 @@ Tasks.addLinks({
         collection: Clients,
         field: 'acctNum'
     },
-    pdf: {
+    attachments: {
         type: 'many',
         collection: Uploads,
-        field: 'pdfFiles'
+        field: 'attachmentIds'
     }
 });

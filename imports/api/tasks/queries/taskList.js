@@ -44,7 +44,7 @@ export default Tasks.createNamedQuery('taskList', {
     client: {
         clientName: 1
     },
-    pdf: {
+    attachments: {
         _id: 1,
         path: 1,
         name: 1

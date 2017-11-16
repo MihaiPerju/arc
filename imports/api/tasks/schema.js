@@ -90,11 +90,11 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
-    pdfFiles: {
+    attachments: {
         type: Array,
         optional: true
     },
-    'pdfFiles.$': {
+    'attachments.$': {
         type: String,
     }
 })

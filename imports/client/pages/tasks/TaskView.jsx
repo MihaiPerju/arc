@@ -7,6 +7,7 @@ import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer';
+import {getToken} from '/imports/api/s3-uploads/utils';
 
 export default class TaskView extends React.Component {
     constructor() {
@@ -40,7 +41,7 @@ export default class TaskView extends React.Component {
     render() {
         const {loading, task} = this.state;
         const componentConfig = {
-            postUrl: `/uploads/task-pdf/` + this.props._id
+            postUrl: `/uploads/task-pdf/` + this.props._id + '/' + getToken()
         };
 
         const djsConfig = {
