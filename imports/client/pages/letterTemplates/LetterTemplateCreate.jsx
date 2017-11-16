@@ -14,7 +14,7 @@ export default class CreateLetterTemplate extends React.Component {
         this.state = {};
     }
 
-    onSubmit(data) {
+    onSubmit = (data) => {
         Meteor.call('letterTemplate.create', data, (err) => {
             if (!err) {
                 FlowRouter.go('/letter-templates/list');
@@ -23,21 +23,27 @@ export default class CreateLetterTemplate extends React.Component {
                 Notifier.error(err.reason);
             }
         })
-    }
+    };
 
     render() {
         return (
             <Container className="page-container">
                 <Header as="h2" textAlign="center">Add a letter template</Header>
-                <AutoForm schema={LetterTemplateSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                <AutoForm schema={LetterTemplateSchema} onSubmit={this.onSubmit} ref="form">
 
                     {this.state.error && <div className="error">{this.state.error}</div>}
 
                     <AutoField name="name"/>
                     <ErrorField name="name"/>
 
-                    <AutoField name="content"/>
-                    <ErrorField name="content"/>
+                    <AutoField name="body"/>
+                    <ErrorField name="body"/>
+
+                    <AutoField name="category"/>
+                    <ErrorField name="category"/>
+
+                    <AutoField name="description"/>
+                    <ErrorField name="description"/>
 
                     <Divider/>
 
