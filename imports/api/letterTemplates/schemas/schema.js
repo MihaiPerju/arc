@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import {CategoryList} from "/imports/api/letterTemplates/enums/categories.js";
+import CATEGORIES, {CategoryList} from "/imports/api/letterTemplates/enums/categories.js";
 
 export default new SimpleSchema({
     name: {
@@ -11,9 +11,10 @@ export default new SimpleSchema({
     category: {
         type: String,
         allowedValues: CategoryList,
-
+        defaultValue: CATEGORIES.VENDOR
     },
     description: {
-        type: String
+        type: String,
+        optional: true
     }
 });

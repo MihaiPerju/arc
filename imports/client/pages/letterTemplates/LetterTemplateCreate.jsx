@@ -2,15 +2,12 @@ import React from 'react';
 import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import {Container, Button, Divider, Header} from 'semantic-ui-react';
+import RichTextArea from "/imports/client/lib/uniforms/RichTextArea.jsx";
 
 export default class CreateLetterTemplate extends React.Component {
-    constructor() {
-        super();
-
+    constructor(props) {
+        super(props);
         this.state = {};
     }
 
@@ -36,7 +33,7 @@ export default class CreateLetterTemplate extends React.Component {
                     <AutoField name="name"/>
                     <ErrorField name="name"/>
 
-                    <AutoField name="body"/>
+                    <RichTextArea name="body"/>
                     <ErrorField name="body"/>
 
                     <AutoField name="category"/>
