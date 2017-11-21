@@ -26,6 +26,7 @@ export default Tasks.createNamedQuery('taskList', {
     insBal2: 1,
     insBal3: 1,
     state: 1,
+    substate: 1,
     facilityId: 1,
     facility: {
         name: 1,
@@ -43,5 +44,6 @@ export default Tasks.createNamedQuery('taskList', {
     },
     client: {
         clientName: 1
-    }
+    },
+    actionsLinkData: 1,
 });

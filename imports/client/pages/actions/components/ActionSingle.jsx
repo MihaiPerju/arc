@@ -31,7 +31,7 @@ export default class ActionSingle extends Component {
             <Table.Row>
                 <Table.Cell>{action.title}</Table.Cell>
                 <Table.Cell>{action.description}</Table.Cell>
-                <Table.Cell>{action.state}</Table.Cell>
+                <Table.Cell>{action.substate}</Table.Cell>
                 <Table.Cell>
                     <Button.Group>
                         <Button onClick={this.onEditAction}>Edit</Button>      

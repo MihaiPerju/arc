@@ -26,6 +26,23 @@ const TaskViewContainer = ({task}) => {
             <h5>InsBal2: {task && task.insBal2}</h5>
             <h5>InsBal3: {task && task.insBal3}</h5>
             <h5>State: {task && task.state}</h5>
+            <h5>Substate: {task && task.substate}</h5>
+            
+            {task && task.actionsLinkData && task.actionsLinkData.length
+                    ?
+                    <div>
+                        <h4>Actions</h4>
+                        {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map(action => (
+                            <div key={action._id}><h6>{action.title}</h6></div>
+                        ))}
+                            
+                    </div>
+                    :
+                    <div>
+                        <h4>No Actions</h4>
+                    </div>
+                }
+
         </Container>
     )
 };

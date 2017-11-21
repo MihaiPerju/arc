@@ -1,4 +1,5 @@
 import React from 'react';
+import {Divider} from 'semantic-ui-react';
 
 export default class FacilityContact extends React.Component {
     render () {
@@ -18,6 +19,7 @@ export default class FacilityContact extends React.Component {
                 <h6>Email: {email}</h6>
                 <h6>Phone: {phone}</h6>
                 <h6>Notes: {notes}</h6>
+                <Divider/>
             </div>
         );
     }

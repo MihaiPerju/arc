@@ -1,5 +1,7 @@
 import SimpleSchema from 'simpl-schema';
-import stateEnum from './enums/states';
+import StateEnum from './enums/states';
+import SubstateEnum from './enums/substates';
+import ActionSchema from './schemas/actionSchema.js';
 
 export default new SimpleSchema({
     acctNum: {
@@ -80,8 +82,13 @@ export default new SimpleSchema({
     },
     state: {
         type: String,
-        defaultValue: stateEnum.ACTIVE,
-        allowedValues: [stateEnum.ACTIVE, stateEnum.ARCHIVED]
+        defaultValue: StateEnum.ACTIVE,
+        allowedValues: _.map(StateEnum, (value, key) => (value))
+    },
+    substate: {
+        type: String,
+        defaultValue: SubstateEnum.NEW,
+        allowedValues: _.map(SubstateEnum, (value, key) => (value))
     },
     facilityId: {
         type: String
@@ -89,5 +96,13 @@ export default new SimpleSchema({
     assigneeId: {
         type: String,
         optional: true
-    }
+    },
+    actionsLinkData: {
+        type: Array,
+        optional: true
+    },
+    'actionsLinkData.$': {
+        type: Object,
+        blackbox: true
+    },
 })
