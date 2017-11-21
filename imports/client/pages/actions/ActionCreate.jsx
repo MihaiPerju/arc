@@ -31,7 +31,7 @@ export default class ActionCreate extends React.Component {
 
     getOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            const labelPrefix = findStateBySubstate(StatesSubstates, value);
+            const labelPrefix = findStateBySubstate(StatesSubstates, key);
             const label = `${labelPrefix}: ${value}`;
             return {value: key, label: label};
         })

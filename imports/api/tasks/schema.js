@@ -1,6 +1,6 @@
 import SimpleSchema from 'simpl-schema';
 import StateEnum from './enums/states';
-import SubstateEnum from './enums/substates';
+import {Substates} from './enums/substates';
 import ActionSchema from './schemas/actionSchema.js';
 
 export default new SimpleSchema({
@@ -87,8 +87,8 @@ export default new SimpleSchema({
     },
     substate: {
         type: String,
-        defaultValue: SubstateEnum.NEW,
-        allowedValues: _.map(SubstateEnum, (value, key) => (value))
+        defaultValue: Substates.NEW,
+        allowedValues: _.map(Substates, (value, key) => (value))
     },
     facilityId: {
         type: String

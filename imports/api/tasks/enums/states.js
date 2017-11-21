@@ -8,30 +8,30 @@ import {LabelSubstates, Substates} from './substates';
 
 export const StatesSubstates = {
     [States.HOLD]: [
-        LabelSubstates[Substates.PENDING_PAYMENT], 
-        LabelSubstates[Substates.AWAITING_PAYMENT], 
-        LabelSubstates[Substates.TOO_SOON_FOR_FOLLOW_UP],
-        LabelSubstates[Substates.BILLED], 
-        LabelSubstates[Substates.APPEALED], 
-        LabelSubstates[Substates.HOSPITAL_REVIEW]
+        Substates.PENDING_PAYMENT, 
+        Substates.AWAITING_PAYMENT, 
+        Substates.TOO_SOON_FOR_FOLLOW_UP,
+        Substates.BILLED, 
+        Substates.APPEALED, 
+        Substates.HOSPITAL_REVIEW
     ],
     [States.ARCHIVED]: [
-        LabelSubstates[Substates.SUCCESSFUL_COLLECTION], 
-        LabelSubstates[Substates.FAIL], 
-        LabelSubstates[Substates.PAID], 
-        LabelSubstates[Substates.REPORTED],
-        LabelSubstates[Substates.SELF_RETURNED], 
-        LabelSubstates[Substates.MERGED], 
-        LabelSubstates[Substates.UNKNOWN]
+        Substates.SUCCESSFUL_COLLECTION, 
+        Substates.FAIL, 
+        Substates.PAID, 
+        Substates.REPORTED,
+        Substates.SELF_RETURNED, 
+        Substates.MERGED, 
+        Substates.UNKNOWN
     ],
     [States.ACTIVE]: [
-        LabelSubstates[Substates.NEW], 
-        LabelSubstates[Substates.FOLLOW_UP], 
-        LabelSubstates[Substates.DENIED], 
-        LabelSubstates[Substates.RETURNED],
-        LabelSubstates[Substates.BILLABLE], 
-        LabelSubstates[Substates.SELF_PAY], 
-        LabelSubstates[Substates.ESCALATED]
+        Substates.NEW, 
+        Substates.FOLLOW_UP, 
+        Substates.DENIED, 
+        Substates.RETURNED,
+        Substates.BILLABLE, 
+        Substates.SELF_PAY, 
+        Substates.ESCALATED
     ]
 }
 

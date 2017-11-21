@@ -7,7 +7,7 @@ import query from '/imports/api/actions/queries/actionList';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
-import TaskSubstatesEnum from '/imports/api/tasks/enums/substates.js';
+import {LabelSubstates} from '/imports/api/tasks/enums/substates.js';
 import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 
 export default class ActionEdit extends React.Component {
@@ -63,9 +63,9 @@ export default class ActionEdit extends React.Component {
 
     getOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            const labelPrefix = findStateBySubstate(StatesSubstates, value);
+            const labelPrefix = findStateBySubstate(StatesSubstates, key);
             const label = `${labelPrefix}: ${value}`;
-            return {value, label: label};
+            return {value: key, label: label};
         })
     };
 
@@ -77,7 +77,7 @@ export default class ActionEdit extends React.Component {
     }
     render() {
         const {model} = this.state;
-        const substates = this.getOptions(TaskSubstatesEnum);
+        const substates = this.getOptions(LabelSubstates);
         return (
             <Container className="page-container">
                 {
