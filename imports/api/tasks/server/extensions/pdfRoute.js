@@ -1,8 +1,20 @@
 import Tasks from '/imports/api/tasks/collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import S3 from '/imports/api/s3-uploads/server/s3';
+import {getUserByToken} from '/imports/api/s3-uploads/server/router';
+import Security from '/imports/api/tasks/security';
+import RolesEnum from '/imports/api/users/enums/roles';
 
-Picker.route('/pdfs/:_id', function (params, req, res, next) {
+Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
+
+    //Checking user rights
+    const user = getUserByToken(params.token);
+    if (!user) {
+        return;
+    }
+    if (!Roles.userIsInRole(user._id, [RolesEnum.ADMIN, RolesEnum.TECH]) && !Security.allowedUploadPdf(user._id, params._id)) {
+        return;
+    }
 
     //Getting attached PDFs from task
     const task = Tasks.findOne({_id: params._id});
@@ -31,8 +43,14 @@ Picker.route('/pdfs/:_id', function (params, req, res, next) {
 
     //Merge PDFs
     const PDFMerge = require('pdf-merge');
-    PDFMerge(files, {output: `${os.tmpDir()}/nested.pdf`})
+    PDFMerge(files)
         .then((buffer) => {
-            console.log("Done! Download here:" + `${os.tmpDir()}/nested.pdf`);
+            res.writeHead(200, {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'attachment; filename=nested.pdf',
+                'Content-Length': buffer.length
+            });
+            res.end(buffer);
         });
+
 });

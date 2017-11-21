@@ -1,7 +1,7 @@
 import React from 'react'
 import {Header} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
-import {path} from '/imports/api/s3-uploads/utils';
+import {path, getToken} from '/imports/api/s3-uploads/utils';
 
 const TaskViewContainer = ({task}) => {
     return (
@@ -27,7 +27,12 @@ const TaskViewContainer = ({task}) => {
             <h5>InsBal2: {task && task.insBal2}</h5>
             <h5>InsBal3: {task && task.insBal3}</h5>
             <h5>State: {task && task.state}</h5>
-
+            {
+                task && task.attachments && task.attachments.length > 1 &&
+                <a href={"/pdfs/" + task._id + "/" + getToken()} target="_blank">
+                    Download nested PDFS
+                </a>
+            }
             <Header as="h3" textAlign="center">PDF Files</Header>
             {
                 task && task.attachments &&
