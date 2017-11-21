@@ -41,6 +41,9 @@ class CreateUser extends React.Component {
 
                     <AutoField name="email"/>
                     <ErrorField name="email"/>
+                    
+                    <AutoField name="phoneNumber"/>
+                    <ErrorField name="phoneNumber"/>
 
                     <AutoField name="password" type="password"/>
                     <ErrorField name="password"/>
@@ -74,6 +77,10 @@ const RegisterSchema = new SimpleSchema({
                 return 'passwordMismatch';
             }
         }
+    },
+    phoneNumber: {
+        type: String, 
+        optional: true
     }
 });
 

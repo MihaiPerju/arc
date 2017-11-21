@@ -1,37 +1,74 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import Menu from "/imports/client/layout/header/Menu";
+import { Button, Dropdown, Menu } from 'semantic-ui-react';
 import UserRoles from '/imports/api/users/enums/roles';
 import { createContainer } from 'meteor/react-meteor-data';
 
 class Header extends Component {
+    state = {activeItem: 'Home'};
+
+    handleItemClick = (e, { name }) => this.setState({ activeItem: name });
+
     render() {
-        user = this.props.user;
-        const unloggedUserRoutes = [
-            {name: "home", label: "Home"},
-            {name: "login", label: "Login"},
-            {name: "register", label: "Register"}
-        ];
-        let loggedUserRoutes = [
-            {name: "home", label: "Home"},
-            {name: "login", label: "Login"},
-            {name: "register", label: "Register"},
-            {name: "client/list", label: "Clients"},
-            {name: "admin/user/list", label: "User Management"},
-            {name: "code/list", label: "CARC/RARC Codes"}
-        ];
-        const adminAndTechRoutes = [
-            {name: "action/list", label: "Actions"}
+        const { activeItem } = this.state;
+        const user = this.props.user;
+
+        let routes = [
+            {name: "/", label: "Home"},
         ];
 
-        if (user && Roles.userIsInRole(user._id, [UserRoles.ADMIN, UserRoles.TECH])) {
-            loggedUserRoutes = loggedUserRoutes.concat(adminAndTechRoutes);
+        let unloggedUserRoutes = [
+            {name: "/login", label: "Login"},
+        ];
+
+        let loggedUserRoutes = [
+            {name: "/client/list", label: "Clients"},
+            {name: "/admin/user/list", label: "User Management"},
+            {name: "/code/list", label: "CARC/RARC Codes"}
+        ];
+
+        const adminAndTechRoutes = [
+            {name: "/action/list", label: "Actions"}
+        ];
+
+        if (user) {
+            routes = routes.concat(loggedUserRoutes);
+            if(Roles.userIsInRole(user._id, [UserRoles.ADMIN, UserRoles.TECH])) {
+                routes = routes.concat(adminAndTechRoutes);
+            }
+        } else {
+            routes = routes.concat(unloggedUserRoutes);
         }
 
         return (
-            <header className="cc-header">
-                <Menu routes={user ? loggedUserRoutes : unloggedUserRoutes}/>
-            </header>
+            <Menu inverted fixed="top">
+                {
+                    routes.map(value => (
+                        <Menu.Item 
+                            href={value.name} 
+                            key={value.label} 
+                            active={activeItem === value.label} 
+                            name={value.label} 
+                            color="blue" 
+                            onClick={this.handleItemClick}
+                        />
+                         ))
+                }
+                {user && <Menu.Menu position='right'>
+                    <Dropdown 
+                        icon="user" 
+                        item 
+                        text={user.profile.firstName + " " + user.profile.lastName} 
+                        name="user" 
+                        onClick={this.handleItemClick}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item href="/my-profile">My Profile</Dropdown.Item>
+                            <Dropdown.Item href="/logout">Logout</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Menu.Menu>
+                }  
+            </Menu>
         )
     }
 }

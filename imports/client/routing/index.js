@@ -7,7 +7,6 @@ import './logoutRoute';
 import Home from '/imports/client/pages/Home';
 
 //User
-import Register from '/imports/client/pages/users/Register';
 import MyProfile from '/imports/client/pages/users/MyProfile';
 import ChangePassword from '/imports/client/pages/users/ChangePassword';
 import ForgotPassword from '/imports/client/pages/users/ForgotPassword';
@@ -29,10 +28,6 @@ route('/', Home, {}, {
 });
 route('/login', Login, {}, {
     name: 'login',
-
-});
-route('/register', Register, {}, {
-    name: 'register',
 
 });
 route('/my-profile', MyProfile, {}, {

@@ -6,6 +6,7 @@ const MyProfileSchema = new SimpleSchema({
     },
     'profile.firstName': {type: String},
     'profile.lastName': {type: String},
+    'profile.phoneNumber': {type: String, optional: true},
     email: {
         type: String,
         regEx: SimpleSchema.RegEx.Email
