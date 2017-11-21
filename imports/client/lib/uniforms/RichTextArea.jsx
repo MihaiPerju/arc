@@ -13,13 +13,14 @@ class RichTextArea extends React.Component {
         }
     }
 
+    componentWillReceiveProps(props) {
+        if (props.value && !props.changed) {
+            this.setState({value: RichTextEditor.createValueFromString(props.value, 'html')})
+        }
+    }
+
     onChange = (value) => {
         this.setState({value});
-        if (this.props.onChange) {
-            this.props.onChange(
-                value.toString('html')
-            );
-        }
         this._intermediate = value.toString('html');
         this.props.onChange(this._intermediate);
         this._intermediate = '';
@@ -29,11 +30,11 @@ class RichTextArea extends React.Component {
         const {
             id,
             label,
-            value,
             ...props,
         } = this.props;
+        const {value} = this.state;
 
-        return(
+        return (
             <div {...filterDOMProps(props)}>
                 {label && (
                     <label htmlFor={id}>
@@ -41,7 +42,7 @@ class RichTextArea extends React.Component {
                     </label>
                 )}
                 <RichTextEditor
-                    value={RichTextEditor.createValueFromString(value, 'html')}
+                    value={value}
                     onChange={this.onChange}
                 />
             </div>

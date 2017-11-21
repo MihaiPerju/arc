@@ -8,14 +8,11 @@ Meteor.methods({
         return LetterTemplates.insert(data);
     },
 
-    'letterTemplate.update'({id, name, content}) {
+    'letterTemplate.update'(data) {
         Security.checkAllowedModifyClient(this.userId);
 
-        LetterTemplates.update({_id: id}, {
-            $set: {
-                name,
-                content
-            }
+        LetterTemplates.update({_id: data.id}, {
+            $set: data
         })
     },
 
