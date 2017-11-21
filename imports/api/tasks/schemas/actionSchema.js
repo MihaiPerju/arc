@@ -2,13 +2,16 @@ import SimpleSchema from 'simpl-schema';
 
 export default new SimpleSchema({
     title: {
-        type: String
-    },
-    description: {
         type: String,
-        optional: true        
+        optional: true
     },
-    substate: {
+    createdAt: {
+        type: Date,
+    },
+    userId: {
+        type: String,
+    },
+    _id: {
         type: String,
         optional: true
     }

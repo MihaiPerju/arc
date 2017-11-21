@@ -3,6 +3,7 @@ import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
 import {Table} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
+import {LabelSubstates} from '/imports/api/tasks/enums/substates'
 
 export default class ActionSingle extends Component {
     constructor() {
@@ -31,7 +32,7 @@ export default class ActionSingle extends Component {
             <Table.Row>
                 <Table.Cell>{action.title}</Table.Cell>
                 <Table.Cell>{action.description}</Table.Cell>
-                <Table.Cell>{action.state}</Table.Cell>
+                <Table.Cell>{LabelSubstates[action.substate]}</Table.Cell>
                 <Table.Cell>
                     <Button.Group>
                         <Button onClick={this.onEditAction}>Edit</Button>      

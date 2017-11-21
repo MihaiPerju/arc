@@ -8,6 +8,22 @@ import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer';
 import {getToken} from '/imports/api/s3-uploads/utils';
+import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer';
+import SelectActionsContainer from './components/SelectActionsContainer';
+import {AutoForm} from 'uniforms-semantic';
+import {Button} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react'
+import {Divider} from 'semantic-ui-react'
+import {Header} from 'semantic-ui-react'
+import Notifier from '/imports/client/lib/Notifier';
+import SimpleSchema from 'simpl-schema';
+
+const ActionSchema = new SimpleSchema({
+    action: {
+        type: String, 
+        optional: true
+    }
+});
 
 export default class TaskView extends React.Component {
     constructor() {
@@ -38,6 +54,20 @@ export default class TaskView extends React.Component {
         })
     };
 
+    onSubmit = (data) => {
+        const taskId = this.props._id;
+
+        Meteor.call('task.actions.add', taskId, data.action.value
+        , (err) => {
+            if (!err) {
+                location.reload();  
+                Notifier.success("Data saved");
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
+    };
+
     render() {
         const {loading, task} = this.state;
         const componentConfig = {
@@ -59,6 +89,20 @@ export default class TaskView extends React.Component {
                 <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                 <Divider/>
                 <CommentsListContainer taskId={task && task._id}/>
+
+                <Container className="page-container">
+                    <Header as="h2" textAlign="center">Add Action</Header>
+                                                 
+                        <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
+                            <SelectActionsContainer/>
+                            
+                            <Divider/>
+
+                            <Button primary fluid type="submit">
+                                Save
+                            </Button>
+                        </AutoForm>
+                </Container>
             </Container>
         );
     }

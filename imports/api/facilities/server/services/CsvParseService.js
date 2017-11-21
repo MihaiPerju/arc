@@ -1,6 +1,7 @@
 import Facilities from '/imports/api/facilities/collection';
 import stateEnum from '/imports/api/tasks/enums/states';
 import Tasks from '/imports/api/tasks/collection';
+import {Substates} from '/imports/api/tasks/enums/substates';
 
 export default class CsvParseService {
 
@@ -28,6 +29,7 @@ export default class CsvParseService {
                 oldTasks.push(task);
             } else {
                 task.state = stateEnum.ARCHIVED;
+                task.substate = Substates.SELF_RETURNED;
                 newTasks.push(task);
             }
         });

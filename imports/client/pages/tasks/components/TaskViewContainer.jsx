@@ -2,6 +2,7 @@ import React from 'react'
 import {Header} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {path, getToken} from '/imports/api/s3-uploads/utils';
+import {LabelSubstates} from '/imports/api/tasks/enums/substates'
 
 const TaskViewContainer = ({task}) => {
     return (
@@ -46,6 +47,22 @@ const TaskViewContainer = ({task}) => {
                         </div>
                     )
                 })
+            }
+            <h5>Substate: {task && LabelSubstates[task.substate]}</h5>
+
+            {task && task.actionsLinkData && task.actionsLinkData.length
+                ?
+                <div>
+                    <h4>Actions</h4>
+                    {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map(action => (
+                        <div key={action._id}><h6>{action.title}</h6></div>
+                    ))}
+
+                </div>
+                :
+                <div>
+                    <h4>No Actions</h4>
+                </div>
             }
         </Container>
     )

@@ -8,5 +8,5 @@ export default Actions.createNamedQuery('actionList', {
     $paginate: true,
     title: 1,
     description: 1,
-    state: 1
+    substate: 1
 });

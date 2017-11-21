@@ -13,7 +13,7 @@ Meteor.methods({
         Users.update(this.userId, {
             $set: {
                 'emails.0.address': email,
-                profile: _.extend(user.profile, profile)
+                profile: _.extend(user.profile, profile),
             }
         })
     },

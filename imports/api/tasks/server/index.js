@@ -3,3 +3,4 @@ import './expose.js';
 import '../links';
 import './taskPdfUpload';
 import './extensions/pdfRoute';
+import './methods.js';
