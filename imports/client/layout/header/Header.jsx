@@ -24,7 +24,8 @@ class Header extends Component {
         let loggedUserRoutes = [
             {name: "/client/list", label: "Clients"},
             {name: "/admin/user/list", label: "User Management"},
-            {name: "/code/list", label: "CARC/RARC Codes"}
+            {name: "/code/list", label: "CARC/RARC Codes"},
+            {name: "/tasks", label: "Tasks"}
         ];
 
         const adminAndTechRoutes = [

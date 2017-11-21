@@ -6,7 +6,8 @@ import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
-import TaskStatesEnum from '/imports/api/tasks/enums/states.js';
+import {LabelSubstates} from '/imports/api/tasks/enums/substates.js';
+import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 
 export default class ActionCreate extends React.Component {
     constructor(props) {
@@ -29,11 +30,14 @@ export default class ActionCreate extends React.Component {
     }
 
     getOptions = (enums) => {
-        return _.map(enums, (value, key) => ({value, label: value}));
+        return _.map(enums, (value, key) => {
+            const labelPrefix = findStateBySubstate(StatesSubstates, key);
+            const label = `${labelPrefix}: ${value}`;
+            return {value: key, label: label};
+        })
     };
 
     handleClick() {
-        console.log(this.state);
         const currentState = this.state.checked;
         this.setState({
             checked: !currentState
@@ -41,7 +45,7 @@ export default class ActionCreate extends React.Component {
     }
 
     render() {
-        const states = this.getOptions(TaskStatesEnum);
+        const substates = this.getOptions(LabelSubstates);
 
         return (
             <Container className="page-container">
@@ -56,19 +60,19 @@ export default class ActionCreate extends React.Component {
                     <LongTextField name="description"/>
                     <ErrorField name="description"/>
 
-                    <input type="checkbox" onClick={this.handleClick}/>Changes the status of the Account?
+                    <input type="checkbox" onClick={this.handleClick}/>Changes the substate of the Account?
 
                     {this.state.checked &&
                         <div>
-                            <SelectField name="state" options={states}/>
-                            <ErrorField name="state"/>
+                            <SelectField name="substate" options={substates}/>
+                            <ErrorField name="substate"/>
                         </div> 
                     }
 
                     {!this.state.checked &&
                         <div className="display-none">
-                            <SelectField value='N/A' name="state" options={'N/A'}/>
-                            <ErrorField name="state"/>
+                            <SelectField value='N/A' name="substate" options={'N/A'}/>
+                            <ErrorField name="substate"/>
                         </div>
                     }
 
