@@ -15,7 +15,8 @@ class EditUser extends Component {
         this.state = {
             email: '',
             firstName: '',
-            lastName: ''
+            lastName: '',
+            phoneNumber: ''
         };
     }
 
@@ -24,7 +25,8 @@ class EditUser extends Component {
             this.setState({
                 email: newProps.data.emails[0].address,
                 firstName: newProps.data.profile.firstName,
-                lastName: newProps.data.profile.lastName
+                lastName: newProps.data.profile.lastName,
+                phoneNumber: newProps.data.profile.phoneNumber
             });
         }
     }
@@ -50,6 +52,7 @@ class EditUser extends Component {
     render() {
         const {data, loading, error} = this.props;
         const model = data;
+
         if (model) {
             model.email = data && data.emails[0].address;
         }
@@ -83,6 +86,9 @@ class EditUser extends Component {
                     <AutoField name="email"/>
                     <ErrorField name="email"/>
 
+                    <AutoField name="profile.phoneNumber"/>
+                    <ErrorField name="profile.phoneNumber"/>
+
                     <Divider/>
 
                     <Button primary fluid type="submit">
@@ -98,6 +104,7 @@ const EditSchema = new SimpleSchema({
     'profile': {type: Object},
     'profile.firstName': {type: String},
     'profile.lastName': {type: String},
+    'profile.phoneNumber': {type: String, optional: true},
     'email': {
         type: String,
         regEx: SimpleSchema.RegEx.Email

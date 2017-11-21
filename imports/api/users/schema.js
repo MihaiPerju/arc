@@ -27,6 +27,10 @@ export default new SimpleSchema({
         type: Object,
         optional: true
     },
+    'profile.phoneNumber': {
+        type: String,
+        optional: true
+    },
     'profile.firstName': {
         type: String,
         optional: true

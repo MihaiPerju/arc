@@ -15,7 +15,8 @@ const createUser = (email, password, roles) => {
         $set: {
             profile: {
                 firstName: faker.name.firstName(),
-                lastName: faker.name.lastName()
+                lastName: faker.name.lastName(),
+                phoneNumber: faker.phone.phoneNumber()
             }
         }
     });

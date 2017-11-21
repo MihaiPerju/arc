@@ -38,7 +38,7 @@ class MyProfile extends React.Component {
 
         const model = {
             profile: user.profile,
-            email: user.getEmail()
+            email: user.getEmail(),
         };
 
         return (
@@ -55,6 +55,9 @@ class MyProfile extends React.Component {
 
                     <AutoField name="email"/>
                     <ErrorField name="email"/>
+
+                    <AutoField name="profile.phoneNumber"/>
+                    <ErrorField name="profile.phoneNumber"/>
 
                     <Divider/>
 

@@ -3,17 +3,17 @@ import Security from '/imports/api/security/security.js';
 import Settings from '/imports/api/settings/collection.js';
 
 Meteor.methods({
-    'admin.createUser'({firstName, lastName, email, password}) {
+    'admin.createUser'({firstName, lastName, email, phoneNumber, password}) {
         Security.checkAdmin(this.userId);
-
+        
         return Accounts.createUser({
             email,
             password,
-            profile: {firstName, lastName}
+            profile: {firstName, lastName, phoneNumber}
         });
     },
 
-    'admin.editUser'(userId, {email, profile}) {
+    'admin.editUser'(userId, {email, profile, }) {
         Security.checkAdmin(this.userId);
 
         if (!userId) {
