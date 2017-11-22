@@ -97,7 +97,7 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
-    attachments: {
+    attachmentIds: {
         type: Array,
         optional: true
     },
