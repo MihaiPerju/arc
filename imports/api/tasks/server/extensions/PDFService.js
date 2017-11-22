@@ -3,7 +3,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-export default class pdfService {
+export default class PDFService {
     static downloadAndSave(attachments) {
         let files = [];
 

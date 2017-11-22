@@ -4,7 +4,7 @@ import {getUserByToken} from '/imports/api/s3-uploads/server/router';
 import Security from '/imports/api/tasks/security';
 import RolesEnum from '/imports/api/users/enums/roles';
 import PDFMerge from 'pdf-merge';
-import PdfService from '/imports/api/tasks/server/extensions/pdfService';
+import PDFService from '/imports/api/tasks/server/extensions/PDFService';
 
 Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
 
@@ -25,7 +25,7 @@ Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
     const attachments = Uploads.find({_id: {$in: attachmentIds}}).fetch();
 
     //Downloading and saving PDFs to local files
-    let files = PdfService.downloadAndSave(attachments);
+    let files = PDFService.downloadAndSave(attachments);
 
     //Merge PDFs
     PDFMerge(files)

@@ -101,7 +101,7 @@ export default new SimpleSchema({
         type: Array,
         optional: true
     },
-    'attachments.$': {
+    'attachmentIds.$': {
         type: String,
     },
     actionsLinkData: {
