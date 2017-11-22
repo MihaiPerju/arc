@@ -75,7 +75,7 @@ export default class TaskView extends React.Component {
                 Notifier.success('Added');
                 this.removeFile(file);
             },
-            acceptedFiles: 'application/pdf'
+            acceptedFiles: '.pdf'
         };
 
         if (loading) {

@@ -37,5 +37,4 @@ Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
             });
             res.end(buffer);
         });
-
 });

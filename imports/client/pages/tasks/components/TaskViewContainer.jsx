@@ -1,6 +1,6 @@
 import React from 'react'
 import {Header} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
+import {Container, Button} from 'semantic-ui-react'
 import {path, getToken} from '/imports/api/s3-uploads/utils';
 import {LabelSubstates} from '/imports/api/tasks/enums/substates'
 
@@ -30,9 +30,9 @@ const TaskViewContainer = ({task}) => {
             <h5>State: {task && task.state}</h5>
             {
                 task && task.attachments && task.attachments.length > 1 &&
-                <a href={"/pdfs/" + task._id + "/" + getToken()} target="_blank">
-                    Download nested PDFS
-                </a>
+                <Button href={"/pdfs/" + task._id + "/" + getToken()} target="_blank">
+                    Download All PDFs
+                </Button>
             }
             <Header as="h3" textAlign="center">PDF Files</Header>
             {
