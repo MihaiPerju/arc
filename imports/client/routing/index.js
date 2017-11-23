@@ -12,6 +12,7 @@ import ChangePassword from '/imports/client/pages/users/ChangePassword';
 import ForgotPassword from '/imports/client/pages/users/ForgotPassword';
 import ResetPassword from '/imports/client/pages/users/ResetPassword.jsx';
 import Login from '/imports/client/pages/users/Login';
+import Dashboard from '/imports/client/pages/users/Dashboard';
 
 //Route action for grapher live
 //Recommended to run this only in dev env
@@ -22,11 +23,11 @@ FlowRouter.route('/grapher-live', {
     }
 });
 
-route('/', Home, {}, {
+route('/home', Home, {}, {
     name: 'home',
 
 });
-route('/login', Login, {}, {
+route('/', Login, {}, {
     name: 'login',
 
 });
@@ -45,6 +46,7 @@ route('/password/reset/:token', ResetPassword, {}, {
     name: 'password.reset',
 
 });
+route('/dashboard', Dashboard);
 
 //Admin
 import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx'
