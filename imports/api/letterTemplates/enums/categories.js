@@ -4,7 +4,8 @@ const CATEGORIES = {
     ESTIMATE: 'estimate',
     EMPLOYEE: 'employee',
     CUSTOMER: 'customer',
-    COLLECTION: 'collection'
+    COLLECTION: 'collection',
+    OTHER: 'other'
 };
 
 const CategoryList = [
@@ -13,7 +14,8 @@ const CategoryList = [
     CATEGORIES.ESTIMATE,
     CATEGORIES.EMPLOYEE,
     CATEGORIES.CUSTOMER,
-    CATEGORIES.COLLECTION
+    CATEGORIES.COLLECTION,
+    CATEGORIES.OTHER
 ];
 
 export {CategoryList};
