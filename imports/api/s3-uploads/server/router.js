@@ -23,6 +23,7 @@ export function createRoute(path, handler) {
     postRoutes.route(path, function (params, req, res, next) {
         let user;
         let facilityId = params.facilityId;
+        let taskId = params.taskId;
 
         if (params.token) {
             user = getUserByToken(params.token);
@@ -31,6 +32,7 @@ export function createRoute(path, handler) {
         const helper = {
             facilityId,
             user,
+            taskId,
             req,
             res,
             next,
@@ -62,7 +64,7 @@ export function createRoute(path, handler) {
                     return uploadedFile.save({
                         resourceType,
                         resourceId,
-                        userId: user._id
+                        userId: user && user._id
                     });
                 });
             }

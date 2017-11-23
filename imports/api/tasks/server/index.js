@@ -1,4 +1,6 @@
 import '../collection.js';
 import './expose.js';
 import '../links';
-import './methods.js'
+import './taskPdfUpload';
+import './extensions/pdfRoute';
+import './methods.js';

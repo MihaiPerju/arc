@@ -97,6 +97,13 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
+    attachmentIds: {
+        type: Array,
+        optional: true
+    },
+    'attachmentIds.$': {
+        type: String,
+    },
     actionsLinkData: {
         type: Array,
         optional: true
@@ -104,5 +111,5 @@ export default new SimpleSchema({
     'actionsLinkData.$': {
         type: Object,
         blackbox: true
-    },
+    }
 })

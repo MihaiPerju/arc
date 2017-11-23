@@ -45,5 +45,10 @@ export default Tasks.createNamedQuery('taskList', {
     client: {
         clientName: 1
     },
-    actionsLinkData: 1,
+    attachments: {
+        _id: 1,
+        path: 1,
+        name: 1
+    },
+    actionsLinkData: 1
 });

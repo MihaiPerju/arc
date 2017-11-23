@@ -2,19 +2,21 @@ import React from 'react';
 import Loading from "/imports/client/lib/ui/Loading.jsx";
 import query from '/imports/api/tasks/queries/taskList';
 import TaskViewContainer from './components/TaskViewContainer';
+import DropzoneComponent from 'react-dropzone-component';
+import {Divider} from 'semantic-ui-react'
 import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer';
+import {getToken} from '/imports/api/s3-uploads/utils';
 import SelectActionsContainer from './components/SelectActionsContainer';
 import {AutoForm} from 'uniforms-semantic';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 import Notifier from '/imports/client/lib/Notifier';
 import SimpleSchema from 'simpl-schema';
 
 const ActionSchema = new SimpleSchema({
     action: {
-        type: String, 
+        type: String,
         optional: true
     }
 });
@@ -29,7 +31,7 @@ export default class TaskView extends React.Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.getTask();
     }
 
@@ -42,6 +44,7 @@ export default class TaskView extends React.Component {
 
             this.setState({
                 task,
+                taskId: task._id,
                 loading: false
             })
         })
@@ -51,40 +54,51 @@ export default class TaskView extends React.Component {
         const taskId = this.props._id;
 
         Meteor.call('task.actions.add', taskId, data.action.value
-        , (err) => {
-            if (!err) {
-                location.reload();  
-                Notifier.success("Data saved");
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    }
+            , (err) => {
+                if (!err) {
+                    location.reload();
+                    Notifier.success("Data saved");
+                } else {
+                    Notifier.error(err.reason);
+                }
+            })
+    };
 
     render() {
         const {loading, task} = this.state;
+        const componentConfig = {
+            postUrl: `/uploads/task-pdf/` + this.props._id + '/' + getToken()
+        };
+
+        const djsConfig = {
+            complete(file) {
+                Notifier.success('Added');
+                this.removeFile(file);
+            },
+            acceptedFiles: '.pdf'
+        };
+
         if (loading) {
             return <Loading/>;
         } else return (
-
             <Container>
                 <TaskViewContainer task={task}/>
-
+                <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                 <Divider/>
                 <CommentsListContainer taskId={task && task._id}/>
 
                 <Container className="page-container">
                     <Header as="h2" textAlign="center">Add Action</Header>
-                                                 
-                        <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
-                            <SelectActionsContainer/>
-                            
-                            <Divider/>
 
-                            <Button primary fluid type="submit">
-                                Save
-                            </Button>
-                        </AutoForm>
+                    <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
+                        <SelectActionsContainer/>
+
+                        <Divider/>
+
+                        <Button primary fluid type="submit">
+                            Save
+                        </Button>
+                    </AutoForm>
                 </Container>
             </Container>
         );
