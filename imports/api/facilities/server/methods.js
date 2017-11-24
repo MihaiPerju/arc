@@ -5,18 +5,18 @@ import FacilitySchema from "../schema.js";
 
 Meteor.methods({
     'facility.create' (data) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         Facilities.insert(data);
     },
 
     'facility.get' (facilityId) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
         return Facilities.findOne(facilityId);
     },
 
     'facility.update' (facility) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
         const facilityData = FacilitySchema.clean(facility);
 
         Facilities.update({_id: facility._id}, {
@@ -25,7 +25,7 @@ Meteor.methods({
     },
 
     'facility.remove' (facilityId) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         Facilities.remove(facilityId);
     }
