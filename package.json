@@ -21,6 +21,7 @@
     "moment": "^2.18.1",
     "object-sizeof": "^1.1.1",
     "papaparse": "^4.3.6",
+    "pdf-merge": "^1.0.2",
     "react": "^15.6.2",
     "react-addons-pure-render-mixin": "^15.3.1",
     "react-autobind": "^1.0.6",
