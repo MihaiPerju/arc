@@ -115,10 +115,10 @@ route('/code/create', CodeCreate);
 
 //Tasks
 import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
-import TaskView from '/imports/client/pages/tasks/TaskView';
+import TaskViewContainer from '/imports/client/pages/tasks/TaskViewContainer';
 
 route('/tasks', TaskListContainer);
-route('/task/:_id/view', TaskView);
+route('/task/:_id/view', TaskViewContainer);
 
 //Actions
 import ActionListContainer from '/imports/client/pages/actions/ActionListContainer.jsx';

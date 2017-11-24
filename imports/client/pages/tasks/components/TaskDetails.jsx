@@ -1,10 +1,10 @@
-import React from 'react'
-import {Header} from 'semantic-ui-react'
-import {Container, Button} from 'semantic-ui-react'
+import React from 'react';
+import {Header} from 'semantic-ui-react';
+import {Container, Button} from 'semantic-ui-react';
 import {path, getToken} from '/imports/api/s3-uploads/utils';
-import {LabelSubstates} from '/imports/api/tasks/enums/substates'
+import {LabelSubstates} from '/imports/api/tasks/enums/substates';
 
-const TaskViewContainer = ({task}) => {
+const TaskDetails = ({task}) => {
     return (
         <Container className="page-container">
             <Header as="h3" textAlign="center">View Task</Header>
@@ -68,4 +68,4 @@ const TaskViewContainer = ({task}) => {
     )
 };
 
-export default TaskViewContainer;
+export default TaskDetails;
