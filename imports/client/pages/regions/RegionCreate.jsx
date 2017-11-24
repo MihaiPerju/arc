@@ -7,7 +7,7 @@ import {Button} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 
-export default class CreateLetterTemplate extends React.Component {
+export default class RegionCreate extends React.Component {
     constructor() {
         super();
 
@@ -18,6 +18,7 @@ export default class CreateLetterTemplate extends React.Component {
         Meteor.call('region.create', data, (err) => {
             if (!err) {
                 Notifier.success('Region added!');
+                // FlowRouter.go('/regions/list');
             } else {
                 Notifier.error(err.reason);
             }
