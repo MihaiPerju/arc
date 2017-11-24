@@ -18,7 +18,7 @@ export default class RegionCreate extends React.Component {
         Meteor.call('region.create', data, (err) => {
             if (!err) {
                 Notifier.success('Region added!');
-                // FlowRouter.go('/regions/list');
+                FlowRouter.go('/region/list');
             } else {
                 Notifier.error(err.reason);
             }

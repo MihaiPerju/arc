@@ -38,7 +38,7 @@ export default class RegionEdit extends React.Component {
         Meteor.call('region.update', data, (err) => {
             if (!err) {
                 Notifier.success("Data saved");
-                // FlowRouter.go('/regions/list');
+                FlowRouter.go('/region/list');
             } else {
                 Notifier.error(err.reason);
             }

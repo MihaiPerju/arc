@@ -22,5 +22,11 @@ Meteor.methods({
                 name
             }
         });
+    },
+
+    'region.delete'(id) {
+        Security.isAdminOrTech(this.userId);
+
+        Regions.remove({_id: id});
     }
 });
