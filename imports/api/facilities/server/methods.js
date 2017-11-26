@@ -2,6 +2,7 @@ import {Meteor} from "meteor/meteor";
 import Facilities from "/imports/api/facilities/collection.js";
 import Security from '/imports/api/security/security.js';
 import FacilitySchema from "../schema.js";
+import Regions from '/imports/api/regions/collection';
 
 Meteor.methods({
     'facility.create' (data) {
@@ -28,5 +29,15 @@ Meteor.methods({
         Security.isAdminOrTech(this.userId);
 
         Facilities.remove(facilityId);
+    },
+
+    'facility.getRegions'(regionIds) {
+        Security.isAdminOrTech(this.userId);
+
+        return Regions.find({
+            _id: {
+                $in: regionIds
+            }
+        }).fetch();
     }
 });

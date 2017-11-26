@@ -6,7 +6,6 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
 import SelectDropDown from "/imports/client/lib/SelectDropDown.jsx";
 import FacilityStatusEnum from "/imports/api/facilities/enums/statuses.js";
-import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
@@ -104,10 +103,10 @@ export default class FacilityListContainer extends Pager {
                                     selectionType="status"
                                     enums={FacilityStatusEnum}
                                     handleSelectBy={this.handleSelectBy}/>
-                    <SelectDropDown name="Region"
-                                    selectionType="region"
-                                    enums={FacilityRegionEnum}
-                                    handleSelectBy={this.handleSelectBy}/>
+                    {/*<SelectDropDown name="Region"*/}
+                                    {/*selectionType="region"*/}
+                                    {/*enums={FacilityRegionEnum}*/}
+                                    {/*handleSelectBy={this.handleSelectBy}/>*/}
                 </div>
                 <SearchInput handleSearch={this.handleSearch}/>
 

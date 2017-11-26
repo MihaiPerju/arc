@@ -3,20 +3,33 @@ import FacilityContactList from "./FacilityContactList.jsx";
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
-import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import SelectUsersContainer from './SelectUsersContainer';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
+import Notifier from '/imports/client/lib/Notifier';
 
 export default class FacilityForm extends React.Component {
     constructor() {
         super();
 
         this.state = {
-            users: []
+            users: [],
+            regions: []
         };
+    }
+
+    componentWillMount() {
+        Meteor.call('regions.get', (err, regions) => {
+            if (!err) {
+                this.setState({
+                    regions
+                })
+            } else {
+                Notifier.error("Couldn't get regions");
+            }
+        });
     }
 
     onSubmit = (data) => {
@@ -27,10 +40,16 @@ export default class FacilityForm extends React.Component {
         return _.map(enums, (value, key) => ({value, label: value}));
     };
 
+    getRegionOptions = (regions) => {
+        return regions.map((region, key) => ({value: region._id, label: region.name}));
+    };
+
     render() {
         const {model} = this.props;
+        const {regions} = this.state;
+        const regionIds = this.getRegionOptions(regions);
+
         const statuses = this.getOptions(FacilityStatusEnum);
-        const regions = this.getOptions(FacilityRegionEnum);
         const schema = FacilitySchema.omit("clientId", "createdAt");
         let newModel = model ? model : {
             status: FacilityStatusEnum.NEW,
@@ -60,9 +79,14 @@ export default class FacilityForm extends React.Component {
 
                     <AutoField name="zipCode"/>
                     <ErrorField name="zipCode"/>
-
-                    <SelectMulti name="region" options={regions}/>
-                    <ErrorField name="region"/>
+                    {
+                        regionIds
+                        &&
+                        <div>
+                            <SelectMulti name="regionIds" options={regionIds}/>
+                            < ErrorField name="regionIds"/>
+                        </div>
+                    }
 
                     <SelectUsersContainer/>
 

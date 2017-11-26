@@ -28,5 +28,10 @@ Meteor.methods({
         Security.isAdminOrTech(this.userId);
 
         Regions.remove({_id: id});
+    },
+
+    'regions.get'() {
+
+        return Regions.find().fetch();
     }
 });
