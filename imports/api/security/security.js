@@ -19,7 +19,7 @@ export default {
         }
     },
 
-    checkAllowedModifyClient(userId) {
+    isAdminOrTech(userId) {
         this.checkLoggedIn(userId);
 
         if (!Roles.userIsInRole(userId, [UserRoles.ADMIN, UserRoles.TECH])) {

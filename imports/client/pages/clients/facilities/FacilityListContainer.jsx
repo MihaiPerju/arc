@@ -6,11 +6,11 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
 import SelectDropDown from "/imports/client/lib/SelectDropDown.jsx";
 import FacilityStatusEnum from "/imports/api/facilities/enums/statuses.js";
-import FacilityRegionEnum from "/imports/api/facilities/enums/regions.js";
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
+import Notifier from '/imports/client/lib/Notifier';
 
 export default class FacilityListContainer extends Pager {
     constructor() {
@@ -22,12 +22,24 @@ export default class FacilityListContainer extends Pager {
             sortBy: 'none',
             isSortAscend: true,
             status: '',
-            region: ''
+            regionIds: null,
+            regions: [],
+
         });
 
         this.query = FacilityListQuery.clone();
         this.FacilityListWrapper = createQueryContainer(this.query, FacilityList, {
             reactive: false
+        })
+    }
+
+    componentDidMount() {
+        Meteor.call('regions.get', (err, regions) => {
+            if (!err) {
+                this.setState({regions});
+            } else {
+                Notifier.error("Couldn't get regions");
+            }
         })
     }
 
@@ -70,29 +82,44 @@ export default class FacilityListContainer extends Pager {
     };
 
     handleSelectBy = (selectionType, selectedValue) => {
-        const {status, region} = this.state;
-        let selectFilters = [{[selectionType]: selectedValue}];
+        const {status, regionIds} = this.state;
+        let selectFilters = [];
 
-        if (selectionType === 'status' && region !== '') {
-            selectFilters.push({region})
-        } else if (selectionType === 'region' && status !== '') {
-            selectFilters.push({status})
+        if (selectionType === 'regionIds') {
+            selectFilters = [{regionIds: {$in: [selectedValue]}}];
+            this.setState({regionIds: {$in: [selectedValue]}});
+            if (status) {
+                selectFilters.push({status});
+            }
+        } else {
+            selectFilters = [{[selectionType]: selectedValue}];
+            this.setState({[selectionType]: selectedValue});
+            if (regionIds) {
+                selectFilters.push({regionIds})
+            }
         }
 
-        this.setState({[selectionType]: selectedValue},
-            this.updateFilters({
-                filters: {
-                    $and: selectFilters
-                }
-            })
-        );
+        this.updateFilters({
+            filters: {
+                $and: selectFilters
+            }
+        });
     };
+
+    getRegionsOptions(regions) {
+        let regionOptions = [];
+        regions.map((region) => {
+            regionOptions.push({label: region.name, value: region._id})
+        });
+        return regionOptions;
+    }
 
     render() {
         const params = _.extend({}, this.getPagerOptions());
         const FacilityListWrapper = this.FacilityListWrapper;
         const clientId = FlowRouter.current().params._id;
-        const {sortBy, isSortAscend} = this.state;
+        const {regions, sortBy, isSortAscend} = this.state;
+        const regionOptions = this.getRegionsOptions(regions);
 
         return (
             <Container className="page-container">
@@ -105,8 +132,8 @@ export default class FacilityListContainer extends Pager {
                                     enums={FacilityStatusEnum}
                                     handleSelectBy={this.handleSelectBy}/>
                     <SelectDropDown name="Region"
-                                    selectionType="region"
-                                    enums={FacilityRegionEnum}
+                                    selectionType="regionIds"
+                                    regionOptions={regionOptions}
                                     handleSelectBy={this.handleSelectBy}/>
                 </div>
                 <SearchInput handleSearch={this.handleSearch}/>

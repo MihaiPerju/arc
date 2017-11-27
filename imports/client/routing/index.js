@@ -129,3 +129,11 @@ route('/action/list', ActionListContainer);
 route('/action/create', CreateAction);
 route('/action/:actionId/edit', EditAction);
 
+//Regions
+import RegionCreate from '/imports/client/pages/regions/RegionCreate';
+import RegionEdit from '/imports/client/pages/regions/RegionEdit';
+import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
+
+route('/region/create', RegionCreate);
+route('/region/:id/edit', RegionEdit);
+route('/region/list', RegionListContainer);

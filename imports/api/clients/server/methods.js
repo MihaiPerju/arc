@@ -4,7 +4,7 @@ import Uploads from '/imports/api/s3-uploads/uploads/collection';
 
 Meteor.methods({
     'client.create'(data) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         const existingClient = Clients.findOne({email: data.email});
         if (existingClient) {
@@ -14,20 +14,20 @@ Meteor.methods({
     },
 
     'client.get'(id) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         return Clients.findOne({_id: id});
     },
 
     'client.getLogoPath'(uploadId) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         const existingUpload = Uploads.findOne({_id: uploadId});
         return existingUpload.path;
     },
 
     'client.update'(clientId, {clientName, firstName, lastName, email, logoPath, contacts}) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         Clients.update({_id: clientId}, {
             $set: {
@@ -42,7 +42,7 @@ Meteor.methods({
     },
 
     'client.removeLogo'(clientId, uploadId) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         Uploads.remove({_id: uploadId});
 
@@ -54,7 +54,7 @@ Meteor.methods({
     },
 
     'client.delete'(id) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         const existingClient = Clients.findOne({_id: id});
         const logoPath = existingClient.logoPath;

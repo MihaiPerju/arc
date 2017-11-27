@@ -4,6 +4,7 @@ import FacilityContact from "./components/FacilityContact";
 import {Header} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import Loading from "/imports/client/lib/ui/Loading.jsx";
+import Notifier from '/imports/client/lib/Notifier';
 
 export default class FacilityView extends React.Component {
     constructor() {
@@ -11,7 +12,8 @@ export default class FacilityView extends React.Component {
 
         this.state = {
             facility: null,
-            loading: true
+            loading: true,
+            regions: []
         };
     }
 
@@ -19,24 +21,36 @@ export default class FacilityView extends React.Component {
         this.getFacility();
     }
 
+    getRegions(regionIds) {
+        Meteor.call('facility.getRegions', regionIds, (err, regions) => {
+            if (err) {
+                Notifier.error("Couldn't get facility regions");
+            } else {
+                this.setState({
+                    regions
+                });
+            }
+        })
+    }
+
     getFacility = () => {
         const {facilityId} = FlowRouter.current().params;
         Meteor.call('facility.get', facilityId, (err, facility) => {
             if (err) {
                 return Notifier.error('Error while getting facility!');
+            } else {
+                this.setState({
+                    facility,
+                    loading: false
+                });
+                this.getRegions(facility.regionIds);
             }
-
-            this.setState({
-                facility,
-                loading: false
-            })
-        })
+        });
     };
 
     render() {
-        const {loading, facility} = this.state;
-
-         if (loading) {
+        const {loading, facility, regions} = this.state;
+        if (loading) {
             return <Loading/>;
         }
 
@@ -51,7 +65,16 @@ export default class FacilityView extends React.Component {
                 <h5>Address 2: {facility && facility.addressTwo}</h5>
                 <h5>Zip: {facility && facility.zipCode}</h5>
                 <h5>Creation date: {facility && moment(facility.createdAt).format('MM/DD/YYYY hh:mm')}</h5>
-
+                {
+                    regions && <div>
+                        <h4>Regions:</h4>
+                        {
+                            regions.map((region, index) => {
+                                return <div key={index}>{region.name}</div>
+                            })
+                        }
+                    </div>
+                }
                 {facility && facility.contacts && facility.contacts.length
                     ?
                     <div>

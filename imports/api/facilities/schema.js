@@ -1,6 +1,5 @@
 import SimpleSchema from 'simpl-schema';
 import FacilityContactSchema from '/imports/api/facilities/schemas/contactSchema.js';
-import regionEnum from "/imports/api/facilities/enums/regions.js";
 import statusEnum from "/imports/api/facilities/enums/statuses.js";
 import ImportRulesSchema from './schemas/importRulesSchema.js';
 
@@ -35,13 +34,13 @@ export default new SimpleSchema({
         type: String,
         allowedValues: _.map(statusEnum, (value, key) => (value))
     },
-    region: {
+    regionIds: {
+        label: 'Regions',
         type: Array,
         minCount: 1
     },
-    'region.$': {
-        type: String,
-        allowedValues: _.map(regionEnum, (value, key) => (value))
+    'regionIds.$': {
+        type: String
     },
     contacts: {
         type: Array,
