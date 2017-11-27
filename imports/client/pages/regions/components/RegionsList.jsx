@@ -8,7 +8,6 @@ import {Table} from 'semantic-ui-react'
 export default class RegionsList extends Component {
     render() {
         const {data, loading, error} = this.props;
-        console.log(data);
         if (loading) {
             return <div>Loading</div>
         }
