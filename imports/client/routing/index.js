@@ -129,3 +129,7 @@ route('/action/list', ActionListContainer);
 route('/action/create', CreateAction);
 route('/action/:actionId/edit', EditAction);
 
+//Reports
+import TaskFilterBuilder from '/imports/client/pages/reports/TaskFilterBuilder';
+
+route('/tasks/filter-builder', TaskFilterBuilder);
