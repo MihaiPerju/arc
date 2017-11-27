@@ -31,7 +31,7 @@ export default class RegionsList extends Component {
                             <Table.Body>
 
                                 {_.map(data, (region, idx) => {
-                                 return <RegionSingle region={region} key={idx}/>;
+                                    return <RegionSingle region={region} key={idx}/>;
 
                                 })}
                             </Table.Body>
