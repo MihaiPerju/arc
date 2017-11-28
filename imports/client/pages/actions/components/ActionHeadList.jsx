@@ -15,6 +15,7 @@ export default class ActionHeadList extends React.Component {
                     handleHeaderClick={handleHeaderClick}/>
                 <th>Description</th>
                 <th>Substates</th>
+                <th>Actions</th>
             </tr>
         );
     }

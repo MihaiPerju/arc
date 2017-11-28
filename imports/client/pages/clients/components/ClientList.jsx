@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import _ from 'underscore';
 import ClientSingle from './ClientSingle.jsx';
 import ClientHeadList from './ClientHeadList';
-import {Container} from 'semantic-ui-react'
-import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Button, Icon, Table} from 'semantic-ui-react'
 
 export default class ClientList extends Component {
     render() {
@@ -19,29 +17,36 @@ export default class ClientList extends Component {
         }
 
         return (
-            <Container>
-                <Table padded>
-                    <Table.Header>
-                        <ClientHeadList sortBy={sortBy}
-                                        isSortAscend={isSortAscend}
-                                        handleHeaderClick={handleHeaderClick}/>
-                    </Table.Header>
-                    {
-                        data.length
-                            ?
-                            <Table.Body>
+            <Table striped>
+                <Table.Header>
+                    <ClientHeadList sortBy={sortBy}
+                                    isSortAscend={isSortAscend}
+                                    handleHeaderClick={handleHeaderClick}/>
+                </Table.Header>
+                {
+                    data.length
+                        ?
+                        <Table.Body>
 
-                                {_.map(data, (client, idx) => {
-                                    return <ClientSingle client={client} key={idx}/>;
-                                })}
-                            </Table.Body>
-                            :
-                            <Table.Body>
-                                There are no clients
-                            </Table.Body>
-                    }
-                </Table>
-            </Container>
+                            {_.map(data, (client, idx) => {
+                                return <ClientSingle client={client} key={idx}/>;
+                            })}
+                        </Table.Body>
+                        :
+                        <Table.Body>
+                            There are no clients
+                        </Table.Body>
+                }
+                <Table.Footer fullWidth>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan='100'>
+                            <Button href='/client/create' floated='left' icon labelPosition='left' primary size='small'>
+                                <Icon name='plus' /> Create
+                            </Button>
+                            </Table.HeaderCell>
+                        </Table.Row>
+                </Table.Footer>
+            </Table>
         );
     }
 }

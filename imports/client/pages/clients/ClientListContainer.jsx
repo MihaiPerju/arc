@@ -71,19 +71,18 @@ export default class ClientListContainer extends Pager {
         return (
             <Container className="page-container">
                 <div>
-                    <SearchInput handleSearch={this.handleSearch}/>
                     <Header as="h2" textAlign="center">Clients</Header>
+                    <SearchInput handleSearch={this.handleSearch}/>
+                    
                 </div>
-                <div>
-                    {this.getPaginator()}
+                <div className='m-t-30'>
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                     <ClientListCont params={params}
                                     sortBy={sortBy}
                                     isSortAscend={isSortAscend}
                                     handleHeaderClick={this.handleHeaderClick}/>
-                    {this.getPaginator()}
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                 </div>
-                <Divider/>
-                <Button fluid primary href="/client/create">Create client</Button>
             </Container>
         );
     }

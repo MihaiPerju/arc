@@ -69,17 +69,15 @@ export default class ActionListContainer extends Pager {
         return (
             <Container className="page-container">
                 <div>
-                <SearchInput handleSearch={this.handleSearch}/>
-                <Header as="h2" textAlign="center">Actions</Header>
-            </div>
-                <div>
-                    {this.getPaginator()}
+                    <Header as="h2" textAlign="center">Actions</Header>
+                    <SearchInput handleSearch={this.handleSearch}/>                    
+                </div>
+                <div className='m-t-30'>
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                     <ActionListCont params={params}
                                     handleHeaderClick={this.handleHeaderClick}/>
-                    {this.getPaginator()}
-                </div>
-                <Divider/>
-                <Button fluid primary href="/action/create">Create Action</Button>
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                </div>            
             </Container>
         );
     }

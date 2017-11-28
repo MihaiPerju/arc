@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import _ from 'underscore';
 import CodeSingle from './CodeSingle.jsx';
 import CodeHeadList from './CodeHeadList';
-import {Container} from 'semantic-ui-react'
-import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Button, Icon, Table, Container} from 'semantic-ui-react'
 
 export default class CodeList extends Component {
     render() {
@@ -19,29 +17,37 @@ export default class CodeList extends Component {
         }
 
         return (
-            <Container>
-                <Table>
-                    <Table.Header>
-                        <CodeHeadList sortBy={sortBy}
-                                      isSortAscend={isSortAscend}
-                                      handleHeaderClick={handleHeaderClick}/>
-                    </Table.Header>
-                    {
-                        data.length
-                            ?
-                            <Table.Body>
+            <Table>
+                <Table.Header>
+                    <CodeHeadList sortBy={sortBy}
+                                    isSortAscend={isSortAscend}
+                                    handleHeaderClick={handleHeaderClick}/>
+                </Table.Header>
+                {
+                    data.length
+                        ?
+                        <Table.Body>
 
-                                {_.map(data, (code, idx) => {
-                                    return <CodeSingle code={code} key={idx}/>;
-                                })}
-                            </Table.Body>
-                            :
-                            <Table.Body>
-                                There are no CARC/RARC codes.
-                            </Table.Body>
-                    }
-                </Table>
-            </Container>
+                            {_.map(data, (code, idx) => {
+                                return <CodeSingle code={code} key={idx}/>;
+                            })}
+                        </Table.Body>
+                        :
+                        <Table.Body>
+                            There are no CARC/RARC codes.
+                        </Table.Body>
+                }
+                <Table.Footer fullWidth>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan='100'>
+                            <Button href='/code/create' floated='left' icon labelPosition='left' primary size='small'>
+                                <Icon name='plus' /> Create
+                            </Button>
+                            </Table.HeaderCell>
+                        </Table.Row>
+                </Table.Footer>
+            </Table>
+        
         );
     }
 }
