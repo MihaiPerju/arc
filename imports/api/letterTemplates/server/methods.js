@@ -3,30 +3,27 @@ import LetterTemplates from '/imports/api/letterTemplates/collection';
 
 Meteor.methods({
     'letterTemplate.create'(data) {
-        Security.checkAdmin(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         return LetterTemplates.insert(data);
     },
 
-    'letterTemplate.update'({id, name, content}) {
-        Security.checkAdmin(this.userId);
+    'letterTemplate.update'(data) {
+        Security.isAdminOrTech(this.userId);
 
-        LetterTemplates.update({_id: id}, {
-            $set: {
-                name,
-                content
-            }
+        LetterTemplates.update({_id: data.id}, {
+            $set: data
         })
     },
 
     'letterTemplate.get'(id) {
-        Security.checkAdmin(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         return LetterTemplates.findOne({_id: id});
     },
 
     'letterTemplate.delete'(id) {
-        Security.checkAdmin(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         LetterTemplates.remove({_id: id});
     }

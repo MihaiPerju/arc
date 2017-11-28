@@ -2,10 +2,11 @@ import React from 'react';
 import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import {Container} from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
+import {Divider} from 'semantic-ui-react';
+import {Header} from 'semantic-ui-react';
+import RichTextArea from "/imports/client/lib/uniforms/RichTextArea.jsx";
 
 export default class EditLetterTemplate extends React.Component {
     constructor() {
@@ -33,7 +34,7 @@ export default class EditLetterTemplate extends React.Component {
         })
     }
 
-    onSubmit(data) {
+    onSubmit = (data) => {
         data.id = this.state.model._id;
         Meteor.call('letterTemplate.update', data, (err) => {
             if (!err) {
@@ -43,7 +44,7 @@ export default class EditLetterTemplate extends React.Component {
                 Notifier.error(err.reason);
             }
         })
-    }
+    };
 
     render() {
         const {model} = this.state;
@@ -56,17 +57,22 @@ export default class EditLetterTemplate extends React.Component {
                         ?
                         <div className="error">{this.state.error}</div>
                         :
-                        <AutoForm model={model} schema={LetterTemplateSchema} onSubmit={this.onSubmit.bind(this)}
+                        <AutoForm model={model} schema={LetterTemplateSchema} onSubmit={this.onSubmit}
                                   ref="form">
 
                             <AutoField name="name"/>
                             <ErrorField name="name"/>
 
-                            <AutoField name="content"/>
-                            <ErrorField name="content"/>
+                            <RichTextArea name="body"/>
+                            <ErrorField name="body"/>
+
+                            <AutoField name="category"/>
+                            <ErrorField name="category"/>
+
+                            <AutoField name="description"/>
+                            <ErrorField name="description"/>
 
                             <Divider/>
-
                             <Button fluid primary type="submit">
                                 Save
                             </Button>
