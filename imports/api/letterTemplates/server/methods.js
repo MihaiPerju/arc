@@ -3,13 +3,13 @@ import LetterTemplates from '/imports/api/letterTemplates/collection';
 
 Meteor.methods({
     'letterTemplate.create'(data) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         return LetterTemplates.insert(data);
     },
 
     'letterTemplate.update'(data) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         LetterTemplates.update({_id: data.id}, {
             $set: data
@@ -17,13 +17,13 @@ Meteor.methods({
     },
 
     'letterTemplate.get'(id) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         return LetterTemplates.findOne({_id: id});
     },
 
     'letterTemplate.delete'(id) {
-        Security.checkAllowedModifyClient(this.userId);
+        Security.isAdminOrTech(this.userId);
 
         LetterTemplates.remove({_id: id});
     }
