@@ -10,8 +10,8 @@ import {Container, Button, Header, Divider} from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 
 export default class FacilityListContainer extends Pager {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         _.extend(this.state, {
             perPage: 10,
@@ -24,7 +24,7 @@ export default class FacilityListContainer extends Pager {
 
         });
 
-        this.query = FacilityListQuery.clone();
+        this.query = FacilityListQuery.clone({clientId: props._id});
         this.FacilityListWrapper = createQueryContainer(this.query, FacilityList, {
             reactive: false
         })

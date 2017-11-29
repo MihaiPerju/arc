@@ -2,23 +2,23 @@ import React from 'react';
 import LetterList from './components/LetterList.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import LetterListQuery from "/imports/api/letters/queries/letterList.js";
-import {Container, Button, Header, Divider} from 'semantic-ui-react';
+import LetterListQuery from '/imports/api/letters/queries/letterList.js';
+import {Button, Container, Divider, Header} from 'semantic-ui-react';
 
 export default class LetterListContainer extends Pager {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         _.extend(this.state, {
             perPage: 10,
             filters: {},
         });
 
-        this.query = LetterListQuery.clone();
-        this.LetterListWrapper = createQueryContainer(this.query, LetterList,
-            {
+        this.query = LetterListQuery.clone({taskId: props.taskId});
+        this.LetterListWrapper = createQueryContainer(this.query, LetterList, {
                 reactive: false,
-            });
+            },
+        );
     }
 
     render() {

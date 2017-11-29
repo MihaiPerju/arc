@@ -27,7 +27,7 @@ export default class LetterRow extends React.Component {
             <Table.Row>
                 <Table.Cell>{letter._id}</Table.Cell>
                 <Table.Cell>{letter.status}</Table.Cell>
-                <Table.Cell>{this.formatDate(letter.createAt)}</Table.Cell>
+                <Table.Cell>{this.formatDate(letter.createdAt)}</Table.Cell>
                 <Table.Cell>
                     <Button.Group>
                         <Button
