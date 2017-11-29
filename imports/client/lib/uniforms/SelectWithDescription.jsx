@@ -121,11 +121,19 @@ class SelectSingleWithDescription extends React.Component {
                     valueComponent={DescriptionValue}
                 />
                 {hint && <div className="hint">{hint}</div>}
-
             </div>
         );
     }
 }
+
+SelectSingleWithDescription.propTypes = {
+    options: PropTypes.array.isRequired,
+    value: PropTypes.object,
+    label: PropTypes.string,
+    placeholder: PropTypes.string,
+    hint: PropTypes.string
+};
+SelectSingleWithDescription.defaultProps = {};
 
 export default connectField(SelectSingleWithDescription,
     {ensureValue: false, includeInChain: false});

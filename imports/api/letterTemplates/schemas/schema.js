@@ -16,5 +16,11 @@ export default new SimpleSchema({
     description: {
         type: String,
         optional: true
+    },
+    keywords: {
+        type: Array,
+    },
+    'keywords.$': {
+        type: String
     }
 });
