@@ -58,8 +58,8 @@ class LetterCreateContainer extends React.Component {
         const options = this.getSelectOptions(letterTemplates);
 
         return (
-            <Container>
-                <Header as="h3" textAlign="center">Letter</Header>
+            <Container className="page-container">
+                <Header as="h3" textAlign="center">Letter creation</Header>
                 <AutoForm autosave
                           schema={letterCreateActionSchema}
                           model={model}

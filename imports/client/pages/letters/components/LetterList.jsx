@@ -22,6 +22,7 @@ export default class LetterList extends React.Component {
                         <tr>
                             <th>Letter ID</th>
                             <th>Status</th>
+                            <th>Create at</th>
                             <th>Actions</th>
                         </tr>
                     </Table.Header>

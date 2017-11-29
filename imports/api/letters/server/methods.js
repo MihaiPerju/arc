@@ -9,6 +9,11 @@ Meteor.methods({
         Letters.insert(data);
     },
 
+    'letter.get' (letterId) {
+        //Security.isAllowed(this.userId, UserRoles.MANAGER);
+        return Letters.findOne(letterId);
+    },
+
     'letter.delete'(letterId) {
         //Security.isAllowed(this.userId, UserRoles.MANAGER);
         Letters.remove(letterId);

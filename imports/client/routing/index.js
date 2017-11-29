@@ -86,9 +86,13 @@ route('/letter-template/create', LetterTemplateCreate);
 
 //Letter
 import LetterCreateContainer from "/imports/client/pages/letters/LetterCreateContainer.jsx"
+import LetterView from "/imports/client/pages/letters/LetterView.jsx";
 
 route('/task/:taskId/create-letter', LetterCreateContainer, {}, {
     name: 'letter.create'
+});
+route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
+    name: 'letter.view'
 });
 
 //Facilities
