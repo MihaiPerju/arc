@@ -9,14 +9,13 @@ export default class TabSelect extends React.Component {
         this.state = {
             activeTab: 0
         };
-
     }
 
-    onChangeActiveTab(index, data) {
+    onChangeActiveTab = (index, data) => {
         this.setState({
             activeTab: data.activeIndex
         });
-    }
+    };
 
     render() {
         const {options, header} = this.props;
@@ -26,7 +25,7 @@ export default class TabSelect extends React.Component {
             return {
                 menuItem: tab.label,
                 render: () => <Tab.Pane>
-                    <Header as="h2" textAlign="center">{header}</Header>
+                    <Header as="h2" textAlign="center">{header ? header : null}</Header>
                     {
                         (options[activeTab].component)
                     }
@@ -35,7 +34,7 @@ export default class TabSelect extends React.Component {
         });
 
         return (
-            <Tab onTabChange={this.onChangeActiveTab.bind(this,)} panes={panes}/>
+            <Tab onTabChange={this.onChangeActiveTab} panes={panes}/>
         )
     }
 }

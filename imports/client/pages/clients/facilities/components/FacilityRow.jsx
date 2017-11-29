@@ -1,7 +1,7 @@
 import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
-import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
 
 export default class FacilityRow extends React.Component {
     handleDelete = (facilityId) => {

@@ -84,6 +84,17 @@ route('/letter-templates/list', LetterTemplatesListContainer);
 route('/letter-template/:id/edit', LetterTemplateEdit);
 route('/letter-template/create', LetterTemplateCreate);
 
+//Letter
+import LetterCreateContainer from "/imports/client/pages/letters/LetterCreateContainer.jsx"
+import LetterView from "/imports/client/pages/letters/LetterView.jsx";
+
+route('/task/:taskId/create-letter', LetterCreateContainer, {}, {
+    name: 'letter.create'
+});
+route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
+    name: 'letter.view'
+});
+
 //Facilities
 import FacilityListContainer from "/imports/client/pages/clients/facilities/FacilityListContainer.jsx";
 import FacilityCreate from "/imports/client/pages/clients/facilities/FacilityCreate.jsx";
@@ -115,10 +126,12 @@ route('/code/create', CodeCreate);
 
 //Tasks
 import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
-import TaskView from '/imports/client/pages/tasks/TaskView';
+import TaskViewContainer from '/imports/client/pages/tasks/TaskViewContainer';
 
 route('/tasks', TaskListContainer);
-route('/task/:_id/view', TaskView);
+route('/task/:_id/view', TaskViewContainer, {}, {
+    name: 'task.view'
+});
 
 //Actions
 import ActionListContainer from '/imports/client/pages/actions/ActionListContainer.jsx';

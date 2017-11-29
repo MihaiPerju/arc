@@ -1,9 +1,8 @@
 import React from 'react';
-import Loading from "/imports/client/lib/ui/Loading.jsx";
-import FacilityRow from "./FacilityRow.jsx";
-import FacilityHeadList from "./FacilityHeadList";
-import {Container} from 'semantic-ui-react'
-import {Table} from 'semantic-ui-react'
+import Loading from '/imports/client/lib/ui/Loading.jsx';
+import FacilityRow from './FacilityRow.jsx';
+import FacilityHeadList from './FacilityHeadList';
+import {Container, Table} from 'semantic-ui-react';
 
 export default class FacilityList extends React.Component {
     render() {
@@ -17,7 +16,6 @@ export default class FacilityList extends React.Component {
             return <div>Error: {error.reason}</div>;
         }
 
-
         return (
             <Container>
                 <Table>
@@ -29,9 +27,9 @@ export default class FacilityList extends React.Component {
                     <Table.Body>
                         {!data.length
                             ? <p>There are no facilities</p>
-                            :
-                            data.map(facility => (
-                                <FacilityRow key={facility._id} facility={facility}/>
+                            : data.map(facility => (
+                                <FacilityRow key={facility._id}
+                                             facility={facility}/>
                             ))
                         }
                     </Table.Body>

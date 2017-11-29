@@ -1,16 +1,16 @@
 import React from 'react';
 import Loading from "/imports/client/lib/ui/Loading.jsx";
 import query from '/imports/api/tasks/queries/taskList';
-import TaskViewContainer from './components/TaskViewContainer';
+import TaskDetails from './TaskDetails.jsx';
 import DropzoneComponent from 'react-dropzone-component';
 import {Divider} from 'semantic-ui-react'
 import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer';
 import {getToken} from '/imports/api/s3-uploads/utils';
-import SelectActionsContainer from './components/SelectActionsContainer';
+import SelectActionsContainer from './SelectActionsContainer';
 import {AutoForm} from 'uniforms-semantic';
-import {Button} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import {Button} from 'semantic-ui-react';
+import {Container} from 'semantic-ui-react';
+import {Header} from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 import SimpleSchema from 'simpl-schema';
 
@@ -36,8 +36,8 @@ export default class TaskView extends React.Component {
     }
 
     getTask = () => {
-        const {_id} = this.props;
-        query.clone({filters: {_id}}).fetchOne((err, task) => {
+        const {taskId} = this.props;
+        query.clone({filters: {_id: taskId}}).fetchOne((err, task) => {
             if (err) {
                 return Notifier.error('Error while getting task!');
             }
@@ -51,7 +51,7 @@ export default class TaskView extends React.Component {
     };
 
     onSubmit = (data) => {
-        const taskId = this.props._id;
+        const {taskId} = this.props;
 
         Meteor.call('task.actions.add', taskId, data.action.value
             , (err) => {
@@ -66,8 +66,9 @@ export default class TaskView extends React.Component {
 
     render() {
         const {loading, task} = this.state;
+        const {taskId} = this.props;
         const componentConfig = {
-            postUrl: `/uploads/task-pdf/` + this.props._id + '/' + getToken()
+            postUrl: `/uploads/task-pdf/` + taskId + '/' + getToken()
         };
 
         const djsConfig = {
@@ -82,24 +83,24 @@ export default class TaskView extends React.Component {
             return <Loading/>;
         } else return (
             <Container>
-                <TaskViewContainer task={task}/>
-                <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
-                <Divider/>
-                <CommentsListContainer taskId={task && task._id}/>
+                    <TaskDetails task={task}/>
+                    <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
+                    <Divider/>
+                    <CommentsListContainer taskId={task && task._id}/>
 
-                <Container className="page-container">
-                    <Header as="h2" textAlign="center">Add Action</Header>
+                    <Container className="page-container">
+                            <Header as="h2" textAlign="center">Add Action</Header>
 
-                    <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
-                        <SelectActionsContainer/>
+                            <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
+                                    <SelectActionsContainer/>
 
-                        <Divider/>
+                                    <Divider/>
 
-                        <Button primary fluid type="submit">
-                            Save
-                        </Button>
-                    </AutoForm>
-                </Container>
+                                    <Button primary fluid type="submit">
+                                            Save
+                                    </Button>
+                            </AutoForm>
+                    </Container>
             </Container>
         );
     }

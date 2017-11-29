@@ -9,8 +9,8 @@ import {Header} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 
 export default class LetterTemplatesListContainer extends Pager {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         _.extend(this.state, {
             perPage: 3,
