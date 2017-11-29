@@ -1,11 +1,11 @@
 import Security from '/imports/api/security/security.js';
 import LetterTemplates from '/imports/api/letterTemplates/collection';
 import LetterTemplateService from './service.letterTemplate.js';
-import UserRoles from '/imports/api/users/enums/roles';
+import {roleGroups} from '/imports/api/users/enums/roles';
 
 Meteor.methods({
-    'manager.letterTemplates.get'() {
-        //Security.isAllowed(this.userId, [UserRoles.MANAGER]);
+    'letterTemplates.get'() {
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
         return LetterTemplateService.getLetterTemplates();
     },
 

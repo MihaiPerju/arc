@@ -18,7 +18,7 @@ class LetterCreateContainer extends React.Component {
     }
 
     componentWillMount() {
-        Meteor.call('manager.letterTemplates.get', (err, letterTemplates) => {
+        Meteor.call('letterTemplates.get', (err, letterTemplates) => {
             if (err) {
                 return Notifier.error(
                     'Error while trying to get letter templates');

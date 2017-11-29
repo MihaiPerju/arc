@@ -10,7 +10,6 @@ Letters.expose({
 });
 LetterListQuery.expose({
     firewall(userId, params) {
-        console.log(params)
         Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
     },
 });
