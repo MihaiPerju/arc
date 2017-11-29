@@ -6,10 +6,7 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
 import SelectDropDown from "/imports/client/lib/SelectDropDown.jsx";
 import FacilityStatusEnum from "/imports/api/facilities/enums/statuses.js";
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
+import {Container, Button, Header, Divider} from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 
 export default class FacilityListContainer extends Pager {

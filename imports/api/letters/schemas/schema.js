@@ -1,16 +1,20 @@
-import SimpleSchema from "simpl-schema";
-import statuses, {StatusList} from "../enums/statuses.js";
+import SimpleSchema from 'simpl-schema';
+import statuses, {StatusList} from '../enums/statuses.js';
 
 export default new SimpleSchema({
     body: {
-        type: String
+        type: String,
     },
     taskId: {
-        type: String
+        type: String,
     },
     status: {
         type: String,
         allowedValues: StatusList,
-        defaultValue: statuses.PENDING
-    }
+        defaultValue: statuses.PENDING,
+    },
+    createAt: {
+        type: Date,
+        optional: true,
+    },
 });

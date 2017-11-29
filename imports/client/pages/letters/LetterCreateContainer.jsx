@@ -13,7 +13,7 @@ class LetterCreateContainer extends React.Component {
 
         this.state = {
             letterTemplates: [],
-            selectedTemplate: {}
+            selectedTemplate: {},
         };
     }
 
@@ -80,8 +80,9 @@ class LetterCreateContainer extends React.Component {
                         </Grid.Column>
                         <Grid.Column width={10}>
                             <LetterTemplatePreview
+                                taskId={taskId}
                                 letterTemplateBody={body}
-                                state={this.state}/>
+                                parentState={this.state}/>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
