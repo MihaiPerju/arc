@@ -27,7 +27,16 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
+    ptName: {
+        type: String,
+        optional: true
+    },
     ptTypeMatch: {
+        type: String,
+        allowedValues: allowedMatches,
+        optional: true
+    },
+    ptNameMatch: {
         type: String,
         allowedValues: allowedMatches,
         optional: true

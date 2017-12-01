@@ -24,18 +24,53 @@ export default class ReportsService {
     }
 
     static isEnum(name) {
-        return name === 'state' || name === 'substate';
+        return ['state', 'substate'].indexOf(name) !== -1;
     }
 
     static isDate(name) {
-        return name === 'dischrgDate' || name === 'fbDate' || name === 'admitDate';
+        return ['dischrgDate', 'fbDate', 'admitDate'].indexOf(name) !== -1;
     }
 
     static isNumber(name) {
-        return name === 'medNo' || name === 'insCode' || name === 'insCode2' || name === 'insCode3' || name === 'insBal' || name === 'insBal2' || name === 'insBal3' || name === 'acctBal';
+        return ['medNo', 'insCode', 'insCode2', 'insCode3',
+            'insBal', 'insBal2', 'insBal3', 'acctBal'].indexOf(name) !== -1;
     }
 
     static isLink(name) {
-        return name === 'facilityId' || name === 'assigneeId';
+        return ['facilityId', 'assigneeId'].indexOf(name) !== -1;
+    }
+
+    static isComplete(data, components) {
+        const requiredFields = [];
+
+        for (component in components) {
+            if (components[component].isActive) {
+                if (ReportsService.isLink(component)) {
+                    requiredFields.push(component);
+                } else if (ReportsService.isDate(component)) {
+                    requiredFields.push(`${component}Start`, `${component}End`);
+                } else if (ReportsService.isNumber(component)) {
+                    requiredFields.push(`${component}Start`, `${component}End`);
+                } else if (ReportsService.isEnum(component)) {
+                    requiredFields.push(component);
+                } else {
+                    requiredFields.push(component, `${component}Match`);
+                }
+            }
+        }
+
+        //If we don't have required fields
+        if (requiredFields.length === 0) {
+            return false;
+        }
+
+        //Looking for needed field
+        for (field of requiredFields) {
+            if (!data[field]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

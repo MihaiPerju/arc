@@ -25,6 +25,9 @@ export default class TaskFilterBuilder extends React.Component {
 
         //Getting schema keys
         let keys = TaskSchema._firstLevelSchemaKeys;
+        //Removing last 2 keys
+        keys.pop();
+        keys.pop();
 
         //Getting options for Select Menu
         let schemaOptions = ReportsService.getOptions(keys);
@@ -89,11 +92,17 @@ export default class TaskFilterBuilder extends React.Component {
             components,
             schemaOptions
         });
+
+        FlowRouter.reload();
     }
 
     onSubmit(data) {
-        console.log(data);
+        const {components} = this.state;
+        if (!ReportsService.isComplete(data, components)) {
+            Notifier.error("Filters uncomplete!");
+        }
     }
+
 
     render() {
         const {facilityOptions, assigneeOptions, schemaOptions, components, keys} = this.state;
