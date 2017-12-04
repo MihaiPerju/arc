@@ -151,6 +151,7 @@ route('/region/create', RegionCreate);
 route('/region/:id/edit', RegionEdit);
 route('/region/list', RegionListContainer);
 
+//Reports
 import TaskFilterBuilder from '/imports/client/pages/reports/TaskFilterBuilder';
 
 route('/tasks/filter-builder', TaskFilterBuilder);
