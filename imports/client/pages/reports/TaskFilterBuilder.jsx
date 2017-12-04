@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Dropdown, Header, Button} from 'semantic-ui-react'
+import {Container, Dropdown, Header, Button, Segment} from 'semantic-ui-react'
 import TaskSchema from '/imports/api/tasks/schema';
 import {AutoForm, ErrorField, SelectField} from 'uniforms-semantic';
 import ReportsService from './services/ReportsService';
@@ -17,7 +17,8 @@ export default class TaskFilterBuilder extends React.Component {
             components: {},
             keys: [],
             facilityOptions: [],
-            assigneeOptions: []
+            assigneeOptions: [],
+            filters: {}
         }
     }
 
@@ -25,6 +26,7 @@ export default class TaskFilterBuilder extends React.Component {
 
         //Getting schema keys
         let keys = TaskSchema._firstLevelSchemaKeys;
+
         //Removing last 2 keys
         keys.pop();
         keys.pop();
@@ -38,6 +40,7 @@ export default class TaskFilterBuilder extends React.Component {
         //Getting assignee and facility options
         let facilityOptions = [], assigneeOptions = [];
 
+        //Getting facility options
         facilityQuery.fetch((err, facilities) => {
             if (!err) {
                 facilities.map((facility) => {
@@ -49,6 +52,7 @@ export default class TaskFilterBuilder extends React.Component {
             }
         });
 
+        //Getting assignee options
         assigneeQuery.fetch((err, assignees) => {
             if (!err) {
                 assignees.map((assignee) => {
@@ -92,25 +96,24 @@ export default class TaskFilterBuilder extends React.Component {
             components,
             schemaOptions
         });
-
-        FlowRouter.reload();
     }
 
     onSubmit(data) {
         const {components} = this.state;
-        if (!ReportsService.isComplete(data, components)) {
-            Notifier.error("Filters uncomplete!");
+        const {result, error} = ReportsService.getFilters(data, components);
+        if (error) {
+            Notifier.error(error);
+        } else {
+            this.setState({
+                filters: result
+            });
         }
     }
 
-
     render() {
-        const {facilityOptions, assigneeOptions, schemaOptions, components, keys} = this.state;
+        const {filters, facilityOptions, assigneeOptions, schemaOptions, components, keys} = this.state;
         return (
             <main className="cc-main">
-                <p/>
-                <p/>
-                <p/>
                 <Container className="page-container">
                     <Header as="h3">Select filters</Header>
                     <Dropdown onChange={this.selectFilter.bind(this)}
@@ -120,7 +123,6 @@ export default class TaskFilterBuilder extends React.Component {
                         schema={FilterBuilderSchema}
                         onSubmit={this.onSubmit.bind(this)}
                         ref="form">
-
                         {
                             _.map(components, (item) => {
 
@@ -137,6 +139,11 @@ export default class TaskFilterBuilder extends React.Component {
                         <Button primary fluid type="submit">
                             Extract
                         </Button>
+                        <Segment tertiary>
+                            {
+                                <div>Extracted filters:{JSON.stringify(filters)}</div>
+                            }
+                        </Segment>
                     </AutoForm>
                 </Container>
             </main>
