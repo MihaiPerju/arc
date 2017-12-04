@@ -1,5 +1,7 @@
 import React from 'react';
 
+const stringMatchOptions = ['Contains', 'Not Contains', 'Is Exact'];
+
 export default class ReportsService {
 
     static getOptions(keys) {
@@ -40,7 +42,12 @@ export default class ReportsService {
         return ['facilityId', 'assigneeId'].indexOf(name) !== -1;
     }
 
-    static isComplete(data, components) {
+    static isString(name) {
+        return ['acctNum', 'facCode', 'ptType', 'ptName',
+            'finClass', 'insName', 'insName2', 'insName3',].indexOf(name) !== -1;
+    }
+
+    static getFilters(data, components) {
         const requiredFields = [];
 
         for (component in components) {
@@ -59,18 +66,56 @@ export default class ReportsService {
             }
         }
 
-        //If we don't have required fields
+        //If we don't have filters
         if (requiredFields.length === 0) {
-            return false;
+            return {result: '', error: 'Select at least one filter!'};
         }
 
-        //Looking for needed field
+        //Creating filters
+        let filters = {};
+
         for (field of requiredFields) {
+            //Field not completed
             if (!data[field]) {
-                return false;
+                return {result: '', error: 'Filters uncomplete!'};
             }
-        }
 
-        return true;
+            //Creating filters
+
+            //Removing 'Start' and 'End' prefixes if they are
+            if (field.endsWith('Start')) {
+                field = field.substr(0, field.indexOf('Start'));
+            }
+            if (field.endsWith('End')) {
+                field = field.substr(0, field.indexOf('End'));
+            }
+
+            //Check type and create filter based on specific type information
+            if (ReportsService.isEnum(field)) {
+                //If is Enum
+                filters[field] = data[field];
+            } else if (ReportsService.isNumber(field)) {
+                //If is Number
+                filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
+            } else if (ReportsService.isDate(field)) {
+                //If is Date
+                filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
+            } else if (ReportsService.isString(field)) {
+                //If is a string
+                if (data[field + 'Match'] === stringMatchOptions[0]) {
+                    filters[field] = {'$regex': data[field], '$options': 'i'};
+                } else if (data[field + 'Match'] === stringMatchOptions[1]) {
+                    filters[field] = {
+                        $not: `/${data[field]}/`
+                    };
+                } else {
+                    filters[field] = data[field];
+                }
+            } else if (ReportsService.isLink(field)) {
+                filters[field] = {$in: data[field]};
+            }
+
+        }
+        return {result: filters};
     }
 }
