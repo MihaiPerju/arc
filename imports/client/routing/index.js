@@ -150,3 +150,7 @@ import RegionListContainer from '/imports/client/pages/regions/RegionsListContai
 route('/region/create', RegionCreate);
 route('/region/:id/edit', RegionEdit);
 route('/region/list', RegionListContainer);
+
+import TaskFilterBuilder from '/imports/client/pages/reports/TaskFilterBuilder';
+
+route('/tasks/filter-builder', TaskFilterBuilder);
