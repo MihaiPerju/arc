@@ -48,7 +48,7 @@ export default class TaskFilterBuilder extends React.Component {
         facilityQuery.fetch((err, facilities) => {
             if (!err) {
                 facilities.map((facility) => {
-                    facilityOptions.push({value: facility._id, label: facility._id});
+                    facilityOptions.push({value: facility._id, label: facility.name});
                 });
                 this.setState({facilityOptions});
             } else {
