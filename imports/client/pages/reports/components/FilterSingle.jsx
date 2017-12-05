@@ -2,6 +2,7 @@ import React from 'react';
 import {Segment, Button, Divider} from 'semantic-ui-react'
 import ReportsService from './../services/ReportsService';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
+import TaskReportFields from './../config/tasks';
 
 export default class FiltersSingle extends React.Component {
     constructor() {
@@ -18,7 +19,7 @@ export default class FiltersSingle extends React.Component {
     }
 
     render() {
-        const {name, keys} = this.props;
+        const {name} = this.props;
 
         return (
             <div>
@@ -32,13 +33,13 @@ export default class FiltersSingle extends React.Component {
                     {name && name.charAt(0).toUpperCase() + name.slice(1)}
 
                     {
-                        ReportsService.isEnum(name, keys) ?
+                        ReportsService.isEnum(name, TaskReportFields) ?
                             <div>
                                 <AutoField name={name}/>
                                 <ErrorField name={name}/>
                             </div>
                             :
-                            ReportsService.isDate(name, keys) ?
+                            ReportsService.isDate(name, TaskReportFields) ?
                                 <div>
                                     <AutoField name={`${name}Start`}/>
                                     <ErrorField name={`${name}Start`}/>
@@ -47,7 +48,7 @@ export default class FiltersSingle extends React.Component {
                                     <ErrorField name={`${name}End`}/>
                                 </div>
                                 :
-                                ReportsService.isNumber(name, keys) ?
+                                ReportsService.isNumber(name, TaskReportFields) ?
                                     <div>
                                         <AutoField name={`${name}Start`}/>
                                         <ErrorField name={`${name}Start`}/>
@@ -56,7 +57,7 @@ export default class FiltersSingle extends React.Component {
                                         <ErrorField name={`${name}End`}/>
                                     </div>
                                     :
-                                    ReportsService.isLink(name, keys) ?
+                                    ReportsService.isLink(name, TaskReportFields) ?
                                         <div>
                                             <SelectField name={name} options={this.getOptions(name)}/>
                                         </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import SimpleSchema from 'simpl-schema';
 
 const stringMatchOptions = ['Contains', 'Not Contains', 'Is Exact'];
 
@@ -25,42 +26,40 @@ export default class ReportsService {
         return components;
     }
 
-    static isEnum(name) {
-        return ['state', 'substate'].indexOf(name) !== -1;
+    static isEnum(name, reportFields) {
+        return reportFields.enums.indexOf(name) !== -1;
     }
 
-    static isDate(name) {
-        return ['dischrgDate', 'fbDate', 'admitDate'].indexOf(name) !== -1;
+    static isDate(name, reportFields) {
+        return reportFields.dates.indexOf(name) !== -1;
     }
 
-    static isNumber(name) {
-        return ['medNo', 'insCode', 'insCode2', 'insCode3',
-            'insBal', 'insBal2', 'insBal3', 'acctBal'].indexOf(name) !== -1;
+    static isNumber(name, reportFields) {
+        return reportFields.numbers.indexOf(name) !== -1;
     }
 
-    static isLink(name) {
-        return ['facilityId', 'assigneeId'].indexOf(name) !== -1;
+    static isLink(name, reportFields) {
+        return reportFields.links.indexOf(name) !== -1;
     }
 
-    static isString(name) {
-        return ['acctNum', 'facCode', 'ptType', 'ptName',
-            'finClass', 'insName', 'insName2', 'insName3',].indexOf(name) !== -1;
+    static isString(name, reportFields) {
+        return reportFields.strings.indexOf(name) !== -1;
     }
 
-    static getFilters(data, components) {
+    static getFilters(data, components, reportFields) {
         const requiredFields = [];
 
         for (component in components) {
             if (components[component].isActive) {
-                if (ReportsService.isLink(component)) {
+                if (ReportsService.isLink(component, reportFields)) {
                     requiredFields.push(component);
-                } else if (ReportsService.isDate(component)) {
+                } else if (ReportsService.isDate(component, reportFields)) {
                     requiredFields.push(`${component}Start`, `${component}End`);
-                } else if (ReportsService.isNumber(component)) {
+                } else if (ReportsService.isNumber(component, reportFields)) {
                     requiredFields.push(`${component}Start`, `${component}End`);
-                } else if (ReportsService.isEnum(component)) {
+                } else if (ReportsService.isEnum(component, reportFields)) {
                     requiredFields.push(component);
-                } else {
+                } else if (ReportsService.isString(component, reportFields)) {
                     requiredFields.push(component, `${component}Match`);
                 }
             }
@@ -80,8 +79,6 @@ export default class ReportsService {
                 return {result: '', error: 'Filters uncomplete!'};
             }
 
-            //Creating filters
-
             //Removing 'Start' and 'End' prefixes if they are
             if (field.endsWith('Start')) {
                 field = field.substr(0, field.indexOf('Start'));
@@ -91,16 +88,16 @@ export default class ReportsService {
             }
 
             //Check type and create filter based on specific type information
-            if (ReportsService.isEnum(field)) {
+            if (ReportsService.isEnum(field, reportFields)) {
                 //If is Enum
                 filters[field] = data[field];
-            } else if (ReportsService.isNumber(field)) {
+            } else if (ReportsService.isNumber(field, reportFields)) {
                 //If is Number
                 filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
-            } else if (ReportsService.isDate(field)) {
+            } else if (ReportsService.isDate(field, reportFields)) {
                 //If is Date
                 filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
-            } else if (ReportsService.isString(field)) {
+            } else if (ReportsService.isString(field, reportFields)) {
                 //If is a string
                 if (data[field + 'Match'] === stringMatchOptions[0]) {
                     filters[field] = {'$regex': data[field], '$options': 'i'};
@@ -111,11 +108,64 @@ export default class ReportsService {
                 } else {
                     filters[field] = data[field];
                 }
-            } else if (ReportsService.isLink(field)) {
+            } else if (ReportsService.isLink(field, reportFields)) {
                 filters[field] = {$in: data[field]};
             }
 
         }
         return {result: filters};
+    }
+
+    static createSchema(keys, reportFields, Enums) {
+        const allowedMatches = ['Contains', 'Not Contains', 'Is Exact'];
+
+        const fields = {};
+        keys.map((key) => {
+            if (ReportsService.isString(key, reportFields)) {
+                fields[key] = {
+                    type: String,
+                    optional: true
+                };
+                fields[`${key}Match`] = {
+                    type: String,
+                    allowedValues: allowedMatches,
+                    optional: true
+                }
+            } else if (ReportsService.isLink(key, reportFields)) {
+                fields[key] = {
+                    type: Array,
+                    optional: true
+                };
+                fields[`${key}.$`] = {
+                    type: String
+                }
+            } else if (ReportsService.isDate(key, reportFields)) {
+                fields[`${key}Start`] = {
+                    type: Date,
+                    optional: true
+                };
+                fields[`${key}End`] = {
+                    type: Date,
+                    optional: true
+                }
+            } else if (ReportsService.isNumber(key, reportFields)) {
+                fields[`${key}Start`] = {
+                    type: SimpleSchema.Integer,
+                    optional: true
+                };
+                fields[`${key}End`] = {
+                    type: SimpleSchema.Integer,
+                    optional: true
+                }
+            } else if (ReportsService.isEnum(key, reportFields)) {
+                fields[key] = {
+                    type: String,
+                    allowedValues: _.map(Enums[`${key}Enum`], (value, key) => (value)),
+                    optional: true
+                }
+            }
+        });
+
+        return new SimpleSchema(fields);
     }
 }
