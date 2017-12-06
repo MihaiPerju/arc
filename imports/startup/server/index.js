@@ -16,3 +16,4 @@ import '/imports/api/tasks/server';
 import '/imports/api/actions/server';
 import '/imports/api/comments/server';
 import '/imports/api/regions/server';
+import '/imports/api/reports/server';

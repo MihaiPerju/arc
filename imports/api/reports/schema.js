@@ -10,6 +10,7 @@ export default new SimpleSchema({
     },
     filterBuilderData: {
         type: Object,
+        blackbox: true,
         optional: true
     },
     allowedRoles: {

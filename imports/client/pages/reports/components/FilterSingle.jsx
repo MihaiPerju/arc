@@ -1,8 +1,8 @@
 import React from 'react';
 import {Segment, Button, Divider} from 'semantic-ui-react'
-import ReportsService from './../services/ReportsService';
+import ReportsService from '../../../../api/reports/services/ReportsService';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
-import TaskReportFields from './../config/tasks';
+import TaskReportFields from '../../../../api/tasks/config/tasks';
 
 export default class FiltersSingle extends React.Component {
     constructor() {

@@ -2,12 +2,12 @@ import React from 'react';
 import {Container, Dropdown, Header, Button, Segment, Divider} from 'semantic-ui-react'
 import TaskSchema from '/imports/api/tasks/schema';
 import {AutoForm, ErrorField, SelectField} from 'uniforms-semantic';
-import ReportsService from './services/ReportsService';
+import ReportsService from '../../../api/reports/services/ReportsService';
 import FilterSingle from './components/FilterSingle';
 import Notifier from '/imports/client/lib/Notifier';
 import facilityQuery from '/imports/api/facilities/queries/facilityList';
 import assigneeQuery from '/imports/api/users/queries/listUsers';
-import TaskReportFields from './config/tasks';
+import TaskReportFields from '../../../api/tasks/config/tasks';
 import stateEnum from '/imports/api/tasks/enums/states';
 import {Substates} from '/imports/api/tasks/enums/substates';
 
