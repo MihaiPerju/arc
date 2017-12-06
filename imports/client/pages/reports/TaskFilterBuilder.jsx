@@ -104,10 +104,13 @@ export default class TaskFilterBuilder extends React.Component {
 
     onSubmit(data) {
         const {components} = this.state;
+        const {onSubmitFilters} = this.props;
+
         const {result, error} = ReportsService.getFilters(data, components, TaskReportFields);
         if (error) {
             Notifier.error(error);
         } else {
+            onSubmitFilters(result);
             this.setState({
                 filters: result
             });
