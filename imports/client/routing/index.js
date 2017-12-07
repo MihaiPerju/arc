@@ -142,20 +142,21 @@ route('/action/list', ActionListContainer);
 route('/action/create', CreateAction);
 route('/action/:actionId/edit', EditAction);
 
-//Regions
-import RegionCreate from '/imports/client/pages/regions/RegionCreate';
-import RegionEdit from '/imports/client/pages/regions/RegionEdit';
-import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
-
-route('/region/create', RegionCreate);
-route('/region/:id/edit', RegionEdit);
-route('/region/list', RegionListContainer);
+// //Regions
+// import RegionCreate from '/imports/client/pages/regions/RegionCreate';
+// import RegionEdit from '/imports/client/pages/regions/RegionEdit';
+// import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
+//
+// route('/region/create', RegionCreate);
+// route('/region/:id/edit', RegionEdit);
+// route('/region/list', RegionListContainer);
 
 //Reports
 import TaskFilterBuilder from '/imports/client/pages/reports/TaskFilterBuilder';
 import ReportListContainer from '/imports/client/pages/reports/ReportListContainer';
-import ReportCreate from '/imports/client/pages/reports/ReportCreate';
+import ReportManage from '/imports/client/pages/reports/ReportManage';
 
 route('/tasks/filter-builder', TaskFilterBuilder);
 route('/reports/list', ReportListContainer);
-route('/report/create', ReportCreate);
+route('/report/create', ReportManage);
+route('/report/:id/edit', ReportManage);

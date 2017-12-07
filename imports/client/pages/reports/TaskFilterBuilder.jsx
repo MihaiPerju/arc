@@ -25,7 +25,6 @@ export default class TaskFilterBuilder extends React.Component {
     }
 
     componentWillMount() {
-
         //Getting schema keys
         let keys = TaskSchema._firstLevelSchemaKeys;
 
@@ -39,7 +38,24 @@ export default class TaskFilterBuilder extends React.Component {
         let schemaOptions = ReportsService.getOptions(keys);
 
         //Creating set of Components based on schema field types
-        let components = ReportsService.getComponents(keys);
+        let {components} = this.props;
+        if (!components) {
+            components = ReportsService.getComponents(keys);
+        }
+
+        //Clearing schemaOptions
+        console.log("Clearing");
+        for (component in components) {
+            if (components[component].isActive) {
+                for (option in schemaOptions) {
+                    if (schemaOptions[option].text == component) {
+                        schemaOptions.splice(option, 1);
+                        // console.log(option, component);
+                    }
+                }
+            }
+        }
+        console.log(schemaOptions);
 
         //Getting assignee and facility options
         let facilityOptions = [], assigneeOptions = [];
@@ -77,7 +93,12 @@ export default class TaskFilterBuilder extends React.Component {
 
     selectFilter(e, data) {
         const {components, schemaOptions} = this.state;
-
+        if (!components[data.value]) {
+            components[data.value] = {
+                isActive: true,
+                name: data.value
+            }
+        }
         components[data.value].isActive = true;
         schemaOptions.map((option) => {
             if (option.text === data.value) {
@@ -106,11 +127,11 @@ export default class TaskFilterBuilder extends React.Component {
         const {components} = this.state;
         const {onSubmitFilters} = this.props;
 
-        const {result, error} = ReportsService.getFilters(data, components, TaskReportFields);
+        const {result, filterBuilderData, error} = ReportsService.getFilters(data, components, TaskReportFields);
         if (error) {
             Notifier.error(error);
         } else {
-            onSubmitFilters(result);
+            onSubmitFilters(result, components, filterBuilderData);
             this.setState({
                 filters: result
             });
@@ -119,6 +140,10 @@ export default class TaskFilterBuilder extends React.Component {
 
     render() {
         const {filters, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
+        const {filterBuilderData} = this.props;
+
+        // console.log(components);
+
         return (
             <main className="cc-main">
                 <Container className="page-container">
@@ -130,6 +155,7 @@ export default class TaskFilterBuilder extends React.Component {
                     <Divider/>
 
                     <AutoForm
+                        model={filterBuilderData}
                         schema={schema}
                         onSubmit={this.onSubmit.bind(this)}
                         ref="form">
@@ -146,7 +172,7 @@ export default class TaskFilterBuilder extends React.Component {
                             })
                         }
                         <Button primary fluid type="submit">
-                            Extract
+                            Finish
                         </Button>
                         <Segment tertiary>
                             {

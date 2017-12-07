@@ -5,7 +5,7 @@ export default new SimpleSchema({
         type: String
     },
     mongoFilters: {
-        type: Object,
+        type: String,
         optional: true
     },
     filterBuilderData: {

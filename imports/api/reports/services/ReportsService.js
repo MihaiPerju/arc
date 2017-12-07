@@ -72,12 +72,15 @@ export default class ReportsService {
 
         //Creating filters
         let filters = {};
+        let filterBuilderData = {};
 
         for (field of requiredFields) {
             //Field not completed
             if (!data[field]) {
                 return {result: '', error: 'Filters uncomplete!'};
             }
+
+            filterBuilderData[field] = data[field];
 
             //Removing 'Start' and 'End' prefixes if they are
             if (field.endsWith('Start')) {
@@ -113,7 +116,7 @@ export default class ReportsService {
             }
 
         }
-        return {result: filters};
+        return {result: filters, filterBuilderData};
     }
 
     static createSchema(keys, reportFields, Enums) {
