@@ -2,6 +2,7 @@ import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import {Table, Button} from 'semantic-ui-react';
 import moment from 'moment';
+import {getToken} from '/imports/api/s3-uploads/utils';
 
 export default class LetterRow extends React.Component {
     handleDelete = (letterId) => {
@@ -38,8 +39,16 @@ export default class LetterRow extends React.Component {
                             )}>
                             View
                         </Button>
+                        <Button
+                            href={`/letters/pdf/${taskId}/${letter._id}/${getToken()}`}
+                            target="_blank">
+                            Get pdf
+                        </Button>
                         <Button color="red"
-                                onClick={() => (this.handleDelete(letter._id))}>Delete</Button>
+                                onClick={() => (this.handleDelete(
+                                    letter._id))}>
+                            Delete
+                        </Button>
                     </Button.Group>
                 </Table.Cell>
             </Table.Row>
