@@ -24,32 +24,41 @@ export default class ReportCreate extends React.Component {
         const reportId = FlowRouter.current().params.id;
         if (reportId) {
             Meteor.call('report.getById', reportId, (err, report) => {
-                if (!err) {
-                    let components = {};
-                    // console.log(report.filterBuilderData);
-                    for (field in report.filterBuilderData) {
-                        if (!field.endsWith('Start') && !field.endsWith('End') && !field.endsWith('Match')) {
-                            // console.log(field);
+                    if (!err) {
+                        let components = {};
+                        for (field in report.filterBuilderData) {
+                            if (field.endsWith('Match')) {
+                                console.log('Match');
+                                field = field.substring(0, field.indexOf('Match'));
+                            } else if (field.endsWith('End')) {
+                                console.log('End');
+                                field = field.substring(0, field.indexOf('End'));
+                            } else if (field.endsWith('Start')) {
+                                console.log('Start');
+                                field = field.substring(0, field.indexOf('Start'));
+                            }
+
                             components[field] = {
                                 isActive: true,
                                 name: field
                             }
                         }
-                    }
 
-                    const {name, allowedRoles, filterBuilderData} = report;
-                    this.setState({
-                        generalInformation: {
-                            name,
-                            allowedRoles
-                        },
-                        components,
-                        filterBuilderData
-                    });
-                } else {
-                    Notifier.error(err.reason);
+                        const {name, allowedRoles, filterBuilderData} = report;
+                        this.setState({
+                            generalInformation: {
+                                name,
+                                allowedRoles
+                            },
+                            components,
+                            filterBuilderData
+                        });
+                    }
+                    else {
+                        Notifier.error(err.reason);
+                    }
                 }
-            })
+            )
         }
 
         let allowedRoles = [];
@@ -89,7 +98,6 @@ export default class ReportCreate extends React.Component {
     }
 
     onSubmitFilters(filters, components, filterBuilderData) {
-
         //Setting state and creating/editing report
         this.setState({
             components,
