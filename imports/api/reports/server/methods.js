@@ -21,7 +21,6 @@ Meteor.methods({
     },
 
     'report.update'(data, _id) {
-        console.log(data, _id);
         Security.isAdminOrTech(this.userId);
 
         return Reports.update({_id}, {

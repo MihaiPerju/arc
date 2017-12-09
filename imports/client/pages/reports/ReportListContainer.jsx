@@ -18,13 +18,6 @@ export default class ReportListContainer extends Pager {
         });
 
         this.query = query.clone();
-        this.query.fetch((err, res) => {
-            if (!err) {
-                console.log(res);
-            } else {
-                console.log(err);
-            }
-        });
         this.ReportListCont = createQueryContainer(this.query, ReportList, {
             reactive: false
         })

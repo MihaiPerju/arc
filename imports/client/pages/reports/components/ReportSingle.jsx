@@ -6,7 +6,6 @@ import {Button} from 'semantic-ui-react'
 export default class ReportSingle extends Component {
     deleteReport() {
         const {report} = this.props;
-        console.log(report);
         Meteor.call('report.delete', report._id, (err) => {
             if (!err) {
                 Notifier.success('Report deleted !');
