@@ -7,6 +7,7 @@ import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
+import SearchInput from "/imports/client/lib/SearchInput.jsx";
 
 export default class ReportListContainer extends Pager {
     constructor() {
@@ -23,6 +24,17 @@ export default class ReportListContainer extends Pager {
         })
     }
 
+    handleSearch = (searchValue) => {
+        this.updateFilters({
+            filters: {
+                name: {
+                    '$regex': searchValue,
+                    '$options': 'i'
+                }
+            }
+        })
+    };
+
     render() {
         const params = _.extend({}, this.getPagerOptions());
         const ReportListCont = this.ReportListCont;
@@ -31,6 +43,7 @@ export default class ReportListContainer extends Pager {
 
             <Container className="page-container">
                 <div>
+                    <SearchInput handleSearch={this.handleSearch}/>
                     <Header as="h2" textAlign="center">Custom reports</Header></div>
                 <div>
                     {this.getPaginator()}
