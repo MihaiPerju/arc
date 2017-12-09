@@ -1,7 +1,7 @@
 import React from 'react';
-import {Container, Dropdown, Header, Button, Segment, Divider, Loader} from 'semantic-ui-react'
+import {Container, Dropdown, Header, Button, Segment, Divider} from 'semantic-ui-react'
 import TaskSchema from '/imports/api/tasks/schema';
-import {AutoForm, ErrorField, SelectField} from 'uniforms-semantic';
+import {AutoForm} from 'uniforms-semantic';
 import ReportsService from '../../../api/reports/services/ReportsService';
 import FilterSingle from './components/FilterSingle';
 import Notifier from '/imports/client/lib/Notifier';
@@ -20,8 +20,7 @@ export default class TaskFilterBuilder extends React.Component {
             facilityOptions: [],
             assigneeOptions: [],
             filters: {},
-            schema: {},
-            loading: true
+            schema: {}
         }
     }
 
@@ -34,11 +33,12 @@ export default class TaskFilterBuilder extends React.Component {
             keys.pop();
             keys.pop();
         }
+
+        //Creating schema
         const schema = ReportsService.createSchema(keys, TaskReportFields, {stateEnum, substateEnum: Substates});
 
         //Getting options for Select Menu
         let schemaOptions = ReportsService.getOptions(keys);
-        console.log(schemaOptions);
 
         //Creating set of Components based on schema field types
         let {components} = this.props;
@@ -46,50 +46,39 @@ export default class TaskFilterBuilder extends React.Component {
             components = ReportsService.getComponents(keys);
         }
 
-        //Clearing schemaOptions
+        //Clearing schemaOptions if in editing mode
         for (component in components) {
             if (components[component].isActive) {
                 for (option in schemaOptions) {
-                    if (schemaOptions[option].text == component) {
+                    if (schemaOptions[option].text === component) {
                         schemaOptions.splice(option, 1);
-                        // console.log(option, component);
                     }
                 }
             }
         }
-        console.log('Schema options loaded!');
-        console.log(schemaOptions);
 
         //Getting assignee and facility options
         let facilityOptions = [], assigneeOptions = [];
 
         //Getting facility options
-        this.setState({loading: true});
         facilityQuery.fetch((err, facilities) => {
             if (!err) {
                 facilities.map((facility) => {
                     facilityOptions.push({value: facility._id, label: facility.name});
                 });
-                this.setState({
-                    facilityOptions,
-                    loading: false
-                });
+                this.setState({facilityOptions});
             } else {
                 Notifier.error(err.reason);
             }
         });
 
         //Getting assignee options
-        this.setState({loading: true});
         assigneeQuery.fetch((err, assignees) => {
             if (!err) {
                 assignees.map((assignee) => {
                     assigneeOptions.push({value: assignee._id, label: assignee._id});
                 });
-                this.setState({
-                    assigneeOptions,
-                    loading: false
-                });
+                this.setState({assigneeOptions});
             } else {
                 Notifier.error(err.reason);
             }
@@ -98,20 +87,18 @@ export default class TaskFilterBuilder extends React.Component {
         this.setState({
             schemaOptions,
             components,
-            schema,
-            loading: false
+            schema
         });
     }
 
     selectFilter(e, data) {
         const {components, schemaOptions} = this.state;
-        if (!components[data.value]) {
-            components[data.value] = {
-                isActive: true,
-                name: data.value
-            }
-        }
-        components[data.value].isActive = true;
+
+        components[data.value] = {
+            isActive: true,
+            name: data.value
+        };
+
         schemaOptions.map((option) => {
             if (option.text === data.value) {
                 schemaOptions.splice(schemaOptions.indexOf(option), 1);
@@ -138,8 +125,8 @@ export default class TaskFilterBuilder extends React.Component {
     onSubmit(data) {
         const {components} = this.state;
         const {onSubmitFilters} = this.props;
-
         const {result, filterBuilderData, error} = ReportsService.getFilters(data, components, TaskReportFields);
+
         if (error) {
             Notifier.error(error);
         } else {
@@ -151,53 +138,44 @@ export default class TaskFilterBuilder extends React.Component {
     }
 
     render() {
-        const {filters, loading, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
+        const {filters, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
         const {filterBuilderData} = this.props;
 
         return (
             <main className="cc-main">
                 <Container className="page-container">
                     <Header as="h3">Select filters</Header>
-                    {
-                        loading ?
-                            <Loader inverted/>
-                            :
-                            <div>
-                                <Dropdown onChange={this.selectFilter.bind(this)}
-                                          placeholder="Task fields"
-                                          options={schemaOptions}/>
 
-                                <Divider/>
+                    <Dropdown onChange={this.selectFilter.bind(this)}
+                              placeholder="Task fields"
+                              options={schemaOptions}/>
+                    <Divider/>
 
-                                <AutoForm
-                                    model={filterBuilderData}
-                                    schema={schema}
-                                    onSubmit={this.onSubmit.bind(this)}
-                                    ref="form">
-                                    {
-                                        _.map(components, (item) => {
-
-                                            return item.isActive &&
-                                                <FilterSingle
-                                                    assigneeIdOptions={assigneeOptions}
-                                                    facilityIdOptions={facilityOptions}
-                                                    deleteFilter={this.deleteFilter.bind(this)}
-                                                    name={item.name}
-                                                />
-                                        })
-                                    }
-                                    <Button primary fluid type="submit">
-                                        Finish
-                                    </Button>
-                                    <Segment tertiary>
-                                        {
-                                            <div>Extracted filters:{JSON.stringify(filters)}</div>
-                                        }
-                                    </Segment>
-                                </AutoForm>
-                            </div>
-
-                    }
+                    <AutoForm
+                        model={filterBuilderData}
+                        schema={schema}
+                        onSubmit={this.onSubmit.bind(this)}
+                        ref="form">
+                        {
+                            _.map(components, (item) => {
+                                return item.isActive &&
+                                    <FilterSingle
+                                        assigneeIdOptions={assigneeOptions}
+                                        facilityIdOptions={facilityOptions}
+                                        deleteFilter={this.deleteFilter.bind(this)}
+                                        name={item.name}
+                                    />
+                            })
+                        }
+                        <Button primary fluid type="submit">
+                            Finish
+                        </Button>
+                        <Segment tertiary>
+                            {
+                                <div>Extracted filters:{JSON.stringify(filters)}</div>
+                            }
+                        </Segment>
+                    </AutoForm>
                 </Container>
             </main>
         )

@@ -6,6 +6,7 @@ import {roleGroups} from '/imports/api/users/enums/roles';
 import TaskFilterBuilder from './TaskFilterBuilder';
 import Notifier from '/imports/client/lib/Notifier';
 import {EJSON} from 'meteor/ejson'
+import ReportsService from '../../../api/reports/services/ReportsService';
 
 export default class ReportCreate extends React.Component {
     constructor() {
@@ -27,16 +28,8 @@ export default class ReportCreate extends React.Component {
                     if (!err) {
                         let components = {};
                         for (field in report.filterBuilderData) {
-                            if (field.endsWith('Match')) {
-                                console.log('Match');
-                                field = field.substring(0, field.indexOf('Match'));
-                            } else if (field.endsWith('End')) {
-                                console.log('End');
-                                field = field.substring(0, field.indexOf('End'));
-                            } else if (field.endsWith('Start')) {
-                                console.log('Start');
-                                field = field.substring(0, field.indexOf('Start'));
-                            }
+
+                            field = ReportsService.getInitialField(field);
 
                             components[field] = {
                                 isActive: true,
@@ -132,15 +125,14 @@ export default class ReportCreate extends React.Component {
     }
 
     render() {
-        const {
-            hasGeneralInformation, allowedRoles, generalInformation,
-            components, filterBuilderData
-        } = this.state;
+        const {hasGeneralInformation, allowedRoles, generalInformation, components, filterBuilderData} = this.state;
 
         return (
             <Container className="page-container">
                 <div>
-                    <Header as="h2" textAlign="center">Create report</Header>
+                    <Header as="h2" textAlign="center">
+                        Create report
+                    </Header>
 
                     <Step.Group ordered>
                         <Step completed={hasGeneralInformation} active={!hasGeneralInformation}>
@@ -192,7 +184,6 @@ export default class ReportCreate extends React.Component {
 
                                 <SelectField name="allowedRoles"
                                              options={allowedRoles}/>
-
 
                                 <Divider/>
 

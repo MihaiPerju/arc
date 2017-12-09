@@ -5,6 +5,17 @@ const stringMatchOptions = ['Contains', 'Not Contains', 'Is Exact'];
 
 export default class ReportsService {
 
+    static getInitialField(field) {
+        if (field.endsWith('Match')) {
+            field = field.substring(0, field.indexOf('Match'));
+        } else if (field.endsWith('End')) {
+            field = field.substring(0, field.indexOf('End'));
+        } else if (field.endsWith('Start')) {
+            field = field.substring(0, field.indexOf('Start'));
+        }
+        return field;
+    }
+
     static getOptions(keys) {
         let schemaOptions = [];
         keys.map((value) => {
