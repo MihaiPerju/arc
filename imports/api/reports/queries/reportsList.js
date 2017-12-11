@@ -9,5 +9,6 @@ export default Reports.createNamedQuery('reportList', {
     name: 1,
     mongoFilters: 1,
     filterBuilderData: 1,
-    allowedRoles: 1
+    allowedRoles: 1,
+    createdBy: 1
 });

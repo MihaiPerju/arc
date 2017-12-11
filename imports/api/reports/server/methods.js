@@ -1,28 +1,28 @@
 import Reports from './../collection.js';
-import Security from '/imports/api/security/security.js';
+import Security from '/imports/api/reports/security.js';
 
 Meteor.methods({
     'report.delete'(id) {
-        // Security.isAdminOrTech(this.userId);
+        Security.hasRightsOnReport(this.userId, id);
 
         Reports.remove({_id: id});
     },
 
     'report.create'(data) {
-        // Security.isAdminOrTech(this.userId);
         data.createdBy = this.userId;
 
         Reports.insert(data);
     },
 
     'report.getById'(_id) {
-        // Security.isAdminOrTech(this.userId);
+        Security.hasRightsOnReport(this.userId, _id);
 
         return Reports.findOne({_id});
     },
 
     'report.update'(data, _id) {
-        // Security.isAdminOrTech(this.userId);
+        // Check if user is allowed to modify report;
+        Security.hasRightsOnReport(this.userId, _id);
 
         return Reports.update({_id}, {
             $set: data
