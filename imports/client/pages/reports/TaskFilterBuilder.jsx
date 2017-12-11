@@ -61,7 +61,7 @@ export default class TaskFilterBuilder extends React.Component {
         let facilityOptions = [], assigneeOptions = [];
 
         //Getting facility options
-        facilityQuery.fetch((err, facilities) => {
+        Meteor.call('facility.getNames', (err, facilities) => {
             if (!err) {
                 facilities.map((facility) => {
                     facilityOptions.push({value: facility._id, label: facility.name});

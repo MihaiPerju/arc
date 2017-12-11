@@ -5,18 +5,18 @@ import FacilitySchema from "../schema.js";
 import Regions from '/imports/api/regions/collection';
 
 Meteor.methods({
-    'facility.create' (data) {
+    'facility.create'(data) {
         Security.isAdminOrTech(this.userId);
 
         Facilities.insert(data);
     },
 
-    'facility.get' (facilityId) {
+    'facility.get'(facilityId) {
         Security.isAdminOrTech(this.userId);
         return Facilities.findOne(facilityId);
     },
 
-    'facility.update' (facility) {
+    'facility.update'(facility) {
         Security.isAdminOrTech(this.userId);
         const facilityData = FacilitySchema.clean(facility);
 
@@ -25,7 +25,7 @@ Meteor.methods({
         })
     },
 
-    'facility.remove' (facilityId) {
+    'facility.remove'(facilityId) {
         Security.isAdminOrTech(this.userId);
 
         Facilities.remove(facilityId);
@@ -39,5 +39,9 @@ Meteor.methods({
                 $in: regionIds
             }
         }).fetch();
+    },
+
+    'facility.getNames'() {
+        return Facilities.find({}, {name: 1}).fetch();
     }
 });
