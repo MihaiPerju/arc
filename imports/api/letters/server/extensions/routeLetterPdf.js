@@ -21,10 +21,9 @@ Picker.route('/letters/pdf/:taskId/:letterId/:token',
             return;
         }
 
-        const tmpPdfLocationRes = LetterService.getLetterTemporalPdfLoc(
-            params.taskId, params.letterId);
+        const tmpPdfLocation = LetterService.getLetterTemporalPdfLoc(params.taskId, params.letterId);
 
-        if (!tmpPdfLocationRes) {
+        if (!tmpPdfLocation) {
             res.writeHead(404);
             res.write('An error occurred');
             return;
@@ -32,13 +31,14 @@ Picker.route('/letters/pdf/:taskId/:letterId/:token',
 
         let data;
         try {
-            data = fs.readFileSync(tmpPdfLocationRes);
+            data = fs.readFileSync(tmpPdfLocation);
         } catch (err) {
             res.writeHead(404);
             res.end('Error 404 - Not found.');
             return;
         }
 
+        fs.unlink(tmpPdfLocation, (error) => {console.error(error)});
         res.writeHead(200, {
             'Content-Type': 'application/pdf',
             'Content-Disposition': `attachment; filename=${params.letterId}.pdf`,
