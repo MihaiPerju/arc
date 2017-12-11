@@ -41,22 +41,29 @@ export default class TaskListContainer extends Pager {
         for (let task of tasks) {
             const {facility} = task;
             const {users} = facility;
-
             //get facility options
-            facilities.push({
+            let item = {
+                key: facility._id,
                 value: facility._id,
                 label: facility.name
-            });
+            }
+            if (!_.findWhere(facilities, item)) {
+                facilities.push(item);
+            }
 
             if (users) {
                 for (let user of users) {
                     const {profile} = user;
 
-                    //get assignee options
-                    assignees.push({
+                    let item = {
+                        key: user._id,
                         label: profile.firstName + ' ' + profile.lastName,
                         value: user._id
-                    });
+                    }
+                    //get assignee options
+                    if (!_.findWhere(assignees, item)) {
+                        assignees.push(item);
+                    }
                 }
             }
         }
@@ -118,9 +125,9 @@ export default class TaskListContainer extends Pager {
                     <Divider/>
                 </AutoForm>
                 <div>
-                    {this.getPaginator()}
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                     <TaskListCont params={params}/>
-                    {this.getPaginator()}
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                 </div>
                 <Divider/>
             </Container>

@@ -34,6 +34,22 @@ const TaskDetails = ({task}) => {
                     Download All PDFs
                 </Button>
             }
+            <h5>Substate: {task && LabelSubstates[task.substate]}</h5>
+
+            {task && task.actionsLinkData && task.actionsLinkData.length
+                ?
+                <Container>
+                    <h4>Actions</h4>
+                    {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map((action, key) => (
+                        <div key={key}><h6>{action.title}</h6></div>
+                    ))}
+
+                </Container>
+                :
+                <div>
+                    <h4>No Actions</h4>
+                </div>
+            }
             <Header as="h3" textAlign="center">PDF Files</Header>
             {
                 task && task.attachments &&
@@ -47,22 +63,6 @@ const TaskDetails = ({task}) => {
                         </div>
                     )
                 })
-            }
-            <h5>Substate: {task && LabelSubstates[task.substate]}</h5>
-
-            {task && task.actionsLinkData && task.actionsLinkData.length
-                ?
-                <div>
-                    <h4>Actions</h4>
-                    {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map(action => (
-                        <div key={action._id}><h6>{action.title}</h6></div>
-                    ))}
-
-                </div>
-                :
-                <div>
-                    <h4>No Actions</h4>
-                </div>
             }
         </Container>
     )

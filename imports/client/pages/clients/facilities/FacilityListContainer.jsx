@@ -135,21 +135,12 @@ export default class FacilityListContainer extends Pager {
                 </div>
                 <SearchInput handleSearch={this.handleSearch}/>
 
-                {this.getPaginator()}
+                {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                 <FacilityListWrapper params={params}
                                      sortBy={sortBy}
                                      isSortAscend={isSortAscend}
                                      handleHeaderClick={this.handleHeaderClick}/>
-                {this.getPaginator()}
-
-                <Divider/>
-
-                <Button primary fluid onClick={() => {
-                    FlowRouter.go("facility.create", {_id: clientId})
-                }}>
-                    Create
-                </Button>
-
+                {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
             </Container>
         );
     }

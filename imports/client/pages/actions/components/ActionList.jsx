@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import _ from 'underscore';
 import ActionSingle from './ActionSingle.jsx';
 import ActionHeadList from './ActionHeadList';
-import {Container} from 'semantic-ui-react'
-import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Button, Icon, Table, Container} from 'semantic-ui-react'
 
 export default class ActionList extends Component {
     render() {
@@ -19,8 +17,7 @@ export default class ActionList extends Component {
         }
 
         return (
-            <Container>
-                <Table padded>
+                <Table striped>
                     <Table.Header>
                         <ActionHeadList sortBy={sortBy}
                                         isSortAscend={isSortAscend}
@@ -40,9 +37,16 @@ export default class ActionList extends Component {
                                 There are no actions
                             </Table.Body>
                     }
+                        <Table.Footer fullWidth>
+                        <Table.Row>
+                            <Table.HeaderCell colSpan='100'>
+                            <Button href='/action/create' floated='left' icon labelPosition='left' primary size='small'>
+                                <Icon name='plus' /> Create
+                            </Button>
+                            </Table.HeaderCell>
+                        </Table.Row>
+                        </Table.Footer>
                 </Table>
-            </Container>
-            
         );
     }
 }

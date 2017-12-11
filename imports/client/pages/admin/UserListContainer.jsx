@@ -32,13 +32,11 @@ export default class UserListContainer extends Pager {
                 <div>
                     <Header textAlign="center" as="h2">Users</Header>
                 </div>
-                <div>
-                    {this.getPaginator()}
+                <div className='m-t-30'>
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                     <UserListCont params={params}/>
-                    {this.getPaginator()}
+                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
                 </div>
-                <Divider/>
-                <Button fluid primary href="/admin/user/create">Create user</Button>
             </Container>
         );
     }
