@@ -9,7 +9,6 @@ reportsQuery.expose({
             const userRole = user.roles[0];
 
             if (!Roles.userIsInRole(userId, roleGroups.ADMIN_TECH)) {
-                console.log("User isn't an admin nor an tech");
                 _.extend(params, {
                     filters: {
                         $or: [{allowedRoles: {'$in': [userRole]}}, {createdBy: user._id}]
