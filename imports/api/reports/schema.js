@@ -18,5 +18,9 @@ export default new SimpleSchema({
     },
     'allowedRoles.$': {
         type: String
+    },
+    createdBy: {
+        type: String,
+        optional: true
     }
 });
