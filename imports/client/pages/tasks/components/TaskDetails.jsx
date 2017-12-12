@@ -1,8 +1,9 @@
 import React from 'react';
 import {Header} from 'semantic-ui-react';
 import {Container, Button} from 'semantic-ui-react';
-import {path, getToken} from '/imports/api/s3-uploads/utils';
+import {getToken} from '/imports/api/s3-uploads/utils';
 import {LabelSubstates} from '/imports/api/tasks/enums/substates';
+import SortableTab from './SortableTab';
 
 const TaskDetails = ({task}) => {
     return (
@@ -51,19 +52,7 @@ const TaskDetails = ({task}) => {
                 </div>
             }
             <Header as="h3" textAlign="center">PDF Files</Header>
-            {
-                task && task.attachments &&
-                task.attachments.map((pdf, index) => {
-                    return (
-                        <div>
-                            <a key={index} target="_blank"
-                               href={path(pdf.path)}>
-                                {pdf.name.slice(0, pdf.name.indexOf('.'))}
-                            </a>
-                        </div>
-                    )
-                })
-            }
+            <SortableTab attachments={task && task.attachments}/>
         </Container>
     )
 };

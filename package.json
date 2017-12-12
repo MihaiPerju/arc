@@ -33,6 +33,7 @@
     "react-notification-system": "^0.2.13",
     "react-rte": "^0.15.0",
     "react-select": "^1.0.0-rc.10",
+    "react-sortable-hoc": "^0.6.8",
     "read-file": "^0.2.0",
     "semantic-ui-css": "^2.2.12",
     "semantic-ui-react": "^0.75.1",
