@@ -57,6 +57,57 @@ export default class ReportsService {
         return reportFields.strings.indexOf(name) !== -1;
     }
 
+    static _createFilters(requiredFields, data, reportFields) {
+        //Creating filters
+        let filters = {};
+        let filterBuilderData = {};
+
+        for (field of requiredFields) {
+            //Field not completed
+            if (!data[field]) {
+                return {error: 'Filters uncomplete!'};
+            }
+            filterBuilderData[field] = data[field];
+
+            //Removing 'Start' and 'End' prefixes if they are
+            if (field.endsWith('Start')) {
+                field = field.substr(0, field.indexOf('Start'));
+            }
+            if (field.endsWith('End')) {
+                field = field.substr(0, field.indexOf('End'));
+            }
+
+            //Check type and create filter based on specific type information
+            if (ReportsService.isEnum(field, reportFields)) {
+                //If is Enum
+                filters[field] = data[field];
+            }
+            if (ReportsService.isNumber(field, reportFields)) {
+                //If is Number
+                filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
+            }
+            if (ReportsService.isDate(field, reportFields)) {
+                //If is Date
+                filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
+            }
+            if (ReportsService.isString(field, reportFields)) {
+                //If is a string
+                if (data[field + 'Match'] === stringMatchOptions[0]) {
+                    filters[field] = {'$regex': data[field], '$options': 'i'};
+                } else if (data[field + 'Match'] === stringMatchOptions[1]) {
+                    filters[field] = {
+                        $not: `/${data[field]}/`
+                    };
+                } else {
+                    filters[field] = data[field];
+                }
+            } else if (ReportsService.isLink(field, reportFields)) {
+                filters[field] = {$in: data[field]};
+            }
+        }
+        return {result: filters, filterBuilderData};
+    }
+
     static getFilters(data, components, reportFields) {
         const requiredFields = [];
 
@@ -81,53 +132,13 @@ export default class ReportsService {
             return {result: '', error: 'Select at least one filter!'};
         }
 
-        //Creating filters
-        let filters = {};
-        let filterBuilderData = {};
+        const {result, filterBuilderData, error} = ReportsService._createFilters(requiredFields, data, reportFields);
 
-        for (field of requiredFields) {
-            //Field not completed
-            if (!data[field]) {
-                return {result: '', error: 'Filters uncomplete!'};
-            }
-
-            filterBuilderData[field] = data[field];
-
-            //Removing 'Start' and 'End' prefixes if they are
-            if (field.endsWith('Start')) {
-                field = field.substr(0, field.indexOf('Start'));
-            }
-            if (field.endsWith('End')) {
-                field = field.substr(0, field.indexOf('End'));
-            }
-
-            //Check type and create filter based on specific type information
-            if (ReportsService.isEnum(field, reportFields)) {
-                //If is Enum
-                filters[field] = data[field];
-            } else if (ReportsService.isNumber(field, reportFields)) {
-                //If is Number
-                filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
-            } else if (ReportsService.isDate(field, reportFields)) {
-                //If is Date
-                filters[field] = {$gte: data[field + 'Start'], $lt: data[field + 'End']};
-            } else if (ReportsService.isString(field, reportFields)) {
-                //If is a string
-                if (data[field + 'Match'] === stringMatchOptions[0]) {
-                    filters[field] = {'$regex': data[field], '$options': 'i'};
-                } else if (data[field + 'Match'] === stringMatchOptions[1]) {
-                    filters[field] = {
-                        $not: `/${data[field]}/`
-                    };
-                } else {
-                    filters[field] = data[field];
-                }
-            } else if (ReportsService.isLink(field, reportFields)) {
-                filters[field] = {$in: data[field]};
-            }
-
+        if (error) {
+            return {error};
         }
-        return {result: filters, filterBuilderData};
+
+        return {result, filterBuilderData};
     }
 
     static createSchema(keys, reportFields, Enums) {
@@ -145,7 +156,8 @@ export default class ReportsService {
                     allowedValues: allowedMatches,
                     optional: true
                 }
-            } else if (ReportsService.isLink(key, reportFields)) {
+            }
+            if (ReportsService.isLink(key, reportFields)) {
                 fields[key] = {
                     type: Array,
                     optional: true
@@ -153,7 +165,8 @@ export default class ReportsService {
                 fields[`${key}.$`] = {
                     type: String
                 }
-            } else if (ReportsService.isDate(key, reportFields)) {
+            }
+            if (ReportsService.isDate(key, reportFields)) {
                 fields[`${key}Start`] = {
                     type: Date,
                     optional: true
@@ -162,7 +175,8 @@ export default class ReportsService {
                     type: Date,
                     optional: true
                 }
-            } else if (ReportsService.isNumber(key, reportFields)) {
+            }
+            if (ReportsService.isNumber(key, reportFields)) {
                 fields[`${key}Start`] = {
                     type: SimpleSchema.Integer,
                     optional: true
@@ -171,7 +185,8 @@ export default class ReportsService {
                     type: SimpleSchema.Integer,
                     optional: true
                 }
-            } else if (ReportsService.isEnum(key, reportFields)) {
+            }
+            if (ReportsService.isEnum(key, reportFields)) {
                 fields[key] = {
                     type: String,
                     allowedValues: _.map(Enums[`${key}Enum`], (value, key) => (value)),
