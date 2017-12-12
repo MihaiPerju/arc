@@ -20,7 +20,7 @@ export default class FiltersSingle extends React.Component {
 
     render() {
         const {name} = this.props;
-
+        const transformedName = name && name.charAt(0).toUpperCase() + name.slice(1);
         return (
             <div>
                 <Button onClick={this.deleteFilter.bind(this, name)}
@@ -30,7 +30,7 @@ export default class FiltersSingle extends React.Component {
                 </Button>
                 <Segment attached>
 
-                    {name && name.charAt(0).toUpperCase() + name.slice(1)}
+                    {transformedName}
 
                     {
                         ReportsService.isEnum(name, TaskReportFields) ?
