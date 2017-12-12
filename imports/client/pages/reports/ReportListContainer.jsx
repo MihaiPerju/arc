@@ -8,13 +8,14 @@ import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
+import PageConfig from '/imports/client/business';
 
 export default class ReportListContainer extends Pager {
     constructor() {
         super();
 
         _.extend(this.state, {
-            perPage: 3,
+            perPage: PageConfig.defaultPerPage,
             filters: {}
         });
 
