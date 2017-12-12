@@ -20,12 +20,12 @@ Meteor.methods({
         return Reports.findOne({_id});
     },
 
-    'report.update'(data, _id) {
+    'report.update'(data) {
         // Check if user is allowed to modify report;
-        Security.hasRightsOnReport(this.userId, _id);
+        Security.hasRightsOnReport(this.userId, data.reportId);
 
-        return Reports.update({_id}, {
-            $set: data
+        return Reports.update({_id: data.reportId}, {
+            $set: data.generalInformation
         });
     }
 });

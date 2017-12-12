@@ -103,10 +103,10 @@ export default class ReportCreate extends React.Component {
         _.extend(generalInformation, {mongoFilters: EJSON.stringify(filters), filterBuilderData});
 
         //If editing mode
-        const reportId = FlowRouter.current().params.id;
+        const reportId = this.props.id;
 
         if (reportId) {
-            Meteor.call('report.update', generalInformation, reportId, (err) => {
+            Meteor.call('report.update', {generalInformation, reportId}, (err) => {
                 if (!err) {
                     Notifier.success("Report modified!");
                     FlowRouter.go('/reports/list');
