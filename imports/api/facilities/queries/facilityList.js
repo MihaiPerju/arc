@@ -2,7 +2,9 @@ import Facilities from '../collection';
 
 export default Facilities.createNamedQuery('facilityList', {
     $filter({filters, options, params}) {
-        filters.clientId = params.clientId;
+        if (params.clientId) {
+            filters.clientId = params.clientId;
+        }
         _.extend(filters, params.filters);
         _.extend(options, params.options);
     },
