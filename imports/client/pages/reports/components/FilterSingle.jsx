@@ -18,6 +18,56 @@ export default class FiltersSingle extends React.Component {
         return name === 'assigneeId' ? assigneeIdOptions : facilityIdOptions;
     }
 
+    renderWidget(name, TaskReportFields) {
+        if (ReportsService.isEnum(name, TaskReportFields)) {
+            return <div>
+                <AutoField name={name}/>
+                <ErrorField name={name}/>
+            </div>
+        }
+        if (ReportsService.isDate(name, TaskReportFields)) {
+            return (
+                <div>
+                    <AutoField name={`${name}Start`}/>
+                    <ErrorField name={`${name}Start`}/>
+
+                    <AutoField name={`${name}End`}/>
+                    <ErrorField name={`${name}End`}/>
+                </div>
+            )
+        }
+
+        if (ReportsService.isNumber(name, TaskReportFields)) {
+            return (
+                <div>
+                    <AutoField name={`${name}Start`}/>
+                    <ErrorField name={`${name}Start`}/>
+
+                    <AutoField name={`${name}End`}/>
+                    <ErrorField name={`${name}End`}/>
+                </div>
+            )
+        }
+
+        if (ReportsService.isLink(name, TaskReportFields)) {
+            return (
+                <div>
+                    <SelectField name={name} options={this.getOptions(name)}/>
+                </div>
+            )
+        }
+
+        return (
+            <div>
+                <AutoField name={name}/>
+                <ErrorField name={name}/>
+
+                <AutoField name={`${name}Match`}/>
+                <ErrorField name={`${name}Match`}/>
+            </div>
+        )
+    }
+
     render() {
         const {name} = this.props;
         const transformedName = name && name.charAt(0).toUpperCase() + name.slice(1);
@@ -33,41 +83,7 @@ export default class FiltersSingle extends React.Component {
                     {transformedName}
 
                     {
-                        ReportsService.isEnum(name, TaskReportFields) ?
-                            <div>
-                                <AutoField name={name}/>
-                                <ErrorField name={name}/>
-                            </div>
-                            :
-                            ReportsService.isDate(name, TaskReportFields) ?
-                                <div>
-                                    <AutoField name={`${name}Start`}/>
-                                    <ErrorField name={`${name}Start`}/>
-
-                                    <AutoField name={`${name}End`}/>
-                                    <ErrorField name={`${name}End`}/>
-                                </div>
-                                :
-                                ReportsService.isNumber(name, TaskReportFields) ?
-                                    <div>
-                                        <AutoField name={`${name}Start`}/>
-                                        <ErrorField name={`${name}Start`}/>
-
-                                        <AutoField name={`${name}End`}/>
-                                        <ErrorField name={`${name}End`}/>
-                                    </div>
-                                    :
-                                    ReportsService.isLink(name, TaskReportFields) ?
-                                        <div>
-                                            <SelectField name={name} options={this.getOptions(name)}/>
-                                        </div>
-                                        : <div>
-                                            <AutoField name={name}/>
-                                            <ErrorField name={name}/>
-
-                                            <AutoField name={`${name}Match`}/>
-                                            <ErrorField name={`${name}Match`}/>
-                                        </div>
+                        this.renderWidget(name, TaskReportFields)
                     }
                 </Segment>
                 <Divider/>
