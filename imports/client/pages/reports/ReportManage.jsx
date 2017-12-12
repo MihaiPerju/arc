@@ -153,8 +153,7 @@ export default class ReportCreate extends React.Component {
                         </Step>
 
                     </Step.Group>
-                    {
-                        hasGeneralInformation
+                    {hasGeneralInformation
                             ?
                             <div>
                                 <TaskFilterBuilder
