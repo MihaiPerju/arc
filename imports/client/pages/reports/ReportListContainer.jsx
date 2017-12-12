@@ -39,6 +39,7 @@ export default class ReportListContainer extends Pager {
     render() {
         const params = _.extend({}, this.getPagerOptions());
         const ReportListCont = this.ReportListCont;
+        const {total} = this.state;
 
         return (
 
@@ -47,9 +48,17 @@ export default class ReportListContainer extends Pager {
                     <SearchInput handleSearch={this.handleSearch}/>
                     <Header as="h2" textAlign="center">Custom reports</Header></div>
                 <div>
-                    {this.getPaginator()}
+                    {
+                        total > PageConfig.defaultPerPage
+                        &&
+                        this.getPaginator()
+                    }
                     <ReportListCont params={params}/>
-                    {this.getPaginator()}
+                    {
+                        total > PageConfig.defaultPerPage
+                        &&
+                        this.getPaginator()
+                    }
                 </div>
                 <Divider/>
                 <Button fluid primary href="/report/create">Create report</Button>
