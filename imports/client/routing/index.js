@@ -154,9 +154,10 @@ route('/region/list', RegionListContainer);
 //Reports
 import TaskFilterBuilder from '/imports/client/pages/reports/TaskFilterBuilder';
 import ReportListContainer from '/imports/client/pages/reports/ReportListContainer';
-import ReportManage from '/imports/client/pages/reports/ReportManage';
+import ReportManage from '/imports/client/pages/reports/ReportEdit';
+import ReportCreate from '/imports/client/pages/reports/ReportCreate';
 
 route('/tasks/filter-builder', TaskFilterBuilder);
 route('/reports/list', ReportListContainer);
-route('/report/create', ReportManage);
+route('/report/create', ReportCreate);
 route('/report/:id/edit', ReportManage);
