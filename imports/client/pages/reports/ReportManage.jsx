@@ -23,12 +23,13 @@ export default class ReportCreate extends React.Component {
     componentWillMount() {
         //Check if is in edit mode
         const reportId = FlowRouter.current().params.id;
+
         if (reportId) {
             Meteor.call('report.getById', reportId, (err, report) => {
                     if (!err) {
                         let components = {};
-                        for (field in report.filterBuilderData) {
 
+                        for (field in report.filterBuilderData) {
                             field = ReportsService.getInitialField(field);
 
                             components[field] = {
@@ -38,6 +39,7 @@ export default class ReportCreate extends React.Component {
                         }
 
                         const {name, allowedRoles, filterBuilderData} = report;
+
                         this.setState({
                             generalInformation: {
                                 name,
@@ -102,6 +104,7 @@ export default class ReportCreate extends React.Component {
 
         //If editing mode
         const reportId = FlowRouter.current().params.id;
+
         if (reportId) {
             Meteor.call('report.update', generalInformation, reportId, (err) => {
                 if (!err) {
