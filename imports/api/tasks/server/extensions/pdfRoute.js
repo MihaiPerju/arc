@@ -22,7 +22,11 @@ Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
     //Getting attached PDFs from task
     const task = Tasks.findOne({_id: params._id});
     const {attachmentIds} = task;
-    const attachments = Uploads.find({_id: {$in: attachmentIds}}).fetch();
+
+    const attachments = [];
+    for (_id of attachmentIds) {
+        attachments.push(Uploads.findOne({_id}));
+    }
 
     //Downloading and saving PDFs to local files
     let files = PDFService.downloadAndSave(attachments);
