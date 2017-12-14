@@ -3,3 +3,4 @@ import '../links';
 import './methods.js';
 import './hooks.js';
 import './expose.js';
+import './extensions/routeLetterPdf.js';
