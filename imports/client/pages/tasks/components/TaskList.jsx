@@ -23,12 +23,13 @@ export default class TaskList extends Component {
                         <Table.HeaderCell>Id</Table.HeaderCell>
                         <Table.HeaderCell>Pacient Name</Table.HeaderCell>
                         <Table.HeaderCell>Status</Table.HeaderCell>
+                        <Table.HeaderCell>Assignee</Table.HeaderCell>
                         <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
                     {_.map(data, (task) => {
-                        return <TaskSingle task={task} key={task._id}/>;
+                        return <TaskSingle task={task} key={task && task._id}/>;
                     })}
                 </Table.Body>
             </Table>
