@@ -58,8 +58,6 @@ export default class ReportCreate extends React.Component {
     }
 
     onSubmitFilters(filters, components, filterBuilderData) {
-        console.log(filters);
-        console.log(filterBuilderData);
         //Setting state and creating/editing report
         this.setState({
             components,

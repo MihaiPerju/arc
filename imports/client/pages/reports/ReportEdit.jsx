@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Header, Divider, Button, Step} from 'semantic-ui-react'
+import {Container, Header, Divider, Button} from 'semantic-ui-react'
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import schema from '/imports/api/reports/schema'
 import {roleGroups} from '/imports/api/users/enums/roles';
