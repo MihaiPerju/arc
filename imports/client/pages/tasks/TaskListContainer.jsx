@@ -130,9 +130,9 @@ export default class TaskListContainer extends Pager {
                     <Divider/>
                 </AutoForm>
                 <div>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                    {this.getPaginator()}
                     <TaskListCont params={params}/>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                    {this.getPaginator()}
                 </div>
                 <Divider/>
             </Container>
