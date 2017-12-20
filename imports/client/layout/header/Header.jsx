@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {Button, Dropdown, Menu, Container} from 'semantic-ui-react';
 import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
+import RolesEnum from '/imports/api/users/enums/roles';
 
 class Header extends Component {
     state = {activeItem: 'Dashboard'};
@@ -19,9 +20,19 @@ class Header extends Component {
             {name: "/admin/user/list", label: "User Management"},
             {name: "/code/list", label: "CARC/RARC Codes"},
             {name: "/tasks", label: "Tasks"},
-            {name: "/reports/list", label: "Reports"},
-            {name: "/letter-templates/list", label: "Letter templates"}
+            {name: "/reports/list", label: "Reports"}
         ];
+        if(user && user.roles.includes(RolesEnum.ADMIN)){
+            routes.push(
+                {name:'/region/list', label:'Regions'},
+                {name: "/letter-templates/list", label: "Letter templates"}
+            )
+        }
+        if(user && user.roles.includes(RolesEnum.TECH)){
+            routes.push(
+                {name: "/letter-templates/list", label: "Letter templates"}
+            )
+        }
 
         const adminAndTechRoutes = [
             {name: "/action/list", label: "Actions"}
