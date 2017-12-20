@@ -5,7 +5,7 @@ import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import SelectUsersContainer from './SelectUsersContainer';
-import {Container,Divider,Button} from 'semantic-ui-react'
+import {Container, Divider, Button} from 'semantic-ui-react'
 import Notifier from '/imports/client/lib/Notifier';
 
 export default class FacilityForm extends React.Component {
