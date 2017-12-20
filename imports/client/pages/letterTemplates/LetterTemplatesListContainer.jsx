@@ -37,8 +37,6 @@ export default class LetterTemplatesListContainer extends Pager {
                     <LetterTemplatesListCont params={params}/>
                     {this.getPaginator()}
                 </div>
-                <Divider/>
-                <Button primary fluid href="/letter-template/create">Create a letter template</Button>
             </Container>
         );
     }
