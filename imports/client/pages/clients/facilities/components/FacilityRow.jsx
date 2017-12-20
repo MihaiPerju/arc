@@ -1,7 +1,7 @@
 import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import {Table} from 'semantic-ui-react';
-import {Button} from 'semantic-ui-react';
+import {Button, Dropdown} from 'semantic-ui-react';
 
 export default class FacilityRow extends React.Component {
     handleDelete = (facilityId) => {
@@ -14,6 +14,8 @@ export default class FacilityRow extends React.Component {
             FlowRouter.reload();
         })
     };
+
+
 
     render() {
         const {facility} = this.props;
@@ -28,24 +30,33 @@ export default class FacilityRow extends React.Component {
                 <Table.Cell>{facility.addressOne}</Table.Cell>
                 <Table.Cell>{facility.addressTwo}</Table.Cell>
                 <Table.Cell>{facility.status}</Table.Cell>
-                <Table.Cell>
-                    <Button.Group>
-                        <Button
-                            primary
-                            onClick={() => (
-                                FlowRouter.go("facility.view", {_id: facility.clientId, facilityId: facility._id})
-                            )}>
-                            View
-                        </Button>
-                        <Button
-                            onClick={() => (
-                                FlowRouter.go("facility.edit", {_id: facility.clientId, facilityId: facility._id})
-                            )}>
-                            Edit
-                        </Button>
+                <Table.Cell>   
 
-                        <Button color="red" onClick={() => (this.handleDelete(facility._id))}>Delete</Button>
-                    </Button.Group>
+                    <Dropdown button text='Action' icon={null}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item>
+                                <Button
+                                        primary
+                                        onClick={() => (
+                                            FlowRouter.go("facility.view", {_id: facility.clientId, facilityId: facility._id})
+                                        )}>
+                                        View
+                                </Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button
+                                    onClick={() => (
+                                        FlowRouter.go("facility.edit", {_id: facility.clientId, facilityId: facility._id})
+                                    )}>
+                                    Edit
+                                </Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button color="red" onClick={() => (this.handleDelete(facility._id))}>Delete</Button>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+
                 </Table.Cell>
             </Table.Row>
         );

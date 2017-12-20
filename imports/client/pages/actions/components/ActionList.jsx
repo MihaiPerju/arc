@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import _ from 'underscore';
 import ActionSingle from './ActionSingle.jsx';
 import ActionHeadList from './ActionHeadList';
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 import {Button, Icon, Table, Container} from 'semantic-ui-react'
 
 export default class ActionList extends Component {
@@ -34,7 +35,7 @@ export default class ActionList extends Component {
                             </Table.Body>
                             :
                             <Table.Body>
-                                There are no actions
+                                <NoDataFoundCell colSpan="100"/>
                             </Table.Body>
                     }
                         <Table.Footer fullWidth>

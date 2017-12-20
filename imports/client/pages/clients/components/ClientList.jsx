@@ -3,6 +3,7 @@ import _ from 'underscore';
 import ClientSingle from './ClientSingle.jsx';
 import ClientHeadList from './ClientHeadList';
 import {Button, Icon, Table} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class ClientList extends Component {
     render() {
@@ -34,7 +35,7 @@ export default class ClientList extends Component {
                         </Table.Body>
                         :
                         <Table.Body>
-                            There are no clients
+                            <NoDataFoundCell colSpan="100"/>
                         </Table.Body>
                 }
                 <Table.Footer fullWidth>

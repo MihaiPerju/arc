@@ -3,6 +3,7 @@ import _ from 'underscore';
 import ReportSingle from './ReportSingle.jsx';
 import {Table} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class ReportList extends Component {
     render() {
@@ -25,11 +26,19 @@ export default class ReportList extends Component {
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
-                    <Table.Body>
-                        {_.map(data, (report) => {
-                            return <ReportSingle report={report} key={report._id}/>;
-                        })}
-                    </Table.Body>
+                    {
+                        data.length
+                            ?
+                            <Table.Body>
+                                {_.map(data, (report) => {
+                                    return <ReportSingle report={report} key={report._id}/>;
+                                })}
+                            </Table.Body>
+                            :
+                            <Table.Body>
+                                <NoDataFoundCell colSpan="100"/>
+                            </Table.Body>
+                    }
                 </Table>
             </Container>
         );

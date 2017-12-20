@@ -4,6 +4,7 @@ import LetterTemplateSingle from './LetterTemplateSingle.jsx';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Table} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class LetterTemplateList extends Component {
     render() {
@@ -37,7 +38,7 @@ export default class LetterTemplateList extends Component {
                             </Table.Body>
                             :
                             <Table.Body>
-                                There are no letter templates
+                                <NoDataFoundCell colSpan="100"/>
                             </Table.Body>
                     }
                 </Table>
