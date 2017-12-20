@@ -18,7 +18,6 @@ import Dashboard from '/imports/client/pages/users/Dashboard';
 //Recommended to run this only in dev env
 FlowRouter.route('/grapher-live', {
     action() {
-        console.log(document.getElementById('grapher-live'));
         render(React.createElement(GrapherLive), document.body);
     }
 });

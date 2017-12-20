@@ -1,3 +1,4 @@
+import 'dropzone/dist/min/dropzone.min.css';
 import '/imports/client/routing';
 import '/imports/client/lib/simpleSchemaMessages'
 import '/imports/api/users/collection'; // for helpers

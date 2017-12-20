@@ -22,13 +22,13 @@ class Header extends Component {
             {name: "/tasks", label: "Tasks"},
             {name: "/reports/list", label: "Reports"}
         ];
-        if(user && user.roles.includes(RolesEnum.ADMIN)){
+        if(user && user.roles && user.roles.includes(RolesEnum.ADMIN)){
             routes.push(
                 {name:'/region/list', label:'Regions'},
                 {name: "/letter-templates/list", label: "Letter templates"}
             )
         }
-        if(user && user.roles.includes(RolesEnum.TECH)){
+        if(user && user.roles && user.roles.includes(RolesEnum.TECH)){
             routes.push(
                 {name: "/letter-templates/list", label: "Letter templates"}
             )

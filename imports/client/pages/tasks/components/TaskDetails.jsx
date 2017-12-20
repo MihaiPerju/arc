@@ -41,10 +41,11 @@ export default class TaskDetails extends React.Component {
                     ?
                     <Container>
                         <h4>Actions</h4>
-                        {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map((action, key) => (
-                            <div key={key}><h6>{action.title}</h6></div>
-                        ))}
-
+                        <ul>
+                            {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map((action, key) => (
+                                <li key={key}>{action.title}</li>
+                            ))}
+                        </ul>
                     </Container>
                     :
                     <div>

@@ -3,6 +3,7 @@ import _ from 'underscore';
 import TaskSingle from './TaskSingle.jsx';
 import {Icon, Label, Menu, Table} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class TaskList extends Component {
     render() {
@@ -40,7 +41,6 @@ export default class TaskList extends Component {
                             <NoDataFoundCell colSpan="100"/>
                         </Table.Body>
                 }
-                
             </Table>
         );
     }

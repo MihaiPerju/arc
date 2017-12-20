@@ -34,6 +34,6 @@ practicalmeteor:mocha
 practicalmeteor:chai
 semantic:ui
 less
-twbs:bootstrap
 xolvio:cleaner
 cultofcoders:grapher-live
+twbs:bootstrap
