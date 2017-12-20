@@ -29,7 +29,7 @@ export default class TaskList extends Component {
                 </Table.Header>
                 <Table.Body>
                     {_.map(data, (task) => {
-                        return <TaskSingle task={task} key={task && task._id}/>;
+                        return <TaskSingle task={task} key={task._id}/>;
                     })}
                 </Table.Body>
             </Table>
