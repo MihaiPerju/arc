@@ -75,12 +75,12 @@ export default class CodeListContainer extends Pager {
                     <SearchInput handleSearch={this.handleSearch}/>                    
                 </div>
                 <div className='m-t-30'>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                    {this.getPaginator()}
                     <CodeListCont params={params}
                                   sortBy={sortBy}
                                   isSortAscend={isSortAscend}
                                   handleHeaderClick={this.handleHeaderClick}/>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                    {this.getPaginator()}
                 </div>
             </Container>
         );

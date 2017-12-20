@@ -135,12 +135,12 @@ export default class FacilityListContainer extends Pager {
                 </div>
                 <SearchInput handleSearch={this.handleSearch}/>
 
-                {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                {this.getPaginator()}
                 <FacilityListWrapper params={params}
                                      sortBy={sortBy}
                                      isSortAscend={isSortAscend}
                                      handleHeaderClick={this.handleHeaderClick}/>
-                {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                {this.getPaginator()}
             </Container>
         );
     }

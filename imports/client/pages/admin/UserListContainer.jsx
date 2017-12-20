@@ -33,9 +33,9 @@ export default class UserListContainer extends Pager {
                     <Header textAlign="center" as="h2">Users</Header>
                 </div>
                 <div className='m-t-30'>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                    {this.getPaginator()}
                     <UserListCont params={params}/>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                    {this.getPaginator()}
                 </div>
             </Container>
         );
