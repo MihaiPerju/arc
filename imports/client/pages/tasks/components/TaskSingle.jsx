@@ -9,6 +9,10 @@ export default class TaskSingle extends Component {
     }
 
     getOptions(users) {
+        if (!users) {
+            [];
+        }
+
         let options = [];
         for (user of users) {
             let item = {
@@ -17,6 +21,7 @@ export default class TaskSingle extends Component {
             };
             options.push(item);
         }
+        
         return options;
     }
 
