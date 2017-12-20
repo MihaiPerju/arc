@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
 import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Button, Dropdown} from 'semantic-ui-react'
 
 export default class RegionSingle extends Component {
     constructor() {
@@ -32,10 +32,16 @@ export default class RegionSingle extends Component {
             <Table.Row>
                 <Table.Cell>{region.name}</Table.Cell>
                 <Table.Cell>
-                    <Button.Group>
-                        <Button primary onClick={this.onEditRegion}>Edit</Button>
-                        <Button color="red" onClick={this.deleteRegion}>Delete</Button>
-                    </Button.Group>
+                    <Dropdown button text='Action' icon={null}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item>
+                                <Button primary onClick={this.onEditRegion}>Edit</Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button color="red" onClick={this.deleteRegion}>Delete</Button>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>  
                 </Table.Cell>
             </Table.Row>
         );
