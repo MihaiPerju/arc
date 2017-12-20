@@ -42,7 +42,7 @@ export default class LetterRow extends React.Component {
                         <Button
                             href={`/letters/pdf/${taskId}/${letter._id}/${getToken()}`}
                             target="_blank">
-                            Get pdf
+                            Download PDF
                         </Button>
                         <Button color="red"
                                 onClick={() => (this.handleDelete(

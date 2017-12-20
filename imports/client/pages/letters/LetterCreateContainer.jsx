@@ -71,14 +71,14 @@ class LetterCreateContainer extends React.Component {
                 </AutoForm>
 
                 <Divider/>
-                <Grid divided='vertically'>
-                    <Grid.Row columns={2}>
-                        <Grid.Column width={6}>
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column width={4}>
                             <GenerateLetterTemplateInputs
                                 templateKeywords={keywords}
                                 onChange={this.updateState}/>
                         </Grid.Column>
-                        <Grid.Column width={10}>
+                        <Grid.Column width={12}>
                             <LetterTemplatePreview
                                 taskId={taskId}
                                 letterTemplateBody={body}
