@@ -27,12 +27,21 @@ export default class TaskList extends Component {
                         <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                <Table.Body>
-                    {_.map(data, (task) => {
-                        return <TaskSingle task={task} key={task._id}/>;
-                    })}
-                </Table.Body>
+                {
+                    data.length
+                        ?
+                        <Table.Body>
+                            {_.map(data, (task) => {
+                                return <TaskSingle task={task} key={task._id}/>;
+                            })}
+                        </Table.Body>
+                        :
+                        <Table.Body>
+                            <NoDataFoundCell colSpan="100"/>
+                        </Table.Body>
+                }
+                
             </Table>
         );
     }
-}
+}                   

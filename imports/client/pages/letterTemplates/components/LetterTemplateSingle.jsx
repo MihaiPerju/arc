@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
 import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Button, Dropdown} from 'semantic-ui-react'
 
 export default class LetterSingle extends Component {
     constructor() {
@@ -32,10 +32,16 @@ export default class LetterSingle extends Component {
             <Table.Row>
                 <Table.Cell>{letterTemplate.name}</Table.Cell>
                 <Table.Cell>
-                    <Button.Group>
-                        <Button primary onClick={this.onEditLetterTemplate}>Edit</Button>
-                        <Button color="red" onClick={this.deleteLetterTemplate}>Delete</Button>
-                    </Button.Group>
+                    <Dropdown button text='Action' icon={null}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item>
+                                <Button primary onClick={this.onEditLetterTemplate}>Edit</Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button color="red" onClick={this.deleteLetterTemplate}>Delete</Button>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Table.Cell>
             </Table.Row>
         );

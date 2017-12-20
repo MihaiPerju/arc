@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
 import {Button} from 'semantic-ui-react'
-import {Table} from 'semantic-ui-react'
+import {Table, Dropdown} from 'semantic-ui-react'
 
 export default class CodeSingle extends Component {
 
@@ -36,11 +36,16 @@ export default class CodeSingle extends Component {
                 <Table.Cell>{code.description_short}</Table.Cell>
                 <Table.Cell>{code.denial_action}</Table.Cell>
                 <Table.Cell>
-                    <Button.Group>
-                        <Button primary onClick={this.onEditCode}>Edit Code</Button>
-
-                        <Button color="red" onClick={this.deleteCode}>Delete</Button>
-                    </Button.Group>
+                    <Dropdown button text='Action' icon={null}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item>
+                                <Button primary onClick={this.onEditCode}>Edit Code</Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button color="red" onClick={this.deleteCode}>Delete</Button>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Table.Cell>
             </Table.Row>
         );

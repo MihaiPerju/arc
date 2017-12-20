@@ -2,6 +2,7 @@ import React from 'react';
 import Loading from '/imports/client/lib/ui/Loading.jsx';
 import LetterRow from './LetterRow.jsx';
 import {Container, Table} from 'semantic-ui-react';
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class LetterList extends React.Component {
     render() {
@@ -28,7 +29,7 @@ export default class LetterList extends React.Component {
                     </Table.Header>
                     <Table.Body>
                         {!data.length
-                            ? <p>There are no letter</p>
+                            ? <NoDataFoundCell colSpan="100"/>
                             : data.map(letter => (
                                 <LetterRow key={letter._id}
                                            letter={letter}/>

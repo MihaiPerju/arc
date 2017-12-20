@@ -56,7 +56,6 @@ export default class extends React.Component {
         return this.state.total > this.state.perPage && <Pagination
             activePage={this.state.page}
             itemsCountPerPage={this.state.perPage}
-            totalItemsCount={this.state.total}
             pageRangeDisplayed={5}
             onChange={this.handlePageChange.bind(this)}
         />

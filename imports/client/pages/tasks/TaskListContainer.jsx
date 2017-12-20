@@ -119,22 +119,22 @@ export default class TaskListContainer extends Pager {
                 <div>
                     <Header as="h2" textAlign="center">Tasks</Header>
                 </div>
-                <AutoForm ref="filters" schema={schema} onChange={this.onHandleChange}>
+                <Container className="m-t-30">
+                    <div className="col-lg-8">
+                        {this.getPaginator()}
+                        <TaskListCont params={params}/>
+                        {this.getPaginator()}
+                    </div>
+                    <AutoForm className="col-lg-4" ref="filters" schema={schema} onChange={this.onHandleChange}>
 
-                    <SelectField name="facilityId" options={facilities}/>
+                        <SelectField name="facilityId" options={facilities}/>
 
-                    <SelectField name="assigneeId" options={assignees}/>
+                        <SelectField name="assigneeId" options={assignees}/>
 
-                    <AutoField name="clientName"/>
+                        <AutoField name="clientName"/>
 
-                    <Divider/>
-                </AutoForm>
-                <div>
-                    {this.getPaginator()}
-                    <TaskListCont params={params}/>
-                    {this.getPaginator()}
-                </div>
-                <Divider/>
+                    </AutoForm>
+                </Container>
             </Container>
         );
     }

@@ -4,6 +4,7 @@ import RegionSingle from './RegionSingle.jsx';
 import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Table} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class RegionsList extends Component {
     render() {
@@ -37,7 +38,7 @@ export default class RegionsList extends Component {
                             </Table.Body>
                             :
                             <Table.Body>
-                                There are no regions
+                                <NoDataFoundCell colSpan="100"/>
                             </Table.Body>
                     }
                 </Table>
