@@ -7,6 +7,7 @@ import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import SelectUsersContainer from './SelectUsersContainer';
 import {Container, Divider, Button} from 'semantic-ui-react'
 import Notifier from '/imports/client/lib/Notifier';
+import FacilityLogoUpload from '../components/FacilityLogoUpload';
 
 export default class FacilityForm extends React.Component {
     constructor() {
@@ -56,6 +57,10 @@ export default class FacilityForm extends React.Component {
 
         return (
             <Container>
+                <Divider/>
+                <FacilityLogoUpload facilityId={model && model._id}/>
+                <Divider/>
+
                 <AutoForm schema={schema} model={newModel} onSubmit={this.onSubmit}>
                     <AutoField name="name"/>
                     <ErrorField name="name"/>
