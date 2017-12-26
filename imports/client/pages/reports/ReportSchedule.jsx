@@ -83,11 +83,10 @@ export default class ReportSchedule extends React.Component {
                 {
                     data.map((schedule, index) => {
                         return (
-                            <ScheduleWidget users={users} key={index} model={schedule}/>
+                            <ScheduleWidget reportId={id} users={users} key={index} model={schedule}/>
                         )
                     })
                 }
-
             </Container>
         )
     }

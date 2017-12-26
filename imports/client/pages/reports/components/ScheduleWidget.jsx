@@ -5,6 +5,7 @@ import {Divider, Button, Segment} from 'semantic-ui-react'
 import SimpleSchema from 'simpl-schema';
 import ReportsEnum from '/imports/api/schedules/enums/reports';
 import Notifier from '/imports/client/lib/Notifier';
+import ScheduleService from '/imports/api/reports/services/ScheduleService';
 
 export default class ScheduleWidget extends React.Component {
     constructor() {
@@ -13,8 +14,8 @@ export default class ScheduleWidget extends React.Component {
 
     onSubmit(data) {
         const {model} = this.props;
+        const {reportId} = this.props;
         if (!model) {
-            const {reportId} = this.props;
             data.reportId = reportId;
             Meteor.call("schedule.create", data, (err) => {
                 if (!err) {
@@ -25,7 +26,13 @@ export default class ScheduleWidget extends React.Component {
                 }
             })
         } else {
-            // console.log("SEND!!!!!");
+            Meteor.call('report.getById', reportId, (err, report) => {
+                if (!err) {
+                    ScheduleService.createReportPdf(report);
+                } else {
+                    Notifier.error(err.reason);
+                }
+            })
         }
     }
 
@@ -44,7 +51,6 @@ export default class ScheduleWidget extends React.Component {
 
     render() {
         const {users, model} = this.props;
-
         return (
             <Segment>
                 <Button

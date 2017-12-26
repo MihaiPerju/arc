@@ -33,7 +33,6 @@ export default class ReportManage extends React.Component {
         const {panes} = this.state;
         return (
             <Container className='page-container'>
-
                 <Tab panes={panes}/>
             </Container>
         )
