@@ -15,6 +15,25 @@ export default class ScheduleService {
             </table>;
 
         const htmlString = reactElementToJSXString(ReportTable);
-        Meteor.pdf.save(htmlString, 'myFileName');
+        Meteor.pdf.stream (htmlString, function (result) {
+            console.log(result);
+            Meteor.call(
+                'report.send',
+                'Alice <pms@app.com>',
+                'bob@example.com',
+                'Hello from Meteor!',
+                "Hello {firstname},\n" +
+                "\n" +
+                "Attached to this email, you will find the report \"{reportName}\"\n" +
+                "\n" +
+                "Regards,\n" +
+                "\n" +
+                "PMS Team",
+                {
+                    filename: 'Report.pdf',
+                    content: result
+                }
+            );
+        });
     }
 }

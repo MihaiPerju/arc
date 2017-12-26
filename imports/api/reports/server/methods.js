@@ -1,5 +1,6 @@
 import Reports from './../collection.js';
 import Security from '/imports/api/reports/security.js';
+import {Email} from 'meteor/email'
 
 Meteor.methods({
     'report.delete'(id) {
@@ -27,5 +28,11 @@ Meteor.methods({
         return Reports.update({_id: data.reportId}, {
             $set: data.generalInformation
         });
+    },
+
+    'report.send'(to, from, subject, text, attachments) {
+        // waiting for the email sending to complete.
+        this.unblock();
+        Email.send({to, from, subject, text, attachments});
     }
 });
