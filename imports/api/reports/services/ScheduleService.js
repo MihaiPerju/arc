@@ -15,8 +15,7 @@ export default class ScheduleService {
             </table>;
 
         const htmlString = reactElementToJSXString(ReportTable);
-        Meteor.pdf.stream (htmlString, function (result) {
-            console.log(result);
+        Meteor.pdf.stream(htmlString, function (result) {
             Meteor.call(
                 'report.send',
                 'Alice <pms@app.com>',

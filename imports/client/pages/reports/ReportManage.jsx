@@ -1,6 +1,7 @@
 import React from 'react';
 import {Container, Header, Divider, Button, Tab} from 'semantic-ui-react'
 import ReportEdit from './ReportEdit';
+import ReportView from './ReportView';
 import ReportSchedule from './ReportSchedule';
 import query from '/imports/api/schedules/queries/scheduleList';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
@@ -24,7 +25,8 @@ export default class ReportManage extends React.Component {
         this.setState({
             panes: [
                 {menuItem: 'Edit report', render: () => <Tab.Pane><ReportEdit id={reportId}/></Tab.Pane>},
-                {menuItem: 'Scheduling', render: () => <Tab.Pane><ScheduleListCont id={reportId}/></Tab.Pane>}
+                {menuItem: 'Scheduling', render: () => <Tab.Pane><ScheduleListCont id={reportId}/></Tab.Pane>},
+                {menuItem: 'View Report', render: () => <Tab.Pane><ReportView id={reportId}/></Tab.Pane>}
             ]
         })
     }
