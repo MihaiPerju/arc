@@ -21,6 +21,7 @@
 .m-t-30 {
   margin-top: 30px;
 }
+
 .column {
   max-width: 450px;
   margin: 0 auto !important;
@@ -38,4 +39,16 @@
 
 .width-p90 {
   width: 90%;
+}
+
+.reportTable {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.reportTableCell {
+  border: 1px solid #dddddd;
+  text-align: center;
+  padding: 8px;
 }
