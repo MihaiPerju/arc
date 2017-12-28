@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Table, Label} from 'semantic-ui-react';
+import {Container} from 'semantic-ui-react';
 
 const TaskData = ({task}) => {
     return (

@@ -6,6 +6,8 @@ import SimpleSchema from 'simpl-schema';
 import ReportsEnum from '/imports/api/schedules/enums/reports';
 import Notifier from '/imports/client/lib/Notifier';
 import ScheduleService from '/imports/api/reports/services/ScheduleService';
+import {EJSON} from 'meteor/ejson'
+import taskQuery from '/imports/api/tasks/queries/taskList';
 
 export default class ScheduleWidget extends React.Component {
     constructor() {
@@ -28,7 +30,14 @@ export default class ScheduleWidget extends React.Component {
         } else {
             Meteor.call('report.getById', reportId, (err, report) => {
                 if (!err) {
-                    ScheduleService.createReportPdf(report);
+                    const filters = EJSON.parse(report.mongoFilters);
+                    taskQuery.clone({filters}).fetch((err, tasks) => {
+                        if (!err) {
+                            ScheduleService.createReportPdf(data.userIds, tasks, report);
+                        } else {
+                            Notifier.error(err.reason);
+                        }
+                    })
                 } else {
                     Notifier.error(err.reason);
                 }

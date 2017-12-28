@@ -29,5 +29,9 @@ Meteor.methods({
                 avatar: ''
             }
         })
+    },
+
+    'users.get'(userIds) {
+        return Users.find({_id: {$in: userIds}}).fetch();
     }
 });
