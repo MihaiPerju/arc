@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
 import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Button, Dropdown} from 'semantic-ui-react'
 
 export default class ClientSingle extends Component {
 
@@ -34,16 +34,24 @@ export default class ClientSingle extends Component {
                 <Table.Cell>{client.lastName}</Table.Cell>
                 <Table.Cell>{client.email}</Table.Cell>
                 <Table.Cell>
-                    <Button.Group>
-                        <Button primary
-                                onClick={() => {
-                                    FlowRouter.go("facility.list", {_id: client._id})
-                                }}>
-                            Manage Facilities
-                        </Button>
-                        <Button onClick={this.onEditClient}>Edit Client</Button>
-                        <Button color="red" onClick={this.deleteClient}>Delete</Button>
-                    </Button.Group>
+                    <Dropdown button text='Action' icon={null}>
+                        <Dropdown.Menu>
+                            <Dropdown.Item>
+                                <Button primary
+                                        onClick={() => {
+                                            FlowRouter.go("facility.list", {_id: client._id})
+                                        }}>
+                                    Manage Facilities
+                                </Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button onClick={this.onEditClient}>Edit Client</Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button color="red" onClick={this.deleteClient}>Delete</Button>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </Table.Cell>
             </Table.Row>
         );

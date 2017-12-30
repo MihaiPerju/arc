@@ -60,8 +60,6 @@ export default class ReportListContainer extends Pager {
                         this.getPaginator()
                     }
                 </div>
-                <Divider/>
-                <Button fluid primary href="/report/create">Create report</Button>
             </Container>
 
         );

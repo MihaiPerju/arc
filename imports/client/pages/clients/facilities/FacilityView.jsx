@@ -22,6 +22,7 @@ export default class FacilityView extends React.Component {
     }
 
     getRegions(regionIds) {
+        regionIds = regionIds || [];
         Meteor.call('facility.getRegions', regionIds, (err, regions) => {
             if (err) {
                 Notifier.error("Couldn't get facility regions");

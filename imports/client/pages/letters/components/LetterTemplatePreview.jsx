@@ -1,6 +1,7 @@
 import React from "react";
 import Parser from "simple-text-parser";
 import CreateLetter from './CreateLetter';
+import { Divider } from 'semantic-ui-react'
 
 export default class LetterTemplatePreview extends React.Component {
     tagParser = () => {
@@ -26,7 +27,12 @@ export default class LetterTemplatePreview extends React.Component {
         return(
             <div>
                 {!!letterTemplateBody && <div dangerouslySetInnerHTML={{__html: letterBody}}/>}
-                {letterTemplateBody ? <CreateLetter taskId={taskId} letterBody={letterBody}/> : null}
+                {letterTemplateBody &&
+                    <div>
+                        <Divider />
+                        <CreateLetter taskId={taskId} letterBody={letterBody}/>
+                    </div>
+                }
             </div>
         );
     }

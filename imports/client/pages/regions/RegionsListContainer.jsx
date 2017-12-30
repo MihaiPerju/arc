@@ -37,8 +37,6 @@ export default class RegionsListContainer extends Pager {
                     <RegionsListCont params={params}/>
                     {this.getPaginator()}
                 </div>
-                <Divider/>
-                <Button primary fluid href="/region/create">Create a region</Button>
             </Container>
         );
     }

@@ -7,7 +7,10 @@ Tasks.expose({});
 TaskListQuery.expose({
     firewall(userId, params) {
         if (Roles.userIsInRole(userId, [RolesEnum.REP, RolesEnum.MANAGER])) {
-            const userFacilities = Facilities.find({allowedUsers: {$in: [userId]}}, {fields: {_id: 1}}).fetch();
+            const userFacilities = Facilities.find({
+                allowedUsers: {$in: [userId]}},
+                 {fields: {_id: 1}})
+            .fetch();
 
             const userFacilitiesArr = [];
 

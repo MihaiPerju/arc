@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Button, Dropdown} from 'semantic-ui-react'
 import Roles from '/imports/api/users/enums/roles';
 
 export default class ReportSingle extends Component {
@@ -28,17 +28,22 @@ export default class ReportSingle extends Component {
             <Table.Row>
                 <Table.Cell>{report.name}</Table.Cell>
                 <Table.Cell>
-                    <Button.Group>
                         {
                             this.isAllowedToEdit()
                             &&
                             <div>
-                                <Button primary href={"/report/" + report._id + "/edit"}>Edit</Button>
-                                <Button negative onClick={this.deleteReport.bind(this)}>Delete</Button>
+                                <Dropdown button text='Action' icon={null}>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item>
+                                            <Button primary href={"/report/" + report._id + "/edit"}>Edit</Button>
+                                        </Dropdown.Item>
+                                        <Dropdown.Item>
+                                            <Button negative onClick={this.deleteReport.bind(this)}>Delete</Button>
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
                             </div>
                         }
-
-                    </Button.Group>
                 </Table.Cell>
             </Table.Row>
         );

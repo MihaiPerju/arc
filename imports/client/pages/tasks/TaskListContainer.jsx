@@ -40,29 +40,34 @@ export default class TaskListContainer extends Pager {
 
         for (let task of tasks) {
             const {facility} = task;
-            const {users} = facility;
-            //get facility options
-            let item = {
-                key: facility._id,
-                value: facility._id,
-                label: facility.name
-            }
-            if (!_.findWhere(facilities, item)) {
-                facilities.push(item);
-            }
+            if (facility) {
+                let users = [];
+                if (facility) {
+                    users = facility.users;
+                }
+                //get facility options
+                let item = {
+                    key: facility._id,
+                    value: facility._id,
+                    label: facility.name
+                };
+                if (!_.findWhere(facilities, item)) {
+                    facilities.push(item);
+                }
 
-            if (users) {
-                for (let user of users) {
-                    const {profile} = user;
+                if (users) {
+                    for (let user of users) {
+                        const {profile} = user;
 
-                    let item = {
-                        key: user._id,
-                        label: profile.firstName + ' ' + profile.lastName,
-                        value: user._id
-                    }
-                    //get assignee options
-                    if (!_.findWhere(assignees, item)) {
-                        assignees.push(item);
+                        let item = {
+                            key: user._id,
+                            label: profile.firstName + ' ' + profile.lastName,
+                            value: user._id
+                        };
+                        //get assignee options
+                        if (!_.findWhere(assignees, item)) {
+                            assignees.push(item);
+                        }
                     }
                 }
             }
@@ -114,22 +119,22 @@ export default class TaskListContainer extends Pager {
                 <div>
                     <Header as="h2" textAlign="center">Tasks</Header>
                 </div>
-                <AutoForm ref="filters" schema={schema} onChange={this.onHandleChange}>
+                <Container className="m-t-30">
+                    <div className="col-lg-8">
+                        {this.getPaginator()}
+                        <TaskListCont params={params}/>
+                        {this.getPaginator()}
+                    </div>
+                    <AutoForm className="col-lg-4" ref="filters" schema={schema} onChange={this.onHandleChange}>
 
-                    <SelectField name="facilityId" options={facilities}/>
+                        <SelectField name="facilityId" options={facilities}/>
 
-                    <SelectField name="assigneeId" options={assignees}/>
+                        <SelectField name="assigneeId" options={assignees}/>
 
-                    <AutoField name="clientName"/>
+                        <AutoField name="clientName"/>
 
-                    <Divider/>
-                </AutoForm>
-                <div>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
-                    <TaskListCont params={params}/>
-                    {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
-                </div>
-                <Divider/>
+                    </AutoForm>
+                </Container>
             </Container>
         );
     }

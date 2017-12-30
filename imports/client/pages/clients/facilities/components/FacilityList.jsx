@@ -4,6 +4,7 @@ import FacilityRow from "./FacilityRow.jsx";
 import FacilityHeadList from "./FacilityHeadList";
 import {Container} from 'semantic-ui-react'
 import {Table, Icon, Button} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class FacilityList extends React.Component {
     render() {
@@ -27,7 +28,7 @@ export default class FacilityList extends React.Component {
                 </Table.Header>
                 <Table.Body>
                     {!data.length
-                        ? <p>There are no facilities</p>
+                        ? <NoDataFoundCell colSpan="100"/>
                         : data.map(facility => (
                             <FacilityRow key={facility._id} facility={facility}/>
                         ))

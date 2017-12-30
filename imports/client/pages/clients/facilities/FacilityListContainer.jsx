@@ -121,26 +121,28 @@ export default class FacilityListContainer extends Pager {
         return (
             <Container className="page-container">
                 <Header as="h3" textAlign="center">Facility List</Header>
-
-
-                <div>
-                    <SelectDropDown name="Status"
-                                    selectionType="status"
-                                    enums={FacilityStatusEnum}
-                                    handleSelectBy={this.handleSelectBy}/>
-                    <SelectDropDown name="Region"
-                                    selectionType="regionIds"
-                                    regionOptions={regionOptions}
-                                    handleSelectBy={this.handleSelectBy}/>
-                </div>
                 <SearchInput handleSearch={this.handleSearch}/>
 
-                {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
-                <FacilityListWrapper params={params}
-                                     sortBy={sortBy}
-                                     isSortAscend={isSortAscend}
-                                     handleHeaderClick={this.handleHeaderClick}/>
-                {this.getPaginator().props.totalItemsCount > this.state.perPage ? this.getPaginator() : ''}
+                <Container className="m-t-30">
+                    <div className="col-lg-8">
+                        {this.getPaginator()}
+                        <FacilityListWrapper params={params}
+                                            sortBy={sortBy}
+                                            isSortAscend={isSortAscend}
+                                            handleHeaderClick={this.handleHeaderClick}/>
+                        {this.getPaginator()}
+                    </div>
+                    <div className="col-lg-4">
+                        <SelectDropDown name="Status"
+                                        selectionType="status"
+                                        enums={FacilityStatusEnum}
+                                        handleSelectBy={this.handleSelectBy}/>
+                        <SelectDropDown name="Region"
+                                        selectionType="regionIds"
+                                        regionOptions={regionOptions}
+                                        handleSelectBy={this.handleSelectBy}/>
+                    </div>
+                </Container>
             </Container>
         );
     }

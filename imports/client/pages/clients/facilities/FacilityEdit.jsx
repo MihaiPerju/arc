@@ -7,6 +7,7 @@ import tabsEnum from '/imports/client/pages/clients/facilities/enums/tabs';
 import ImportingRules from '/imports/client/pages/clients/facilities/components/ImportingRules';
 import UploadPlacementFile from '/imports/client/pages/clients/facilities/components/UploadPlacementFile';
 import {Container} from 'semantic-ui-react'
+import UploadInventoryFile from './components/UploadInventoryFile';
 
 export default class FacilityEdit extends React.Component {
     constructor() {
@@ -61,6 +62,10 @@ export default class FacilityEdit extends React.Component {
             {
                 label: tabsEnum.PLACEMENT_FILE,
                 component: <UploadPlacementFile facilityId={facility && facility._id}/>
+            },
+            {
+                label: tabsEnum.INVENTORY_FILE,
+                component: <UploadInventoryFile facilityId={facility && facility._id}/>
             }
         ];
 

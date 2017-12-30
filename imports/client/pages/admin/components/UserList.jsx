@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import _ from 'underscore';
 import UserSingle from './UserSingle.jsx';
 import {Table, Icon, Button} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class UserList extends Component {
     render() {
@@ -23,12 +24,21 @@ export default class UserList extends Component {
                         <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-                <Table.Body>
+                {
+                    data.length
+                        ?
+                        <Table.Body>
 
-                    {_.map(data, (user, idx) => {
-                        return <UserSingle user={user} key={idx}/>;
-                    })}
-                </Table.Body>
+                            {_.map(data, (user, idx) => {
+                                return <UserSingle user={user} key={idx}/>;
+                            })}
+                        </Table.Body>
+                        :
+                        <Table.Body>
+                            <NoDataFoundCell colSpan="100"/>
+                        </Table.Body>
+                }
+                
                 <Table.Footer fullWidth>
                         <Table.Row>
                             <Table.HeaderCell colSpan='100'>

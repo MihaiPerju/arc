@@ -53,7 +53,7 @@ export default class extends React.Component {
     }
 
     getPaginator() {
-        return <Pagination
+        return this.state.total > this.state.perPage && <Pagination
             activePage={this.state.page}
             itemsCountPerPage={this.state.perPage}
             totalItemsCount={this.state.total}

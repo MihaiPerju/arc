@@ -3,6 +3,7 @@ import _ from 'underscore';
 import CodeSingle from './CodeSingle.jsx';
 import CodeHeadList from './CodeHeadList';
 import {Button, Icon, Table, Container} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class CodeList extends Component {
     render() {
@@ -34,7 +35,7 @@ export default class CodeList extends Component {
                         </Table.Body>
                         :
                         <Table.Body>
-                            There are no CARC/RARC codes.
+                            <NoDataFoundCell colSpan="100"/>
                         </Table.Body>
                 }
                 <Table.Footer fullWidth>
