@@ -19,7 +19,7 @@ export default class ScheduleService {
         });
     }
 
-    static sendEmails(userIds, result, report) {
+    static sendEmails(userIds, attachment, report) {
         for (userId of userIds) {
             Meteor.call('users.get', userIds, (err, users) => {
                 if (!err) {
@@ -39,7 +39,7 @@ export default class ScheduleService {
                             "PMS Team",
                             {
                                 filename: 'Report.pdf',
-                                content: result
+                                content: attachment
                             }
                         );
                     }
