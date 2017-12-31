@@ -10,7 +10,6 @@ import {Container, Table} from 'semantic-ui-react';
 import pdf from 'html-pdf';
 import Users from '/imports/api/users/collection';
 
-console.log(pdf);
 const TaskData = ({task}) => {
     return <Container>
         <Table textAlign="center" celled>
@@ -105,10 +104,7 @@ export default class CronjobService {
         const now = moment();
         const tomorrow = moment().add('1', 'days');
 
-        // CronjobService.sendReports(ReportsEnum.frequency[10].value);
-
-        console.log(now.hour());
-        //if is our needed hour
+        //Runs only at 3 AM
         if (now.hour() == 3) {
 
             //Check the week day.
@@ -171,13 +167,18 @@ export default class CronjobService {
     static sendReports(frequency) {
         const schedules = Schedules.find({frequency: {$in: [frequency]}}).fetch();
         for (schedule of schedules) {
-            const _id = schedule.reportId;
-            const report = Reports.findOne({_id});
-            const filters = EJSON.parse(report.mongoFilters);
-            const userIds = schedule.userIds;
-            const tasks = taskQuery.clone({filters}).fetch();
-            CronjobService.createReportPdf(userIds, tasks, report);
+            CronjobService.executeSchedule(schedule);
         }
+    }
+
+    static executeSchedule(schedule) {
+        const _id = schedule.reportId;
+        const report = Reports.findOne({_id});
+        const filters = EJSON.parse(report.mongoFilters);
+        const userIds = schedule.userIds;
+        const tasks = taskQuery.clone({filters}).fetch();
+
+        CronjobService.createReportPdf(userIds, tasks, report);
     }
 
     static createReportPdf(userIds, tasks, report) {

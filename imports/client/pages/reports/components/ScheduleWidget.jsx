@@ -5,9 +5,6 @@ import {Divider, Button, Segment} from 'semantic-ui-react'
 import SimpleSchema from 'simpl-schema';
 import ReportsEnum from '/imports/api/schedules/enums/reports';
 import Notifier from '/imports/client/lib/Notifier';
-import ScheduleService from '/imports/api/reports/services/ScheduleService';
-import {EJSON} from 'meteor/ejson'
-import taskQuery from '/imports/api/tasks/queries/taskList';
 
 export default class ScheduleWidget extends React.Component {
     constructor() {
@@ -28,16 +25,10 @@ export default class ScheduleWidget extends React.Component {
                 }
             })
         } else {
-            Meteor.call('report.getById', reportId, (err, report) => {
+            model.reportId = reportId;
+            Meteor.call('report.sendNow', model, (err) => {
                 if (!err) {
-                    const filters = EJSON.parse(report.mongoFilters);
-                    taskQuery.clone({filters}).fetch((err, tasks) => {
-                        if (!err) {
-                            ScheduleService.createReportPdf(data.userIds, tasks, report);
-                        } else {
-                            Notifier.error(err.reason);
-                        }
-                    })
+                    Notifier.success("Emails sent!");
                 } else {
                     Notifier.error(err.reason);
                 }
@@ -89,6 +80,7 @@ export default class ScheduleWidget extends React.Component {
         )
     }
 }
+
 const schema = new SimpleSchema({
     userIds: {
         type: Array,

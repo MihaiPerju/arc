@@ -1,6 +1,6 @@
 import Reports from './../collection.js';
 import Security from '/imports/api/reports/security.js';
-import {Email} from 'meteor/email'
+import Cronjob from '/imports/api/reports/server/services/CronjobService';
 
 Meteor.methods({
     'report.delete'(id) {
@@ -28,5 +28,11 @@ Meteor.methods({
         return Reports.update({_id: data.reportId}, {
             $set: data.generalInformation
         });
+    },
+
+    'report.sendNow'(schedule) {
+        Security.hasRightsOnReport(this.userId, schedule.reportId);
+
+        Cronjob.executeSchedule(schedule);
     }
 });
