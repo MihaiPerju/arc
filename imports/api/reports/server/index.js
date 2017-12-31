@@ -1,3 +1,5 @@
 import './exposure';
 import './methods';
-import './services/CronjobService';
+import CronjobService from './services/CronjobService';
+
+CronjobService.checkTime();
