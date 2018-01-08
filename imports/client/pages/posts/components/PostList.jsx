@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import _ from 'underscore';
 import PostSingle from './PostSingle.jsx';
-import {Icon, Label, Menu, Table} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 

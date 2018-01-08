@@ -23,8 +23,8 @@ export default class FacilityList extends React.Component {
             <Table>
                 <Table.Header>
                     <FacilityHeadList sortBy={sortBy}
-                                        isSortAscend={isSortAscend}
-                                        handleHeaderClick={handleHeaderClick}/>
+                                      isSortAscend={isSortAscend}
+                                      handleHeaderClick={handleHeaderClick}/>
                 </Table.Header>
                 <Table.Body>
                     {!data.length
@@ -37,12 +37,12 @@ export default class FacilityList extends React.Component {
                 <Table.Footer fullWidth>
                     <Table.Row>
                         <Table.HeaderCell colSpan='100'>
-                        <Button floated='left' icon labelPosition='left' primary size='small'
-                            onClick={() => {
-                                FlowRouter.go("facility.create", {_id: clientId})
-                            }}>
-                            <Icon name='plus' /> Create
-                        </Button>
+                            <Button floated='left' icon labelPosition='left' primary size='small'
+                                    onClick={() => {
+                                        FlowRouter.go("facility.create", {_id: clientId})
+                                    }}>
+                                <Icon name='plus'/> Create
+                            </Button>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Footer>

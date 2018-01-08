@@ -5,8 +5,6 @@ import ClientList from './components/ClientList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
 import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 
 export default class ClientListContainer extends Pager {
@@ -73,7 +71,7 @@ export default class ClientListContainer extends Pager {
                 <div>
                     <Header as="h2" textAlign="center">Clients</Header>
                     <SearchInput handleSearch={this.handleSearch}/>
-                    
+
                 </div>
                 <div className='m-t-30'>
                     {this.getPaginator()}
