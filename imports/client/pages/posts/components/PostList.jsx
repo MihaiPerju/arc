@@ -3,6 +3,7 @@ import _ from 'underscore';
 import PostSingle from './PostSingle.jsx';
 import {Icon, Label, Menu, Table} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
+import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 
 export default class PostList extends Component {
     render() {
@@ -27,11 +28,19 @@ export default class PostList extends Component {
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
-                    <Table.Body>
-                        {_.map(data, (post) => {
-                            return <PostSingle post={post} key={post._id}/>;
-                        })}
-                    </Table.Body>
+                    {
+                        data.length
+                            ?
+                            <Table.Body>
+                                {_.map(data, (post) => {
+                                    return <PostSingle post={post} key={post._id}/>;
+                                })}
+                            </Table.Body>
+                            :
+                            <Table.Body>
+                                <NoDataFoundCell colSpan="100"/>
+                            </Table.Body>
+                    }
                 </Table>
             </Container>
         );
