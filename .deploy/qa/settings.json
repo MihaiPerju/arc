@@ -12,6 +12,12 @@
       "bucket": "testing.cultofcoders.com",
       "region": "eu-central-1",
       "url": "https://s3-eu-central-1.amazonaws.com/testing.cultofcoders.com"
+    },
+    "sftp": {
+      "host": "mihai@localhost",
+      "port": "22",
+      "username": "mihai",
+      "password": "cronos"
     }
   }
 }
