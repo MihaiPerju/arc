@@ -68,5 +68,8 @@ export default new SimpleSchema({
     logoPath: {
         type: String,
         optional: true
+    },
+    sftpPath: {
+        type: String
     }
 })
