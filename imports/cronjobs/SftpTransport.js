@@ -1,6 +1,4 @@
 import SftpClient from 'ssh2-sftp-client';
-import moment from 'moment';
-
 
 export default class SftpTransport {
     constructor(sftpConfig) {
@@ -13,37 +11,43 @@ export default class SftpTransport {
         return this.client;
     }
 
-    archiveFiles(path) {
-        let filesList = [];
+    archiveFiles(filePath, facilityPath) {
+        const copyPath = facilityPath + '/archive' + filePath.replace(facilityPath, "");
 
-        this.client.list(path).then((files) => {
+        Promise.await(this.client.list(filePath).then((files) => {
             files.forEach((file) => {
 
                 //If it's different from archive file enter it
                 if (this._isDirectory(file) && file.name !== 'archive') {
-                    //enter it and continue work
-                    this.archiveFiles(path + '/' + file.name);
+
+                    Promise.await(this.client.mkdir(copyPath + '/' + file.name, true));
+
+                    //copy files
+                    this.archiveFiles(filePath + '/' + file.name, facilityPath);
+
+                    //remove folder
+                    Promise.await(this.client.rmdir(filePath + '/' + file.name));
+
                 } else if (this._isCsvFile(file)) {
                     //it is a CSV file and we need to copy it
+                    const csvFilePath = filePath + '/' + file.name;
+                    const stream = Promise.await(this.client.get(csvFilePath));
+                    Promise.await(this.client.put(stream, copyPath + '/' + file.name));
 
+                    //remove file
+                    Promise.await(this.client.delete(filePath + '/' + file.name))
                 }
             })
-        });
+        }));
     }
 
     _isCsvFile(file) {
         //Need to check extension. For this, we need to check Db and see attachment
         // files and compare extensions
-        if (file.type === '-') {
-            return true;
-        }
-        return false;
+        return file.type === '-';
     }
 
     _isDirectory(file) {
-        if (file.type === 'd') {
-            return true;
-        }
-        return false;
+       return file.type === 'd';
     }
 }

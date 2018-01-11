@@ -18,10 +18,16 @@ export default class FacilityFilesService {
         //Extract paths from facilities
         for (facility of facilities) {
 
-            const {sftpPath} = facility;
-            const path = '/server' + sftpPath;
+            let {sftpPath} = facility;
+            if (!sftpPath.beginsWith('/')) {
+                sftpPath = '/' + sftpPath;
+            }
+
+            const facilityPath = '/server' + sftpPath;
+            const filePath = facilityPath;
+
             // On every path check if there are new files and do the job
-            sftp.archiveFiles(path);
+            sftp.archiveFiles(filePath, facilityPath);
         }
     }
 
