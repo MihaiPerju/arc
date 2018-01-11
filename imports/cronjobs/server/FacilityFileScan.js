@@ -4,7 +4,6 @@ import SftpTransport from '../SftpTransport';
 export default class FacilityFilesService {
     run() {
         return Promise.await(this._run());
-        // return true;
     }
 
     async _run() {
@@ -19,7 +18,7 @@ export default class FacilityFilesService {
         for (facility of facilities) {
 
             let {sftpPath} = facility;
-            if (!sftpPath.beginsWith('/')) {
+            if (!sftpPath.startsWith('/')) {
                 sftpPath = '/' + sftpPath;
             }
 
@@ -30,5 +29,4 @@ export default class FacilityFilesService {
             sftp.archiveFiles(filePath, facilityPath);
         }
     }
-
 }

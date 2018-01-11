@@ -48,6 +48,6 @@ export default class SftpTransport {
     }
 
     _isDirectory(file) {
-       return file.type === 'd';
+        return file.type === 'd';
     }
 }
