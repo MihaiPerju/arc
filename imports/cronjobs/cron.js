@@ -1,3 +1,5 @@
+import FacilityFileScan from './server/FacilityFileScan';
+
 SyncedCron.add({
     name: 'Test cronjob',
     schedule: function (parser) {
@@ -5,6 +7,6 @@ SyncedCron.add({
         return parser.recur().every(1).minute();
     },
     job: function () {
-        console.log("tat normal!");
+        // FacilityFileScan.run();
     }
 });

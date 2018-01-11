@@ -80,6 +80,9 @@ export default class FacilityForm extends React.Component {
                     <AutoField name="state"/>
                     <ErrorField name="state"/>
 
+                    <AutoField name="sftpPath"/>
+                    <ErrorField name="sftpPath"/>
+
                     <AutoField name="zipCode"/>
                     <ErrorField name="zipCode"/>
                     {

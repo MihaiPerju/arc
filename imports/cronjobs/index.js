@@ -1,3 +1,6 @@
-import './readInventoryFiles';
+import './cron';
+import SftpTransport from './SftpTransport';
+import FacilityFileScan from './server/FacilityFileScan';
 
-SyncedCron.start();
+const fileScan = new FacilityFileScan();
+fileScan.run();
