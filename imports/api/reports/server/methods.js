@@ -1,6 +1,6 @@
 import Reports from './../collection.js';
 import Security from '/imports/api/reports/security.js';
-import {Email} from 'meteor/email'
+import Cronjob from '/imports/api/reports/server/services/CronjobService';
 
 Meteor.methods({
     'report.delete'(id) {
@@ -30,9 +30,9 @@ Meteor.methods({
         });
     },
 
-    'report.send'(to, from, subject, text, attachments) {
-        // waiting for the email sending to complete.
-        this.unblock();
-        Email.send({to, from, subject, text, attachments});
+    'report.sendNow'(schedule) {
+        Security.hasRightsOnReport(this.userId, schedule.reportId);
+
+        Cronjob.executeSchedule(schedule);
     }
 });
