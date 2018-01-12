@@ -1,5 +1,6 @@
 import Facilities from '/imports/api/facilities/collection';
 import SftpTransport from '../SftpTransport';
+import sftpData from '/imports/api/business';
 
 export default class FacilityFilesService {
     run() {
@@ -22,7 +23,7 @@ export default class FacilityFilesService {
                 sftpPath = '/' + sftpPath;
             }
 
-            const facilityPath = '/server' + sftpPath;
+            const facilityPath = sftpData.SFTP_ROOT_FOLDER + sftpPath;
             const filePath = facilityPath;
 
             // On every path check if there are new files and do the job

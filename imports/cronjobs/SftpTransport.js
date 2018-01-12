@@ -1,4 +1,5 @@
 import SftpClient from 'ssh2-sftp-client';
+import sftpData from '/imports/api/business';
 
 export default class SftpTransport {
     constructor(sftpConfig) {
@@ -12,7 +13,7 @@ export default class SftpTransport {
     }
 
     archiveFiles(filePath, facilityPath) {
-        const copyPath = facilityPath + '/archive' + filePath.replace(facilityPath, "");
+        const copyPath = facilityPath + sftpData.SFTP_ARCHIVE_FOLDERS + filePath.replace(facilityPath, "");
 
         Promise.await(this.client.list(filePath).then((files) => {
             files.forEach((file) => {
