@@ -13,8 +13,7 @@ export default class SftpTransport {
     }
 
     archiveFiles(filePath, facilityPath) {
-        const copyPath = facilityPath + sftpData.SFTP_ARCHIVE_FOLDERS + filePath.replace(facilityPath, "");
-
+        const copyPath = facilityPath + sftpData.SFTP_ARCHIVE_FOLDER + filePath.replace(facilityPath, "");
         Promise.await(this.client.list(filePath).then((files) => {
             files.forEach((file) => {
 
@@ -33,7 +32,7 @@ export default class SftpTransport {
                     //it is a CSV file and we need to copy it
                     const csvFilePath = filePath + '/' + file.name;
                     const stream = Promise.await(this.client.get(csvFilePath));
-                    Promise.await(this.client.put(stream, copyPath + '/' + file.name));
+                    Promise.await(this.client.put(stream, copyPath + '/' + file.name + '.csv'));
 
                     //remove file
                     Promise.await(this.client.delete(filePath + '/' + file.name))
