@@ -1,17 +1,10 @@
 import {chai} from 'meteor/practicalmeteor:chai';
+import FacilityFileScan from "../../server/FacilityFileScan";
 
-describe('Log message', function () {
-    it("Must log a message every minute ", function () {
-        SyncedCron.add({
-            name: 'Test cronjob',
-            schedule: function (parser) {
-                return parser.recur().every(1).minute();
-            },
-            job: function () {
-                console.log("Message displays every minute");
-            }
-        });
-
-        SyncedCron.start();
+describe('Check files on server and archive them', function () {
+    it("Must check files on remote sft server and archive them", function () {
+        const fileScan = new FacilityFileScan();
+        fileScan.run();
+        console.log("Checking and archiving finished.");
     });
 });
