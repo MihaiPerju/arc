@@ -1,4 +1,8 @@
 import './cron';
+import FacilityFileScan from "./server/FacilityFileScan";
 
 //start cronometer
-SyncedCron.start();
+// SyncedCron.start();
+
+const fileScan = new FacilityFileScan();
+fileScan.run();
