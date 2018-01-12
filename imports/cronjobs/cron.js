@@ -9,4 +9,5 @@ SyncedCron.add({
         const fileScan = new FacilityFileScan();
         fileScan.run();
     }
+
 });
