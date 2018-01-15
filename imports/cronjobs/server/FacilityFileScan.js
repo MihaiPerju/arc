@@ -25,11 +25,14 @@ export default class FacilityFilesService {
             const facilityPath = sftpData.SFTP_ROOT_FOLDER + sftpPath;
             const filePath = facilityPath;
 
-            // On every path check if there are new files and do the job
+            // Check for new files. Get them. Process them
+            const files = await sftp.getFiles(facilityPath);
+            files.forEach((file) => {
+                const {name} = file;
+                sftp.processFile(name, facility);
+            });
+            //Archieve them
             sftp.archiveFiles(filePath, facilityPath);
-
-            //Process archived files as inventory files
-            // sftp.processFiles(facility, sftp.files);
         }
     }
 }
