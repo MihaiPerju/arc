@@ -21,7 +21,6 @@ export default class TaskSingle extends Component {
             };
             options.push(item);
         }
-        
         return options;
     }
 
@@ -36,6 +35,14 @@ export default class TaskSingle extends Component {
         return [{label: 'Unassigned'}];
     }
 
+    displayId(id) {
+        if (typeof (id) === 'string') {
+            return id;
+        } else if (typeof (id) === 'object') {
+            return id._str;
+        }
+    }
+
     render() {
         const {task} = this.props;
         const options = this.getOptions(task && task.facility && task.facility.users);
@@ -44,7 +51,7 @@ export default class TaskSingle extends Component {
 
         return (
             <Table.Row>
-                <Table.Cell>{task._id}</Table.Cell>
+                <Table.Cell>{this.displayId(task._id)}</Table.Cell>
                 <Table.Cell>{task.client && task.client.clientName}</Table.Cell>
                 <Table.Cell>{task.state}</Table.Cell>
                 <Table.Cell>
