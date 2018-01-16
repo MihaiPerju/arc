@@ -43,6 +43,10 @@
     "simpl-schema": "^0.5.0",
     "simple-text-parser": "^1.0.0",
     "ssh2-sftp-client": "^2.0.1",
+<<<<<<< HEAD
+=======
+    "stream-to-string": "^1.1.0",
+>>>>>>> 5565291dc9556386ce5471446af9e67bfe5e4091
     "svg4everybody": "^2.1.9",
     "underscore": "^1.8.3",
     "uniforms": "^1.22.0",
