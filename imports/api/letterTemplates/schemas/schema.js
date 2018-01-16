@@ -19,12 +19,13 @@ export default new SimpleSchema({
     },
     keywords: {
         type: Array,
+        optional: true
     },
     'keywords.$': {
         type: String,
     },
-    createAt: {
+    createdAt: {
         type: Date,
         optional: true,
-    },
+    }
 });
