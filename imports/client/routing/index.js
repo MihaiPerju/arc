@@ -4,7 +4,7 @@ import {GrapherLive} from 'meteor/cultofcoders:grapher-live';
 
 import route from './router';
 import './logoutRoute';
-import Home from '/imports/client/pages/Home';
+import Home from '/imports/client/pages/home/Home';
 
 //User
 import MyProfile from '/imports/client/pages/users/MyProfile';

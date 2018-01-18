@@ -83,24 +83,24 @@ export default class TaskView extends React.Component {
             return <Loading/>;
         } else return (
             <Container>
-                    <TaskDetails task={task}/>
-                    <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
-                    <Divider/>
-                    <CommentsListContainer taskId={task && task._id}/>
+                <TaskDetails task={task}/>
+                <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
+                <Divider/>
+                <CommentsListContainer taskId={task && task._id}/>
 
-                    <Container className="page-container">
-                            <Header as="h2" textAlign="center">Add Action</Header>
+                <Container className="page-container">
+                    <Header as="h2" textAlign="center">Add Action</Header>
 
-                            <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
-                                    <SelectActionsContainer/>
+                    <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
+                        <SelectActionsContainer/>
 
-                                    <Divider/>
+                        <Divider/>
 
-                                    <Button primary fluid type="submit">
-                                            Save
-                                    </Button>
-                            </AutoForm>
-                    </Container>
+                        <Button primary fluid type="submit">
+                            Save
+                        </Button>
+                    </AutoForm>
+                </Container>
             </Container>
         );
     }
