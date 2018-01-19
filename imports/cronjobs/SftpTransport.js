@@ -111,7 +111,6 @@ export default class SftpTransport {
         const csvString = parser(stream);
         Papa.parse(csvString, {
                 chunk: (results) => {
-                    console.log("parse:"+results);
                     TaskService.upload(results.data, importRules, facility._id);
                 }
             }

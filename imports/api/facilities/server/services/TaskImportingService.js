@@ -17,8 +17,9 @@ export default class TaskService {
         const [oldTasks, newTasks] = CsvParseService.filterTasks(tasks);
 
         //Creating new tasks with 'archived' state
-        const RowTasks = Tasks.rawCollection();
-        RowTasks.insert(newTasks);
+        newTasks.map((task) => {
+            Tasks.insert(task);
+        });
 
         //Updating old tasks
         oldTasks.map((task) => {
