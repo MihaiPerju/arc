@@ -7,8 +7,7 @@ export default class TaskService {
         const tasks = CsvParseService.convertToTasks(results, importRules, true, facilityId);
         //Creating tasks
         tasks.map((task) => {
-            const RowTasks = Tasks.rawCollection();
-            RowTasks.insert(task);
+            Tasks.insert(task);
         });
     }
 
