@@ -41,12 +41,6 @@ export default class Dashboard extends React.Component {
                         </Card.Description>
                         <Pie data={pieData}/>
                     </Card.Content>
-                    <Card.Content extra>
-                        <a>
-                            <Icon name='user'/>
-                            22 Friends
-                        </a>
-                    </Card.Content>
                 </Card>
             </Container>
         )
