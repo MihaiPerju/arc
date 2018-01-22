@@ -1,9 +1,10 @@
 import React from 'react';
-import {Header} from 'semantic-ui-react';
+import {Header, Button} from 'semantic-ui-react';
 import {Container} from 'semantic-ui-react';
 import {LabelSubstates} from '/imports/api/tasks/enums/substates';
 import TaskData from './TaskData';
 import SortableTab from './SortableTab';
+import {getToken} from '/imports/api/s3-uploads/utils';
 
 const TaskDetails = ({task}) => {
     return (
