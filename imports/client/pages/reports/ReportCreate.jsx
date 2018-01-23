@@ -2,7 +2,7 @@ import React from 'react';
 import {Container, Header, Divider, Button, Step} from 'semantic-ui-react'
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import schema from '/imports/api/reports/schema'
-import {roleGroups} from '/imports/api/users/enums/roles';
+import Roles from '/imports/api/users/enums/roles';
 import TaskFilterBuilder from './TaskFilterBuilder';
 import Notifier from '/imports/client/lib/Notifier';
 import {EJSON} from 'meteor/ejson'
@@ -16,20 +16,9 @@ export default class ReportCreate extends React.Component {
             error: null,
             hasGeneralInformation: false,
             generalInformation: {},
-            allowedRoles: [],
+            allowedRoles: [{value: Roles.MANAGER, label: Roles.MANAGER}],
         };
     }
-
-    componentWillMount() {
-        let allowedRoles = [];
-        roleGroups.ADMIN_TECH_MANAGER.map((role) => {
-            allowedRoles.push({value: role, label: role});
-        });
-        this.setState({
-            allowedRoles
-        });
-    }
-
 
     goNextStep() {
         this.setState({

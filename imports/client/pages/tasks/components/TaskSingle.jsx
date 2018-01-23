@@ -43,7 +43,7 @@ export default class TaskSingle extends Component {
 
         return (
             <Table.Row>
-                <Table.Cell>{task && task._id}</Table.Cell>
+                <Table.Cell>{task._id}</Table.Cell>
                 <Table.Cell>{task.client && task.client.clientName}</Table.Cell>
                 <Table.Cell>{task.state}</Table.Cell>
                 <Table.Cell>
