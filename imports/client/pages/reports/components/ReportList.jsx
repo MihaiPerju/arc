@@ -42,7 +42,7 @@ export default class ReportList extends Component {
                     <Table.Footer fullWidth>
                         <Table.Row>
                             <Table.HeaderCell colSpan='100'>
-                            <Button href='report/create' floated='left' icon labelPosition='left' primary size='small'>
+                            <Button href='/report/create' floated='left' icon labelPosition='left' primary size='small'>
                                 <Icon name='plus' /> Create
                             </Button>
                             </Table.HeaderCell>

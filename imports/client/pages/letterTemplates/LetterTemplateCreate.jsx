@@ -11,7 +11,7 @@ export default class CreateLetterTemplate extends React.Component {
         this.state = {};
     }
 
-    onSubmit = (data) => {
+    onSubmit(data) {
         Meteor.call('letterTemplate.create', data, (err) => {
             if (!err) {
                 FlowRouter.go('/letter-templates/list');
@@ -19,7 +19,7 @@ export default class CreateLetterTemplate extends React.Component {
             } else {
                 Notifier.error(err.reason);
             }
-        })
+        });
     };
 
     render() {
@@ -45,7 +45,7 @@ export default class CreateLetterTemplate extends React.Component {
                     <Divider/>
 
                     <Button fluid primary type="submit">
-                        Continue
+                        Create
                     </Button>
                 </AutoForm>
             </Container>

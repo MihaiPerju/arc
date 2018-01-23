@@ -21,7 +21,6 @@ export default class TaskSingle extends Component {
             };
             options.push(item);
         }
-        
         return options;
     }
 

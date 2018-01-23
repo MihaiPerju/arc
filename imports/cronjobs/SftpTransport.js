@@ -107,14 +107,14 @@ export default class SftpTransport {
         const stream = Promise.await(this.client.get(filePath));
         const {importRules} = facility;
 
-        toString(stream, function (err, csvString) {
-            Papa.parse(csvString, {
-                    chunk: (results) => {
-                        TaskService.upload(results.data, importRules, facility._id);
-                    }
+        const parser = Meteor.wrapAsync(toString);
+        const csvString = parser(stream);
+        Papa.parse(csvString, {
+                chunk: (results) => {
+                    TaskService.upload(results.data, importRules, facility._id);
                 }
-            );
-        });
+            }
+        );
     }
 
     _isCsvFile(file) {

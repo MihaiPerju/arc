@@ -4,7 +4,7 @@ import {GrapherLive} from 'meteor/cultofcoders:grapher-live';
 
 import route from './router';
 import './logoutRoute';
-import Home from '/imports/client/pages/Home';
+import Home from '/imports/client/pages/home/Home';
 
 //User
 import MyProfile from '/imports/client/pages/users/MyProfile';
@@ -41,7 +41,7 @@ route('/password/forgot', ForgotPassword, {}, {
     name: 'password.forgot',
 
 });
-route('/password/reset/:token', ResetPassword, {}, {
+route('/reset-password/:token', ResetPassword, {}, {
     name: 'password.reset',
 
 });
