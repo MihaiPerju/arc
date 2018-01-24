@@ -107,6 +107,7 @@ export default class SortableTab extends React.Component {
     }
 
     render() {
+        const {items} = this.state;
         return (
             <div>
                 <SortableList items={this.state.items}
@@ -114,13 +115,18 @@ export default class SortableTab extends React.Component {
                               getPdfName={this.getPdfName}
                               redirectToPdf={this.redirectToPdf}
                               onSortEnd={this.onSortEnd.bind(this)}/>
-                <Divider/>
                 {
-                    <Button fluid onClick={this.downloadPdfs.bind(this)}
-                            target="_blank">
-                        Download All PDFs
-                    </Button>
+                    items && items.length > 1 &&
+                    <div>
+                        <Button fluid onClick={this.downloadPdfs.bind(this)}
+                                target="_blank">
+                            Download All PDFs
+                        </Button>
+                        <Divider/>
+                    </div>
                 }
+
+
             </div>
         )
     }
