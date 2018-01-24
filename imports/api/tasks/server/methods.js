@@ -5,6 +5,10 @@ import TaskSecurity from './../security';
 import Security from '/imports/api/security/security';
 import {roleGroups} from '/imports/api/users/enums/roles';
 import Users from '/imports/api/users/collection';
+import StateEnum from '/imports/api/tasks/enums/states';
+import TimeService from './services/TimeService';
+import moment from 'moment';
+import Facilities from '/imports/api/facilities/collection';
 
 Meteor.methods({
     'task.actions.add'(taskId, actionId) {
@@ -24,7 +28,7 @@ Meteor.methods({
 
 
     'task.attachment.remove'(_id, attachmentId, key) {
-        Security.hasRightsOnTask(this.userId, _id);
+        TaskSecurity.hasRightsOnTask(this.userId, _id);
         Tasks.update({_id}, {
             $pull: {
                 attachmentIds: attachmentId
@@ -35,12 +39,59 @@ Meteor.methods({
     },
 
     'task.attachment.update_order'(_id, attachmentIds) {
-        Security.hasRightsOnTask(this.userId, _id);
+        TaskSecurity.hasRightsOnTask(this.userId, _id);
         Tasks.update({_id}, {
             $set: {
                 attachmentIds
-
             }
         })
+    },
+
+    'tasks.count'() {
+        const result = [];
+        const facilities = Facilities.find().fetch();
+        for (count in facilities) {
+            let facility = facilities[count];
+            //if user has rights on facility or is an admin/tech
+            if (facility.allowedUsers && facility.allowedUsers.includes(this.userId) || Roles.userIsInRole(this.userId, roleGroups.ADMIN_TECH)) {
+                const active = Tasks.find({state: StateEnum.ACTIVE, facilityId: facility._id}).count();
+                const archived = Tasks.find({state: StateEnum.ARCHIVED, facilityId: facility._id}).count();
+                const hold = Tasks.find({state: StateEnum.HOLD, facilityId: facility._id}).count();
+                let currentMonth = 0;
+                let currentWeek = 0;
+                //select tasks this month and week. To be optimized.
+                const tasks = Tasks.find({facilityId: facility._id}).fetch();
+                for (index in tasks) {
+                    const task = tasks[index];
+
+                    if (TimeService.sameMonth(moment(task.createdAt), moment())) {
+                        currentMonth++;
+                    }
+                    if (TimeService.sameWeek(moment(task.createdAt), moment())) {
+                        currentWeek++;
+                    }
+                }
+                result.push({
+                    name: facility.name,
+                    active,
+                    archived,
+                    hold,
+                    currentMonth,
+                    currentWeek
+                })
+            }
+        }
+        return result;
+    },
+
+    'tasks.get'() {
+        let result = {
+            hold: [],
+            active: []
+        };
+
+        result.hold = Tasks.find({state: StateEnum.HOLD, assigneeId: this.userId}).fetch();
+        result.active = Tasks.find({state: StateEnum.ACTIVE, assigneeId: this.userId}).fetch();
+        return result;
     }
 });
