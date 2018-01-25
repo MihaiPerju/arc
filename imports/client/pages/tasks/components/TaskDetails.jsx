@@ -11,12 +11,7 @@ const TaskDetails = ({task}) => {
         <Container className="page-container">
             <Header as="h3" textAlign="center">View Task</Header>
             <TaskData task={task}/>
-            {
-                task && task.attachments && task.attachments.length > 1 &&
-                <Button href={"/pdfs/" + task._id + "/" + getToken()} target="_blank">
-                    Download All PDFs
-                </Button>
-            }
+
             <h5>Substate: {task && LabelSubstates[task.substate]}</h5>
             {task && task.actionsLinkData && task.actionsLinkData.length
                 ?

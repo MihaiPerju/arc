@@ -4,7 +4,7 @@ import fs from 'fs';
 import ParseService from '/imports/api/facilities/server/services/CsvParseService';
 import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
 
-createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames}) => {
+createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, success}) => {
 
     if (filenames.length != 1) {
         return error('Invalid number of files');
@@ -23,4 +23,5 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames}) =
             }
         }
     );
+    success();
 });

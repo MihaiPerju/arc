@@ -4,6 +4,10 @@ import {Substates} from './enums/substates';
 import ActionSchema from './schemas/actionSchema.js';
 
 export default new SimpleSchema({
+    createdAt: {
+        type: Date,
+        defaultValue: new Date
+    },
     acctNum: {
         type: String,
         optional: true

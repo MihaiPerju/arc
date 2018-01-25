@@ -1,53 +1,90 @@
 import React from 'react';
-import {Container, Card, Icon} from 'semantic-ui-react'
+import {Container, Card, Grid} from 'semantic-ui-react'
 import {Pie} from 'react-chartjs';
-
-const pieData = [
-    {
-        value: 300,
-        color: "#F7464A",
-        highlight: "#FF5A5E",
-        label: "Red"
-    },
-    {
-        value: 50,
-        color: "#46BFBD",
-        highlight: "#5AD3D1",
-        label: "Green"
-    },
-    {
-        value: 100,
-        color: "#FDB45C",
-        highlight: "#FFC870",
-        label: "Yellow"
-    }
-];
+import Notifier from '/imports/client/lib/Notifier';
 
 export default class Dashboard extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            data: []
+        }
+    }
+
+    componentWillMount() {
+        Meteor.call('tasks.count', (err, data) => {
+            if (!err) {
+                this.setState({data});
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
+    }
+
+    getChartData(facility) {
+        return [
+            {
+                value: facility.active,
+                color: "#147087",
+                highlight: "#1889A6",
+                label: "Active"
+            },
+            {
+                value: facility.hold,
+                color: "#363636",
+                highlight: "#5A5A5A",
+                label: "Hold"
+            }
+        ];
+    }
+
     render() {
+        const {data} = this.state;
+        console.log(data);
         return (
             <Container>
-                <Card fluid>
-                    <Card.Content style={{"textAlign": "center"}}>
-                        <Card.Header style={{"textAlign": "center"}}>
-                            Dashboard
-                        </Card.Header>
-                        <Card.Description style={{"textAlign": "left"}}>
-                            <p>- Total Accounts On Hold: X</p>
-                            <p>- Total Accounts Active: X</p>
-                            <p>- Total Accounts Archived: X</p>
-                            <p>- Total Accounts This Month: X</p>
-                            <p>- Total Accounts This Week: X</p>
-                        </Card.Description>
-                        <Pie data={pieData}/>
-                    </Card.Content>
-                    <Card.Content extra>
-                        <a>
-                            <Icon name='user'/>
-                            22 Friends
-                        </a>
-                    </Card.Content>
-                </Card>
+                {
+                    data && data.map((facility) => {
+                        return (
+                            <Card fluid>
+                                <Card.Content style={{"textAlign": "center"}}>
+                                    <Card.Header>
+                                        <h2>{facility.name}</h2>
+                                        <Grid>
+                                            <Grid.Column>
+                                                <h4>Total Active</h4>
+                                                <p style={{"fontSize": "50"}}> {facility.active}</p>
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <h4>Total Archived</h4>
+                                                <p style={{"fontSize": "50"}}> {facility.archived} </p>
+
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <h4>On hold</h4>
+                                                <p style={{"fontSize": "50"}}>  {facility.hold}</p>
+
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <h4>This month</h4>
+                                                <p style={{"fontSize": "50"}}>  {facility.currentMonth}</p>
+
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <h4>This week</h4>
+                                                <p style={{"fontSize": "50"}}>  {facility.currentWeek}</p>
+
+                                            </Grid.Column>
+                                        </Grid>
+                                    </Card.Header>
+                                    <Card.Description>
+                                        <Pie data={this.getChartData(facility)} width="600" height="250"/>
+                                    </Card.Description>
+                                </Card.Content>
+                            </Card>
+                        )
+                    })
+                }
             </Container>
         )
     }
