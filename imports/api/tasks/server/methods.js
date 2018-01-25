@@ -94,5 +94,6 @@ Meteor.methods({
         result.hold = Tasks.find({state: StateEnum.HOLD, assigneeId: this.userId}).fetch();
         result.active = Tasks.find({state: StateEnum.ACTIVE, assigneeId: this.userId}).fetch();
         return result;
+
     }
 });
