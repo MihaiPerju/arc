@@ -53,6 +53,7 @@ Meteor.methods({
         for (count in facilities) {
             let facility = facilities[count];
             //if user has rights on facility or is an admin/tech
+
             if (facility.allowedUsers && facility.allowedUsers.includes(this.userId) || Roles.userIsInRole(this.userId, roleGroups.ADMIN_TECH)) {
                 const active = Tasks.find({state: StateEnum.ACTIVE, facilityId: facility._id}).count();
                 const archived = Tasks.find({state: StateEnum.ARCHIVED, facilityId: facility._id}).count();
