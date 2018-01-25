@@ -1,6 +1,5 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {GrapherLive} from 'meteor/cultofcoders:grapher-live';
 
 import route from './router';
 import './logoutRoute';
@@ -13,14 +12,6 @@ import ForgotPassword from '/imports/client/pages/users/ForgotPassword';
 import ResetPassword from '/imports/client/pages/users/ResetPassword.jsx';
 import Login from '/imports/client/pages/users/Login';
 import Dashboard from '/imports/client/pages/users/Dashboard';
-
-//Route action for grapher live
-//Recommended to run this only in dev env
-FlowRouter.route('/grapher-live', {
-    action() {
-        render(React.createElement(GrapherLive), document.body);
-    }
-});
 
 route('/home', Home, {}, {
     name: 'home',

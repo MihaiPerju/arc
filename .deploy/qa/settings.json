@@ -14,10 +14,10 @@
       "url": "https://s3-eu-central-1.amazonaws.com/testing.cultofcoders.com"
     },
     "sftp": {
-      "host": "mihai@localhost",
+      "host": "sftp-tester@45.55.0.237",
       "port": "22",
-      "username": "mihai",
-      "password": "cronos"
+      "username": "sftp-tester",
+      "password": "boomboom44"
     }
   }
 }

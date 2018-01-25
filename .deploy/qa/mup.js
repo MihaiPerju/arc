@@ -1,11 +1,12 @@
 module.exports = {
     servers: {
         one: {
-            "host": "appname.com",
+            "host": "45.55.0.237",
             "username": "root",
             opts: {
                 port: 22,
             },
+            password: '44adc8cd512add8dd64b6ec2971'
             // "pem": "/Users/theodor/.ssh/id_rsa",
             // pem:
             // password:
@@ -14,7 +15,7 @@ module.exports = {
     },
 
     meteor: {
-        name: 'appname.com',
+        name: 'arcc',
         path: '../../',
         servers: {
             one: {}
@@ -23,12 +24,12 @@ module.exports = {
             serverOnly: true,
         },
         env: {
-            ROOT_URL: 'https://appname.com',
-            MONGO_URL: 'mongodb://localhost/meteor',
+            ROOT_URL: 'http://45.55.0.237:3000',
+            MONGO_URL: 'mongodb://localhost/arcc',
             PORT: 3000
         },
 
-        dockerImage: 'artyomjackson/meteord-imagemagick:latest',
+        dockerImage: 'abernix/meteord',
         deployCheckWaitTime: 60,
         enableUploadProgressBar: true
     },

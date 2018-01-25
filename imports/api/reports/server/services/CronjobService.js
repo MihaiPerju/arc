@@ -7,7 +7,7 @@ import taskQuery from '/imports/api/tasks/queries/taskList';
 import ReactDOMServer from "react-dom/server";
 import React from 'react';
 import {Container, Table} from 'semantic-ui-react';
-import pdf from 'html-pdf';
+// import pdf from 'html-pdf';
 import Users from '/imports/api/users/collection';
 
 const TaskData = ({task}) => {
@@ -189,11 +189,11 @@ export default class CronjobService {
             ReportTable += ReactDOMServer.renderToString(taskSingle) + '<br/>';
         }
 
-        pdf.create(ReportTable).toStream(Meteor.bindEnvironment((err, attachment) => {
-            if (!err) {
-                CronjobService.sendEmails(userIds, attachment, report);
-            }
-        }));
+        // pdf.create(ReportTable).toStream(Meteor.bindEnvironment((err, attachment) => {
+            // if (!err) {
+                // CronjobService.sendEmails(userIds, attachment, report);
+            // }
+        // }));
     }
 
 
