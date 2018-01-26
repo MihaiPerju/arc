@@ -9,7 +9,6 @@ import {createContainer} from 'meteor/react-meteor-data';
 class Home extends React.Component {
     render() {
         const {currentUser} = this.props;
-        console.log(currentUser);
         return (
             <main className="cc-main">
                 <Container className="page-container">
