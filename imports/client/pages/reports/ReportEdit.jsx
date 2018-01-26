@@ -14,7 +14,6 @@ export default class ReportCreate extends React.Component {
         super();
 
         this.state = {
-            error: null,
             hasGeneralInformation: false,
             generalInformation: {},
             allowedRoles: [],
@@ -60,10 +59,10 @@ export default class ReportCreate extends React.Component {
         })
     }
 
-
-    goNextStep() {
+    goNextStep(generalInformation) {
         this.setState({
-            hasGeneralInformation: true
+            hasGeneralInformation: true,
+            generalInformation
         });
     }
 
@@ -71,20 +70,6 @@ export default class ReportCreate extends React.Component {
         this.setState({
             hasGeneralInformation: false
         });
-    }
-
-    onSubmitGeneralData(generalInformation) {
-        if (generalInformation.allowedRoles.length > 0) {
-            this.setState({
-                generalInformation,
-                error: null
-            });
-            this.goNextStep();
-        } else {
-            this.setState({
-                error: 'Select at least one allowed role!'
-            });
-        }
     }
 
     onSubmitFilters(filters, components, filterBuilderData) {
@@ -142,12 +127,7 @@ export default class ReportCreate extends React.Component {
                         <AutoForm
                             model={generalInformation}
                             schema={schema}
-                            onSubmit={this.onSubmitGeneralData.bind(this)} ref="form">
-
-                            {this.state.error
-                                ? <div className="error">{this.state.error}</div>
-                                : ''
-                            }
+                            onSubmit={this.goNextStep.bind(this)} ref="form">
 
                             <AutoField name="name"/>
                             <ErrorField name="name"/>
