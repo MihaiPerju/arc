@@ -16,30 +16,38 @@ class Header extends Component {
 
         let routes = [
             {name: "/home", label: "Home"},
-            {name: "/client/list", label: "Clients"},
-            {name: "/admin/user/list", label: "User Management"},
-            {name: "/code/list", label: "CARC/RARC Codes"},
             {name: "/tasks", label: "Tasks"},
-            {name: "/reports/list", label: "Reports"}
         ];
-        if(user && user.roles && user.roles.includes(RolesEnum.ADMIN)){
+        if (user && user.roles && user.roles.includes(RolesEnum.ADMIN)) {
             routes.push(
-                {name:'/region/list', label:'Regions'},
+                {name: "/admin/user/list", label: "User Management"},
+                {name: '/region/list', label: 'Regions'},
                 {name: "/letter-templates/list", label: "Letter templates"}
             )
         }
-        if(user && user.roles && user.roles.includes(RolesEnum.TECH)){
+        if (user && user.roles && user.roles.includes(RolesEnum.TECH)) {
             routes.push(
                 {name: "/letter-templates/list", label: "Letter templates"}
             )
         }
 
         const adminAndTechRoutes = [
+            {name: "/client/list", label: "Clients"},
+            {name: "/code/list", label: "CARC/RARC Codes"},
+            {name: "/reports/list", label: "Reports"},
             {name: "/action/list", label: "Actions"}
+        ];
+
+        const managerRoutes = [
+            {name: "/letter-templates/list", label: "Letter templates"},
+            {name: "/reports/list", label: "Reports"}
         ];
 
         if (user && Roles.userIsInRole(user._id, [UserRoles.ADMIN, UserRoles.TECH])) {
             routes = routes.concat(adminAndTechRoutes);
+        }
+        if (user && Roles.userIsInRole(user._id, [UserRoles.MANAGER])) {
+            routes = routes.concat(managerRoutes);
         }
 
         return (
