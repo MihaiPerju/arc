@@ -27,12 +27,10 @@ export default class TaskFilterBuilder extends React.Component {
     componentWillMount() {
         //Getting schema keys
         let keys = TaskSchema._firstLevelSchemaKeys;
-
-        //Removing last 2 keys
-        if (keys.length == 25) {
-            keys.pop();
-            keys.pop();
-        }
+        //also,remove field "createdAt", "actionsLinkData", "attachmentIds"
+        keys.splice(keys.indexOf('createdAt'), 1);
+        keys.splice(keys.indexOf('actionsLinkData'), 1);
+        keys.splice(keys.indexOf('attachmentIds'), 1);
 
         //Creating schema
         const schema = ReportsService.createSchema(keys, TaskReportFields, {stateEnum, substateEnum: Substates});
