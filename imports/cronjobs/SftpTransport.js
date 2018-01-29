@@ -38,6 +38,9 @@ export default class SftpTransport {
             }
 
             files.forEach((file) => {
+                if (file.name === 'archive') {
+                    return;
+                }
                 let filePath = `${path}/${file.name}`;
                 const fileObj = {
                     name: filePath,
