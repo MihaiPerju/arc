@@ -37,7 +37,7 @@ export default new SimpleSchema({
     regionIds: {
         label: 'Regions',
         type: Array,
-        minCount: 1
+        optional: true
     },
     'regionIds.$': {
         type: String
