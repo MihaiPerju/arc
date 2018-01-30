@@ -7,11 +7,14 @@ export default class CsvParseService {
 
     //Converting to tasks
     static convertToTasks(results, importRules, isPlacement, facilityId) {
-
-        const startIndex = importRules.hasHeader ? 1 : 0;
+        const header = results[0];
+        results.splice(0, 1);
+        if (importRules.hasHeader) {
+            importRules = CsvParseService.convertImportingRules(importRules, header);
+        }
 
         const tasks = [];
-        for (let i = startIndex; i < results.length - 1; i++) {
+        for (let i = 0; i < results.length - 1; i++) {
             const newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId);
             tasks.push(newTask);
         }
@@ -58,5 +61,19 @@ export default class CsvParseService {
             }
         });
         return facility.importRules;
+    }
+
+    static convertImportingRules(importRules, header) {
+        //Trim spaces from Header to avoid crashes
+        for (index in header) {
+            header[index] = header[index].trim();
+        }
+
+        let newImportRules = {};
+        delete importRules.hasHeader;
+        for (rule in importRules) {
+            newImportRules[rule] = header.indexOf(importRules[rule].trim()) + 1;
+        }
+        return (newImportRules);
     }
 }

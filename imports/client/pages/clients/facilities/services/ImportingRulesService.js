@@ -24,7 +24,6 @@ export default class ImportingRulesService {
     static getSchemaFields() {
         const fields = [];
         for (let key in FieldsEnum.importingRules) {
-            // console.log(FieldsEnum[key]);
             fields.push(FieldsEnum.importingRules[key].value);
         }
         return fields;
