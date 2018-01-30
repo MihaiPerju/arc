@@ -56,8 +56,10 @@ export default class TaskView extends React.Component {
         Meteor.call('task.actions.add', taskId, data.action.value
             , (err) => {
                 if (!err) {
-                    location.reload();
                     Notifier.success("Data saved");
+                    this.getTask();
+                    //Clear inputs
+                    this.refs.form.reset();
                 } else {
                     Notifier.error(err.reason);
                 }
@@ -93,7 +95,6 @@ export default class TaskView extends React.Component {
 
                     <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
                         <SelectActionsContainer/>
-
                         <Divider/>
 
                         <Button primary fluid type="submit">
