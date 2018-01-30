@@ -66,7 +66,6 @@ export default class SortableTab extends React.Component {
         //Updating status in Db
         Meteor.call('task.attachment.update_order', taskId, attachmentIds, (err) => {
             if (!err) {
-                Notifier.success('Reordered!');
                 window.open("/pdfs/" + taskId + "/" + getToken(), '_blank');
             } else {
                 Notifier.error(err.reason);
@@ -88,6 +87,7 @@ export default class SortableTab extends React.Component {
         Meteor.call('task.attachment.remove', taskId, pdf._id, pdf.path, (err) => {
             if (!err) {
                 Notifier.success("Attachment removed!");
+                this.props.updateTask();
             } else {
                 Notifier.error(err.reason);
             }
@@ -106,12 +106,23 @@ export default class SortableTab extends React.Component {
         this.setState({items});
     }
 
+    componentWillReceiveProps({attachments}) {
+        let items = [];
+        attachments && attachments.map((pdf) => {
+            items.push(
+                pdf
+            )
+        });
+
+        this.setState({items});
+    }
+
     render() {
         const {items} = this.state;
         return (
             <div>
                 <SortableList items={this.state.items}
-                              deletePdf={this.deletePdf}
+                              deletePdf={this.deletePdf.bind(this)}
                               getPdfName={this.getPdfName}
                               redirectToPdf={this.redirectToPdf}
                               onSortEnd={this.onSortEnd.bind(this)}/>
@@ -125,8 +136,6 @@ export default class SortableTab extends React.Component {
                         <Divider/>
                     </div>
                 }
-
-
             </div>
         )
     }

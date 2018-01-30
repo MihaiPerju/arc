@@ -7,8 +7,8 @@ export default class RepDashboard extends React.Component {
         super();
         this.state = {
             tasks: {
-                active: [],
-                hold: []
+                active: 0,
+                hold: 0
             }
         }
     }
@@ -16,6 +16,7 @@ export default class RepDashboard extends React.Component {
     componentWillMount() {
         Meteor.call('tasks.get', (err, tasks) => {
             if (!err) {
+                console.log(tasks);
                 this.setState({tasks});
             } else {
                 Notifier.error(err.reason);
@@ -30,32 +31,18 @@ export default class RepDashboard extends React.Component {
                 <Card fluid>
                     <Card.Content style={{"textAlign": "center"}}>
                         <Card.Header>
-                            <h2>Tasks</h2>
+                            <h2>Accounts</h2>
                         </Card.Header>
                         <Card.Description>
-                            <h2>Active</h2>
                             <Grid columns={4} stretched>
-                                {
-                                    tasks.active.map((task, index) => {
-                                        return (
-                                            <Grid.Column key={index}>
-                                                <a href={"/task/" + task._id + "/view"}>{task._id}</a>
-                                            </Grid.Column>
-                                        )
-                                    })
-                                }
-                            </Grid>
-                            <h2>On hold</h2>
-                            <Grid columns={4} stretched>
-                                {
-                                    tasks.hold.map((task, index) => {
-                                        return (
-                                            <Grid.Column key={index}>
-                                                <a href={"/task/" + task._id + "/view"}>{task._id}</a>
-                                            </Grid.Column>
-                                        )
-                                    })
-                                }
+                                <Grid.Column>
+                                    <h2>Active</h2>
+                                    <p style={{"fontSize": "50"}}> {tasks.active}</p>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <h2>Hold</h2>
+                                    <p style={{"fontSize": "50"}}> {tasks.hold}</p>
+                                </Grid.Column>
                             </Grid>
                         </Card.Description>
                     </Card.Content>

@@ -36,6 +36,7 @@ export default class TaskView extends React.Component {
     }
 
     getTask = () => {
+        console.log("entered!");
         const {taskId} = this.props;
         query.clone({filters: {_id: taskId}}).fetchOne((err, task) => {
             if (err) {
@@ -56,8 +57,10 @@ export default class TaskView extends React.Component {
         Meteor.call('task.actions.add', taskId, data.action.value
             , (err) => {
                 if (!err) {
-                    location.reload();
                     Notifier.success("Data saved");
+                    this.getTask();
+                    //Clear inputs
+                    this.refs.form.reset();
                 } else {
                     Notifier.error(err.reason);
                 }
@@ -70,11 +73,12 @@ export default class TaskView extends React.Component {
         const componentConfig = {
             postUrl: `/uploads/task-pdf/` + taskId + '/' + getToken()
         };
-
+        const that = this;
         const djsConfig = {
             complete(file) {
                 Notifier.success('Added');
                 this.removeFile(file);
+                that.getTask();
             },
             acceptedFiles: '.pdf'
         };
@@ -83,7 +87,7 @@ export default class TaskView extends React.Component {
             return <Loading/>;
         } else return (
             <Container>
-                <TaskDetails task={task}/>
+                <TaskDetails updateTask={this.getTask} task={task}/>
                 <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                 <Divider/>
                 <CommentsListContainer taskId={task && task._id}/>
@@ -93,7 +97,6 @@ export default class TaskView extends React.Component {
 
                     <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
                         <SelectActionsContainer/>
-
                         <Divider/>
 
                         <Button primary fluid type="submit">

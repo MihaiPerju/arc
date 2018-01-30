@@ -5,7 +5,7 @@ import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import ROLES from '/imports/api/users/enums/roles';
 import {Container, Button, Divider, Icon, Segment, Header} from 'semantic-ui-react';
-import { createContainer } from 'meteor/react-meteor-data';
+import {createContainer} from 'meteor/react-meteor-data';
 
 export class Login extends React.Component {
     constructor() {
@@ -39,12 +39,14 @@ export class Login extends React.Component {
                         <Segment.Group>
                             <Segment>
                                 <Icon size="large" name="user"/>
-                                <AutoField className="ui input width-p90" placeholder="Enter your email address" label={false} name="email"/>
+                                <AutoField className="ui input width-p90" placeholder="Enter your email address"
+                                           label={false} name="email"/>
                                 <ErrorField name="email"/>
                             </Segment>
                             <Segment>
                                 <Icon size="large" name="lock"/>
-                                <AutoField className="ui input width-p90" placeholder="Password" label={false} name="password" type="password"/>
+                                <AutoField className="ui input width-p90" placeholder="Password" label={false}
+                                           name="password" type="password"/>
                                 <ErrorField name="password"/>
                             </Segment>
                         </Segment.Group>
@@ -55,7 +57,7 @@ export class Login extends React.Component {
                         </Button>
                     </AutoForm>
                     {error && <div className="ui error message">{error}</div>}
-                </Segment.Group>  
+                </Segment.Group>
             </Container>
         )
     }
@@ -76,16 +78,16 @@ Login.propTypes = {
 Login.defaultProps = {};
 
 export default LoginContainer = createContainer(() => {
-  const user = Meteor.user();
-  const loggingIn = Meteor.loggingIn();
-  
-  if (!loggingIn && user) {
-    FlowRouter.go('/dashboard');
-  }
-  
-  return {
-      user: user,
-      loggingIn: loggingIn
-  }
+    const user = Meteor.user();
+    const loggingIn = Meteor.loggingIn();
+
+    if (!loggingIn && user) {
+        FlowRouter.go('/home');
+    }
+
+    return {
+        user: user,
+        loggingIn: loggingIn
+    }
 
 }, Login);
