@@ -1,15 +1,28 @@
 import React from 'react';
 import {AutoForm, AutoField, ErrorField, RadioField} from 'uniforms-semantic';
-import schema from '/imports/api/facilities/schemas/importRulesSchema';
 import Notifier from '/imports/client/lib/Notifier';
 import PropTypes from 'prop-types';
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
+import RulesService from '/imports/client/pages/clients/facilities/services/ImportingRulesService';
+import Loading from '/imports/client/lib/ui/Loading';
 
 export default class ImportingRules extends React.Component {
     constructor() {
         super();
+        this.state = {
+            loading: true
+        }
+    }
+
+    componentWillMount() {
+        const {model} = this.props;
+        const schema = RulesService.createSchema(model && model.importRules && model.importRules.hasHeader);
+        this.setState({
+            loading: false,
+            schema
+        });
     }
 
     onSubmitImportingRules = (importRules) => {
@@ -25,42 +38,51 @@ export default class ImportingRules extends React.Component {
         })
     };
 
-    getSchemaFields(schemaFields) {
-        const fields = [];
-        for (let key in schemaFields) {
-            if (key != 'hasHeader')
-                fields.push(key);
+    onChange(field, value) {
+        if (field === 'hasHeader') {
+            //Change schema
+            const newSchema = RulesService.createSchema(value);
+
+            this.setState({
+                schema: newSchema
+            })
         }
-        return fields;
     }
 
     render() {
-        const fields = this.getSchemaFields(schema._schema);
+        const {schema, loading} = this.state;
+        const fields = RulesService.getSchemaFields();
         const {model} = this.props;
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
 
         return (
             <Container>
-                <AutoForm model={model.importRules} schema={schema} onSubmit={this.onSubmitImportingRules}>
+                {
+                    loading ?
+                        <Loading/> :
+                        <AutoForm model={model.importRules} schema={schema}
+                                  onChange={this.onChange.bind(this)}
+                                  onSubmit={this.onSubmitImportingRules}>
 
-                    <RadioField name="hasHeader" options={options}/>
-                    <ErrorField name="hasHeader"/>
+                            <RadioField name="hasHeader" options={options}/>
+                            <ErrorField name="hasHeader"/>
 
-                    {
-                        fields.map((field, index) => {
-                            return (
-                                <div key={index}>
-                                    <AutoField name={field}/>
-                                    <ErrorField name={field}/>
-                                </div>
-                            )
-                        })
-                    }
+                            {
+                                fields && fields.map((field, index) => {
+                                    return (
+                                        <div key={index}>
+                                            <AutoField name={field}/>
+                                            <ErrorField name={field}/>
+                                        </div>
+                                    )
+                                })
+                            }
 
-                    <Divider/>
+                            <Divider/>
 
-                    <Button primary fluid type="submit">Submit</Button>
-                </AutoForm>
+                            <Button primary fluid type="submit">Submit</Button>
+                        </AutoForm>
+                }
             </Container>
         )
     }

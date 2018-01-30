@@ -36,7 +36,6 @@ export default class TaskView extends React.Component {
     }
 
     getTask = () => {
-        console.log("entered!");
         const {taskId} = this.props;
         query.clone({filters: {_id: taskId}}).fetchOne((err, task) => {
             if (err) {
