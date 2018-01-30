@@ -6,7 +6,7 @@ import TaskData from './TaskData';
 import SortableTab from './SortableTab';
 import {getToken} from '/imports/api/s3-uploads/utils';
 
-const TaskDetails = ({task}) => {
+const TaskDetails = ({task, updateTask}) => {
     return (
         <Container className="page-container">
             <Header as="h3" textAlign="center">View Task</Header>
@@ -29,7 +29,7 @@ const TaskDetails = ({task}) => {
                 </div>
             }
             <Header as="h3" textAlign="center">PDF Files</Header>
-            <SortableTab attachments={task && task.attachments}/>
+            <SortableTab updateTask={updateTask} attachments={task && task.attachments}/>
         </Container>)
 };
 
