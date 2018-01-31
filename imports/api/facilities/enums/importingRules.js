@@ -19,5 +19,10 @@ export default {
         {value: 'insBal', label: 'Insurance Balance'},
         {value: 'insBal2', label: 'Insurance Balance 2'},
         {value: 'insBal3', label: 'Insurance Balance 3'}
-    ]
+    ],
+    types: {
+        dates: ['dischrgDate', 'fbDate', 'admitDate'],
+        numbers: ['acctBal', 'medNo', 'insCode', 'insCode2', 'insCode3', 'insBal', 'insBal2', 'insBal3'],
+        strings: ['acctNum', 'ptType', 'ptName', 'finClass', 'insName', 'insName2', 'insName3', 'facCode'],
+    }
 }

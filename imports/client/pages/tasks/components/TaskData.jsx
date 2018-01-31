@@ -1,5 +1,6 @@
 import React from 'react';
 import {Container, Table} from 'semantic-ui-react';
+import moment from "moment/moment";
 
 const TaskData = ({task}) => {
     return (
@@ -24,11 +25,11 @@ const TaskData = ({task}) => {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>DischrgDate</Table.Cell>
-                        <Table.Cell>{task && task.dischrgDate}</Table.Cell>
+                        <Table.Cell>{task && moment(task.dischrgDate).format('MM/DD/YYYY')}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>FbDate</Table.Cell>
-                        <Table.Cell>{task && task.fbDate}</Table.Cell>
+                        <Table.Cell>{task && moment(task.fbDate).format('MM/DD/YYYY')}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>AcctBal</Table.Cell>
@@ -40,7 +41,7 @@ const TaskData = ({task}) => {
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>AdmitDate</Table.Cell>
-                        <Table.Cell>{task && task.admitDate}</Table.Cell>
+                        <Table.Cell>{task && moment(task.admitDate).format('MM/DD/YYYY')}</Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.Cell>MedNo</Table.Cell>
