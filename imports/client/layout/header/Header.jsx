@@ -35,7 +35,8 @@ class Header extends Component {
             {name: "/client/list", label: "Clients"},
             {name: "/code/list", label: "CARC/RARC Codes"},
             {name: "/reports/list", label: "Reports"},
-            {name: "/action/list", label: "Actions"}
+            {name: "/action/list", label: "Actions"},
+            {name: "/inscompany/list", label: "Insurance Companies"}
         ];
 
         const managerRoutes = [

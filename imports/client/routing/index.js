@@ -152,3 +152,12 @@ route('/tasks/filter-builder', TaskFilterBuilder);
 route('/reports/list', ReportListContainer);
 route('/report/create', ReportCreate);
 route('/report/:id/edit', ReportManage);
+
+//Insurance Companies
+import InsCompanyCreate from '/imports/client/pages/insCompanies/InsCompanyCreate';
+import InsCompanyEdit from '/imports/client/pages/insCompanies/InsCompanyEdit';
+import InsCompanyListContainer from '/imports/client/pages/insCompanies/InsCompanyListContainer';
+
+route('/inscompany/create', InsCompanyCreate);
+route('/inscompany/:id/edit', InsCompanyEdit);
+route('/inscompany/list', InsCompanyListContainer);

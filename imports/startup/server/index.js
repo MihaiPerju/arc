@@ -19,3 +19,4 @@ import '/imports/api/regions/server';
 import '/imports/api/reports/server';
 import '/imports/api/schedules/server';
 import '/imports/cronjobs';
+import '/imports/api/insCompanies/server';
