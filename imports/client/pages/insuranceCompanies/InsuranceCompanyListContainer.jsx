@@ -1,13 +1,13 @@
 import React from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/insCompanies/queries/insCompanyList.js';
-import InsCompaniesList from './components/InsCompaniesList.jsx';
+import query from '/imports/api/insuranceCompanies/queries/insuranceCompanyList.js';
+import InsuranceCompaniesList from './components/InsuranceCompaniesList.jsx';
 import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
 import { Container } from 'semantic-ui-react';
 import { Header } from 'semantic-ui-react';
 
 
-export default class InsCompaniesListContainer extends Pager {
+export default class InsuranceCompaniesListContainer extends Pager {
     constructor () {
         super();
 
@@ -17,14 +17,14 @@ export default class InsCompaniesListContainer extends Pager {
         });
 
         this.query = query.clone();
-        this.InsCompaniesListCont = createQueryContainer(this.query, InsCompaniesList, {
+        this.InsuranceCompaniesListCont = createQueryContainer(this.query, InsuranceCompaniesList, {
             reactive: false
         });
     }
 
     render () {
         const params = _.extend({}, this.getPagerOptions());
-        const InsCompaniesListCont = this.InsCompaniesListCont;
+        const InsuranceCompaniesListCont = this.InsuranceCompaniesListCont;
 
         return (
             <Container className="page-container">
@@ -33,7 +33,7 @@ export default class InsCompaniesListContainer extends Pager {
                 </div>
                 <div>
                     {this.getPaginator()}
-                    <InsCompaniesListCont params={params}/>
+                    <InsuranceCompaniesListCont params={params}/>
                     {this.getPaginator()}
                 </div>
             </Container>

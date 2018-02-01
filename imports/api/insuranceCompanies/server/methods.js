@@ -1,22 +1,22 @@
-import insCompanies from '../collection.js';
+import InsuranceCompanies from '../collection.js';
 import Security from '/imports/api/security/security.js';
 
 Meteor.methods({
     'inscompany.create' (data) {
         Security.isAdminOrTech(this.userId);
 
-        insCompanies.insert(data);
+        InsuranceCompanies.insert(data);
     },
 
     'inscompany.get' (id) {
         Security.isAdminOrTech(this.userId);
 
-        return insCompanies.findOne({_id: id});
+        return InsuranceCompanies.findOne({_id: id});
     },
 
     'inscompany.update' (data) {
         Security.isAdminOrTech(this.userId);
-        insCompanies.update({_id: data._id}, {
+        InsuranceCompanies.update({_id: data._id}, {
             $set: {
                 name: data.name,
                 aliases: data.aliases
@@ -27,7 +27,7 @@ Meteor.methods({
     'inscompany.delete' (id) {
         Security.isAdminOrTech(this.userId);
 
-        insCompanies.remove({_id: id});
+        InsuranceCompanies.remove({_id: id});
     }
 
 });

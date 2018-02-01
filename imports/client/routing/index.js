@@ -154,10 +154,10 @@ route('/report/create', ReportCreate);
 route('/report/:id/edit', ReportManage);
 
 //Insurance Companies
-import InsCompanyCreate from '/imports/client/pages/insCompanies/InsCompanyCreate';
-import InsCompanyEdit from '/imports/client/pages/insCompanies/InsCompanyEdit';
-import InsCompanyListContainer from '/imports/client/pages/insCompanies/InsCompanyListContainer';
+import InsuranceCompanyCreate from '/imports/client/pages/insuranceCompanies/InsuranceCompanyCreate';
+import InsuranceCompanyEdit from '/imports/client/pages/insuranceCompanies/InsuranceCompanyEdit';
+import InsuranceCompanyListContainer from '/imports/client/pages/insuranceCompanies/InsuranceCompanyListContainer';
 
-route('/inscompany/create', InsCompanyCreate);
-route('/inscompany/:id/edit', InsCompanyEdit);
-route('/inscompany/list', InsCompanyListContainer);
+route('/inscompany/create', InsuranceCompanyCreate);
+route('/inscompany/:id/edit', InsuranceCompanyEdit);
+route('/inscompany/list', InsuranceCompanyListContainer);

@@ -1,5 +1,5 @@
 import React from 'react';
-import InsCompanySchema from '/imports/api/insCompanies/schemas/schema';
+import InsCompanySchema from '/imports/api/insuranceCompanies/schemas/schema';
 import { AutoForm, AutoField, ErrorField } from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import { Container } from 'semantic-ui-react';
@@ -7,7 +7,7 @@ import { Button } from 'semantic-ui-react';
 import { Divider } from 'semantic-ui-react';
 import { Header } from 'semantic-ui-react';
 
-export default class InsCompanyEdit extends React.Component {
+export default class InsuranceCompanyEdit extends React.Component {
     constructor () {
         super();
 
@@ -52,8 +52,10 @@ export default class InsCompanyEdit extends React.Component {
                 <Header as="h2" textAlign="center">Edit Insurance company</Header>
                 {
                     this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : <AutoForm model={model} schema={InsCompanySchema} onSubmit={this.onSubmit.bind(this)}
+                        ?
+                        <div className="error">{this.state.error}</div>
+                        :
+                        <AutoForm model={model} schema={InsCompanySchema} onSubmit={this.onSubmit.bind(this)}
                                     ref="form">
 
                             <AutoField name="name"/>

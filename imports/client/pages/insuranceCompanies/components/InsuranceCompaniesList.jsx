@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import _ from 'underscore';
-import InsCompanySingle from './InsCompanySingle.jsx';
+import InsuranceCompanySingle from './InsuranceCompanySingle.jsx';
 import { Button } from 'semantic-ui-react';
 import { Container, Icon } from 'semantic-ui-react';
 import { Table } from 'semantic-ui-react';
 import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell';
 
-export default class InsCompaniesList extends Component {
+export default class InsuranceCompaniesList extends Component {
     render () {
         const {data, loading, error} = this.props;
         if (loading) {
@@ -32,7 +32,7 @@ export default class InsCompaniesList extends Component {
                             ? <Table.Body>
 
                                 {_.map(data, (inscompany, idx) => {
-                                    return <InsCompanySingle inscompany={inscompany} key={idx}/>;
+                                    return <InsuranceCompanySingle inscompany={inscompany} key={idx}/>;
 
                                 })}
                             </Table.Body>

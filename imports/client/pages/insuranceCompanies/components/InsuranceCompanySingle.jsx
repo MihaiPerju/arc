@@ -4,7 +4,7 @@ import autoBind from 'react-autobind';
 import { Table } from 'semantic-ui-react';
 import { Button, Dropdown } from 'semantic-ui-react';
 
-export default class insCompanySingle extends Component {
+export default class InsuranceCompanySingle extends Component {
     constructor () {
         super();
         autoBind(this);

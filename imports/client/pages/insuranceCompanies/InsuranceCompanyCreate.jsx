@@ -1,5 +1,5 @@
 import React from 'react';
-import InsCompanySchema from '/imports/api/insCompanies/schemas/schema';
+import InsCompanySchema from '/imports/api/insuranceCompanies/schemas/schema';
 import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
@@ -7,7 +7,7 @@ import {Button} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 
-export default class InsCompanyCreate extends React.Component {
+export default class InsuranceCompanyCreate extends React.Component {
     constructor() {
         super();
 
