@@ -2,6 +2,7 @@ import React from 'react';
 import NotificationsSystem from 'react-notification-system';
 import Notifier from '/imports/client/lib/Notifier';
 import Header from '/imports/client/layout/header/Header';
+import LeftMenu from '/imports/client/layout/leftMenu/LeftMenu';
 import Footer from '/imports/client/layout/footer/Footer';
 
 export default ({main, routeProps}) => {
@@ -12,9 +13,10 @@ export default ({main, routeProps}) => {
     return (
         <div id="cc-app">
             <Header />
-            {React.createElement(main, routeProps)}
-            <Footer />
-
+            <main className="main-section">
+                <LeftMenu />
+                {React.createElement(main, routeProps)}                
+            </main>
             <NotificationsSystem ref={ref => Notifier.setRef(ref)} />
         </div>
     )

@@ -1,0 +1,58 @@
+.left-menu {
+	width: 280px;
+	padding: 25px 15px;
+	&__wrapper {
+		list-style: none;
+	}
+	.menu__item {
+		> a {
+			position: relative;
+			font-size: 1.6rem;
+			padding: 7px 15px 8px 50px;
+			color: $light-grey;
+			&:hover {
+				background: $color-white;
+				border-radius: 3px;
+				color: $dark-grey;
+				i {
+					color: $green;
+				}
+			}
+		}
+		&:nth-of-type(2) {
+			i {
+				font-size: 1.8rem;
+			}
+		}
+		&:nth-of-type(5) {
+			i {
+				left: 20px;
+			}
+		}
+		&:nth-of-type(7) {
+			margin-bottom: 25px;
+		}
+		&:nth-of-type(10) {
+			i {
+				left: 18px;
+			}
+		}		
+		&:last-of-type {
+			margin-top: 25px;
+			> a {
+				color: #e44545;
+				&:hover {
+					color: #e81818;
+					i {
+						color: #e81818;
+					}
+				}
+			}
+		}
+		i {
+			position: absolute;
+			left: 15px;
+			top: 8px;
+		}
+	}
+}

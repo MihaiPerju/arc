@@ -1,12 +1,92 @@
-.cc-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 60px;
-  box-shadow: $shadow-dp2;
-  background-color: $color-white;
+.header-bar {
+	width: 100%;
+	height: 80px;
+	box-shadow: $shadow-header;
+	background-color: $color-white;
+	padding: 0 30px;
+	&__wrapper {
+		display: flex;
+		justify-content: space-between;
+		height: 100%;
+	}
+	.profile-img {
+		width: 50px;
+		height: 50px;
+	}
+	.left__side {
+		> a {
+			display: flex;
+			align-items: center;
+			padding: 25px 0;
+			&:hover i {
+				color: $dark-grey;
+			}
+		}
+		i {
+			font-size: 1.8rem;
+			color: $light-grey;
+			margin-right: 18px;
+		}
+	}
+	.right__side {
+		display: flex;
+		list-style: none;
+		padding: 13px 0;
+		li {
+			> a {
+				display: flex;
+				height: 100%;
+				align-items: center;
+				color: $light-grey;
+				&:hover {
+					color: $dark-grey;
+				}
+			}
+			&:first-of-type {
+				
+			}
+			&:nth-of-type(2) {
+				padding-left: 5px;
+				padding-right: 5px;
+				> a {
+					padding-left: 20px;
+					padding-right: 20px;
+					i {
+						font-size: 2rem;
+					}
+				}
+			}
+		}
+	}
+	.owner-menu {
+		padding-right: 15px;
+		position: relative;
+		> a {
+			display: flex;
+			align-items: center;
+			padding: 15px 0;
+			> span {
+				color: $dark-grey;
+				margin-right: 15px;
+			}
+			&:before {
+				content: '\f107';
+				font-family: $font-icon;
+				position: absolute;
+				right: 0;
+				top: 20px;
+				color: $light-grey;
+			}
+		}
+		.profile-img {
+			img {
+				position: relative;
+			}
+		}
+	}
 }
 
-.cc-logo {
-
+.header__logo {
+	width: 94px;
+	height: 29px;
 }

@@ -11,9 +11,9 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  //font-family: $font-;
-  color: $color-text;
   background-color: $color-page-bg;
+  font-family: $font-arial;
+  color: $dark-grey;
   @include mds-font-size(14px, $base-line-height);
 
   -webkit-font-smoothing: antialiased;
@@ -32,7 +32,7 @@ body {
 a {
   text-decoration: none;
   color: inherit;
-
+  display: block;
   &:hover {
 
   }
@@ -87,4 +87,12 @@ h5 {
 
 h6 {
   @include mds-font-size($mds-heading-size-6);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.img-circle {
+  border-radius: 50%;
 }
