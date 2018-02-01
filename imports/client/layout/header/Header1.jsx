@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {Button, Dropdown, Menu, Container} from 'semantic-ui-react';
 import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
@@ -15,7 +16,7 @@ class Header extends Component {
 
         let routes = [
             {name: "/home", label: "Home"},
-            {name: "/accounts", label: "Accounts"},
+            {name: "/tasks", label: "Tasks"},
         ];
         if (user && user.roles && user.roles.includes(RolesEnum.ADMIN)) {
             routes.push(
@@ -34,8 +35,7 @@ class Header extends Component {
             {name: "/client/list", label: "Clients"},
             {name: "/code/list", label: "CARC/RARC Codes"},
             {name: "/reports/list", label: "Reports"},
-            {name: "/action/list", label: "Actions"},
-            {name: "/inscompany/list", label: "Insurance Companies"}
+            {name: "/action/list", label: "Actions"}
         ];
 
         const managerRoutes = [
@@ -51,36 +51,39 @@ class Header extends Component {
         }
 
         return (
-            <div>
+            <Container>
                 {user &&
-                <header className="header-bar">
-                    <div className="header-bar__wrapper">
-                        <div className="left__side">
-                            <a href="/home">
-                                <i className="icon-home"/>
-                                <img className="header__logo" src="/assets/img/logo.png" alt=""/>
-                            </a>
-                        </div>
-                        <ul className="right__side">
-                            <li>
-                                <a href="">+ Create view</a>
-                            </li>
-                            <li>
-                                <a href=""><i className="icon-cog"/></a>
-                            </li>
-                            <li className="owner-menu">
-                                <a href="">
-                                    <span>{user.profile.firstName + " " + user.profile.lastName}</span>
-                                    <div className="profile-img">
-                                        <img className="img-circle" src="/assets/img/user1.svg" alt=""/>
-                                    </div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </header>
+                <Menu inverted fixed="top">
+                    {
+                        routes.map(value => (
+                            <Menu.Item
+                                href={value.name}
+                                key={value.label}
+                                active={activeItem === value.label}
+                                name={value.label}
+                                color="blue"
+                                onClick={this.handleItemClick}
+                            />
+                        ))
+                    }
+                    <Menu.Menu position='right'>
+                        <Dropdown
+                            icon="user"
+                            item
+                            text={user.profile.firstName + " " + user.profile.lastName}
+                            name="user"
+                            onClick={this.handleItemClick}>
+                            <Dropdown.Menu>
+                                <Dropdown.Item href="/my-profile">My Profile</Dropdown.Item>
+                            </Dropdown.Menu>
+                        </Dropdown>
+                        <Menu.Item>
+                            <Button href="/logout">Log out</Button>
+                        </Menu.Item>
+                    </Menu.Menu>
+                </Menu>
                 }
-            </div>
+            </Container>
         )
     }
 }

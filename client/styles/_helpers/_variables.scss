@@ -1,5 +1,6 @@
 //font variables
-//$font-roboto: 'Roboto', sans-serif;
+$font-arial: 'Arial';
+$font-icon: 'arcc_font_set';
 
 //https://www.sitepoint.com/understanding-and-using-rem-units-in-css/
 $base-font-size: 62.5%; //1 rem = 10px
@@ -10,7 +11,14 @@ $base-line-height: 1.2;
 $color-white: #ffffff;
 $color-black: #000000;
 
-$color-page-bg: white;
+// My Colurs
+$dark-grey: #333;
+$light-grey: #838383;
+$blue: #3370b5;
+$green: #3cb878;
+$purple: #8560a8;
+
+$color-page-bg: #eae9e9;
 
 $color-main: black;
 $color-main-dark: black;
@@ -60,6 +68,9 @@ $shadow-dp24: 0px 11px 15px -7px rgba(black, 0.2), 0px 24px 38px 3px rgba(black,
 
 $text-shadow: 2px 2px 7px rgba($color-black, 0.2);
 
+// Header Shadow;
+$shadow-header: 1px 2px 3px 0px #f3f3f3;
+
 //animation curves
 $animation-standard-curve: cubic-bezier(0.4, 0.0, 0.2, 1);;
 
@@ -88,4 +99,5 @@ $mds-z-15: 15;//notifications
 
 //paths
 $img-path: "./assets/img";
-$font-path: "./assets/font";
+$font-path: "./font";
+$font-icons: "./icons";

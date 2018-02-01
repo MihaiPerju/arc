@@ -3,7 +3,8 @@
 }
 
 .page-container {
-  margin-top: 5%;
+  width: calc(100% - 280px);
+  overflow-y: auto;
 }
 
 .display-none {
@@ -44,4 +45,9 @@
 .no-data-found {
   font-size: 18px;
   color: darkgray;
+}
+
+.main-section {
+  display: flex;
+  height: calc(100% - 80px);
 }

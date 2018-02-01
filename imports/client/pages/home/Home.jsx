@@ -1,6 +1,4 @@
 import React from 'react';
-import {Header} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
 import Dashboard from './components/Dashboard';
 import RepDashboard from './components/RepDashboard';
 import RoleEnum from "../../../api/users/enums/roles";
@@ -11,8 +9,8 @@ class Home extends React.Component {
         const {currentUser} = this.props;
         return (
             <main className="cc-main">
-                <Container className="page-container">
-                    <Header textAlign="center" as='h1'>Dashboard</Header>
+                <div className="page-container">
+                    <div className="text-center"><h1>Dashboard</h1></div>
                     {
                         currentUser && currentUser.roles && currentUser.roles.includes(RoleEnum.REP)
                             ?
@@ -20,7 +18,7 @@ class Home extends React.Component {
                             :
                             <Dashboard/>
                     }
-                </Container>
+                </div>
             </main>
         )
     }
