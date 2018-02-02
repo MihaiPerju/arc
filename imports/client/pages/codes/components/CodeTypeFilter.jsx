@@ -3,7 +3,7 @@ import SimpleSchema from 'simpl-schema';
 import { AutoForm, AutoField, RadioField } from 'uniforms-semantic';
 import CodeEnum from '/imports/api/codes/enums/codes.js';
 
-const searchSchema = new SimpleSchema({
+const filterSchema = new SimpleSchema({
     type: {
         label: 'Filter by type',
         type: String,
@@ -12,7 +12,7 @@ const searchSchema = new SimpleSchema({
     }
 });
 
-export default class FacilitySearch extends React.Component {
+export default class CodeTypeFilter extends React.Component {
     handleFilter = (data) => {
         this.props.handleFilter(data.type);
     };
@@ -20,7 +20,7 @@ export default class FacilitySearch extends React.Component {
     render () {
         return (
             <AutoForm autosave
-                      schema={searchSchema}
+                      schema={filterSchema}
                       onSubmit={this.handleFilter}
             >
                 <AutoField name="type"/>
