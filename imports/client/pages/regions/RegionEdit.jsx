@@ -53,8 +53,10 @@ export default class RegionEdit extends React.Component {
                 <Header as="h2" textAlign="center">Edit Region</Header>
                 {
                     this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : <AutoForm model={model} schema={RegionSchema} onSubmit={this.onSubmit.bind(this)}
+                        ?
+                        <div className="error">{this.state.error}</div>
+                        :
+                        <AutoForm model={model} schema={RegionSchema} onSubmit={this.onSubmit.bind(this)}
                                     ref="form">
 
                             <AutoField name="name"/>
