@@ -1,5 +1,5 @@
 import React from 'react';
-import RegionSchema from '/imports/api/regions/schemas/schema';
+import InsCompanySchema from '/imports/api/insuranceCompanies/schemas/schema';
 import { AutoForm, AutoField, ErrorField } from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import { Container } from 'semantic-ui-react';
@@ -7,7 +7,7 @@ import { Button } from 'semantic-ui-react';
 import { Divider } from 'semantic-ui-react';
 import { Header } from 'semantic-ui-react';
 
-export default class RegionEdit extends React.Component {
+export default class InsuranceCompanyEdit extends React.Component {
     constructor () {
         super();
 
@@ -18,7 +18,7 @@ export default class RegionEdit extends React.Component {
     }
 
     componentWillMount () {
-        Meteor.call('region.get', FlowRouter.current().params.id, (error, model) => {
+        Meteor.call('inscompany.get', FlowRouter.current().params.id, (error, model) => {
             if (!error) {
                 if (model) {
                     this.setState({model});
@@ -34,11 +34,10 @@ export default class RegionEdit extends React.Component {
     }
 
     onSubmit (data) {
-        data._id = this.state.model._id;
-        Meteor.call('region.update', data, (err) => {
+        Meteor.call('inscompany.update', data, (err) => {
             if (!err) {
                 Notifier.success('Data saved');
-                FlowRouter.go('/region/list');
+                FlowRouter.go('/inscompany/list');
             } else {
                 Notifier.error(err.reason);
             }
@@ -50,17 +49,20 @@ export default class RegionEdit extends React.Component {
 
         return (
             <Container className="page-container">
-                <Header as="h2" textAlign="center">Edit Region</Header>
+                <Header as="h2" textAlign="center">Edit Insurance company</Header>
                 {
                     this.state.error
                         ?
                         <div className="error">{this.state.error}</div>
                         :
-                        <AutoForm model={model} schema={RegionSchema} onSubmit={this.onSubmit.bind(this)}
+                        <AutoForm model={model} schema={InsCompanySchema} onSubmit={this.onSubmit.bind(this)}
                                     ref="form">
 
                             <AutoField name="name"/>
                             <ErrorField name="name"/>
+
+                            <AutoField name="aliases"/>
+                            <ErrorField name="aliases"/>
 
                             <Divider/>
 
