@@ -14,9 +14,11 @@ $color-black: #000000;
 // My Colurs
 $dark-grey: #333;
 $light-grey: #838383;
+$extra-light-grey: #b7b7b7;
 $blue: #3370b5;
 $green: #3cb878;
 $purple: #8560a8;
+$yellow: #dac81e;
 
 $color-page-bg: #eae9e9;
 
@@ -69,7 +71,7 @@ $shadow-dp24: 0px 11px 15px -7px rgba(black, 0.2), 0px 24px 38px 3px rgba(black,
 $text-shadow: 2px 2px 7px rgba($color-black, 0.2);
 
 // Header Shadow;
-$shadow-header: 1px 2px 3px 0px #f3f3f3;
+$shadow-header: 1px 2px 7px 0 rgba(220, 220, 220, 0.8);
 
 //animation curves
 $animation-standard-curve: cubic-bezier(0.4, 0.0, 0.2, 1);;

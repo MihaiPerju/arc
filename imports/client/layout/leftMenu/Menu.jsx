@@ -34,6 +34,9 @@ export default class Menu extends Component {
 
 		return (
 			<ul className="left-menu__wrapper">
+				<li className="menu__item">
+					<a href=""><span className="menu__label">Create View</span></a>
+				</li>
 				{menuRoutes}
 			</ul>
 		)

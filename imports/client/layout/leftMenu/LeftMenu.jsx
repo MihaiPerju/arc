@@ -64,6 +64,7 @@ class LeftMenu extends Component {
 							{ name: "regions", label: "Regions", icon: 'globe' },
 							{ name: "templates", label: "Templates", icon: 'window-restore' },
 							{ name: "actions", label: "Actions", icon: 'thumb-tack' },
+							{ name: "settings", label: "Settings", icon: 'cog' },
 							{ name: "logout", label: "Log out", icon: 'sign-out' }
 						]}/>
 					</div>
