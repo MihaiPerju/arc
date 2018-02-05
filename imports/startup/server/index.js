@@ -18,6 +18,7 @@ import '/imports/api/comments/server';
 import '/imports/api/regions/server';
 import '/imports/api/reports/server';
 import '/imports/api/schedules/server';
+import '/imports/api/reasonCodes/server';
 import '/imports/cronjobs';
 import '/imports/api/insuranceCompanies/server';
 import '/imports/api/tags/server';
