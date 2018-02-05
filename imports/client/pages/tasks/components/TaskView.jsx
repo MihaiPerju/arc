@@ -88,12 +88,8 @@ export default class TaskView extends React.Component {
             <Container>
                 <TaskDetails updateTask={this.getTask} task={task}/>
                 <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
-                <Divider/>
-                <CommentsListContainer taskId={task && task._id}/>
-
                 <Container className="page-container">
                     <Header as="h2" textAlign="center">Add Action</Header>
-
                     <AutoForm schema={ActionSchema} onSubmit={this.onSubmit} ref="form">
                         <SelectActionsContainer/>
                         <Divider/>
@@ -102,6 +98,8 @@ export default class TaskView extends React.Component {
                             Save
                         </Button>
                     </AutoForm>
+                    <Divider/>
+                    <CommentsListContainer taskId={task && task._id}/>
                 </Container>
             </Container>
         );
