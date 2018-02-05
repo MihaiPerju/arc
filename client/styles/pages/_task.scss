@@ -1,0 +1,251 @@
+// Task Bar
+.task-bar {
+	display: flex;
+	background: $color-white;
+	padding: 10px;
+	padding-right: 3px;
+	padding-bottom: 10px;
+    box-shadow: 0px 1px 3px 0px #ebe7e7;
+    border-bottom: 1px #e1e1e1 solid;
+    position: relative;
+    .search-task {
+		width: calc(100% - 173px);
+    }
+	.select-type {
+		padding-right: 18px;
+		padding-left: 5px;
+		padding-top: 8px;
+		position: relative;
+		cursor: pointer;
+		&:before {
+			content: '\f107';
+			font-family: $font-icon;
+			position: absolute;
+			color: $extra-light-grey;
+			top: 8px;
+			right: 0;
+			line-height: 1.4rem;
+		}
+		.btn-select {
+			width: 16px;
+			height: 16px;
+			border: 1px $extra-light-grey solid;
+			border-radius: 3px;
+			background: $color-white;
+			position: relative;
+			&:before {
+				content: '-';
+				position: absolute;
+				top: -6px;
+				left: 3px;
+				font-size: 2.4rem;
+				line-height: 2.2rem;
+			}
+		}
+	}
+	.btn-group {
+		padding-left: 9px;
+		padding-right: 9px;
+		button {
+			padding: 8px 11px;
+			color: $extra-light-grey;
+			font-size: 1.6rem;
+			line-height: 1.4rem;
+		}
+	}
+	.filter-block {
+		button {
+			padding: 8px 15px;
+			font-size: 1.6rem;
+			color: $extra-light-grey;
+		}
+	}
+	.form-group {
+		input {
+			background: #f2f1f1;
+			border-radius: 3px;
+			border: 0;
+			padding: 7px 15px;
+			line-height: 1.4rem;
+			font-family: $font-arial, $font-icon;
+		}
+		::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+	  		color: #8e8d8d;
+		}
+		::-moz-placeholder { /* Firefox 19+ */
+	  		color: #8e8d8d;
+	  		opacity: 1;
+		}
+		:-ms-input-placeholder { /* IE 10+ */
+	  		color: #8e8d8d;
+		}
+	}
+}
+
+// Pagination Bar
+.pagination-bar {
+	background: $color-white;
+	padding: 14px 15px 15px;
+	box-shadow: 0px -4px 9px 0px #ebe7e7;
+	border-top: 1px #e1e1e1 solid;
+	position: relative;
+	.pagination-bar__wrapper {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.btn-group {
+		.btn-next, .btn-prev {
+			padding: 4px 9px;
+			font-size: 1.4rem;
+			background: #f2f1f1;
+			border: 1px #e1e1e1 solid;
+			color: $extra-light-grey;
+			margin-left: 10px;
+			&:hover {
+				color: $light-grey;
+			}
+		}
+	}
+}
+.mark-task {
+	position: absolute;
+	top: 25px;
+	right: 10px;
+	label {
+		position: relative;
+		cursor: pointer;
+		padding: 5px;
+		&:before {
+			font-family: $font-icon;
+			font-size: 1.8rem;
+		}
+	}
+
+	input:not(:checked) + label {
+		&:before {
+			content: '\f006';
+			color: $extra-light-grey;
+		}
+	}
+	input:checked + label {
+		&:before {
+			content: '\f005';
+			color: $yellow;
+		}
+	}
+}
+
+.check-task {
+	position: absolute;
+	left: 10px;
+	top: 23px;
+	label {
+		position: relative;
+		cursor: pointer;
+		padding: 5px;
+		display: block;
+		&:before {
+			width: 16px;
+			height: 16px;
+			content: ' ';
+			display: block;
+			border-radius: 3px;
+			border: 1px $extra-light-grey solid;
+		}
+		&:after {
+			width: 16px;
+			height: 8px;
+			content: ' ';
+			display: block;
+			border-left: 2px $dark-grey solid;
+			border-bottom: 2px $dark-grey solid;
+			transform: rotate(-45deg);
+			position: absolute;
+			top: 4px;
+			left: 8px;
+			opacity: 0;
+		}
+	}
+
+	input:not(:checked) + label {
+		&:before {
+			background: #e1e1e1;
+		}
+	}
+	input:checked + label {
+		&:before {
+			background: $color-white;
+		}
+		&:after {
+			opacity: 1;
+		}
+	}	
+}
+
+.task-container {
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	.lef__side {
+		width: 520px;
+    	flex-shrink: 0;
+	}
+	> .right__side {
+		width: 100%;
+		flex: 1;
+		padding: 15px;
+	}
+	.task-list {
+		// width: 33.2%;
+		height: calc(100% - 112px);
+		background: rgba(255, 255, 255, 0.4);
+		overflow-y: auto;
+	}
+	.task-item {
+		border-bottom: 1px #e1e1e1 solid;
+		padding: 15px 47px;
+		position: relative;
+		.row__item {
+			display: flex;
+			justify-content: space-between;
+			&:last-of-type {
+				margin-top: 11px;;
+			}
+		}
+		.right__side {
+			display: flex;
+		}
+		.pacient-id {
+			margin-right: 10px;
+		}
+		.financial-class {
+			color: #aa831a;
+			margin-right: 15px;
+		}
+		.price {
+			position: relative;
+			padding-left: 13px;
+			&:before {
+				content: '\f155';
+				font-family: $font-icon;
+				position: absolute;
+				top: 0;
+				left: 0;
+				color: $green;
+			}
+		}
+	}
+}
+
+// Task Content
+.task-content {
+	.header-block {
+		background: $color-white;
+		border-radius: 3px;
+		padding: 15px;
+		.main-info {
+			display: flex;
+		}
+	}
+}

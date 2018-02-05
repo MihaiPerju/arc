@@ -1,58 +1,36 @@
 import React, {Component} from 'react';
-import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import AssigneeSelect from './AssigneeSelect';
 
 export default class TaskSingle extends Component {
     constructor() {
         super();
     }
 
-    getOptions(users) {
-        if (!users) {
-            [];
-        }
-
-        let options = [];
-        for (user of users) {
-            let item = {
-                label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
-                value: user && user._id
-            };
-            options.push(item);
-        }
-        return options;
-    }
-
-    getFirstOption(task, options) {
-        if (task.assigneeId) {
-            for (option of options) {
-                if (option.value === task.assigneeId) {
-                    return [option];
-                }
-            }
-        }
-        return [{label: 'Unassigned'}];
-    }
-
     render() {
-        const {task} = this.props;
-        const options = this.getOptions(task && task.facility && task.facility.users);
-        let userOptions = this.getFirstOption(task, options);
-        userOptions = userOptions.concat(options);
-
         return (
-            <Table.Row>
-                <Table.Cell>{task._id}</Table.Cell>
-                <Table.Cell>{task.client && task.client.clientName}</Table.Cell>
-                <Table.Cell>{task.state}</Table.Cell>
-                <Table.Cell>
-                    <AssigneeSelect taskId={task._id} options={userOptions}/>
-                </Table.Cell>
-                <Table.Cell>
-                    <Button href={"/account/" + task._id + '/view'} primary>View</Button>
-                </Table.Cell>
-            </Table.Row>
+            <div className="task-item">
+                <div className="check-task">
+                    <input type="checkbox" id="11" className="hidden"/>
+                    <label htmlFor="11"></label>
+                </div>
+                <div className="mark-task">
+                    <input type="checkbox" id="1" className="hidden"/>
+                    <label htmlFor="1"></label>
+                </div>
+                <div className="row__item">
+                    <div className="left__side">
+                        <div className="person">Solomon Ben</div>
+                    </div>
+                    <div className="right__side">
+                        <div className="pacient-id text-blue">MBG981828112</div>
+                        <div className="financial-class">O/D</div>
+                        <div className="time">11:20 am</div>
+                    </div>
+                </div>
+                <div className="row__item">
+                    <div className="price">18,586</div>
+                    <div className="location">New York-Presbyterian University Hospital</div>
+                </div>
+            </div>
         );
     }
 }

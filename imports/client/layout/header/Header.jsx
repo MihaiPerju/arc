@@ -62,12 +62,6 @@ class Header extends Component {
                             </a>
                         </div>
                         <ul className="right__side">
-                            <li>
-                                <a href="">+ Create view</a>
-                            </li>
-                            <li>
-                                <a href=""><i className="icon-cog"/></a>
-                            </li>
                             <li className="owner-menu">
                                 <a href="">
                                     <span>{user.profile.firstName + " " + user.profile.lastName}</span>
