@@ -1,6 +1,6 @@
 import React from 'react';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-import {path, getToken} from '/imports/api/s3-uploads/utils';
+import {getToken} from '/imports/api/s3-uploads/utils';
 import {Segment, Button, Divider} from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 
@@ -78,7 +78,7 @@ export default class SortableTab extends React.Component {
     }
 
     redirectToPdf(pdf) {
-        window.open(path(pdf.path), '_blank');
+        window.open('/pdf/' + pdf._id + '/' + getToken(), '_blank');
     }
 
     deletePdf(pdf) {
