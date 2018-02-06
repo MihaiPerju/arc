@@ -50,7 +50,7 @@ export default class TaskSingle extends Component {
                     <AssigneeSelect taskId={task._id} options={userOptions}/>
                 </Table.Cell>
                 <Table.Cell>
-                    <Button href={"/task/" + task._id + '/view'} primary>View</Button>
+                    <Button href={"/account/" + task._id + '/view'} primary>View</Button>
                 </Table.Cell>
             </Table.Row>
         );

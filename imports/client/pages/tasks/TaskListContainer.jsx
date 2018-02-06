@@ -117,7 +117,7 @@ export default class TaskListContainer extends Pager {
         return (
             <Container className="page-container">
                 <div>
-                    <Header as="h2" textAlign="center">Tasks</Header>
+                    <Header as="h2" textAlign="center">Accounts</Header>
                 </div>
                 <Container className="m-t-30">
                     <div className="col-lg-8">

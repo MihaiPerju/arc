@@ -9,7 +9,7 @@ import {getToken} from '/imports/api/s3-uploads/utils';
 const TaskDetails = ({task, updateTask}) => {
     return (
         <Container className="page-container">
-            <Header as="h3" textAlign="center">View Task</Header>
+            <Header as="h3" textAlign="center">View Account</Header>
             <TaskData task={task}/>
 
             <h5>Substate: {task && LabelSubstates[task.substate]}</h5>

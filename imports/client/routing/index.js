@@ -118,8 +118,8 @@ route('/code/create', CodeCreate);
 import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
 import TaskViewContainer from '/imports/client/pages/tasks/TaskViewContainer';
 
-route('/tasks', TaskListContainer);
-route('/task/:_id/view', TaskViewContainer, {}, {
+route('/accounts', TaskListContainer);
+route('/account/:_id/view', TaskViewContainer, {}, {
     name: 'task.view'
 });
 
