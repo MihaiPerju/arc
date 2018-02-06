@@ -1,6 +1,6 @@
 import React from 'react';
 import ClientSchema from '/imports/api/clients/schemas/schema';
-import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField, LongTextField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import DropzoneComponent from 'react-dropzone-component';
 import {path, getToken} from '/imports/api/s3-uploads/utils';
@@ -109,6 +109,9 @@ export default class EditClient extends React.Component {
                             <AutoField name="email"/>
                             <ErrorField name="email"/>
 
+                            <LongTextField name="financialGoals"/>
+                            <ErrorField name="financialGoals"/>
+
                             <h3>Client Logo</h3>
                             {
                                 model.logoPath
@@ -125,7 +128,7 @@ export default class EditClient extends React.Component {
                                     <NestField name="">
                                         <TextField name="firstName"/>
                                         <TextField name="lastName"/>
-                                        <TextField name="contactDescription"/>
+                                        <AutoField name="contactType"/>
                                         <TextField name="phone"/>
                                         <TextField name="email"/>
                                         <TextField name="notes"/>

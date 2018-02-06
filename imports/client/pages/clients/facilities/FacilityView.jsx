@@ -6,6 +6,7 @@ import { Container } from 'semantic-ui-react';
 import Loading from '/imports/client/lib/ui/Loading.jsx';
 import Notifier from '/imports/client/lib/Notifier';
 import {getImagePath} from '/imports/api/utils';
+import FacilityContactsTable from './components/FacilityContactsTable';
 
 export default class FacilityView extends React.Component {
     constructor () {
@@ -91,13 +92,13 @@ export default class FacilityView extends React.Component {
                     </div>
                 }
                 {facility.contacts && facility.contacts.length
-                    ? <div>
+                    ?
+                    <div>
                         <h4>Contacts</h4>
-                        {facility.contacts.map(contact => (
-                            <FacilityContact key={contact._id} contact={contact}/>
-                        ))}
+                        <FacilityContactsTable contacts={facility.contacts}/>
                     </div>
-                    : <div>
+                    :
+                    <div>
                         <h4>No Contacts</h4>
                     </div>
                 }
