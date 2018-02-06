@@ -8,12 +8,12 @@ export default class TaskListContainer extends Component {
     constructor() {
         super();
     }
-
+        
     render() {
         return (
             <div className="task-container">
                 <div className="left__side">
-                <TaskBar/>
+                    <TaskBar/>
                     <TaskList/>
                     <PaginationBar/>
                 </div>
