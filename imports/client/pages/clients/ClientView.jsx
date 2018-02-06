@@ -22,8 +22,7 @@ export default class ClientView extends React.Component {
     }
 
     getClient = () => {
-        const clientId = this.props;
-
+        const {clientId} = this.props;
         Meteor.call('client.get', clientId, (err, client) => {
             if (err) {
                 return Notifier.error('Error while getting client!');
@@ -49,10 +48,13 @@ export default class ClientView extends React.Component {
                 </Container>);
         }
 
+        const rootUrl = Meteor.settings.public.ROOT_URL || '/themes/default/';
+        const logoPath = client.logoPath ? path(client.logoPath) : `${rootUrl}assets/img/no_logo.svg`;
+
         return (
             <Container className="page-container">
                 <Header as="h3" textAlign="center">Client {client.clientName}</Header>
-                <img src={path(client.logoPath)}/>
+                <img src={logoPath}/>
                 <h5>First name: {client.firstName}</h5>
                 <h5>Last name: {client.lastName}</h5>
                 <h5>Email: {client.email}</h5>
