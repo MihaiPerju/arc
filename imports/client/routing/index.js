@@ -62,7 +62,7 @@ import EditClient from '/imports/client/pages/clients/ClientEdit';
 import ClientListContainer from '/imports/client/pages/clients/ClientListContainer';
 import ClientView from '/imports/client/pages/clients/ClientView';
 
-route('/client/:userId/view', ClientView);
+route('/client/:clientId/view', ClientView);
 route('/client/create', CreateClient);
 route('/client/:userId/edit', EditClient);
 route('/client/list', ClientListContainer);

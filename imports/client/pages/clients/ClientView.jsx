@@ -22,7 +22,7 @@ export default class ClientView extends React.Component {
     }
 
     getClient = () => {
-        const clientId = this.props.userId;
+        const clientId = this.props;
 
         Meteor.call('client.get', clientId, (err, client) => {
             if (err) {
