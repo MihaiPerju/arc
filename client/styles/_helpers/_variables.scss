@@ -17,6 +17,7 @@ $light-grey: #838383;
 $extra-light-grey: #b7b7b7;
 $blue: #3370b5;
 $green: #3cb878;
+$light-green: #7cc576;
 $purple: #8560a8;
 $yellow: #dac81e;
 
@@ -39,6 +40,10 @@ $color-info: #03a9f4;
 
 $color-tooltip-bg: black;
 
+// Translate Variables
+$translateY: translateY(-50%);
+$translateX: translateX(-50%);
+$translateXY: translate(-50%, -50%);
 
 //Material Design shadows
 $shadow-dp0: 0px 0px 0px 0px rgba(black, 0.2), 0px 0px 0px 0px rgba(black, 0.14), 0px 0px 0px 0px rgba(black, 0.12);

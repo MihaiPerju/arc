@@ -8,13 +8,13 @@ export default class TaskContentHeader extends Component {
 					<div className="left__side">
 						<div className="name">Claudio Steel</div>
 						<div className="row__block">
-							<div className="pacient-id">MBG981828112</div>
+							<div className="pacient-id text-blue">MBG981828112</div>
 							<div className="financial-class">O/D</div>
 							<div className="location">New York-Presbyterian University Hospital</div>
 							<div className="label-group">
-								<div className="label--green">158 points</div>
-								<div className="label--grey">CARC</div>
-								<div className="label--grey">Work queue</div>
+								<div className="label label--green">158 points</div>
+								<div className="label label--grey text-uppercase">carc</div>
+								<div className="label label--grey">Work queue</div>
 							</div>
 						</div>
 					</div>
@@ -31,23 +31,23 @@ export default class TaskContentHeader extends Component {
 				</div>
 				<div className="additional-info">
 					<ul>
-						<li>
+						<li className="text-center">
 							<div className="text-light-grey">Status Code</div>
-							<div className="text-dark-grey">invden</div>
+							<div className="text-dark-grey text-uppercase">invden</div>
 						</li>
-						<li>
+						<li className="text-center">
 							<div className="text-light-grey">Financial class</div>
-							<div className="text-dark-grey">d</div>
+							<div className="text-dark-grey text-uppercase">d</div>
 						</li>
-						<li>
+						<li className="text-center">
 							<div className="text-light-grey">Admin date</div>
 							<div className="text-dark-grey">03/15/2018</div>
 						</li>
-						<li>
+						<li className="text-center">
 							<div className="text-light-grey">Discharge date</div>
 							<div className="text-dark-grey">09/16/2018</div>
 						</li>
-						<li>
+						<li className="text-center">
 							<div className="text-light-grey">Placement date</div>
 							<div className="text-dark-grey">12/05/2018</div>
 						</li>
