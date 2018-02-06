@@ -50,7 +50,7 @@ class LeftMenu extends Component {
 				{user &&
 					<div className="left-menu">
 						<Menu routes={[
-							{ name: "tasks", label: "Tasks" , icon: 'tasks' },
+							{ name: "accounts", label: "Tasks" , icon: 'tasks' },
 							{ name: "review", label: "Review", icon: 'inbox' },
 							{ name: "on-hold", label: "On Hold", icon: 'hand-paper-o' },
 							{ name: "archived", label: "Archived", icon: 'archive' },
