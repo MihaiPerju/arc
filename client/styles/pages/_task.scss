@@ -187,7 +187,7 @@
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	.lef__side {
+	> .left__side {
 		width: 520px;
     	flex-shrink: 0;
 	}
@@ -201,6 +201,9 @@
 		height: calc(100% - 112px);
 		background: rgba(255, 255, 255, 0.4);
 		overflow-y: auto;
+	}
+	.financial-class {
+		color: #aa831a;
 	}
 	.task-item {
 		border-bottom: 1px #e1e1e1 solid;
@@ -220,7 +223,6 @@
 			margin-right: 10px;
 		}
 		.financial-class {
-			color: #aa831a;
 			margin-right: 15px;
 		}
 		.price {
@@ -238,14 +240,174 @@
 	}
 }
 
+// Labels
+.label-group {
+	.label {
+		margin-right: 5px;
+	}
+}
+.label {
+	padding: 1px 3px;
+	color: $color-white;
+	border-radius: 3px;
+	font-size: 1.2rem;
+	display: inline-block;
+}
+
+.label--green {
+	background: $light-green;
+}
+
+.label--grey {
+	background: #c2c2c2;
+}
+
 // Task Content
 .task-content {
 	.header-block {
 		background: $color-white;
 		border-radius: 3px;
-		padding: 15px;
+		padding: 25px 15px;
+		margin-bottom: 35px;
 		.main-info {
 			display: flex;
+			border-bottom: 1px #ebebeb solid;
 		}
+	}
+	.left__side {
+		width: 70%;
+		.name {
+			font-size: 2.4rem;
+			line-height: 2.4rem;
+			margin-bottom: 10px;
+		}
+		.row__block {
+			display: flex;
+			flex-wrap: wrap;
+			margin-left: -15px;
+		}
+		.pacient-id {
+			margin-left: 15px;
+			margin-bottom: 20px;
+		}
+		.financial-class {
+			margin-left: 15px;
+			margin-bottom: 20px;
+		}
+		.location {
+			margin-left: 15px;
+			margin-bottom: 20px;
+		}
+		.label-group {
+			margin-left: 15px;
+			margin-bottom: 20px;
+		}
+	}
+	.right__side {
+		width: 30%;
+		display: flex;
+		justify-content: flex-end;
+		flex-wrap: wrap;
+		.price-col {
+			text-align: right;
+			margin-bottom: 20px;
+			padding-left: 40px;
+			.price {
+				font-size: 2.4rem;
+				position: relative;
+				margin-bottom: 7px;
+				&:before {
+					content: '\f155';
+					font-family: $font-icon;
+					color: $light-green;
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+	.additional-info {
+		margin-top: 20px;
+		> ul {
+			list-style: none;
+			display: flex;
+			li {
+				width: 20%;
+				position: relative;
+				&:last-of-type {
+					&:before {
+						display: none;
+					}
+				}
+				&:before {
+					content: ' ';
+					position: absolute;
+					right: 0;
+					width: 1px;
+					background: #ebebeb;
+					height: 26px;
+					top: 50%;
+					transform: $translateY;
+				}
+				> div {
+					&:first-of-type {
+						margin-bottom: 10px;
+					}
+				}
+			}
+		}
+	}
+}
+
+// Action Block
+.action-block {
+	.header__block {
+		background: rgba($color-white, 0.3);
+		border-radius: 3px;
+		margin-bottom: 2px;
+		padding: 5px 15px;
+		.title-block {
+			font-size: 1.2rem;
+			color: #8e8e8f;
+		}
+	}
+	.pay-item {
+		&__wrapper {
+			background: #f6f6f6;
+			padding: 10px 15px;
+		    border-radius: 0 0 3px 3px;
+		}
+		.brand-block {
+			background: $color-white;
+			text-align: center;
+		    border-radius: 3px 3px 0 0;
+		    padding-top: 4px;
+		    padding-bottom: 4px;
+			img {
+				height: 29px;
+				width: auto;
+			}
+		}
+		.info-row {
+			padding: 10px 0;
+			display: flex;
+			justify-content: space-between;
+			.price {
+				position: relative;
+				&:before {
+					content: '\f155';
+					font-family: $font-icon;
+					color: $light-green;
+					margin-right: 5px;
+				}
+			}
+		}
+	}
+}
+
+// Slide Payers
+.slide-payers {
+	* {
+	  min-height: 0;
+	  min-width: 0;
 	}
 }
