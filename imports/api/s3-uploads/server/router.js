@@ -25,8 +25,9 @@ export function getUserByToken(token) {
 export function createRoute(path, handler) {
     postRoutes.route(path, function (params, req, res, next) {
         let user;
-        let facilityId = params.facilityId;
-        let taskId = params.taskId;
+        let {facilityId} = params;
+        let {taskId} = params;
+        let {clientId}=params;
 
         if (params.token) {
             user = getUserByToken(params.token);
@@ -36,6 +37,7 @@ export function createRoute(path, handler) {
             facilityId,
             user,
             taskId,
+            clientId,
             req,
             res,
             next,
