@@ -152,8 +152,8 @@ import ReportCreate from '/imports/client/pages/reports/ReportCreate';
 route('/tasks/filter-builder', TaskFilterBuilder);
 route('/reports/list', ReportListContainer);
 route('/report/create', ReportCreate);
-route('/report/create/facilityCode/:facCode', ReportCreate, {}, {
-    name: 'report.create.facilitycode'
+route('/report/create/facilityid/:facilityId', ReportCreate, {}, {
+    name: 'report.create.facilityid'
 });
 route('/report/:id/edit', ReportManage);
 

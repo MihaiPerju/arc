@@ -54,7 +54,7 @@ export default class FacilityRow extends React.Component {
                             <Dropdown.Item>
                                 <Button color="green"
                                     onClick={() => (
-                                        FlowRouter.go("report.create.facilitycode", {facCode: facility._id})
+                                        FlowRouter.go("report.create.facilityid", {facilityId: facility._id})
                                     )}>
                                     Create Report
                                 </Button>

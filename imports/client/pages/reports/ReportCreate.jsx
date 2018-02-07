@@ -39,6 +39,9 @@ export default class ReportCreate extends React.Component {
             filterBuilderData
         });
 
+        console.log(components);
+        console.log(filterBuilderData);
+
         const {generalInformation} = this.state;
         _.extend(generalInformation, {mongoFilters: EJSON.stringify(filters), filterBuilderData});
 
@@ -53,14 +56,19 @@ export default class ReportCreate extends React.Component {
     }
 
     componentWillMount () {
-        const facCode = FlowRouter.current().params.facCode;
-        if (facCode) {
-            let filterBuilderData = {
-                facCode,
-                facCodeMatch: 'Is Exact'
-            };
+        const facilityId = FlowRouter.current().params.facilityId;
+        if (facilityId) {
+            // autocomplete if facilityId in params
             this.setState({
-                filterBuilderData
+                filterBuilderData: {
+                    facilityId
+                },
+                components: {
+                    facilityId: {
+                        isActive: true,
+                        name: 'facilityId'
+                    }
+                }
             });
         }
     }
@@ -78,7 +86,8 @@ export default class ReportCreate extends React.Component {
                     <ReportStepper hasGeneralInformation={hasGeneralInformation}/>
 
                     {hasGeneralInformation
-                        ? <div>
+                        ?
+                        <div>
                             <TaskFilterBuilder
                                 filterBuilderData={filterBuilderData}
                                 components={components}
@@ -93,7 +102,8 @@ export default class ReportCreate extends React.Component {
                                 Back
                             </Button>
                         </div>
-                        : <AutoForm
+                        :
+                        <AutoForm
                             model={generalInformation}
                             schema={schema}
                             onSubmit={this.goNextStep.bind(this)} ref="form">
