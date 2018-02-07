@@ -4,6 +4,7 @@ import {Accounts} from 'meteor/accounts-base';
 import fs from 'fs';
 import Uploader from '/imports/api/s3-uploads/server/s3';
 import UploadedFile from '/imports/api/s3-uploads/server/UploadedFile';
+import folderConfig from '/imports/api/business';
 
 let postRoutes = Picker.filter(function (req, res) {
     return req.method == "POST";
@@ -81,8 +82,17 @@ export function createRoute(path, handler) {
                     const fileSizeInBytes = stats.size;
 
                     let fileName = filePath.replace(os.tmpDir() + '/', '');
+                    const movePath = os.tmpDir() + folderConfig.LOCAL_STORAGE_FOLDER + '/' + fileName;
+
+                    //If there is no local folder
+                    if (!fs.existsSync('/tmp' + folderConfig.LOCAL_STORAGE_FOLDER)) {
+                        fs.mkdirSync('/tmp' + folderConfig.LOCAL_STORAGE_FOLDER);
+                    }
+                    //Move file to specified storage folder
+                    fs.renameSync(filePath, movePath);
+
                     const mimeType = Uploader.guessMimeType(fileName);
-                    const uploadFile = new UploadedFile(fileName, filePath, mimeType, fileSizeInBytes);
+                    const uploadFile = new UploadedFile(fileName, movePath, mimeType, fileSizeInBytes);
 
                     return uploadFile.save({
                         resourceType,
