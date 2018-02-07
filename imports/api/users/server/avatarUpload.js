@@ -1,8 +1,8 @@
 import Users from '../collection';
-import { createRoute } from '/imports/api/s3-uploads/server/router';
+import {createRoute} from '/imports/api/s3-uploads/server/router';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 
-createRoute('/uploads/avatar/:token', ({user, error, filenames, success, upload}) => {
+createRoute('/uploads/avatar/:token', ({user, error, filenames, success, uploadLocal}) => {
     if (!user) {
         return error('Not Authorized');
     }
@@ -11,7 +11,7 @@ createRoute('/uploads/avatar/:token', ({user, error, filenames, success, upload}
         return error('Invalid number of files');
     }
 
-    const [uploadId] = upload();
+    const [uploadId] = uploadLocal();
     const uploadObject = Uploads.findOne(uploadId);
 
     if (user.avatar && user.avatar._id) {

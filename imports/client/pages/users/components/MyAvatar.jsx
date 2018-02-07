@@ -1,7 +1,7 @@
 import React from 'react';
 import DropzoneComponent from 'react-dropzone-component';
-import { path, getToken } from '/imports/api/s3-uploads/utils';
-import { Notifier } from '/imports/client/utils';
+import {path, getToken} from '/imports/api/s3-uploads/utils';
+import {Notifier} from '/imports/client/utils';
 
 class MyAvatar extends React.Component {
     render() {
@@ -13,7 +13,8 @@ class MyAvatar extends React.Component {
             complete(file) {
                 Notifier.success('Avatar added');
                 this.removeFile(file);
-            }
+            },
+            acceptedFiles: 'image/*'
         };
 
         const user = this.props.user;
@@ -23,7 +24,7 @@ class MyAvatar extends React.Component {
                 {user.avatar && user.avatar.path
                     ?
                     <div>
-                        <img src={path(user.avatar.path)} />
+                        <img src={'/image/' + user.avatar._id}/>
                         <a href="" onClick={this.onRemoveAvatar.bind(this)}>Delete Avatar</a>
                     </div>
                     : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>

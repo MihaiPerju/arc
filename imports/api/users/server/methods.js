@@ -2,6 +2,7 @@ import {Meteor} from 'meteor/meteor';
 import MyProfileSchema from '../schemas/MyProfileSchema';
 import Users from '../collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import fs from 'fs';
 
 Meteor.methods({
     'users.my_profile.update'(data) {
@@ -20,9 +21,13 @@ Meteor.methods({
 
     'users.remove_avatar'() {
         const user = Users.findOne(this.userId);
-        const avatarId = user.avatar._id;
+        const {_id} = user.avatar;
+        const avatar = Uploads.findOne({_id});
+        const {path} = avatar;
+        //Delete file from /tmp
+        fs.unlinkSync(path);
 
-        Uploads.remove(avatarId);
+        Uploads.remove(_id);
 
         Users.update(this.userId, {
             $unset: {
