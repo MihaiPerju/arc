@@ -84,7 +84,8 @@ export default class EditClient extends React.Component {
                 Notifier.success('Logo added');
                 this.removeFile(file);
                 that.getClient();
-            }
+            },
+            acceptedFiles: 'image/*'
         };
 
         return (
