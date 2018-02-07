@@ -65,7 +65,7 @@ export default new SimpleSchema({
         type: ImportRulesSchema,
         optional: true
     },
-    logoPath: {
+    logoId: {
         type: String,
         optional: true
     },

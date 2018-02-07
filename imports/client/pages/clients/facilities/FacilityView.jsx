@@ -58,8 +58,14 @@ export default class FacilityView extends React.Component {
 
         return (
             <Container className="page-container">
-                <Header as="h3" textAlign="center">Facility {facility && facility.name}</Header>
-                <img src={path(facility && facility.logoPath)}/>
+                <Header as="h3" textAlign="center">{facility && facility.name}</Header>
+                {
+                    facility && facility.logoId
+                    &&
+                    <div>
+                        <img src={'/image/' + facility.logoId}/>
+                    </div>
+                }
                 <h5>Status: {facility && facility.status}</h5>
                 <h5>State: {facility && facility.state}</h5>
                 <h5>Region: {facility && facility.region}</h5>
