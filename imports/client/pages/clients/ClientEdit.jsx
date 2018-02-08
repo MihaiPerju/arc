@@ -76,7 +76,7 @@ export default class EditClient extends React.Component {
         const clientId = this.props.userId;
 
         const componentConfig = {
-            postUrl: '/uploads/logo/' + '/' + clientId + '/' + getToken()
+            postUrl: '/uploads/logo/' + clientId + '/' + getToken()
         };
 
         const djsConfig = {

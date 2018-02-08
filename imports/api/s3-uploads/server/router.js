@@ -27,7 +27,7 @@ export function createRoute(path, handler) {
         let user;
         let {facilityId} = params;
         let {taskId} = params;
-        let {clientId}=params;
+        let {clientId} = params;
 
         if (params.token) {
             user = getUserByToken(params.token);
