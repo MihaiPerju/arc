@@ -3,6 +3,8 @@ import {getUserByToken} from '/imports/api/s3-uploads/server/router';
 import Security from '/imports/api/tasks/security';
 import RolesEnum from '/imports/api/users/enums/roles';
 import fs from 'fs';
+import os from 'os';
+import FolderConfig from '/imports/api/business';
 
 Picker.route('/pdf/:_id/:token', function (params, req, res, next) {
     //Checking user rights
@@ -15,10 +17,9 @@ Picker.route('/pdf/:_id/:token', function (params, req, res, next) {
         res.writeHead(404);
         res.write("An error occurred");
     }
-
-    const attachment = Uploads.findOne({_id: params._id});
-    const pdfPath = attachment.path;
-    var data = fs.readFileSync(pdfPath);
+    const {_id} = params;
+    const {path} = Uploads.findOne({_id});
+    let data = fs.readFileSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
 
     res.end(data);
 });

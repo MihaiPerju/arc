@@ -2,6 +2,7 @@ import React from 'react';
 import {Comment} from 'semantic-ui-react'
 import autoBind from 'react-autobind';
 import moment from 'moment';
+import {getImagePath} from "../../../../api/utils";
 
 export default class CommentSingle extends React.Component {
     constructor() {
@@ -18,7 +19,7 @@ export default class CommentSingle extends React.Component {
             <div>
                 <Comment>
                     <Comment.Avatar
-                        src={author && author.avatar ?'/image/'+author.avatar._id : 'https://www.dontshake.org/media/k2/items/cache/71f67488b0857639cee631943a3fc6fa_XL.jpg'}/>
+                        src={author && author.avatar ? getImagePath(author.avatar.path) : 'https://www.dontshake.org/media/k2/items/cache/71f67488b0857639cee631943a3fc6fa_XL.jpg'}/>
                     <Comment.Content>
                         <Comment.Author
                             as='a'>{

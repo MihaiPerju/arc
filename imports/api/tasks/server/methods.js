@@ -9,6 +9,8 @@ import moment from 'moment';
 import Facilities from '/imports/api/facilities/collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import fs from 'fs';
+import os from 'os';
+import FolderConfig from '/imports/api/business';
 
 Meteor.methods({
     'task.actions.add'(taskId, actionId) {
@@ -34,10 +36,9 @@ Meteor.methods({
                 attachmentIds: attachmentId
             }
         });
-        const upload = Uploads.findOne({_id: attachmentId});
+        const {path} = Uploads.findOne({_id: attachmentId});
         Uploads.remove({_id: attachmentId});
-        const {path} = upload;
-        fs.unlinkSync(path);
+        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
     },
 
     'task.attachment.update_order'(_id, attachmentIds) {

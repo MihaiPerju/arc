@@ -4,6 +4,8 @@ import {getUserByToken} from '/imports/api/s3-uploads/server/router';
 import Security from '/imports/api/tasks/security';
 import RolesEnum from '/imports/api/users/enums/roles';
 import PDFMerge from 'pdf-merge';
+import os from 'os';
+import FolderConfig from '/imports/api/business';
 
 Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
 
@@ -24,8 +26,8 @@ Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
 
     const files = [];
     for (_id of attachmentIds) {
-        const attachment = Uploads.findOne({_id});
-        files.push(attachment.path);
+        const {path} = Uploads.findOne({_id});
+        files.push(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
     }
 
     //Merge PDFs
