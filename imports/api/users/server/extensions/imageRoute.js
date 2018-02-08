@@ -1,14 +1,14 @@
-import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import fs from 'fs';
+import os from 'os';
+import folderConfig from '/imports/api/business';
 
-Picker.route('/image/:_id', function (params, req, res, next) {
-    const {_id} = params;
-    const avatar = Uploads.findOne({_id});
-    const {path} = avatar;
-    const file = fs.readFileSync(path);
+Picker.route('/image/:path', function (params, req, res, next) {
+    const {path} = params;
+    const filePath = os.tmpDir() + folderConfig.LOCAL_STORAGE_FOLDER + '/' + path;
+    const file = fs.readFileSync(filePath);
 
     res.writeHead(200, {
-        'Content-Type': 'image/jpeg',
+        'Content-Type': file.mimeType,
         'Content-Disposition': `attachment; filename=${params._id}.jpeg`,
         'Content-Length': file.length
     });

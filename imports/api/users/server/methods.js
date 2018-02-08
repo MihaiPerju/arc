@@ -3,6 +3,8 @@ import MyProfileSchema from '../schemas/MyProfileSchema';
 import Users from '../collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import fs from 'fs';
+import os from 'os'
+import FolderConfig from '/imports/api/business';
 
 Meteor.methods({
     'users.my_profile.update'(data) {
@@ -24,16 +26,15 @@ Meteor.methods({
         const {_id} = user.avatar;
         const avatar = Uploads.findOne({_id});
         const {path} = avatar;
-        //Delete file from /tmp
-        fs.unlinkSync(path);
-
-        Uploads.remove(_id);
 
         Users.update(this.userId, {
             $unset: {
                 avatar: ''
             }
-        })
+        });
+        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
+        Uploads.remove(_id);
+
     },
 
     'users.get'(userIds) {

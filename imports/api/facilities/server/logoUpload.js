@@ -15,10 +15,10 @@ createRoute('/uploads/facility-logo/:facilityId/:token', ({user, facilityId, err
     }
 
     const [uploadId] = uploadLocal();
-
+    const {path} = Uploads.findOne({_id: uploadId});
     Facilities.update({_id: facilityId}, {
         $set: {
-            logoId: uploadId
+            logoPath: path
         }
     });
 

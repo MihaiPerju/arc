@@ -2,6 +2,8 @@ import Security from '/imports/api/security/security.js';
 import Clients from '/imports/api/clients/collection.js';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import fs from 'fs';
+import os from 'os';
+import FolderConfig from '/imports/api/business';
 
 Meteor.methods({
     'client.create'(data) {
@@ -45,18 +47,15 @@ Meteor.methods({
     'client.removeLogo'(clientId) {
         Security.isAdminOrTech(this.userId);
 
-        const client = Clients.findOne({_id: clientId});
-        const {logoId} = client;
-        const logo = Uploads.findOne({_id: logoId});
-        const {path} = logo;
+        const {logoPath} = Clients.findOne({_id: clientId});
 
         //Delete from local storage
-        fs.unlinkSync(path);
-        Uploads.remove({_id: logoId});
+        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + logoPath);
+        Uploads.remove({path: logoPath});
 
         Clients.update({_id: clientId}, {
             $unset: {
-                logoId: null
+                logoPath: null
             }
         });
     },

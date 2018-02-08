@@ -15,7 +15,7 @@ export default new SimpleSchema({
         type: String,
         regEx: SimpleSchema.RegEx.Email
     },
-    logoId: {
+    logoPath: {
         type: String,
         optional: true
     },

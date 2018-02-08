@@ -8,6 +8,7 @@ import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
+import {getImagePath} from '/imports/api/utils';
 
 export default class EditClient extends React.Component {
     constructor() {
@@ -110,10 +111,10 @@ export default class EditClient extends React.Component {
 
                             <h3>Client Logo</h3>
                             {
-                                model.logoId
+                                model.logoPath
                                     ?
                                     <div>
-                                        <img src={'/image/' + model.logoId}/>
+                                        <img src={getImagePath(model.logoPath)}/>
                                         <a href="" onClick={this.onRemoveLogo.bind(this)}>Remove Logo</a>
                                     </div>
                                     : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>

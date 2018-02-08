@@ -4,6 +4,8 @@ import Security from '/imports/api/security/security.js';
 import FacilitySchema from "../schema.js";
 import Regions from '/imports/api/regions/collection';
 import fs from 'fs';
+import os from 'os';
+import FolderConfig from '/imports/api/business';
 import Uploads from "../../s3-uploads/uploads/collection";
 
 Meteor.methods({
@@ -49,19 +51,17 @@ Meteor.methods({
 
     'facility.getLogo'(_id) {
         const facility = Facilities.findOne({_id});
-        const {logoId} = facility;
-        return logoId;
+        const {logoPath} = facility;
+        return logoPath;
     },
 
-    'facility.removeLogo'(_id, uploadId) {
+    'facility.removeLogo'(_id, path) {
         Facilities.update({_id}, {
             $unset: {
-                logoId: null
+                logoPath: null
             }
         });
-        const logo = Uploads.findOne({_id: uploadId});
-        const {path} = logo;
-        fs.unlinkSync(path);
-        Uploads.remove({_id: uploadId});
+        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
+        Uploads.remove({path});
     }
 });

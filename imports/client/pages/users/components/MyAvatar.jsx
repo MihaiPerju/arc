@@ -1,7 +1,8 @@
 import React from 'react';
 import DropzoneComponent from 'react-dropzone-component';
-import {path, getToken} from '/imports/api/s3-uploads/utils';
+import {getToken} from '/imports/api/s3-uploads/utils';
 import {Notifier} from '/imports/client/utils';
+import {getImagePath} from '/imports/api/utils';
 
 class MyAvatar extends React.Component {
     render() {
@@ -24,7 +25,7 @@ class MyAvatar extends React.Component {
                 {user.avatar && user.avatar.path
                     ?
                     <div>
-                        <img src={'/image/' + user.avatar._id}/>
+                        <img src={getImagePath(user.avatar.path)}/>
                         <a href="" onClick={this.onRemoveAvatar.bind(this)}>Delete Avatar</a>
                     </div>
                     : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>

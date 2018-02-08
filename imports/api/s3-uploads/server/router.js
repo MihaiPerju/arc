@@ -84,8 +84,8 @@ export function createRoute(path, handler) {
                     const fileSizeInBytes = stats.size;
 
                     let fileName = filePath.replace(os.tmpDir() + '/', '');
-                    const movePath = os.tmpDir() + folderConfig.LOCAL_STORAGE_FOLDER + '/' + fileName;
-
+                    let movePath = os.tmpDir() + folderConfig.LOCAL_STORAGE_FOLDER + '/' + fileName;
+                    movePath = movePath.replace(/\s+/g, '-');
                     //If there is no local folder
                     if (!fs.existsSync('/tmp' + folderConfig.LOCAL_STORAGE_FOLDER)) {
                         fs.mkdirSync('/tmp' + folderConfig.LOCAL_STORAGE_FOLDER);
@@ -93,8 +93,10 @@ export function createRoute(path, handler) {
                     //Move file to specified storage folder
                     fs.renameSync(filePath, movePath);
 
+                    filePath = movePath.replace(os.tmpDir() + folderConfig.LOCAL_STORAGE_FOLDER+'/', '');
+
                     const mimeType = Uploader.guessMimeType(fileName);
-                    const uploadFile = new UploadedFile(fileName, movePath, mimeType, fileSizeInBytes);
+                    const uploadFile = new UploadedFile(fileName, filePath, mimeType, fileSizeInBytes);
 
                     return uploadFile.save({
                         resourceType,

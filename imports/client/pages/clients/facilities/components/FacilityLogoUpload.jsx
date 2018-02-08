@@ -3,21 +3,22 @@ import {Container, Header} from 'semantic-ui-react'
 import DropzoneComponent from 'react-dropzone-component';
 import Notifier from '/imports/client/lib/Notifier';
 import {getToken} from '/imports/api/s3-uploads/utils';
+import {getImagePath} from '/imports/api/utils';
 
 export default class FacilityLogoUpload extends React.Component {
     constructor() {
         super();
         this.state = {
-            logoId: null
+            logoPath: null
         }
     }
 
     getLogo() {
         const {facilityId} = this.props;
-        Meteor.call('facility.getLogo', facilityId, (err, logoId) => {
+        Meteor.call('facility.getLogo', facilityId, (err, logoPath) => {
             if (!err) {
                 this.setState({
-                    logoId
+                    logoPath
                 })
             } else {
                 Notifier.error(err.reason);
@@ -31,8 +32,8 @@ export default class FacilityLogoUpload extends React.Component {
 
     onRemoveLogo() {
         const {facilityId} = this.props;
-        const {logoId} = this.state;
-        Meteor.call('facility.removeLogo', facilityId, logoId, (err) => {
+        const {logoPath} = this.state;
+        Meteor.call('facility.removeLogo', facilityId, logoPath, (err) => {
             if (!err) {
                 Notifier.success("Logo removed!");
                 this.getLogo();
@@ -44,7 +45,7 @@ export default class FacilityLogoUpload extends React.Component {
 
     render() {
         const {facilityId} = this.props;
-        const {logoId} = this.state;
+        const {logoPath} = this.state;
         const that = this;
 
         const componentConfig = {
@@ -62,10 +63,10 @@ export default class FacilityLogoUpload extends React.Component {
 
         return <Container>
             <Header textAlign='center' as='h2'>Logo</Header>
-            {logoId
+            {logoPath
                 ?
                 <div>
-                    <img src={'/image/' + logoId}/>
+                    <img src={getImagePath(logoPath)}/>
                     <a href="" onClick={this.onRemoveLogo.bind(this)}>Delete Logo</a>
                 </div>
                 : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
