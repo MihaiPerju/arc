@@ -21,7 +21,7 @@ export default class FacilityCreate extends React.Component {
         return (
             <Container className="page-container">
                 <Header as="h3" textAlign="center">Create facility</Header>
-                <FacilityForm submitAction={this.createFacility}/>
+                <FacilityForm purpose="Create" submitAction={this.createFacility}/>
             </Container>
         );
     }
