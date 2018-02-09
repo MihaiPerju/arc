@@ -48,6 +48,7 @@ export default class UserSingle extends Component {
         return (
             <Table.Row>
                 <Table.Cell>{user.emails[0].address}</Table.Cell>
+                <Table.Cell>tags</Table.Cell>
                 <Table.Cell>
                     <Dropdown button text='Action' icon={null}>
                         <Dropdown.Menu>

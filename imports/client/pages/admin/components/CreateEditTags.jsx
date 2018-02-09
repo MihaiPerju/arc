@@ -4,6 +4,7 @@ import Dialog from '/imports/client/lib/ui/Dialog';
 import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
 import TagsSchema from '/imports/api/tags/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
+import TagsList from './TagsList.jsx';
 
 export default class CreateEditTags extends Component {
     constructor () {
@@ -11,19 +12,21 @@ export default class CreateEditTags extends Component {
 
         this.state = {
             cancelDialogActive: false,
-            showSpecificRoles: false
+            showSpecificRoles: false,
+            tags: []
         };
     }
 
-    dialogOpen = () => {
+    componentDidMount () {
         this.setState({
-            cancelDialogActive: true
+            tags: this.props.tags
         });
-    };
+    }
 
-    dialogClose = () => {
+    dialogToggle = () => {
+        const {cancelDialogActive} = this.state;
         this.setState({
-            cancelDialogActive: false
+            cancelDialogActive: !cancelDialogActive
         });
     };
 
@@ -38,9 +41,19 @@ export default class CreateEditTags extends Component {
     };
 
     onSubmitForm = (model) => {
-        Meteor.call('tag.create', model, (err) => {
+        const {tags} = this.state;
+        const {onTagsChange} = this.props;
+
+        Meteor.call('tag.create', model, (err, data) => {
             if (!err) {
-                Notifier.success('Tag created!');
+                model._id = data;
+                tags.push(model);
+                this.setState({
+                    tags
+                });
+                onTagsChange(tags);
+
+                Notifier.success('Tag successfully created!');
                 this.refs.tagForm.reset();
             } else {
                 Notifier.error(err.reason);
@@ -48,27 +61,34 @@ export default class CreateEditTags extends Component {
         });
     };
 
+    onTagsChange = (tags) => {
+        const {onTagsChange} = this.props;
+
+        this.setState({
+            tags
+        });
+        onTagsChange(tags);
+    };
+
     render () {
-        const {cancelDialogActive, showSpecificRoles} = this.state;
+        const {cancelDialogActive, showSpecificRoles, tags} = this.state;
         const actions = [
-            <Button onClick={this.dialogClose}>Cancel</Button>,
+            <Button onClick={this.dialogToggle}>Cancel</Button>,
             <Button onClick={this.saveTags}>Save</Button>,
         ];
         const visibilitySelect = [{value: 0, label: 'Select visibility'}, {value: 1, label: 'Public'}];
 
         return (
             <div>
-                <Button type="button" onClick={this.dialogOpen}>Manage Tags</Button>
+                <Button type="button" onClick={this.dialogToggle}>Manage Tags</Button>
                 {
                     cancelDialogActive && (
-                        <Dialog closePortal={this.dialogClose}
+                        <Dialog closePortal={this.dialogToggle}
                                 title="Manage Tags"
                                 actions={actions}>
 
                             <AutoForm schema={TagsSchema} onChangeModel={this.onFormChange} onSubmit={this.onSubmitForm}
                                       ref="tagForm">
-
-                                {this.state.error && <div className="error">{this.state.error}</div>}
 
                                 <AutoField name="name"/>
                                 <ErrorField name="name"/>
@@ -79,10 +99,15 @@ export default class CreateEditTags extends Component {
                                     showSpecificRoles &&
                                     <AutoField name="visibility"/>
                                 }
+
                                 <Button color="green">Create new tag</Button>
+
                             </AutoForm>
 
-                            <h2>List of current tags</h2>
+                            <h2>List of available tags</h2>
+
+                            <TagsList tags={tags} onTagsChange={this.onTagsChange}/>
+
                         </Dialog>
                     )
                 }

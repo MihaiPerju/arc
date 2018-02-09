@@ -8,13 +8,13 @@ Meteor.methods({
 
         data.userId = this.userId;
 
-        Tags.insert(data);
+        return Tags.insert(data);
     },
 
-    'tag.delete' (id) {
+    'tag.delete' (_id) {
         Security.isAdminOrTech(this.userId);
 
-        Tags.remove({_id: id});
+        Tags.remove({_id: _id});
     },
 
     'tag.getAll' () {

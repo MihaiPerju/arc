@@ -7,5 +7,6 @@ export default Users.createNamedQuery('listUsers', {
     },
     $paginate: true,
     profile: 1,
-    emails: 1
+    emails: 1,
+    tags: 1
 });

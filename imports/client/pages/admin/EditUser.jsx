@@ -9,6 +9,7 @@ import { Container } from 'semantic-ui-react';
 import { Divider } from 'semantic-ui-react';
 import CreateEditTags from './components/CreateEditTags';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
+import TagsService from './services/TagsService';
 
 class EditUser extends Component {
     constructor () {
@@ -65,14 +66,20 @@ class EditUser extends Component {
     getTagList = () => {
         const {allTags} = this.state;
 
-        return allTags.map((tag, key) => ({value: tag._id, label: tag.name}));
+        return allTags.map((tag, key) => ({value: tag._id, label: TagsService.getTagName(tag)}));
     };
+
+    onTagsChange = (tags) => {
+        this.setState({
+           tags
+        });
+    }
 
     render () {
         const {data, loading, error} = this.props;
+        const {allTags} = this.state;
         const model = data;
         const tags = this.getTagList();
-        console.log(tags);
         if (model) {
             model.email = data && data.emails[0].address;
         }
@@ -112,9 +119,10 @@ class EditUser extends Component {
                     <SelectMulti name="tagIds" options={tags}/>
                     <ErrorField name="tagIds"/>
 
-                    <p>
-                        <CreateEditTags/>
-                    </p>
+                    {
+                        allTags &&
+                        <CreateEditTags tags={allTags} onTagsChange={this.onTagsChange}/>
+                    }
 
                     <Divider/>
 
