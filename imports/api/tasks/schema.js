@@ -25,15 +25,15 @@ export default new SimpleSchema({
         optional: true
     },
     dischrgDate: {
-        type: String,
+        type: Date,
         optional: true
     },
     fbDate: {
-        type: String,
+        type: Date,
         optional: true
     },
     acctBal: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     finClass: {
@@ -41,11 +41,11 @@ export default new SimpleSchema({
         optional: true
     },
     admitDate: {
-        type: String,
+        type: Date,
         optional: true
     },
     medNo: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     insName: {
@@ -61,27 +61,27 @@ export default new SimpleSchema({
         optional: true
     },
     insCode: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     insCode2: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     insCode3: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     insBal: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     insBal2: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     insBal3: {
-        type: String,
+        type: SimpleSchema.Integer,
         optional: true
     },
     state: {
@@ -115,5 +115,10 @@ export default new SimpleSchema({
     'actionsLinkData.$': {
         type: Object,
         blackbox: true
+    },
+    metaData: {
+        type: Object,
+        blackbox: true,
+        optional: true
     }
 })

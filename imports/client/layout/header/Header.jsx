@@ -16,7 +16,7 @@ class Header extends Component {
 
         let routes = [
             {name: "/home", label: "Home"},
-            {name: "/tasks", label: "Tasks"},
+            {name: "/accounts", label: "Accounts"},
         ];
         if (user && user.roles && user.roles.includes(RolesEnum.ADMIN)) {
             routes.push(
@@ -35,7 +35,8 @@ class Header extends Component {
             {name: "/client/list", label: "Clients"},
             {name: "/code/list", label: "CARC/RARC Codes"},
             {name: "/reports/list", label: "Reports"},
-            {name: "/action/list", label: "Actions"}
+            {name: "/action/list", label: "Actions"},
+            {name: "/inscompany/list", label: "Insurance Companies"}
         ];
 
         const managerRoutes = [

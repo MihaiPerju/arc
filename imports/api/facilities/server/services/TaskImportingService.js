@@ -5,7 +5,7 @@ export default class TaskService {
     //For placement file
     static upload(results, importRules, facilityId) {
         const tasks = CsvParseService.convertToTasks(results, importRules, true, facilityId);
-        //Creating tasks
+        // Creating tasks
         tasks.map((task) => {
             Tasks.insert(task);
         });

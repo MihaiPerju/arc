@@ -1,14 +1,14 @@
 import React from 'react';
 import RegionSchema from '/imports/api/regions/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
+import { AutoForm, AutoField, ErrorField } from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 
 export default class RegionEdit extends React.Component {
-    constructor() {
+    constructor () {
         super();
 
         this.state = {
@@ -17,7 +17,7 @@ export default class RegionEdit extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentWillMount () {
         Meteor.call('region.get', FlowRouter.current().params.id, (error, model) => {
             if (!error) {
                 if (model) {
@@ -30,22 +30,22 @@ export default class RegionEdit extends React.Component {
                 this.setState({error});
                 Notifier.error(error.reason);
             }
-        })
+        });
     }
 
-    onSubmit(data) {
+    onSubmit (data) {
         data._id = this.state.model._id;
         Meteor.call('region.update', data, (err) => {
             if (!err) {
-                Notifier.success("Data saved");
+                Notifier.success('Data saved');
                 FlowRouter.go('/region/list');
             } else {
                 Notifier.error(err.reason);
             }
-        })
+        });
     }
 
-    render() {
+    render () {
         const {model} = this.state;
 
         return (
@@ -57,7 +57,7 @@ export default class RegionEdit extends React.Component {
                         <div className="error">{this.state.error}</div>
                         :
                         <AutoForm model={model} schema={RegionSchema} onSubmit={this.onSubmit.bind(this)}
-                                  ref="form">
+                                    ref="form">
 
                             <AutoField name="name"/>
                             <ErrorField name="name"/>
@@ -70,6 +70,6 @@ export default class RegionEdit extends React.Component {
                         </AutoForm>
                 }
             </Container>
-        )
+        );
     }
 }

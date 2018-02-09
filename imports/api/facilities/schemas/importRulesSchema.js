@@ -3,85 +3,83 @@ import SimpleSchema from 'simpl-schema';
 export default new SimpleSchema({
     hasHeader: {
         type: Boolean,
-        allowedValues: [true, false],
-        defaultValue: false,
-        label: 'Does the file have a header?'
+        allowedValues: [true, false]
     },
     acctNum: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true,
         label: 'Account Number'
     },
     facCode: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     ptType: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     ptName: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     dischrgDate: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     fbDate: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     acctBal: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     finClass: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     admitDate: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     medNo: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insName: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insName2: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insName3: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insCode: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insCode2: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insCode3: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insBal: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insBal2: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     },
     insBal3: {
-        type: SimpleSchema.Integer,
+        type: String,
         optional: true
     }
 })

@@ -86,7 +86,7 @@ export default class ActionEdit extends React.Component {
                         <div className="error">{this.state.error}</div>
                         :
                         <AutoForm model={model} schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                    
+
                             <AutoField name="title"/>
                             <ErrorField name="title"/>
 
@@ -94,12 +94,12 @@ export default class ActionEdit extends React.Component {
                             <ErrorField name="description"/>
 
                             <input type="checkbox" checked={this.state.checked} onChange={this.handleClick}/>Changes the status of the Account?
-                            
+
                             {this.state.checked &&
                                 <div>
                                     <SelectField name="substate" options={substates}/>
                                     <ErrorField name="substate"/>
-                                </div> 
+                                </div>
                             }
 
                             {!this.state.checked &&
@@ -108,7 +108,7 @@ export default class ActionEdit extends React.Component {
                                     <ErrorField name="substate"/>
                                 </div>
                             }
-            
+
                             <Divider/>
 
                             <Button fluid primary type="submit">

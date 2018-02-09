@@ -1,14 +1,16 @@
 import ActionService from './services/ActionService.js';
 import Tasks from '../collection';
-import S3 from '/imports/api/s3-uploads/server/s3';
 import TaskSecurity from './../security';
 import Security from '/imports/api/security/security';
 import {roleGroups} from '/imports/api/users/enums/roles';
-import Users from '/imports/api/users/collection';
 import StateEnum from '/imports/api/tasks/enums/states';
 import TimeService from './services/TimeService';
 import moment from 'moment';
 import Facilities from '/imports/api/facilities/collection';
+import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import fs from 'fs';
+import os from 'os';
+import FolderConfig from '/imports/api/business';
 
 Meteor.methods({
     'task.actions.add'(taskId, actionId) {
@@ -34,8 +36,9 @@ Meteor.methods({
                 attachmentIds: attachmentId
             }
         });
-
-        S3.remove(key);
+        const {path} = Uploads.findOne({_id: attachmentId});
+        Uploads.remove({_id: attachmentId});
+        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
     },
 
     'task.attachment.update_order'(_id, attachmentIds) {

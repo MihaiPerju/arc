@@ -59,8 +59,10 @@ route('/post/:postId/edit', EditPost);
 //Clients
 import CreateClient from '/imports/client/pages/clients/ClientCreate';
 import EditClient from '/imports/client/pages/clients/ClientEdit';
-import ClientListContainer from '/imports/client/pages/clients/ClientListContainer.jsx';
+import ClientListContainer from '/imports/client/pages/clients/ClientListContainer';
+import ClientView from '/imports/client/pages/clients/ClientView';
 
+route('/client/:clientId/view', ClientView);
 route('/client/create', CreateClient);
 route('/client/:userId/edit', EditClient);
 route('/client/list', ClientListContainer);
@@ -118,8 +120,8 @@ route('/code/create', CodeCreate);
 import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
 import TaskViewContainer from '/imports/client/pages/tasks/TaskViewContainer';
 
-route('/tasks', TaskListContainer);
-route('/task/:_id/view', TaskViewContainer, {}, {
+route('/accounts', TaskListContainer);
+route('/account/:_id/view', TaskViewContainer, {}, {
     name: 'task.view'
 });
 
@@ -152,3 +154,12 @@ route('/tasks/filter-builder', TaskFilterBuilder);
 route('/reports/list', ReportListContainer);
 route('/report/create', ReportCreate);
 route('/report/:id/edit', ReportManage);
+
+//Insurance Companies
+import InsuranceCompanyCreate from '/imports/client/pages/insuranceCompanies/InsuranceCompanyCreate';
+import InsuranceCompanyEdit from '/imports/client/pages/insuranceCompanies/InsuranceCompanyEdit';
+import InsuranceCompanyListContainer from '/imports/client/pages/insuranceCompanies/InsuranceCompanyListContainer';
+
+route('/inscompany/create', InsuranceCompanyCreate);
+route('/inscompany/:id/edit', InsuranceCompanyEdit);
+route('/inscompany/list', InsuranceCompanyListContainer);

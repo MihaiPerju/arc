@@ -16,7 +16,6 @@ export default class RepDashboard extends React.Component {
     componentWillMount() {
         Meteor.call('tasks.get', (err, tasks) => {
             if (!err) {
-                console.log(tasks);
                 this.setState({tasks});
             } else {
                 Notifier.error(err.reason);

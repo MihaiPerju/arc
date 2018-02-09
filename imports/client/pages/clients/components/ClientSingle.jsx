@@ -20,6 +20,10 @@ export default class ClientSingle extends Component {
         });
     }
 
+    onViewClient() {
+        FlowRouter.go("/client/:_id/view", {_id: this.props.client._id});
+    }
+
     onEditClient() {
         FlowRouter.go("/client/:_id/edit", {_id: this.props.client._id});
     }
@@ -43,6 +47,9 @@ export default class ClientSingle extends Component {
                                         }}>
                                     Manage Facilities
                                 </Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button onClick={this.onViewClient}>View Client</Button>
                             </Dropdown.Item>
                             <Dropdown.Item>
                                 <Button onClick={this.onEditClient}>Edit Client</Button>
