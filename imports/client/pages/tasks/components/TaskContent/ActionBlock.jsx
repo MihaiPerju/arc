@@ -1,6 +1,21 @@
 import React, {Component} from 'react';
+import NewAction from './NewAction';
 
 export default class ActionBlock extends Component {
+    constructor() {
+        super();
+        this.state = {
+            createAction: false
+        }
+        this.newAction = this.newAction.bind(this);
+    }
+
+    newAction() {
+        this.setState({
+            createAction: !this.state.createAction
+        })
+    }
+
     render() {
         return(
             <div className="action-block">
@@ -8,28 +23,11 @@ export default class ActionBlock extends Component {
                     <div className="title-block text-uppercase">actions</div>
                 </div>
                 <div className="main__block">
-                    <div className="add-content">
+                    <div className="add-content" onClick={this.newAction}>
                         <i className="icon-thumb-tack"/>
                         <div className="text-center">+ Add new action</div>
                     </div>
-                    <div className="new-action">
-                        <div className="action-info">
-                            <img className="md-avatar img-circle" src="/assets/img/user1.svg" alt=""/>
-                            <div className="name">Solomon Ben</div>
-                        </div>
-                        <form action="">
-                            <div className="select-action">
-                                <span>Select action</span>
-                            </div>
-                            <div className="form-group">
-                                <input type="text" placeholder="Note"/>
-                            </div>
-                            <div className="btn-group">
-                                <button className="btn--red">Cancel</button>
-                                <button className="btn--green">Save</button>
-                            </div>
-                        </form>
-                    </div>
+                    { this.state.createAction ? <NewAction/> : null }                    
                     <div className="action-list">
                         <div className="action-item">
                             <div className="action-info">
