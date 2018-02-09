@@ -16,10 +16,13 @@ $dark-grey: #333;
 $light-grey: #838383;
 $extra-light-grey: #b7b7b7;
 $blue: #3370b5;
+$light-blue: #00bff3;
 $green: #3cb878;
 $light-green: #7cc576;
 $purple: #8560a8;
 $yellow: #dac81e;
+$orange: #f26c4f;
+$red: #da6363;
 
 $color-page-bg: #eae9e9;
 
@@ -44,6 +47,9 @@ $color-tooltip-bg: black;
 $translateY: translateY(-50%);
 $translateX: translateX(-50%);
 $translateXY: translate(-50%, -50%);
+
+// Transition Variables
+$transition300: 300ms ease;
 
 //Material Design shadows
 $shadow-dp0: 0px 0px 0px 0px rgba(black, 0.2), 0px 0px 0px 0px rgba(black, 0.14), 0px 0px 0px 0px rgba(black, 0.12);

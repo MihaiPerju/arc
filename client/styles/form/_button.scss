@@ -8,16 +8,15 @@ button,
   outline: none;
   text-align: center;
   text-decoration: none;
-  text-transform: uppercase;
   overflow: hidden;
   user-select: none;
   line-height: inherit;
 
   background: transparent;
-  @include mds-font-size(16px);
+  font-size: 1.4rem;
   padding: 12px 20px;
-  border-radius: 2px;
-  font-weight: bold;
+  border-radius: 3px;
+  color: $color-white;
 
   &:after,
   &:before {
@@ -60,6 +59,52 @@ button,
     padding: 0;
     border: 0;
   }
+
+  &.btn--red {
+    background: $orange;
+  }
+
+  &.btn--green {
+    background: $green;
+  }
+
+  &.btn--blue {
+    background: $light-blue;
+  }
+
+  &.btn-text--blue {
+    color: $blue;
+  }
+
+  &.btn-text--red {
+    color: $red;
+  }
+
+  &.btn-post {
+    background: #f3f2f2;
+    color: $light-grey;
+    border: 1px #e1e1e1 solid;
+  }
+  
+  &.btn-download {
+    color: rgba($color-white, 0.4);
+    margin-left: 2px;
+    padding-left: 30px;
+    padding-right: 30px;
+    span {
+      position: relative;
+      padding-left: 25px;
+      &:before {
+        content: '\f019';
+        font-family: $font-icon;
+        position: absolute;
+        top: 2px;
+        left: 0;
+        color: $blue;
+      }
+    }
+  }
+
 }
 
 .cc-button {
