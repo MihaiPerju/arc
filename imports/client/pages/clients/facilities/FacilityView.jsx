@@ -65,13 +65,13 @@ export default class FacilityView extends React.Component {
         }
 
         const rootUrl = Meteor.settings.public.ROOT_URL || '/themes/default/';
-        const logoPath = facility.logoPath ? path(facility.logoPath) : `${rootUrl}assets/img/no_logo.svg`;
+        const logoPath = facility.logoPath ? getImagePath(facility.logoPath) : `${rootUrl}assets/img/no_logo.svg`;
 
         return (
             <Container className="page-container">
                 <Header as="h3" textAlign="center">Facility {facility.name}</Header>
                 <div>
-                    <img src={getImagePath(facility.logoPath)}/>
+                    <img src={logoPath}/>
                 </div>
                 <h5>Status: {facility.status}</h5>
                 <h5>State: {facility.state}</h5>
