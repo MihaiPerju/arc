@@ -45,8 +45,7 @@ describe('Import header placement files', function () {
         };
         const facilityId = 'abcdefghijklmnop';
         TaskService.upload(input, importRules, facilityId);
-        const accounts = Tasks.find().fetch();
-        const account = accounts[0];
+        const account = Tasks.findOne();
 
         //Delete date fields + id for easy checking
         delete account.fbDate;
@@ -84,7 +83,7 @@ describe('Import header placement files', function () {
 
 
         test = () => {
-            if (JSON.stringify(account.metaData) !== JSON.stringify(expectedAccount.metaData)){
+            if (JSON.stringify(account.metaData) !== JSON.stringify(expectedAccount.metaData)) {
                 return false;
             }
             delete account.metaData;
