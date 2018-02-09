@@ -9,7 +9,7 @@ import {EJSON} from 'meteor/ejson'
 import ReportsService from '../../../api/reports/services/ReportsService';
 import ReportStepper from '/imports/client/pages/reports/components/ReportStepper';
 
-export default class ReportCreate extends React.Component {
+export default class ReportEdit extends React.Component {
     constructor() {
         super();
 

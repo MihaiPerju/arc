@@ -39,9 +39,6 @@ export default class ReportCreate extends React.Component {
             filterBuilderData
         });
 
-        console.log(components);
-        console.log(filterBuilderData);
-
         const {generalInformation} = this.state;
         _.extend(generalInformation, {mongoFilters: EJSON.stringify(filters), filterBuilderData});
 
