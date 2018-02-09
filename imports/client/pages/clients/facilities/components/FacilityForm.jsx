@@ -44,7 +44,7 @@ export default class FacilityForm extends React.Component {
     };
 
     render() {
-        const {model} = this.props;
+        const {model, purpose} = this.props;
         const {regions} = this.state;
         const regionIds = this.getRegionOptions(regions);
 
@@ -58,7 +58,9 @@ export default class FacilityForm extends React.Component {
         return (
             <Container>
                 <Divider/>
-                <FacilityLogoUpload facilityId={model && model._id}/>
+                {purpose && purpose=="Edit" &&
+                    <FacilityLogoUpload facilityId={model && model._id}/>
+                }
                 <Divider/>
 
                 <AutoForm schema={schema} model={newModel} onSubmit={this.onSubmit}>
