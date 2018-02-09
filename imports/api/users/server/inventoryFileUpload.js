@@ -12,14 +12,14 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
 
     const importRules = ParseService.getImportRules(facilityId);
 
-    for (index of filenames) {
+    for (index in filenames) {
         const stream = fs.readFileSync(filenames[index]);
         const csvString = stream.toString();
 
         Papa.parse(csvString, {
                 chunk: (results) => {
-                    //the result needs to be performed here
-                    TaskService.update(results.data, importRules);
+                    // the result needs to be performed here
+                    TaskService.update(results.data, importRules, facilityId);
                 }
             }
         );
