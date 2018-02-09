@@ -1,16 +1,16 @@
 import React from 'react';
-import FacilityContactList from "./FacilityContactList.jsx";
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
-import FacilitySchema from "/imports/api/facilities/schema.js";
+import FacilityContactList from './FacilityContactList.jsx';
+import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
+import FacilitySchema from '/imports/api/facilities/schema.js';
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import SelectUsersContainer from './SelectUsersContainer';
-import {Container, Divider, Button} from 'semantic-ui-react'
+import { Container, Divider, Button } from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 import FacilityLogoUpload from '../components/FacilityLogoUpload';
 
 export default class FacilityForm extends React.Component {
-    constructor() {
+    constructor () {
         super();
 
         this.state = {
@@ -19,14 +19,14 @@ export default class FacilityForm extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentWillMount () {
         Meteor.call('regions.get', (err, regions) => {
             if (!err) {
                 this.setState({
                     regions
-                })
+                });
             } else {
-                Notifier.error("Couldn't get regions");
+                Notifier.error('Couldn\'t get regions');
             }
         });
     }
@@ -43,13 +43,13 @@ export default class FacilityForm extends React.Component {
         return regions.map((region, key) => ({value: region._id, label: region.name}));
     };
 
-    render() {
+    render () {
         const {model, purpose} = this.props;
         const {regions} = this.state;
         const regionIds = this.getRegionOptions(regions);
 
         const statuses = this.getOptions(FacilityStatusEnum);
-        const schema = FacilitySchema.omit("clientId", "createdAt");
+        const schema = FacilitySchema.omit('clientId', 'createdAt');
         let newModel = model ? model : {
             status: FacilityStatusEnum.NEW,
             region: []
@@ -57,11 +57,14 @@ export default class FacilityForm extends React.Component {
 
         return (
             <Container>
-                <Divider/>
-                {purpose && purpose=="Edit" &&
-                    <FacilityLogoUpload facilityId={model && model._id}/>
+                {
+                    purpose && purpose == 'Edit' &&
+                    <div>
+                        <Divider/>
+                        < FacilityLogoUpload facilityId={model && model._id}/>
+                        <Divider/>
+                    </div>
                 }
-                <Divider/>
 
                 <AutoForm schema={schema} model={newModel} onSubmit={this.onSubmit}>
                     <AutoField name="name"/>
