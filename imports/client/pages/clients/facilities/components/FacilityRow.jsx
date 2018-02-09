@@ -32,7 +32,7 @@ export default class FacilityRow extends React.Component {
                 <Table.Cell>{facility.status}</Table.Cell>
                 <Table.Cell>   
 
-                    <Dropdown button text='Action' icon={null}>
+                    <Dropdown button text='Action' icon={null} simple>
                         <Dropdown.Menu>
                             <Dropdown.Item>
                                 <Button
@@ -49,6 +49,14 @@ export default class FacilityRow extends React.Component {
                                         FlowRouter.go("facility.edit", {_id: facility.clientId, facilityId: facility._id})
                                     )}>
                                     Edit
+                                </Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button color="green"
+                                    onClick={() => (
+                                        FlowRouter.go("report.create.facilityid", {facilityId: facility._id})
+                                    )}>
+                                    Create Report
                                 </Button>
                             </Dropdown.Item>
                             <Dropdown.Item>

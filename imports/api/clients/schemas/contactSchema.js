@@ -1,12 +1,16 @@
 import SimpleSchema from 'simpl-schema';
+import ContactTypes from '../enums/contactTypes';
 
 export default new SimpleSchema({
     email: {
         type: String,
         regEx: SimpleSchema.RegEx.Email
     },
-    contactDescription: {
-        type: String
+    contactType: {
+        label: 'Contact type',
+        type: String,
+        allowedValues: [ContactTypes.TECH, ContactTypes.ADMIN, ContactTypes.REP, ContactTypes.MANAGER],
+        optional: true
     },
     firstName: {
         type: String

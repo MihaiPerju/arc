@@ -29,7 +29,7 @@ Meteor.methods({
         return existingUpload.path;
     },
 
-    'client.update'(clientId, {clientName, firstName, lastName, email, logoPath, contacts}) {
+    'client.update'(clientId, {clientName, firstName, lastName, email, logoPath, contacts, financialGoals}) {
         Security.isAdminOrTech(this.userId);
 
         Clients.update({_id: clientId}, {
@@ -39,7 +39,8 @@ Meteor.methods({
                 lastName,
                 email,
                 logoPath,
-                contacts
+                contacts,
+                financialGoals
             }
         })
     },

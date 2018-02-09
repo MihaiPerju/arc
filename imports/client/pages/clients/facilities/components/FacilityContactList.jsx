@@ -22,8 +22,8 @@ export default class FacilityContactList extends React.Component {
                                 <AutoField name="email"/>
                                 <ErrorField name="email"/>
 
-                                <AutoField name="contactDescription"/>
-                                <ErrorField name="contactDescription"/>
+                                <AutoField name="contactType"/>
+                                <ErrorField name="contactType"/>
 
                                 <LongTextField name="notes"/>
                                 <ErrorField name="notes"/>
