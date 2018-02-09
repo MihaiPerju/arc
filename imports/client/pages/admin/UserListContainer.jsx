@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/users/queries/listUsers.js';
 import UserList from './components/UserList.jsx';
-import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {Container} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
+import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import { Container } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 
 export default class UserListContainer extends Pager {
-    constructor() {
+    constructor () {
         super();
 
         _.extend(this.state, {
@@ -18,15 +18,19 @@ export default class UserListContainer extends Pager {
         });
 
         this.query = query.clone();
+        this.query.setParams({
+            userId: Meteor.userId(),
+            roles: Meteor.user().roles
+        });
+
         this.UserListCont = createQueryContainer(this.query, UserList, {
             reactive: false
-        })
+        });
     }
 
-    render() {
+    render () {
         const params = _.extend({}, this.getPagerOptions());
         const UserListCont = this.UserListCont;
-
         return (
             <Container className="page-container">
                 <div>
