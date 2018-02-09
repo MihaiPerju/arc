@@ -3,7 +3,7 @@ import Facilities from "../../facilities/collection";
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import Security from '/imports/api/security/security.js';
 
-createRoute('/uploads/facility-logo/:facilityId/:token', ({user, facilityId, error, filenames, success, upload}) => {
+createRoute('/uploads/facility-logo/:facilityId/:token', ({user, facilityId, error, filenames, success, uploadLocal}) => {
 
     if (!user) {
         return error("Not logged in!");
@@ -14,12 +14,11 @@ createRoute('/uploads/facility-logo/:facilityId/:token', ({user, facilityId, err
         return error('Invalid number of files');
     }
 
-    const [uploadId] = upload();
-    const uploadFile = Uploads.findOne({_id: uploadId});
-
+    const [uploadId] = uploadLocal();
+    const {path} = Uploads.findOne({_id: uploadId});
     Facilities.update({_id: facilityId}, {
         $set: {
-            logoPath: uploadFile.path
+            logoPath: path
         }
     });
 

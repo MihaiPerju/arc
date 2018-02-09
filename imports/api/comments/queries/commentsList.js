@@ -16,7 +16,8 @@ export default Comments.createNamedQuery('listComments', {
             lastName: 1
         },
         avatar: {
-            path: 1
+            path: 1,
+            _id: 1
         }
     }
 });

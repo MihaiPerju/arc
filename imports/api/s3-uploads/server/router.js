@@ -2,6 +2,9 @@ import S3Uploader from './s3';
 import middleware from './extensions/busboy.middleware';
 import {Accounts} from 'meteor/accounts-base';
 import fs from 'fs';
+import Uploader from '/imports/api/s3-uploads/server/s3';
+import UploadedFile from '/imports/api/s3-uploads/server/UploadedFile';
+import folderConfig from '/imports/api/business';
 
 let postRoutes = Picker.filter(function (req, res) {
     return req.method == "POST";
@@ -22,8 +25,9 @@ export function getUserByToken(token) {
 export function createRoute(path, handler) {
     postRoutes.route(path, function (params, req, res, next) {
         let user;
-        let facilityId = params.facilityId;
-        let taskId = params.taskId;
+        let {facilityId} = params;
+        let {taskId} = params;
+        let {clientId} = params;
 
         if (params.token) {
             user = getUserByToken(params.token);
@@ -33,6 +37,7 @@ export function createRoute(path, handler) {
             facilityId,
             user,
             taskId,
+            clientId,
             req,
             res,
             next,
@@ -62,6 +67,38 @@ export function createRoute(path, handler) {
                     const uploadedFile = S3Uploader.upload(filename);
 
                     return uploadedFile.save({
+                        resourceType,
+                        resourceId,
+                        userId: user && user._id
+                    });
+                });
+            },
+            uploadLocal() {
+                return _.map(req.filenames, function (filePath) {
+                    const {resourceType, resourceId} = req.postData;
+
+                    let fs = Npm.require('fs');
+                    let os = Npm.require("os");
+
+                    const stats = fs.statSync(filePath);
+                    const fileSizeInBytes = stats.size;
+
+                    let fileName = filePath.replace(os.tmpDir() + '/', '');
+                    let movePath = os.tmpDir() + folderConfig.LOCAL_STORAGE_FOLDER + '/' + fileName;
+                    movePath = movePath.replace(/\s+/g, '-');
+                    //If there is no local folder
+                    if (!fs.existsSync('/tmp' + folderConfig.LOCAL_STORAGE_FOLDER)) {
+                        fs.mkdirSync('/tmp' + folderConfig.LOCAL_STORAGE_FOLDER);
+                    }
+                    //Move file to specified storage folder
+                    fs.renameSync(filePath, movePath);
+
+                    filePath = movePath.replace(os.tmpDir() + folderConfig.LOCAL_STORAGE_FOLDER+'/', '');
+
+                    const mimeType = Uploader.guessMimeType(fileName);
+                    const uploadFile = new UploadedFile(fileName, filePath, mimeType, fileSizeInBytes);
+
+                    return uploadFile.save({
                         resourceType,
                         resourceId,
                         userId: user && user._id

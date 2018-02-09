@@ -5,7 +5,7 @@ import {Header} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import Loading from "/imports/client/lib/ui/Loading.jsx";
 import Notifier from '/imports/client/lib/Notifier';
-import {path} from '/imports/api/s3-uploads/utils';
+import {getImagePath} from '/imports/api/utils';
 
 export default class FacilityView extends React.Component {
     constructor() {
@@ -58,8 +58,14 @@ export default class FacilityView extends React.Component {
 
         return (
             <Container className="page-container">
-                <Header as="h3" textAlign="center">Facility {facility && facility.name}</Header>
-                <img src={path(facility && facility.logoPath)}/>
+                <Header as="h3" textAlign="center">{facility && facility.name}</Header>
+                {
+                    facility && facility.logoPath
+                    &&
+                    <div>
+                        <img src={getImagePath(facility.logoPath)}/>
+                    </div>
+                }
                 <h5>Status: {facility && facility.status}</h5>
                 <h5>State: {facility && facility.state}</h5>
                 <h5>Region: {facility && facility.region}</h5>
