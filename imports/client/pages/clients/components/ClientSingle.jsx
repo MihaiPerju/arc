@@ -38,7 +38,7 @@ export default class ClientSingle extends Component {
                 <Table.Cell>{client.lastName}</Table.Cell>
                 <Table.Cell>{client.email}</Table.Cell>
                 <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
+                    <Dropdown button text='Action' icon={null} simple>
                         <Dropdown.Menu>
                             <Dropdown.Item>
                                 <Button primary
