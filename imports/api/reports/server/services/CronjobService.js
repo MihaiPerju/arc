@@ -214,7 +214,6 @@ export default class CronjobService {
             allReceivers.push({email: client.email, name: client.firstName});
         }
 
-
         for (receiver of allReceivers) {
             const to = receiver.email;
             const from = 'PMS <pms@app.com>';

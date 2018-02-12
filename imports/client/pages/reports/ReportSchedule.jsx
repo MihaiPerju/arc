@@ -49,7 +49,9 @@ export default class ReportSchedule extends React.Component {
     getClientOptions (clients) {
         return _.map(clients, ({_id, clientName, facilities}) => {
             let clientFacilities = '';
-            if (facilities) clientFacilities = facilities.map(function (elem) { return elem.name; }).join(',');
+            if (facilities)
+                clientFacilities = facilities.map(function (elem) { return elem.name; }).join(',');
+
             const value = `${clientName} (${clientFacilities})`;
             return {value: _id, label: value};
         });
