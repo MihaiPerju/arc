@@ -6,5 +6,6 @@ export default Schedules.createNamedQuery('listSchedules', {
         _.extend(options, params.options);
     },
     frequency: 1,
-    userIds: 1
+    userIds: 1,
+    clientIds: 1
 });

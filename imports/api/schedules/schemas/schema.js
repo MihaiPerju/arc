@@ -15,5 +15,11 @@ export default new SimpleSchema({
     },
     'userIds.$': {
         type: String
+    },
+    clientIds: {
+        type: Array
+    },
+    'clientIds.$': {
+        type: String
     }
 });
