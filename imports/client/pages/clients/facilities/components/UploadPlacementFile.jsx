@@ -18,7 +18,8 @@ export default class UploadPlacementFile extends React.Component {
             complete(file) {
                 Notifier.success('Added');
                 this.removeFile(file);
-            }
+            },
+            acceptedFiles: '.csv'
         };
         return <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
     }
