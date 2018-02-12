@@ -50,6 +50,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-user:before {
+  content: "\f007";
+}
 .icon-search:before {
   content: "\f002";
 }

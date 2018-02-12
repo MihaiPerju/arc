@@ -5,6 +5,40 @@ import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
 
 class Header extends Component {
+    constructor() {
+        super();
+        this.state = {
+            dropdown: false
+        }
+        this.openDropdown = this.openDropdown.bind(this);
+        this.outsideClick = this.outsideClick.bind(this);
+        this.nodeRef = this.nodeRef.bind(this);
+    }
+
+    openDropdown() {
+        if(!this.state.dropdown) {
+            document.addEventListener('click', this.outsideClick, false);
+        } else {
+            document.removeEventListener('click', this.outsideClick, false)
+        }
+
+        this.setState({
+            dropdown: !this.state.dropdown
+        })
+    }
+
+    outsideClick(e) {
+        if (this.node.contains(e.target)) {
+            return;
+        }
+
+        this.openDropdown();
+    };
+
+    nodeRef(node) {
+        this.node = node;
+    }
+
     state = {activeItem: 'Dashboard'};
 
     handleItemClick = (e, {name}) => this.setState({activeItem: name});
@@ -60,16 +94,17 @@ class Header extends Component {
                                 <img className="header__logo" src="/assets/img/logo.png" alt=""/>
                             </a>
                         </div>
-                        <ul className="right__side">
-                            <li className="owner-menu">
+                        <div className={this.state.dropdown ? "right__side open" : "right__side"} onClick={this.openDropdown} ref={this.nodeRef}>
+                            <div className="owner-menu">
                                 <a href="">
                                     <span>{user.profile.firstName + " " + user.profile.lastName}</span>
                                     <div className="profile-img">
                                         <img className="img-circle" src="/assets/img/user1.svg" alt=""/>
                                     </div>
                                 </a>
-                            </li>
-                        </ul>
+                            </div>
+                            {this.state.dropdown ? <BtnGroup/> : null}                            
+                        </div>
                     </div>
                 </header>
                 }
@@ -90,3 +125,14 @@ export default HeaderContainer = createContainer(() => {
         user,
     };
 }, Header);
+
+class BtnGroup extends Component {
+    render() {
+        return (
+            <div className="btn-group">
+                <a href="/settings"><i className="icon-cog"/><span>Settings</span></a>
+                <a href="/logout"><i className="icon-sign-out"/><span>Log out</span></a>
+            </div>
+        )
+    }
+}
