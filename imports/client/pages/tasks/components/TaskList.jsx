@@ -9,7 +9,7 @@ export default class TaskList extends Component {
     render() {
         return (
             <div className="task-list">
-                <TaskSingle/>
+                <TaskSingle renderContent={this.props.renderContent} showBtnGroup={this.props.showBtnGroup}/>
             </div>
         );
     }

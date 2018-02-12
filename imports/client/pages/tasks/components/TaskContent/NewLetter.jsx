@@ -1,9 +1,22 @@
 import React, {Component} from 'react';
 
 export default class NewLetter extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+    
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 1);
+    }
+
     render() {
         return (
-            <div className="new-letter">
+            <div className={this.state.fade ? "new-letter in" : "new-letter"}>
                 <div className="row-block">
                     <div className="info">
                         <img className="md-avatar img-circle" src="/assets/img/user1.svg" alt=""/>

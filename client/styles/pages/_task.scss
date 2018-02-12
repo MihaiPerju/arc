@@ -8,8 +8,15 @@
     box-shadow: 0px 1px 3px 0px #ebe7e7;
     border-bottom: 1px #e1e1e1 solid;
     position: relative;
+    justify-content: flex-end;    
+    overflow: hidden;
+    height: 56px;
     .search-task {
-        width: calc(100% - 173px);
+        width: calc(100% - 174px);
+        transition: width $transition300;
+        &.full__width {
+            width: calc(100% - 91px);
+        }
     }
     .select-type {
         padding-right: 18px;
@@ -17,6 +24,10 @@
         padding-top: 8px;
         position: relative;
         cursor: pointer;
+        margin-right: 10px;
+        position: absolute;
+        left: 10px;
+        top: 10px;
         &:before {
             content: '\f107';
             font-family: $font-icon;
@@ -44,8 +55,12 @@
         }
     }
     .btn-group {
-        padding-left: 9px;
         padding-right: 9px;
+        opacity: 0;
+        transition: opacity $transition300;
+        &.in {
+            opacity: 1;
+        }
         button {
             padding: 8px 11px;
             color: $extra-light-grey;
@@ -84,7 +99,7 @@
 // Pagination Bar
 .pagination-bar {
     background: $color-white;
-    padding: 14px 15px 15px;
+    padding: 7px 15px;
     box-shadow: 0px -4px 9px 0px #ebe7e7;
     border-top: 1px #e1e1e1 solid;
     position: relative;
@@ -189,6 +204,10 @@
     > .left__side {
         width: 520px;
         flex-shrink: 0;
+        transition: width $transition300;
+        &.full__width {
+            width: 100%;
+        }
     }
     > .right__side {
         width: calc(100% - 520px);
@@ -197,7 +216,6 @@
         overflow-y: auto;
     }
     .task-list {
-        // width: 33.2%;
         height: calc(100% - 112px);
         background: rgba(255, 255, 255, 0.4);
         overflow-y: auto;
@@ -209,6 +227,25 @@
         border-bottom: 1px #e1e1e1 solid;
         padding: 15px 47px;
         position: relative;
+        cursor: pointer;
+        background: rgba($color-white, 0.5);
+        &.open {
+            &:before {
+                content: ' ';
+                background: $green;
+                width: 4px;
+                top: 0;
+                bottom: 0;
+                left: -1px;
+                position: absolute;
+            }
+        }
+        &:hover {
+            background: $color-white;
+        }
+        &.bg--yellow {
+            background: rgba(255, 247, 153, 0.6);
+        }
         .row__item {
             display: flex;
             justify-content: space-between;
@@ -224,6 +261,9 @@
         }
         .financial-class {
             margin-right: 15px;
+        }
+        .person {
+            font-weight: 700;
         }
         .price {
             position: relative;
@@ -399,27 +439,7 @@
             flex-shrink: 0;
         }
     }
-    // Select Custom
-    .select-action {
-        background: #ebebeb;
-        border-radius: 3px;
-        padding: 12px 15px;        
-        cursor: pointer;
-        > span {
-            display: block;
-            padding-right: 10px;
-            position: relative;
-            color: $light-grey;
-            &:before {
-                content: '\f107';
-                font-family: $font-icon;
-                position: absolute;
-                top: 0;
-                right: 0
-            }
-        }
-    }
-
+    
     .header__block {
         background: rgba($color-white, 0.3);
         border-radius: 3px;
@@ -497,6 +517,11 @@
         padding: 10px 15px;
         display: flex;
         align-items: center;
+        opacity: 0;
+        transition: opacity $transition300;
+        &.in {
+            opacity: 1;
+        }
         .btn-group {
             display: flex;
             button {
@@ -552,6 +577,11 @@
         background: rgba($color-white, 0.6);
         margin-top: 2px;
         padding: 10px 15px 20px 15px;
+        opacity: 0;
+        transition: opacity $transition300;
+        &.in {
+            opacity: 1;
+        }
         .row-block {
             display: flex;
             justify-content: space-between;
@@ -751,5 +781,61 @@
     }
     .btn-next {
         right: 15px;
+    }
+}
+
+// Select Custom
+.select-action {
+    background: #ebebeb;
+    border-radius: 3px;
+    padding: 12px 15px;        
+    cursor: pointer;
+    > span {
+        display: block;
+        padding-right: 10px;
+        position: relative;
+        color: $light-grey;
+        &:before {
+            content: '\f107';
+            font-family: $font-icon;
+            position: absolute;
+            top: 0;
+            right: 0
+        }
+    }
+}
+
+.toggle-form {
+    font-size: 2.4rem;
+    background: #f7941d;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    box-shadow: 3px 5px 15px 0px #b7b6b6;
+    color: $color-white;
+    text-align: center;
+    line-height: 4rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.tooltip {
+    position: absolute;
+    right: 63px;
+    top: 15px;
+    background: #0f0f0f;
+    border-radius: 3px;
+    color: $color-white;
+    padding: 4px 8px;
+    &:before {
+        content: ' ';
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        position: absolute;
+        right: -6px;
+        top: 50%;
+        transform: $translateY;
+        background: #0f0f0f;
     }
 }

@@ -50,7 +50,7 @@ class LeftMenu extends Component {
 				{user &&
 					<div className="left-menu">
 						<Menu routes={[
-							{ name: "accounts", label: "Tasks" , icon: 'tasks' },
+							{ name: "accounts", label: "Account" , icon: 'user' },
 							{ name: "review", label: "Review", icon: 'inbox' },
 							{ name: "on-hold", label: "On Hold", icon: 'hand-paper-o' },
 							{ name: "archived", label: "Archived", icon: 'archive' },
@@ -63,9 +63,7 @@ class LeftMenu extends Component {
 							{ name: "reports", label: "Reports", icon: 'file-text-o' },
 							{ name: "regions", label: "Regions", icon: 'globe' },
 							{ name: "templates", label: "Templates", icon: 'window-restore' },
-							{ name: "actions", label: "Actions", icon: 'thumb-tack' },
-							{ name: "settings", label: "Settings", icon: 'cog' },
-							{ name: "logout", label: "Log out", icon: 'sign-out' }
+							{ name: "actions", label: "Actions", icon: 'thumb-tack' }
 						]}/>
 					</div>
 				}

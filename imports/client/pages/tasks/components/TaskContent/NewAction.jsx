@@ -1,9 +1,22 @@
 import React, {Component} from 'react';
 
 export default class NewAction extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+    
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 1);
+    }
+
     render() {
         return (
-            <div className="new-action">
+            <div className={this.state.fade ? "new-action in" : "new-action"}>
                 <div className="action-info">
                     <img className="md-avatar img-circle" src="/assets/img/user1.svg" alt=""/>
                     <div className="name">Solomon Ben</div>
