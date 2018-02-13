@@ -1,16 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
-import {Table} from 'semantic-ui-react'
-import {Button, Dropdown} from 'semantic-ui-react'
+import { Table, Button, Dropdown, Label } from 'semantic-ui-react';
 
 export default class LetterSingle extends Component {
-    constructor() {
+    constructor () {
         super();
         autoBind(this);
     }
 
-    deleteLetterTemplate() {
+    deleteLetterTemplate () {
         Meteor.call('letterTemplate.delete', this.props.letterTemplate._id, (err) => {
             if (!err) {
                 Notifier.success('Letter template deleted !');
@@ -21,16 +20,23 @@ export default class LetterSingle extends Component {
         });
     }
 
-    onEditLetterTemplate() {
-        FlowRouter.go("/letter-template/:_id/edit", {_id: this.props.letterTemplate._id});
+    onEditLetterTemplate () {
+        FlowRouter.go('/letter-template/:_id/edit', {_id: this.props.letterTemplate._id});
     }
 
-    render() {
+    render () {
         const {letterTemplate} = this.props;
 
         return (
             <Table.Row>
                 <Table.Cell>{letterTemplate.name}</Table.Cell>
+                <Table.Cell>
+                    <div>
+                        {_.map(letterTemplate.codes, (code, idx) => {
+                            return <Label as='a' color='teal' tag>{code.code}</Label>;
+                        })}
+                    </div>
+                </Table.Cell>
                 <Table.Cell>
                     <Dropdown button text='Action' icon={null} simple>
                         <Dropdown.Menu>

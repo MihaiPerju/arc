@@ -24,6 +24,7 @@ export default class LetterTemplateList extends Component {
                     <Table.Header>
                         <Table.Row>
                             <Table.HeaderCell>Name</Table.HeaderCell>
+                            <Table.HeaderCell>CARC/RARC codes</Table.HeaderCell>
                             <Table.HeaderCell>Actions</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
