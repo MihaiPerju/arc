@@ -7,7 +7,7 @@ import taskQuery from '/imports/api/tasks/queries/taskList';
 import ReactDOMServer from "react-dom/server";
 import React from 'react';
 import {Container, Table} from 'semantic-ui-react';
-// import pdf from 'html-pdf';
+import pdf from 'html-pdf';
 import Users from '/imports/api/users/collection';
 
 const TaskData = ({task}) => {
@@ -32,11 +32,11 @@ const TaskData = ({task}) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>DischrgDate</Table.Cell>
-                    <Table.Cell>{task && task.dischrgDate}</Table.Cell>
+                    <Table.Cell>{task && moment(task.dischrgDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>FbDate</Table.Cell>
-                    <Table.Cell>{task && task.fbDate}</Table.Cell>
+                    <Table.Cell>{task && moment(task.fbDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>AcctBal</Table.Cell>
@@ -48,7 +48,7 @@ const TaskData = ({task}) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>AdmitDate</Table.Cell>
-                    <Table.Cell>{task && task.admitDate}</Table.Cell>
+                    <Table.Cell>{task && moment(task.admitDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>MedNo</Table.Cell>
@@ -189,11 +189,11 @@ export default class CronjobService {
             ReportTable += ReactDOMServer.renderToString(taskSingle) + '<br/>';
         }
 
-        // pdf.create(ReportTable).toStream(Meteor.bindEnvironment((err, attachment) => {
-            // if (!err) {
-                // CronjobService.sendEmails(userIds, attachment, report);
-            // }
-        // }));
+        pdf.create(ReportTable).toStream(Meteor.bindEnvironment((err, attachment) => {
+            if (!err) {
+                CronjobService.sendEmails(userIds, attachment, report);
+            }
+        }));
     }
 
 
