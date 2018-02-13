@@ -4,7 +4,7 @@ import PayerBlock from './components/TaskContent/PayerBlock';
 import ActionBlock from './components/TaskContent/ActionBlock';
 import LetterList from './components/TaskContent/LetterList';
 import PdfFiles from './components/TaskContent/PdfFiles';
-import CommentBlock from './components/TaskContent/CommentBlock';
+import CommentBlock from '/imports/client/lib/CommentBlock.jsx';
 
 export default class TaskContent extends Component {
     constructor() {
@@ -13,7 +13,7 @@ export default class TaskContent extends Component {
 
     render() {
         return (
-            <div className="task-content">              
+            <div className="main-content">              
                 <TaskContentHeader/>
                 <PayerBlock/>
                 <ActionBlock/>
