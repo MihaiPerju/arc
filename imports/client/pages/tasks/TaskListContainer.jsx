@@ -3,7 +3,7 @@ import TaskList from './components/TaskList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
-import FilterBar from './components/FilterBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
 
 export default class TaskListContainer extends Component {
     constructor() {
