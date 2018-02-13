@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import SelectBlock from '/imports/client/lib/SelectBlock.jsx';
+import SelectBlock from './SelectBlock.jsx';
 
 export default class FilterBar extends Component {
     render() {
