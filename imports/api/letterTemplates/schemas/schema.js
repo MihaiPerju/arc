@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import CATEGORIES, {CategoryList} from '/imports/api/letterTemplates/enums/categories.js';
+import CATEGORIES, { CategoryList } from '/imports/api/letterTemplates/enums/categories.js';
 
 export default new SimpleSchema({
     name: {
@@ -27,5 +27,13 @@ export default new SimpleSchema({
     createdAt: {
         type: Date,
         optional: true,
-    }
+    },
+    codeIds: {
+        label: 'CARC/RARC codes',
+        type: Array,
+        optional: true
+    },
+    'codeIds.$': {
+        type: String
+    },
 });

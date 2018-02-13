@@ -32,7 +32,7 @@ export default class LetterSingle extends Component {
             <Table.Row>
                 <Table.Cell>{letterTemplate.name}</Table.Cell>
                 <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
+                    <Dropdown button text='Action' icon={null} simple>
                         <Dropdown.Menu>
                             <Dropdown.Item>
                                 <Button primary onClick={this.onEditLetterTemplate}>Edit</Button>
