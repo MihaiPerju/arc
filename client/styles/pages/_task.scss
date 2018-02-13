@@ -1,3 +1,15 @@
+// Filter Bar
+.filter-bar {
+    background: $color-white;
+    padding: 15px;
+    border-bottom: 1px #e1e1e1 solid;
+    .select-action {
+        &:first-of-type {
+            margin-bottom: 15px;
+            z-index: 2;
+        }
+    }
+}
 // Task Bar
 .task-bar {
     display: flex;
@@ -69,6 +81,22 @@
         }
     }
     .filter-block {
+        position: relative;
+        &.active {
+            button {
+                color: $green;
+            }
+            &:before {
+                content: ' ';
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;              
+                border-bottom: 6px solid #e1e1e1;
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: $translateX;
+            }
+        }
         button {
             padding: 8px 15px;
             font-size: 1.6rem;
@@ -214,11 +242,19 @@
         flex: 1;
         padding: 15px;
         overflow-y: auto;
+        opacity: 0;
+        transition: opacity 100ms ease;
+        &.in {
+            opacity: 1;
+        }
     }
     .task-list {
         height: calc(100% - 112px);
         background: rgba(255, 255, 255, 0.4);
         overflow-y: auto;
+        &.decreased {
+            height: calc(100% - 237px);
+        }
     }
     .financial-class {
         color: #aa831a;
@@ -505,10 +541,10 @@
     .action-form {
         display: flex;
         justify-content: space-between;
-        width: calc(100% - 280px);
+        width: 70%;
         align-items: flex-start;
         .select-action {
-            width: 35%;
+            width: 50%;
         }
     }
     .new-action {
@@ -537,7 +573,7 @@
         .action-info {
             display: flex;
             align-items: center;
-            width: 280px;
+            width: 30%;
             .name {
                 padding-left: 15px;
             }
@@ -588,17 +624,17 @@
             align-items: flex-start;
         }
         .info {
-            width: 280px;
+            width: 30%;
             display: flex;
             align-items: center;
+            padding-right: 10px;
             .name {
                 padding-left: 15px;
             }
         }
         .row-block {
             .form-group {
-                padding-left: 10px;
-                width: calc(100% - 280px);
+                width: 70%;
                 display: flex;
             }
         }
@@ -756,10 +792,7 @@
 .slide-payers {
     margin-left: -2px;
     margin-right: -2px;
-    * {
-        min-height: 0;
-        min-width: 0;
-    }
+    transition: opacity $transition300;
     .slick-list {
         padding: 0 2px;
     }
@@ -786,24 +819,62 @@
 
 // Select Custom
 .select-action {
-    background: #ebebeb;
-    border-radius: 3px;
-    padding: 12px 15px;        
     cursor: pointer;
-    > span {
-        display: block;
-        padding-right: 10px;
-        position: relative;
-        color: $light-grey;
-        &:before {
-            content: '\f107';
-            font-family: $font-icon;
-            position: absolute;
-            top: 0;
-            right: 0
+    position: relative;
+    height: 40px;
+    &.open {
+        .select-custom {
+            background: $color-white;
+            box-shadow: 0px 1px 10px 0px #d6d6d6;
+            .select-header {
+                &:before {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+    .select-custom {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+        border-radius: 3px;
+        background: #ebebeb;   
+        .select-header {
+            padding: 12px 15px;
+            position: relative;
+            color: $light-grey;
+            &:before {
+                content: '\f107';
+                font-family: $font-icon;
+                position: absolute;
+                top: 11px;
+                right: 15px;
+                color: $extra-light-grey;
+            }
+        }
+        .select-wrapper {
+            border-top: 1px #e0dfdf solid;
+            list-style: none;
+            > li {
+                padding: 0 15px;
+                &:hover {
+                    background: #ebebeb;
+                    span {
+                        border-color: transparent;
+                    }
+                }
+                > span {
+                    display: block;
+                    border-bottom: 1px #ebebeb solid;
+                    padding: 9px 0;
+                }
+            }       
         }
     }
 }
+
 
 .toggle-form {
     font-size: 2.4rem;

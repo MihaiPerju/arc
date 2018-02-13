@@ -3,6 +3,17 @@ import React, {Component} from 'react';
 export default class TaskBar extends Component {
     constructor() {
         super();
+        this.state = {
+            active: false
+        }
+        this.renderFilterBar = this.renderFilterBar.bind(this);
+    }
+
+    renderFilterBar() {
+        this.setState({
+            active: !this.state.active
+        });
+        this.props.filter();
     }
 
     render() {
@@ -11,17 +22,13 @@ export default class TaskBar extends Component {
                 <div className="select-type">
                     <div className="btn-select"></div>
                 </div>
-                {
-                    this.props.btnGroup ? (
-                       <BtnGroup/> 
-                    ) : null
-                }
+                { this.props.btnGroup ? <BtnGroup/> : null }
                 <form action="" className={this.props.btnGroup ? "search-task" : "search-task full__width"}>
                     <div className="form-group">
                         <input type="text" placeholder="&#xf002;  Search" />
                     </div>
                 </form>
-                <div className="filter-block">
+                <div className={this.state.active ? "filter-block active" : "filter-block"} onClick={this.renderFilterBar}>
                     <button><i className="icon-filter"/></button>
                 </div>
             </div>
