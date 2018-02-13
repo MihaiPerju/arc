@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import SelectBlock from '../ui/SelectBlock';
 
 export default class NewLetter extends Component {
     constructor() {
@@ -23,9 +24,7 @@ export default class NewLetter extends Component {
                         <div className="name">Solomon Ben</div>
                     </div>
                     <div className="form-group">
-                        <div className="select-action">
-                            <span>Select letter</span>
-                        </div>
+                        <SelectBlock header={'Select letter'}/>
                         <button className="btn--red">Cancel</button>
                     </div>
                 </div>

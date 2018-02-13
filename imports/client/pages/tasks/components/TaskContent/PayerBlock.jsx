@@ -6,6 +6,14 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default class PayerBlock extends Component {
+    constructor() {
+        super();
+    }
+
+    componentWillReceiveProps(){
+      this.refs.slick.innerSlider.onWindowResized()
+    }
+
     render() {
         var settings = {
             infinite: true,
@@ -15,6 +23,7 @@ export default class PayerBlock extends Component {
             prevArrow: <LeftArrow/>,
             slidesToScroll: 1
         };
+
         return (
             <div className="action-block">
                 <div className="header__block">
@@ -22,7 +31,7 @@ export default class PayerBlock extends Component {
                 </div>
                 <div className="main__block">
                     <div className="slide-payers">
-                        <Slider {...settings}>
+                        <Slider ref="slick" {...settings}>
                             <div><PayItem/></div>
                             <div><PayItem/></div>
                             <div><PayItem/></div>

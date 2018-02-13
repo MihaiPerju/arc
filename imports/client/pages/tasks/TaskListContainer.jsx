@@ -3,17 +3,19 @@ import TaskList from './components/TaskList.jsx';
 import TaskBar from './components/TaskBar.jsx';
 import PaginationBar from './components/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
-import FilterSearch from './components/FilterSearch.jsx';
+import FilterBar from './components/FilterBar.jsx';
 
 export default class TaskListContainer extends Component {
     constructor() {
         super();
         this.state = {
             rightSide: false,
-            btnGroup: false
+            btnGroup: false,
+            filter: false
         }
         this.renderRightSide = this.renderRightSide.bind(this);
         this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
     }
     
     renderRightSide() {
@@ -28,23 +30,54 @@ export default class TaskListContainer extends Component {
         })
     }
 
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
+        })
+    }
+
     render() {
         return (
             <div className="task-container">
                 <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
-                    <TaskBar btnGroup={this.state.btnGroup}/>
-                    <FilterSearch/>
-                    <TaskList renderContent={this.renderRightSide} showBtnGroup={this.showBtnGroup}/>
+                    <TaskBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    { this.state.filter ? <FilterBar/> : null }
+                    <TaskList 
+                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                        renderContent={this.renderRightSide}
+                        showBtnGroup={this.showBtnGroup}
+                    />
                     <PaginationBar/>
                 </div>
                 {
                     this.state.rightSide ? (
-                        <div className="right__side">
-                            <TaskContent/>
-                        </div>
+                        <RightSide/>
                     ) : null
                 }
             </div>
         );
+    }
+}
+
+class RightSide extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render() {
+        return (
+            <div className={this.state.fade ? "right__side in" :"right__side"}>
+                <TaskContent/>
+            </div>
+        )
     }
 }
