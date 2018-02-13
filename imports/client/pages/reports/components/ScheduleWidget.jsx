@@ -50,7 +50,7 @@ export default class ScheduleWidget extends React.Component {
     }
 
     render() {
-        const {users, model} = this.props;
+        const {users, clients, model} = this.props;
         return (
             <Segment>
                 <Button
@@ -66,6 +66,9 @@ export default class ScheduleWidget extends React.Component {
 
                     <SelectMulti name="userIds" options={users}/>
                     <ErrorField name="userIds"/>
+
+                    <SelectMulti name="clientIds" options={clients}/>
+                    <ErrorField name="clientIds"/>
                     <Divider/>
 
                     <Button fluid primary type="submit">
@@ -84,9 +87,16 @@ export default class ScheduleWidget extends React.Component {
 const schema = new SimpleSchema({
     userIds: {
         type: Array,
-        label: 'User Ids'
+        label: 'Internal users'
     },
     'userIds.$': {
+        type: String
+    },
+    clientIds: {
+        type: Array,
+        label: 'External users'
+    },
+    'clientIds.$': {
         type: String
     },
     frequency: {
