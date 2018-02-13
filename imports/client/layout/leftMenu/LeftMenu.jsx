@@ -57,13 +57,13 @@ class LeftMenu extends Component {
 							{ name: "escalations", label: "Escalations", icon: 'info' },
 							{ name: "tickles", label: "Tickles", icon: 'comments-o' },
 							{ name: "unassigned", label: "Unassigned", icon: 'question-circle-o' },
-							{ name: "clients", label: "Clients", icon: 'users' },
-							{ name: "user-management", label: "User management", icon: 'user-circle-o' },
-							{ name: "codes", label: "Codes", icon: 'code-fork' },
-							{ name: "reports", label: "Reports", icon: 'file-text-o' },
-							{ name: "regions", label: "Regions", icon: 'globe' },
-							{ name: "templates", label: "Templates", icon: 'window-restore' },
-							{ name: "actions", label: "Actions", icon: 'thumb-tack' }
+							{ name: "client/list", label: "Clients", icon: 'users' },
+							{ name: "admin/user/list", label: "User management", icon: 'user-circle-o' },
+							{ name: "code/list", label: "Codes", icon: 'code-fork' },
+							{ name: "reports/list", label: "Reports", icon: 'file-text-o' },
+							{ name: "region/list", label: "Regions", icon: 'globe' },
+							{ name: "letter-templates/list", label: "Templates", icon: 'window-restore' },
+							{ name: "action/list", label: "Actions", icon: 'thumb-tack' }
 						]}/>
 					</div>
 				}

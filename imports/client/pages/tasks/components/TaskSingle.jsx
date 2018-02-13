@@ -29,8 +29,11 @@ export default class TaskSingle extends Component {
 
     render() {
         return (
-            <div className={this.state.bgYellow ? "task-item bg--yellow" : this.state.open ? "task-item open" : "task-item"} onClick={this.renderContent}>
-                <div className="check-task">
+            <div className={
+                    this.state.bgYellow ? "list-item task-item bg--yellow" : this.state.open ? "list-item task-item open" : "list-item task-item"}
+                    onClick={this.renderContent}
+                >
+                <div className="check-item">
                     <input type="checkbox" id="11" className="hidden"/>
                     <label htmlFor="11" onClick={this.changeTaskBg}></label>
                 </div>

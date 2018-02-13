@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class TaskBar extends Component {
+export default class SearchBar extends Component {
     constructor() {
         super();
         this.state = {
@@ -18,12 +18,12 @@ export default class TaskBar extends Component {
 
     render() {
         return (
-            <div className="task-bar">
+            <div className="search-bar">
                 <div className="select-type">
                     <div className="btn-select"></div>
                 </div>
                 { this.props.btnGroup ? <BtnGroup/> : null }
-                <form action="" className={this.props.btnGroup ? "search-task" : "search-task full__width"}>
+                <form action="" className={this.props.btnGroup ? "search-input" : "search-input full__width"}>
                     <div className="form-group">
                         <input type="text" placeholder="&#xf002;  Search" />
                     </div>

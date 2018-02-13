@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import TaskList from './components/TaskList.jsx';
-import TaskBar from './components/TaskBar.jsx';
-import PaginationBar from './components/PaginationBar.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
 import FilterBar from './components/FilterBar.jsx';
 
@@ -38,9 +38,9 @@ export default class TaskListContainer extends Component {
 
     render() {
         return (
-            <div className="task-container">
+            <div className="cc-container">
                 <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
-                    <TaskBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
                     { this.state.filter ? <FilterBar/> : null }
                     <TaskList 
                         class={this.state.filter ? "task-list decreased" : "task-list"} 
