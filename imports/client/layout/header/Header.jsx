@@ -130,7 +130,7 @@ class BtnGroup extends Component {
     render() {
         return (
             <div className="btn-group">
-                <a href="/settings"><i className="icon-cog"/><span>Settings</span></a>
+                <a href="/my-profile"><i className="icon-cog"/><span>Settings</span></a>
                 <a href="/logout"><i className="icon-sign-out"/><span>Log out</span></a>
             </div>
         )
