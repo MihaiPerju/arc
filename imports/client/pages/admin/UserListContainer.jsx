@@ -30,6 +30,12 @@ export default class UserListContainer extends Component {
         })
     }
 
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
+        })
+    }
+
     render() {
         return (
             <div className="cc-container">
