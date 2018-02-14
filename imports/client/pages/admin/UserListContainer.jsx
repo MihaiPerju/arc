@@ -23,16 +23,10 @@ export default class UserListContainer extends Component {
             rightSide: true
         })
     }
-    
+
     showBtnGroup() {
         this.setState({
             btnGroup: !this.state.btnGroup
-        })
-    }
-
-    showFilterBar() {
-        this.setState({
-            filter: !this.state.filter
         })
     }
 
