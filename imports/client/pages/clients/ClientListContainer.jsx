@@ -1,87 +1,83 @@
-import React from 'react';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/clients/queries/listClients.js';
+import React, {Component} from 'react';
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ClientList from './components/ClientList.jsx';
-import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import SearchInput from "/imports/client/lib/SearchInput.jsx";
-import {Container} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import ClientContent from './ClientContent.jsx';
 
-export default class ClientListContainer extends Pager {
+export default class ClientContainer extends Component {
     constructor() {
         super();
-
-        _.extend(this.state, {
-            perPage: 3,
-            filters: {},
-            sortBy: 'none',
-            isSortAscend: true
-        });
-
-        this.query = query.clone();
-        this.ClientListCont = createQueryContainer(this.query, ClientList, {
-            reactive: false
+        this.state = {
+            rightSide: false,
+            btnGroup: false,
+            filter: false
+        }
+        this.renderRightSide = this.renderRightSide.bind(this);
+        this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
+    }
+    
+    renderRightSide() {
+        this.setState({
+            rightSide: true
         })
     }
 
-    handleSearch = (searchValue) => {
-        this.updateFilters({
-            filters: {
-                clientName: {
-                    '$regex': searchValue,
-                    '$options': 'i'
-                }
-            }
+    showBtnGroup() {
+        this.setState({
+            btnGroup: !this.state.btnGroup
         })
-    };
+    }
 
-    handleHeaderClick = (headerName) => {
-        const {sortBy, isSortAscend} = this.state;
-        if (sortBy === headerName) {
-            this.setState({
-                isSortAscend: !isSortAscend
-            }, this.handleSort);
-        } else {
-            this.setState({
-                sortBy: headerName,
-                isSortAscend: true
-            }, this.handleSort);
-        }
-    };
-
-    handleSort = () => {
-        const {sortBy, isSortAscend} = this.state;
-
-        this.updateFilters({
-            options: {
-                sort: {
-                    [sortBy]: isSortAscend ? 1 : -1
-                }
-            }
-        });
-    };
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
+        })
+    }
 
     render() {
-        const params = _.extend({}, this.getPagerOptions());
-        const ClientListCont = this.ClientListCont;
-        const {sortBy, isSortAscend} = this.state;
-
         return (
-            <Container className="page-container">
-                <div>
-                    <Header as="h2" textAlign="center">Clients</Header>
-                    <SearchInput handleSearch={this.handleSearch}/>
-
+            <div className="cc-container">
+                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    { this.state.filter ? <FilterBar/> : null }
+                    <ClientList 
+                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                        renderContent={this.renderRightSide}
+                        showBtnGroup={this.showBtnGroup}
+                    />
+                    <PaginationBar/>
                 </div>
-                <div className='m-t-30'>
-                    {this.getPaginator()}
-                    <ClientListCont params={params}
-                                    sortBy={sortBy}
-                                    isSortAscend={isSortAscend}
-                                    handleHeaderClick={this.handleHeaderClick}/>
-                    {this.getPaginator()}
-                </div>
-            </Container>
+                {
+                    this.state.rightSide ? (
+                        <RightSide/>
+                    ) : null
+                }
+            </div>
         );
+    }
+}
+
+class RightSide extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render() {
+        return (
+            <div className={this.state.fade ? "right__side in" :"right__side"}>
+                <ClientContent/>
+            </div>
+        )
     }
 }

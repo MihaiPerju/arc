@@ -1,102 +1,83 @@
-import React from 'react';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/codes/queries/listCodes.js';
+import React, {Component} from 'react'
 import CodeList from './components/CodeList.jsx';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
-import SearchInput from '/imports/client/lib/SearchInput.jsx';
-import { Button } from 'semantic-ui-react';
-import { Container } from 'semantic-ui-react';
-import { Divider } from 'semantic-ui-react';
-import { Header } from 'semantic-ui-react';
-import CodeTypeFilter from './components/CodeTypeFilter.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
+import CodeContent from './CodeContent.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
 
-export default class CodeListContainer extends Pager {
-    constructor () {
+export default class CodeListContainer extends Component {
+    constructor() {
         super();
-
-        _.extend(this.state, {
-            perPage: 20,
-            filters: {},
-            sortBy: 'none',
-            isSortAscend: true
-        });
-
-        this.query = query.clone();
-        this.CodeListCont = createQueryContainer(this.query, CodeList, {
-            reactive: false
-        });
+        this.state = {
+            rightSide: false,
+            btnGroup: false,
+            filter: false
+        }
+        this.renderRightSide = this.renderRightSide.bind(this);
+        this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
+    }
+    
+    renderRightSide() {
+        this.setState({
+            rightSide: true
+        })
     }
 
-    handleSearch = (searchValue) => {
-        let newFilters = this.state.filters.filters || {};
-        newFilters.code = {
-            '$regex': searchValue,
-            '$options': 'i'
-        };
-        this.updateFilters({
-            filters: newFilters
-        });
-    };
+    showBtnGroup() {
+        this.setState({
+            btnGroup: !this.state.btnGroup
+        })
+    }
 
-    handleFilter = (type) => {
-        let newFilters = this.state.filters.filters || {};
-        if (type == '') {
-            delete newFilters.type;
-        } else {
-            newFilters.type = type;
-        }
-        this.updateFilters({
-            filters: newFilters
-        });
-    };
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
+        })
+    }
 
-    handleHeaderClick = (headerName) => {
-        const {sortBy, isSortAscend} = this.state;
-        if (sortBy === headerName) {
-            this.setState({
-                isSortAscend: !isSortAscend
-            }, this.handleSort);
-        } else {
-            this.setState({
-                sortBy: headerName,
-                isSortAscend: true
-            }, this.handleSort);
-        }
-    };
-
-    handleSort = () => {
-        const {sortBy, isSortAscend} = this.state;
-
-        this.updateFilters({
-            options: {
-                sort: {
-                    [sortBy]: isSortAscend ? 1 : -1
-                }
-            }
-        });
-    };
-
-    render () {
-        const params = _.extend({}, this.getPagerOptions());
-        const CodeListCont = this.CodeListCont;
-        const {sortBy, isSortAscend} = this.state;
-
+    render() {
         return (
-            <Container className="page-container">
-                <div>
-                    <Header as="h2" textAlign="center">Manage CARC/RARC Codes</Header>
-                    <SearchInput handleSearch={this.handleSearch}/>
-                    <CodeTypeFilter handleFilter={this.handleFilter}/>
+            <div className="cc-container">
+                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    { this.state.filter ? <FilterBar/> : null }
+                    <CodeList 
+                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                        renderContent={this.renderRightSide}
+                        showBtnGroup={this.showBtnGroup}
+                    />
+                    <PaginationBar/>
                 </div>
-                <div className='m-t-30'>
-                    {this.getPaginator()}
-                    <CodeListCont params={params}
-                                  sortBy={sortBy}
-                                  isSortAscend={isSortAscend}
-                                  handleHeaderClick={this.handleHeaderClick}/>
-                    {this.getPaginator()}
-                </div>
-            </Container>
+                {
+                    this.state.rightSide ? (
+                        <RightSide/>
+                    ) : null
+                }
+            </div>
         );
+    }
+}
+
+class RightSide extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render() {
+        return (
+            <div className={this.state.fade ? "right__side in" :"right__side"}>
+                <CodeContent/>
+            </div>
+        )
     }
 }

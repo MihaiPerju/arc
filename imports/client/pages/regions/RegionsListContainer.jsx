@@ -1,43 +1,83 @@
-import React from 'react';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/regions/queries/regionList.js';
+import React, {Component} from 'react'
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import RegionsList from './components/RegionsList.jsx';
-import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {Button} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
+import RegionContent from './RegionContent.jsx';
 
-export default class RegionsListContainer extends Pager {
+export default class ReportListContainer extends Component {
     constructor() {
         super();
+        this.state = {
+            rightSide: false,
+            btnGroup: false,
+            filter: false
+        }
+        this.renderRightSide = this.renderRightSide.bind(this);
+        this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
+    }
+    
+    renderRightSide() {
+        this.setState({
+            rightSide: true
+        })
+    }
 
-        _.extend(this.state, {
-            perPage: 3,
-            filters: {}
-        });
+    showBtnGroup() {
+        this.setState({
+            btnGroup: !this.state.btnGroup
+        })
+    }
 
-        this.query = query.clone();
-        this.RegionsListCont = createQueryContainer(this.query, RegionsList, {
-            reactive: false
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
         })
     }
 
     render() {
-        const params = _.extend({}, this.getPagerOptions());
-        const RegionsListCont = this.RegionsListCont;
-
         return (
-            <Container className="page-container">
-                <div>
-                    <Header as="h2" textAlign="center">Regions</Header>
+            <div className="cc-container">
+                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    { this.state.filter ? <FilterBar/> : null }
+                    <RegionsList 
+                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                        renderContent={this.renderRightSide}
+                        showBtnGroup={this.showBtnGroup}
+                    />
+                    <PaginationBar/>
                 </div>
-                <div>
-                    {this.getPaginator()}
-                    <RegionsListCont params={params}/>
-                    {this.getPaginator()}
-                </div>
-            </Container>
+                {
+                    this.state.rightSide ? (
+                        <RightSide/>
+                    ) : null
+                }
+            </div>
         );
+    }
+}
+
+class RightSide extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render() {
+        return (
+            <div className={this.state.fade ? "right__side in" :"right__side"}>
+                <RegionContent/>
+            </div>
+        )
     }
 }

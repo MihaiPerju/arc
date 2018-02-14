@@ -1,43 +1,83 @@
 import React, {Component} from 'react';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/users/queries/listUsers.js';
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import UserList from './components/UserList.jsx';
-import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {Container} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
+import UserContent from './UserContent.jsx';
 
-export default class UserListContainer extends Pager {
+export default class UserListContainer extends Component {
     constructor() {
         super();
+        this.state = {
+            rightSide: false,
+            btnGroup: false,
+            filter: false
+        }
+        this.renderRightSide = this.renderRightSide.bind(this);
+        this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
+    }
+    
+    renderRightSide() {
+        this.setState({
+            rightSide: true
+        })
+    }
 
-        _.extend(this.state, {
-            perPage: 3,
-            filters: {}
-        });
+    showBtnGroup() {
+        this.setState({
+            btnGroup: !this.state.btnGroup
+        })
+    }
 
-        this.query = query.clone();
-        this.UserListCont = createQueryContainer(this.query, UserList, {
-            reactive: false
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
         })
     }
 
     render() {
-        const params = _.extend({}, this.getPagerOptions());
-        const UserListCont = this.UserListCont;
-
         return (
-            <Container className="page-container">
-                <div>
-                    <Header textAlign="center" as="h2">Users</Header>
+            <div className="cc-container">
+                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    { this.state.filter ? <FilterBar/> : null }
+                    <UserList 
+                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                        renderContent={this.renderRightSide}
+                        showBtnGroup={this.showBtnGroup}
+                    />
+                    <PaginationBar/>
                 </div>
-                <div className='m-t-30'>
-                    {this.getPaginator()}
-                    <UserListCont params={params}/>
-                    {this.getPaginator()}
-                </div>
-            </Container>
+                {
+                    this.state.rightSide ? (
+                        <RightSide/>
+                    ) : null
+                }
+            </div>
         );
+    }
+}
+
+class RightSide extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render() {
+        return (
+            <div className={this.state.fade ? "right__side in" :"right__side"}>
+                <UserContent/>
+            </div>
+        )
     }
 }
