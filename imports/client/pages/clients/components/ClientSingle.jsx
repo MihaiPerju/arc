@@ -25,11 +25,6 @@ export default class ClientSingle extends Component {
             bgYellow: !this.state.bgYellow
         });
         this.props.showBtnGroup();
-
-        adipisicingasdas
-        decreaseddas
-        dasd
-        asperioresd
     }
 
     render() {
