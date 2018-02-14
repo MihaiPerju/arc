@@ -51,12 +51,12 @@ class LeftMenu extends Component {
 					<div className="left-menu">
 						<Menu routes={[
 							{ name: "accounts", label: "Account" , icon: 'user' },
-							{ name: "review", label: "Review", icon: 'inbox' },
-							{ name: "on-hold", label: "On Hold", icon: 'hand-paper-o' },
-							{ name: "archived", label: "Archived", icon: 'archive' },
-							{ name: "escalations", label: "Escalations", icon: 'info' },
-							{ name: "tickles", label: "Tickles", icon: 'comments-o' },
-							{ name: "unassigned", label: "Unassigned", icon: 'question-circle-o' },
+							{ name: "accounts", label: "Review", icon: 'inbox' },
+							{ name: "accounts", label: "On Hold", icon: 'hand-paper-o' },
+							{ name: "accounts", label: "Archived", icon: 'archive' },
+							{ name: "accounts", label: "Escalations", icon: 'info' },
+							{ name: "accounts", label: "Tickles", icon: 'comments-o' },
+							{ name: "accounts", label: "Unassigned", icon: 'question-circle-o' },
 							{ name: "client/list", label: "Clients", icon: 'users' },
 							{ name: "admin/user/list", label: "User management", icon: 'user-circle-o' },
 							{ name: "code/list", label: "Codes", icon: 'code-fork' },
