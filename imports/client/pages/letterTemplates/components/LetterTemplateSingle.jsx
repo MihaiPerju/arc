@@ -1,49 +1,35 @@
 import React, {Component} from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import autoBind from 'react-autobind';
-import {Table} from 'semantic-ui-react'
-import {Button, Dropdown} from 'semantic-ui-react'
 
-export default class LetterSingle extends Component {
-    constructor() {
-        super();
-        autoBind(this);
+export default class LetterTemplateSingle extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            fontNormal: false,
+            bgYellow: false,
+            open: false
+        }
+        this.renderContent = this.renderContent.bind(this);
+        this.changeTaskBg = this.changeTaskBg.bind(this);        
     }
 
-    deleteLetterTemplate() {
-        Meteor.call('letterTemplate.delete', this.props.letterTemplate._id, (err) => {
-            if (!err) {
-                Notifier.success('Letter template deleted !');
-                FlowRouter.reload();
-            } else {
-                Notifier.error(err.reason);
-            }
+    renderContent() {
+        this.setState({
+            fontNormal: true,
+            open: !this.state.open
         });
+        this.props.renderContent();
     }
 
-    onEditLetterTemplate() {
-        FlowRouter.go("/letter-template/:_id/edit", {_id: this.props.letterTemplate._id});
+    changeTaskBg() {
+        this.setState({
+            bgYellow: !this.state.bgYellow
+        });
+        this.props.showBtnGroup();
     }
 
     render() {
-        const {letterTemplate} = this.props;
-
         return (
-            <Table.Row>
-                <Table.Cell>{letterTemplate.name}</Table.Cell>
-                <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Button primary onClick={this.onEditLetterTemplate}>Edit</Button>
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                <Button color="red" onClick={this.deleteLetterTemplate}>Delete</Button>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Table.Cell>
-            </Table.Row>
+            <div className="list-item" onClick={this.renderContent}>Letter</div>
         );
     }
 }

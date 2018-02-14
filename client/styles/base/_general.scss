@@ -93,6 +93,12 @@ h6 {
   text-align: center;
 }
 
+.align-center {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
 .text-uppercase {
   text-transform: uppercase;
 }

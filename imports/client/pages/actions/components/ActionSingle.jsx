@@ -1,51 +1,45 @@
 import React, {Component} from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import autoBind from 'react-autobind';
-import {Table, Dropdown} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {LabelSubstates} from '/imports/api/tasks/enums/substates'
 
 export default class ActionSingle extends Component {
-    constructor() {
-        super();
-        autoBind(this);
+    constructor(props) {
+        super(props);
+        this.state = {
+            fontNormal: false,
+            bgYellow: false,
+            open: false
+        }
+        this.renderContent = this.renderContent.bind(this);
+        this.changeTaskBg = this.changeTaskBg.bind(this);        
     }
 
-    deleteAction() {
-        const {action} = this.props;
-
-        Meteor.call('action.delete', action._id, (err)=> {
-            if (!err) {
-                Notifier.success('Action deleted !');
-                FlowRouter.reload();
-            }
+    renderContent() {
+        this.setState({
+            fontNormal: true,
+            open: !this.state.open
         });
+        this.props.renderContent();
     }
 
-    onEditAction() {
-        FlowRouter.go("/action/:_id/edit", {_id: this.props.action._id});
+    changeTaskBg() {
+        this.setState({
+            bgYellow: !this.state.bgYellow
+        });
+        // this.props.showBtnGroup();
     }
+
     render() {
-        const {action} = this.props;
 
         return (
-            <Table.Row>
-                <Table.Cell>{action.title}</Table.Cell>
-                <Table.Cell>{action.description}</Table.Cell>
-                <Table.Cell>{LabelSubstates[action.substate]}</Table.Cell>
-                <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Button onClick={this.onEditAction}>Edit</Button> 
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                <Button color="red" onClick={this.deleteAction}>Delete</Button>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Table.Cell>
-            </Table.Row>
+            <div className={this.state.bgYellow ? "list-item task-item bg--yellow" : this.state.open ? "list-item task-item open" : "list-item task-item"}
+            onClick={this.renderContent}>
+                <div className="check-item">
+                    <input id={this.props.id} type="checkbox" className="hidden"/>
+                    <label htmlFor={this.props.id} onClick={this.changeTaskBg}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name">{this.props.name}</div>
+                </div>
+            </div>
         );
     }
 }

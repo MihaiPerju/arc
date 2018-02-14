@@ -1,41 +1,83 @@
-import React from 'react';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/letterTemplates/queries/listLetterTemplates.js';
+import React, {Component} from 'react';
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import LetterTemplatesList from './components/LetterTemplatesList.jsx';
-import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {Container} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import LetterTemplateContent from './LetterTemplateContent.jsx';
 
-export default class LetterTemplatesListContainer extends Pager {
-    constructor(props) {
-        super(props);
+export default class LetterTemplateListContainer extends Component {
+    constructor() {
+        super();
+        this.state = {
+            rightSide: false,
+            btnGroup: false,
+            filter: false
+        }
+        this.renderRightSide = this.renderRightSide.bind(this);
+        this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
+    }
+    
+    renderRightSide() {
+        this.setState({
+            rightSide: true
+        })
+    }
 
-        _.extend(this.state, {
-            perPage: 3,
-            filters: {}
-        });
+    showBtnGroup() {
+        this.setState({
+            btnGroup: !this.state.btnGroup
+        })
+    }
 
-        this.query = query.clone();
-        this.LetterTemplatesListCont = createQueryContainer(this.query, LetterTemplatesList, {
-            reactive: false
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
         })
     }
 
     render() {
-        const params = _.extend({}, this.getPagerOptions());
-        const LetterTemplatesListCont = this.LetterTemplatesListCont;
-
         return (
-            <Container className="page-container">
-                <div>
-                    <Header as="h2" textAlign="center">Letter templates</Header>
+            <div className="cc-container">
+                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    { this.state.filter ? <FilterBar/> : null }
+                    <LetterTemplatesList 
+                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                        renderContent={this.renderRightSide}
+                        showBtnGroup={this.showBtnGroup}
+                    />
+                    <PaginationBar/>
                 </div>
-                <div>
-                    {this.getPaginator()}
-                    <LetterTemplatesListCont params={params}/>
-                    {this.getPaginator()}
-                </div>
-            </Container>
+                {
+                    this.state.rightSide ? (
+                        <RightSide/>
+                    ) : null
+                }
+            </div>
         );
+    }
+}
+
+class RightSide extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render() {
+        return (
+            <div className={this.state.fade ? "right__side in" :"right__side"}>
+                <LetterTemplateContent/>
+            </div>
+        )
     }
 }

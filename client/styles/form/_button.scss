@@ -80,6 +80,16 @@ button,
     color: $red;
   }
 
+  &.btn--white {
+    background: $color-white;
+    border: 1px #e1e1e1 solid;
+    color: $dark-grey;
+    transition: background $transition300;
+    &:hover {
+      background: #ebeaea;
+    }
+  }
+
   &.btn-post {
     background: #f3f2f2;
     color: $light-grey;
