@@ -20,6 +20,13 @@ export default class UserSingle extends Component {
         this.props.renderContent();
     }
 
+    changeTaskBg() {
+        this.setState({
+            bgYellow: !this.state.bgYellow
+        });
+        this.props.showBtnGroup();
+    }
+
     render() {
         return (
             <div className="list-item" onClick={this.renderContent}>User</div>

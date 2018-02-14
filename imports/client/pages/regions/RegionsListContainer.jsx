@@ -29,6 +29,10 @@ export default class ReportListContainer extends Component {
             btnGroup: !this.state.btnGroup
         })
     }
+<<<<<<< 2eb426e7eb33818ff616e722150de2c113819448
+=======
+
+>>>>>>> updates
     showFilterBar() {
         this.setState({
             filter: !this.state.filter

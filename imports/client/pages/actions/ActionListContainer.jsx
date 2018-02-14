@@ -1,4 +1,3 @@
-import React, {Component} from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';

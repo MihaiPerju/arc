@@ -27,11 +27,6 @@ export default class ActionSingle extends Component {
         // this.props.showBtnGroup();
     }
 
-    manageCodes = () => {
-        const {action, reasonCodesManage} = this.props;
-        reasonCodesManage(action._id);
-    }
-    
     render() {
 
         return (
