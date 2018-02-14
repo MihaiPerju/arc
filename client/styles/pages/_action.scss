@@ -1,0 +1,55 @@
+.action-content {
+    background: $color-white;
+    border-radius: 3px;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    i {
+        font-size: 7.2rem;
+        color: $extra-light-grey;
+        margin-bottom: 50px;
+        display: block;
+    }
+    .action-name {
+        font-size: 2.4rem;
+        margin-top: 10px;
+    }
+    .intro-block {
+        margin-bottom: 60px;
+        padding-left: 20px;
+        padding-right: 20px;
+        &__wrapper {
+            padding-bottom: 20px;
+            border-bottom: 1px #ebebeb solid;
+        }
+    }
+    .info-block {
+        display: flex;
+        margin-bottom: 40px;
+        .status, p {
+            margin-left: 5px;
+        }
+        p {
+            line-height: 2rem;
+        }
+        .left-side {
+            width: 30%;
+            display: flex;
+            padding-right: 20px;
+        }
+        .right-side {
+            width: 70%;
+            display: flex;
+            padding-left: 20px;
+        }
+    }
+    .btn-edit {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
