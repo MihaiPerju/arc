@@ -125,7 +125,7 @@ export default class TaskListContainer extends Pager {
                         <TaskListCont params={params}/>
                         {this.getPaginator()}
                     </div>
-                    <AutoForm className="col-lg-4" ref="filters" schema={schema} onChange={this.onHandleChange}>
+                    <AutoForm  className="col-lg-4" ref="filters" schema={schema} onChange={this.onHandleChange}>
 
                         <SelectField name="facilityId" options={facilities}/>
 

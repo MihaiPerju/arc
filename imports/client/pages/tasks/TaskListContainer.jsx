@@ -3,27 +3,24 @@ import TaskList from './components/TaskList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/tasks/queries/taskList';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
-import SimpleSchema from 'simpl-schema';
 import TaskService from './services/TaskService';
 
-export default class TaskListContainer extends Component {
+export default class TaskListContainer extends Pager {
     constructor() {
         super();
-        this.state = {
+        _.extend(this.state, {
+            perPage: 3,
+            filters: {},
+            tasks: [],
             rightSide: false,
             btnGroup: false,
             filter: false,
             tasksSelected: []
-        };
+        });
 
         this.query = query.clone();
         this.TaskListCont = createQueryContainer(this.query, TaskList, {
@@ -62,8 +59,8 @@ export default class TaskListContainer extends Component {
     }
 
     getData(tasks) {
-        const facilities = [];
-        const assignees = [];
+        let facilities = [];
+        let assignees = [];
         if (tasks) {
             for (let task of tasks) {
                 const {facility} = task;
@@ -100,9 +97,7 @@ export default class TaskListContainer extends Component {
                 }
             }
         }
-        return [facilities
-            , assignees
-        ];
+        return [facilities, assignees];
     }
 
     manageTask(task) {
@@ -121,17 +116,21 @@ export default class TaskListContainer extends Component {
         })
     }
 
+    changeFilters(filters) {
+        this.updateFilters({filters})
+    }
+
     render() {
         const {tasks, rightSide, filter, btnGroup, tasksSelected} = this.state;
-        const [facilities, assignees] = this.getData(tasks);
+        const options = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
 
         return (
             <div className="cc-container">
                 <div className={rightSide ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={btnGroup} filter={this.showFilterBar}/>
-                    {filter ? <FilterBar/> : null}
+                    <SearchBar changeFilters={this.changeFilters} options={options} btnGroup={btnGroup}
+                               filter={this.showFilterBar}/>
                     <TaskListCont
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
