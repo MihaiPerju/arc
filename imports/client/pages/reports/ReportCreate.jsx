@@ -1,15 +1,15 @@
 import React from 'react';
-import {Container, Header, Divider, Button, Step} from 'semantic-ui-react'
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
-import schema from '/imports/api/reports/schema'
+import { Container, Header, Divider, Button, Step } from 'semantic-ui-react';
+import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
+import schema from '/imports/api/reports/schema';
 import Roles from '/imports/api/users/enums/roles';
 import TaskFilterBuilder from './TaskFilterBuilder';
 import Notifier from '/imports/client/lib/Notifier';
-import {EJSON} from 'meteor/ejson'
+import { EJSON } from 'meteor/ejson';
 import ReportStepper from '/imports/client/pages/reports/components/ReportStepper';
 
 export default class ReportCreate extends React.Component {
-    constructor() {
+    constructor () {
         super();
 
         this.state = {
@@ -19,20 +19,20 @@ export default class ReportCreate extends React.Component {
         };
     }
 
-    goNextStep(generalInformation) {
+    goNextStep (generalInformation) {
         this.setState({
             hasGeneralInformation: true,
             generalInformation
         });
     }
 
-    goPreviousStep() {
+    goPreviousStep () {
         this.setState({
             hasGeneralInformation: false
         });
     }
 
-    onSubmitFilters(filters, components, filterBuilderData) {
+    onSubmitFilters (filters, components, filterBuilderData) {
         //Setting state and creating/editing report
         this.setState({
             components,
@@ -44,15 +44,33 @@ export default class ReportCreate extends React.Component {
 
         Meteor.call('report.create', generalInformation, (err) => {
             if (!err) {
-                Notifier.success("Report created");
+                Notifier.success('Report created');
                 FlowRouter.go('/reports/list');
             } else {
                 Notifier.error(err.reason);
             }
-        })
+        });
     }
 
-    render() {
+    componentWillMount () {
+        const facilityId = FlowRouter.current().params.facilityId;
+        if (facilityId) {
+            // autocomplete if facilityId in params
+            this.setState({
+                filterBuilderData: {
+                    facilityId
+                },
+                components: {
+                    facilityId: {
+                        isActive: true,
+                        name: 'facilityId'
+                    }
+                }
+            });
+        }
+    }
+
+    render () {
         const {hasGeneralInformation, allowedRoles, generalInformation, components, filterBuilderData} = this.state;
 
         return (
@@ -102,6 +120,6 @@ export default class ReportCreate extends React.Component {
                     }
                 </div>
             </Container>
-        )
+        );
     }
 }

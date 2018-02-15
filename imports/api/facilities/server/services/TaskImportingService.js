@@ -12,8 +12,8 @@ export default class TaskService {
     }
 
     //For inventory file
-    static update(results, importRules) {
-        const tasks = CsvParseService.convertToTasks(results, importRules);
+    static update(results, importRules, facilityId) {
+        const tasks = CsvParseService.convertToTasks(results, importRules,false,facilityId);
         const [oldTasks, newTasks] = CsvParseService.filterTasks(tasks);
 
         //Creating new tasks with 'archived' state

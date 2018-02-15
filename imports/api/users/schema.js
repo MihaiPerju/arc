@@ -39,6 +39,13 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
+    tagIds: {
+        type: Array,
+        optional: true
+    },
+    'tagIds.$': {
+        type: String
+    },
     'profile.suspended': {type: Boolean, optional: true},
     avatar: {type: AvatarSchema, optional: true}
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 
 import route from './router';
 import './logoutRoute';
@@ -39,9 +39,9 @@ route('/reset-password/:token', ResetPassword, {}, {
 route('/dashboard', Dashboard);
 
 //Admin
-import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx'
-import CreateUser from '/imports/client/pages/admin/CreateUser.jsx'
-import EditUser from '/imports/client/pages/admin/EditUser.jsx'
+import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx';
+import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
+import EditUser from '/imports/client/pages/admin/EditUser.jsx';
 
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
@@ -59,8 +59,10 @@ route('/post/:postId/edit', EditPost);
 //Clients
 import CreateClient from '/imports/client/pages/clients/ClientCreate';
 import EditClient from '/imports/client/pages/clients/ClientEdit';
-import ClientListContainer from '/imports/client/pages/clients/ClientListContainer.jsx';
+import ClientListContainer from '/imports/client/pages/clients/ClientListContainer';
+import ClientView from '/imports/client/pages/clients/ClientView';
 
+route('/client/:clientId/view', ClientView);
 route('/client/create', CreateClient);
 route('/client/:userId/edit', EditClient);
 route('/client/list', ClientListContainer);
@@ -75,8 +77,8 @@ route('/letter-template/:id/edit', LetterTemplateEdit);
 route('/letter-template/create', LetterTemplateCreate);
 
 //Letter
-import LetterCreateContainer from "/imports/client/pages/letters/LetterCreateContainer.jsx"
-import LetterView from "/imports/client/pages/letters/LetterView.jsx";
+import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
+import LetterView from '/imports/client/pages/letters/LetterView.jsx';
 
 route('/task/:taskId/create-letter', LetterCreateContainer, {}, {
     name: 'letter.create'
@@ -86,10 +88,10 @@ route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
 });
 
 //Facilities
-import FacilityListContainer from "/imports/client/pages/clients/facilities/FacilityListContainer.jsx";
-import FacilityCreate from "/imports/client/pages/clients/facilities/FacilityCreate.jsx";
-import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.jsx";
-import FacilityView from "/imports/client/pages/clients/facilities/FacilityView.jsx";
+import FacilityListContainer from '/imports/client/pages/clients/facilities/FacilityListContainer.jsx';
+import FacilityCreate from '/imports/client/pages/clients/facilities/FacilityCreate.jsx';
+import FacilityEdit from '/imports/client/pages/clients/facilities/FacilityEdit.jsx';
+import FacilityView from '/imports/client/pages/clients/facilities/FacilityView.jsx';
 
 route('/client/:_id/manage-facilities', FacilityListContainer, {}, {
     name: 'facility.list'
@@ -112,7 +114,6 @@ import CodeCreate from '/imports/client/pages/codes/CodeCreate';
 route('/code/list', CodeListContainer);
 route('/code/:id/edit', CodeEdit);
 route('/code/create', CodeCreate);
-
 
 //Tasks
 import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
@@ -151,6 +152,9 @@ import ReportCreate from '/imports/client/pages/reports/ReportCreate';
 route('/tasks/filter-builder', TaskFilterBuilder);
 route('/reports/list', ReportListContainer);
 route('/report/create', ReportCreate);
+route('/report/create/facilityid/:facilityId', ReportCreate, {}, {
+    name: 'report.create.facilityid'
+});
 route('/report/:id/edit', ReportManage);
 
 //Insurance Companies

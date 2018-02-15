@@ -53,7 +53,7 @@ export default class FacilityEdit extends React.Component {
         const tabOptions = [
             {
                 label: tabsEnum.GENERAL,
-                component: <FacilityForm model={facility} submitAction={this.updateFacility}/>
+                component: <FacilityForm purpose="Edit" model={facility} submitAction={this.updateFacility}/>
             },
             {
                 label: tabsEnum.IMP_RULES,

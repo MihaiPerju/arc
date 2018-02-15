@@ -13,7 +13,7 @@ Meteor.methods({
         });
     },
 
-    'admin.editUser'(userId, {email, profile, }) {
+    'admin.editUser'(userId, {email, profile, tagIds}) {
         Security.checkAdmin(this.userId);
 
         if (!userId) {
@@ -37,7 +37,8 @@ Meteor.methods({
                     address: email,
                     verified: false
                 }],
-                profile
+                profile,
+                tagIds
             }
         });
     },

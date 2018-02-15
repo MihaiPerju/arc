@@ -80,13 +80,9 @@ export default class CsvParseService {
     }
 
     //Get import rules
-    static getImportRules(id) {
-        const facility = Facilities.findOne({_id: id}, {
-            fields: {
-                importRules: 1,
-            }
-        });
-        return facility.importRules;
+    static getImportRules(_id) {
+        const {importRules} = Facilities.findOne({_id});
+        return importRules;
     }
 
     static convertImportingRules(importRules, header) {

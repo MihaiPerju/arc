@@ -20,3 +20,4 @@ import '/imports/api/reports/server';
 import '/imports/api/schedules/server';
 import '/imports/cronjobs';
 import '/imports/api/insuranceCompanies/server';
+import '/imports/api/tags/server';
