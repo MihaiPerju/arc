@@ -29,6 +29,7 @@ export default class extends React.Component {
     }
 
     updateFilters(filters) {
+        console.log(filters);
         this.getQuery().setParams(filters);
 
         this.recount();

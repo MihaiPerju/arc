@@ -5,7 +5,7 @@ export default class SelectBlock extends Component {
         super();
         this.state = {
             open: false
-        }
+        };
         this.openSelect = this.openSelect.bind(this);
         this.nodeRef = this.nodeRef.bind(this);
         this.outsideClick = this.outsideClick.bind(this);

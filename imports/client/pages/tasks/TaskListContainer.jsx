@@ -17,12 +17,15 @@ import TaskService from './services/TaskService';
 export default class TaskListContainer extends Pager {
     constructor() {
         super();
-        this.state = {
+        _.extend(this.state, {
+            perPage: 3,
+            filters: {},
+            tasks: [],
             rightSide: false,
             btnGroup: false,
             filter: false,
             tasksSelected: []
-        };
+        });
 
         this.query = query.clone();
         this.TaskListCont = createQueryContainer(this.query, TaskList, {
@@ -61,11 +64,12 @@ export default class TaskListContainer extends Pager {
     }
 
     getData(tasks) {
-        const facilities = [];
-        const assignees = [];
+        let facilities = [];
+        let assignees = [];
         if (tasks) {
             for (let task of tasks) {
                 const {facility} = task;
+                console.log(facility);
                 if (facility) {
                     let users = [];
                     if (facility) {
@@ -99,9 +103,7 @@ export default class TaskListContainer extends Pager {
                 }
             }
         }
-        return [facilities
-            , assignees
-        ];
+        return [facilities, assignees];
     }
 
     manageTask(task) {
@@ -120,17 +122,21 @@ export default class TaskListContainer extends Pager {
         })
     }
 
+    changeFilters(filters) {
+        this.updateFilters({filters})
+    }
+
     render() {
         const {tasks, rightSide, filter, btnGroup, tasksSelected} = this.state;
-        const [facilities, assignees] = this.getData(tasks);
+        const options = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
 
         return (
             <div className="cc-container">
                 <div className={rightSide ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={btnGroup} filter={this.showFilterBar}/>
-                    {filter ? <FilterBar/> : null}
+                    <SearchBar changeFilters={this.changeFilters} options={options} btnGroup={btnGroup}
+                               filter={this.showFilterBar}/>
                     <TaskListCont
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
