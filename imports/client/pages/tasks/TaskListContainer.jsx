@@ -106,9 +106,18 @@ export default class TaskListContainer extends Component {
 
     manageTask(task) {
         const {tasksSelected} = this.state;
-        if(TaskService.containsTask(tasksSelected,task)){
-            tasksSelected.splice(tasksSelected.indexOf())
+        //If it was in the list, it needs to be removed (deselected)
+        if (TaskService.containsTask(tasksSelected, task)) {
+            //remove
+            tasksSelected.splice(tasksSelected.indexOf(task), 1);
+        } else {
+            //Else, push it to the list
+            tasksSelected.push(task)
         }
+
+        this.setState({
+            tasksSelected
+        })
     }
 
     render() {
