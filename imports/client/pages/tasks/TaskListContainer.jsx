@@ -11,11 +11,10 @@ import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import TaskService from './services/TaskService';
 
-export default class TaskListContainer extends Component {
+export default class TaskListContainer extends Pager {
     constructor() {
         super();
         this.state = {
