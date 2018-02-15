@@ -14,12 +14,11 @@ export default class ActionList extends Component {
         ];
         const actionList = actions.map(function(action, index){
             return (
-                const {renderContnent, showBtnGroup} = this.props;
                 <ActionSingle
                     key={index}
                     id={index}
-                    renderContent={renderContent}
-                    showBtnGroup={showBtnGroup}
+                    renderContent={this.props.renderContent}
+                    showBtnGroup={this.props.showBtnGroup}
                     name={action.name}
                 />
             )
