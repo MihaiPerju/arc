@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SimpleSchema from 'simpl-schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
 import ROLES from '/imports/api/users/enums/roles';
 import {Container, Button, Divider, Icon, Segment, Header} from 'semantic-ui-react';
