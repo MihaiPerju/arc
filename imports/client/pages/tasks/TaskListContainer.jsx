@@ -3,15 +3,10 @@ import TaskList from './components/TaskList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/tasks/queries/taskList';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
-import SimpleSchema from 'simpl-schema';
 import TaskService from './services/TaskService';
 
 export default class TaskListContainer extends Pager {
@@ -69,7 +64,6 @@ export default class TaskListContainer extends Pager {
         if (tasks) {
             for (let task of tasks) {
                 const {facility} = task;
-                console.log(facility);
                 if (facility) {
                     let users = [];
                     if (facility) {
