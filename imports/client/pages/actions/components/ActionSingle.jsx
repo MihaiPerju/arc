@@ -28,16 +28,18 @@ export default class ActionSingle extends Component {
     }
 
     render() {
+        const { open, bgYellow } = this.state;
+        const { id, name } = this.props;
 
         return (
-            <div className={this.state.bgYellow ? "list-item task-item bg--yellow" : this.state.open ? "list-item task-item open" : "list-item task-item"}
+            <div className={bgYellow ? "list-item task-item bg--yellow" : open ? "list-item task-item open" : "list-item task-item"}
             onClick={this.renderContent}>
                 <div className="check-item">
-                    <input id={this.props.id} type="checkbox" className="hidden"/>
-                    <label htmlFor={this.props.id} onClick={this.changeTaskBg}></label>
+                    <input id={id} type="checkbox" className="hidden"/>
+                    <label htmlFor={id} onClick={this.changeTaskBg}></label>
                 </div>
                 <div className="row__block align-center">
-                    <div className="item-name">{this.props.name}</div>
+                    <div className="item-name">{name}</div>
                 </div>
             </div>
         );
