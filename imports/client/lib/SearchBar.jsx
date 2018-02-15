@@ -1,48 +1,81 @@
 import React, {Component} from 'react';
-import {AutoForm, AutoField, ErrorField, SelectField} from '/imports/ui/forms';
+import {AutoForm, AutoField} from '/imports/ui/forms';
 import SimpleSchema from "simpl-schema";
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
 
 export default class SearchBar extends Component {
     constructor() {
         super();
         this.state = {
-            active: false
+            active: false,
+            filter: false
         };
         this.renderFilterBar = this.renderFilterBar.bind(this);
     }
 
     renderFilterBar() {
+        const {active, filter} = this.state;
         this.setState({
-            active: !this.state.active
+            active: !active,
+            filter: !filter
         });
         this.props.filter();
     }
 
-    render() {
-        return (
-            <div className="search-bar">
-                <div className="select-type">
-                    <div className="btn-select"></div>
-                </div>
-                {this.props.btnGroup ? <BtnGroup/> : null}
-                <div className={this.props.btnGroup ? "search-input" : "search-input full__width"}>
-                    <div className="form-group">
-                        <AutoForm schema={schema}>
-                            <SelectField name="facilityId" options={[{value: 2, label: 1}, {value: 3, label: 4}]}/>
-                        </AutoForm>
-                    </div>
-                </div>
+    onHandleChange() {
+        const {changeFilters} = this.props;
+        const newFilters = this.refs.filters.state.modelSync;
 
-                {/*<form action="" className={this.props.btnGroup ? "search-input" : "search-input full__width"}>*/}
-                    {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="&#xf002;  Search"/>*/}
-                    {/*</div>*/}
-                {/*</form>*/}
-                <div className={this.state.active ? "filter-block active" : "filter-block"}
-                     onClick={this.renderFilterBar}>
-                    <button><i className="icon-filter"/></button>
+        if (!newFilters.facilityId) {
+            delete newFilters.facilityId;
+        }
+        if (!newFilters.assigneeId) {
+            delete newFilters.assigneeId;
+        }
+        if (!newFilters.clientName) {
+            delete newFilters.clientName;
+            changeFilters(newFilters);
+        } else {
+            Meteor.call('client.getByName', newFilters.clientName, (err, clients) => {
+                if (!err) {
+                    let acctNums = [];
+                    for (let client of clients) {
+                        acctNums.push(client._id);
+                    }
+                    newFilters.acctNum = {$in: acctNums};
+                    delete newFilters.clientName;
+                    changeFilters(newFilters);
+                }
+            })
+        }
+    }
+
+    render() {
+        const {filter, active} = this.state;
+        const {options} = this.props;
+        return (
+            <AutoForm ref="filters" onChange={this.onHandleChange.bind(this)} schema={schema}>
+                <div className="search-bar">
+                    <div className="select-type">
+                        <div className="btn-select"></div>
+                    </div>
+                    {this.props.btnGroup ? <BtnGroup/> : null}
+                    <div className={this.props.btnGroup ? "search-input" : "search-input full__width"}>
+                        <div className="form-group">
+                            <AutoField name="clientName" placeholder="Search"/>
+                        </div>
+                    </div>
+
+                    <div className={active ? "filter-block active" : "filter-block"}
+                         onClick={this.renderFilterBar}>
+                        <button><i className="icon-filter"/></button>
+                    </div>
+
                 </div>
-            </div>
+                {
+                    filter && <FilterBar options={options}/>
+                }
+            </AutoForm>
         )
     }
 }
@@ -75,8 +108,7 @@ class BtnGroup extends Component {
 const schema = new SimpleSchema({
     facilityId: {
         type: String,
-        optional: true,
-        label: 'Filter by facility'
+        optional: true
     },
     assigneeId: {
         type: String,
