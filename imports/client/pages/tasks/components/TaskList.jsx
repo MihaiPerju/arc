@@ -17,7 +17,6 @@ export default class TaskList extends Component {
         if (error) {
             return <div>Error: {error.reason}</div>
         }
-        // console.log(data);
         return (
             <div className={this.props.class}>
                 {
