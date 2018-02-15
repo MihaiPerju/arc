@@ -19,9 +19,10 @@ export default class TaskListContainer extends Component {
     constructor() {
         super();
         this.state = {
-            rightSide: false,
+            rightSide: true,
             btnGroup: false,
             filter: false,
+            task: null,
             tasksSelected: []
         };
 
@@ -105,46 +106,49 @@ export default class TaskListContainer extends Component {
         ];
     }
 
-    manageTask(task) {
-        const {tasksSelected} = this.state;
-        //If it was in the list, it needs to be removed (deselected)
-        if (TaskService.containsTask(tasksSelected, task)) {
-            //remove
-            tasksSelected.splice(tasksSelected.indexOf(task), 1);
+    selectTask(newTask) {
+        const {task} = this.state;
+        if (JSON.stringify(task) === JSON.stringify(newTask)) {
+            this.setState({task: null})
         } else {
-            //Else, push it to the list
-            tasksSelected.push(task)
+            this.setState({task: newTask});
         }
+    }
 
+    checkTask(task) {
+        const {tasksSelected} = this.state;
+        if (tasksSelected.includes(task._id)) {
+            tasksSelected.splice(tasksSelected.indexOf(task._id), 1);
+        } else {
+            tasksSelected.push(task._id);
+        }
         this.setState({
             tasksSelected
         })
     }
 
     render() {
-        const {tasks, rightSide, filter, btnGroup, tasksSelected} = this.state;
+        const {tasks, filter, tasksSelected, task} = this.state;
         const [facilities, assignees] = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
-
+        console.log(task);
         return (
             <div className="cc-container">
-                <div className={rightSide ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={btnGroup} filter={this.showFilterBar}/>
+                <div className={task ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={tasksSelected.length} filter={this.showFilterBar}/>
                     {filter ? <FilterBar/> : null}
                     <TaskListCont
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
-                        showBtnGroup={this.showBtnGroup}
-                        manageTask={this.manageTask}
-
+                        selectTask={this.selectTask}
+                        tasksSelected={tasksSelected}
+                        checkTask={this.checkTask}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    rightSide ? (
-                        <RightSide tasks={tasksSelected}/>
-                    ) : null
+                    task && <RightSide task={task}/>
                 }
             </div>
         );
@@ -167,12 +171,12 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {tasks} = this.props;
+        const {task} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
-                    tasks.length === 1 ?
-                        <TaskContent task={tasks[0]}/>
+                    task ?
+                        <TaskContent task={task}/>
                         :
                         'No component provided for bulk accounts'
                 }

@@ -5,17 +5,17 @@ export default class TaskSingle extends Component {
         super(props);
         this.state = {
             fontNormal: false,
-            bgYellow: false,
+            checked: false,
             open: false
         };
 
-        this.renderContent = this.renderContent.bind(this);
-        this.changeTaskBg = this.changeTaskBg.bind(this);
+        // this.renderContent = this.renderContent.bind(this);
+        // this.changeTaskBg = this.changeTaskBg.bind(this);
     }
 
     renderContent() {
         const {manageTask, task} = this.props;
-        manageTask(task);
+        // manageTask(task);
         const {open} = this.state;
         this.setState({
             fontNormal: true,
@@ -24,28 +24,31 @@ export default class TaskSingle extends Component {
         this.props.renderContent();
     }
 
-    changeTaskBg() {
-        this.setState({
-            bgYellow: !this.state.bgYellow
-        });
-        this.props.showBtnGroup();
+    onCheck() {
+        const {checkTask, task} = this.props;
+        checkTask(task);
+    }
+
+    onSelectTask() {
+        const {selectTask, task} = this.props;
+        selectTask(task);
     }
 
     render() {
-        const {task} = this.props;
-        const {open, bgYellow} = this.state;
+        const {task, active} = this.props;
+        const {open} = this.state;
         return (
             <div className={
-                bgYellow ? "list-item task-item bg--yellow" : open ? "list-item task-item open" : "list-item task-item"}
-                 onClick={this.renderContent}
+                active ? "list-item task-item bg--yellow" : open ? "list-item task-item open" : "list-item task-item"}
+                 onClick={this.onSelectTask.bind(this)}
             >
                 <div className="check-item">
-                    <input type="checkbox" id="11" className="hidden"/>
-                    <label htmlFor="11" onClick={this.changeTaskBg}></label>
+                    <input type="checkbox" checked={active} className="hidden"/>
+                    <label onClick={this.onCheck.bind(this)}/>
                 </div>
                 <div className="mark-task">
-                    <input type="checkbox" id="1" className="hidden"/>
-                    <label htmlFor="1"></label>
+                    <input type="checkbox" className="hidden"/>
+                    <label></label>
                 </div>
                 <div className="row__item">
                     <div className="left__side">
