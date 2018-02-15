@@ -32,7 +32,7 @@ export default class SearchBar extends Component {
         if (!newFilters.assigneeId) {
             delete newFilters.assigneeId;
         }
-        if (!newFilters.clientName) {
+        if (!newFilters.clientName && newFilters.clientName !== '') {
             delete newFilters.clientName;
             changeFilters(newFilters);
         } else {
