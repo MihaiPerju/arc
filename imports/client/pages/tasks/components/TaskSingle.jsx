@@ -14,6 +14,8 @@ export default class TaskSingle extends Component {
     }
 
     renderContent() {
+        const {manageTask, task} = this.props;
+        manageTask(task);
         const {open} = this.state;
         this.setState({
             fontNormal: true,

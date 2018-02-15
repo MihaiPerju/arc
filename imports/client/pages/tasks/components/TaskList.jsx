@@ -8,7 +8,7 @@ export default class TaskList extends Component {
     }
 
     render() {
-        const {data, loading, error} = this.props;
+        const {data, loading, error, manageTask} = this.props;
 
         if (loading) {
             return <div>Loading</div>
@@ -25,8 +25,9 @@ export default class TaskList extends Component {
                         ?
                         _.map(data, (task) => {
                             return <TaskSingle renderContent={this.props.renderContent}
+                                               showBtnGroup={this.props.showBtnGroup}
                                                task={task} key={task._id}
-                                               showBtnGroup={this.props.showBtnGroup}/>
+                                               manageTask={manageTask}/>
                         })
                         :
                         "No tasks. To be replaced by designer"
