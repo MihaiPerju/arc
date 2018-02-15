@@ -14,6 +14,7 @@ import autoBind from 'react-autobind'
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import TaskService from './services/TaskService';
+
 export default class TaskListContainer extends Component {
     constructor() {
         super();
@@ -121,7 +122,7 @@ export default class TaskListContainer extends Component {
     }
 
     render() {
-        const {tasks, rightSide, filter, btnGroup} = this.state;
+        const {tasks, rightSide, filter, btnGroup, tasksSelected} = this.state;
         const [facilities, assignees] = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
@@ -134,14 +135,15 @@ export default class TaskListContainer extends Component {
                     <TaskListCont
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
-                        manageTask = {this.manageTask}
                         showBtnGroup={this.showBtnGroup}
+                        manageTask={this.manageTask}
+
                     />
                     <PaginationBar/>
                 </div>
                 {
                     rightSide ? (
-                        <RightSide/>
+                        <RightSide tasks={tasksSelected}/>
                     ) : null
                 }
             </div>
@@ -165,9 +167,15 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
+        const {tasks} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
-                <TaskContent/>
+                {
+                    tasks.length === 1 ?
+                        <TaskContent task={tasks[0]}/>
+                        :
+                        'No component provided for bulk accounts'
+                }
             </div>
         )
     }
