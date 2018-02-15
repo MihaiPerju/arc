@@ -1,11 +1,28 @@
 import React, {Component} from 'react';
 import CodeSingle from './CodeSingle';
 
-export default class ReportList extends Component {
+export default class CodeList extends Component {
     render() {
+    	const codes = [
+            { name: 'Code1' },
+            { name: 'Code2' },
+            { name: 'Code3' }
+        ];
+        const codeList = codes.map(function(code, index){
+        	const { renderContent, showBtnGroup } = this.props;
+        	return (
+				<CodeSingle
+					key={index}
+					id={index}
+					renderContent={renderContent}
+					showBtnGroup={showBtnGroup}
+					name={code.name}
+				/>
+        	)
+        }, this)
         return (
             <div className={this.props.class}>
-                <CodeSingle renderContent={this.props.renderContent} showBtnGroup={this.props.showBtnGroup}/>
+                { codeList }
             </div>
         );
     }

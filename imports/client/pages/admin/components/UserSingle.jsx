@@ -28,8 +28,21 @@ export default class UserSingle extends Component {
     }
 
     render() {
+        const { bgYellow, open } = this.state;
+        const { id, mail, avatar } = this.props;
+
         return (
-            <div className="list-item" onClick={this.renderContent}>User</div>
+            <div className={bgYellow ? "list-item user-item bg--yellow" : open ? "list-item user-item open" : "list-item user-item"}
+            onClick={this.renderContent}>
+                <div className="check-item">
+                    <input id={id} type="checkbox" className="hidden"/>
+                    <label htmlFor={id} onClick={this.changeTaskBg}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name text-blue">{mail}</div>
+                    <img className="md-avatar img-circle" src={avatar} alt=""/>
+                </div>
+            </div>
         );
     }
 }

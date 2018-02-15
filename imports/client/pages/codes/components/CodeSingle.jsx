@@ -28,8 +28,20 @@ export default class CodeSingle extends Component {
     }
 
     render() {
+        const { open, bgYellow } = this.state;
+        const { id, name } = this.props;
+        
         return (
-            <div className="list-item" onClick={this.renderContent}>Code</div>
+            <div className={bgYellow ? "list-item bg--yellow" : open ? "list-item open" : "list-item"}
+            onClick={this.renderContent}>
+                <div className="check-item">
+                    <input id={id} type="checkbox" className="hidden"/>
+                    <label htmlFor={id} onClick={this.changeTaskBg}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name">{name}</div>
+                </div>
+            </div>
         );
     }
 }
