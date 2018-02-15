@@ -13,14 +13,15 @@ import {Header} from 'semantic-ui-react'
 import autoBind from 'react-autobind'
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
-
+import TaskService from './services/TaskService';
 export default class TaskListContainer extends Component {
     constructor() {
         super();
         this.state = {
             rightSide: false,
             btnGroup: false,
-            filter: false
+            filter: false,
+            tasksSelected: []
         };
 
         this.query = query.clone();
@@ -103,6 +104,13 @@ export default class TaskListContainer extends Component {
         ];
     }
 
+    manageTask(task) {
+        const {tasksSelected} = this.state;
+        if(TaskService.containsTask(tasksSelected,task)){
+            tasksSelected.splice(tasksSelected.indexOf())
+        }
+    }
+
     render() {
         const {tasks, rightSide, filter, btnGroup} = this.state;
         const [facilities, assignees] = this.getData(tasks);
@@ -117,6 +125,7 @@ export default class TaskListContainer extends Component {
                     <TaskListCont
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
+                        manageTask = {this.manageTask}
                         showBtnGroup={this.showBtnGroup}
                     />
                     <PaginationBar/>
