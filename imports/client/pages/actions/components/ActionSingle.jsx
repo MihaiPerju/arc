@@ -32,7 +32,7 @@ export default class ActionSingle extends Component {
         const { id, name } = this.props;
 
         return (
-            <div className={bgYellow ? "list-item task-item bg--yellow" : open ? "list-item task-item open" : "list-item task-item"}
+            <div className={bgYellow ? "list-item bg--yellow" : open ? "list-item open" : "list-item"}
             onClick={this.renderContent}>
                 <div className="check-item">
                     <input id={id} type="checkbox" className="hidden"/>
