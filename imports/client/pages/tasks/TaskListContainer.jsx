@@ -96,7 +96,8 @@ export default class TaskListContainer extends Pager {
 
     selectTask(newTask) {
         const {task} = this.state;
-        if (JSON.stringify(task) === JSON.stringify(newTask)) {
+        if (task && task._id === newTask._id) {
+            console.log("Selected existent!");
             this.setState({task: null})
         } else {
             this.setState({task: newTask});
