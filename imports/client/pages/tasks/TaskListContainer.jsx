@@ -128,7 +128,7 @@ export default class TaskListContainer extends Pager {
         const [facilities, assignees] = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
-        console.log(task);
+
         return (
             <div className="cc-container">
                 <div className={task ? "left__side" : "left__side full__width"}>
@@ -138,6 +138,7 @@ export default class TaskListContainer extends Pager {
                         renderContent={this.renderRightSide}
                         selectTask={this.selectTask}
                         tasksSelected={tasksSelected}
+                        currentTask={task && task._id}
                         checkTask={this.checkTask}
                     />
                     <PaginationBar/>

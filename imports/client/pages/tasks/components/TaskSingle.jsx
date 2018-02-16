@@ -1,30 +1,17 @@
 import React, {Component} from 'react';
+import classNames from 'classnames'
 
 export default class TaskSingle extends Component {
     constructor(props) {
         super(props);
         this.state = {
             fontNormal: false,
-            checked: false,
-            open: false
+            checked: false
         };
-
-        // this.renderContent = this.renderContent.bind(this);
-        // this.changeTaskBg = this.changeTaskBg.bind(this);
     }
 
-    renderContent() {
-        const {manageTask, task} = this.props;
-        // manageTask(task);
-        const {open} = this.state;
-        this.setState({
-            fontNormal: true,
-            open: !open
-        });
-        this.props.renderContent();
-    }
-
-    onCheck() {
+    onCheck(e) {
+        e.stopPropagation();
         const {checkTask, task} = this.props;
         checkTask(task);
     }
@@ -35,11 +22,14 @@ export default class TaskSingle extends Component {
     }
 
     render() {
-        const {task, active} = this.props;
-        const {open} = this.state;
+        const {task, active, currentTask} = this.props;
+        const classes = classNames({
+            "list-item task-item": true,
+            "open": task._id === currentTask,
+            'bg--yellow': active
+        });
         return (
-            <div className={
-                active ? "list-item task-item bg--yellow" : open ? "list-item task-item open" : "list-item task-item"}
+            <div className={classes}
                  onClick={this.onSelectTask.bind(this)}
             >
                 <div className="check-item">

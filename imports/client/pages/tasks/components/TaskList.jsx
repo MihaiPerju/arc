@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import TaskSingle from './TaskSingle.jsx';
 import _ from "underscore";
-import TaskService from './../services/TaskService';
 
 export default class TaskList extends Component {
     constructor(props) {
@@ -14,7 +13,7 @@ export default class TaskList extends Component {
     }
 
     render() {
-        const {data, loading, error, checkTask, selectTask} = this.props;
+        const {data, loading, error, checkTask, selectTask, currentTask} = this.props;
 
         if (loading) {
             return <div>Loading</div>
@@ -29,8 +28,8 @@ export default class TaskList extends Component {
                     data.length
                         ?
                         _.map(data, (task) => {
-                            return <TaskSingle renderContent={this.props.renderContent}
-                                               active={this.taskIsActive(task)}
+                            return <TaskSingle active={this.taskIsActive(task)}
+                                               currentTask={currentTask}
                                                selectTask={selectTask}
                                                checkTask={checkTask}
                                                key={task._id}
