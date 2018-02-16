@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import TaskList from './components/TaskList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
