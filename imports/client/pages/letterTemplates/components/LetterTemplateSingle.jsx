@@ -28,8 +28,20 @@ export default class LetterTemplateSingle extends Component {
     }
 
     render() {
+        const { bgYellow, open } = this.state;
+        const { id, title } = this.props;
+
         return (
-            <div className="list-item" onClick={this.renderContent}>Letter</div>
+            <div className={bgYellow ? "list-item bg--yellow" : open ? "list-item open" : "list-item"}
+            onClick={this.renderContent}>
+                <div className="check-item">
+                    <input id={id} type="checkbox" className="hidden"/>
+                    <label htmlFor={id} onClick={this.changeTaskBg}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name">{title}</div>
+                </div>
+            </div>
         );
     }
 }
