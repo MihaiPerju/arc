@@ -173,27 +173,11 @@
     }
 }
 
-// Labels
+// Label Group
 .label-group {
     .label {
         margin-right: 5px;
     }
-}
-
-.label {
-    padding: 1px 3px;
-    color: $color-white;
-    border-radius: 3px;
-    font-size: 1.2rem;
-    display: inline-block;
-}
-
-.label--green {
-    background: $light-green;
-}
-
-.label--grey {
-    background: #c2c2c2;
 }
 
 // Action Block

@@ -30,6 +30,7 @@ export default class ReportSingle extends Component {
     render() {
         const { bgYellow, open } = this.state;
         const { id, title } = this.props;
+        
         return (
             <div className={bgYellow ? "list-item bg--yellow" : open ? "list-item open" : "list-item"}
             onClick={this.renderContent}>

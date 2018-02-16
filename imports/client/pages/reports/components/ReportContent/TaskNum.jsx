@@ -5,6 +5,7 @@ import PayerBlock from './PayerBlock';
 export default class TaskNum extends Component {
     render() {
         const { taskNum, client } = this.props;
+        
         return (
             <div className="task-num-block">
                 <h6 className="text-light-grey">Task nr. {taskNum}</h6>

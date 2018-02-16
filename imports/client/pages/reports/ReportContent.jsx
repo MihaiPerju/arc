@@ -10,7 +10,7 @@ export default class ReportContent extends Component {
     render() {
         const tasks = [
             { client: 'Claudio Steel' },
-            { client: 'Olimen limen' }
+            { client: 'Olimen Limen' }
         ];
         const taskList = tasks.map(function(task, index){
             return (
@@ -20,7 +20,8 @@ export default class ReportContent extends Component {
                     client={task.client}
                 />
             )
-        })
+        }, this);
+
         return (
             <div className="main-content report-content">
                 <ReportHeader/>
