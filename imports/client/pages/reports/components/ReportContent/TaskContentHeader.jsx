@@ -4,11 +4,13 @@ import moment from "moment/moment";
 export default class TaskContentHeader extends Component {
 
     render() {
+        const { client } = this.props;
+
         return (
             <div className="header-block">
                 <div className="main-info">
                     <div className="left__side">
-                        <div className="name">Claudio Steel</div>
+                        <div className="name">{client}</div>
                         <div className="row__block">
                             <div className="pacient-id text-blue">MBG981828112</div>
                             <div className="financial-class">O/D</div>
