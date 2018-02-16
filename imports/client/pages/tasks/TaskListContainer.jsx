@@ -12,8 +12,11 @@ import TaskService from './services/TaskService';
 export default class TaskListContainer extends Pager {
     constructor() {
         super();
-        this.state = {
-            rightSide: true,
+        _.extend(this.state, {
+            perPage: 3,
+            filters: {},
+            tasks: [],
+            rightSide: false,
             btnGroup: false,
             filter: false,
             task: null,
