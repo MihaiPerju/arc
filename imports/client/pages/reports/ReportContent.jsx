@@ -17,6 +17,7 @@ export default class ReportContent extends Component {
                 <TaskNum
                     key={index}
                     taskNum={index + 1}
+                    client={task.client}
                 />
             )
         })
