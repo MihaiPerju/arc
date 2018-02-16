@@ -12,15 +12,13 @@ import TaskService from './services/TaskService';
 export default class TaskListContainer extends Pager {
     constructor() {
         super();
-        _.extend(this.state, {
-            perPage: 3,
-            filters: {},
-            tasks: [],
-            rightSide: false,
+        this.state = {
+            rightSide: true,
             btnGroup: false,
             filter: false,
+            task: null,
             tasksSelected: []
-        });
+        };
 
         this.query = query.clone();
         this.TaskListCont = createQueryContainer(this.query, TaskList, {
@@ -100,17 +98,22 @@ export default class TaskListContainer extends Pager {
         return [facilities, assignees];
     }
 
-    manageTask(task) {
-        const {tasksSelected} = this.state;
-        //If it was in the list, it needs to be removed (deselected)
-        if (TaskService.containsTask(tasksSelected, task)) {
-            //remove
-            tasksSelected.splice(tasksSelected.indexOf(task), 1);
+    selectTask(newTask) {
+        const {task} = this.state;
+        if (JSON.stringify(task) === JSON.stringify(newTask)) {
+            this.setState({task: null})
         } else {
-            //Else, push it to the list
-            tasksSelected.push(task)
+            this.setState({task: newTask});
         }
+    }
 
+    checkTask(task) {
+        const {tasksSelected} = this.state;
+        if (tasksSelected.includes(task._id)) {
+            tasksSelected.splice(tasksSelected.indexOf(task._id), 1);
+        } else {
+            tasksSelected.push(task._id);
+        }
         this.setState({
             tasksSelected
         })
@@ -121,29 +124,28 @@ export default class TaskListContainer extends Pager {
     }
 
     render() {
-        const {tasks, rightSide, filter, btnGroup, tasksSelected} = this.state;
-        const options = this.getData(tasks);
+        const {tasks, filter, tasksSelected, task} = this.state;
+        const [facilities, assignees] = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
 
         return (
             <div className="cc-container">
-                <div className={rightSide ? "left__side" : "left__side full__width"}>
-                    <SearchBar changeFilters={this.changeFilters} options={options} btnGroup={btnGroup}
-                               filter={this.showFilterBar}/>
+                <div className={task ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={tasksSelected.length} filter={this.showFilterBar}/>
+                    {filter ? <FilterBar/> : null}
                     <TaskListCont
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
-                        showBtnGroup={this.showBtnGroup}
-                        manageTask={this.manageTask}
-
+                        selectTask={this.selectTask}
+                        tasksSelected={tasksSelected}
+                        currentTask={task && task._id}
+                        checkTask={this.checkTask}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    rightSide ? (
-                        <RightSide tasks={tasksSelected}/>
-                    ) : null
+                    task && <RightSide task={task}/>
                 }
             </div>
         );
@@ -166,12 +168,12 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {tasks} = this.props;
+        const {task} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
-                    tasks.length === 1 ?
-                        <TaskContent task={tasks[0]}/>
+                    task ?
+                        <TaskContent task={task}/>
                         :
                         'No component provided for bulk accounts'
                 }
