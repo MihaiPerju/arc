@@ -5,17 +5,16 @@ export default class ReportHeader extends Component {
 		return (
 			<div className="main-content__header header-block">
 				<div className="row__header">
-					<div className="text-light-grey">Report name</div>
-					<div className="title">Report nr.11</div>
+					<div className="text-light-grey">Code name</div>
+					<div className="title">Code1</div>
 				</div>
 				<div className="row__header">
 					<div className="plasment-block">
-						<div className="text-light-grey">Plasment date</div>
-						<div className="time">11:20</div>
+						<div className="text-light-grey">Type</div>
+						<div className="label label--grey text-uppercase">carc</div>
 					</div>
 					<div className="btn-group">
-						<button className="btn--white">Schedule</button>
-						<button className="btn--white">Edit report</button>
+						<button className="btn--white">Edit code</button>
 					</div>
 				</div>
 			</div>
