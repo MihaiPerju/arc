@@ -6,18 +6,20 @@ export default class ActionBlock extends Component {
         super();
         this.state = {
             createAction: false
-        }
-        this.newAction = this.newAction.bind(this);
+        },
+            this.newAction = this.newAction.bind(this);
     }
 
     newAction() {
+        const {createAction} = this.state;
         this.setState({
-            createAction: !this.state.createAction
+            createAction: !createAction
         })
     }
 
     render() {
-        return(
+        const {task} = this.props;
+        return (
             <div className="action-block">
                 <div className="header__block">
                     <div className="title-block text-uppercase">actions</div>
@@ -27,7 +29,7 @@ export default class ActionBlock extends Component {
                         <i className="icon-thumb-tack"/>
                         <div className="text-center">+ Add new action</div>
                     </div>
-                    { this.state.createAction ? <NewAction/> : null }                    
+                    {this.state.createAction ? <NewAction hide={this.newAction} task={task}/> : null}
                     <div className="action-list">
                         <div className="action-item">
                             <div className="action-info">
