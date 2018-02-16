@@ -1,5 +1,6 @@
 .report-content {
-    .header-block {        
+    .header-block {
+        margin-bottom: 20px;       
         .title {
             font-size: 2.4rem;
             padding-left: 30px;
@@ -44,6 +45,19 @@
                     margin-left: 15px;
                 }
             }
+        }
+    }
+    .action-block {
+        margin-bottom: 15px;
+    }
+    .task-num-block {
+        border-top: 1px #d7d7d7 solid;
+        padding-top: 15px;
+        h6 {
+            font-weight: 400;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            padding: 0 15px;
         }
     }
 }
