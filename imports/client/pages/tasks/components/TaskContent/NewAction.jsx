@@ -45,7 +45,7 @@ export default class NewAction extends Component {
     }
 
     onSubmit(data) {
-        const {task, hide} = this.props;
+        const {task, hide, getTasks} = this.props;
         Meteor.call('task.actions.add', task._id, data.action
             , (err) => {
                 if (!err) {
@@ -53,11 +53,17 @@ export default class NewAction extends Component {
                     // this.getTask();
                     //Clear inputs
                     this.refs.form.reset();
+                    getTasks();
                     hide();
                 } else {
                     Notifier.error(err.reason);
                 }
             })
+    }
+
+    onHide(e) {
+        const {hide} = this.props;
+        hide();
     }
 
     render() {
@@ -73,11 +79,9 @@ export default class NewAction extends Component {
                     <AutoForm schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
                         <AutoField name="action" options={actions}/>
                         <ErrorField name="action"/>
-                        {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Note"/>*/}
-                        {/*</div>*/}
+
                         <div className="btn-group">
-                            <button className="btn--red">Cancel</button>
+                            <button type="button" className="btn--red" onClick={this.onHide.bind(this)}>Cancel</button>
                             <button type="submit" className="btn--green">Save</button>
                         </div>
                     </AutoForm>
