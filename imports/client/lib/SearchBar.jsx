@@ -10,16 +10,14 @@ export default class SearchBar extends Component {
             active: false,
             filter: false
         };
-        this.renderFilterBar = this.renderFilterBar.bind(this);
     }
 
-    renderFilterBar() {
+    manageFilterBar() {
         const {active, filter} = this.state;
         this.setState({
             active: !active,
             filter: !filter
         });
-        this.props.filter();
     }
 
     onHandleChange() {
@@ -67,7 +65,7 @@ export default class SearchBar extends Component {
                     </div>
 
                     <div className={active ? "filter-block active" : "filter-block"}
-                         onClick={this.renderFilterBar}>
+                         onClick={this.manageFilterBar.bind(this)}>
                         <button><i className="icon-filter"/></button>
                     </div>
 
