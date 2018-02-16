@@ -19,7 +19,6 @@ export default class TaskListContainer extends Pager {
             tasks: [],
             rightSide: false,
             btnGroup: false,
-            filter: false,
             task: null,
             tasksSelected: []
         });
@@ -33,7 +32,6 @@ export default class TaskListContainer extends Pager {
 
         this.renderRightSide = this.renderRightSide.bind(this);
         this.showBtnGroup = this.showBtnGroup.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
     }
 
     componentWillMount() {
@@ -51,12 +49,6 @@ export default class TaskListContainer extends Pager {
     showBtnGroup() {
         this.setState({
             btnGroup: !this.state.btnGroup
-        })
-    }
-
-    showFilterBar() {
-        this.setState({
-            filter: !this.state.filter
         })
     }
 
@@ -99,7 +91,7 @@ export default class TaskListContainer extends Pager {
                 }
             }
         }
-        return [facilities, assignees];
+        return {facilities, assignees};
     }
 
     selectTask(newTask) {
@@ -129,14 +121,17 @@ export default class TaskListContainer extends Pager {
 
     render() {
         const {tasks, filter, tasksSelected, task} = this.state;
-        const [facilities, assignees] = this.getData(tasks);
+        const options = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
         const TaskListCont = this.TaskListCont;
 
         return (
             <div className="cc-container">
                 <div className={task ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={tasksSelected.le
+                    <SearchBar options={options}
+                               changeFilters={this.changeFilters}
+                               btnGroup={tasksSelected.length}
+                    />
                     <TaskListCont
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
