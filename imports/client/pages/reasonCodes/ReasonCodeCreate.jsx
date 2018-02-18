@@ -23,6 +23,7 @@ class CreateReasonCode extends React.Component {
 
         actionQuery.fetch((err, actions) => {
             if (!err) {
+                console.log(actions);
                 actions.forEach((action) => {
                     actionOptions.push({
                         label: action.title,
@@ -60,6 +61,7 @@ class CreateReasonCode extends React.Component {
 
     render() {
         const {actionOptions, error} = this.state;
+        console.log(actionOptions);
 
         return (
             <Container className="page-container">
