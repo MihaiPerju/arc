@@ -1,10 +1,9 @@
 import React from 'react';
-import {Button} from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 
 export default class CreateLetter extends React.Component {
     createLetter = () => {
-        const {letterBody, taskId} = this.props;
+        const {letterBody, taskId, reset} = this.props;
         const data = {
             body: letterBody,
             taskId
@@ -15,6 +14,7 @@ export default class CreateLetter extends React.Component {
                 Notifier.error('Error while trying to create letter!');
             } else {
                 Notifier.success('Letter successfully created!');
+                reset();
             }
         });
     };
