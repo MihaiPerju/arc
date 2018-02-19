@@ -25,6 +25,7 @@ export default class TaskList extends Component {
         return (
             <div className={this.props.class}>
                 {
+                    data &&
                     data.length
                         ?
                         _.map(data, (task) => {
