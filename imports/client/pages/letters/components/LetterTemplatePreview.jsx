@@ -31,6 +31,7 @@ export default class LetterTemplatePreview extends React.Component {
                     <div>
                         <Divider />
                         <CreateLetter taskId={taskId} letterBody={letterBody} attachments={attachments}/>
+                        <CreateLetter taskId={taskId} letterBody={letterBody}/>
                     </div>
                 }
             </div>

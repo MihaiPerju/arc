@@ -16,17 +16,13 @@ export default class CreateLetter extends React.Component {
                 Notifier.error('Error while trying to create letter!');
             } else {
                 Notifier.success('Letter successfully created!');
-                FlowRouter.go('task.view', {_id: taskId});
             }
         });
     };
 
     render() {
         return (
-            <Button primary
-                    onClick={this.createLetter}>
-                Create Letter
-            </Button>
+            <button onClick={this.createLetter} className="btn--green btn-save">Save</button>
         );
     }
 }
