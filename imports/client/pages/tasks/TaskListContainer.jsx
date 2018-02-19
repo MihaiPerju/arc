@@ -4,11 +4,12 @@ import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/tasks/queries/taskList';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import autoBind from 'react-autobind'
+import query from '/imports/api/tasks/queries/taskList';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
 
-export default class TaskListContainer extends Pager {
+class TaskListContainer extends Pager {
     constructor() {
         super();
         _.extend(this.state, {
@@ -107,11 +108,24 @@ export default class TaskListContainer extends Pager {
         this.updateFilters({filters})
     }
 
+    update() {
+        const {refetch} = this.props;
+        refetch();
+    }
+
     render() {
+        const {data, loading, error} = this.props;
         const {tasks, filter, tasksSelected, task} = this.state;
         const options = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
 
+        if (loading) {
+            return <Loading/>
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>
+        }
         return (
             <div className="cc-container">
                 <div className={task ? "left__side" : "left__side full__width"}>
@@ -126,11 +140,12 @@ export default class TaskListContainer extends Pager {
                         tasksSelected={tasksSelected}
                         currentTask={task && task._id}
                         checkTask={this.checkTask}
+                        data={data}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    task && <RightSide task={task}/>
+                    task && <RightSide update={this.update} task={task}/>
                 }
             </div>
         );
@@ -153,12 +168,12 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {task} = this.props;
+        const {task,update} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
                     task ?
-                        <TaskContent task={task}/>
+                        <TaskContent update={update} task={task}/>
                         :
                         'No component provided for bulk accounts'
                 }
@@ -166,3 +181,7 @@ class RightSide extends Component {
         )
     }
 }
+
+export default withQuery((props) => {
+    return query.clone();
+})(TaskListContainer)

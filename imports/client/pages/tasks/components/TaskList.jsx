@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
 import TaskSingle from './TaskSingle.jsx';
 import _ from "underscore";
-import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import query from '/imports/api/tasks/queries/taskList';
-import Loading from '/imports/client/lib/ui/Loading';
 
-class TaskList extends Component {
+export default class TaskList extends Component {
     constructor(props) {
         super(props);
     }
@@ -16,15 +13,8 @@ class TaskList extends Component {
     }
 
     render() {
-        const {data, loading, error, checkTask, selectTask, currentTask} = this.props;
+        const {data, checkTask, selectTask, currentTask} = this.props;
 
-        if (loading) {
-            return <Loading/>
-        }
-
-        if (error) {
-            return <div>Error: {error.reason}</div>
-        }
         return (
             <div className={this.props.class}>
                 {
@@ -36,6 +26,7 @@ class TaskList extends Component {
                                                currentTask={currentTask}
                                                selectTask={selectTask}
                                                checkTask={checkTask}
+                                               update={this.update}
                                                key={task._id}
                                                task={task}/>
                         })
@@ -46,7 +37,3 @@ class TaskList extends Component {
         );
     }
 }
-
-export default withQuery((props) => {
-    return query.clone();
-})(TaskList)
