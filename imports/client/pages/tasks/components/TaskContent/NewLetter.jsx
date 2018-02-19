@@ -1,30 +1,74 @@
 import React, {Component} from 'react';
-import SelectBlock from '/imports/client/lib/SelectBlock.jsx';
+import query from '/imports/api/letterTemplates/queries/listLetterTemplates';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import Loading from '/imports/client/lib/ui/Loading';
+import {getImagePath} from '/imports/api/utils';
+import {AutoForm, SelectField} from 'uniforms-semantic';
+import SimpleSchema from 'simpl-schema';
 
-export default class NewLetter extends Component {
+class NewLetter extends Component {
     constructor() {
         super();
         this.state = {
             fade: false
         }
     }
-    
+
     componentDidMount() {
         setTimeout(() => {
             this.setState({fade: true});
         }, 1);
     }
 
+    getOptions = (data) => {
+        return _.map(data, (letterTemplate) => ({
+            value: letterTemplate._id,
+            label: letterTemplate.name
+        }));
+    };
+
+    getLetterTemplate(value) {
+        const {data} = this.props;
+        for (letterTemplate of data) {
+            if (letterTemplate._id === value) {
+                return letterTemplate;
+            }
+        }
+    }
+
+    onHandleChange(label, value) {
+        const letterTemplate = this.getLetterTemplate(value)
+        console.log(letterTemplate);
+    }
+
     render() {
+        const {data, isLoading, error} = this.props;
+        if (isLoading) {
+            return <Loading/>
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>
+        }
+        const {avatar} = Meteor.user();
+        const {profile} = Meteor.user();
+        const options = this.getOptions(data);
+        console.log(options);
         return (
             <div className={this.state.fade ? "new-letter in" : "new-letter"}>
                 <div className="row-block">
                     <div className="info">
-                        <img className="md-avatar img-circle" src="/assets/img/user1.svg" alt=""/>
-                        <div className="name">Solomon Ben</div>
+                        <img className="md-avatar img-circle"
+                             src={avatar ? getImagePath(avatar.path) : "/assets/img/user1.svg"} alt=""/>
+                        <div className="name">{profile.firstName + " " + profile.lastName}</div>
                     </div>
                     <div className="form-group">
-                        <SelectBlock header={'Select letter'}/>
+                        <AutoForm onChange={this.onHandleChange.bind(this)} schema={schema}>
+                            <SelectField
+                                name="selectedOption"
+                                placeholder="Select letter"
+                                options={options}/>
+                        </AutoForm>
                         <button className="btn--red">Cancel</button>
                     </div>
                 </div>
@@ -57,9 +101,10 @@ export default class NewLetter extends Component {
                     </div>
                     <div className="right-col">
                         <p>Dear Mr. John,</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id porro eum, ducimus. 
-                        Neque saepe dolorem perferendis eos nihil. Accusamus atque, dolore qui praesentium doloribus reiciendis laudantium, 
-                        quibusdam beatae! Dolore, magnam.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id porro eum, ducimus.
+                            Neque saepe dolorem perferendis eos nihil. Accusamus atque, dolore qui praesentium doloribus
+                            reiciendis laudantium,
+                            quibusdam beatae! Dolore, magnam.</p>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                         <p>Sincerily</p>
                         <button className="btn--green btn-save">Save</button>
@@ -69,3 +114,14 @@ export default class NewLetter extends Component {
         )
     }
 }
+
+const schema = new SimpleSchema({
+    selectedOption: {
+        type: String,
+        label: false
+    }
+});
+
+export default withQuery(() => {
+    return query.clone();
+})(NewLetter)
