@@ -8,17 +8,19 @@ const SortableItem = SortableElement(({pdf, index, getPdfName, deletePdf, redire
     <li style={{'listStyleType': 'none'}}>
         {
             pdf &&
-            <Segment clearing>
-                <Button.Group floated='right'>
-                    <Button primary onClick={redirectToPdf.bind(this, pdf)}>
-                        View
-                    </Button>
-                    <Button negative onClick={deletePdf.bind(this, pdf)}>
-                        Delete
-                    </Button>
-                </Button.Group>
-                {getPdfName(pdf)}
-            </Segment>
+            <div className="block-item">
+                <div className="info">
+                    <div className="title">{getPdfName(pdf)}</div>
+                </div>
+                <div className="btn-group">
+                    <button onClick={redirectToPdf.bind(this, pdf)} className="btn-text--blue">
+                        <i className="icon-download"/>
+                    </button>
+                    <button onClick={deletePdf.bind(this, pdf)} className="btn-text--red">
+                        <i className="icon-trash-o"/>
+                    </button>
+                </div>
+            </div>
         }
     </li>
 );
@@ -52,27 +54,6 @@ export default class SortableTab extends React.Component {
         });
     };
 
-    downloadPdfs() {
-        const taskId = FlowRouter.current().params._id;
-        const {items} = this.state;
-
-        //creating attachmentIds
-        let attachmentIds = [];
-
-        for (item of items) {
-            attachmentIds.push(item._id);
-        }
-
-        //Updating status in Db
-        Meteor.call('task.attachment.update_order', taskId, attachmentIds, (err) => {
-            if (!err) {
-                window.open("/pdfs/" + taskId + "/" + getToken(), '_blank');
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    }
-
     getPdfName(pdf) {
         return pdf.name.slice(0, pdf.name.indexOf('.'))
     }
@@ -87,7 +68,6 @@ export default class SortableTab extends React.Component {
         Meteor.call('task.attachment.remove', taskId, pdf._id, pdf.path, (err) => {
             if (!err) {
                 Notifier.success("Attachment removed!");
-                this.props.updateTask();
             } else {
                 Notifier.error(err.reason);
             }
@@ -121,21 +101,11 @@ export default class SortableTab extends React.Component {
         const {items} = this.state;
         return (
             <div>
-                <SortableList items={this.state.items}
+                <SortableList items={items}
                               deletePdf={this.deletePdf.bind(this)}
                               getPdfName={this.getPdfName}
                               redirectToPdf={this.redirectToPdf}
                               onSortEnd={this.onSortEnd.bind(this)}/>
-                {
-                    items && items.length > 1 &&
-                    <div>
-                        <Button fluid onClick={this.downloadPdfs.bind(this)}
-                                target="_blank">
-                            Download All PDFs
-                        </Button>
-                        <Divider/>
-                    </div>
-                }
             </div>
         )
     }
