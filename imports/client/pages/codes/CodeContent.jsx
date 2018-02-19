@@ -16,6 +16,7 @@ export default class CodeContent extends Component {
                 <CodeHeader/>
                 <DescriptionBlock/>
                 <ActionBlock/>
+                <Note/>
             </div>
         )
     }
