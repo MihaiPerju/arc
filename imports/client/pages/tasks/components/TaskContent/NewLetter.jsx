@@ -43,11 +43,15 @@ class NewLetter extends Component {
         this.setState({selectedTemplate});
     }
 
+    cancel() {
+        const {cancel} = this.props;
+        cancel();
+    }
+
     render() {
-        const {data, isLoading, error, task} = this.props;
+        const {data, isLoading, error, task, cancel} = this.props;
         const {selectedTemplate} = this.state;
-        const {avatar} = Meteor.user();
-        const {profile} = Meteor.user();
+        const {avatar, profile} = Meteor.user();
         const options = this.getOptions(data);
 
         if (isLoading) {
@@ -73,12 +77,12 @@ class NewLetter extends Component {
                                 placeholder="Select letter"
                                 options={options}/>
                         </AutoForm>
-                        <button className="btn--red">Cancel</button>
+                        <button onClick={this.cancel.bind(this)} className="btn--red">Cancel</button>
                     </div>
                 </div>
-
                 <LetterCreateContainer selectedTemplate={selectedTemplate}
                                        taskId={task && task._id}
+                                       reset={cancel}
                                        data={data}/>
             </div>
         )

@@ -9,10 +9,10 @@ LetterGetQuery.expose({});
 Letters.expose({
     firewall(filters, options, userId) {
         Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
-    },
+    }
 });
 LetterListQuery.expose({
     firewall(userId, params) {
         Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
-    },
+    }
 });
