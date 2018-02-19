@@ -1,14 +1,12 @@
 import React, {Component} from 'react'
 import TaskList from './components/TaskList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/tasks/queries/taskList';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import autoBind from 'react-autobind'
-import TaskService from './services/TaskService';
 
 export default class TaskListContainer extends Pager {
     constructor() {
@@ -24,20 +22,10 @@ export default class TaskListContainer extends Pager {
         });
 
         this.query = query.clone();
-        this.TaskListCont = createQueryContainer(this.query, TaskList, {
-            reactive: false
-        });
-
         autoBind(this);
 
         this.renderRightSide = this.renderRightSide.bind(this);
         this.showBtnGroup = this.showBtnGroup.bind(this);
-    }
-
-    componentWillMount() {
-        query.fetch((err, tasks) => {
-            this.setState({tasks});
-        });
     }
 
     renderRightSide() {
@@ -123,7 +111,6 @@ export default class TaskListContainer extends Pager {
         const {tasks, filter, tasksSelected, task} = this.state;
         const options = this.getData(tasks);
         // const params = _.extend({}, this.getPagerOptions());
-        const TaskListCont = this.TaskListCont;
 
         return (
             <div className="cc-container">
@@ -132,7 +119,7 @@ export default class TaskListContainer extends Pager {
                                changeFilters={this.changeFilters}
                                btnGroup={tasksSelected.length}
                     />
-                    <TaskListCont
+                    <TaskList
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
                         selectTask={this.selectTask}
