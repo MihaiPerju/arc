@@ -19,7 +19,7 @@ export default class ActionBlock extends Component {
     }
 
     render() {
-        const {task} = this.props;
+        const {task,update} = this.props;
         return (
             <div className="action-block">
                 <div className="header__block">
@@ -30,7 +30,7 @@ export default class ActionBlock extends Component {
                         <i className="icon-thumb-tack"/>
                         <div className="text-center">+ Add new action</div>
                     </div>
-                    {this.state.createAction ? <NewAction hide={this.newAction} task={task}/> : null}
+                    {this.state.createAction ? <NewAction update={update}  hide={this.newAction} task={task}/> : null}
                     <div className="action-list">
                         {
                             task.actionsLinkData &&
