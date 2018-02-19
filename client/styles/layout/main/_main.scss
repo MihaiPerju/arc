@@ -65,6 +65,17 @@
     background: #c2c2c2;
 }
 
+// Flex Height Block
+.flex-content {
+    height: 100%;
+    border-radius: 3px;
+    background: $color-white;
+    padding: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
 // Main Container
 .cc-container {
     width: calc(100% - 280px);
@@ -356,6 +367,15 @@
                     }
                 }
             }
+        }
+    }
+    .description-block {
+        background: $color-white;
+        padding: 10px 15px;
+        border-radius: 3px;
+        p {
+            line-height: 2rem;
+            word-wrap: break-word;
         }
     }
 }
