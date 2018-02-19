@@ -20,7 +20,7 @@ class LetterList extends Component {
     }
 
     render() {
-        const {data, isLoading, error,} = this.props;
+        const {data, isLoading, error, task} = this.props;
         if (isLoading) {
             return <Loading/>
         }
@@ -38,7 +38,7 @@ class LetterList extends Component {
                         <i className="icon-envelope-o"/>
                         <div className="text-center">+ Create a new letter</div>
                     </div>
-                    {this.state.createLetter ? <NewLetter/> : null}
+                    {this.state.createLetter ? <NewLetter task={task}/> : null}
                     <div className="block-list letter-list">
                         <div className="block-item">
                             <div className="info">

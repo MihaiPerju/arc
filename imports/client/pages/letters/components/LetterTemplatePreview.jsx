@@ -29,7 +29,6 @@ export default class LetterTemplatePreview extends React.Component {
                 {!!letterTemplateBody && <div dangerouslySetInnerHTML={{__html: letterBody}}/>}
                 {letterTemplateBody &&
                     <div>
-                        <Divider />
                         <CreateLetter taskId={taskId} letterBody={letterBody}/>
                     </div>
                 }

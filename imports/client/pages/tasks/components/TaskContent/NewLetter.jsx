@@ -5,12 +5,14 @@ import Loading from '/imports/client/lib/ui/Loading';
 import {getImagePath} from '/imports/api/utils';
 import {AutoForm, SelectField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
+import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
 
 class NewLetter extends Component {
     constructor() {
         super();
         this.state = {
-            fade: false
+            fade: false,
+            selectedTemplate: {}
         }
     }
 
@@ -37,12 +39,17 @@ class NewLetter extends Component {
     }
 
     onHandleChange(label, value) {
-        const letterTemplate = this.getLetterTemplate(value)
-        console.log(letterTemplate);
+        const selectedTemplate = this.getLetterTemplate(value);
+        this.setState({selectedTemplate});
     }
 
     render() {
-        const {data, isLoading, error} = this.props;
+        const {data, isLoading, error, task} = this.props;
+        const {selectedTemplate} = this.state;
+        const {avatar} = Meteor.user();
+        const {profile} = Meteor.user();
+        const options = this.getOptions(data);
+
         if (isLoading) {
             return <Loading/>
         }
@@ -50,10 +57,7 @@ class NewLetter extends Component {
         if (error) {
             return <div>Error: {error.reason}</div>
         }
-        const {avatar} = Meteor.user();
-        const {profile} = Meteor.user();
-        const options = this.getOptions(data);
-        console.log(options);
+
         return (
             <div className={this.state.fade ? "new-letter in" : "new-letter"}>
                 <div className="row-block">
@@ -72,44 +76,10 @@ class NewLetter extends Component {
                         <button className="btn--red">Cancel</button>
                     </div>
                 </div>
-                <form action="" className="letter-template">
-                    <div className="left-col">
-                        <div className="form-group">
-                            <input type="text" placeholder="Company name"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder="Company addr block"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder="Letter date"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder="Addr block"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder="First name"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder="Second name"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder="Signature"/>
-                        </div>
-                        <div className="form-group">
-                            <input type="text" placeholder="Title"/>
-                        </div>
-                    </div>
-                    <div className="right-col">
-                        <p>Dear Mr. John,</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Id porro eum, ducimus.
-                            Neque saepe dolorem perferendis eos nihil. Accusamus atque, dolore qui praesentium doloribus
-                            reiciendis laudantium,
-                            quibusdam beatae! Dolore, magnam.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                        <p>Sincerily</p>
-                        <button className="btn--green btn-save">Save</button>
-                    </div>
-                </form>
+
+                <LetterCreateContainer selectedTemplate={selectedTemplate}
+                                       taskId={task && task._id}
+                                       data={data}/>
             </div>
         )
     }
