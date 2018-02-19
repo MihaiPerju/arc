@@ -7,6 +7,7 @@ import autoBind from 'react-autobind';
 import Notifier from '/imports/client/lib/Notifier';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
+import {getImagePath} from "../../../../api/utils";
 
 export default class CommentList extends Component {
 
@@ -38,7 +39,7 @@ export default class CommentList extends Component {
 
     render() {
         const {data, loading, error} = this.props;
-
+        const {path} = Meteor.user() && Meteor.user().avatar;
         if (loading) {
             return <Loading/>
         }
@@ -47,22 +48,27 @@ export default class CommentList extends Component {
             return <div>Error: {error.reason}</div>
         }
 
-
         return (
             <Container>
                 <Comment.Group minimal>
                     <Header as='h3' dividing>Comments</Header>
+                    <div className="comment-block">
+                        <AutoForm ref='comment' schema={schema} onSubmit={this.onSubmit}>
+                            <div className="form-group">
+                                <img className="md-avatar img-circle"
+                                    src={ path ? getImagePath(path) : 'https://www.dontshake.org/media/k2/items/cache/71f67488b0857639cee631943a3fc6fa_XL.jpg'}
+                                     alt=""/>
+                                <AutoField style={{"width": "80%"}} placeholder="Leave your comment" name="content"/>
+                                <ErrorField name="content"/>
+                                <button className="btn-post">Post</button>
+                            </div>
+                        </AutoForm>
+                    </div>
                     {
                         data.map((comment, index) => {
                             return <CommentSingle comment={comment} key={index}/>
                         })
                     }
-
-                    <AutoForm ref='comment' schema={schema} onSubmit={this.onSubmit}>
-                        <AutoField name="content"/>
-                        <ErrorField name="content"/>
-                    </AutoForm>
-
                     <Divider/>
                 </Comment.Group>
             </Container>
@@ -74,6 +80,6 @@ const schema = new SimpleSchema({
     content: {
         type: String,
         optional: true,
-        label: 'Comment'
+        label: false
     }
 });
