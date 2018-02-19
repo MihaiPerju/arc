@@ -45,15 +45,14 @@ export default class NewAction extends Component {
     }
 
     onSubmit(data) {
-        const {task, hide, getTasks} = this.props;
+        const {task, hide, update} = this.props;
         Meteor.call('task.actions.add', task._id, data.action
             , (err) => {
                 if (!err) {
                     Notifier.success("Data saved");
-                    // this.getTask();
                     //Clear inputs
                     this.refs.form.reset();
-                    getTasks();
+                    update();
                     hide();
                 } else {
                     Notifier.error(err.reason);
