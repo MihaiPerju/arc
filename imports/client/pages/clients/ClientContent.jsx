@@ -9,9 +9,10 @@ export default class ClientContent extends Component {
     }
 
     render() {
+        const {client} = this.props;
         return (
-            <div className="main-content client-content">              
-                <ClientContentHeader/>
+            <div className="main-content client-content">
+                <ClientContentHeader client={client}/>
                 <ContactBlock/>
                 <NoteBlock/>
             </div>
