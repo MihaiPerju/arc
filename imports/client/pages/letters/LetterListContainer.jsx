@@ -27,9 +27,7 @@ export default class LetterListContainer extends Pager {
         const {taskId} = this.props;
 
         return (
-            <Container className="page-container">
-                <Header as="h3" textAlign="center">Letter List</Header>
-
+            <div>
                 <LetterListWrapper params={params}/>
                 {this.getPaginator()}
 
@@ -40,8 +38,7 @@ export default class LetterListContainer extends Pager {
                 }}>
                     Create
                 </Button>
-
-            </Container>
+            </div>
         );
     }
 }
