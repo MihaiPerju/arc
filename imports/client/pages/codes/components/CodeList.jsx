@@ -3,26 +3,24 @@ import CodeSingle from './CodeSingle';
 
 export default class CodeList extends Component {
     render() {
-    	const codes = [
-            { name: 'Code1' },
-            { name: 'Code2' },
-            { name: 'Code3' }
-        ];
-        const codeList = codes.map(function(code, index){
-        	const { renderContent, showBtnGroup } = this.props;
-        	return (
-				<CodeSingle
-					key={index}
-					id={index}
-					renderContent={renderContent}
-					showBtnGroup={showBtnGroup}
-					name={code.name}
-				/>
-        	)
+        const {codes} = this.props;
+        const codeList = codes.map(function (code, index) {
+            const {setCode, selectCode, codesSelected, currentCode} = this.props;
+            return (
+                <CodeSingle
+                    codesSelected={codesSelected}
+                    currentCode={currentCode}
+                    selectCode={selectCode}
+                    setCode={setCode}
+                    code={code}
+                    key={index}
+
+                />
+            )
         }, this)
         return (
             <div className={this.props.class}>
-                { codeList }
+                {codeList}
             </div>
         );
     }

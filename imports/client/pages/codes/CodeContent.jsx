@@ -11,12 +11,13 @@ export default class CodeContent extends Component {
     }
 
     render() {
+        const {code} = this.props;
         return (
             <div className="main-content code-content">
-                <CodeHeader/>
-                <DescriptionBlock/>
-                <ActionBlock/>
-                <Note/>
+                <CodeHeader code={code}/>
+                <DescriptionBlock code={code}/>
+                <ActionBlock code={code}/>
+                <Note code={code}/>
             </div>
         )
     }
