@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {getImagePath} from "/imports/api/utils";
 
 export default class UserContent extends Component {
     constructor() {
@@ -6,23 +7,27 @@ export default class UserContent extends Component {
     }
 
     render() {
+        const {user} = this.props;
         return (
             <div className="main-content flex-content user-content">
                 <div className="intro-block text-center">
-                    <img className="lg-avatar img-circle" src="/assets/img/user.svg" alt=""/>
+                    <img src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"}
+                         className="lg-avatar img-circle"
+                         alt=""/>
                     <div className="info">
                         <div className="text-light-grey">User name</div>
-                        <div className="text-blue email">contomestchii@email</div>
+                        <div
+                            className="text-blue email">{user.profile && user.profile.firstName + " " + user.profile.lastName}</div>
                     </div>
                 </div>
                 <ul className="row__info">
                     <li>
                         <span className="text-light-grey">First name</span>
-                        <span className="info-label">Chester</span>
+                        <span className="info-label">{user.profile && user.profile.firstName}</span>
                     </li>
                     <li>
                         <span className="text-light-grey">Last name</span>
-                        <span className="info-label">Schroeder</span>
+                        <span className="info-label">{user.profile && user.profile.lastName}</span>
                     </li>
                     <li>
                         <span className="text-light-grey">Phone</span>
