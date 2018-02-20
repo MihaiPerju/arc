@@ -43,10 +43,14 @@ class LetterList extends Component {
                         <NewLetter cancel={this.toggleLetter.bind(this)} task={task}/> : null}
                     <div className="block-list letter-list">
                         {
+<<<<<<< HEAD
 <<<<<<< 5c830ba22fd3d5c902f3d9c5b2980a10c4206cc6
 =======
                             data &&
 >>>>>>> obtained reactivity on account level
+=======
+                            data &&
+>>>>>>> started adapting clients
                             _.map(data, (letter, index) => {
                                 return (
                                     <div key={index} className="block-item">
