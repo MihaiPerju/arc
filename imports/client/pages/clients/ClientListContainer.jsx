@@ -4,8 +4,11 @@ import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ClientList from './components/ClientList.jsx';
 import ClientContent from './ClientContent.jsx';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import query from "../../../api/clients/queries/listClients";
+import Loading from '/imports/client/lib/ui/Loading';
 
-export default class ClientContainer extends Component {
+class ClientContainer extends Component {
     constructor() {
         super();
         this.state = {
@@ -17,7 +20,7 @@ export default class ClientContainer extends Component {
         this.showBtnGroup = this.showBtnGroup.bind(this);
         this.showFilterBar = this.showFilterBar.bind(this);
     }
-    
+
     renderRightSide() {
         this.setState({
             rightSide: true
@@ -37,13 +40,24 @@ export default class ClientContainer extends Component {
     }
 
     render() {
+        const {data, loading, error} = this.props;
+        console.log(data);
+
+        if (loading) {
+            return <Loading/>
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>
+        }
         return (
             <div className="cc-container">
                 <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
-                    { this.state.filter ? <FilterBar/> : null }
-                    <ClientList 
-                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                    {this.state.filter ? <FilterBar/> : null}
+                    <ClientList
+                        clients={data}
+                        class={this.state.filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
                         showBtnGroup={this.showBtnGroup}
                     />
@@ -75,9 +89,13 @@ class RightSide extends Component {
 
     render() {
         return (
-            <div className={this.state.fade ? "right__side in" :"right__side"}>
+            <div className={this.state.fade ? "right__side in" : "right__side"}>
                 <ClientContent/>
             </div>
         )
     }
 }
+
+export default withQuery((props) => {
+    return query.clone();
+})(ClientContainer)
