@@ -3,19 +3,19 @@ import ClientSingle from './ClientSingle';
 
 export default class ClientList extends Component {
     render() {
-        const imgPath = '/assets/img/';
         const {clients} = this.props;
         const clientList = clients.map(function (client, index) {
-            const {renderContent, showBtnGroup} = this.props;
+            const {renderContent, showBtnGroup, selectClient} = this.props;
             return (
                 <ClientSingle
-                    key={index}
                     renderContent={renderContent}
+                    selectClient={selectClient}
                     showBtnGroup={showBtnGroup}
-                    id={index}
                     name={client.clientName}
+                    avatar={client.logoPath}
                     mail={client.email}
-                    avatar={client.avatar}
+                    key={index}
+                    id={client._id}
                 />
             )
         }, this);
