@@ -43,10 +43,7 @@ class LetterList extends Component {
                         <NewLetter cancel={this.toggleLetter.bind(this)} task={task}/> : null}
                     <div className="block-list letter-list">
                         {
-<<<<<<< HEAD
-=======
                             data &&
->>>>>>> origin/ui-account-reactivity
                             _.map(data, (letter, index) => {
                                 return (
                                     <div key={index} className="block-item">
