@@ -52,9 +52,20 @@ class ClientContainer extends Component {
         })
     }
 
+    getClient() {
+        const {data} = this.props;
+        const {currentClient} = this.state;
+        for (client of data) {
+            if (client._id === currentClient) {
+                return client;
+            }
+        }
+    }
+
     render() {
         const {data, loading, error} = this.props;
         const {clientsSelected, currentClient} = this.state;
+        const client = this.getClient();
 
         if (loading) {
             return <Loading/>
@@ -80,7 +91,7 @@ class ClientContainer extends Component {
                 </div>
                 {
                     currentClient ? (
-                        <RightSide/>
+                        <RightSide client={client}/>
                     ) : null
                 }
             </div>
@@ -103,9 +114,10 @@ class RightSide extends Component {
     }
 
     render() {
+        const {client} = this.props;
         return (
             <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <ClientContent/>
+                <ClientContent client={client}/>
             </div>
         )
     }
