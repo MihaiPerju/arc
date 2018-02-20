@@ -12,15 +12,15 @@ export default class TaskContent extends Component {
     }
 
     render() {
-        const {task} = this.props;
+        const {task, update} = this.props;
         return (
             <div className="main-content">
                 <TaskContentHeader task={task}/>
                 <PayerBlock task={task}/>
-                <ActionBlock task={task}/>
+                <ActionBlock update={update} task={task}/>
                 <LetterList task={task}/>
-                <PdfFiles task={task}/>
-                <CommentBlock task={task}/>
+                <PdfFiles  task={task}/>
+                <CommentBlock  task={task}/>
             </div>
         )
     }

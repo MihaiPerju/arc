@@ -13,18 +13,12 @@ export default class TaskList extends Component {
     }
 
     render() {
-        const {data, loading, error, checkTask, selectTask, currentTask} = this.props;
+        const {data, checkTask, selectTask, currentTask} = this.props;
 
-        if (loading) {
-            return <div>Loading</div>
-        }
-
-        if (error) {
-            return <div>Error: {error.reason}</div>
-        }
         return (
             <div className={this.props.class}>
                 {
+                    data &&
                     data.length
                         ?
                         _.map(data, (task) => {
@@ -32,6 +26,7 @@ export default class TaskList extends Component {
                                                currentTask={currentTask}
                                                selectTask={selectTask}
                                                checkTask={checkTask}
+                                               update={this.update}
                                                key={task._id}
                                                task={task}/>
                         })

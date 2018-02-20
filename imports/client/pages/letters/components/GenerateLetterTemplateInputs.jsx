@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from "underscore";
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 
 export default class GenerateLetterTemplateInputs extends React.Component {
@@ -44,10 +44,13 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
             templateKeywords.forEach((keyword, index) => {
                 fields.push(
-                    <AutoField
-                        key={index}
-                        name={keyword}
-                    />,
+                    <div className="form-group">
+                        <AutoField
+                            key={index}
+                            name={keyword}
+                            placeholder={keyword}
+                        />
+                    </div>,
                     <ErrorField key={keyword + index} name={keyword}/>,
                 );
             });
@@ -65,7 +68,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
         const fields = this.generateFields();
         const {templateKeywords} = this.props;
 
-        if(!templateKeywords || !templateKeywords.length) {
+        if (!templateKeywords || !templateKeywords.length) {
             return <div/>;
         }
 

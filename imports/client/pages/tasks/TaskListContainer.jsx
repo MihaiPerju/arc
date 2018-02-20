@@ -1,16 +1,15 @@
 import React, {Component} from 'react'
 import TaskList from './components/TaskList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import TaskContent from './TaskContent.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/tasks/queries/taskList';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import autoBind from 'react-autobind'
-import TaskService from './services/TaskService';
+import query from '/imports/api/tasks/queries/taskList';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
 
-export default class TaskListContainer extends Pager {
+class TaskListContainer extends Pager {
     constructor() {
         super();
         _.extend(this.state, {
@@ -19,25 +18,15 @@ export default class TaskListContainer extends Pager {
             tasks: [],
             rightSide: false,
             btnGroup: false,
-            task: null,
+            taskId: null,
             tasksSelected: []
         });
 
         this.query = query.clone();
-        this.TaskListCont = createQueryContainer(this.query, TaskList, {
-            reactive: false
-        });
-
         autoBind(this);
 
         this.renderRightSide = this.renderRightSide.bind(this);
         this.showBtnGroup = this.showBtnGroup.bind(this);
-    }
-
-    componentWillMount() {
-        query.fetch((err, tasks) => {
-            this.setState({tasks});
-        });
     }
 
     renderRightSide() {
@@ -95,11 +84,11 @@ export default class TaskListContainer extends Pager {
     }
 
     selectTask(newTask) {
-        const {task} = this.state;
-        if (task && task._id === newTask._id) {
-            this.setState({task: null})
+        const {taskId} = this.state;
+        if (taskId === newTask._id) {
+            this.setState({taskId: null})
         } else {
-            this.setState({task: newTask});
+            this.setState({taskId: newTask._id});
         }
     }
 
@@ -119,31 +108,54 @@ export default class TaskListContainer extends Pager {
         this.updateFilters({filters})
     }
 
-    render() {
-        const {tasks, filter, tasksSelected, task} = this.state;
-        const options = this.getData(tasks);
-        // const params = _.extend({}, this.getPagerOptions());
-        const TaskListCont = this.TaskListCont;
+    update() {
+        const {refetch} = this.props;
+        refetch();
+    }
 
+    getTask(taskId) {
+        const {data} = this.props;
+        for (task of data) {
+            if (task._id == taskId)
+                return task;
+        }
+        return null;
+    }
+
+    render() {
+        const {data, loading, error} = this.props;
+        const {tasks, filter, tasksSelected, taskId} = this.state;
+        const options = this.getData(tasks);
+        const task = this.getTask(taskId);
+        // const params = _.extend({}, this.getPagerOptions());
+
+        if (loading) {
+            return <Loading/>
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>
+        }
         return (
             <div className="cc-container">
-                <div className={task ? "left__side" : "left__side full__width"}>
+                <div className={taskId ? "left__side" : "left__side full__width"}>
                     <SearchBar options={options}
                                changeFilters={this.changeFilters}
                                btnGroup={tasksSelected.length}
                     />
-                    <TaskListCont
+                    <TaskList
                         class={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
                         selectTask={this.selectTask}
                         tasksSelected={tasksSelected}
-                        currentTask={task && task._id}
+                        currentTask={taskId}
                         checkTask={this.checkTask}
+                        data={data}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    task && <RightSide task={task}/>
+                    taskId && <RightSide update={this.update} task={task}/>
                 }
             </div>
         );
@@ -166,12 +178,12 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {task} = this.props;
+        const {task, update} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
                     task ?
-                        <TaskContent task={task}/>
+                        <TaskContent update={update} task={task}/>
                         :
                         'No component provided for bulk accounts'
                 }
@@ -179,3 +191,7 @@ class RightSide extends Component {
         )
     }
 }
+
+export default withQuery((props) => {
+    return query.clone();
+})(TaskListContainer)
