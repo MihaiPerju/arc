@@ -4,24 +4,19 @@ import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import RegionsList from './components/RegionsList.jsx';
 import RegionContent from './RegionContent.jsx';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import query from "/imports/api/regions/queries/regionList";
+import Loading from '/imports/client/lib/ui/Loading';
+import {objectFromArray} from "/imports/api/utils";
 
-export default class ReportListContainer extends Component {
+class RegionListContainer extends Component {
     constructor() {
         super();
         this.state = {
-            rightSide: false,
-            btnGroup: false,
+            regionsSelected: [],
+            currentRegion: null,
             filter: false
         }
-        this.renderRightSide = this.renderRightSide.bind(this);
-        this.showBtnGroup = this.showBtnGroup.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
-    }
-    
-    renderRightSide() {
-        this.setState({
-            rightSide: true
-        })
     }
 
     showBtnGroup() {
@@ -29,32 +24,62 @@ export default class ReportListContainer extends Component {
             btnGroup: !this.state.btnGroup
         })
     }
-<<<<<<< 2eb426e7eb33818ff616e722150de2c113819448
-=======
-
->>>>>>> updates
+    
     showFilterBar() {
         this.setState({
             filter: !this.state.filter
         })
     }
 
+    setRegion = (_id) => {
+        const {currentRegion} = this.state;
+
+        if (currentRegion === _id) {
+            this.setState({currentRegion: null});
+        } else {
+            this.setState({currentRegion: _id});
+        }
+    };
+
+    selectRegion = (_id) => {
+        const {regionsSelected} = this.state;
+        if (regionsSelected.includes(_id)) {
+            regionsSelected.splice(regionsSelected.indexOf(_id), 1);
+        } else {
+            regionsSelected.push(_id);
+        }
+        this.setState({regionsSelected});
+    };
+
     render() {
+        const {data, loading, error} = this.props;
+        const {regionsSelected, currentRegion} = this.state;
+        const region = objectFromArray(data, currentRegion);
+
+        if (loading) {
+            return <Loading/>
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>
+        }
         return (
             <div className="cc-container">
-                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
-                    { this.state.filter ? <FilterBar/> : null }
-                    <RegionsList 
-                        class={this.state.filter ? "task-list decreased" : "task-list"} 
-                        renderContent={this.renderRightSide}
-                        showBtnGroup={this.showBtnGroup}
+                <div className={currentRegion ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={regionsSelected.length} filter={this.showFilterBar}/>
+                    <RegionsList
+                        class={this.state.filter ? "task-list decreased" : "task-list"}
+                        regionsSelected={regionsSelected}
+                        selectRegion={this.selectRegion}
+                        currentRegion={currentRegion}
+                        setRegion={this.setRegion}
+                        regions={data}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    this.state.rightSide ? (
-                        <RightSide/>
+                    currentRegion ? (
+                        <RightSide region={region}/>
                     ) : null
                 }
             </div>
@@ -77,10 +102,15 @@ class RightSide extends Component {
     }
 
     render() {
+        const {region} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" :"right__side"}>
-                <RegionContent/>
+            <div className={this.state.fade ? "right__side in" : "right__side"}>
+                <RegionContent region={region}/>
             </div>
         )
     }
 }
+
+export default withQuery((props) => {
+    return query.clone();
+})(RegionListContainer)

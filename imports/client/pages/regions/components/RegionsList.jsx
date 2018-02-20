@@ -3,29 +3,24 @@ import RegionSingle from './RegionSingle';
 
 export default class RegionsList extends Component {
     render() {
-    	const regions = [
-            { name: 'Romania' },
-            { name: 'Italy' },
-            { name: 'Germany' },
-            { name: 'Spain' }
-        ];
-
-		const regionList = regions.map(function(region, index){
-        	const { renderContent, showBtnGroup } = this.props;
-			return (
+        const {regions} = this.props;
+        const regionList = regions.map(function (region, index) {
+            const {setRegion, selectRegion, regionsSelected, currentRegion} = this.props;
+            return (
                 <RegionSingle
-                	key={index}
-                	id={index}
-                	renderContent={renderContent}
-                	showBtnGroup={showBtnGroup}
-                	name={region.name}
+                    regionsSelected={regionsSelected}
+                    currentRegion={currentRegion}
+                    selectRegion={selectRegion}
+                    setRegion={setRegion}
+                    region={region}
+                    key={index}
                 />
-			)
-		}, this);
+            )
+        }, this);
 
         return (
             <div className={this.props.class}>
-            	{ regionList }
+                {regionList}
             </div>
         );
     }

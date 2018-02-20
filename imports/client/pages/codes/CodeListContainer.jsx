@@ -62,7 +62,6 @@ class CodeListContainer extends Component {
             <div className="cc-container">
                 <div className={currentCode ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={codesSelected.length} filter={this.showFilterBar}/>
-                    {this.state.filter ? <FilterBar/> : null}
                     <CodeList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         codesSelected={codesSelected}
