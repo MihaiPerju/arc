@@ -56,7 +56,7 @@ export default class CommentList extends Component {
                         <AutoForm ref='comment' schema={schema} onSubmit={this.onSubmit}>
                             <div className="form-group">
                                 <img className="md-avatar img-circle"
-                                    src={ path ? getImagePath(path) : 'https://www.dontshake.org/media/k2/items/cache/71f67488b0857639cee631943a3fc6fa_XL.jpg'}
+                                     src={path ? getImagePath(path) : 'https://www.dontshake.org/media/k2/items/cache/71f67488b0857639cee631943a3fc6fa_XL.jpg'}
                                      alt=""/>
                                 <AutoField style={{"width": "80%"}} placeholder="Leave your comment" name="content"/>
                                 <ErrorField name="content"/>
@@ -65,6 +65,7 @@ export default class CommentList extends Component {
                         </AutoForm>
                     </div>
                     {
+                        data &&
                         data.map((comment, index) => {
                             return <CommentSingle comment={comment} key={index}/>
                         })
