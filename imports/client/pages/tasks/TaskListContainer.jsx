@@ -8,6 +8,7 @@ import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import autoBind from 'react-autobind'
 import query from '/imports/api/tasks/queries/taskList';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import Loading from '/imports/client/lib/ui/Loading';
 
 class TaskListContainer extends Pager {
     constructor() {
