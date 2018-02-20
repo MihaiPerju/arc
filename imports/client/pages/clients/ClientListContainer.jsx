@@ -12,14 +12,22 @@ class ClientContainer extends Component {
     constructor() {
         super();
         this.state = {
-            rightSide: false,
-            btnGroup: false,
+            currentClient: null,
             filter: false,
             clientsSelected: []
         };
         this.renderRightSide = this.renderRightSide.bind(this);
-        this.showBtnGroup = this.showBtnGroup.bind(this);
         this.showFilterBar = this.showFilterBar.bind(this);
+    }
+
+    setClient = (_id) => {
+        const {currentClient} = this.state;
+
+        if (currentClient === _id) {
+            this.setState({currentClient: null});
+        } else {
+            this.setState({currentClient: _id});
+        }
     }
 
     renderRightSide() {
@@ -28,22 +36,14 @@ class ClientContainer extends Component {
         })
     }
 
-    selectClient(_id) {
-        console.log(_id)
-        console.log(this);
-        // const {clientsSelected} = this.state;
-        // if (clientsSelected.includes(_id)) {
-        //     clientsSelected.splice(clientsSelected.indexOf(_id), 1);
-        // } else {
-        //     clientsSelected.push(_id);
-        // }
-        // this.setState({clientsSelected});
-    }
-
-    showBtnGroup() {
-        this.setState({
-            btnGroup: !this.state.btnGroup
-        })
+    selectClient = (_id) => {
+        const {clientsSelected} = this.state;
+        if (clientsSelected.includes(_id)) {
+            clientsSelected.splice(clientsSelected.indexOf(_id), 1);
+        } else {
+            clientsSelected.push(_id);
+        }
+        this.setState({clientsSelected});
     }
 
     showFilterBar() {
@@ -54,8 +54,7 @@ class ClientContainer extends Component {
 
     render() {
         const {data, loading, error} = this.props;
-        const {clientsSelected} = this.state;
-        console.log(clientsSelected);
+        const {clientsSelected, currentClient} = this.state;
 
         if (loading) {
             return <Loading/>
@@ -66,20 +65,21 @@ class ClientContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                <div className={currentClient ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={clientsSelected.length} filter={this.showFilterBar}/>
                     {this.state.filter ? <FilterBar/> : null}
                     <ClientList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
+                        setClient={this.setClient.bind(this)}
                         renderContent={this.renderRightSide}
-                        selectClient={this.selectClient.bind(this)}
-                        showBtnGroup={this.showBtnGroup}
+                        selectClient={this.selectClient}
+                        currentClient={currentClient}
                         clients={data}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    this.state.rightSide ? (
+                    currentClient ? (
                         <RightSide/>
                     ) : null
                 }
