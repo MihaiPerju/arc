@@ -45,7 +45,7 @@ export default class ActionBlock extends Component {
             complete(file) {
                 Notifier.success('Added');
                 this.removeFile(file);
-                that.getTask();
+                that.props.update();
             },
             acceptedFiles: '.pdf'
         };

@@ -19,8 +19,8 @@ export default class TaskContent extends Component {
                 <PayerBlock task={task}/>
                 <ActionBlock update={update} task={task}/>
                 <LetterList task={task}/>
-                <PdfFiles  task={task}/>
-                <CommentBlock  task={task}/>
+                <PdfFiles update={update} task={task}/>
+                <CommentBlock task={task}/>
             </div>
         )
     }
