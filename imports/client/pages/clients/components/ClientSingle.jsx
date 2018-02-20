@@ -7,19 +7,17 @@ export default class ClientSingle extends Component {
         super(props);
         this.state = {
             fontNormal: false,
-            bgYellow: false,
-            open: false
-        }
-        this.renderContent = this.renderContent.bind(this);
+            bgYellow: false
+        };
         this.changeTaskBg = this.changeTaskBg.bind(this);
     }
 
-    renderContent() {
+    onSetClient(_id) {
+        const {id, setClient} = this.props;
         this.setState({
-            fontNormal: true,
-            open: !this.state.open
+            fontNormal: true
         });
-        this.props.renderContent();
+        setClient(id);
     }
 
     changeTaskBg() {
@@ -41,18 +39,18 @@ export default class ClientSingle extends Component {
     }
 
     render() {
-        const {bgYellow, open} = this.state;
-        const {id, mail, avatar, name} = this.props;
+        const {bgYellow} = this.state;
+        const {id, mail, avatar, name, currentClient} = this.props;
         const classes = classNames({
             'list-item': true,
             'user-item': true,
-            'bg--yellow': bgYellow
+            'bg--yellow': bgYellow,
+            "open": currentClient === id
         });
-        // {bgYellow ? "list-item user-item bg--yellow" : open ? "list-item user-item open" : "list-item user-item"}
         return (
             <div
                 className={classes}
-                onClick={this.renderContent}>
+                onClick={this.onSetClient.bind(this)}>
                 <div className="check-item">
                     <input checked={bgYellow} type="checkbox" className="hidden"/>
                     <label onClick={this.onSelectClient.bind(this)}></label>
