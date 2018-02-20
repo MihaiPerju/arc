@@ -14,8 +14,9 @@ class ClientContainer extends Component {
         this.state = {
             rightSide: false,
             btnGroup: false,
-            filter: false
-        }
+            filter: false,
+            clientsSelected: []
+        };
         this.renderRightSide = this.renderRightSide.bind(this);
         this.showBtnGroup = this.showBtnGroup.bind(this);
         this.showFilterBar = this.showFilterBar.bind(this);
@@ -25,6 +26,18 @@ class ClientContainer extends Component {
         this.setState({
             rightSide: true
         })
+    }
+
+    selectClient(_id) {
+        console.log(_id)
+        console.log(this);
+        // const {clientsSelected} = this.state;
+        // if (clientsSelected.includes(_id)) {
+        //     clientsSelected.splice(clientsSelected.indexOf(_id), 1);
+        // } else {
+        //     clientsSelected.push(_id);
+        // }
+        // this.setState({clientsSelected});
     }
 
     showBtnGroup() {
@@ -41,7 +54,8 @@ class ClientContainer extends Component {
 
     render() {
         const {data, loading, error} = this.props;
-        console.log(data);
+        const {clientsSelected} = this.state;
+        console.log(clientsSelected);
 
         if (loading) {
             return <Loading/>
@@ -56,10 +70,11 @@ class ClientContainer extends Component {
                     <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
                     {this.state.filter ? <FilterBar/> : null}
                     <ClientList
-                        clients={data}
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
+                        selectClient={this.selectClient.bind(this)}
                         showBtnGroup={this.showBtnGroup}
+                        clients={data}
                     />
                     <PaginationBar/>
                 </div>
