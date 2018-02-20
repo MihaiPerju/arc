@@ -4,20 +4,26 @@ import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import UserList from './components/UserList.jsx';
 import UserContent from './UserContent.jsx';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import query from "/imports/api/users/queries/listUsers";
+import Loading from '/imports/client/lib/ui/Loading';
+import {objectFromArray} from "/imports/api/utils";
 
-export default class UserListContainer extends Component {
+class UserListContainer extends Component {
     constructor() {
         super();
         this.state = {
             rightSide: false,
             btnGroup: false,
-            filter: false
+            filter: false,
+            usersSelected: [],
+            currentUser: null
         }
         this.renderRightSide = this.renderRightSide.bind(this);
         this.showBtnGroup = this.showBtnGroup.bind(this);
         this.showFilterBar = this.showFilterBar.bind(this);
     }
-    
+
     renderRightSide() {
         this.setState({
             rightSide: true
@@ -36,22 +42,59 @@ export default class UserListContainer extends Component {
         })
     }
 
+    selectUser(objectId) {
+        const {usersSelected} = this.state;
+        if (usersSelected.includes(objectId)) {
+            usersSelected.splice(usersSelected.indexOf(objectId), 1);
+        } else {
+            usersSelected.push(objectId);
+        }
+        this.setState({usersSelected});
+    }
+
+    setUser(id) {
+        const {currentUser} = this.state;
+        if (currentUser === id) {
+            this.setState({currentUser: null})
+        } else {
+            this.setState({currentUser: id})
+        }
+    }
+
     render() {
+        const {data, loading, error} = this.props;
+        const {usersSelected, currentUser} = this.state;
+        const user = objectFromArray(data, currentUser);
+        console.log(user);
+
+        if (loading) {
+            return <Loading/>
+        }
+
+        if (error) {
+            return <div>{error.reason}</div>
+        }
+
         return (
             <div className="cc-container">
-                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
+                <div className={currentUser ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
-                    { this.state.filter ? <FilterBar/> : null }
-                    <UserList 
-                        class={this.state.filter ? "task-list decreased" : "task-list"} 
+                    {this.state.filter ? <FilterBar/> : null}
+                    <UserList
+                        class={this.state.filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
+                        selectUser={this.selectUser.bind(this)}
+                        setUser={this.setUser.bind(this)}
                         showBtnGroup={this.showBtnGroup}
+                        usersSelected={usersSelected}
+                        currentUser={currentUser}
+                        users={data}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    this.state.rightSide ? (
-                        <RightSide/>
+                    currentUser ? (
+                        <RightSide user={user}/>
                     ) : null
                 }
             </div>
@@ -74,10 +117,16 @@ class RightSide extends Component {
     }
 
     render() {
+        const {user} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" :"right__side"}>
-                <UserContent/>
+            <div className={this.state.fade ? "right__side in" : "right__side"}>
+                <UserContent user={user}/>
             </div>
         )
     }
 }
+
+
+export default withQuery((props) => {
+    return query.clone();
+})(UserListContainer)
