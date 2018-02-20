@@ -8,11 +8,12 @@ export default class ReportContent extends Component {
     }
 
     render() {
+        const {report} = this.props;
         const tasks = [
-            { client: 'Claudio Steel' },
-            { client: 'Olimen Limen' }
+            {client: 'Claudio Steel'},
+            {client: 'Olimen Limen'}
         ];
-        const taskList = tasks.map(function(task, index){
+        const taskList = tasks.map(function (task, index) {
             return (
                 <TaskNum
                     key={index}
@@ -24,8 +25,8 @@ export default class ReportContent extends Component {
 
         return (
             <div className="main-content report-content">
-                <ReportHeader/>
-                { taskList }
+                <ReportHeader report={report}/>
+                {taskList}
             </div>
         )
     }

@@ -65,7 +65,6 @@ class UserListContainer extends Component {
         const {data, loading, error} = this.props;
         const {usersSelected, currentUser} = this.state;
         const user = objectFromArray(data, currentUser);
-        console.log(user);
 
         if (loading) {
             return <Loading/>
