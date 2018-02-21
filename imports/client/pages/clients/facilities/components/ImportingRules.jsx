@@ -51,7 +51,6 @@ export default class ImportingRules extends React.Component {
         const {schema, loading} = this.state;
         const fields = RulesService.getSchemaFields();
         const {model} = this.props;
-        console.log(schema);
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
 
         return (

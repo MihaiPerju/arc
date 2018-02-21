@@ -13,7 +13,7 @@ export default {
     ],
     types: {
         dates: ['dischrgDate', 'fbDate', 'admitDate'],
-        numbers: ['acctBal', 'medNo', 'insCode', 'insCode2', 'insCode3', 'insCode4', 'insBal', 'insBal2', 'insBal3', 'insBal4'],
-        strings: ['acctNum', 'ptType', 'ptName', 'finClass', 'insName', 'insName2', 'insName3', 'insName4', 'facCode'],
+        numbers: ['acctBal', 'medNo', 'insCode','insBal'],
+        strings: ['acctNum', 'ptType', 'ptName', 'finClass', 'insName', 'facCode'],
     }
 }
