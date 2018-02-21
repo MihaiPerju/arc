@@ -61,7 +61,11 @@ export default new SimpleSchema({
     'allowedUsers.$': {
         type: String
     },
-    importRules: {
+    placementRules: {
+        type: ImportRulesSchema,
+        optional: true
+    },
+    inventoryRules: {
         type: ImportRulesSchema,
         optional: true
     },

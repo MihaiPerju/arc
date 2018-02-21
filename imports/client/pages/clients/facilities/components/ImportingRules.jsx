@@ -25,8 +25,10 @@ export default class ImportingRules extends React.Component {
 
     onSubmitImportingRules = (importRules) => {
         const facilityId = this.props.model._id;
-
-        Meteor.call('facility.update', {_id: facilityId, importRules}, (err) => {
+        const {rules} = this.props;
+        const newFacility = {_id: facilityId};
+        newFacility[rules] = importRules;
+        Meteor.call('facility.update', newFacility, (err) => {
             if (!err) {
                 Notifier.success("Facility updated!");
                 this.props.updateFacility();
@@ -50,7 +52,7 @@ export default class ImportingRules extends React.Component {
     render() {
         const {schema, loading} = this.state;
         const fields = RulesService.getSchemaFields();
-        const {model} = this.props;
+        const {model, rules} = this.props;
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
 
         return (
@@ -58,7 +60,7 @@ export default class ImportingRules extends React.Component {
                 {
                     loading ?
                         <Loading/> :
-                        <AutoForm model={model.importRules} schema={schema}
+                        <AutoForm model={model[rules]} schema={schema}
                                   onChange={this.onChange.bind(this)}
                                   onSubmit={this.onSubmitImportingRules}>
 
