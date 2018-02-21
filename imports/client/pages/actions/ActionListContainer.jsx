@@ -8,6 +8,7 @@ import query from "/imports/api/actions/queries/actionList";
 import Loading from '/imports/client/lib/ui/Loading';
 import {objectFromArray} from "/imports/api/utils";
 
+
 class ActionListContainer extends Component {
     constructor() {
         super();
