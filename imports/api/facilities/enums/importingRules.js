@@ -9,20 +9,11 @@ export default {
         {value: 'acctBal', label: 'Acct Balance'},
         {value: 'finClass', label: 'Fin Class'},
         {value: 'admitDate', label: 'Admit Date'},
-        {value: 'medNo', label: 'Med No'},
-        {value: 'insName', label: 'Insurance Name'},
-        {value: 'insName2', label: 'Insurance Name 2'},
-        {value: 'insName3', label: 'Insurance Name 3'},
-        {value: 'insCode', label: 'Insurance Code'},
-        {value: 'insCode2', label: 'Insurance Code 2'},
-        {value: 'insCode3', label: 'Insurance Code 3'},
-        {value: 'insBal', label: 'Insurance Balance'},
-        {value: 'insBal2', label: 'Insurance Balance 2'},
-        {value: 'insBal3', label: 'Insurance Balance 3'}
+        {value: 'medNo', label: 'Med No'}
     ],
     types: {
         dates: ['dischrgDate', 'fbDate', 'admitDate'],
-        numbers: ['acctBal', 'medNo', 'insCode', 'insCode2', 'insCode3', 'insBal', 'insBal2', 'insBal3'],
-        strings: ['acctNum', 'ptType', 'ptName', 'finClass', 'insName', 'insName2', 'insName3', 'facCode'],
+        numbers: ['acctBal', 'medNo', 'insCode', 'insCode2', 'insCode3', 'insCode4', 'insBal', 'insBal2', 'insBal3', 'insBal4'],
+        strings: ['acctNum', 'ptType', 'ptName', 'finClass', 'insName', 'insName2', 'insName3', 'insName4', 'facCode'],
     }
 }

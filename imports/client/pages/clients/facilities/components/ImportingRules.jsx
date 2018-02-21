@@ -1,10 +1,8 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField, RadioField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, RadioField, ListField, ListItemField, NestField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import PropTypes from 'prop-types';
-import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
+import {Container, Divider, Button, Segment} from 'semantic-ui-react'
 import RulesService from '/imports/client/pages/clients/facilities/services/ImportingRulesService';
 import Loading from '/imports/client/lib/ui/Loading';
 
@@ -53,6 +51,7 @@ export default class ImportingRules extends React.Component {
         const {schema, loading} = this.state;
         const fields = RulesService.getSchemaFields();
         const {model} = this.props;
+        console.log(schema);
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
 
         return (
@@ -69,17 +68,32 @@ export default class ImportingRules extends React.Component {
 
                             {
                                 fields && fields.map((field, index) => {
-                                    return (
-                                        <div key={index}>
-                                            <AutoField name={field}/>
-                                            <ErrorField name={field}/>
-                                        </div>
-                                    )
+                                    if (field !== 'insurances')
+                                        return (
+                                            <div key={index}>
+                                                <AutoField name={field}/>
+                                                <ErrorField name={field}/>
+                                            </div>
+                                        )
                                 })
                             }
+                            <ListField name="insurances">
+                                <ListItemField name="$">
+                                    <NestField>
+                                        <Segment>
+                                            <AutoField name="insName"/>
+                                            <ErrorField name="insName"/>
 
+                                            <AutoField name="insCode"/>
+                                            <ErrorField name="insCode"/>
+
+                                            <AutoField name="insBal"/>
+                                            <ErrorField name="insBal"/>
+                                        </Segment>
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
                             <Divider/>
-
                             <Button primary fluid type="submit">Submit</Button>
                         </AutoForm>
                 }
