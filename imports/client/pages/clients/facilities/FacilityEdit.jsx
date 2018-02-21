@@ -56,16 +56,14 @@ export default class FacilityEdit extends React.Component {
                 component: <FacilityForm purpose="Edit" model={facility} submitAction={this.updateFacility}/>
             },
             {
-                label: tabsEnum.IMP_RULES,
-                component: <ImportingRules updateFacility={this.getFacility} model={facility}/>
-            },
-            {
                 label: tabsEnum.PLACEMENT_FILE,
-                component: <UploadPlacementFile facilityId={facility && facility._id}/>
+                component: <UploadPlacementFile updateFacility={this.getFacility}
+                                                model={facility}/>
             },
             {
                 label: tabsEnum.INVENTORY_FILE,
-                component: <UploadInventoryFile facilityId={facility && facility._id}/>
+                component: <UploadInventoryFile updateFacility={this.getFacility}
+                                                model={facility}/>
             }
         ];
 
@@ -75,7 +73,7 @@ export default class FacilityEdit extends React.Component {
 
         return (
             <Container className="page-container">
-                <TabSelect header="Edit facility" options={tabOptions}/>
+                <TabSelect options={tabOptions}/>
             </Container>
         );
     }

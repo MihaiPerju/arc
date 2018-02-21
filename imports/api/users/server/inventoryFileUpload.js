@@ -10,7 +10,7 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
         return error('Invalid number of files');
     }
 
-    const importRules = ParseService.getImportRules(facilityId);
+    const importRules = ParseService.getImportRules(facilityId,'inventoryRules');
 
     for (index in filenames) {
         const stream = fs.readFileSync(filenames[index]);

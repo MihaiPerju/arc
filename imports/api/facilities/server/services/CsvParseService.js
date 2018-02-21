@@ -98,9 +98,9 @@ export default class CsvParseService {
     }
 
     //Get import rules
-    static getImportRules(_id) {
-        const {importRules} = Facilities.findOne({_id});
-        return importRules;
+    static getImportRules(_id, rules) {
+        const facility = Facilities.findOne({_id});
+        return facility[rules];
     }
 
     static isInsuranceField(insurances, field) {
