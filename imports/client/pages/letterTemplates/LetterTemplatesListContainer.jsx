@@ -1,57 +1,71 @@
 import React, {Component} from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import LetterTemplatesList from './components/LetterTemplatesList.jsx';
 import LetterTemplateContent from './LetterTemplateContent.jsx';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import query from "/imports/api/letterTemplates/queries/listLetterTemplates";
+import Loading from '/imports/client/lib/ui/Loading';
+import {objectFromArray} from "/imports/api/utils";
 
-export default class LetterTemplateListContainer extends Component {
+class LetterTemplateListContainer extends Component {
     constructor() {
         super();
         this.state = {
-            rightSide: false,
-            btnGroup: false,
+            templatesSelected: [],
+            currentTemplate: null,
             filter: false
         }
-        this.renderRightSide = this.renderRightSide.bind(this);
-        this.showBtnGroup = this.showBtnGroup.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
-    }
-    
-    renderRightSide() {
-        this.setState({
-            rightSide: true
-        })
     }
 
-    showBtnGroup() {
-        this.setState({
-            btnGroup: !this.state.btnGroup
-        })
-    }
+    setTemplate = (_id) => {
+        const {currentTemplate} = this.state;
 
-    showFilterBar() {
-        this.setState({
-            filter: !this.state.filter
-        })
-    }
+        if (currentTemplate === _id) {
+            this.setState({currentTemplate: null});
+        } else {
+            this.setState({currentTemplate: _id});
+        }
+    };
+
+    selectTemplate = (_id) => {
+        const {templatesSelected} = this.state;
+        if (templatesSelected.includes(_id)) {
+            templatesSelected.splice(templatesSelected.indexOf(_id), 1);
+        } else {
+            templatesSelected.push(_id);
+        }
+        this.setState({templatesSelected});
+    };
 
     render() {
+        const {data, loading, error} = this.props;
+        const {templatesSelected, currentTemplate} = this.state;
+        const template = objectFromArray(data, currentTemplate);
+        if (loading) {
+            return <Loading/>
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>
+        }
         return (
             <div className="cc-container">
-                <div className={this.state.rightSide ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
-                    { this.state.filter ? <FilterBar/> : null }
-                    <LetterTemplatesList 
-                        class={this.state.filter ? "task-list decreased" : "task-list"} 
-                        renderContent={this.renderRightSide}
-                        showBtnGroup={this.showBtnGroup}
+                <div className={currentTemplate ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={templatesSelected.length}/>
+                    <LetterTemplatesList
+                        class={this.state.filter ? "task-list decreased" : "task-list"}
+                        templatesSelected={templatesSelected}
+                        selectTemplate={this.selectTemplate}
+                        currentTemplate={currentTemplate}
+                        setTemplate={this.setTemplate}
+                        templates={data}
                     />
                     <PaginationBar/>
                 </div>
                 {
-                    this.state.rightSide ? (
-                        <RightSide/>
+                    currentTemplate ? (
+                        <RightSide template={template}/>
                     ) : null
                 }
             </div>
@@ -74,10 +88,15 @@ class RightSide extends Component {
     }
 
     render() {
+        const {template} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" :"right__side"}>
-                <LetterTemplateContent/>
+            <div className={this.state.fade ? "right__side in" : "right__side"}>
+                <LetterTemplateContent template={template}/>
             </div>
         )
     }
 }
+
+export default withQuery((props) => {
+    return query.clone();
+})(LetterTemplateListContainer)

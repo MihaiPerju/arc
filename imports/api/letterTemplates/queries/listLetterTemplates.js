@@ -10,5 +10,6 @@ export default LetterTemplates.createNamedQuery('listLetterTemplates', {
     name: 1,
     body: 1,
     description: 1,
-    keywords: 1
+    keywords: 1,
+    category: 1
 });

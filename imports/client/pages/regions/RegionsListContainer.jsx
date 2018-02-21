@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import RegionsList from './components/RegionsList.jsx';
 import RegionContent from './RegionContent.jsx';
@@ -39,7 +38,6 @@ class RegionListContainer extends Component {
         this.setState({regionsSelected});
     };
 
-
     render() {
         const {data, loading, error} = this.props;
         const {regionsSelected, currentRegion} = this.state;
@@ -55,7 +53,7 @@ class RegionListContainer extends Component {
         return (
             <div className="cc-container">
                 <div className={currentRegion ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={regionsSelected.length} filter={this.showFilterBar}/>
+                    <SearchBar btnGroup={regionsSelected.length}/>
                     <RegionsList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         regionsSelected={regionsSelected}
