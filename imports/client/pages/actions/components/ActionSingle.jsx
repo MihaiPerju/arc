@@ -1,45 +1,41 @@
 import React, {Component} from 'react';
+import classNames from "classnames";
 
 export default class ActionSingle extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            fontNormal: false,
-            bgYellow: false,
-            open: false
-        }
-        this.renderContent = this.renderContent.bind(this);
-        this.changeTaskBg = this.changeTaskBg.bind(this);        
     }
 
-    renderContent() {
-        this.setState({
-            fontNormal: true,
-            open: !this.state.open
-        });
-        this.props.renderContent();
+    onSetAction() {
+        const {action, setAction} = this.props;
+        setAction(action._id);
     }
 
-    changeTaskBg() {
-        this.setState({
-            bgYellow: !this.state.bgYellow
-        });
-        // this.props.showBtnGroup();
+    onSelectAction(e) {
+        e.stopPropagation();
+        const {action, selectAction} = this.props;
+        selectAction(action._id);
     }
 
     render() {
-        const { open, bgYellow } = this.state;
-        const { id, name } = this.props;
+        const {action, actionsSelected, currentAction} = this.props;
+        const checked = actionsSelected.includes(action._id);
+        const classes = classNames({
+            "list-item": true,
+            "bg--yellow": checked,
+            "open": currentAction === action._id
+        });
 
         return (
-            <div className={bgYellow ? "list-item bg--yellow" : open ? "list-item open" : "list-item"}
-            onClick={this.renderContent}>
+            <div
+                onClick={this.onSetAction.bind(this)}
+                className={classes}>
                 <div className="check-item">
-                    <input id={id} type="checkbox" className="hidden"/>
-                    <label htmlFor={id} onClick={this.changeTaskBg}></label>
+                    <input type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectAction.bind(this)}></label>
                 </div>
                 <div className="row__block align-center">
-                    <div className="item-name">{name}</div>
+                    <div className="item-name">OK</div>
                 </div>
             </div>
         );
