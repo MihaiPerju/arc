@@ -18,6 +18,27 @@ export default class ImportingRulesService {
                 label: field.label
             }
         });
+        schemaObj.insurances = {
+            type: Array,
+            optional: true,
+            label: "Insurances"
+        };
+        schemaObj['insurances.$'] = {
+            type: new SimpleSchema({
+                insName: {
+                    type: hasHeader ? String : SimpleSchema.Integer,
+                    label: "Insurance Name"
+                },
+                insCode: {
+                    type: hasHeader ? String : SimpleSchema.Integer,
+                    label: "Insurance Code"
+                },
+                insBal: {
+                    type: hasHeader ? String : SimpleSchema.Integer,
+                    label: "Insurance Balance"
+                }
+            })
+        };
         return new SimpleSchema(schemaObj);
     }
 
