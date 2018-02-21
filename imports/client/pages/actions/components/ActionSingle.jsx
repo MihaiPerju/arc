@@ -31,11 +31,11 @@ export default class ActionSingle extends Component {
                 onClick={this.onSetAction.bind(this)}
                 className={classes}>
                 <div className="check-item">
-                    <input type="checkbox" className="hidden"/>
+                    <input checked={checked} type="checkbox" className="hidden"/>
                     <label onClick={this.onSelectAction.bind(this)}></label>
                 </div>
                 <div className="row__block align-center">
-                    <div className="item-name">OK</div>
+                    <div className="item-name">{action.title}</div>
                 </div>
             </div>
         );
