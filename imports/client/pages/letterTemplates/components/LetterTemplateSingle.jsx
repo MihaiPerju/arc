@@ -1,45 +1,40 @@
 import React, {Component} from 'react';
+import classNames from "classnames";
 
 export default class LetterTemplateSingle extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            fontNormal: false,
-            bgYellow: false,
-            open: false
-        }
-        this.renderContent = this.renderContent.bind(this);
-        this.changeTaskBg = this.changeTaskBg.bind(this);        
     }
 
-    renderContent() {
-        this.setState({
-            fontNormal: true,
-            open: !this.state.open
-        });
-        this.props.renderContent();
+    onSetTemplate() {
+        const {template, setTemplate} = this.props;
+        setTemplate(template._id);
     }
 
-    changeTaskBg() {
-        this.setState({
-            bgYellow: !this.state.bgYellow
-        });
-        this.props.showBtnGroup();
+    onSelectTemplate(e) {
+        e.stopPropagation();
+        const {template, selectTemplate} = this.props;
+        selectTemplate(template._id);
     }
 
     render() {
-        const { bgYellow, open } = this.state;
-        const { id, title } = this.props;
-
+        const {template, templatesSelected, currentTemplate} = this.props;
+        const checked = templatesSelected.includes(template._id);
+        const classes = classNames({
+            "list-item": true,
+            "bg--yellow": checked,
+            "open": currentTemplate === template._id
+        });
         return (
-            <div className={bgYellow ? "list-item bg--yellow" : open ? "list-item open" : "list-item"}
-            onClick={this.renderContent}>
+            <div
+                onClick={this.onSetTemplate.bind(this)}
+                className={classes}>
                 <div className="check-item">
-                    <input id={id} type="checkbox" className="hidden"/>
-                    <label htmlFor={id} onClick={this.changeTaskBg}></label>
+                    <input checked={checked} type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectTemplate.bind(this)}></label>
                 </div>
                 <div className="row__block align-center">
-                    <div className="item-name">{title}</div>
+                    <div className="item-name">{template.name}</div>
                 </div>
             </div>
         );

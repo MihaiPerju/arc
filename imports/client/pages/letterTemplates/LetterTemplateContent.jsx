@@ -9,11 +9,12 @@ export default class LetterTemplateContent extends Component {
     }
 
     render() {
+        const {template} = this.props;
         return (
             <div className="main-content letter-temp-content">
-                <LetterTemplateHeader/>
-                <DescriptionBlock/>
-                <LetterBody/>
+                <LetterTemplateHeader template={template}/>
+                <DescriptionBlock template={template}/>
+                <LetterBody template={template}/>
             </div>
         )
     }

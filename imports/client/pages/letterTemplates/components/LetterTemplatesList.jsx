@@ -3,28 +3,23 @@ import LetterTemplateSingle from './LetterTemplateSingle';
 
 export default class LetterTemplatesList extends Component {
     render() {
-    	const letters = [
-    	    { title: 'Contact letter with offers' },
-    	    { title: 'Holiday letter' },
-    	    { title: 'Weekly announcement' },
-    	    { title: 'Welcome letter' }
-    	];
-    	const letterList = letters.map(function(letter, index){
-    		const { renderContent, showBtnGroup } = this.props;
-    	    return (
-    	        <LetterTemplateSingle
-    	        	key={index}
-    	        	id={index}
-    	        	title={letter.title}
-	    	        renderContent={renderContent}
-	    	        showBtnGroup={showBtnGroup}
-    	    	/>
-    	    )
-    	}, this);
+        const {templates} = this.props;
+        const letterList = templates.map(function (template, index) {
+            const {setTemplate, selectTemplate, templatesSelected, currentTemplate} = this.props;            return (
+                <LetterTemplateSingle
+                    templatesSelected={templatesSelected}
+                    currentTemplate={currentTemplate}
+                    selectTemplate={selectTemplate}
+                    setTemplate={setTemplate}
+                    template={template}
+                    key={index}
+                />
+            )
+        }, this);
 
         return (
             <div className={this.props.class}>
-                { letterList }
+                {letterList}
             </div>
         );
     }
