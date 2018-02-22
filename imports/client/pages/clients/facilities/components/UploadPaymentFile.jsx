@@ -12,20 +12,20 @@ export default class UploadPaymentFile extends React.Component {
     render() {
         const {model, updateFacility} = this.props;
 
-        // const componentConfig = {
-        //     postUrl: `/uploads/inventory/${model && model._id}`
-        // };
-        //
-        // const djsConfig = {
-        //     complete(file) {
-        //         Notifier.success('Added');
-        //         this.removeFile(file);
-        //     },
-        //     acceptedFiles: '.csv'
-        // };
+        const componentConfig = {
+            postUrl: `/uploads/payment/${model && model._id}`
+        };
+
+        const djsConfig = {
+            complete(file) {
+                Notifier.success('Added');
+                this.removeFile(file);
+            },
+            acceptedFiles: '.csv'
+        };
         return (
             <Container>
-                {/*<DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>*/}
+                <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                 <Divider/>
                 <ImportingRules rules={"paymentRules"} updateFacility={updateFacility} model={model}/>
             </Container>
