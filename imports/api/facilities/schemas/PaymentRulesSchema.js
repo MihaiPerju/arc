@@ -39,7 +39,7 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
-    ptBalance: {
+    ptBal: {
         label: "Pacient Balance",
         type: String,
         optional: true
