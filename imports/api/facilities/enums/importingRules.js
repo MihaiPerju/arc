@@ -22,7 +22,7 @@ export default {
         {value: 'payorCode', label: 'Payor Code', optional: false},
         {value: 'insName', label: 'Insurance Name', optional: true},
         {value: 'newAcctBal', label: 'New Account Balance', optional: true},
-        {value: 'ptBalance', label: 'Payment Balance', optional: true},
+        {value: 'ptBal', label: 'Payment Balance', optional: true},
         {value: 'finClass', label: 'Financial Class', optional: true},
         {value: 'transDate', label: 'Transaction Date', optional: false},
         {value: 'transType', label: 'Transaction Type', optional: false},
@@ -30,7 +30,7 @@ export default {
     ],
     types: {
         dates: ['dischrgDate', 'fbDate', 'admitDate', 'transDate'],
-        numbers: ['acctBal', 'medNo', 'insCode', 'insBal', 'newAcctBal', 'ptBalance', 'transAmount'],
+        numbers: ['acctBal', 'medNo', 'insCode', 'insBal', 'newAcctBal', 'ptBal', 'transAmount'],
         strings: ['transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode'],
     }
 }
