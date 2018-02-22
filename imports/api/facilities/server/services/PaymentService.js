@@ -1,9 +1,17 @@
 import CsvParseService from "./CsvParseService";
+import Payments from '/imports/api/payments/collection';
 
 export default class PaymentService {
     //For placement file
     static upload(results, importRules, facilityId) {
-        const payment = PaymentService.convertToPayment(results, importRules, facilityId);
+        const payments = PaymentService.convertToPayment(results, importRules, facilityId);
+        console.log(payments);
+
+        // Creating payments
+        payments.map((payment) => {
+            Payments.insert(payment);
+            console.log("inserted");
+        });
     }
 
     static convertToPayment(results, importRules, facilityId) {
@@ -15,8 +23,6 @@ export default class PaymentService {
             //Need to convert the rules\
             rules = CsvParseService.convertImportingRules(importRules, header);
         }
-        // console.log(importRules);
-        // console.log(rules);
         for (let i = 0; i < results.length - 1; i++) {
             const newPayment = PaymentService.createPayment(results[i], importRules, facilityId, rules);
             payments.push(newPayment);
@@ -61,7 +67,6 @@ export default class PaymentService {
                 payment.metaData[key] = metaValue;
             }
         }
-        console.log(payment);
-        // return payment;
+        return payment;
     }
 }
