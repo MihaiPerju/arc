@@ -3,6 +3,7 @@ import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc'
 import {getToken} from '/imports/api/s3-uploads/utils';
 import {Segment, Button, Divider} from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
+import TaskViewService from '../services/TaskViewService';
 
 const SortableItem = SortableElement(({pdf, index, getPdfName, deletePdf, redirectToPdf}) =>
     <li style={{'listStyleType': 'none'}}>
@@ -73,10 +74,6 @@ export default class SortableTab extends React.Component {
         })
     }
 
-    getPdfName(pdf) {
-        return pdf.name.slice(0, pdf.name.indexOf('.'))
-    }
-
     redirectToPdf(pdf) {
         window.open('/pdf/' + pdf._id + '/' + getToken(), '_blank');
     }
@@ -123,7 +120,7 @@ export default class SortableTab extends React.Component {
             <div>
                 <SortableList items={this.state.items}
                               deletePdf={this.deletePdf.bind(this)}
-                              getPdfName={this.getPdfName}
+                              getPdfName={TaskViewService.getPdfName}
                               redirectToPdf={this.redirectToPdf}
                               onSortEnd={this.onSortEnd.bind(this)}/>
                 {

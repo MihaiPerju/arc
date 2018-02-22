@@ -13,13 +13,13 @@ const TaskDetails = ({task, updateTask}) => {
             <TaskData task={task}/>
 
             <h5>Substate: {task && LabelSubstates[task.substate]}</h5>
-            {task && task.actionsLinkData && task.actionsLinkData.length
+            {task && task.actions && task.actions.length
                 ?
                 <Container>
                     <h4>Actions</h4>
                     <ul>
-                        {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map((action, key) => (
-                            <li key={key}>{action.title}</li>
+                        {task.actions.sort((a, b) => a.createdAt < b.createdAt).map((action, key) => (
+                            <li key={key}><b>{action.action.title}</b> Reason: {action.reasonCode}</li>
                         ))}
                     </ul>
                 </Container>
