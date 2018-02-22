@@ -18,7 +18,8 @@ export default class LetterView extends React.Component {
     componentDidMount() {
         const {letterId} = FlowRouter.current().params;
 
-        letterQuery.clone({_id: letterId}).fetchOne((err, letter) => {
+        console.log(letterId);
+        letterQuery.clone({filters: {_id: letterId}}).fetchOne((err, letter) => {
             if (!err) {
                 this.setState({
                     letter,
