@@ -15,8 +15,8 @@ export default class ImportingRules extends React.Component {
     }
 
     componentWillMount() {
-        const {model} = this.props;
-        const schema = RulesService.createSchema(model && model.importRules && model.importRules.hasHeader);
+        const {model, rules} = this.props;
+        const schema = RulesService.createSchema(rules, model && model[rules] && model[rules].hasHeader);
         this.setState({
             loading: false,
             schema
@@ -39,9 +39,10 @@ export default class ImportingRules extends React.Component {
     };
 
     onChange(field, value) {
+        const {rules} = this.props;
         if (field === 'hasHeader') {
             //Change schema
-            const newSchema = RulesService.createSchema(value);
+            const newSchema = RulesService.createSchema(rules, value);
 
             this.setState({
                 schema: newSchema
@@ -51,10 +52,9 @@ export default class ImportingRules extends React.Component {
 
     render() {
         const {schema, loading} = this.state;
-        const fields = RulesService.getSchemaFields();
         const {model, rules} = this.props;
+        const fields = RulesService.getSchemaFields(rules);
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
-
         return (
             <Container>
                 {
@@ -69,7 +69,7 @@ export default class ImportingRules extends React.Component {
 
                             {
                                 fields && fields.map((field, index) => {
-                                    if (field !== 'insurances')
+                                    if (field !== 'newInsBal')
                                         return (
                                             <div key={index}>
                                                 <AutoField name={field}/>
@@ -78,22 +78,39 @@ export default class ImportingRules extends React.Component {
                                         )
                                 })
                             }
-                            <ListField name="insurances">
-                                <ListItemField name="$">
-                                    <NestField>
-                                        <Segment>
-                                            <AutoField name="insName"/>
-                                            <ErrorField name="insName"/>
+                            {
+                                schema._schemaKeys.includes("insurances") ?
+                                    <ListField name="insurances">
+                                        <ListItemField name="$">
+                                            <NestField>
+                                                <Segment>
+                                                    <AutoField name="insName"/>
+                                                    <ErrorField name="insName"/>
 
-                                            <AutoField name="insCode"/>
-                                            <ErrorField name="insCode"/>
+                                                    <AutoField name="insCode"/>
+                                                    <ErrorField name="insCode"/>
 
-                                            <AutoField name="insBal"/>
-                                            <ErrorField name="insBal"/>
-                                        </Segment>
-                                    </NestField>
-                                </ListItemField>
-                            </ListField>
+                                                    <AutoField name="insBal"/>
+                                                    <ErrorField name="insBal"/>
+                                                </Segment>
+                                            </NestField>
+                                        </ListItemField>
+                                    </ListField>
+                                    :
+                                    <ListField name="newInsBal">
+                                        <ListItemField name="$">
+                                            <NestField>
+                                                <Segment>
+                                                    <AutoField name="insBal"/>
+                                                    <ErrorField name="insBal"/>
+                                                </Segment>
+                                            </NestField>
+                                        </ListItemField>
+                                    </ListField>
+
+                            }
+
+
                             <Divider/>
                             <Button primary fluid type="submit">Submit</Button>
                         </AutoForm>

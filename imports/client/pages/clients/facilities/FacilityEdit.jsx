@@ -4,10 +4,10 @@ import Loading from "/imports/client/lib/ui/Loading.jsx";
 import FacilityForm from "./components/FacilityForm.jsx";
 import TabSelect from '/imports/client/lib/TabSelect';
 import tabsEnum from '/imports/client/pages/clients/facilities/enums/tabs';
-import ImportingRules from '/imports/client/pages/clients/facilities/components/ImportingRules';
 import UploadPlacementFile from '/imports/client/pages/clients/facilities/components/UploadPlacementFile';
 import {Container} from 'semantic-ui-react'
 import UploadInventoryFile from './components/UploadInventoryFile';
+import UploadPaymentFile from './components/UploadPaymentFile';
 
 export default class FacilityEdit extends React.Component {
     constructor() {
@@ -63,6 +63,11 @@ export default class FacilityEdit extends React.Component {
             {
                 label: tabsEnum.INVENTORY_FILE,
                 component: <UploadInventoryFile updateFacility={this.getFacility}
+                                                model={facility}/>
+            },
+            {
+                label: tabsEnum.PAYMENT_FILE,
+                component: <UploadPaymentFile updateFacility={this.getFacility}
                                                 model={facility}/>
             }
         ];
