@@ -3,25 +3,27 @@ import Pager from '/imports/client/lib/Pager.jsx';
 import query from '/imports/api/actions/queries/actionList';
 import ActionList from './components/ActionList.jsx';
 import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
-import SearchInput from "/imports/client/lib/SearchInput.jsx";
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import SearchInput from '/imports/client/lib/SearchInput.jsx';
+import { Container } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
+import ReasonCodesDialog from './components/ReasonCodesDialog';
 
 export default class ActionListContainer extends Pager {
-    constructor() {
+    constructor () {
         super();
 
         _.extend(this.state, {
             perPage: 3,
             filters: {},
+            actionReasonCodes: false
         });
 
         this.query = query.clone();
         this.ActionListCont = createQueryContainer(this.query, ActionList, {
             reactive: false
-        })
+        });
     }
 
     handleSearch = (searchValue) => {
@@ -32,7 +34,7 @@ export default class ActionListContainer extends Pager {
                     '$options': 'i'
                 }
             }
-        })
+        });
     };
 
     handleHeaderClick = (headerName) => {
@@ -61,23 +63,38 @@ export default class ActionListContainer extends Pager {
         });
     };
 
-    render() {
+    handleClose = () => {
+        this.setState({
+            actionReasonCodes: false
+        });
+    };
+
+    handleCurrentAction = (actionReasonCodes) => {
+        this.setState({
+            actionReasonCodes
+        });
+    }
+
+    render () {
         const params = _.extend({}, this.getPagerOptions());
         const ActionListCont = this.ActionListCont;
-        const {sortBy, isSortAscend} = this.state;
+        const {sortBy, isSortAscend, actionReasonCodes} = this.state;
 
         return (
             <Container className="page-container">
                 <div>
                     <Header as="h2" textAlign="center">Actions</Header>
-                    <SearchInput handleSearch={this.handleSearch}/>                    
+                    <SearchInput handleSearch={this.handleSearch}/>
                 </div>
                 <div className='m-t-30'>
                     {this.getPaginator()}
                     <ActionListCont params={params}
-                                    handleHeaderClick={this.handleHeaderClick}/>
+                                    handleHeaderClick={this.handleHeaderClick}
+                                    reasonCodesManage={this.handleCurrentAction}/>
                     {this.getPaginator()}
-                </div>            
+                </div>
+                {actionReasonCodes && <ReasonCodesDialog actionId={actionReasonCodes}
+                                                              closeAction={this.handleClose}/>}
             </Container>
         );
     }

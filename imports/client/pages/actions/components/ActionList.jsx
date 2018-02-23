@@ -7,7 +7,7 @@ import {Button, Icon, Table, Container} from 'semantic-ui-react'
 
 export default class ActionList extends Component {
     render() {
-        const {data, loading, error, handleHeaderClick, sortBy, isSortAscend} = this.props;
+        const {data, loading, error, handleHeaderClick, sortBy, isSortAscend, reasonCodesManage} = this.props;
 
         if (loading) {
             return <div>Loading</div>
@@ -30,7 +30,7 @@ export default class ActionList extends Component {
                             <Table.Body>
 
                                 {_.map(data, (action, idx) => {
-                                    return <ActionSingle action={action} key={idx}/>;
+                                    return <ActionSingle action={action} key={idx} reasonCodesManage={reasonCodesManage}/>;
                                 })}
                             </Table.Body>
                             :

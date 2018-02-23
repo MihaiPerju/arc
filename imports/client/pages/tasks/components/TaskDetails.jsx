@@ -7,19 +7,20 @@ import SortableTab from './SortableTab';
 import {getToken} from '/imports/api/s3-uploads/utils';
 
 const TaskDetails = ({task, updateTask}) => {
+    const actionsPerformed = task.actions;
     return (
         <Container className="page-container">
             <Header as="h3" textAlign="center">View Account</Header>
             <TaskData task={task}/>
 
             <h5>Substate: {task && LabelSubstates[task.substate]}</h5>
-            {task && task.actionsLinkData && task.actionsLinkData.length
+            {task && actionsPerformed && actionsPerformed.length
                 ?
                 <Container>
                     <h4>Actions</h4>
                     <ul>
-                        {task.actionsLinkData.sort((a, b) => a.createdAt < b.createdAt).map((action, key) => (
-                            <li key={key}>{action.title}</li>
+                        {actionsPerformed.sort((a, b) => a.createdAt < b.createdAt).map((actionPerformed, key) => (
+                            <li key={key}><b>{actionPerformed.action.title}</b> Reason: {actionPerformed.reasonCode}</li>
                         ))}
                     </ul>
                 </Container>

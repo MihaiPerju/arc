@@ -3,7 +3,7 @@ import Facilities from '/imports/api/facilities/collection';
 import Users from '/imports/api/users/collection';
 import Clients from '/imports/api/clients/collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
-import Actions from '/imports/api/actions/collection';
+import TaskActions from '/imports/api/taskActions/collection';
 
 Tasks.addLinks({
     facility: {
@@ -26,21 +26,10 @@ Tasks.addLinks({
         collection: Uploads,
         field: 'attachmentIds'
     },
+
     actions: {
         type: 'many',
-        collection: Actions,
-        field: 'actionsLinkData',
-        metadata: {
-            title: {
-                type: String,
-            },
-            createdAt: {
-                type: Date,
-            },
-            userId: {
-                type: String,
-                optional: true
-            }
-        }
+        collection: TaskActions,
+        field: 'actionsLinkData'
     }
 });
