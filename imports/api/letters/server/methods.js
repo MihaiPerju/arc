@@ -6,6 +6,8 @@ import Letters from '../collection.js';
 Meteor.methods({
     'letter.create'(data) {
         Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+        data.attachmentIds = data.attachments;
+        console.log(data);
         Letters.insert(data);
     },
 

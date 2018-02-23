@@ -25,6 +25,12 @@ export default class ActionSingle extends Component {
     onEditAction() {
         FlowRouter.go("/action/:_id/edit", {_id: this.props.action._id});
     }
+
+    manageCodes = () => {
+        const {action, reasonCodesManage} = this.props;
+        reasonCodesManage(action._id);
+    }
+
     render() {
         const {action} = this.props;
 
@@ -44,6 +50,9 @@ export default class ActionSingle extends Component {
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
+                </Table.Cell>
+                <Table.Cell>
+                    <Button color="green" onClick={this.manageCodes}>Manage Reason Codes</Button>
                 </Table.Cell>
             </Table.Row>
         );

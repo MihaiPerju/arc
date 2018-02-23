@@ -4,10 +4,11 @@ import Notifier from '/imports/client/lib/Notifier';
 
 export default class CreateLetter extends React.Component {
     createLetter = () => {
-        const {letterBody, taskId} = this.props;
+        const {letterBody, taskId, attachments} = this.props;
         const data = {
             body: letterBody,
-            taskId
+            taskId,
+            attachments
         };
 
         Meteor.call('letter.create', data, (err) => {
