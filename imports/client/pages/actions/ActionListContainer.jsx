@@ -17,7 +17,7 @@ export default class ActionListContainer extends Pager {
         _.extend(this.state, {
             perPage: 3,
             filters: {},
-            actionReasonCodes: 0
+            actionReasonCodes: false
         });
 
         this.query = query.clone();
@@ -65,7 +65,7 @@ export default class ActionListContainer extends Pager {
 
     handleClose = () => {
         this.setState({
-            actionReasonCodes: 0
+            actionReasonCodes: false
         });
     };
 
@@ -93,7 +93,7 @@ export default class ActionListContainer extends Pager {
                                     reasonCodesManage={this.handleCurrentAction}/>
                     {this.getPaginator()}
                 </div>
-                {actionReasonCodes != 0 && <ReasonCodesDialog actionId={actionReasonCodes}
+                {actionReasonCodes && <ReasonCodesDialog actionId={actionReasonCodes}
                                                               closeAction={this.handleClose}/>}
             </Container>
         );
