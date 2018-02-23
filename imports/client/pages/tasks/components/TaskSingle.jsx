@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import classNames from 'classnames'
+import React, { Component } from 'react';
+import classNames from 'classnames';
+import AssigneeSelect from './AssigneeSelect';
 
 export default class TaskSingle extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props);
         this.state = {
             fontNormal: false,
@@ -10,24 +11,54 @@ export default class TaskSingle extends Component {
         };
     }
 
-    onCheck(e) {
+    onCheck (e) {
         e.stopPropagation();
         const {checkTask, task} = this.props;
         checkTask(task);
     }
 
-    onSelectTask() {
+    onSelectTask () {
         const {selectTask, task} = this.props;
         selectTask(task);
     }
 
-    render() {
+    getOptions (users) {
+        if (!users) {
+            [];
+        }
+
+        let options = [];
+        for (user of users) {
+            let item = {
+                label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
+                value: user && user._id
+            };
+            options.push(item);
+        }
+        return options;
+    }
+
+    getFirstOption (task, options) {
+        if (task.assigneeId) {
+            for (option of options) {
+                if (option.value === task.assigneeId) {
+                    return [option];
+                }
+            }
+        }
+        return [{label: 'Unassigned'}];
+    }
+
+    render () {
         const {task, active, currentTask} = this.props;
         const classes = classNames({
-            "list-item task-item": true,
-            "open": task._id === currentTask,
+            'list-item task-item': true,
+            'open': task._id === currentTask,
             'bg--yellow': active
         });
+        const options = this.getOptions(task && task.facility && task.facility.users);
+        let userOptions = this.getFirstOption(task, options).concat(options);
+
         return (
             <div className={classes}
                  onClick={this.onSelectTask.bind(this)}
@@ -43,10 +74,13 @@ export default class TaskSingle extends Component {
                 <div className="row__item">
                     <div className="left__side">
                         <div
-                            className={this.state.fontNormal ? "person font-normal" : "person"}>{task.client && task.client.clientName}</div>
+                            className={this.state.fontNormal ? 'person font-normal' : 'person'}>{task.client && task.client.clientName}</div>
                     </div>
                     <div className="right__side">
-                        <div className="pacient-id text-blue">{task.client && task.client._id}</div>
+                        <div className="pacient-id text-blue">
+                            <AssigneeSelect taskId={task._id} options={userOptions}/>
+                            {task.client && task.client._id}
+                        </div>
                         <div className="financial-class">O/D</div>
                         <div className="time">11:20 am</div>
                     </div>
