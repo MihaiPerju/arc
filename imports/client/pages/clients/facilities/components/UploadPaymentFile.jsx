@@ -4,7 +4,7 @@ import Notifier from '/imports/client/lib/Notifier';
 import {Container, Divider} from 'semantic-ui-react'
 import ImportingRules from '/imports/client/pages/clients/facilities/components/ImportingRules';
 
-export default class UploadInventoryFile extends React.Component {
+export default class UploadPaymentFile extends React.Component {
     constructor() {
         super();
     }
@@ -13,7 +13,7 @@ export default class UploadInventoryFile extends React.Component {
         const {model, updateFacility} = this.props;
 
         const componentConfig = {
-            postUrl: `/uploads/inventory/${model && model._id}`
+            postUrl: `/uploads/payment/${model && model._id}`
         };
 
         const djsConfig = {
@@ -27,7 +27,7 @@ export default class UploadInventoryFile extends React.Component {
             <Container>
                 <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                 <Divider/>
-                <ImportingRules rules={"inventoryRules"} updateFacility={updateFacility} model={model}/>
+                <ImportingRules rules={"paymentRules"} updateFacility={updateFacility} model={model}/>
             </Container>
         )
     }

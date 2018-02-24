@@ -2,15 +2,15 @@ import {createRoute} from '/imports/api/s3-uploads/server/router';
 import Papa from 'papaparse';
 import fs from 'fs';
 import ParseService from '/imports/api/facilities/server/services/CsvParseService';
-import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
+import PaymentService from '/imports/api/facilities/server/services/PaymentService';
 
-createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, success}) => {
+createRoute('/uploads/payment/:facilityId', ({facilityId, error, filenames, success}) => {
 
     if (filenames.length != 1) {
         return error('Invalid number of files');
     }
 
-    const importRules = ParseService.getImportRules(facilityId,'inventoryRules');
+    const importRules = ParseService.getImportRules(facilityId, 'paymentRules');
 
     for (index in filenames) {
         const stream = fs.readFileSync(filenames[index]);
@@ -19,7 +19,7 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
         Papa.parse(csvString, {
                 chunk: (results) => {
                     // the result needs to be performed here
-                    TaskService.update(results.data, importRules, facilityId);
+                    PaymentService.upload(results.data, importRules, facilityId);
                 }
             }
         );
