@@ -1,5 +1,6 @@
 import React from 'react';
 import FacilityContactList from "./FacilityContactList.jsx";
+import RegionListQuery from '/imports/api/regions/queries/regionList.js';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
@@ -20,6 +21,18 @@ export default class FacilityForm extends React.Component {
     }
 
     componentWillMount() {
+        RegionListQuery.clone({
+            filters: {
+                clientId: FlowRouter.current().params._id
+            }
+        }).fetch((err, regions) => {
+            if (!err){
+                this.setState({
+                    regions
+                })
+            }
+        })
+        /*
         Meteor.call('regions.get', (err, regions) => {
             if (!err) {
                 this.setState({
@@ -29,6 +42,7 @@ export default class FacilityForm extends React.Component {
                 Notifier.error("Couldn't get regions");
             }
         });
+        */
     }
 
     onSubmit = (data) => {

@@ -43,6 +43,14 @@ export default class ClientSingle extends Component {
                             <Dropdown.Item>
                                 <Button primary
                                         onClick={() => {
+                                            FlowRouter.go("region.list", {id: client._id})
+                                        }}>
+                                    Manage Regions
+                                </Button>
+                            </Dropdown.Item>
+                            <Dropdown.Item>
+                                <Button primary
+                                        onClick={() => {
                                             FlowRouter.go("facility.list", {_id: client._id})
                                         }}>
                                     Manage Facilities

@@ -1,6 +1,7 @@
 import React from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
 import FacilityListQuery from '/imports/api/facilities/queries/facilityList.js';
+import RegionListQuery from '/imports/api/regions/queries/regionList.js';
 import FacilityList from './components/FacilityList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import SearchInput from "/imports/client/lib/SearchInput.jsx";
@@ -31,6 +32,18 @@ export default class FacilityListContainer extends Pager {
     }
 
     componentDidMount() {
+        RegionListQuery.clone({
+            filters: {
+                clientId: FlowRouter.current().params._id
+            }
+        }).fetch((err, regions) => {
+            if (!err){
+                this.setState({
+                    regions
+                })
+            }
+        })
+        /*
         Meteor.call('regions.get', (err, regions) => {
             if (!err) {
                 this.setState({regions});
@@ -38,6 +51,7 @@ export default class FacilityListContainer extends Pager {
                 Notifier.error("Couldn't get regions");
             }
         })
+        */
     }
 
     handleSearch = (searchValue) => {
