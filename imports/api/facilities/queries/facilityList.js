@@ -17,5 +17,8 @@ export default Facilities.createNamedQuery('facilityList', {
     addressOne: 1,
     addressTwo: 1,
     region: 1,
-    status: 1
+    status: 1,
+    placementRules: 1,
+    inventoryRules: 1,
+    paymentRules: 1
 });

@@ -15,11 +15,11 @@ export default class FacilityContentHeader extends Component {
                 <ul className="row__info main-info">
                     <li className="text-center">
                         <div className="text-light-grey">Status</div>
-                        <div className="info-label">{facility.status}</div>
+                        <div className="info-label">{facility.status ? facility.status : "None"}</div>
                     </li>
                     <li className="text-center">
                         <div className="text-light-grey">City</div>
-                        <div className="info-label">None</div>
+                        <div className="info-label">{facility.city ? facility.city : "None"}</div>
                     </li>
                     <li className="text-center">
                         <div className="text-light-grey">Region</div>
@@ -31,17 +31,21 @@ export default class FacilityContentHeader extends Component {
                     </li>
                     <li className="text-center">
                         <div className="text-light-grey">Zip code</div>
-                        <div className="info-label">None</div>
+                        <div className="info-label">{facility.zipCode ? facility.zipCode : "None"}</div>
                     </li>
                 </ul>
                 <ul className="row__info additionl-info">
                     <li className="text-center">
-                        <div className="text-light-grey">First adress</div>
-                        <div className="info-label">None</div>
+                        <div className="text-light-grey">First address</div>
+                        <div className="info-label">
+                            {facility.addressOne ? facility.addressOne : "None"}
+                        </div>
                     </li>
                     <li className="text-center">
-                        <div className="text-light-grey">Second adress</div>
-                        <div className="info-label">None</div>
+                        <div className="text-light-grey">Second address</div>
+                        <div className="info-label">
+                            {facility.addressTwo ? facility.addressTwo : "None"}
+                        </div>
                     </li>
                 </ul>
             </div>
