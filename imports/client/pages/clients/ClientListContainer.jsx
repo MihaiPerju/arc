@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ClientList from './components/ClientList.jsx';
 import ClientContent from './ClientContent.jsx';
@@ -16,8 +15,6 @@ class ClientContainer extends Component {
             filter: false,
             clientsSelected: []
         };
-        this.renderRightSide = this.renderRightSide.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
     }
 
     setClient = (_id) => {
@@ -30,12 +27,6 @@ class ClientContainer extends Component {
         }
     }
 
-    renderRightSide() {
-        this.setState({
-            rightSide: true
-        })
-    }
-
     selectClient = (_id) => {
         const {clientsSelected} = this.state;
         if (clientsSelected.includes(_id)) {
@@ -44,12 +35,6 @@ class ClientContainer extends Component {
             clientsSelected.push(_id);
         }
         this.setState({clientsSelected});
-    }
-
-    showFilterBar() {
-        this.setState({
-            filter: !this.state.filter
-        })
     }
 
     getClient() {
@@ -77,12 +62,10 @@ class ClientContainer extends Component {
         return (
             <div className="cc-container">
                 <div className={currentClient ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={clientsSelected.length} filter={this.showFilterBar}/>
-                    {this.state.filter ? <FilterBar/> : null}
+                    <SearchBar btnGroup={clientsSelected.length}/>
                     <ClientList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         setClient={this.setClient.bind(this)}
-                        renderContent={this.renderRightSide}
                         selectClient={this.selectClient}
                         currentClient={currentClient}
                         clients={data}

@@ -1,45 +1,44 @@
 import React, {Component} from 'react';
+import classNames from "classnames";
+import {getImagePath} from "../../../../../api/utils";
 
 export default class FacilitySingle extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            bgYellow: false,
-            open: false
-        }
-        this.renderContent = this.renderContent.bind(this);
-        this.changeTaskBg = this.changeTaskBg.bind(this);        
     }
 
-    renderContent() {
-        this.setState({
-            fontNormal: true,
-            open: !this.state.open
-        });
-        this.props.renderContent();
+    onSetFacility() {
+        const {facility, setFacility} = this.props;
+        setFacility(facility._id);
     }
 
-    changeTaskBg() {
-        this.setState({
-            bgYellow: !this.state.bgYellow
-        });
-        this.props.showBtnGroup();
+    onSelectFacility(e) {
+        e.stopPropagation();
+        const {facility, selectFacility} = this.props;
+        selectFacility(facility._id);
     }
 
     render() {
-        const { bgYellow, open } = this.state;
-        const { id, name, avatar } = this.props;
-
+        const {facility, facilitiesSelected, currentFacility} = this.props;
+        const checked = facilitiesSelected.includes(facility._id);
+        const classes = classNames({
+            "list-item": true,
+            "bg--yellow": checked,
+            "open": currentFacility === facility._id
+        });
         return (
-            <div className={bgYellow ? "list-item user-item bg--yellow" : open ? "list-item user-item open" : "list-item user-item"}
-                onClick={this.renderContent}>
+            <div
+                className={classes}
+                onClick={this.onSetFacility.bind(this)}>
                 <div className="check-item">
-                    <input id={id} type="checkbox" className="hidden"/>
-                    <label htmlFor={id} onClick={this.changeTaskBg}></label>
+                    <input checked={checked} type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectFacility.bind(this)}></label>
                 </div>
                 <div className="row__block align-center">
-                    <div className="item-name">{name}</div>
-                    <img src={avatar} alt="" className="md-avatar"/>
+                    <img src={facility.logoPath ? getImagePath(facility.logoPath) : "/assets/img/user1.svg"}
+                         className="md-avatar"
+                         alt=""/>
+                    <div className="item-name">{facility.name}</div>
                 </div>
             </div>
         )
