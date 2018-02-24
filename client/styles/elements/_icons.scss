@@ -50,6 +50,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-check-circle-o:before {
+  content: "\f05d";
+}
+.icon-upload:before {
+  content: "\f093";
+}
 .icon-user:before {
   content: "\f007";
 }

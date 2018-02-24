@@ -16,10 +16,14 @@ export default class ClientContentHeader extends Component {
                     </div>
                     <div className="info-row">
                         <div className="info-item">
-                            <div className="text-light-grey">Email</div>
-                            <div className="text text-blue">{client.email}</div>
+                            <span className="text-light-grey">Email</span>
+                            <span className="text text-blue">{client.email}</span>
                         </div>
-                        <button className="btn--white">Edit client</button>
+                        <div className="btn-group">
+                            <a href={FlowRouter.url("/client/ansBJhbjdsj343b/manage-facilities")} className="cc-button btn--white">Manage facillity</a>
+                            <a href="#" className="cc-button btn--white">Manage regions</a>
+                            <button className="btn--white">Edit client</button>
+                        </div>
                     </div>
                 </div>
             </div>

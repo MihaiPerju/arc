@@ -88,12 +88,12 @@ route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
 });
 
 //Facilities
-import FacilityListContainer from '/imports/client/pages/clients/facilities/FacilityListContainer.jsx';
+import FacilityContainer from '/imports/client/pages/clients/facilities/FacilityContainer.jsx';
 import FacilityCreate from '/imports/client/pages/clients/facilities/FacilityCreate.jsx';
 import FacilityEdit from '/imports/client/pages/clients/facilities/FacilityEdit.jsx';
 import FacilityView from '/imports/client/pages/clients/facilities/FacilityView.jsx';
 
-route('/client/:_id/manage-facilities', FacilityListContainer, {}, {
+route('/client/:_id/manage-facilities', FacilityContainer, {}, {
     name: 'facility.list'
 });
 route('/client/:_id/manage-facilities/create', FacilityCreate, {}, {
