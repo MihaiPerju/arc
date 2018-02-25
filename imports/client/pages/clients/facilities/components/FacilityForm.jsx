@@ -30,7 +30,7 @@ export default class FacilityForm extends React.Component {
             if (!err){
                 this.setState({
                     regions
-                })
+                });
             } else {
                 Notifier.error('Couldn\'t get regions');
             }
