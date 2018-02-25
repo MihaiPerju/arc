@@ -1,6 +1,6 @@
 import React from 'react';
 import ClientSchema from '/imports/api/clients/schemas/schema';
-import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField, LongTextField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import DropzoneComponent from 'react-dropzone-component';
 import {path, getToken} from '/imports/api/s3-uploads/utils';
@@ -8,6 +8,7 @@ import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
+import {getImagePath} from '/imports/api/utils';
 
 export default class EditClient extends React.Component {
     constructor() {
@@ -16,14 +17,11 @@ export default class EditClient extends React.Component {
         this.state = {
             model: {},
             error: null,
-            uploadId: null,
-            uploadPath: null
         };
     }
 
-    componentWillMount() {
+    getClient() {
         const clientId = this.props.userId;
-
         Meteor.call('client.get', clientId, (err, res) => {
             if (!err) {
                 if (!res) {
@@ -35,7 +33,6 @@ export default class EditClient extends React.Component {
                 } else {
                     this.setState({
                         model: res,
-                        uploadPath: res.logoPath
                     })
                 }
             } else {
@@ -44,28 +41,17 @@ export default class EditClient extends React.Component {
         })
     }
 
-    getPath(uploadId) {
-        Meteor.call('client.getLogoPath', uploadId, (err, uploadPath) => {
-            if (!err) {
-                this.setState({
-                    uploadPath
-                });
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
+    componentWillMount() {
+        this.getClient();
     }
 
     onRemoveLogo() {
         const clientId = this.props.userId;
-        const {uploadId} = this.state;
 
-        Meteor.call('client.removeLogo', clientId, uploadId, (err) => {
+        Meteor.call('client.removeLogo', clientId, (err) => {
             if (!err) {
                 Notifier.success("Logo removed!");
-                this.setState({
-                    uploadPath: null
-                });
+                this.getClient();
             } else {
                 Notifier.error(err.reason);
             }
@@ -74,7 +60,6 @@ export default class EditClient extends React.Component {
 
     onSubmit(data) {
         const clientId = this.props.userId;
-        data.logoPath = this.state.uploadPath;
 
         Meteor.call('client.update', clientId, data, (err) => {
             if (!err) {
@@ -88,24 +73,20 @@ export default class EditClient extends React.Component {
 
     render() {
         const that = this;
-        const {uploadPath} = this.state;
         const {model} = this.state;
+        const clientId = this.props.userId;
 
         const componentConfig = {
-            postUrl: '/uploads/logo/' + getToken()
+            postUrl: '/uploads/logo/' + clientId + '/' + getToken()
         };
 
         const djsConfig = {
             complete(file) {
-                const uploadId = JSON.parse(file.xhr.response).uploadId;
-                that.setState({
-                    uploadId
-                });
-                that.getPath(uploadId);
-
                 Notifier.success('Logo added');
                 this.removeFile(file);
-            }
+                that.getClient();
+            },
+            acceptedFiles: 'image/*'
         };
 
         return (
@@ -128,12 +109,15 @@ export default class EditClient extends React.Component {
                             <AutoField name="email"/>
                             <ErrorField name="email"/>
 
+                            <LongTextField name="financialGoals"/>
+                            <ErrorField name="financialGoals"/>
+
                             <h3>Client Logo</h3>
                             {
-                                uploadPath
+                                model.logoPath
                                     ?
                                     <div>
-                                        <img src={path(uploadPath)}/>
+                                        <img src={getImagePath(model.logoPath)}/>
                                         <a href="" onClick={this.onRemoveLogo.bind(this)}>Remove Logo</a>
                                     </div>
                                     : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
@@ -144,10 +128,10 @@ export default class EditClient extends React.Component {
                                     <NestField name="">
                                         <TextField name="firstName"/>
                                         <TextField name="lastName"/>
-                                        <TextField name="contactDescription"/>
+                                        <AutoField name="contactType"/>
                                         <TextField name="phone"/>
                                         <TextField name="email"/>
-                                        <TextField name="notes"/> 
+                                        <TextField name="notes"/>
                                     </NestField>
                                 </ListItemField>
                             </ListField>

@@ -21,6 +21,7 @@ export default class UserList extends Component {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>Email</Table.HeaderCell>
+                        <Table.HeaderCell>Tags</Table.HeaderCell>
                         <Table.HeaderCell>Actions</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>

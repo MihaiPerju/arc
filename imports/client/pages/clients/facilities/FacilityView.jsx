@@ -1,14 +1,15 @@
 import React from 'react';
 import moment from 'moment';
-import FacilityContact from "./components/FacilityContact";
-import {Header} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import Loading from "/imports/client/lib/ui/Loading.jsx";
+import FacilityContact from './components/FacilityContact';
+import { Header } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
+import Loading from '/imports/client/lib/ui/Loading.jsx';
 import Notifier from '/imports/client/lib/Notifier';
-import {path} from '/imports/api/s3-uploads/utils';
+import {getImagePath} from '/imports/api/utils';
+import FacilityContactsTable from './components/FacilityContactsTable';
 
 export default class FacilityView extends React.Component {
-    constructor() {
+    constructor () {
         super();
 
         this.state = {
@@ -18,21 +19,21 @@ export default class FacilityView extends React.Component {
         };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.getFacility();
     }
 
-    getRegions(regionIds) {
+    getRegions (regionIds) {
         regionIds = regionIds || [];
         Meteor.call('facility.getRegions', regionIds, (err, regions) => {
             if (err) {
-                Notifier.error("Couldn't get facility regions");
+                Notifier.error('Couldn\'t get facility regions');
             } else {
                 this.setState({
                     regions
                 });
             }
-        })
+        });
     }
 
     getFacility = () => {
@@ -50,41 +51,51 @@ export default class FacilityView extends React.Component {
         });
     };
 
-    render() {
+    render () {
         const {loading, facility, regions} = this.state;
         if (loading) {
             return <Loading/>;
         }
+        
+        if (!facility) {
+            return (
+                <Container className="page-container">
+                    No facility found !
+                </Container>);
+        }
+
+        const rootUrl = Meteor.settings.public.ROOT_URL || '/themes/default/';
+        const logoPath = facility.logoPath ? getImagePath(facility.logoPath) : `${rootUrl}assets/img/no_logo.svg`;
 
         return (
             <Container className="page-container">
-                <Header as="h3" textAlign="center">Facility {facility && facility.name}</Header>
-                <img src={path(facility && facility.logoPath)}/>
-                <h5>Status: {facility && facility.status}</h5>
-                <h5>State: {facility && facility.state}</h5>
-                <h5>Region: {facility && facility.region}</h5>
-                <h5>City {facility && facility.city}</h5>
-                <h5>Address 1: {facility && facility.addressOne}</h5>
-                <h5>Address 2: {facility && facility.addressTwo}</h5>
-                <h5>Zip: {facility && facility.zipCode}</h5>
-                <h5>Creation date: {facility && moment(facility.createdAt).format('MM/DD/YYYY hh:mm')}</h5>
+                <Header as="h3" textAlign="center">Facility {facility.name}</Header>
+                <div>
+                    <img src={logoPath}/>
+                </div>
+                <h5>Status: {facility.status}</h5>
+                <h5>State: {facility.state}</h5>
+                <h5>Region: {facility.region}</h5>
+                <h5>City {facility.city}</h5>
+                <h5>Address 1: {facility.addressOne}</h5>
+                <h5>Address 2: {facility.addressTwo}</h5>
+                <h5>Zip: {facility.zipCode}</h5>
+                <h5>Creation date: {moment(facility.createdAt).format('MM/DD/YYYY hh:mm')}</h5>
                 {
                     regions && <div>
                         <h4>Regions:</h4>
                         {
                             regions.map((region, index) => {
-                                return <div key={index}>{region.name}</div>
+                                return <div key={index}>{region.name}</div>;
                             })
                         }
                     </div>
                 }
-                {facility && facility.contacts && facility.contacts.length
+                {facility.contacts && facility.contacts.length
                     ?
                     <div>
                         <h4>Contacts</h4>
-                        {facility.contacts.map(contact => (
-                            <FacilityContact key={contact._id} contact={contact}/>
-                        ))}
+                        <FacilityContactsTable contacts={facility.contacts}/>
                     </div>
                     :
                     <div>

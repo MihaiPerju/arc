@@ -7,8 +7,9 @@ import taskQuery from '/imports/api/tasks/queries/taskList';
 import ReactDOMServer from "react-dom/server";
 import React from 'react';
 import {Container, Table} from 'semantic-ui-react';
-// import pdf from 'html-pdf';
+import pdf from 'html-pdf';
 import Users from '/imports/api/users/collection';
+import Clients from '/imports/api/clients/collection';
 
 const TaskData = ({task}) => {
     return <Container>
@@ -32,11 +33,11 @@ const TaskData = ({task}) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>DischrgDate</Table.Cell>
-                    <Table.Cell>{task && task.dischrgDate}</Table.Cell>
+                    <Table.Cell>{task && moment(task.dischrgDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>FbDate</Table.Cell>
-                    <Table.Cell>{task && task.fbDate}</Table.Cell>
+                    <Table.Cell>{task && moment(task.fbDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>AcctBal</Table.Cell>
@@ -48,7 +49,7 @@ const TaskData = ({task}) => {
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>AdmitDate</Table.Cell>
-                    <Table.Cell>{task && task.admitDate}</Table.Cell>
+                    <Table.Cell>{task && moment(task.admitDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>MedNo</Table.Cell>
@@ -176,12 +177,13 @@ export default class CronjobService {
         const report = Reports.findOne({_id});
         const filters = EJSON.parse(report.mongoFilters);
         const userIds = schedule.userIds;
+        const clientIds = schedule.clientIds;
         const tasks = taskQuery.clone({filters}).fetch();
 
-        CronjobService.createReportPdf(userIds, tasks, report);
+        CronjobService.createReportPdf(userIds, clientIds, tasks, report);
     }
 
-    static createReportPdf(userIds, tasks, report) {
+    static createReportPdf(userIds, clientIds, tasks, report) {
         let ReportTable = '';
         for (task of tasks) {
             const taskSingle = <TaskData task={task}/>;
@@ -189,23 +191,34 @@ export default class CronjobService {
             ReportTable += ReactDOMServer.renderToString(taskSingle) + '<br/>';
         }
 
-        // pdf.create(ReportTable).toStream(Meteor.bindEnvironment((err, attachment) => {
-            // if (!err) {
-                // CronjobService.sendEmails(userIds, attachment, report);
-            // }
-        // }));
+        pdf.create(ReportTable).toStream(Meteor.bindEnvironment((err, attachment) => {
+            if (!err) {
+                CronjobService.sendEmails(userIds, attachment, report);
+            }
+        }));
     }
 
 
-    static sendEmails(userIds, attachment, report) {
+    static sendEmails(userIds, clientIds, attachment, report) {
 
         const users = Users.find({_id: {$in: userIds}}).fetch();
+        const clients = Clients.find({_id: {$in: clientIds}}).fetch();
+
+        const allReceivers = [];
 
         for (user of users) {
-            const to = user.emails[0].address;
+            allReceivers.push({email: user.emails[0].address, name: user.profile.firstName});
+        }
+
+        for (client in clients) {
+            allReceivers.push({email: client.email, name: client.firstName});
+        }
+
+        for (receiver of allReceivers) {
+            const to = receiver.email;
             const from = 'PMS <pms@app.com>';
             const subject = 'Reports';
-            const text = `Hello ${user.profile.firstName},\n` +
+            const text = `Hello ${receiver.name},\n` +
                 "\n" +
                 `Attached to this email, you will find the report '${report.name}'\n` +
                 "\n" +

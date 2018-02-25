@@ -1,6 +1,6 @@
-import Users from '../collection';
+import Clients from '../collection';
 
-export default Users.createNamedQuery('listClients', {
+export default Clients.createNamedQuery('listClients', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);
@@ -9,5 +9,6 @@ export default Users.createNamedQuery('listClients', {
     clientName: 1,
     firstName: 1,
     lastName: 1,
-    email: 1
+    email: 1,
+    financialGoals: 1
 });

@@ -19,6 +19,10 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
+    financialGoals: {
+        type: String,
+        optional: true
+    },
     contacts: {
         type: Array,
         optional: true

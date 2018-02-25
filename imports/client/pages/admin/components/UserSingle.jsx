@@ -1,11 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Notifier from '/imports/client/lib/Notifier';
-import {Table} from 'semantic-ui-react'
-import {Button, Dropdown} from 'semantic-ui-react'
+import { Table, Label } from 'semantic-ui-react';
+import { Button, Dropdown } from 'semantic-ui-react';
 import RolesEnum from '/imports/api/users/enums/roles';
+import _ from 'underscore';
 
 export default class UserSingle extends Component {
-    deleteUser() {
+    deleteUser () {
         const {user} = this.props;
 
         Meteor.call('admin.deleteUser', user._id, (err) => {
@@ -16,11 +17,11 @@ export default class UserSingle extends Component {
         });
     }
 
-    userCanSuspend() {
+    userCanSuspend () {
         return Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN);
     }
 
-    suspendUser() {
+    suspendUser () {
         const {user} = this.props;
 
         Meteor.call('admin.suspendUser', user._id, (err) => {
@@ -31,7 +32,7 @@ export default class UserSingle extends Component {
         });
     }
 
-    resumeUser() {
+    resumeUser () {
         const {user} = this.props;
 
         Meteor.call('admin.resumeUser', user._id, (err) => {
@@ -42,17 +43,23 @@ export default class UserSingle extends Component {
         });
     }
 
-    render() {
+    render () {
         const {user} = this.props;
-
         return (
             <Table.Row>
                 <Table.Cell>{user.emails[0].address}</Table.Cell>
                 <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
+                    <div>
+                    {_.map(user.tags, (tag, idx) => {
+                        return <Label as='a' color='teal' tag>{tag.name}</Label>
+                    })}
+                    </div>
+                </Table.Cell>
+                <Table.Cell>
+                    <Dropdown button text='Action' icon={null} simple>
                         <Dropdown.Menu>
                             <Dropdown.Item>
-                                <Button primary href={"/admin/user/" + user._id + "/edit"}>Edit</Button>
+                                <Button primary href={'/admin/user/' + user._id + '/edit'}>Edit</Button>
                             </Dropdown.Item>
                             {
                                 user._id !== Meteor.userId() && this.userCanSuspend() &&
@@ -60,8 +67,7 @@ export default class UserSingle extends Component {
                                 <Dropdown.Item>
                                     {user.profile.suspended ?
                                         <Button onClick={this.resumeUser.bind(this)}>Resume</Button>
-                                        :
-                                        <Button color="black" onClick={this.suspendUser.bind(this)}>Suspend</Button>
+                                        : <Button color="black" onClick={this.suspendUser.bind(this)}>Suspend</Button>
                                     }
                                 </Dropdown.Item>
                             }

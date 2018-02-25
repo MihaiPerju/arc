@@ -37,7 +37,8 @@ class LetterTemplateService {
                 name: 1,
                 body: 1,
                 description: 1,
-                keywords: 1
+                keywords: 1,
+                codeIds: 1
             }
         }).fetch();
     }

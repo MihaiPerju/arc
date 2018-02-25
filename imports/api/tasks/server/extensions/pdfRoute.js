@@ -4,7 +4,8 @@ import {getUserByToken} from '/imports/api/s3-uploads/server/router';
 import Security from '/imports/api/tasks/security';
 import RolesEnum from '/imports/api/users/enums/roles';
 import PDFMerge from 'pdf-merge';
-import PDFService from '/imports/api/tasks/server/extensions/PDFService';
+import os from 'os';
+import FolderConfig from '/imports/api/business';
 
 Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
 
@@ -23,13 +24,11 @@ Picker.route('/pdfs/:_id/:token', function (params, req, res, next) {
     const task = Tasks.findOne({_id: params._id});
     const {attachmentIds} = task;
 
-    const attachments = [];
+    const files = [];
     for (_id of attachmentIds) {
-        attachments.push(Uploads.findOne({_id}));
+        const {path} = Uploads.findOne({_id});
+        files.push(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
     }
-
-    //Downloading and saving PDFs to local files
-    let files = PDFService.downloadAndSave(attachments);
 
     //Merge PDFs
     PDFMerge(files)

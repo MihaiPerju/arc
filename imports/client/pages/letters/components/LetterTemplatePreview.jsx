@@ -21,7 +21,7 @@ export default class LetterTemplatePreview extends React.Component {
     };
 
     render() {
-        const {letterTemplateBody, taskId} = this.props;
+        const {letterTemplateBody, taskId, attachments} = this.props;
         const letterBody = this.tagParser();
 
         return(
@@ -30,7 +30,7 @@ export default class LetterTemplatePreview extends React.Component {
                 {letterTemplateBody &&
                     <div>
                         <Divider />
-                        <CreateLetter taskId={taskId} letterBody={letterBody}/>
+                        <CreateLetter taskId={taskId} letterBody={letterBody} attachments={attachments}/>
                     </div>
                 }
             </div>
