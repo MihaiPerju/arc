@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class Uploaditem extends Component {
+export default class UploadItem extends Component {
     render() {
 
         return (
