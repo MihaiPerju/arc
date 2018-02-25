@@ -26,8 +26,8 @@ export default class PaymentBlock extends Component {
                     <div className="add-content">
                         <i className="icon-upload"/>
                     </div>
-                    <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                     <div className="upload-list">
+                        <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                     </div>
                 </div>
                 <div className="upload-section">

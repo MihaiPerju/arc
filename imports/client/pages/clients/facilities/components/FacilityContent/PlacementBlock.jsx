@@ -33,9 +33,6 @@ export default class PlacementBlock extends Component {
                 <div className="upload-section">
                     <ImportingRules rules={"placementRules"} model={facility}/>
                 </div>
-                <div className="upload-section">
-                    <UploadItem/>
-                </div>
             </div>
         )
     }
