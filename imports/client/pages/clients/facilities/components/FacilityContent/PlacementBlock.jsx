@@ -1,11 +1,8 @@
 import React, {Component} from 'react';
 import UploadItem from './UploadItem';
-<<<<<<< HEAD
-=======
 import Notifier from "../../../../../lib/Notifier";
 import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
->>>>>>> included importing rules
 
 export default class PlacementBlock extends Component {
     render() {
@@ -25,7 +22,6 @@ export default class PlacementBlock extends Component {
                         <div className="text-center">+ Upload placement file</div>
                     </div>
                 </div>
-<<<<<<< HEAD
                 <UploadForm/>
                 <div className="upload-list">
                     {
@@ -71,14 +67,12 @@ class UploadForm extends Component {
                         </div>
                     </div>
                 </form>
-=======
                 <div className="upload-section">
                     <ImportingRules rules={"placementRules"} model={facility}/>
                 </div>
                 <div className="upload-section">
                     <UploadItem/>
                 </div>
->>>>>>> included importing rules
             </div>
         )
     }

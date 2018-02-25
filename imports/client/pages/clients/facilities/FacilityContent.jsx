@@ -7,7 +7,7 @@ import PaymentBlock from './components/FacilityContent/PaymentBlock';
 export default class FacilityContent extends Component {
     render() {
         const {facility} = this.props;
-        console.log(facility);
+        // console.log(facility);
         return (
             <div className="main-content facility-content">
                 <div className="breadcrumb">
