@@ -15,11 +15,11 @@ const Text = ({
     ...props
 }) =>
     <div {...filterDOMProps(props)}>
-        {/*{label && (*/}
-            {/*<label htmlFor={id}>*/}
-                {/*{label}*/}
-            {/*</label>*/}
-        {/*)}*/}
+        {label && (
+            <label htmlFor={id}>
+                {label}
+            </label>
+        )}
 
         <input
             disabled={disabled}

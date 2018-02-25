@@ -8,7 +8,7 @@ export default class ImportingRulesService {
                 type: Boolean,
                 allowedValues: [true, false],
                 defaultValue: hasHeader,
-                label: 'Does the file have a header?'
+                label: 'File with header'
             },
         };
         FieldsEnum[rules].forEach((field) => {
@@ -63,7 +63,7 @@ export default class ImportingRulesService {
         const fields = [];
 
         for (let key in FieldsEnum[rules]) {
-            fields.push(FieldsEnum[rules][key].value);
+            fields.push({value: FieldsEnum[rules][key].value, label: FieldsEnum[rules][key].label});
         }
         return fields;
     }

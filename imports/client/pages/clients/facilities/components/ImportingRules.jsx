@@ -1,8 +1,8 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField, RadioField, ListField, ListItemField, NestField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, RadioField, ListField, ListItemField, NestField} from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
 import PropTypes from 'prop-types';
-import {Container, Divider, Button, Segment} from 'semantic-ui-react'
+import {Container, Segment} from 'semantic-ui-react'
 import RulesService from '/imports/client/pages/clients/facilities/services/ImportingRulesService';
 import Loading from '/imports/client/lib/ui/Loading';
 
@@ -31,7 +31,7 @@ export default class ImportingRules extends React.Component {
         Meteor.call('facility.update', newFacility, (err) => {
             if (!err) {
                 Notifier.success("Facility updated!");
-                this.props.updateFacility();
+                // this.props.updateFacility();
             } else {
                 Notifier.error(err.reason);
             }
@@ -55,47 +55,57 @@ export default class ImportingRules extends React.Component {
         const {model, rules} = this.props;
         const fields = RulesService.getSchemaFields(rules);
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
+
         return (
             <Container>
                 {
                     loading ?
                         <Loading/> :
+
                         <AutoForm model={model[rules]} schema={schema}
                                   onChange={this.onChange.bind(this)}
                                   onSubmit={this.onSubmitImportingRules}>
 
-                            <RadioField name="hasHeader" options={options}/>
-                            <ErrorField name="hasHeader"/>
+                            <div className="form-wrapper">
+                                <div className="radio-group">
+                                    <RadioField name="hasHeader" options={options}/>
+                                    <ErrorField name="hasHeader"/>
+                                </div>
+                            </div>
 
                             {
+
                                 fields && fields.map((field, index) => {
                                     if (field !== 'newInsBal')
                                         return (
-                                            <div key={index}>
-                                                <AutoField name={field}/>
-                                                <ErrorField name={field}/>
+                                            <div className="upload-item" key={index}>
+                                                <AutoField name={field.value}/>
+                                                <ErrorField name={field.value}/>
                                             </div>
                                         )
                                 })
                             }
+
                             {
                                 schema._schemaKeys.includes("insurances") ?
-                                    <ListField name="insurances">
-                                        <ListItemField name="$">
-                                            <NestField>
-                                                <Segment>
-                                                    <AutoField name="insName"/>
-                                                    <ErrorField name="insName"/>
-
-                                                    <AutoField name="insCode"/>
-                                                    <ErrorField name="insCode"/>
-
-                                                    <AutoField name="insBal"/>
-                                                    <ErrorField name="insBal"/>
-                                                </Segment>
-                                            </NestField>
-                                        </ListItemField>
-                                    </ListField>
+                                        <ListField name="insurances">
+                                            <ListItemField name="$">
+                                                <NestField>
+                                                    <div className="upload-item">
+                                                        <AutoField name="insName"/>
+                                                        <ErrorField name="insName"/>
+                                                    </div>
+                                                    <div className="upload-item">
+                                                        <AutoField name="insCode"/>
+                                                        <ErrorField name="insCode"/>
+                                                    </div>
+                                                    <div className="upload-item">
+                                                        <AutoField name="insBal"/>
+                                                        <ErrorField name="insBal"/>
+                                                    </div>
+                                                </NestField>
+                                            </ListItemField>
+                                        </ListField>
                                     :
                                     <ListField name="newInsBal">
                                         <ListItemField name="$">
@@ -107,12 +117,11 @@ export default class ImportingRules extends React.Component {
                                             </NestField>
                                         </ListItemField>
                                     </ListField>
-
                             }
-
-
-                            <Divider/>
-                            <Button primary fluid type="submit">Submit</Button>
+                            <div className="btn-group">
+                                {/*<button className="btn--red">Cancel</button>*/}
+                                <button className="btn--green">Submit</button>
+                            </div>
                         </AutoForm>
                 }
             </Container>
@@ -120,6 +129,7 @@ export default class ImportingRules extends React.Component {
     }
 }
 
-ImportingRules.propTypes = {
+ImportingRules
+    .propTypes = {
     model: PropTypes.object
 };

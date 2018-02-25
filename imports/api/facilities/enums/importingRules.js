@@ -1,14 +1,14 @@
 let commonRules = [
     {value: 'acctNum', label: 'Account Number', optional: true},
     {value: 'facCode', label: 'Facility Code', optional: true},
-    {value: 'ptType', label: 'Pt Type', optional: true},
-    {value: 'ptName', label: 'Pt Name', optional: true},
+    {value: 'ptType', label: 'Payment Type', optional: true},
+    {value: 'ptName', label: 'Payment Name', optional: true},
     {value: 'dischrgDate', label: 'Discharge Date', optional: true},
     {value: 'fbDate', label: 'Fb Date', optional: true},
-    {value: 'acctBal', label: 'Acct Balance', optional: true},
-    {value: 'finClass', label: 'Fin Class', optional: true},
+    {value: 'acctBal', label: 'Account Balance', optional: true},
+    {value: 'finClass', label: 'Financial Class', optional: true},
     {value: 'admitDate', label: 'Admit Date', optional: true},
-    {value: 'medNo', label: 'Med No', optional: true}
+    {value: 'medNo', label: 'Medical Number', optional: true}
 ];
 
 export default {
