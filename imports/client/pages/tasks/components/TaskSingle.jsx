@@ -78,7 +78,6 @@ export default class TaskSingle extends Component {
                     </div>
                     <div className="right__side">
                         <div className="pacient-id text-blue">
-                            <AssigneeSelect taskId={task._id} options={userOptions}/>
                             {task.client && task.client._id}
                         </div>
                         <div className="financial-class">O/D</div>
