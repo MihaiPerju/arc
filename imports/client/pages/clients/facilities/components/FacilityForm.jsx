@@ -53,8 +53,6 @@ export default class FacilityForm extends React.Component {
         const {model, purpose} = this.props;
         const {regions} = this.state;
         const regionIds = this.getRegionOptions(regions);
-        //const defaultRegion = regionIds[0].value;
-        //console.log(defaultRegion);
 
         const statuses = this.getOptions(FacilityStatusEnum);
         const schema = FacilitySchema.omit('clientId', 'createdAt');

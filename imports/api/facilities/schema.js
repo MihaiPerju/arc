@@ -37,7 +37,6 @@ export default new SimpleSchema({
     regionId: {
         label: 'Region',
         type: String,
-        //optional: true
     },
     contacts: {
         type: Array,
