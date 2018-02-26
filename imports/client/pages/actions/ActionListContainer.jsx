@@ -21,6 +21,42 @@ class ActionListContainer extends Component {
 
     setAction = (_id) => {
         const {currentAction} = this.state;
+/*
+import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import SearchInput from '/imports/client/lib/SearchInput.jsx';
+import { Container } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
+import ReasonCodesDialog from './components/ReasonCodesDialog';
+
+export default class ActionListContainer extends Pager {
+    constructor () {
+        super();
+
+        _.extend(this.state, {
+            perPage: 3,
+            filters: {},
+            actionReasonCodes: false
+        });
+
+        this.query = query.clone();
+        this.ActionListCont = createQueryContainer(this.query, ActionList, {
+            reactive: false
+        });
+    }
+
+    handleSearch = (searchValue) => {
+        this.updateFilters({
+            filters: {
+                title: {
+                    '$regex': searchValue,
+                    '$options': 'i'
+                }
+            }
+        });
+    };
+*/
 
         if (currentAction === _id) {
             this.setState({currentAction: null});
@@ -39,11 +75,27 @@ class ActionListContainer extends Component {
         this.setState({actionsSelected});
     };
 
+    handleClose = () => {
+        this.setState({
+            actionReasonCodes: false
+        });
+    };
+
+    handleCurrentAction = (actionReasonCodes) => {
+        this.setState({
+            actionReasonCodes
+        });
+    }
+
     render() {
         const {data, loading, error} = this.props;
         const {actionsSelected, currentAction} = this.state;
         const action = objectFromArray(data, currentAction);
-
+        /*
+        const params = _.extend({}, this.getPagerOptions());
+        const ActionListCont = this.ActionListCont;
+        const {sortBy, isSortAscend, actionReasonCodes} = this.state;
+         */
         if (loading) {
             return <Loading/>
         }
@@ -71,6 +123,23 @@ class ActionListContainer extends Component {
                     ) : null
                 }
             </div>
+/*
+            <Container className="page-container">
+                <div>
+                    <Header as="h2" textAlign="center">Actions</Header>
+                    <SearchInput handleSearch={this.handleSearch}/>
+                </div>
+                <div className='m-t-30'>
+                    {this.getPaginator()}
+                    <ActionListCont params={params}
+                                    handleHeaderClick={this.handleHeaderClick}
+                                    reasonCodesManage={this.handleCurrentAction}/>
+                    {this.getPaginator()}
+                </div>
+                {actionReasonCodes && <ReasonCodesDialog actionId={actionReasonCodes}
+                                                              closeAction={this.handleClose}/>}
+            </Container>
+*/
         );
     }
 }

@@ -4,11 +4,15 @@ import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container, Button, Divider, Header} from 'semantic-ui-react';
 import RichTextArea from "/imports/client/lib/uniforms/RichTextArea.jsx";
+import codesQuery from '/imports/api/codes/queries/listCodeNames';
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class CreateLetterTemplate extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            codes: []
+        };
     }
 
     onSubmit(data) {
@@ -22,7 +26,27 @@ export default class CreateLetterTemplate extends React.Component {
         });
     };
 
+    componentWillMount () {
+        codesQuery.clone({}).fetch((err, codes) => {
+            if (!err) {
+                this.setState({
+                    codes
+                });
+            } else {
+                Notifier.error('Couldn\'t get carc/rarc codes');
+            }
+        });
+    }
+
+    getCodeOptions (codes) {
+        return _.map(codes, ({_id, code}) => {
+            return {value: _id, label: code};
+        })
+    }
+
     render() {
+        const codeIds = this.getCodeOptions(this.state.codes);
+
         return (
             <Container className="page-container">
                 <Header as="h2" textAlign="center">Add a letter template</Header>
@@ -41,6 +65,11 @@ export default class CreateLetterTemplate extends React.Component {
 
                     <AutoField name="description"/>
                     <ErrorField name="description"/>
+
+                    {
+                        codeIds &&
+                        <SelectMulti name="codeIds" options={codeIds}/>
+                    }
 
                     <Divider/>
 

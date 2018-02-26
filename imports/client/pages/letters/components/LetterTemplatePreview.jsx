@@ -1,5 +1,5 @@
-import React from "react";
-import Parser from "simple-text-parser";
+import React from 'react';
+import Parser from 'simple-text-parser';
 import CreateLetter from './CreateLetter';
 
 export default class LetterTemplatePreview extends React.Component {
@@ -19,8 +19,8 @@ export default class LetterTemplatePreview extends React.Component {
         return parser.render(letterTemplateBody);
     };
 
-    render() {
-        const {letterTemplateBody, taskId, reset} = this.props;
+    render () {
+        const {letterTemplateBody, taskId, reset, attachments} = this.props;
         const letterBody = this.tagParser();
 
         return (
@@ -28,7 +28,8 @@ export default class LetterTemplatePreview extends React.Component {
                 {!!letterTemplateBody && <div dangerouslySetInnerHTML={{__html: letterBody}}/>}
                 {letterTemplateBody &&
                 <div>
-                    <CreateLetter reset={reset} taskId={taskId} letterBody={letterBody}/>
+                    <Divider/>
+                    <CreateLetter reset={reset} taskId={taskId} letterBody={letterBody} attachments={attachments}/>
                 </div>
                 }
             </div>

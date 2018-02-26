@@ -17,4 +17,11 @@ export default new SimpleSchema({
         type: Date,
         optional: true,
     },
+    attachmentIds: {
+        type: Array,
+        optional: true
+    },
+    'attachmentIds.$': {
+        type: String,
+    },
 });
