@@ -2,6 +2,7 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
+import RolesEnum from '/imports/api/users/enums/roles';
 
 export default class AssigneeSelect extends React.Component {
     constructor() {
@@ -21,6 +22,11 @@ export default class AssigneeSelect extends React.Component {
 
     render() {
         const {options} = this.props;
+        const roles = Meteor.user().roles;
+
+        if (_.contains([RolesEnum.REP, RolesEnum.MANAGER], roles[0])) {
+            return (<div></div>);
+        }
 
         return (
             <div>
