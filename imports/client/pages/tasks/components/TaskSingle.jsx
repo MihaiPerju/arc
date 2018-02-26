@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import AssigneeSelect from './AssigneeSelect';
 
 export default class TaskSingle extends Component {
     constructor (props) {
@@ -22,33 +21,6 @@ export default class TaskSingle extends Component {
         selectTask(task);
     }
 
-    getOptions (users) {
-        if (!users) {
-            [];
-        }
-
-        let options = [];
-        for (user of users) {
-            let item = {
-                label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
-                value: user && user._id
-            };
-            options.push(item);
-        }
-        return options;
-    }
-
-    getFirstOption (task, options) {
-        if (task.assigneeId) {
-            for (option of options) {
-                if (option.value === task.assigneeId) {
-                    return [option];
-                }
-            }
-        }
-        return [{label: 'Unassigned'}];
-    }
-
     render () {
         const {task, active, currentTask} = this.props;
         const classes = classNames({
@@ -56,10 +28,6 @@ export default class TaskSingle extends Component {
             'open': task._id === currentTask,
             'bg--yellow': active
         });
-        const options = this.getOptions(task && task.facility && task.facility.users);
-        let userOptions = this.getFirstOption(task, options).concat(options);
-
-        console.log(task.facility);
 
         return (
             <div className={classes}
@@ -81,7 +49,6 @@ export default class TaskSingle extends Component {
                     <div className="right__side">
                         <div className="pacient-id text-blue">
                             {task.client && task.client._id}
-                            <AssigneeSelect taskId={task._id} options={userOptions}/>
                         </div>
                         <div className="financial-class">O/D</div>
                         <div className="time">11:20 am</div>

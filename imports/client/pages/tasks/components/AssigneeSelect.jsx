@@ -36,6 +36,7 @@ export default class AssigneeSelect extends React.Component {
 
 const schema = new SimpleSchema({
     assigneeId: {
+        label: 'Assign task to user: ',
         type: String
     }
 });
