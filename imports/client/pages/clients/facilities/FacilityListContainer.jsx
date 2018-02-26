@@ -88,7 +88,7 @@ export default class FacilityListContainer extends Pager {
         let selectFilters = [];
 
         if (selectionType === 'regionIds') {
-            selectFilters = [{regionIds: {$in: [selectedValue]}}];
+            selectFilters = [{regionId: {$in: [selectedValue]}}];
             this.setState({regionIds: {$in: [selectedValue]}});
             if (status) {
                 selectFilters.push({status});

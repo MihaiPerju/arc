@@ -102,7 +102,7 @@ export default class FacilityForm extends React.Component {
                         regionIds
                         &&
                         <div>
-                            <SelectSimple name="regionId" options={regionIds}/>
+                            <SelectField name="regionId" options={regionIds}/>
                             < ErrorField name="regionId"/>
                         </div>
                     }
