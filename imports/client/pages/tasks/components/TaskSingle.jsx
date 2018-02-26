@@ -59,6 +59,8 @@ export default class TaskSingle extends Component {
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
 
+        console.log(task.facility);
+
         return (
             <div className={classes}
                  onClick={this.onSelectTask.bind(this)}
@@ -79,6 +81,7 @@ export default class TaskSingle extends Component {
                     <div className="right__side">
                         <div className="pacient-id text-blue">
                             {task.client && task.client._id}
+                            <AssigneeSelect taskId={task._id} options={userOptions}/>
                         </div>
                         <div className="financial-class">O/D</div>
                         <div className="time">11:20 am</div>

@@ -11,7 +11,7 @@ export default LetterTemplates.createNamedQuery('listLetterTemplates', {
     body: 1,
     description: 1,
     keywords: 1,
-    category: 1
+    category: 1,
     content: 1,
     codes: {
         code: 1
