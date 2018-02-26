@@ -7,6 +7,7 @@ const Text = ({
                   id,
                   inputRef,
                   label,
+                  labelHidden,
                   name,
                   onChange,
                   placeholder,
@@ -16,7 +17,8 @@ const Text = ({
                   ...props
               }) =>
     <div {...filterDOMProps(props)}>
-        {label && (
+        {console.log(labelHidden)}
+        {label && !labelHidden && (
             <label htmlFor={id}>
                 {label}
             </label>

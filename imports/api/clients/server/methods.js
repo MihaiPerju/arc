@@ -51,7 +51,6 @@ Meteor.methods({
         const {logoPath} = Clients.findOne({_id: clientId});
 
         //Delete from local storage
-        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + logoPath);
         Uploads.remove({path: logoPath});
 
         Clients.update({_id: clientId}, {
@@ -59,6 +58,7 @@ Meteor.methods({
                 logoPath: null
             }
         });
+        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + logoPath);
     },
 
     'client.delete'(id) {

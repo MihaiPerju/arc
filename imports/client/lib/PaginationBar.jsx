@@ -5,9 +5,9 @@ export default class PaginationBar extends Component {
         super();
         this.state = {
             tooltip: false
-        }
+        };
         this.showTooltip = this.showTooltip.bind(this);
-        this.closeTooltip = this.closeTooltip.bind(this);        
+        this.closeTooltip = this.closeTooltip.bind(this);
     }
 
     showTooltip() {
@@ -23,16 +23,23 @@ export default class PaginationBar extends Component {
     }
 
     render() {
+        const {noAddButton} = this.props;
+        console.log(noAddButton);
         return (
             <div className="pagination-bar">
                 <div className="pagination-bar__wrapper">
-                    <div className="left__side text-dark-grey">1-12 <span className="text-light-grey">of</span> 275</div>
+                    <div className="left__side text-dark-grey">1-12 <span className="text-light-grey">of</span> 275
+                    </div>
                     <div className="btn-group">
                         <button className="btn-prev"><i className="icon-angle-left"/></button>
                         <button className="btn-next"><i className="icon-angle-right"/></button>
                     </div>
-                    <div className="toggle-form" onMouseEnter={this.showTooltip} onMouseLeave={this.closeTooltip}>+</div>
-                    {this.state.tooltip ? <Tooltip/> : null}                    
+                    {
+                        !noAddButton &&
+                        <div className="toggle-form" onMouseEnter={this.showTooltip} onMouseLeave={this.closeTooltip}>+
+                        </div>
+                    }
+                    {this.state.tooltip && !noAddButton && <Tooltip/>}
                 </div>
             </div>
         )
