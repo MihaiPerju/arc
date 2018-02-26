@@ -12,6 +12,7 @@ export default class CommentSingle extends React.Component {
 
     render() {
         const {comment} = this.props;
+        console.log(comment);
         const {author} = comment;
 
         return (

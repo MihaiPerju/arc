@@ -61,7 +61,6 @@ class LeftMenu extends Component {
 							{ name: "admin/user/list", label: "User management", icon: 'user-circle-o' },
 							{ name: "code/list", label: "Codes", icon: 'code-fork' },
 							{ name: "reports/list", label: "Reports", icon: 'file-text-o' },
-							{ name: "region/list", label: "Regions", icon: 'globe' },
 							{ name: "letter-templates/list", label: "Templates", icon: 'window-restore' },
 							{ name: "action/list", label: "Actions", icon: 'thumb-tack' }
 						]}/>

@@ -51,7 +51,6 @@ export default class CommentList extends Component {
         return (
             <Container>
                 <Comment.Group minimal>
-                    <Header as='h3' dividing>Comments</Header>
                     <div className="comment-block">
                         <AutoForm ref='comment' schema={schema} onSubmit={this.onSubmit}>
                             <div className="form-group">

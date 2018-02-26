@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
+import {getImagePath} from "../../../api/utils";
 
 class Header extends Component {
     constructor() {
@@ -100,7 +101,7 @@ class Header extends Component {
                                 <a href="">
                                     <span>{user.profile.firstName + " " + user.profile.lastName}</span>
                                     <div className="profile-img">
-                                        <img className="img-circle" src="/assets/img/user1.svg" alt=""/>
+                                        <img className="img-circle" src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"} alt=""/>
                                     </div>
                                 </a>
                             </div>
