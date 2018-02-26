@@ -34,12 +34,8 @@ export default class PaginationBar extends Component {
                         <button className="btn-prev"><i className="icon-angle-left"/></button>
                         <button className="btn-next"><i className="icon-angle-right"/></button>
                     </div>
-                    {
-                        !noAddButton &&
-                        <div className="toggle-form" onMouseEnter={this.showTooltip} onMouseLeave={this.closeTooltip}>+
-                        </div>
-                    }
-                    {this.state.tooltip && !noAddButton && <Tooltip/>}
+                    <div className="toggle-form" onClick={this.props.create} onMouseEnter={this.showTooltip} onMouseLeave={this.closeTooltip}>+</div>
+                    {this.state.tooltip && <Tooltip/>}
                 </div>
             </div>
         )

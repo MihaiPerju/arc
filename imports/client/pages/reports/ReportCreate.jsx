@@ -1,125 +1,91 @@
-import React from 'react';
-import { Container, Header, Divider, Button, Step } from 'semantic-ui-react';
-import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
-import schema from '/imports/api/reports/schema';
-import Roles from '/imports/api/users/enums/roles';
-import TaskFilterBuilder from './TaskFilterBuilder';
-import Notifier from '/imports/client/lib/Notifier';
-import { EJSON } from 'meteor/ejson';
-import ReportStepper from '/imports/client/pages/reports/components/ReportStepper';
+import React, {Component} from 'react';
 
-export default class ReportCreate extends React.Component {
+export default class ReportCreate extends Component {
     constructor () {
         super();
-
         this.state = {
-            hasGeneralInformation: false,
-            generalInformation: {},
-            allowedRoles: [{value: Roles.MANAGER, label: Roles.MANAGER}],
+            filter: false
         };
+        this.addFilter = this.addFilter.bind(this);
+        this.closeFilter = this.closeFilter.bind(this);
     }
 
-    goNextStep (generalInformation) {
+    addFilter() {
         this.setState({
-            hasGeneralInformation: true,
-            generalInformation
-        });
+            filter: true
+        })
     }
 
-    goPreviousStep () {
+    closeFilter() {
         this.setState({
-            hasGeneralInformation: false
-        });
-    }
-
-    onSubmitFilters (filters, components, filterBuilderData) {
-        //Setting state and creating/editing report
-        this.setState({
-            components,
-            filterBuilderData
-        });
-
-        const {generalInformation} = this.state;
-        _.extend(generalInformation, {mongoFilters: EJSON.stringify(filters), filterBuilderData});
-
-        Meteor.call('report.create', generalInformation, (err) => {
-            if (!err) {
-                Notifier.success('Report created');
-                FlowRouter.go('/reports/list');
-            } else {
-                Notifier.error(err.reason);
-            }
-        });
-    }
-
-    componentWillMount () {
-        const facilityId = FlowRouter.current().params.facilityId;
-        if (facilityId) {
-            // autocomplete if facilityId in params
-            this.setState({
-                filterBuilderData: {
-                    facilityId
-                },
-                components: {
-                    facilityId: {
-                        isActive: true,
-                        name: 'facilityId'
-                    }
-                }
-            });
-        }
+            filter: false
+        })
     }
 
     render () {
-        const {hasGeneralInformation, allowedRoles, generalInformation, components, filterBuilderData} = this.state;
+        const { filter } = this.state;
 
         return (
-            <Container className="page-container">
-                <div>
-                    <Header as="h2" textAlign="center">
-                        Create report
-                    </Header>
-
-                    <ReportStepper hasGeneralInformation={hasGeneralInformation}/>
-
-                    {hasGeneralInformation
-                        ?
-                        <div>
-                            <TaskFilterBuilder
-                                filterBuilderData={filterBuilderData}
-                                components={components}
-                                onSubmitFilters={this.onSubmitFilters.bind(this)}/>
-
-                            <Divider/>
-
-                            <Button
-                                fluid
-                                secondary
-                                onClick={this.goPreviousStep.bind(this)}>
-                                Back
-                            </Button>
+            <div className="create-form">
+                <form action="">
+                    <div className="create-form__bar">
+                        <button className="btn-add">+ Add report</button>
+                        <div className="btn-group">
+                            <button className="btn-cancel">Cancel</button>
+                            <button className="btn--green">Confirm & save</button>
                         </div>
-                        :
-                        <AutoForm
-                            model={generalInformation}
-                            schema={schema}
-                            onSubmit={this.goNextStep.bind(this)} ref="form">
-
-                            <AutoField name="name"/>
-                            <ErrorField name="name"/>
-
-                            <SelectField name="allowedRoles"
-                                         options={allowedRoles}/>
-
-                            <Divider/>
-
-                            <Button primary fluid type="submit">
-                                Next
-                            </Button>
-                        </AutoForm>
-                    }
-                </div>
-            </Container>
+                    </div>
+                    <div className="create-form__wrapper">
+                        <div className="action-block">
+                            <div className="header__block">
+                                <div className="title-block text-uppercase">general data</div>
+                            </div>
+                            <div className="form-wrapper">
+                                <input type="text" placeholder="Report name"/>
+                            </div>
+                            <div className="check-group">
+                                <input type="checkbox" id="c1"/>
+                                <label htmlFor="c1">Allow manager role</label>
+                            </div>
+                        </div>
+                        <div className="action-block">
+                            <div className="header__block">
+                                <div className="title-block text-uppercase">Create fillters for report</div>
+                            </div>
+                            <div className="label-filter text-light-grey">Extracted filters ()</div>
+                        </div>
+                        {
+                            filter && <FilterGroup close={this.closeFilter}/>
+                        }
+                        <div className="add-filter text-center" onClick={this.addFilter}>+ Add filter</div>
+                    </div>
+                </form>
+            </div>
         );
+    }
+}
+
+class FilterGroup extends Component {
+    render() {
+        const { close } = this.props;
+
+        return (
+            <div className="select-group">
+                <div className="row-select">
+                    <div className="type">Filter 1</div>
+                    <div className="btn-delete" onClick={close}>Delete</div>
+                </div>
+                <div className="form-wrapper">
+                    <select name="filter">
+                        <option value="">Select filter</option>
+                    </select>
+                </div>
+                <div className="form-wrapper">
+                    <select name="filter">
+                        <option value="">Name match</option>
+                    </select>
+                </div>
+            </div>
+        )
     }
 }

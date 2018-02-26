@@ -4,6 +4,7 @@ import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import ReportContent from './ReportContent.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import ReportCreate from './ReportCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/reports/queries/reportsList";
 import Loading from '/imports/client/lib/ui/Loading';
@@ -15,9 +16,11 @@ class ReportListContainer extends Component {
         this.state = {
             reportsSelected: [],
             currentReport: null,
-            filter: false
+            filter: false,
+            create: false
         };
         this.showFilterBar = this.showFilterBar.bind(this);
+        this.createForm = this.createForm.bind(this);
     }
 
     setReport = (_id) => {
@@ -46,9 +49,15 @@ class ReportListContainer extends Component {
         })
     }
 
+    createForm() {
+        this.setState({
+            create: true
+        })
+    }
+
     render() {
         const {data, loading, error} = this.props;
-        const {reportsSelected, currentReport} = this.state;
+        const {reportsSelected, currentReport, create} = this.state;
         const report = objectFromArray(data, currentReport);
 
         if (loading) {
@@ -61,7 +70,9 @@ class ReportListContainer extends Component {
 
         return (
             <div className="cc-container">
-                <div className={currentReport ? "left__side" : "left__side full__width"}>
+                <div className={
+                    currentReport || create ? "left__side" : "left__side full__width"
+                }>
                     <SearchBar btnGroup={reportsSelected.length} filter={this.showFilterBar}/>
                     {this.state.filter ? <FilterBar/> : null}
                     <ReportList
@@ -72,11 +83,13 @@ class ReportListContainer extends Component {
                         setReport={this.setReport}
                         reports={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar create={this.createForm}/>
                 </div>
                 {
                     currentReport ? (
                         <RightSide report={report}/>
+                    ) : create ? (
+                        <RightSide create/>
                     ) : null
                 }
             </div>
@@ -99,10 +112,16 @@ class RightSide extends Component {
     }
 
     render() {
-        const {report} = this.props;
+        const {report, create} = this.props;
         return (
             <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <ReportContent report={report}/>
+                {
+                    create ? (
+                        <ReportCreate/>
+                    ) : (
+                        <ReportContent report={report}/>
+                    )
+                }
             </div>
         )
     }
