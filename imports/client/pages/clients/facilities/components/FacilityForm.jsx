@@ -4,7 +4,7 @@ import RegionListQuery from '/imports/api/regions/queries/regionList.js';
 import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
 import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
-import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
+import SelectSimple from '/imports/client/lib/uniforms/SelectSimple.jsx';
 import SelectUsersContainer from './SelectUsersContainer';
 import { Container, Divider, Button } from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
@@ -53,6 +53,8 @@ export default class FacilityForm extends React.Component {
         const {model, purpose} = this.props;
         const {regions} = this.state;
         const regionIds = this.getRegionOptions(regions);
+        //const defaultRegion = regionIds[0].value;
+        //console.log(defaultRegion);
 
         const statuses = this.getOptions(FacilityStatusEnum);
         const schema = FacilitySchema.omit('clientId', 'createdAt');
@@ -100,8 +102,8 @@ export default class FacilityForm extends React.Component {
                         regionIds
                         &&
                         <div>
-                            <SelectMulti name="regionIds" options={regionIds}/>
-                            < ErrorField name="regionIds"/>
+                            <SelectSimple name="regionId" options={regionIds}/>
+                            < ErrorField name="regionId"/>
                         </div>
                     }
 

@@ -43,15 +43,6 @@ export default class FacilityListContainer extends Pager {
                 })
             }
         })
-        /*
-        Meteor.call('regions.get', (err, regions) => {
-            if (!err) {
-                this.setState({regions});
-            } else {
-                Notifier.error("Couldn't get regions");
-            }
-        })
-        */
     }
 
     handleSearch = (searchValue) => {
