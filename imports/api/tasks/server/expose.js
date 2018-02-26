@@ -25,7 +25,8 @@ TaskListQuery.expose({
                 filters: {
                     facilityId: {
                         $in: userFacilitiesArr
-                    }
+                    },
+                    assigneeId: userId
                 }
             });
         }
