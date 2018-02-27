@@ -7,6 +7,18 @@ export default class ReportContent extends Component {
         super();
     }
 
+    componentDidMount() {
+        this.count.bind(this);
+    }
+
+    count = () => {
+        const parent = document.getElementById('table');
+        const sameClass = parent.getElementByClassName('table-container');
+        for(i=0; i< sameClass; i++) {
+            console.log('sameClass.length')            
+        }
+    }
+
     render() {
         const {report, schedule} = this.props;
         const mainTable = {
@@ -39,6 +51,26 @@ export default class ReportContent extends Component {
                     { title: 'none' },
                     { title: 'none' }
                 ]
+            },
+            {
+                header: 'Discarge date',
+                row: [
+                    { title: 'none' },
+                    { title: 'none' },
+                    { title: 'none' },
+                    { title: 'none' },
+                    { title: 'none' }
+                ]
+            },
+            {
+                header: 'Discarge date',
+                row: [
+                    { title: 'none' },
+                    { title: 'none' },
+                    { title: 'none' },
+                    { title: 'none' },
+                    { title: 'none' }
+                ]
             }
         ];
 
@@ -53,24 +85,16 @@ export default class ReportContent extends Component {
                             rows={mainTable.row}
                         />
                     </div>
-                    <div className="right-side">
+                    <div className="right-side" id="table">
                         {
                             tableList.map(function(table, index){
                                 return (
-                                    [0].indexOf(index) > -1 ? (
-                                        <TableReport
-                                            fixed
-                                            key={index}
-                                            title={table.header}
-                                            rows={table.row}
-                                        />
-                                    ) : (
-                                        <TableReport
-                                            key={index}
-                                            title={table.header}
-                                            rows={table.row}
-                                        />
-                                    )
+                                    <TableReport
+                                        center
+                                        key={index}
+                                        title={table.header}
+                                        rows={table.row}
+                                    />
                                 )
                             })
                         }

@@ -3,10 +3,10 @@ import classNames from 'classnames';
 
 export default class TableReport extends Component {
     render() {        
-        const { title, rows, fixed } = this.props;
+        const { title, rows, center } = this.props;
         const classes = classNames({
             'table-container': true,
-            'fixed-container': fixed
+            'text-center': center
         });
 
         return (
