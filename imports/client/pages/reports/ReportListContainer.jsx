@@ -74,7 +74,6 @@ class ReportListContainer extends Component {
                     currentReport || create ? "left__side" : "left__side full__width"
                 }>
                     <SearchBar btnGroup={reportsSelected.length} filter={this.showFilterBar}/>
-                    {this.state.filter ? <FilterBar/> : null}
                     <ReportList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         reportsSelected={reportsSelected}

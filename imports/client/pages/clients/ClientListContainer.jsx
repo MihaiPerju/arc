@@ -100,7 +100,6 @@ class ClientContainer extends Component {
                     currentClient ? "left__side" : create ? "left__side" : "left__side full__width"
                 }>
                     <SearchBar btnGroup={clientsSelected.length} filter={this.showFilterBar}/>
-                    {this.state.filter ? <FilterBar/> : null}
                     <ClientList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         setClient={this.setClient.bind(this)}
