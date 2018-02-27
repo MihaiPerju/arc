@@ -50,10 +50,12 @@ class ReportListContainer extends Component {
     }
 
     createForm() {
-        this.setState({
-            create: true
-        })
+        this.setState({create: true})
     }
+
+    closeForm = () => {
+        this.setState({create: false});
+    };
 
     render() {
         const {data, loading, error} = this.props;
@@ -82,13 +84,13 @@ class ReportListContainer extends Component {
                         setReport={this.setReport}
                         reports={data}
                     />
-                    <PaginationBar create={this.createForm}/>
+                    <PaginationBar close={this.closeForm} create={this.createForm}/>
                 </div>
                 {
                     currentReport ? (
                         <RightSide report={report}/>
                     ) : create ? (
-                        <RightSide create/>
+                        <RightSide close={this.closeForm} create/>
                     ) : null
                 }
             </div>
@@ -111,12 +113,12 @@ class RightSide extends Component {
     }
 
     render() {
-        const {report, create} = this.props;
+        const {report, create, close} = this.props;
         return (
             <div className={this.state.fade ? "right__side in" : "right__side"}>
                 {
                     create ? (
-                        <ReportCreate/>
+                        <ReportCreate close={close}/>
                     ) : (
                         <ReportContent report={report}/>
                     )

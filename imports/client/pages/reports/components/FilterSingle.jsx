@@ -28,10 +28,10 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isDate(name, TaskReportFields)) {
             return (
                 <div>
-                    <AutoField name={`${name}Start`}/>
+                    <AutoField placeholder="Select minimum date" noLabel={true} name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
-                    <AutoField name={`${name}End`}/>
+                    <AutoField placeholder="Select maximum date" noLabel={true} name={`${name}End`}/>
                     <ErrorField name={`${name}End`}/>
                 </div>
             )
@@ -72,15 +72,10 @@ export default class FiltersSingle extends React.Component {
         const {name} = this.props;
         return (
             <div>
-                {/*<Button onClick={this.deleteFilter.bind(this, name)}*/}
-                {/*attached='top'*/}
-                {/*color="red">*/}
-                {/*Delete*/}
-                {/*</Button>*/}
                 <div className="select-group">
                     <div className="row-select">
                         <div className="type">{name}</div>
-                        <div className="btn-delete">Delete</div>
+                        <div onClick={this.deleteFilter.bind(this, name)} className="btn-delete">Delete</div>
                     </div>
                     <div className="form-wrapper">
                         {
