@@ -1,0 +1,129 @@
+.create-form {
+    position: relative;
+    padding-top: 55px;
+    .create-form__bar {
+        display: flex;
+        position: absolute;
+        background: $color-white;
+        justify-content: space-between;
+        padding: 7px 30px 8px 10px;
+        top: -15px;
+        left: -14px;
+        right: -15px;
+        border-bottom: 1px #e1e1e1 solid;
+        box-shadow: 0 1px 3px 0 #ebe7e7;
+        .btn-add {
+            color: $dark-grey
+        }
+        .btn-cancel {
+            color: $red;
+            &:hover {
+                color: #d02121;
+            }
+        }
+    }
+    .action-block {
+        .form-wrapper {
+            padding-top: 8px;
+        }
+    }
+    .form-wrapper {
+        input {
+            background: $color-white;
+        }
+    }
+    .add-filter {
+        background: rgba($color-white, 0.5);
+        cursor: pointer;
+        padding: 17px 15px;
+        border-radius: 3px;
+        transition: background $transition300;
+        margin-top: 25px;
+        &:hover {
+            background: $color-white;
+        }
+    }
+    .label-filter {
+        background: #d7d7d7;
+        border-radius: 3px;
+        padding: 17px 15px;
+        margin-top: 10px;
+    }
+    .check-group {
+        margin-top: 20px;
+        padding-left: 15px;
+        input{
+            display: none;
+            & + label {
+                position: relative;
+                padding-left: 25px;
+                cursor: pointer;
+                user-select: none;
+                &:before, &:after {
+                    position: absolute;
+                    left: 0;
+                }
+                &:before {
+                    content: ' ';
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50%;
+                    border: 2px #c2c2c2 solid;
+                    opacity: 1;
+                    top: 1px;
+                }
+                &:after {
+                    content: '\f05d';
+                    font-family: $font-icon;
+                    font-size: 1.7rem;
+                    line-height: 1.7rem;
+                    color: $green;
+                    opacity: 0;
+                    top: 0;
+                }
+            }
+            &:checked {
+                & + label {
+                    &:before {
+                        opacity: 0;
+                    }
+                    &:after {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+    }
+    .select-group {
+        border-bottom: 1px #e1e1e1 solid;
+        padding-bottom: 5px;
+        &:first-of-type {
+            border-top: 1px #e1e1e1 solid;
+        }
+        .row-select {
+            display: flex;
+            justify-content: space-between;
+            padding-left: 15px;
+        }
+        .type {
+            padding: 10px 0;
+        }
+        .btn-delete {
+            cursor: pointer;
+            color: $red;
+            padding: 10px 15px;
+            &:hover {
+                color: #d02121;
+            }
+        }
+        .form-wrapper {
+            margin-bottom: 10px;
+            select {
+                border-radius: 3px;
+                border: 1px #ebebeb solid;
+                background: $color-white;
+                color: $light-grey;
+            }
+        }
+    }
+}

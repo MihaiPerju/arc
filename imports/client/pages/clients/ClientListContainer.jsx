@@ -4,6 +4,7 @@ import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ClientList from './components/ClientList.jsx';
 import ClientContent from './ClientContent.jsx';
+import ClientCreate from './ClientCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "../../../api/clients/queries/listClients";
 import Loading from '/imports/client/lib/ui/Loading';
@@ -14,10 +15,13 @@ class ClientContainer extends Component {
         this.state = {
             currentClient: null,
             filter: false,
-            clientsSelected: []
+            clientsSelected: [],
+            create: false
         };
         this.renderRightSide = this.renderRightSide.bind(this);
         this.showFilterBar = this.showFilterBar.bind(this);
+        this.createForm = this.createForm.bind(this);
+        this.closeForm = this.closeForm.bind(this);
     }
 
     setClient = (_id) => {
@@ -43,7 +47,10 @@ class ClientContainer extends Component {
         } else {
             clientsSelected.push(_id);
         }
-        this.setState({clientsSelected});
+        this.setState({
+            clientsSelected,
+            create: false
+        });
     }
 
     showFilterBar() {
@@ -62,9 +69,22 @@ class ClientContainer extends Component {
         }
     }
 
+    createForm() {
+        this.setState({
+            create: true,
+            rightSide: true
+        });
+    }
+
+    closeForm() {
+        this.setState({
+            create: false
+        })
+    }
+
     render() {
         const {data, loading, error} = this.props;
-        const {clientsSelected, currentClient} = this.state;
+        const {clientsSelected, currentClient, create} = this.state;
         const client = this.getClient();
 
         if (loading) {
@@ -76,7 +96,9 @@ class ClientContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={currentClient ? "left__side" : "left__side full__width"}>
+                <div className={
+                    currentClient ? "left__side" : create ? "left__side" : "left__side full__width"
+                }>
                     <SearchBar btnGroup={clientsSelected.length} filter={this.showFilterBar}/>
                     {this.state.filter ? <FilterBar/> : null}
                     <ClientList
@@ -87,11 +109,16 @@ class ClientContainer extends Component {
                         currentClient={currentClient}
                         clients={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar
+                        create={this.createForm}
+                        closeForm={this.closeForm}
+                    />
                 </div>
                 {
                     currentClient ? (
                         <RightSide client={client}/>
+                    ) : create ? (
+                        <RightSide create={create} />
                     ) : null
                 }
             </div>
@@ -114,10 +141,18 @@ class RightSide extends Component {
     }
 
     render() {
-        const {client} = this.props;
+        const {client, create} = this.props;
+        const {fade} = this.state;
+
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <ClientContent client={client}/>
+            <div className={fade ? "right__side in" : "right__side"}>
+                {
+                    create ? (                        
+                        <ClientCreate/>
+                    ) : (
+                        <ClientContent client={client}/>
+                    )
+                }
             </div>
         )
     }
