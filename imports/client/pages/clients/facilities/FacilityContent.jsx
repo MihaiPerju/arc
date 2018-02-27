@@ -6,22 +6,24 @@ import PaymentBlock from './components/FacilityContent/PaymentBlock';
 
 export default class FacilityContent extends Component {
     render() {
+        const {facility} = this.props;
+        // console.log(facility);
         return (
             <div className="main-content facility-content">
                 <div className="breadcrumb">
                     <ul>
                         <li>
-                            <a href={FlowRouter.url('/client/list')}>Millenium Insurance</a>
+                            <a href={FlowRouter.url('/client/list')}>Clients</a>
                         </li>
                         <li>
-                            <span>Facillity name 1</span>
+                            <span>{facility.name}</span>
                         </li>
                     </ul>
                 </div>
-                <FacilityContentHeader/>
-                <PlacementBlock/>
-                <InventoryBlock/>
-                <PaymentBlock/>
+                <FacilityContentHeader facility={facility}/>
+                <PlacementBlock facility={facility}/>
+                <InventoryBlock facility={facility}/>
+                <PaymentBlock facility={facility}/>
             </div>
         )
     }

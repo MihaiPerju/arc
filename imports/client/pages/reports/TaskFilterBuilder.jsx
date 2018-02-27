@@ -169,7 +169,7 @@ export default class TaskFilterBuilder extends React.Component {
                             Finish
                         </Button>
                         <Segment tertiary>
-                                <div>Extracted filters:{JSON.stringify(filters)}</div>
+                            <div>Extracted filters:{JSON.stringify(filters)}</div>
                         </Segment>
                     </AutoForm>
                 </Container>

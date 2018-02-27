@@ -2,6 +2,7 @@ import SimpleSchema from 'simpl-schema';
 import StateEnum from './enums/states';
 import {Substates} from './enums/substates';
 import ActionSchema from './schemas/actionSchema.js';
+import insuranceSchema from '/imports/api/facilities/schemas/insuranceSchema';
 
 export default new SimpleSchema({
     createdAt: {
@@ -48,41 +49,12 @@ export default new SimpleSchema({
         type: SimpleSchema.Integer,
         optional: true
     },
-    insName: {
-        type: String,
+    insurances: {
+        type: Array,
         optional: true
     },
-    insName2: {
-        type: String,
-        optional: true
-    },
-    insName3: {
-        type: String,
-        optional: true
-    },
-    insCode: {
-        type: SimpleSchema.Integer,
-        optional: true
-    },
-    insCode2: {
-        type: SimpleSchema.Integer,
-        optional: true
-    },
-    insCode3: {
-        type: SimpleSchema.Integer,
-        optional: true
-    },
-    insBal: {
-        type: SimpleSchema.Integer,
-        optional: true
-    },
-    insBal2: {
-        type: SimpleSchema.Integer,
-        optional: true
-    },
-    insBal3: {
-        type: SimpleSchema.Integer,
-        optional: true
+    'insurances.$': {
+        type: insuranceSchema
     },
     state: {
         type: String,

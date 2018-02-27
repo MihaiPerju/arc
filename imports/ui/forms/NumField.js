@@ -1,33 +1,34 @@
-import React          from 'react';
-import connectField   from 'uniforms/connectField';
+import React from 'react';
+import connectField from 'uniforms/connectField';
 import filterDOMProps from 'uniforms/filterDOMProps';
-import {Component}    from 'react';
+import {Component} from 'react';
 
 const noneIfNaN = x => isNaN(x) ? undefined : x;
 
 const Num_ = ({
-    decimal,
-    disabled,
-    id,
-    inputRef,
-    label,
-    max,
-    min,
-    name,
-    onChange,
-    placeholder,
-    step,
-    value,
-    ...props
-}) =>
+                  decimal,
+                  disabled,
+                  id,
+                  inputRef,
+                  label,
+                  max,
+                  min,
+                  name,
+                  onChange,
+                  placeholder,
+                  step,
+                  value,
+                  backgroundStyle,
+                  ...props
+              }) =>
     <div {...filterDOMProps(props)}>
         {label && (
             <label htmlFor={id}>
                 {label}
             </label>
         )}
-
         <input
+            style={backgroundStyle}
             disabled={disabled}
             id={id}
             max={max}
@@ -45,7 +46,7 @@ const Num_ = ({
 
 // NOTE: React < 16 workaround. Make it optional?
 class Num extends Component {
-    constructor () {
+    constructor() {
         super(...arguments);
 
         this.state = {value: '' + this.props.value};
@@ -53,7 +54,7 @@ class Num extends Component {
         this.onChange = this.onChange.bind(this);
     }
 
-    componentWillReceiveProps ({decimal, value}) {
+    componentWillReceiveProps({decimal, value}) {
         const parse = decimal ? parseFloat : parseInt;
 
         if (noneIfNaN(parse(value)) !== noneIfNaN(parse(this.state.value.replace(/[.,]+$/, '')))) {
@@ -61,14 +62,14 @@ class Num extends Component {
         }
     }
 
-    onChange ({target: {value}}) {
+    onChange({target: {value}}) {
         const change = value.replace(/[^\d.,-]/g, '');
 
         this.setState({value: change});
         this.props.onChange(noneIfNaN((this.props.decimal ? parseFloat : parseInt)(change)));
     }
 
-    render () {
+    render() {
         return Num_({...this.props, onChange: this.onChange, value: this.state.value});
     }
 }

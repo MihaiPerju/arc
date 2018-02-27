@@ -153,7 +153,7 @@ class TaskListContainer extends Pager {
                         checkTask={this.checkTask}
                         data={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar noAddButton={true}/>
                 </div>
                 {
                     taskId && <RightSide update={this.update} task={task}/>
