@@ -8,7 +8,7 @@ export default class ReportContent extends Component {
     }
 
     render() {
-        const {report} = this.props;
+        const {report, schedule} = this.props;
         const mainTable = {
             header: 'Task name',
             row: [
@@ -44,7 +44,7 @@ export default class ReportContent extends Component {
 
         return (
             <div className="main-content report-content">
-                <ReportHeader report={report}/>
+                <ReportHeader report={report} schedule={schedule}/>
 
                 <div className="table-list">
                     <div className="left-side">
