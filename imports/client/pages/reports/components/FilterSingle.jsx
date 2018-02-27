@@ -21,7 +21,7 @@ export default class FiltersSingle extends React.Component {
     renderWidget(name, TaskReportFields) {
         if (ReportsService.isEnum(name, TaskReportFields)) {
             return <div>
-                <AutoField name={name}/>
+                <AutoField placeholder="Select filter" noLabel={true} name={name}/>
                 <ErrorField name={name}/>
             </div>
         }
@@ -51,7 +51,7 @@ export default class FiltersSingle extends React.Component {
 
         if (ReportsService.isLink(name, TaskReportFields)) {
             return (
-                <div>
+                <div className="check-group">
                     <SelectField name={name} options={this.getOptions(name)}/>
                 </div>
             )
