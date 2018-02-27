@@ -91,25 +91,6 @@ export default class TaskFilterBuilder extends React.Component {
         });
     }
 
-    selectFilter(e, data) {
-        const {components, schemaOptions} = this.state;
-
-        components[data.value] = {
-            isActive: true,
-            name: data.value
-        };
-
-        schemaOptions.map((option) => {
-            if (option.text === data.value) {
-                schemaOptions.splice(schemaOptions.indexOf(option), 1);
-            }
-        });
-        this.setState({
-            components,
-            schemaOptions
-        });
-    }
-
     deleteFilter = (name) => {
         const {components, schemaOptions} = this.state;
 
@@ -162,8 +143,6 @@ export default class TaskFilterBuilder extends React.Component {
     render() {
         const {filters, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
         const {filterBuilderData} = this.props;
-
-        console.log(schemaOptions);
 
         return (
             <main className="cc-main">
