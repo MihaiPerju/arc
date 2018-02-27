@@ -36,7 +36,6 @@ export default class ActionBlock extends Component {
 
     render() {
         const {task} = this.props;
-        console.log(task);
 
         const componentConfig = {
             postUrl: `/uploads/task-pdf/` + task._id + '/' + getToken()
@@ -46,7 +45,7 @@ export default class ActionBlock extends Component {
             complete(file) {
                 Notifier.success('Added');
                 this.removeFile(file);
-                that.getTask();
+                that.props.update();
             },
             acceptedFiles: '.pdf'
         };

@@ -33,24 +33,24 @@ class LetterCreateContainer extends React.Component {
 
 
     render() {
-        const {taskId, selectedTemplate} = this.props;
-        console.log(selectedTemplate);
+        const {taskId, selectedTemplate, reset} = this.props;
         const {keywords, body} = selectedTemplate;
-        // const model = {letterTemplate: null};
 
         return (
-            <div className="letter-template">
-                <div className="left-col">
-                    <GenerateLetterTemplateInputs
-                        templateKeywords={keywords}
-                        onChange={this.updateState}/>
-                </div>
-                <div className="right-col">
-                    <LetterTemplatePreview
-                        taskId={taskId}
-                        letterTemplateBody={body}
-                        parentState={this.state}/>
-                </div>
+            <div>
+                <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>
+                    <div className="left-col">
+                        <GenerateLetterTemplateInputs
+                            templateKeywords={keywords}
+                            onChange={this.updateState}/>
+                    </div>
+                    <div className="right-col">
+                        <LetterTemplatePreview
+                            reset={reset}
+                            taskId={taskId}
+                            letterTemplateBody={body}
+                            parentState={this.state}/>
+                    </div>
             </div>
         );
     }
