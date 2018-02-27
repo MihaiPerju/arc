@@ -10,40 +10,30 @@ export default class ReportCreate extends Component {
     constructor() {
         super();
         this.state = {
-            hasGeneralInformation: true,
+            hasGeneralInformation: false,
             generalInformation: {},
             allowedRoles: [{value: Roles.MANAGER, label: Roles.MANAGER}],
             filterBuilderData: {},
             components: {},
-            filter: true,
+            filter: false,
         };
     }
-
-    addFilter = () => {
-        this.setState({
-            filter: true
-        })
-    };
-
-    closeFilter = () => {
-        this.setState({
-            filter: false
-        })
-    };
 
     //When changing name or role of the filter
     onChange = (field, value) => {
         let {generalInformation} = this.state;
 
         //Not allowing to pick up filters if we don't have a name
-        if (field === 'name' && value) {
-            this.setState({
-                hasGeneralInformation: true,
-            })
-        } else {
-            this.setState({
-                hasGeneralInformation: false
-            })
+        if (field === 'name') {
+            if (value) {
+                this.setState({
+                    hasGeneralInformation: true,
+                })
+            } else {
+                this.setState({
+                    hasGeneralInformation: false
+                })
+            }
         }
         const newInformation = {};
         newInformation[field] = value;
@@ -53,6 +43,7 @@ export default class ReportCreate extends Component {
     };
 
     onSubmitFilters = (filters, components, filterBuilderData) => {
+        const {close} = this.props;
         //Setting state and creating/editing report
         this.setState({
             components,
@@ -62,62 +53,58 @@ export default class ReportCreate extends Component {
         const {generalInformation} = this.state;
         _.extend(generalInformation, {mongoFilters: EJSON.stringify(filters), filterBuilderData});
 
-        // Meteor.call('report.create', generalInformation, (err) => {
-        //     if (!err) {
-        //         Notifier.success('Report created');
-        //         FlowRouter.go('/reports/list');
-        //     } else {
-        //         Notifier.error(err.reason);
-        //     }
-        // });
+        Meteor.call('report.create', generalInformation, (err) => {
+            if (!err) {
+                Notifier.success('Report created');
+                close();
+            } else {
+                Notifier.error(err.reason);
+            }
+        });
+    };
+
+    finish = () => {
+        const filterBuilder = this.refs.filterBuilder;
+        const filterForm = filterBuilder.refs.filters;
+        filterForm.submit();
+    };
+
+    onCancel = () => {
+        const {close} = this.props;
+        close();
     };
 
     render() {
-        const {filter, hasGeneralInformation, components, filterBuilderData} = this.state;
+        const {hasGeneralInformation, components, filterBuilderData} = this.state;
         const allowedRoles = [{value: Roles.MANAGER, label: "Allow " + Roles.MANAGER + " role"}];
 
         return (
             <div className="create-form">
-                <form action="">
-                    {/*Upper bar*/}
-                    <div className="create-form__bar">
-                        <button className="btn-add">+ Add report</button>
-                        <div className="btn-group">
-                            <button className="btn-cancel">Cancel</button>
-                            <button className="btn--green">Confirm & save</button>
-                        </div>
-                    </div>
-
-                    {/*Form with general data and filters*/}
-                    <div className="create-form__wrapper">
-                        {/*General data*/}
-                        <div className="action-block">
-                            <div className="header__block">
-                                <div className="title-block text-uppercase">general data</div>
-                            </div>
-                            <AutoForm onChange={this.onChange}
-                                      ref="generalDataForm"
-                                      schema={schema}>
-                                <div className="form-wrapper">
-                                    <AutoField placeholder="Report name" name="name"/>
-                                    <ErrorField name="name"/>
-                                </div>
-
-                                <div className="check-group">
-                                    <SelectField options={allowedRoles}
-                                                 name="allowedRoles"
-                                                 ref="allowedRoles"/>
-                                </div>
-                            </AutoForm>
-                        </div>
+                {/*Upper bar*/}
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Add report</button>
+                    <div className="btn-group">
+                        <button onClick={this.onCancel} className="btn-cancel">Cancel</button>
                         {
                             hasGeneralInformation &&
-                            //Filters section
-                            <div className="action-block">
-                                <div className="header__block">
-                                    <div className="title-block text-uppercase">Create fillters for report</div>
-                                </div>
-                                <div className="label-filter text-light-grey">Extracted filters ()</div>
+                            <button onClick={this.finish} className="btn--green">Confirm & save</button>
+                        }
+                    </div>
+                </div>
+
+                {/*Form with general data and filters*/}
+                <div className="create-form__wrapper">
+                    {/*General data*/}
+                    <div className="action-block">
+                        <div className="header__block">
+                            <div className="title-block text-uppercase">general data</div>
+                        </div>
+                        <AutoForm onChange={this.onChange}
+                                  ref="generalDataForm"
+                                  schema={schema}>
+                            <div className="form-wrapper">
+                                <AutoField placeholder="Report name" name="name"/>
+                                <ErrorField name="name"/>
                             </div>
                         }
                         {
@@ -133,8 +120,33 @@ export default class ReportCreate extends Component {
                         {/*hasGeneralInformation &&*/}
                         {/*<div className="add-filter text-center" onClick={this.addFilter}>+ Add filter</div>*/}
                         {/*}*/}
+
+                            <div className="check-group">
+                                <SelectField options={allowedRoles}
+                                             name="allowedRoles"
+                                             ref="allowedRoles"/>
+                            </div>
+                        </AutoForm>
                     </div>
-                </form>
+                    {
+                        hasGeneralInformation &&
+                        //Filters section
+                        <div className="action-block">
+                            <div className="header__block">
+                                <div className="title-block text-uppercase">Create fillters for report</div>
+                            </div>
+                        </div>
+                    }
+                    {
+                        //Filter Builder with widgets
+                        hasGeneralInformation &&
+                        <TaskFilterBuilder
+                            onSubmitFilters={this.onSubmitFilters.bind(this)}
+                            filterBuilderData={filterBuilderData}
+                            components={components}
+                            ref="filterBuilder"/>
+                    }
+                </div>
             </div>
         );
     }

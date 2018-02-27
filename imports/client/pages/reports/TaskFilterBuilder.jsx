@@ -145,36 +145,35 @@ export default class TaskFilterBuilder extends React.Component {
         const {filterBuilderData} = this.props;
 
         return (
-            <main className="cc-main">
-                <AutoForm
-                    model={filterBuilderData}
-                    schema={schema}
-                    onSubmit={this.onSubmit.bind(this)}
-                    ref="form">
-                    {
-                        _.map(components, (item) => {
-                            return item.isActive &&
-                                <FilterSingle
-                                    assigneeIdOptions={assigneeOptions}
-                                    facilityIdOptions={facilityOptions}
-                                    deleteFilter={this.deleteFilter}
-                                    name={item.name}
-                                />
-                        })
-                    }
-                    <Button primary fluid type="submit">
-                        Finish
-                    </Button>
-                    <Segment tertiary>
-                        <div>Extracted filters:{JSON.stringify(filters)}</div>
-                    </Segment>
-                </AutoForm>
-                <div className="add-filter text-center">
-                    <AutoForm ref="filterSelect" onChange={this.createFilter} schema={filterSchema}>
-                        <SelectField options={schemaOptions} name="filter"/>
+            <div>
+                <main className="cc-main">
+                    <AutoForm
+                        model={filterBuilderData}
+                        schema={schema}
+                        onSubmit={this.onSubmit.bind(this)}
+                        ref="filters">
+                        {
+                            _.map(components, (item) => {
+                                return item.isActive &&
+                                    <FilterSingle
+                                        assigneeIdOptions={assigneeOptions}
+                                        facilityIdOptions={facilityOptions}
+                                        deleteFilter={this.deleteFilter}
+                                        name={item.name}
+                                    />
+                            })
+                        }
+                        {/*Component for showing filters extracted*/}
+                        {/*<div className="label-filter text-light-grey">Extracted filters:{JSON.stringify(filters)}</div>*/}
                     </AutoForm>
-                </div>
-            </main>
+                    <div className="add-filter text-center">
+                        <AutoForm ref="filterSelect" onChange={this.createFilter} schema={filterSchema}>
+                            <SelectField options={schemaOptions} name="filter"/>
+                        </AutoForm>
+                    </div>
+                </main>
+            </div>
+
         )
     }
 }
