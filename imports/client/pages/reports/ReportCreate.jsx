@@ -1,44 +1,80 @@
 import React, {Component} from 'react';
-<<<<<<< HEAD
-
-export default class ReportCreate extends Component {
-    constructor () {
-        super();
-        this.state = {
-            filter: false
-=======
 import Roles from "../../../api/users/enums/roles";
 import schema from "/imports/api/reports/schema";
 import {AutoForm, AutoField, ErrorField, SelectField} from "/imports/ui/forms";
+import {EJSON} from "meteor/ejson";
+import Notifier from "../../lib/Notifier";
+import TaskFilterBuilder from './TaskFilterBuilder';
 
 export default class ReportCreate extends Component {
     constructor() {
         super();
         this.state = {
-            filter: false,
             hasGeneralInformation: true,
             generalInformation: {},
             allowedRoles: [{value: Roles.MANAGER, label: Roles.MANAGER}],
->>>>>>> started working on reports
+            filterBuilderData: {},
+            components: {},
+            filter: true,
         };
-        this.addFilter = this.addFilter.bind(this);
-        this.closeFilter = this.closeFilter.bind(this);
     }
 
-    addFilter() {
+    addFilter = () => {
         this.setState({
             filter: true
         })
-    }
+    };
 
-    closeFilter() {
+    closeFilter = () => {
         this.setState({
             filter: false
         })
-    }
+    };
+
+    //When changing name or role of the filter
+    onChange = (field, value) => {
+        let {generalInformation} = this.state;
+
+        //Not allowing to pick up filters if we don't have a name
+        if (field === 'name' && value) {
+            this.setState({
+                hasGeneralInformation: true,
+            })
+        } else {
+            this.setState({
+                hasGeneralInformation: false
+            })
+        }
+        const newInformation = {};
+        newInformation[field] = value;
+        _.extend(generalInformation, generalInformation, newInformation);
+        this.setState({generalInformation});
+
+    };
+
+    onSubmitFilters = (filters, components, filterBuilderData) => {
+        //Setting state and creating/editing report
+        this.setState({
+            components,
+            filterBuilderData
+        });
+
+        const {generalInformation} = this.state;
+        _.extend(generalInformation, {mongoFilters: EJSON.stringify(filters), filterBuilderData});
+
+        // Meteor.call('report.create', generalInformation, (err) => {
+        //     if (!err) {
+        //         Notifier.success('Report created');
+        //         FlowRouter.go('/reports/list');
+        //     } else {
+        //         Notifier.error(err.reason);
+        //     }
+        // });
+    };
 
     render() {
-        const {filter, hasGeneralInformation, allowedRoles} = this.state;
+        const {filter, hasGeneralInformation, components, filterBuilderData} = this.state;
+        const allowedRoles = [{value: Roles.MANAGER, label: "Allow " + Roles.MANAGER + " role"}];
 
         return (
             <div className="create-form">
@@ -59,21 +95,18 @@ export default class ReportCreate extends Component {
                             <div className="header__block">
                                 <div className="title-block text-uppercase">general data</div>
                             </div>
-                            <AutoForm schema={schema}>
+                            <AutoForm onChange={this.onChange}
+                                      ref="generalDataForm"
+                                      schema={schema}>
                                 <div className="form-wrapper">
                                     <AutoField placeholder="Report name" name="name"/>
                                     <ErrorField name="name"/>
                                 </div>
 
-                                <SelectField name="allowedRoles"
-                                             options={allowedRoles}/>
-
-                                <div className="form-wrapper">
-                                    <input type="text" placeholder="Report name"/>
-                                </div>
                                 <div className="check-group">
-                                    <input type="checkbox" id="c1"/>
-                                    <label htmlFor="c1">Allow manager role</label>
+                                    <SelectField options={allowedRoles}
+                                                 name="allowedRoles"
+                                                 ref="allowedRoles"/>
                                 </div>
                             </AutoForm>
                         </div>
@@ -88,14 +121,18 @@ export default class ReportCreate extends Component {
                             </div>
                         }
                         {
-                            //Widget for filters
-                            filter && <FilterGroup close={this.closeFilter}/>
+                            //Filter Builder with widgets
+                            filter &&
+                            <TaskFilterBuilder
+                                filterBuilderData={filterBuilderData}
+                                components={components}
+                                onSubmitFilters={this.onSubmitFilters.bind(this)}/>
                         }
-                        {
-                            //Add filter button
-                            hasGeneralInformation &&
-                            <div className="add-filter text-center" onClick={this.addFilter}>+ Add filter</div>
-                        }
+                        {/*{*/}
+                        {/*//Add filter button*/}
+                        {/*hasGeneralInformation &&*/}
+                        {/*<div className="add-filter text-center" onClick={this.addFilter}>+ Add filter</div>*/}
+                        {/*}*/}
                     </div>
                 </form>
             </div>

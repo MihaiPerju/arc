@@ -1,7 +1,7 @@
 import React from 'react';
 import {Segment, Button, Divider} from 'semantic-ui-react'
 import ReportsService from '../../../../api/reports/services/ReportsService';
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, SelectField} from '/imports/ui/forms';
 import TaskReportFields from '../../../../api/tasks/config/tasks';
 
 export default class FiltersSingle extends React.Component {
@@ -9,9 +9,9 @@ export default class FiltersSingle extends React.Component {
         super();
     }
 
-    deleteFilter(name) {
+    deleteFilter = (name) => {
         this.props.deleteFilter(name);
-    }
+    };
 
     getOptions() {
         const {name, assigneeIdOptions, facilityIdOptions} = this.props;
@@ -40,10 +40,10 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isNumber(name, TaskReportFields)) {
             return (
                 <div>
-                    <AutoField name={`${name}Start`}/>
+                    <AutoField noLabel={true} placeholder="Type minimum value" name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
-                    <AutoField name={`${name}End`}/>
+                    <AutoField noLabel={true} placeholder="Type maximum value" name={`${name}End`}/>
                     <ErrorField name={`${name}End`}/>
                 </div>
             )
@@ -59,10 +59,10 @@ export default class FiltersSingle extends React.Component {
 
         return (
             <div>
-                <AutoField name={name}/>
+                <AutoField placeholder="Type your filter" name={name}/>
                 <ErrorField name={name}/>
 
-                <AutoField name={`${name}Match`}/>
+                <AutoField placeholder="Select matching pattern" name={`${name}Match`}/>
                 <ErrorField name={`${name}Match`}/>
             </div>
         )
@@ -70,23 +70,24 @@ export default class FiltersSingle extends React.Component {
 
     render() {
         const {name} = this.props;
-        const transformedName = name && name.charAt(0).toUpperCase() + name.slice(1);
         return (
             <div>
-                <Button onClick={this.deleteFilter.bind(this, name)}
-                        attached='top'
-                        color="red">
-                    Delete
-                </Button>
-                <Segment attached>
-
-                    {transformedName}
-
-                    {
-                        this.renderWidget(name, TaskReportFields)
-                    }
-                </Segment>
-                <Divider/>
+                {/*<Button onClick={this.deleteFilter.bind(this, name)}*/}
+                {/*attached='top'*/}
+                {/*color="red">*/}
+                {/*Delete*/}
+                {/*</Button>*/}
+                <div className="select-group">
+                    <div className="row-select">
+                        <div className="type">{name}</div>
+                        <div className="btn-delete">Delete</div>
+                    </div>
+                    <div className="form-wrapper">
+                        {
+                            this.renderWidget(name, TaskReportFields)
+                        }
+                    </div>
+                </div>
             </div>
         )
     }
