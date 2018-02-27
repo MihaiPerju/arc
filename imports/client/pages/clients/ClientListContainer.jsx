@@ -46,6 +46,13 @@ class ClientContainer extends Component {
         });
     }
 
+    showFilterBar() {
+        this.setState({
+            clientsSelected,
+            create: false
+        });
+    }
+
     getClient() {
         const {data} = this.props;
         const {currentClient} = this.state;

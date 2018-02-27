@@ -1,10 +1,25 @@
 import React, {Component} from 'react';
+<<<<<<< HEAD
 
 export default class ReportCreate extends Component {
     constructor () {
         super();
         this.state = {
             filter: false
+=======
+import Roles from "../../../api/users/enums/roles";
+import schema from "/imports/api/reports/schema";
+import {AutoForm, AutoField, ErrorField, SelectField} from "/imports/ui/forms";
+
+export default class ReportCreate extends Component {
+    constructor() {
+        super();
+        this.state = {
+            filter: false,
+            hasGeneralInformation: true,
+            generalInformation: {},
+            allowedRoles: [{value: Roles.MANAGER, label: Roles.MANAGER}],
+>>>>>>> started working on reports
         };
         this.addFilter = this.addFilter.bind(this);
         this.closeFilter = this.closeFilter.bind(this);
@@ -22,12 +37,13 @@ export default class ReportCreate extends Component {
         })
     }
 
-    render () {
-        const { filter } = this.state;
+    render() {
+        const {filter, hasGeneralInformation, allowedRoles} = this.state;
 
         return (
             <div className="create-form">
                 <form action="">
+                    {/*Upper bar*/}
                     <div className="create-form__bar">
                         <button className="btn-add">+ Add report</button>
                         <div className="btn-group">
@@ -35,29 +51,51 @@ export default class ReportCreate extends Component {
                             <button className="btn--green">Confirm & save</button>
                         </div>
                     </div>
+
+                    {/*Form with general data and filters*/}
                     <div className="create-form__wrapper">
+                        {/*General data*/}
                         <div className="action-block">
                             <div className="header__block">
                                 <div className="title-block text-uppercase">general data</div>
                             </div>
-                            <div className="form-wrapper">
-                                <input type="text" placeholder="Report name"/>
-                            </div>
-                            <div className="check-group">
-                                <input type="checkbox" id="c1"/>
-                                <label htmlFor="c1">Allow manager role</label>
-                            </div>
-                        </div>
-                        <div className="action-block">
-                            <div className="header__block">
-                                <div className="title-block text-uppercase">Create fillters for report</div>
-                            </div>
-                            <div className="label-filter text-light-grey">Extracted filters ()</div>
+                            <AutoForm schema={schema}>
+                                <div className="form-wrapper">
+                                    <AutoField placeholder="Report name" name="name"/>
+                                    <ErrorField name="name"/>
+                                </div>
+
+                                <SelectField name="allowedRoles"
+                                             options={allowedRoles}/>
+
+                                <div className="form-wrapper">
+                                    <input type="text" placeholder="Report name"/>
+                                </div>
+                                <div className="check-group">
+                                    <input type="checkbox" id="c1"/>
+                                    <label htmlFor="c1">Allow manager role</label>
+                                </div>
+                            </AutoForm>
                         </div>
                         {
+                            hasGeneralInformation &&
+                            //Filters section
+                            <div className="action-block">
+                                <div className="header__block">
+                                    <div className="title-block text-uppercase">Create fillters for report</div>
+                                </div>
+                                <div className="label-filter text-light-grey">Extracted filters ()</div>
+                            </div>
+                        }
+                        {
+                            //Widget for filters
                             filter && <FilterGroup close={this.closeFilter}/>
                         }
-                        <div className="add-filter text-center" onClick={this.addFilter}>+ Add filter</div>
+                        {
+                            //Add filter button
+                            hasGeneralInformation &&
+                            <div className="add-filter text-center" onClick={this.addFilter}>+ Add filter</div>
+                        }
                     </div>
                 </form>
             </div>
@@ -67,7 +105,7 @@ export default class ReportCreate extends Component {
 
 class FilterGroup extends Component {
     render() {
-        const { close } = this.props;
+        const {close} = this.props;
 
         return (
             <div className="select-group">
