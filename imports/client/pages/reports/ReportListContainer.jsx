@@ -3,6 +3,7 @@ import ReportList from './components/ReportList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import ReportContent from './ReportContent.jsx';
+import ScheduleBlock from './ScheduleBlock.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import ReportCreate from './ReportCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
@@ -17,10 +18,12 @@ class ReportListContainer extends Component {
             reportsSelected: [],
             currentReport: null,
             filter: false,
-            create: false
+            create: false,
+            schedule: false
         };
         this.showFilterBar = this.showFilterBar.bind(this);
         this.createForm = this.createForm.bind(this);
+        // this.createSchedule = this.createSchedule.bind(this);
     }
 
     setReport = (_id) => {
@@ -55,9 +58,15 @@ class ReportListContainer extends Component {
         })
     }
 
+    createSchedule = () => {
+        this.setState({
+            schedule: true
+        })
+    }
+
     render() {
         const {data, loading, error} = this.props;
-        const {reportsSelected, currentReport, create} = this.state;
+        const {reportsSelected, currentReport, create, schedule} = this.state;
         const report = objectFromArray(data, currentReport);
 
         if (loading) {
@@ -86,7 +95,7 @@ class ReportListContainer extends Component {
                 </div>
                 {
                     currentReport ? (
-                        <RightSide report={report}/>
+                        <RightSide report={report} schedule={schedule} createSchedule={this.createSchedule} />
                     ) : create ? (
                         <RightSide create/>
                     ) : null
@@ -111,14 +120,16 @@ class RightSide extends Component {
     }
 
     render() {
-        const {report, create} = this.props;
+        const {report, create, schedule, createSchedule} = this.props;
         return (
             <div className={this.state.fade ? "right__side in" : "right__side"}>
                 {
                     create ? (
                         <ReportCreate/>
+                    ) : schedule ? (
+                        <ScheduleBlock/>
                     ) : (
-                        <ReportContent report={report}/>
+                        <ReportContent report={report} schedule={createSchedule} />
                     )
                 }
             </div>
