@@ -15,14 +15,14 @@ const Num_ = ({
                   min,
                   name,
                   onChange,
+                  noLabel,
                   placeholder,
                   step,
                   value,
-                  backgroundStyle,
                   ...props
               }) =>
     <div {...filterDOMProps(props)}>
-        {label && (
+        {label && !noLabel && (
             <label htmlFor={id}>
                 {label}
             </label>

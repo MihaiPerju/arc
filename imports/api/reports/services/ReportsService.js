@@ -17,9 +17,9 @@ export default class ReportsService {
     }
 
     static getOptions(keys) {
-        let schemaOptions = [];
+        let schemaOptions = [{label: "+ Add Filter"}];
         keys.map((value) => {
-            schemaOptions.push({text: value, value});
+            schemaOptions.push({label: value, value});
         });
         return schemaOptions;
     }
@@ -149,7 +149,7 @@ export default class ReportsService {
             if (ReportsService.isString(key, reportFields)) {
                 fields[key] = {
                     type: String,
-                    optional: true
+                    optional: true,
                 };
                 fields[`${key}Match`] = {
                     type: String,

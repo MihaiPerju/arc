@@ -48,6 +48,7 @@
             }
         }
     }
+
     .table-container {
         .table-header {
             padding-bottom: 15px;
@@ -55,6 +56,11 @@
         .table-row {
             border-top: 1px #d7d7d7 solid;
             padding: 10px 0;
+            .right-side {
+                .table-container {
+                    float: left;
+                }
+            }
         }
     }
 }

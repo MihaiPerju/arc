@@ -1,5 +1,5 @@
-import React          from 'react';
-import connectField   from 'uniforms/connectField';
+import React from 'react';
+import connectField from 'uniforms/connectField';
 import filterDOMProps from 'uniforms/filterDOMProps';
 
 const dateFormat = value => value && value.toISOString().slice(0, -8);
@@ -13,20 +13,21 @@ const dateParse = (timestamp, onChange) => {
 };
 
 const Date_ = ({
-    disabled,
-    id,
-    inputRef,
-    label,
-    max,
-    min,
-    name,
-    onChange,
-    placeholder,
-    value,
-    ...props
-}) =>
+                   disabled,
+                   id,
+                   inputRef,
+                   label,
+                   max,
+                   min,
+                   name,
+                   onChange,
+                   noLabel,
+                   placeholder,
+                   value,
+                   ...props
+               }) =>
     <div {...filterDOMProps(props)}>
-        {label && (
+        {label && !noLabel && (
             <label htmlFor={id}>
                 {label}
             </label>

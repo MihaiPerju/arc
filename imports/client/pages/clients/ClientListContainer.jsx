@@ -46,6 +46,13 @@ class ClientContainer extends Component {
         });
     }
 
+    showFilterBar() {
+        this.setState({
+            clientsSelected,
+            create: false
+        });
+    }
+
     getClient() {
         const {data} = this.props;
         const {currentClient} = this.state;
@@ -83,8 +90,10 @@ class ClientContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={currentClient ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={clientsSelected.length}/>
+                <div className={
+                    currentClient ? "left__side" : create ? "left__side" : "left__side full__width"
+                }>
+                    <SearchBar btnGroup={clientsSelected.length} filter={this.showFilterBar}/>
                     <ClientList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         setClient={this.setClient.bind(this)}

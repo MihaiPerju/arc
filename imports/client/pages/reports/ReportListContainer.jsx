@@ -18,12 +18,10 @@ class ReportListContainer extends Component {
             reportsSelected: [],
             currentReport: null,
             filter: false,
-            create: false,
-            schedule: false
+            create: false
         };
         this.showFilterBar = this.showFilterBar.bind(this);
         this.createForm = this.createForm.bind(this);
-        // this.createSchedule = this.createSchedule.bind(this);
     }
 
     setReport = (_id) => {
@@ -67,6 +65,16 @@ class ReportListContainer extends Component {
     render() {
         const {data, loading, error} = this.props;
         const {reportsSelected, currentReport, create, schedule} = this.state;
+        this.setState({create: true})
+    }
+
+    closeForm = () => {
+        this.setState({create: false});
+    };
+
+    render() {
+        const {data, loading, error} = this.props;
+        const {reportsSelected, currentReport, create} = this.state;
         const report = objectFromArray(data, currentReport);
 
         if (loading) {
@@ -83,7 +91,6 @@ class ReportListContainer extends Component {
                     currentReport || create ? "left__side" : "left__side full__width"
                 }>
                     <SearchBar btnGroup={reportsSelected.length} filter={this.showFilterBar}/>
-                    {this.state.filter ? <FilterBar/> : null}
                     <ReportList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         reportsSelected={reportsSelected}
@@ -92,13 +99,13 @@ class ReportListContainer extends Component {
                         setReport={this.setReport}
                         reports={data}
                     />
-                    <PaginationBar create={this.createForm}/>
+                    <PaginationBar close={this.closeForm} create={this.createForm}/>
                 </div>
                 {
                     currentReport ? (
-                        <RightSide report={report} schedule={schedule} createSchedule={this.createSchedule} />
+                        <RightSide report={report}/>
                     ) : create ? (
-                        <RightSide create/>
+                        <RightSide close={this.closeForm} create/>
                     ) : null
                 }
             </div>
@@ -121,16 +128,14 @@ class RightSide extends Component {
     }
 
     render() {
-        const {report, create, schedule, createSchedule} = this.props;
+        const {report, create, close} = this.props;
         return (
             <div className={this.state.fade ? "right__side in" : "right__side"}>
                 {
                     create ? (
-                        <ReportCreate/>
-                    ) : schedule ? (
-                        <ScheduleBlock/>
+                        <ReportCreate close={close}/>
                     ) : (
-                        <ReportContent report={report} schedule={createSchedule} />
+                        <ReportContent report={report}/>
                     )
                 }
             </div>
