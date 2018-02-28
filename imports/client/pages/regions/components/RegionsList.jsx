@@ -9,6 +9,7 @@ import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
 export default class RegionsList extends Component {
     render() {
         const {data, loading, error} = this.props;
+        const clientId = FlowRouter.current().params.id;
         if (loading) {
             return <div>Loading</div>
         }
@@ -44,7 +45,8 @@ export default class RegionsList extends Component {
                     <Table.Footer fullWidth>
                         <Table.Row>
                             <Table.HeaderCell colSpan='100'>
-                            <Button href='/region/create' floated='left' icon labelPosition='left' primary size='small'>
+                            <Button href={FlowRouter.url('region.create', {id: clientId})}
+                                    floated='left' icon labelPosition='left' primary size='small'>
                                 <Icon name='plus' /> Create
                             </Button>
                             </Table.HeaderCell>

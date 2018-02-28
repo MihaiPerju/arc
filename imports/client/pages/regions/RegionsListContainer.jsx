@@ -17,7 +17,11 @@ export default class RegionsListContainer extends Pager {
             filters: {}
         });
 
-        this.query = query.clone();
+        this.query = query.clone({
+            filters: {
+                clientId: FlowRouter.current().params.id
+            }
+        });
         this.RegionsListCont = createQueryContainer(this.query, RegionsList, {
             reactive: false
         })
