@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import classNames from 'classnames';
 
 export default class TableReport extends Component {
-    render() {        
+    render() {
         const { title, rows, center } = this.props;
         const classes = classNames({
             'table-container': true,

@@ -128,8 +128,11 @@ export default class TaskFilterBuilder extends React.Component {
 
         schemaOptions.map((option) => {
             if (option.value === value) {
+<<<<<<< HEAD
                 console.log(option.value);
                 console.log(value);
+=======
+>>>>>>> origin/ui-schedules
                 schemaOptions.splice(schemaOptions.indexOf(option), 1);
             }
         });
@@ -163,6 +166,15 @@ export default class TaskFilterBuilder extends React.Component {
                                     />
                             })
                         }
+<<<<<<< HEAD
+=======
+                        <Button primary fluid type="submit">
+                            Finish
+                        </Button>
+                        <Segment tertiary>
+                            <div>Extracted filters:{JSON.stringify(filters)}</div>
+                        </Segment>
+>>>>>>> origin/ui-schedules
                         {/*Component for showing filters extracted*/}
                         {/*<div className="label-filter text-light-grey">Extracted filters:{JSON.stringify(filters)}</div>*/}
                     </AutoForm>

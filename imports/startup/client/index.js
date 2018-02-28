@@ -6,4 +6,8 @@ import svg4everybody from 'svg4everybody'; //external file svg polyfill
 import 'semantic-ui-css/semantic.min.css';
 import '/imports/api/comments/links';
 import '/imports/api/facilities/links';
+<<<<<<< HEAD
 import '/imports/api/tasks/links';
+=======
+import '/imports/api/tasks/links';
+>>>>>>> origin/ui-schedules

@@ -15,7 +15,6 @@ const Num_ = ({
                   min,
                   name,
                   onChange,
-                  backgroundStyle,
                   noLabel,
                   placeholder,
                   step,

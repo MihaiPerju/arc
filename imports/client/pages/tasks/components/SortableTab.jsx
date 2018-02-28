@@ -54,27 +54,7 @@ export default class SortableTab extends React.Component {
             items: arrayMove(this.state.items, oldIndex, newIndex),
         });
     };
-
-
-    downloadPdfs() {
-        const taskId = FlowRouter.current().params._id;
-        const {items} = this.state;
-
-        //creating attachmentIds
-        let attachmentIds = [];
-
-        for (item of items) {
-            attachmentIds.push(item._id);
-        }
-
-        //Updating status in Db
-        Meteor.call('task.attachment.update_order', taskId, attachmentIds, (err) => {
-            if (!err) {
-                window.open("/pdfs/" + taskId + "/" + getToken(), '_blank');
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
+    
     getPdfName(pdf) {
         return pdf.name.slice(0, pdf.name.indexOf('.'))
     }

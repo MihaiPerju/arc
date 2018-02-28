@@ -19,13 +19,8 @@ export default class TaskContent extends Component {
                 <PayerBlock task={task}/>
                 <ActionBlock update={update} task={task}/>
                 <LetterList task={task}/>
-<<<<<<< 5c830ba22fd3d5c902f3d9c5b2980a10c4206cc6
-                <PdfFiles  task={task}/>
-                <CommentBlock  task={task}/>
-=======
                 <PdfFiles update={update} task={task}/>
                 <CommentBlock task={task}/>
->>>>>>> obtained reactivity on account level
             </div>
         )
     }

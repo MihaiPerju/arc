@@ -1,14 +1,6 @@
 import React from 'react';
-import { AutoForm, ErrorField } from 'uniforms-semantic';
-import { Container, Header, Divider, Grid } from 'semantic-ui-react';
-import SelectWithDescription from '/imports/client/lib/uniforms/SelectWithDescription.jsx';
-import letterCreateActionSchema from '/imports/client/pages/letters/schemas/letterCreateAction.js';
-import Notifier from '/imports/client/lib/Notifier';
 import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
-import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
-import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
-import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
 
 class LetterCreateContainer extends React.Component {
     constructor () {
@@ -16,9 +8,6 @@ class LetterCreateContainer extends React.Component {
 
         this.state = {
             letterTemplates: [],
-            selectedTemplate: {},
-            pdfAttachments: [],
-            selectedAttachments: []
         };
     }
 
@@ -51,6 +40,7 @@ class LetterCreateContainer extends React.Component {
                             letterTemplateBody={body}
                             parentState={this.state}/>
                     </div>
+                </div>
             </div>
         );
     }
