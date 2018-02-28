@@ -1,29 +1,4 @@
 import React, {Component} from 'react';
-<<<<<<< HEAD
-
-export default class ScheduleBlock extends Component {
-    constructor() {
-        super();
-        this.state = {
-            schedule: false
-        }
-    }
-
-    createSchedule = () => {
-        this.setState({
-            schedule: true
-        })
-    }
-
-    closeSchedule = () => {
-        this.setState({
-            schedule: false
-        })
-    }
-
-    render() {
-        const { schedule } = this.state;
-=======
 import Notifier from "../../lib/Notifier";
 import clientsQuery from "../../../api/clients/queries/clientsWithFacilites";
 import usersQuery from "../../../api/users/queries/listUsersByRole";
@@ -122,7 +97,6 @@ class ScheduleBlock extends Component {
         if (error) {
             return <div>Error: {error.reason}</div>;
         }
->>>>>>> origin/ui-schedules
 
         return (
             <div className="action-block schedule-block">
@@ -130,36 +104,11 @@ class ScheduleBlock extends Component {
                     <div className="title-block text-uppercase">Schedule</div>
                 </div>
                 <div className="main__block">
-<<<<<<< HEAD
-                    <div className="add-content" onClick={this.createSchedule}>
-=======
                     <div className="add-content" onClick={this.onAddSchedule}>
->>>>>>> origin/ui-schedules
                         <i className="icon-calendar-plus-o"/>
                         <div className="text-center">+ Add schedule</div>
                     </div>
                     {
-<<<<<<< HEAD
-                        schedule && <CreateSchedule close={this.closeSchedule}/>
-                    }                    
-                    <div className="schedule-list">
-                        <div className="schedule-item">
-                            <div className="left__side">
-                                <div className="info">
-                                    <div className="text-light-grey">Frequency</div>
-                                    <div className="info-label">None</div>
-                                </div>
-                                <div className="info">
-                                    <div className="text-light-grey">Frequency</div>
-                                    <div className="info-label">None</div>
-                                </div>
-                            </div>
-                            <div className="btn-group">
-                                <button className="btn-cancel"><i className="icon-trash-o"/></button>
-                                <button className="btn--blue">Sent</button>
-                            </div>
-                        </div>
-=======
                         blankSchedule &&
                         <CreateSchedule
                             close={this.close}
@@ -201,8 +150,6 @@ class ScheduleBlock extends Component {
                                 );
                             })
                         }
-
->>>>>>> origin/ui-schedules
                     </div>
                 </div>
             </div>
@@ -215,10 +162,6 @@ class CreateSchedule extends Component {
         super();
     }
 
-<<<<<<< HEAD
-    render() {
-        const { close } = this.props;
-=======
     onSubmit = (data) => {
         const {model} = this.props;
         const {report} = this.props;
@@ -246,30 +189,11 @@ class CreateSchedule extends Component {
 
     render() {
         const {users, clients, model, close} = this.props;
->>>>>>> origin/ui-schedules
 
         return (
             <div className="new-section">
                 <div className="text-label">Create schedule</div>
                 <div className="schedule-form">
-<<<<<<< HEAD
-                    <form action="">
-                        <div className="form-wrapper">
-                            <select name="" id="">
-                                <option value="">Select frequency</option>
-                            </select>
-                        </div>
-                        <div className="form-wrapper">
-                            <select name="" id="">
-                                <option value="">Select internal users</option>
-                            </select>
-                        </div>
-                        <div className="btn-group">
-                            <button className="btn-cancel" onClick={close}>Cancel</button>
-                            <button className="btn--green">Confirm schedule</button>
-                        </div>
-                    </form>
-=======
                     <AutoForm model={model} schema={schema} onSubmit={this.onSubmit.bind(this)}>
                         <div className="form-wrapper">
                             <SelectMulti placeholder="Select Frequency" noLabel={true} name="frequency"
@@ -300,18 +224,13 @@ class CreateSchedule extends Component {
                             </button>
                         </div>
                     </AutoForm>
->>>>>>> origin/ui-schedules
                 </div>
             </div>
         )
     }
-<<<<<<< HEAD
-}
-=======
 }
 
 export default withQuery((props) => {
     console.log(props);
     return query.clone({filters: {reportId: props.report._id}});
 }, {reactive: true})(ScheduleBlock)
->>>>>>> origin/ui-schedules

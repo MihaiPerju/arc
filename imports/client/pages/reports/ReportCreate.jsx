@@ -12,10 +12,6 @@ export default class ReportCreate extends Component {
         this.state = {
             hasGeneralInformation: false,
             generalInformation: {},
-<<<<<<< HEAD
-            allowedRoles: [{value: Roles.MANAGER, label: Roles.MANAGER}],
-=======
->>>>>>> origin/ui-schedules
             filterBuilderData: {},
             components: {},
             filter: false,
@@ -65,7 +61,6 @@ export default class ReportCreate extends Component {
             }
         });
     };
-<<<<<<< HEAD
 
     finish = () => {
         const filterBuilder = this.refs.filterBuilder;
@@ -96,38 +91,6 @@ export default class ReportCreate extends Component {
                     </div>
                 </div>
 
-=======
-
-    finish = () => {
-        const filterBuilder = this.refs.filterBuilder;
-        const filterForm = filterBuilder.refs.filters;
-        filterForm.submit();
-    };
-
-    onCancel = () => {
-        const {close} = this.props;
-        close();
-    };
-
-    render() {
-        const {hasGeneralInformation, components, filterBuilderData} = this.state;
-        const allowedRoles = [{value: Roles.MANAGER, label: "Allow " + Roles.MANAGER + " role"}];
-
-        return (
-            <div className="create-form">
-                {/*Upper bar*/}
-                <div className="create-form__bar">
-                    <button className="btn-add">+ Add report</button>
-                    <div className="btn-group">
-                        <button onClick={this.onCancel} className="btn-cancel">Cancel</button>
-                        {
-                            hasGeneralInformation &&
-                            <button onClick={this.finish} className="btn--green">Confirm & save</button>
-                        }
-                    </div>
-                </div>
-
->>>>>>> origin/ui-schedules
                 {/*Form with general data and filters*/}
                 <div className="create-form__wrapper">
                     {/*General data*/}
@@ -142,24 +105,6 @@ export default class ReportCreate extends Component {
                                 <AutoField placeholder="Report name" name="name"/>
                                 <ErrorField name="name"/>
                             </div>
-<<<<<<< HEAD
-                        }
-                        {
-                            //Filter Builder with widgets
-                            filter &&
-                            <TaskFilterBuilder
-                                filterBuilderData={filterBuilderData}
-                                components={components}
-                                onSubmitFilters={this.onSubmitFilters.bind(this)}/>
-                        }
-                        {/*{*/}
-                        {/*//Add filter button*/}
-                        {/*hasGeneralInformation &&*/}
-                        {/*<div className="add-filter text-center" onClick={this.addFilter}>+ Add filter</div>*/}
-                        {/*}*/}
-=======
->>>>>>> origin/ui-schedules
-
                             <div className="check-group">
                                 <SelectField options={allowedRoles}
                                              name="allowedRoles"

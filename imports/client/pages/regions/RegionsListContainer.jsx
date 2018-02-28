@@ -18,7 +18,6 @@ class RegionListContainer extends Component {
         }
     }
 
-<<<<<<< HEAD
     showBtnGroup() {
         this.setState({
             btnGroup: !this.state.btnGroup
@@ -31,8 +30,6 @@ class RegionListContainer extends Component {
         })
     }
 
-=======
->>>>>>> origin/ui-schedules
     setRegion = (_id) => {
         const {currentRegion} = this.state;
 
