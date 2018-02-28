@@ -47,13 +47,13 @@ export default class ActionBlock extends Component {
                                                 <div className="name">Author(TBM)</div>
                                                 <div className="text text-light-grey">
                                                     <b>{actionPerformed.reasonCode}</b>:
-                                                    {actionPerformed.action.title}
+                                                    {actionPerformed.action && actionPerformed.action.title}
                                                 </div>
                                             </div>
-                                            <div className="status archived">{actionPerformed.action.status}</div>
+                                            <div className="status archived">{actionPerformed.action && actionPerformed.action.status}</div>
                                         </div>
                                         <div className="action-time">
-                                            {moment(actionPerformed.action.createdAt).format('hh:mm')}
+                                            {moment(actionPerformed.action && actionPerformed.action.createdAt).format('hh:mm')}
                                         </div>
                                     </div>
                                 )

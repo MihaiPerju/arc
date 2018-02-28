@@ -5,6 +5,7 @@ import ActionBlock from './components/TaskContent/ActionBlock';
 import LetterList from './components/TaskContent/LetterList';
 import PdfFiles from './components/TaskContent/PdfFiles';
 import CommentBlock from './components/TaskContent/CommentBlock';
+import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer.jsx';
 
 export default class TaskContent extends Component {
     constructor() {
@@ -20,7 +21,7 @@ export default class TaskContent extends Component {
                 <ActionBlock update={update} task={task}/>
                 <LetterList task={task}/>
                 <PdfFiles update={update} task={task}/>
-                <CommentBlock task={task}/>
+                <CommentsListContainer taskId={task._id} />
             </div>
         )
     }

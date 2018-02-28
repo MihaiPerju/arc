@@ -31,6 +31,10 @@ class LetterList extends Component {
         });
     };
 
+    redirectToPdf (pdf) {
+        window.open('/letters/pdf/' + pdf, '_blank');
+    }
+
     render () {
         const {data, isLoading, error, task} = this.props;
         if (isLoading) {
@@ -64,7 +68,8 @@ class LetterList extends Component {
                                         <div className="btn-group">
                                             <button
                                                 className="btn-text--blue"
-                                                href={`/letters/pdf/${task._id}/${letter._id}/${getToken()}`}>
+                                                onClick={this.redirectToPdf.bind(this, `${task._id}/${letter._id}/${getToken()}`)}
+                                            >
                                                 <i className="icon-download"/></button>
                                             <button className="btn-text--red" onClick={() => (this.handleDelete(
                                                 letter._id))}><i className="icon-trash-o"/></button>
