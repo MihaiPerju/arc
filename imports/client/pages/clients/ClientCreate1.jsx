@@ -10,7 +10,6 @@ import {Header} from 'semantic-ui-react'
 export default class CreateClient extends React.Component {
     constructor() {
         super();
-
         this.state = {};
     }
 
