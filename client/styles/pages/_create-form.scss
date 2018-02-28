@@ -29,15 +29,20 @@
         overflow-y: auto;
         margin-top: 20px;
         padding: 0 15px;
+        width: 100%;
     }
     .action-block {
+        width: 100%;
         .form-wrapper {
             padding-top: 8px;
         }
     }
     .form-wrapper {
-        input {
+        input, textarea {
             background: $color-white;
+        }
+        textarea {
+            border-bottom: 0;
         }
     }
     .add-filter {
@@ -102,6 +107,16 @@
             }
         }
     }
+
+    .btn-delete {
+        cursor: pointer;
+        color: $red;
+        padding: 10px 15px;
+        &:hover {
+            color: #d02121;
+        }
+    }
+
     .select-group {
         border-bottom: 1px #e1e1e1 solid;
         padding-bottom: 5px;
@@ -115,15 +130,7 @@
         }
         .type {
             padding: 10px 0;
-        }
-        .btn-delete {
-            cursor: pointer;
-            color: $red;
-            padding: 10px 15px;
-            &:hover {
-                color: #d02121;
-            }
-        }
+        }        
         .form-wrapper {
             margin-bottom: 10px;
             select {
@@ -132,6 +139,31 @@
                 background: $color-white;
                 color: $light-grey;
             }
+        }
+    }
+}
+
+.action-new-contact {
+    padding-bottom: 15px;
+    border-bottom: 1px #e1e1e1 solid;
+    .header__block {
+        
+    }
+    .row__action {
+        margin-top: 20px;
+        padding-left: 15px;
+        display: flex;
+        justify-content: space-between;
+        border-top: 1px #e1e1e1 solid;
+        .type {
+            padding-top: 10px;
+        }
+    }
+    .select-group {
+        border-bottom: 0;
+        padding-bottom: 0;
+        .form-wrapper {
+            margin-bottom: 0;
         }
     }
 }

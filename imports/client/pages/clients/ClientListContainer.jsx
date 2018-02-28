@@ -64,6 +64,7 @@ class ClientContainer extends Component {
 
     createForm() {
         this.setState({
+            currentClient: false,
             create: true,
             rightSide: true
         });
@@ -106,11 +107,12 @@ class ClientContainer extends Component {
                     />
                 </div>
                 {
-                    currentClient ? (
-                        <RightSide client={client}/>
-                    ) : create ? (
-                        <RightSide create={create} />
-                    ) : null
+                    (currentClient || create) &&
+                    <RightSide
+                        client={client}
+                        create={create}
+                        close={this.closeForm}
+                    />
                 }
             </div>
         );
@@ -132,17 +134,13 @@ class RightSide extends Component {
     }
 
     render() {
-        const {client, create} = this.props;
+        const {client, create, close} = this.props;
         const {fade} = this.state;
 
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
-                    create ? (                        
-                        <ClientCreate/>
-                    ) : (
-                        <ClientContent client={client}/>
-                    )
+                    create ? <ClientCreate  close={close}/> : <ClientContent client={client}/>
                 }
             </div>
         )
