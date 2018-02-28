@@ -1,27 +1,102 @@
 import React, {Component} from 'react';
+import Notifier from "../../lib/Notifier";
+import clientsQuery from "../../../api/clients/queries/clientsWithFacilites";
+import usersQuery from "../../../api/users/queries/listUsersByRole";
+import ReportsEnum from "../../../api/schedules/enums/reports";
+import {AutoForm, ErrorField} from '/imports/ui/forms';
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import schema from '/imports/api/schedules/schemas/schema'
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import query from "/imports/api/schedules/queries/scheduleList";
 
-export default class ScheduleBlock extends Component {
+class ScheduleBlock extends Component {
     constructor() {
         super();
         this.state = {
-            schedule: false
+            users: [],
+            clients: [],
+            schedule: false,
+            blankSchedule: false
         }
     }
 
-    createSchedule = () => {
-        this.setState({
-            schedule: true
-        })
+    componentWillMount() {
+        usersQuery.clone({}).fetch((err, users) => {
+            if (!err) {
+                this.setState({
+                    users
+                });
+            } else {
+                Notifier.error('Couldn\'t get users');
+            }
+        });
+
+        clientsQuery.clone({}).fetch((err, clients) => {
+            if (!err) {
+                this.setState({
+                    clients
+                });
+            } else {
+                Notifier.error(err + 'Couldn\'t get clients');
+            }
+        });
     }
 
-    closeSchedule = () => {
-        this.setState({
-            schedule: false
-        })
+    getUserOptions(users) {
+        return _.map(users, ({_id, profile, roles}) => {
+            const value = `${profile.firstName} ${profile.lastName} (${roles[0]})`;
+            return {value: _id, label: value};
+        });
     }
+
+    getClientOptions(clients) {
+        return _.map(clients, ({_id, clientName, facilities}) => {
+            let clientFacilities = '';
+            if (facilities)
+                clientFacilities = facilities.map(function (elem) {
+                    return elem.name;
+                }).join(',');
+
+            const value = `${clientName} (${clientFacilities})`;
+            return {value: _id, label: value};
+        });
+    }
+
+    onAddSchedule = () => {
+        this.setState({
+            blankSchedule: true
+        });
+    };
+
+    close = () => {
+        this.setState({
+            blankSchedule: false
+        });
+    };
+
+    onDeleteSchedule = (_id) => {
+        Meteor.call('schedule.delete', _id, (err) => {
+            if (!err) {
+                Notifier.success("Schedule removed!");
+            } else
+                Notifier.error(err.reason);
+        })
+    };
 
     render() {
-        const { schedule } = this.state;
+        const {data, error, loading, report} = this.props;
+        const {blankSchedule} = this.state;
+        const users = this.getUserOptions(this.state.users);
+        const clients = this.getClientOptions(this.state.clients);
+        schema = schema.omit("reportId");
+
+        if (loading) {
+            return <Loading/>;
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>;
+        }
 
         return (
             <div className="action-block schedule-block">
@@ -29,30 +104,53 @@ export default class ScheduleBlock extends Component {
                     <div className="title-block text-uppercase">Schedule</div>
                 </div>
                 <div className="main__block">
-                    <div className="add-content" onClick={this.createSchedule}>
+                    <div className="add-content" onClick={this.onAddSchedule}>
                         <i className="icon-calendar-plus-o"/>
                         <div className="text-center">+ Add schedule</div>
                     </div>
                     {
-                        schedule && <CreateSchedule close={this.closeSchedule}/>
-                    }                    
+                        blankSchedule &&
+                        <CreateSchedule
+                            close={this.close}
+                            clients={clients}
+                            users={users}
+                            report={report}
+                            cancel={this.close}
+                        />
+                    }
+
                     <div className="schedule-list">
-                        <div className="schedule-item">
-                            <div className="left__side">
-                                <div className="info">
-                                    <div className="text-light-grey">Frequency</div>
-                                    <div className="info-label">None</div>
-                                </div>
-                                <div className="info">
-                                    <div className="text-light-grey">Frequency</div>
-                                    <div className="info-label">None</div>
-                                </div>
-                            </div>
-                            <div className="btn-group">
-                                <button className="btn-cancel"><i className="icon-trash-o"/></button>
-                                <button className="btn--blue">Sent</button>
-                            </div>
-                        </div>
+                        {
+                            data.map((schedule, index) => {
+                                return (
+                                    <div key={index} className="schedule-item">
+                                        <div className="left__side">
+                                            <div className="info">
+                                                <div className="text-light-grey">Frequency</div>
+                                                <div className="info-label">{
+                                                    schedule.frequency.map((frequency, index) => {
+
+                                                        if (index === schedule.frequency.length - 1) {
+                                                            return frequency
+                                                        } else {
+                                                            return frequency + ", "
+                                                        }
+                                                    })
+                                                }</div>
+                                            </div>
+                                        </div>
+                                        <div className="btn-group">
+                                            <button onClick={this.onDeleteSchedule.bind(this, schedule._id)}
+                                                    className="btn-cancel">
+                                                <i className="icon-trash-o"/>
+                                            </button>
+                                            <button className="btn--blue">Send</button>
+                                        </div>
+                                    </div>
+                                );
+                            })
+                        }
+
                     </div>
                 </div>
             </div>
@@ -65,31 +163,75 @@ class CreateSchedule extends Component {
         super();
     }
 
+    onSubmit = (data) => {
+        const {model} = this.props;
+        const {report} = this.props;
+        if (!model) {
+            data.reportId = report._id;
+            Meteor.call("schedule.create", data, (err) => {
+                if (!err) {
+                    Notifier.success("Schedule created!");
+                    this.props.close();
+                } else {
+                    Notifier.error(err.reason);
+                }
+            })
+        } else {
+            model.reportId = report._id;
+            Meteor.call('report.sendNow', model, (err) => {
+                if (!err) {
+                    Notifier.success("Emails sent!");
+                } else {
+                    Notifier.error(err.reason);
+                }
+            })
+        }
+    };
+
     render() {
-        const { close } = this.props;
+        const {users, clients, model, close} = this.props;
 
         return (
             <div className="new-section">
                 <div className="text-label">Create schedule</div>
                 <div className="schedule-form">
-                    <form action="">
+                    <AutoForm model={model} schema={schema} onSubmit={this.onSubmit.bind(this)}>
                         <div className="form-wrapper">
-                            <select name="" id="">
-                                <option value="">Select frequency</option>
-                            </select>
+                            <SelectMulti placeholder="Select Frequency" noLabel={true} name="frequency"
+                                         options={ReportsEnum.frequency}/>
+                            <ErrorField name="frequency"/>
                         </div>
+
                         <div className="form-wrapper">
-                            <select name="" id="">
-                                <option value="">Select internal users</option>
-                            </select>
+                            <SelectMulti placeholder="Select Internal Users" noLabel={true} name="userIds"
+                                         options={users}/>
+                            <ErrorField name="userIds"/>
                         </div>
+
+                        <div className="form-wrapper">
+                            <SelectMulti placeholder="Select External Users" noLabel={true} name="clientIds"
+                                         options={clients}/>
+                            <ErrorField name="clientIds"/>
+                        </div>
+
                         <div className="btn-group">
-                            <button className="btn-cancel" onClick={close}>Cancel</button>
-                            <button className="btn--green">Confirm schedule</button>
+                            <button type="button" className="btn-cancel" onClick={close}>Cancel</button>
+                            <button className="btn--green">
+                                {
+                                    model ?
+                                        'Send now' :
+                                        'Confirm schedule'
+                                }
+                            </button>
                         </div>
-                    </form>
+                    </AutoForm>
                 </div>
             </div>
         )
     }
 }
+
+export default withQuery((props) => {
+    console.log(props);
+    return query.clone({filters: {reportId: props.report._id}});
+}, {reactive: true})(ScheduleBlock)

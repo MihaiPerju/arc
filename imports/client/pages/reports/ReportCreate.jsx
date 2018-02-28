@@ -16,8 +16,6 @@ export default class ReportCreate extends Component {
             components: {},
             filter: false,
         };
-        this.addFilter = this.addFilter.bind(this);
-        this.closeFilter = this.closeFilter.bind(this);
     }
 
     //When changing name or role of the filter

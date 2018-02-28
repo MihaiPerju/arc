@@ -17,15 +17,11 @@ const Text = ({
                   ...props
               }) =>
     <div {...filterDOMProps(props)}>
-        {console.log(labelHidden)}
         {label && !labelHidden && (
             <label htmlFor={id}>
                 {label}
             </label>
         )}
-        {
-            console.log(backgroundStyle)
-        }
         <input
             style={backgroundStyle}
             disabled={disabled}

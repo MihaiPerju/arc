@@ -3,13 +3,13 @@ import ReportList from './components/ReportList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import ReportContent from './ReportContent.jsx';
-import ScheduleBlock from './ScheduleBlock.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import ReportCreate from './ReportCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/reports/queries/reportsList";
 import Loading from '/imports/client/lib/ui/Loading';
 import {objectFromArray} from "/imports/api/utils";
+import classNames from 'classnames';
 
 class ReportListContainer extends Component {
     constructor() {
@@ -20,7 +20,6 @@ class ReportListContainer extends Component {
             filter: false,
             create: false
         };
-        this.showFilterBar = this.showFilterBar.bind(this);
         this.createForm = this.createForm.bind(this);
     }
 
@@ -30,7 +29,11 @@ class ReportListContainer extends Component {
         if (currentReport === _id) {
             this.setState({currentReport: null});
         } else {
-            this.setState({currentReport: _id});
+            this.setState({
+                currentReport: _id,
+                schedule: false,
+                create: false
+            });
         }
     };
 
@@ -44,28 +47,11 @@ class ReportListContainer extends Component {
         this.setState({reportsSelected});
     };
 
-    showFilterBar() {
-        this.setState({
-            filter: !this.state.filter
-        })
-    }
-
     createForm() {
         this.setState({
+            currentReport: false,
             create: true
         })
-    }
-
-    createSchedule = () => {
-        this.setState({
-            schedule: true
-        })
-    }
-
-    render() {
-        const {data, loading, error} = this.props;
-        const {reportsSelected, currentReport, create, schedule} = this.state;
-        this.setState({create: true})
     }
 
     closeForm = () => {
@@ -102,11 +88,11 @@ class ReportListContainer extends Component {
                     <PaginationBar close={this.closeForm} create={this.createForm}/>
                 </div>
                 {
-                    currentReport ? (
-                        <RightSide report={report}/>
-                    ) : create ? (
-                        <RightSide close={this.closeForm} create/>
-                    ) : null
+                    (currentReport || create) &&
+                    <RightSide close={this.closeForm}
+                               report={report}
+                               create={create}
+                    />
                 }
             </div>
         );
@@ -129,14 +115,15 @@ class RightSide extends Component {
 
     render() {
         const {report, create, close} = this.props;
+        const {fade} = this.state;
+        const classes = classNames({
+            "right__side": true,
+            "in": fade
+        });
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
+            <div className={classes}>
                 {
-                    create ? (
-                        <ReportCreate close={close}/>
-                    ) : (
-                        <ReportContent report={report}/>
-                    )
+                    create ? <ReportCreate close={close}/> : <ReportContent report={report}/>
                 }
             </div>
         )

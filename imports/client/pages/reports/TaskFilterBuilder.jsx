@@ -128,8 +128,6 @@ export default class TaskFilterBuilder extends React.Component {
 
         schemaOptions.map((option) => {
             if (option.value === value) {
-                console.log(option.value);
-                console.log(value);
                 schemaOptions.splice(schemaOptions.indexOf(option), 1);
             }
         });
