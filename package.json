@@ -52,7 +52,8 @@
     "underscore": "^1.8.3",
     "uniforms": "^1.22.0",
     "uniforms-semantic": "^1.22.0",
-    "uniforms-unstyled": "^1.19.1"
+    "uniforms-unstyled": "^1.19.1",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
