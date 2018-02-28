@@ -73,7 +73,6 @@ export default class NewAction extends Component {
                     hide();
                 } else {
                     Notifier.error(err.reason);
-                    console.log(err);
                 }
             });
     }

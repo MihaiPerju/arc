@@ -18,7 +18,8 @@ class LetterCreateContainer extends React.Component {
             letterTemplates: [],
             selectedTemplate: {},
             pdfAttachments: [],
-            selectedAttachments: []
+            selectedAttachments: [],
+            attachmentIds: []
         };
     }
 
@@ -80,7 +81,7 @@ class LetterCreateContainer extends React.Component {
     render() {
         const {taskId, selectedTemplate, reset} = this.props;
         const {keywords, body} = selectedTemplate;
-        const {letterTemplates, pdfAttachments, selectedAttachments} = this.state;
+        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
@@ -98,7 +99,8 @@ class LetterCreateContainer extends React.Component {
                             reset={reset}
                             taskId={taskId}
                             letterTemplateBody={body}
-                            parentState={this.state}/>
+                            parentState={this.state}
+                            attachments={attachmentIds}/>
                     </div>
                 </div>
             </div>

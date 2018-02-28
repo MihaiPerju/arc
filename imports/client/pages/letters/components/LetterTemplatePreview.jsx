@@ -1,6 +1,7 @@
 import React from 'react';
 import Parser from 'simple-text-parser';
 import CreateLetter from './CreateLetter';
+import {Divider} from 'semantic-ui-react';
 
 export default class LetterTemplatePreview extends React.Component {
     tagParser = () => {
