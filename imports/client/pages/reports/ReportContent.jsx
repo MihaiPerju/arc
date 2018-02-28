@@ -2,13 +2,32 @@ import React, {Component} from 'react';
 import ReportHeader from './components/ReportContent/ReportHeader';
 import TableReport from './components/ReportContent/TableReport';
 import ScheduleBlock from './ScheduleBlock.jsx';
+import Notifier from "../../lib/Notifier";
+import {EJSON} from "meteor/ejson";
+import taskQuery from "../../../api/tasks/queries/taskList";
+import moment from "moment/moment";
 
 export default class ReportContent extends Component {
     constructor() {
         super();
         this.state = {
-            schedule: false
+            schedule: false,
+            tasks: []
         }
+    }
+
+    componentWillMount() {
+        const {report} = this.props;
+        const filters = EJSON.parse(report.mongoFilters);
+        taskQuery.clone({filters}).fetch((err, tasks) => {
+            if (!err) {
+                this.setState({
+                    tasks
+                })
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
     }
 
     openSchedule = () => {
@@ -32,57 +51,45 @@ export default class ReportContent extends Component {
 
     render() {
         const {report} = this.props;
-        const {schedule} = this.state;
+        const {schedule, tasks} = this.state;
+
         const mainTable = {
-            header: 'Task name',
-            row: [
-                {title: 'Task name nr. 1'},
-                {title: 'Task name nr. 2'},
-                {title: 'Task name nr. 3'},
-                {title: 'Task name nr. 4'},
-                {title: 'Task name nr. 5'}
-            ]
-        }
+            header: 'Account name',
+            row: tasks.map((task, index) => {
+                return {title: "Account No." + (index + 1)}
+            })
+        };
+
         const tableList = [
             {
                 header: 'Account number',
-                row: [
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'}
-                ]
+                row: tasks.map((task, index) => {
+                    return {title: task.acctNum}
+                })
             },
             {
                 header: 'Discharge date',
-                row: [
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'}
-                ]
+                row: tasks.map((task, index) => {
+                    return {title: moment(task.dischrgDate).format('MM/DD/YYYY hh:mm')}
+                })
             },
             {
-                header: 'Discharge date',
-                row: [
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'}
-                ]
+                header: 'Payment Type',
+                row: tasks.map((task, index) => {
+                    return {title: task.ptType}
+                })
             },
             {
-                header: 'Discharge date',
-                row: [
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'},
-                    {title: 'none'}
-                ]
+                header: "Facility Code",
+                row: tasks.map((task, index) => {
+                    return {title: task.facCode}
+                })
+            },
+            {
+                header: "Payment Name",
+                row: tasks.map((task, index) => {
+                    return {title: task.ptName}
+                })
             }
         ];
         return (
