@@ -1,13 +1,18 @@
 import React from 'react';
 import ClientSchema from '/imports/api/clients/schemas/schema';
-import {AutoForm, AutoField, ErrorField, ListField, ListItemField, NestField, TextField, LongTextField} from 'uniforms-semantic';
+import {
+    AutoForm,
+    AutoField,
+    ErrorField,
+    ListField,
+    ListItemField,
+    NestField,
+    TextField,
+    LongTextField
+} from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
 import DropzoneComponent from 'react-dropzone-component';
-import {path, getToken} from '/imports/api/s3-uploads/utils';
-import {Button} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import {getToken} from '/imports/api/s3-uploads/utils';
 import {getImagePath} from '/imports/api/utils';
 
 export default class EditClient extends React.Component {
@@ -20,131 +25,155 @@ export default class EditClient extends React.Component {
         };
     }
 
-    getClient() {
-        const clientId = this.props.userId;
-        Meteor.call('client.get', clientId, (err, res) => {
-            if (!err) {
-                if (!res) {
-                    //case if url is invalid
-                    Notifier.error("Invalid request!");
-                    this.setState({
-                        error: "Cannot process. Invalid request"
-                    });
-                } else {
-                    this.setState({
-                        model: res,
-                    })
-                }
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    }
-
-    componentWillMount() {
-        this.getClient();
-    }
-
     onRemoveLogo() {
-        const clientId = this.props.userId;
+        const {client} = this.props;
 
-        Meteor.call('client.removeLogo', clientId, (err) => {
+        Meteor.call('client.removeLogo', client._id, (err) => {
             if (!err) {
                 Notifier.success("Logo removed!");
-                this.getClient();
             } else {
                 Notifier.error(err.reason);
             }
         });
     }
 
-    onSubmit(data) {
-        const clientId = this.props.userId;
+    onSubmit = (data) => {
+        const {client, setEdit} = this.props;
 
-        Meteor.call('client.update', clientId, data, (err) => {
+        Meteor.call('client.update', client._id, data, (err) => {
             if (!err) {
                 Notifier.success("Data saved");
-                FlowRouter.go('/client/list');
+                setEdit();
             } else {
                 Notifier.error(err.reason);
             }
         })
-    }
+    };
+
+    closeEdit = () => {
+        const {setEdit} = this.props;
+        setEdit();
+    };
+
+    onEditClient = () => {
+        const {form} = this.refs;
+        form.submit();
+    };
 
     render() {
-        const that = this;
-        const {model} = this.state;
-        const clientId = this.props.userId;
+        const {client} = this.props;
 
         const componentConfig = {
-            postUrl: '/uploads/logo/' + clientId + '/' + getToken()
+            postUrl: '/uploads/logo/' + client._id + '/' + getToken()
         };
 
         const djsConfig = {
             complete(file) {
                 Notifier.success('Logo added');
                 this.removeFile(file);
-                that.getClient();
             },
             acceptedFiles: 'image/*'
         };
 
         return (
-            <Container className="page-container">
-                <Header as="h2" textAlign="center">Edit Client</Header>
-                {this.state.error
-                    ? <div className="error">{this.state.error}</div>
-                    : (
-                        <AutoForm model={model} schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+            <div className="create-form">
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Edit client</button>
+                    <div className="btn-group">
+                        <button onClick={this.closeEdit} className="btn-cancel">Cancel</button>
+                        <button onClick={this.onEditClient} className="btn--green">Confirm & save</button>
+                    </div>
+                </div>
 
-                            <AutoField name="clientName"/>
-                            <ErrorField name="clientName"/>
-
-                            <AutoField name="firstName"/>
-                            <ErrorField name="firstName"/>
-
-                            <AutoField name="lastName"/>
-                            <ErrorField name="lastName"/>
-
-                            <AutoField name="email"/>
-                            <ErrorField name="email"/>
-
-                            <LongTextField name="financialGoals"/>
-                            <ErrorField name="financialGoals"/>
-
-                            <h3>Client Logo</h3>
-                            {
-                                model.logoPath
-                                    ?
-                                    <div>
-                                        <img src={getImagePath(model.logoPath)}/>
-                                        <a href="" onClick={this.onRemoveLogo.bind(this)}>Remove Logo</a>
+                <div className="create-form__wrapper">
+                    <div className="action-block">
+                        <div className="header__block">
+                            <div className="title-block text-uppercase">Client information</div>
+                        </div>
+                        {this.state.error
+                            ? <div className="error">{this.state.error}</div>
+                            : (
+                                <AutoForm model={client} schema={ClientSchema} onSubmit={this.onSubmit} ref="form">
+                                    <div className="form-wrapper">
+                                        <AutoField labelHidden={true} placeholder="Client name" name="clientName"/>
+                                        <ErrorField name="clientName"/>
                                     </div>
-                                    : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
-                            }
 
-                            <ListField name="contacts">
-                                <ListItemField name="$">
-                                    <NestField name="">
-                                        <TextField name="firstName"/>
-                                        <TextField name="lastName"/>
-                                        <AutoField name="contactType"/>
-                                        <TextField name="phone"/>
-                                        <TextField name="email"/>
-                                        <TextField name="notes"/>
-                                    </NestField>
-                                </ListItemField>
-                            </ListField>
+                                    <div className="form-wrapper">
+                                        <AutoField labelHidden={true} placeholder="Email" name="email"/>
+                                        <ErrorField name="email"/>
+                                    </div>
 
-                            <Divider/>
+                                    <div className="form-wrapper">
+                                        <LongTextField labelHidden={true} placeholder="Financial goals"
+                                                       name="financialGoals"/>
+                                        <ErrorField name="financialGoals"/>
+                                    </div>
 
-                            <Button primary fluid type="submit">
-                                Save
-                            </Button>
-                        </AutoForm>
-                    )
-                }
-            </Container>
+                                    <div className="header__block">
+                                        <div className="title-block text-uppercase">Client Logo</div>
+                                    </div>
+                                    <div className="main__block">
+                                        {
+                                            client && client.logoPath
+                                                ?
+                                                <div>
+                                                    <img src={getImagePath(client.logoPath)}/>
+                                                    <a href="" onClick={this.onRemoveLogo.bind(this)}>Remove Logo</a>
+                                                </div>
+                                                : (
+
+                                                    <div className="add-content">
+                                                        <i className="icon-upload"/>
+                                                        <DropzoneComponent config={componentConfig}
+                                                                           djsConfig={djsConfig}/>
+                                                    </div>
+                                                )
+                                        }
+                                    </div>
+
+                                    <ListField name="contacts" className="add-filter text-center">
+                                        <ListItemField name="$">
+                                            <NestField name="">
+                                                <div className="form-wrapper">
+                                                    <TextField labelHidden={true} placeholder="First Name"
+                                                               name="firstName"/>
+                                                </div>
+                                                <div className="form-wrapper">
+                                                    <TextField labelHidden={true} placeholder="Last Name"
+                                                               name="lastName"/>
+                                                </div>
+                                                <div className="form-wrapper">
+                                                    <AutoField labelHidden={true} placeholder="Contact type"
+                                                               name="contactType"/>
+                                                </div>
+                                                <div className="form-wrapper">
+                                                    <TextField labelHidden={true} placeholder="Phone" name="phone"/>
+                                                </div>
+                                                <div className="form-wrapper">
+                                                    <TextField labelHidden={true} placeholder="Email" name="email"/>
+                                                </div>
+                                                <div className="form-wrapper">
+                                                    <TextField labelHidden={true} placeholder="Notes" name="notes"/>
+                                                </div>
+                                            </NestField>
+                                        </ListItemField>
+                                    </ListField>
+                                </AutoForm>
+                            )
+                        }
+                    </div>
+                </div>
+            </div>
         )
     }
 }
+//For editing a client
+// <form action="">
+//     <div className="create-form__wrapper">
+//         {
+//             newContact && <NewContact close={this.closeNewContact}/>
+//         }
+//         <div className="add-filter text-center" onClick={this.newContact}>+ Add contact</div>
+//     </div>
+// </form>

@@ -29,7 +29,6 @@ export default class AutoField extends BaseField {
                     props.component = SelectField;
                 }
             } else {
-                console.log(props.fieldType)
                 switch (props.fieldType) {
                     case Date:    props.component = DateField; break;
                     case Array:   props.component = ListField; break;

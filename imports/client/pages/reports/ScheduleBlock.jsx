@@ -231,6 +231,5 @@ class CreateSchedule extends Component {
 }
 
 export default withQuery((props) => {
-    console.log(props);
     return query.clone({filters: {reportId: props.report._id}});
 }, {reactive: true})(ScheduleBlock)

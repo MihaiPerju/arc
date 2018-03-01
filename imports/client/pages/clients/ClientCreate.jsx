@@ -17,7 +17,7 @@ export default class CreateClient extends Component {
         })
     }
 
-    closeNewCotact = () => {
+    closeNewContact = () => {
         this.setState({
             newContact: false
         })
@@ -26,7 +26,6 @@ export default class CreateClient extends Component {
     onSubmit(data) {
         Meteor.call('client.create', data, (err, userId) => {
             if (!err) {
-                FlowRouter.go('/client/' + userId + '/edit');
                 Notifier.success('Client added!');
             } else {
                 Notifier.error(err.reason);
@@ -34,6 +33,10 @@ export default class CreateClient extends Component {
         })
     }
 
+    onCreateClient = () => {
+        const {form} = this.refs;
+        form.submit();
+    };
 
     render() {
         const {newContact} = this.state;
@@ -44,65 +47,35 @@ export default class CreateClient extends Component {
                     <button className="btn-add">+ Add client</button>
                     <div className="btn-group">
                         <button className="btn-cancel">Cancel</button>
-                        <button className="btn--green">Confirm & save</button>
+                        <button onClick={this.onCreateClient} className="btn--green">Confirm & save</button>
                     </div>
                 </div>
-                <div className="action-block">
-                    <div className="header__block">
-                        <div className="title-block text-uppercase">Client information</div>
-                    </div>
-                </div>
-                <AutoForm schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-
-                    {
-                        this.state.error
-                            ?
-                            <div className="error">{this.state.error}</div>
-                            :
-                            ''
-                    }
-                    <div className="form-wrapper">
-                        <AutoField noLabel={true} placeholder="Client name" name="clientName"/>
-                        <ErrorField name="clientName"/>
-                    </div>
-
-                    <div className="form-wrapper">
-                        <AutoField noLabel={true} placeholder="Email" name="email"/>
-                        <ErrorField name="email"/>
-                    </div>
-                    <button>
-                        Continue
-                    </button>
-                </AutoForm>
-                <form action="">
-
-                    <div className="create-form__wrapper">
-                        <div className="action-block">
-                            <div className="header__block">
-                                <div className="title-block text-uppercase">Client information</div>
-                            </div>
-                            <div className="form-wrapper">
-                                <input type="text" placeholder="Client name"/>
-                            </div>
-                            <div className="form-wrapper">
-                                <input type="text" placeholder="First name"/>
-                            </div>
-                            <div className="form-wrapper">
-                                <input type="text" placeholder="Last name"/>
-                            </div>
-                            <div className="form-wrapper">
-                                <input type="text" placeholder="Email"/>
-                            </div>
-                            <div className="form-wrapper">
-                                <input type="text" placeholder="Region"/>
-                            </div>
+                <div className="create-form__wrapper">
+                    <div className="action-block">
+                        <div className="header__block">
+                            <div className="title-block text-uppercase">Client information</div>
                         </div>
-                        {
-                            newContact && <NewContact close={this.closeNewCotact}/>
-                        }
-                        <div className="add-filter text-center" onClick={this.newContact}>+ Add contact</div>
+                        <AutoForm schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+
+                            {
+                                this.state.error
+                                    ?
+                                    <div className="error">{this.state.error}</div>
+                                    :
+                                    ''
+                            }
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Client name" name="clientName"/>
+                                <ErrorField name="clientName"/>
+                            </div>
+
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Email" name="email"/>
+                                <ErrorField name="email"/>
+                            </div>
+                        </AutoForm>
                     </div>
-                </form>
+                </div>
             </div>
         )
     }
