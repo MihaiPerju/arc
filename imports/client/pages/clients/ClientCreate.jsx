@@ -56,13 +56,8 @@ export default class CreateClient extends Component {
                             <div className="title-block text-uppercase">Client information</div>
                         </div>
                         <AutoForm schema={ClientSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-
                             {
-                                this.state.error
-                                    ?
-                                    <div className="error">{this.state.error}</div>
-                                    :
-                                    ''
+                                this.state.error && <div className="error">{this.state.error}</div>
                             }
                             <div className="form-wrapper">
                                 <AutoField labelHidden={true} placeholder="Client name" name="clientName"/>

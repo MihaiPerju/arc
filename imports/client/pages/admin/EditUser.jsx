@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import React, {Component} from 'react';
+import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/users/queries/singleUser.js';
-import { AutoForm, AutoField, ErrorField } from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-import { Button } from 'semantic-ui-react';
-import { Container } from 'semantic-ui-react';
-import { Divider } from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
+import {Container} from 'semantic-ui-react';
+import {Divider} from 'semantic-ui-react';
 import CreateEditTags from './components/CreateEditTags';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TagsService from './services/TagsService';
 
-class EditUser extends Component {
-    constructor () {
+export default class EditUser extends Component {
+    constructor() {
         super();
 
         this.state = {
@@ -25,57 +25,57 @@ class EditUser extends Component {
         };
     }
 
-    componentWillReceiveProps (newProps) {
-        if (!this.props.data && newProps.data) {
-            this.setState({
-                email: newProps.data.emails[0].address,
-                firstName: newProps.data.profile.firstName,
-                lastName: newProps.data.profile.lastName,
-                phoneNumber: newProps.data.profile.phoneNumber
-            });
-        }
+    componentWillReceiveProps(newProps) {
+        // if (!this.props.data && newProps.data) {
+        //     this.setState({
+        //         email: newProps.data.emails[0].address,
+        //         firstName: newProps.data.profile.firstName,
+        //         lastName: newProps.data.profile.lastName,
+        //         phoneNumber: newProps.data.profile.phoneNumber
+        //     });
+        // }
     }
 
-    componentWillMount () {
-        Meteor.call('tag.getAll', (err, allTags) => {
-
-            this.setState({
-                allTags
-            });
-        });
+    componentWillMount() {
+        // Meteor.call('tag.getAll', (err, allTags) => {
+        //
+        //     this.setState({
+        //         allTags
+        //     });
+        // });
     }
 
-    onSubmit (formData) {
-        Meteor.call('admin.editUser', this.props.data._id, formData, (err) => {
-            if (!err) {
-                Notifier.success('Data saved !');
-                FlowRouter.go('/admin/user/list');
-            } else {
-                Notifier.error(err.reason);
-            }
-        });
+    onSubmit(formData) {
+        // Meteor.call('admin.editUser', this.props.data._id, formData, (err) => {
+        //     if (!err) {
+        //         Notifier.success('Data saved !');
+        //         FlowRouter.go('/admin/user/list');
+        //     } else {
+        //         Notifier.error(err.reason);
+        //     }
+        // });
     }
 
-    onChangeField (fieldName, value) {
-        const stateObj = {};
-        stateObj[fieldName] = value;
-
-        this.setState(stateObj);
+    onChangeField(fieldName, value) {
+        // const stateObj = {};
+        // stateObj[fieldName] = value;
+        //
+        // this.setState(stateObj);
     }
 
     getTagList = () => {
-        const {allTags} = this.state;
-
-        return allTags.map((tag, key) => ({value: tag._id, label: TagsService.getTagName(tag)}));
+        // const {allTags} = this.state;
+        //
+        // return allTags.map((tag, key) => ({value: tag._id, label: TagsService.getTagName(tag)}));
     };
 
     onTagsChange = (tags) => {
-        this.setState({
-           tags
-        });
+        // this.setState({
+        //    tags
+        // });
     }
 
-    render () {
+    render() {
         const {data, loading, error} = this.props;
         const {allTags} = this.state;
         const model = data;
@@ -98,38 +98,38 @@ class EditUser extends Component {
 
         return (
             <Container className="page-container">
-                <AutoForm model={model} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                    {this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : ''
-                    }
+                {/*<AutoForm model={model} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">*/}
+                {/*{this.state.error*/}
+                {/*? <div className="error">{this.state.error}</div>*/}
+                {/*: ''*/}
+                {/*}*/}
 
-                    <AutoField name="profile.firstName"/>
-                    <ErrorField name="profile.firstName"/>
+                {/*<AutoField name="profile.firstName"/>*/}
+                {/*<ErrorField name="profile.firstName"/>*/}
 
-                    <AutoField name="profile.lastName"/>
-                    <ErrorField name="profile.lastName"/>
+                {/*<AutoField name="profile.lastName"/>*/}
+                {/*<ErrorField name="profile.lastName"/>*/}
 
-                    <AutoField name="email"/>
-                    <ErrorField name="email"/>
+                {/*<AutoField name="email"/>*/}
+                {/*<ErrorField name="email"/>*/}
 
-                    <AutoField name="profile.phoneNumber"/>
-                    <ErrorField name="profile.phoneNumber"/>
+                {/*<AutoField name="profile.phoneNumber"/>*/}
+                {/*<ErrorField name="profile.phoneNumber"/>*/}
 
-                    <SelectMulti name="tagIds" options={tags}/>
-                    <ErrorField name="tagIds"/>
+                {/*<SelectMulti name="tagIds" options={tags}/>*/}
+                {/*<ErrorField name="tagIds"/>*/}
 
-                    {
-                        allTags &&
-                        <CreateEditTags tags={allTags} onTagsChange={this.onTagsChange}/>
-                    }
+                {/*{*/}
+                {/*allTags &&*/}
+                {/*<CreateEditTags tags={allTags} onTagsChange={this.onTagsChange}/>*/}
+                {/*}*/}
 
-                    <Divider/>
+                {/*<Divider/>*/}
 
-                    <Button primary fluid type="submit">
-                        Save
-                    </Button>
-                </AutoForm>
+                {/*<Button primary fluid type="submit">*/}
+                {/*Save*/}
+                {/*</Button>*/}
+                {/*</AutoForm>*/}
             </Container>
         );
     }
@@ -153,11 +153,3 @@ const EditSchema = new SimpleSchema({
         type: String
     }
 });
-
-export default (props) => {
-    const Container = createQueryContainer(query.clone({filters: {_id: FlowRouter.current().params.userId}}), EditUser, {
-        single: true
-    });
-
-    return <Container/>;
-};
