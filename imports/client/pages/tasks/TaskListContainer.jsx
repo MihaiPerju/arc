@@ -106,7 +106,8 @@ class TaskListContainer extends Pager {
     }
 
     changeFilters(filters) {
-        this.updateFilters({filters})
+        this.updateFilters({filters});
+        console.log(this.state.filters);
     }
 
     update() {
@@ -195,4 +196,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-}, {reactive: true})(TaskListContainer)
+})(TaskListContainer)
