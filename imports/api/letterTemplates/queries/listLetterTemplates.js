@@ -8,12 +8,12 @@ export default LetterTemplates.createNamedQuery('listLetterTemplates', {
     },
     $paginate: true,
     name: 1,
-    body: 1,
-    description: 1,
-    keywords: 1,
-    category: 1,
     content: 1,
     codes: {
         code: 1
-    }
+    },
+    body: 1,
+    description: 1,
+    keywords: 1,
+    category: 1
 });

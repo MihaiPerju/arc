@@ -4,6 +4,7 @@ import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ActionList from './components/ActionList.jsx';
 import ActionContent from './ActionContent.jsx';
+import ActionCreate from './ActionCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/actions/queries/actionList";
 import Loading from '/imports/client/lib/ui/Loading';
@@ -15,48 +16,13 @@ class ActionListContainer extends Component {
         this.state = {
             actionsSelected: [],
             currentAction: null,
-            filter: false
+            filter: false,
+            create: false
         }
     }
 
     setAction = (_id) => {
         const {currentAction} = this.state;
-/*
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
-import SearchInput from '/imports/client/lib/SearchInput.jsx';
-import { Container } from 'semantic-ui-react';
-import { Button } from 'semantic-ui-react';
-import { Divider } from 'semantic-ui-react';
-import { Header } from 'semantic-ui-react';
-import ReasonCodesDialog from './components/ReasonCodesDialog';
-
-export default class ActionListContainer extends Pager {
-    constructor () {
-        super();
-
-        _.extend(this.state, {
-            perPage: 3,
-            filters: {},
-            actionReasonCodes: false
-        });
-
-        this.query = query.clone();
-        this.ActionListCont = createQueryContainer(this.query, ActionList, {
-            reactive: false
-        });
-    }
-
-    handleSearch = (searchValue) => {
-        this.updateFilters({
-            filters: {
-                title: {
-                    '$regex': searchValue,
-                    '$options': 'i'
-                }
-            }
-        });
-    };
-*/
 
         if (currentAction === _id) {
             this.setState({currentAction: null});
@@ -75,6 +41,7 @@ export default class ActionListContainer extends Pager {
         this.setState({actionsSelected});
     };
 
+
     handleClose = () => {
         this.setState({
             actionReasonCodes: false
@@ -85,11 +52,25 @@ export default class ActionListContainer extends Pager {
         this.setState({
             actionReasonCodes
         });
+
+    createForm = () => {
+        this.setState({
+            currentAction: false,
+            create: true,
+            rightSide: true
+        })
+    }
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        })
+
     }
 
     render() {
         const {data, loading, error} = this.props;
-        const {actionsSelected, currentAction} = this.state;
+        const {actionsSelected, currentAction, create} = this.state;
         const action = objectFromArray(data, currentAction);
         /*
         const params = _.extend({}, this.getPagerOptions());
@@ -105,7 +86,7 @@ export default class ActionListContainer extends Pager {
         }
         return (
             <div className="cc-container">
-                <div className={currentAction ? "left__side" : "left__side full__width"}>
+                <div className={(currentAction || create) ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={actionsSelected.length}/>
                     <ActionList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -115,12 +96,15 @@ export default class ActionListContainer extends Pager {
                         setAction={this.setAction}
                         actions={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar create={this.createForm}/>
                 </div>
                 {
-                    currentAction ? (
-                        <RightSide action={action}/>
-                    ) : null
+                    (currentAction || create) &&
+                    <RightSide
+                        action={action}
+                        create={create}
+                        close={this.closeForm}
+                    />
                 }
             </div>
 /*
@@ -159,10 +143,13 @@ class RightSide extends Component {
     }
 
     render() {
-        const {action} = this.props;
+        const {fade} = this.state;
+        const {action, create, close} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <ActionContent action={action}/>
+            <div className={fade ? "right__side in" : "right__side"}>
+                {
+                    create ? <ActionCreate close={close}/> : <ActionContent action={action}/>
+                }
             </div>
         )
     }

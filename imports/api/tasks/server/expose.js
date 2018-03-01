@@ -2,7 +2,7 @@ import Tasks from "../collection.js";
 import TaskListQuery from "./../queries/taskList";
 import Facilities from '/imports/api/facilities/collection';
 import RolesEnum from '/imports/api/users/enums/roles';
-import TaskAttachmentsQuery from "./../queries/taskAttachmentsList";
+import TaskAttachmentsQuery from "/imports/api/tasks/queries/taskAttachmentsList";
 
 Tasks.expose({});
 TaskAttachmentsQuery.expose({});

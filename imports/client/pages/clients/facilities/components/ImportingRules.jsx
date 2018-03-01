@@ -1,12 +1,10 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField, RadioField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, RadioField, ListField, ListItemField, NestField} from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
 import PropTypes from 'prop-types';
-import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
 import RulesService from '/imports/client/pages/clients/facilities/services/ImportingRulesService';
 import Loading from '/imports/client/lib/ui/Loading';
+import UploadItem from './FacilityContent/UploadItem'
 
 export default class ImportingRules extends React.Component {
     constructor() {
@@ -17,8 +15,8 @@ export default class ImportingRules extends React.Component {
     }
 
     componentWillMount() {
-        const {model} = this.props;
-        const schema = RulesService.createSchema(model && model.importRules && model.importRules.hasHeader);
+        const {model, rules} = this.props;
+        const schema = RulesService.createSchema(rules, model && model[rules] && model[rules].hasHeader);
         this.setState({
             loading: false,
             schema
@@ -27,11 +25,13 @@ export default class ImportingRules extends React.Component {
 
     onSubmitImportingRules = (importRules) => {
         const facilityId = this.props.model._id;
-
-        Meteor.call('facility.update', {_id: facilityId, importRules}, (err) => {
+        const {rules} = this.props;
+        const newFacility = {_id: facilityId};
+        newFacility[rules] = importRules;
+        Meteor.call('facility.update', newFacility, (err) => {
             if (!err) {
                 Notifier.success("Facility updated!");
-                this.props.updateFacility();
+                // this.props.updateFacility();
             } else {
                 Notifier.error(err.reason);
             }
@@ -39,9 +39,10 @@ export default class ImportingRules extends React.Component {
     };
 
     onChange(field, value) {
+        const {rules} = this.props;
         if (field === 'hasHeader') {
             //Change schema
-            const newSchema = RulesService.createSchema(value);
+            const newSchema = RulesService.createSchema(rules, value);
 
             this.setState({
                 schema: newSchema
@@ -49,45 +50,116 @@ export default class ImportingRules extends React.Component {
         }
     }
 
+    groupFields(fields) {
+        const numInRow = 4;
+        const numGroups = Math.round(fields.length / numInRow);
+        let result = [];
+        for (let i = 0; i < numGroups; i++) {
+            const startIndex = i * numInRow;
+            const finishIndex = Math.min((i + 1) * numInRow, fields.length);
+            const groupOfFields = fields.slice(startIndex, finishIndex);
+            result.push(groupOfFields);
+        }
+        return result;
+    }
+
     render() {
         const {schema, loading} = this.state;
-        const fields = RulesService.getSchemaFields();
-        const {model} = this.props;
+        const {model, rules} = this.props;
+        const fields = RulesService.getSchemaFields(rules);
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
+        const fieldGroups = this.groupFields(fields);
 
         return (
-            <Container>
+            <div>
                 {
                     loading ?
                         <Loading/> :
-                        <AutoForm model={model.importRules} schema={schema}
+                        <AutoForm model={model[rules]} schema={schema}
                                   onChange={this.onChange.bind(this)}
                                   onSubmit={this.onSubmitImportingRules}>
 
-                            <RadioField name="hasHeader" options={options}/>
-                            <ErrorField name="hasHeader"/>
+                            <div className="form-wrapper">
+                                <div className="upload-section">
+                                    <div className="radio-group">
+                                        <RadioField name="hasHeader" options={options}/>
+                                        <ErrorField name="hasHeader"/>
+                                    </div>
+                                </div>
+                            </div>
 
-                            {
-                                fields && fields.map((field, index) => {
-                                    return (
-                                        <div key={index}>
-                                            <AutoField name={field}/>
-                                            <ErrorField name={field}/>
-                                        </div>
-                                    )
-                                })
-                            }
+                            <div className="upload-list">
+                                {
+                                    fieldGroups && fieldGroups.map((fields) => {
+                                        return <UploadItem fields={fields}/>
+                                    })
+                                }
+                            </div>
+                            <div className="upload-list">
+                                {
+                                    schema._schemaKeys.includes("insurances") ?
+                                        <ListField name="insurances">
+                                            <ListItemField name="$">
+                                                <NestField className="upload-item text-center">
+                                                    <AutoField
+                                                        backgroundStyle={{
+                                                            "background": "#FFFFFF",
+                                                            "text-align": "center"
+                                                        }}
+                                                        className="text-light-grey"
+                                                        name="insName"
+                                                    />
+                                                    <ErrorField name="insName"/>
+                                                    <AutoField
+                                                        backgroundStyle={{
+                                                            "background": "#FFFFFF",
+                                                            "text-align": "center"
+                                                        }}
+                                                        className="text-light-grey"
+                                                        name="insCode"/>
+                                                    <ErrorField name="insCode"/>
 
-                            <Divider/>
-
-                            <Button primary fluid type="submit">Submit</Button>
+                                                    <AutoField
+                                                        backgroundStyle={{
+                                                            "background": "#FFFFFF",
+                                                            "text-align": "center"
+                                                        }}
+                                                        className="text-light-grey"
+                                                        name="insBal"/>
+                                                    <ErrorField name="insBal"/>
+                                                </NestField>
+                                            </ListItemField>
+                                        </ListField>
+                                        :
+                                        <ListField name="newInsBal">
+                                            <ListItemField name="$">
+                                                <NestField className="upload-item text-center">
+                                                    <div>
+                                                        <AutoField
+                                                            backgroundStyle={{
+                                                                "background": "#FFFFFF",
+                                                                "text-align": "center"
+                                                            }}
+                                                            className="text-light-grey" name="insBal"/>
+                                                        <ErrorField name="insBal"/>
+                                                    </div>
+                                                </NestField>
+                                            </ListItemField>
+                                        </ListField>
+                                }
+                            </div>
+                            <div className="btn-group">
+                                {/*<button className="btn--red">Cancel</button>*/}
+                                <button className="btn--green">Submit</button>
+                            </div>
                         </AutoForm>
                 }
-            </Container>
+            </div>
         )
     }
 }
 
-ImportingRules.propTypes = {
+ImportingRules
+    .propTypes = {
     model: PropTypes.object
 };

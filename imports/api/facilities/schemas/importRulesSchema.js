@@ -1,4 +1,5 @@
 import SimpleSchema from 'simpl-schema';
+import insuranceSchema from './insuranceSchema';
 
 export default new SimpleSchema({
     hasHeader: {
@@ -12,74 +13,55 @@ export default new SimpleSchema({
     },
     facCode: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Facility Code'
     },
     ptType: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Payment Type'
     },
     ptName: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Payment Name'
     },
     dischrgDate: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Discharge Date'
     },
     fbDate: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Fb Date'
     },
     acctBal: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Account Balance'
     },
     finClass: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Financial Class'
     },
     admitDate: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Admit Date'
     },
     medNo: {
         type: String,
-        optional: true
+        optional: true,
+        label: 'Medical Number'
     },
-    insName: {
-        type: String,
-        optional: true
+    insurances: {
+        type: Array,
+        optional: true,
+        label: 'Insurances'
     },
-    insName2: {
-        type: String,
-        optional: true
-    },
-    insName3: {
-        type: String,
-        optional: true
-    },
-    insCode: {
-        type: String,
-        optional: true
-    },
-    insCode2: {
-        type: String,
-        optional: true
-    },
-    insCode3: {
-        type: String,
-        optional: true
-    },
-    insBal: {
-        type: String,
-        optional: true
-    },
-    insBal2: {
-        type: String,
-        optional: true
-    },
-    insBal3: {
-        type: String,
-        optional: true
+    'insurances.$': {
+        type: insuranceSchema
     }
-})
+});

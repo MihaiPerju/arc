@@ -18,6 +18,7 @@ export default class SearchBar extends Component {
             active: !active,
             filter: !filter
         });
+        this.props.changeFilters();
     }
 
     onHandleChange() {
@@ -60,7 +61,7 @@ export default class SearchBar extends Component {
                     {this.props.btnGroup ? <BtnGroup/> : null}
                     <div className={this.props.btnGroup ? "search-input" : "search-input full__width"}>
                         <div className="form-group">
-                            <AutoField name="clientName" placeholder="Search"/>
+                            <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
                         </div>
                     </div>
 

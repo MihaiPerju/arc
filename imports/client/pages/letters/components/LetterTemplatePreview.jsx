@@ -20,7 +20,7 @@ export default class LetterTemplatePreview extends React.Component {
         return parser.render(letterTemplateBody);
     };
 
-    render () {
+    render() {
         const {letterTemplateBody, taskId, reset, attachments} = this.props;
         const letterBody = this.tagParser();
 

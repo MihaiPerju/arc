@@ -13,10 +13,10 @@ export default class TaskList extends Component {
     }
 
     render() {
-        const {data, checkTask, selectTask, currentTask} = this.props;
+        const {data, checkTask, selectTask, currentTask, classes} = this.props;
 
         return (
-            <div className={this.props.class}>
+            <div className={classes}>
                 {
                     data &&
                     data.length

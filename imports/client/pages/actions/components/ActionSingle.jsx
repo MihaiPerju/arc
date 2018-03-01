@@ -43,28 +43,6 @@ export default class ActionSingle extends Component {
                     <div className="item-name">{action.title}</div>
                 </div>
             </div>
-/*
-            <Table.Row>
-                <Table.Cell>{action.title}</Table.Cell>
-                <Table.Cell>{action.description}</Table.Cell>
-                <Table.Cell>{LabelSubstates[action.substate]}</Table.Cell>
-                <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Button onClick={this.onEditAction}>Edit</Button> 
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                <Button color="red" onClick={this.deleteAction}>Delete</Button>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Table.Cell>
-                <Table.Cell>
-                    <Button color="green" onClick={this.manageCodes}>Manage Reason Codes</Button>
-                </Table.Cell>
-            </Table.Row>
-*/
         );
     }
 }

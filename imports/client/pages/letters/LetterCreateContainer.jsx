@@ -6,9 +6,6 @@ import letterCreateActionSchema from '/imports/client/pages/letters/schemas/lett
 import Notifier from '/imports/client/lib/Notifier';
 import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
-import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
-import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
-import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
 
 class LetterCreateContainer extends React.Component {
     constructor () {
@@ -104,50 +101,6 @@ class LetterCreateContainer extends React.Component {
                     </div>
                 </div>
             </div>
-    /*
-    render () {
-        const {taskId} = this.props;
-        const {letterTemplates, selectedTemplate, pdfAttachments, selectedAttachments} = this.state;
-        const {keywords, body} = selectedTemplate;
-        const model = {letterTemplate: null};
-        const options = this.getSelectOptions(letterTemplates);
-        const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
-
-        return (
-            <Container className="page-container">
-                <Header as="h3" textAlign="center">Letter creation</Header>
-                <AutoForm autosave
-                          schema={letterCreateActionSchema}
-                          model={model}
-                          onSubmit={this.onSubmit}>
-                    <SelectWithDescription
-                        placeholder={'Select one of the letter templates'}
-                        name="letterTemplate" options={options}/>
-                    <ErrorField name="letterTemplate"/>
-
-                    <SelectMulti name="attachmentIds" options={attachmentOptions}/>
-                    <ErrorField name="attachmentIds"/>
-                </AutoForm>
-
-                <Divider/>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={4}>
-                            <GenerateLetterTemplateInputs
-                                templateKeywords={keywords}
-                                onChange={this.updateState}/>
-                        </Grid.Column>
-                        <Grid.Column width={12}>
-                            <LetterTemplatePreview
-                                taskId={taskId}
-                                attachments={selectedAttachments}
-                                letterTemplateBody={body}
-                                parentState={this.state}/>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Container>
-            */
         );
     }
 }

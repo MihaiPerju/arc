@@ -2,6 +2,10 @@ import React, {Component} from 'react';
 import {getImagePath} from "../../../../../api/utils";
 
 export default class ClientContentHeader extends Component {
+    onRedirect(clientId) {
+        FlowRouter.go("/client/" + clientId + "/edit")
+    }
+
     render() {
         const {client} = this.props;
         return (
@@ -16,10 +20,19 @@ export default class ClientContentHeader extends Component {
                     </div>
                     <div className="info-row">
                         <div className="info-item">
-                            <div className="text-light-grey">Email</div>
-                            <div className="text text-blue">{client.email}</div>
+                            <span className="text-light-grey">Email</span>
+                            <span className="text text-blue">{client.email}</span>
                         </div>
-                        <button className="btn--white">Edit client</button>
+                        <div className="btn-group">
+                            <a href={"/client/" + client._id + "/manage-facilities"}
+                               className="cc-button btn--white">
+                                Manage facilities
+                            </a>
+                            <a href="/region/list" className="cc-button btn--white">Manage regions</a>
+                            <button onClick={this.onRedirect.bind(this, client._id)} className="btn--white">Edit
+                                client
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
