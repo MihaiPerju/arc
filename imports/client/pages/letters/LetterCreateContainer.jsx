@@ -6,6 +6,9 @@ import letterCreateActionSchema from '/imports/client/pages/letters/schemas/lett
 import Notifier from '/imports/client/lib/Notifier';
 import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
+import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
+import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
+import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
 
 class LetterCreateContainer extends React.Component {
     constructor () {

@@ -198,4 +198,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(TaskListContainer)
+}, {reactive: true})(TaskListContainer)
