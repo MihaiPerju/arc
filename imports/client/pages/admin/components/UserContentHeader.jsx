@@ -9,8 +9,9 @@ export default class UserContentHeader extends React.Component {
 
     render() {
         const {user} = this.props;
+        console.log(user);
         return (
-            <div >
+            <div className="flex-content">
                 <div className="intro-block text-center">
                     <img src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"}
                          className="lg-avatar img-circle"
@@ -32,7 +33,7 @@ export default class UserContentHeader extends React.Component {
                     </li>
                     <li>
                         <span className="text-light-grey">Phone</span>
-                        <span className="info-label">(456) 789-2345</span>
+                        <span className="info-label">{user.profile.phoneNumber}</span>
                     </li>
                 </ul>
                 <button onClick={this.onEdit} className="btn-edit btn--white">Edit user</button>

@@ -21,10 +21,10 @@ export default class UserContent extends Component {
         const {user} = this.props;
         const {edit} = this.state;
         return (
-            <div className="main-content flex-content user-content">
+            <div className="main-content user-content">
                 {
                     edit ?
-                        <EditUser  setEdit={this.setEdit} user={user}/>
+                        <EditUser setEdit={this.setEdit} user={user}/>
                         :
                         <UserContentHeader setEdit={this.setEdit} user={user}/>
                 }

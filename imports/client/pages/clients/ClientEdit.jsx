@@ -90,78 +90,73 @@ export default class EditClient extends React.Component {
                         <div className="header__block">
                             <div className="title-block text-uppercase">Client information</div>
                         </div>
-                        {this.state.error
-                            ? <div className="error">{this.state.error}</div>
-                            : (
-                                <AutoForm model={client} schema={ClientSchema} onSubmit={this.onSubmit} ref="form">
-                                    <div className="form-wrapper">
-                                        <AutoField labelHidden={true} placeholder="Client name" name="clientName"/>
-                                        <ErrorField name="clientName"/>
-                                    </div>
+                        <AutoForm model={client} schema={ClientSchema} onSubmit={this.onSubmit} ref="form">
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Client name" name="clientName"/>
+                                <ErrorField name="clientName"/>
+                            </div>
 
-                                    <div className="form-wrapper">
-                                        <AutoField labelHidden={true} placeholder="Email" name="email"/>
-                                        <ErrorField name="email"/>
-                                    </div>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Email" name="email"/>
+                                <ErrorField name="email"/>
+                            </div>
 
-                                    <div className="form-wrapper">
-                                        <LongTextField labelHidden={true} placeholder="Financial goals"
-                                                       name="financialGoals"/>
-                                        <ErrorField name="financialGoals"/>
-                                    </div>
+                            <div className="form-wrapper">
+                                <LongTextField labelHidden={true} placeholder="Financial goals"
+                                               name="financialGoals"/>
+                                <ErrorField name="financialGoals"/>
+                            </div>
 
-                                    <div className="header__block">
-                                        <div className="title-block text-uppercase">Client Logo</div>
-                                    </div>
-                                    <div className="main__block">
-                                        {
-                                            client && client.logoPath
-                                                ?
-                                                <div>
-                                                    <img src={getImagePath(client.logoPath)}/>
-                                                    <a href="" onClick={this.onRemoveLogo.bind(this)}>Remove Logo</a>
-                                                </div>
-                                                : (
+                            <div className="header__block">
+                                <div className="title-block text-uppercase">Client Logo</div>
+                            </div>
+                            <div className="main__block">
+                                {
+                                    client && client.logoPath
+                                        ?
+                                        <div>
+                                            <img src={getImagePath(client.logoPath)}/>
+                                            <a href="" onClick={this.onRemoveLogo.bind(this)}>Remove Logo</a>
+                                        </div>
+                                        : (
 
-                                                    <div className="add-content">
-                                                        <i className="icon-upload"/>
-                                                        <DropzoneComponent config={componentConfig}
-                                                                           djsConfig={djsConfig}/>
-                                                    </div>
-                                                )
-                                        }
-                                    </div>
+                                            <div className="add-content">
+                                                <i className="icon-upload"/>
+                                                <DropzoneComponent config={componentConfig}
+                                                                   djsConfig={djsConfig}/>
+                                            </div>
+                                        )
+                                }
+                            </div>
 
-                                    <ListField name="contacts" className="add-filter text-center">
-                                        <ListItemField name="$">
-                                            <NestField name="">
-                                                <div className="form-wrapper">
-                                                    <TextField labelHidden={true} placeholder="First Name"
-                                                               name="firstName"/>
-                                                </div>
-                                                <div className="form-wrapper">
-                                                    <TextField labelHidden={true} placeholder="Last Name"
-                                                               name="lastName"/>
-                                                </div>
-                                                <div className="form-wrapper">
-                                                    <AutoField labelHidden={true} placeholder="Contact type"
-                                                               name="contactType"/>
-                                                </div>
-                                                <div className="form-wrapper">
-                                                    <TextField labelHidden={true} placeholder="Phone" name="phone"/>
-                                                </div>
-                                                <div className="form-wrapper">
-                                                    <TextField labelHidden={true} placeholder="Email" name="email"/>
-                                                </div>
-                                                <div className="form-wrapper">
-                                                    <TextField labelHidden={true} placeholder="Notes" name="notes"/>
-                                                </div>
-                                            </NestField>
-                                        </ListItemField>
-                                    </ListField>
-                                </AutoForm>
-                            )
-                        }
+                            <ListField name="contacts" className="add-filter text-center">
+                                <ListItemField name="$">
+                                    <NestField name="">
+                                        <div className="form-wrapper">
+                                            <TextField labelHidden={true} placeholder="First Name"
+                                                       name="firstName"/>
+                                        </div>
+                                        <div className="form-wrapper">
+                                            <TextField labelHidden={true} placeholder="Last Name"
+                                                       name="lastName"/>
+                                        </div>
+                                        <div className="form-wrapper">
+                                            <AutoField labelHidden={true} placeholder="Contact type"
+                                                       name="contactType"/>
+                                        </div>
+                                        <div className="form-wrapper">
+                                            <TextField labelHidden={true} placeholder="Phone" name="phone"/>
+                                        </div>
+                                        <div className="form-wrapper">
+                                            <TextField labelHidden={true} placeholder="Email" name="email"/>
+                                        </div>
+                                        <div className="form-wrapper">
+                                            <TextField labelHidden={true} placeholder="Notes" name="notes"/>
+                                        </div>
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
+                        </AutoForm>
                     </div>
                 </div>
             </div>
