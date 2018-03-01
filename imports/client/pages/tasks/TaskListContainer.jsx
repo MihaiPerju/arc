@@ -107,6 +107,9 @@ class TaskListContainer extends Pager {
 
     changeFilters(filters) {
         this.updateFilters({filters})
+        this.setState({
+            filter: !this.state.filter
+        })
     }
 
     update() {
@@ -145,7 +148,7 @@ class TaskListContainer extends Pager {
                                btnGroup={tasksSelected.length}
                     />
                     <TaskList
-                        class={filter ? "task-list decreased" : "task-list"}
+                        classes={filter ? "task-list decreased" : "task-list"}
                         renderContent={this.renderRightSide}
                         selectTask={this.selectTask}
                         tasksSelected={tasksSelected}

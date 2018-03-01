@@ -1,64 +1,51 @@
-import React from 'react';
-import CodesSchema from '/imports/api/codes/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
-import Notifier from '/imports/client/lib/Notifier';
-import CodeEnum from '/imports/api/codes/enums/codes';
-import {Button} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import React, {Component} from 'react';
 
-export default class CodeCreate extends React.Component {
+export default class CodeCreate extends Component {
     constructor() {
         super();
 
         this.state = {};
     }
 
-    onSubmit(data) {
-        Meteor.call('code.create', data, (err) => {
-            if (!err) {
-                FlowRouter.go('/code/list');
-                Notifier.success('Code added!');
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    }
-
     render() {
         return (
-            <Container className="page-container">
-                <Header as="h2" textAlign="center">Add a code</Header>
-                <AutoForm schema={CodesSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-
-                    {this.state.error && <div className="error">{this.state.error}</div>}
-
-                    <AutoField name="code"/>
-                    <ErrorField name="code"/>
-
-                    <AutoField name="action"/>
-                    <ErrorField name="action"/>
-
-                    <AutoField name="type" initialValue={CodeEnum.CARC}/>
-                    <ErrorField name="type"/>
-
-                    <AutoField name="description"/>
-                    <ErrorField name="description"/>
-
-                    <AutoField name="description_short"/>
-                    <ErrorField name="description_short"/>
-
-                    <AutoField name="denial_action"/>
-                    <ErrorField name="denial_action"/>
-
-                    <Divider/>
-
-                    <Button fluid primary type="submit">
-                        Create
-                    </Button>
-                </AutoForm>
-            </Container>
+            <div className="create-form">
+                <form action="">
+                    <div className="create-form__bar">
+                        <button className="btn-add">+ Add user</button>
+                        <div className="btn-group">
+                            <button className="btn-cancel">Cancel</button>
+                            <button className="btn--green">Confirm & save</button>
+                        </div>
+                    </div>
+                    <div className="create-form__wrapper">
+                        <div className="action-block i--block">
+                            <div className="form-wrapper">
+                                <input type="text" placeholder="Code name"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <input type="text" placeholder="Action"/>
+                            </div>
+                            <div className="select-group">
+                                <div className="form-wrapper">
+                                    <select name="filter">
+                                        <option value="">Select category</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="form-wrapper">
+                                <textarea placeholder="Description"></textarea>
+                            </div>
+                            <div className="form-wrapper">
+                                <textarea placeholder="*Note"></textarea>
+                            </div>
+                            <div className="form-wrapper">
+                                <input type="text" placeholder="Action"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         )
     }
 }

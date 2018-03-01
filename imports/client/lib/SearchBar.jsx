@@ -18,6 +18,7 @@ export default class SearchBar extends Component {
             active: !active,
             filter: !filter
         });
+        this.props.changeFilters();
     }
 
     onHandleChange() {
