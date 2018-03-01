@@ -7,10 +7,14 @@ export default class FilterBar extends Component {
 
         return (
             <div className="filter-bar">
-                <ul className="select-wrapper">
-                    <SelectField name="facilityId" options={options && options.facilities}/>
-                    <SelectField name="assigneeId" options={options && options.assignees}/>
-                </ul>
+                <div className="select-wrapper">
+                    <div className="select-form">
+                        <SelectField name="facilityId" options={options && options.facilities}/>
+                    </div>
+                    <div className="select-form">
+                        <SelectField name="assigneeId" options={options && options.assignees}/>
+                    </div>
+                </div>
             </div>
         )
     }

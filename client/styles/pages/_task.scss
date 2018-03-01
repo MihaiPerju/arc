@@ -105,11 +105,11 @@
 
 .cc-container {
     .task-list {
-        height: calc(100% - 112px);
+        height: calc(100% - 111px);
         background: rgba(255, 255, 255, 0.4);
         overflow-y: auto;
         &.decreased {
-            height: calc(100% - 237px);
+            height: calc(100% - 227px);
         }
     }
     .financial-class {
