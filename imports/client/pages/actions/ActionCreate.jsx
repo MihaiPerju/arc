@@ -1,86 +1,45 @@
-import React from 'react';
-import { AutoForm, AutoField, ErrorField, LongTextField, SelectField } from 'uniforms-semantic';
-import ActionSchema from '/imports/api/actions/schemas/schema';
-import Notifier from '/imports/client/lib/Notifier';
-import {Button} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
-import {LabelSubstates} from '/imports/api/tasks/enums/substates.js';
-import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
+import React, {Component} from 'react';
 
-export default class ActionCreate extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-        this.state = {
-            checked: false
-        };
-    }
-
-    onSubmit(data) {
-        Meteor.call('action.create', data, (err)=> {
-            if (!err) {
-                FlowRouter.go('/action/list');                
-                Notifier.success('Action created!');
-            } else {
-                Notifier.error(err.reason);
-            }
-        });
-    }
-
-    getOptions = (enums) => {
-        return _.map(enums, (value, key) => {
-            const labelPrefix = findStateBySubstate(StatesSubstates, key);
-            const label = `${labelPrefix}: ${value}`;
-            return {value: key, label: label};
-        })
-    };
-
-    handleClick() {
-        const currentState = this.state.checked;
-        this.setState({
-            checked: !currentState
-        })
+export default class ActionCreate extends Component {
+    constructor() {
+        super();
+        this.state = {};
     }
 
     render() {
-        const substates = this.getOptions(LabelSubstates);
-
         return (
-            <Container className="page-container">
-                <Header as="h2" textAlign="center">Add an action</Header>
-                <AutoForm schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                    
-                    {this.state.error && <div className="error">{this.state.error}</div>}
-
-                    <AutoField name="title"/>
-                    <ErrorField name="title"/>
-
-                    <LongTextField name="description"/>
-                    <ErrorField name="description"/>
-
-                    <input type="checkbox" onClick={this.handleClick}/>Changes the substate of the Account?
-
-                    {this.state.checked &&
-                        <div>
-                            <SelectField name="substate" options={substates}/>
-                            <ErrorField name="substate"/>
-                        </div> 
-                    }
-
-                    {!this.state.checked &&
-                        <div className="display-none">
-                            <SelectField value='N/A' name="substate" options={'N/A'}/>
-                            <ErrorField name="substate"/>
+            <div className="create-form action-create-form">
+                <form action="">
+                    <div className="create-form__bar">
+                        <button className="btn-add">+ Add action</button>
+                        <div className="btn-group">
+                            <button className="btn-cancel">Cancel</button>
+                            <button className="btn--green">Confirm & save</button>
                         </div>
-                    }
-
-                    <Button fluid primary type="submit">
-                        Create
-                    </Button>
-                </AutoForm>
-            </Container>
+                    </div>
+                    <div className="create-form__wrapper">
+                        <div className="action-block">
+                            <div className="form-wrapper">
+                                <input type="text" placeholder="Action name"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <textarea placeholder="Description"></textarea>
+                            </div>
+                            <div className="check-group">
+                                <input type="checkbox" id="m1" name="allowedRoles" value="on"/>
+                                <label htmlFor="m1">Allow manager role</label>
+                            </div>
+                            <div className="select-group">
+                                <div className="form-wrapper">
+                                    <select name="filter">
+                                        <option value="">Select category</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
         )
     }
 }
