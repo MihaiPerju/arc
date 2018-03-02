@@ -48,6 +48,11 @@ export default class ReportHeader extends Component {
         }
     };
 
+    onEdit = () => {
+        const {setEdit} = this.props;
+        setEdit();
+    };
+
     render() {
         const {report} = this.props;
         const {schedule, tasks} = this.state;
@@ -108,7 +113,7 @@ export default class ReportHeader extends Component {
                                 </div>
                                 <div className="btn-group">
                                     <button className="btn--white" onClick={this.openSchedule}>Schedule</button>
-                                    <button className="btn--white">Edit report</button>
+                                    <button onClick={this.onEdit} className="btn--white">Edit report</button>
                                 </div>
                             </div>
                         </div>

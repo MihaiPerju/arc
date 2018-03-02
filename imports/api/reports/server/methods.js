@@ -23,9 +23,9 @@ Meteor.methods({
 
     'report.update'(data) {
         // Check if user is allowed to modify report;
-        Security.hasRightsOnReport(this.userId, data.reportId);
+        Security.hasRightsOnReport(this.userId, data._id);
 
-        return Reports.update({_id: data.reportId}, {
+        return Reports.update({_id: data._id}, {
             $set: data.generalInformation
         });
     },

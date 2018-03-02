@@ -96,7 +96,7 @@ export default class ReportsService {
                     filters[field] = {'$regex': data[field], '$options': 'i'};
                 } else if (data[field + 'Match'] === stringMatchOptions[1]) {
                     filters[field] = {
-                        $not: `/${data[field]}/`
+                        $ne: `/${data[field]}/`
                     };
                 } else {
                     filters[field] = data[field];
