@@ -29,6 +29,11 @@ export default class CodeEdit extends React.Component {
         form.submit();
     };
 
+    onSetEdit = () => {
+        const {setEdit} = this.props;
+        setEdit();
+    };
+
     render() {
         const {code} = this.props;
 
@@ -37,7 +42,7 @@ export default class CodeEdit extends React.Component {
                 <div className="create-form__bar">
                     <button className="btn-add">+ Edit code</button>
                     <div className="btn-group">
-                        <button className="btn-cancel">Cancel</button>
+                        <button onClick={this.onSetEdit} className="btn-cancel">Cancel</button>
                         <button onClick={this.onEditCode} className="btn--green">Confirm & save</button>
                     </div>
                 </div>
@@ -45,7 +50,7 @@ export default class CodeEdit extends React.Component {
                 <div className="create-form__wrapper">
                     <div className="action-block">
                         <div className="header__block">
-                            <div className="title-block text-uppercase">Code information</div>
+                            <div className="title-bloc;k text-uppercase">Code information</div>
                         </div>
                         <AutoForm schema={CodesSchema} onSubmit={this.onSubmit.bind(this)} ref="form" model={code}>
                             {
@@ -54,7 +59,6 @@ export default class CodeEdit extends React.Component {
                             <div className="form-wrapper">
                                 <AutoField labelHidden={true} placeholder="Code" name="code"/>
                                 <ErrorField name="code"/>
-
                             </div>
 
                             <div className="form-wrapper">
