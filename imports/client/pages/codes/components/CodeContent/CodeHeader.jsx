@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 
 export default class ReportHeader extends Component {
+    onEdit = () => {
+        const {setEdit} = this.props;
+        setEdit();
+    };
+
     render() {
         const {code} = this.props;
         return (
@@ -15,7 +20,9 @@ export default class ReportHeader extends Component {
                         <div className="label label--grey text-uppercase">{code.type}</div>
                     </div>
                     <div className="btn-group">
-                        <button className="btn--white">Edit code</button>
+                        <button onClick={this.onEdit} className="btn--white">Edit
+                            code
+                        </button>
                     </div>
                 </div>
             </div>
