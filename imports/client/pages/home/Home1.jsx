@@ -8,9 +8,18 @@ class Home extends React.Component {
     render() {
         const {currentUser} = this.props;
         return (
-            <div className="cc-container home-container">
-                <h1>Dashboard</h1>
-            </div>
+            <main className="cc-main">
+                <div className="page-container">
+                    <div className="text-center"><h1>Dashboard</h1></div>
+                    {
+                        currentUser && currentUser.roles && currentUser.roles.includes(RoleEnum.REP)
+                            ?
+                            <RepDashboard/>
+                            :
+                            <Dashboard/>
+                    }
+                </div>
+            </main>
         )
     }
 }

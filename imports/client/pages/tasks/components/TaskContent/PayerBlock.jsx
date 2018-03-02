@@ -18,7 +18,7 @@ export default class PayerBlock extends Component {
         var settings = {
             infinite: true,
             speed: 500,
-            slidesToShow: 4,            
+            slidesToShow: 3,
             nextArrow: <RightArrow/>,
             prevArrow: <LeftArrow/>,
             slidesToScroll: 1
