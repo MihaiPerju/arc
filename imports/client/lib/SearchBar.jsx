@@ -2,13 +2,16 @@ import React, {Component} from 'react';
 import {AutoForm, AutoField} from '/imports/ui/forms';
 import SimpleSchema from "simpl-schema";
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import Dropdown from './Dropdown';
+import classNames from 'classnames';
 
 export default class SearchBar extends Component {
     constructor() {
         super();
         this.state = {
             active: false,
-            filter: false
+            filter: false,
+            dropdown: false
         };
     }
 
@@ -49,27 +52,63 @@ export default class SearchBar extends Component {
         }
     }
 
+    openDropdown = () => {
+        if (!this.state.dropdown) {
+            document.addEventListener('click', this.outsideClick, false);
+        } else {
+            document.removeEventListener('click', this.outsideClick, false)
+        }
+        this.setState({
+            dropdown: !this.state.dropdown
+        })
+    }
+
+    outsideClick = (e) => {
+        if (this.node.contains(e.target)) {
+            return;
+        }
+
+        this.openDropdown();
+    };
+
+    nodeRef = (node) => {
+        this.node = node;
+    }
+
     render() {
-        const {filter, active} = this.state;
-        const {options} = this.props;
+        const {filter, active, dropdown} = this.state;
+        const {options, btnGroup} = this.props;
+        const classes = classNames({
+                'select-type': true,
+                'open': dropdown
+            }
+        );
+
         return (
             <AutoForm ref="filters" onChange={this.onHandleChange.bind(this)} schema={schema}>
                 <div className="search-bar">
-                    <div className="select-type">
-                        <div className="btn-select"></div>
+                    <div className={classes} ref={this.nodeRef}>
+                        <div className="btn-select"/>
+                        <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
+                            <i className="icon-angle-down"/>
+                        </div>
+                        {
+                            dropdown && <Dropdown/>
+                        }
                     </div>
-                    {this.props.btnGroup ? <BtnGroup/> : null}
-                    <div className={this.props.btnGroup ? "search-input" : "search-input full__width"}>
-                        <div className="form-group">
-                            <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
+                    <div className="search-bar__wrapper">
+                        {btnGroup ? <BtnGroup/> : null}
+                        <div className={btnGroup ? "search-input" : "search-input full__width"}>
+                            <div className="form-group">
+                                <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
+                            </div>
+                        </div>
+
+                        <div className={active ? "filter-block active" : "filter-block"}
+                             onClick={this.manageFilterBar.bind(this)}>
+                            <button><i className="icon-filter"/></button>
                         </div>
                     </div>
-
-                    <div className={active ? "filter-block active" : "filter-block"}
-                         onClick={this.manageFilterBar.bind(this)}>
-                        <button><i className="icon-filter"/></button>
-                    </div>
-
                 </div>
                 {
                     filter && <FilterBar options={options}/>
@@ -102,7 +141,6 @@ class BtnGroup extends Component {
         )
     }
 }
-
 
 const schema = new SimpleSchema({
     facilityId: {

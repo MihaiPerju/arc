@@ -137,8 +137,6 @@
       option {
         padding-top: 4px;
         padding-bottom: 5px;
-        &:hover {}
-
       }
     }
   }
@@ -146,7 +144,6 @@
 
 // Search Bar
 .search-bar {
-  display: flex;
   background: $color-white;
   padding: 10px;
   padding-right: 3px;
@@ -154,9 +151,13 @@
   box-shadow: 0px 1px 3px 0px #ebe7e7;
   border-bottom: 1px #e1e1e1 solid;
   position: relative;
-  justify-content: flex-end;
-  overflow: hidden;
-  height: 56px;
+  .search-bar__wrapper {
+    display: flex;
+    position: relative;
+    justify-content: flex-end;
+    overflow: hidden;
+    height: 35px;
+  }
   .search-input {
     width: calc(100% - 174px);
     transition: width $transition300;
@@ -165,23 +166,50 @@
     }
   }
   .select-type {
-    padding-right: 18px;
-    padding-left: 5px;
+    padding-right: 15px;
+    padding-left: 15px;
     padding-top: 8px;
-    position: relative;
     cursor: pointer;
     margin-right: 10px;
     position: absolute;
-    left: 10px;
+    left: 0;
     top: 10px;
-    &:before {
-      content: '\f107';
-      font-family: $font-icon;
+    z-index: 1;
+    background: $color-white;
+    border-radius: 3px;
+    &.open {
+      box-shadow: 0px 1px 10px 0 #d6d6d6
+    }
+    .dropdown {
+      min-width: 80px;
+      &__wrapper {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        list-style: none;
+        margin-left: -10px;
+        margin-right: -10px;
+      }
+      li {
+        margin-left: -5px;
+        margin-right: -5px;
+        a {
+          padding: 6px 15px;
+          color: $light-grey;
+          display: block;
+          line-height: 1.4rem;
+          &:hover {
+            background: #f2f1f1;
+          }
+        }
+      }
+    }
+    .btn-toggle-dropdown {
       position: absolute;
       color: $extra-light-grey;
-      top: 8px;
-      right: 0;
+      top: 4px;
+      left: 35px;
       line-height: 1.4rem;
+      padding: 5px;
     }
     .btn-select {
       width: 16px;
