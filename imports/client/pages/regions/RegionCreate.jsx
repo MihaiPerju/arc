@@ -15,10 +15,11 @@ export default class RegionCreate extends React.Component {
     }
 
     onSubmit(data) {
+        data.clientId = FlowRouter.current().params.id;
         Meteor.call('region.create', data, (err) => {
             if (!err) {
                 Notifier.success('Region added!');
-                FlowRouter.go('/region/list');
+                FlowRouter.go('region.list', {id: FlowRouter.current().params.id});
             } else {
                 Notifier.error(err.reason);
             }
@@ -26,10 +27,11 @@ export default class RegionCreate extends React.Component {
     }
 
     render() {
+        const schema = RegionSchema.omit('clientId');
         return (
             <Container className="page-container">
                 <Header as="h2" textAlign="center">Add a region</Header>
-                <AutoForm schema={RegionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                <AutoForm schema={schema} onSubmit={this.onSubmit.bind(this)} ref="form">
 
                     {this.state.error && <div className="error">{this.state.error}</div>}
 

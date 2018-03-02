@@ -17,8 +17,8 @@ class ClientContainer extends Component {
             clientsSelected: [],
             create: false
         };
-        this.renderRightSide = this.renderRightSide.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
+        //this.renderRightSide = this.renderRightSide.bind(this);
+        //this.showFilterBar = this.showFilterBar.bind(this);
         this.createForm = this.createForm.bind(this);
         this.closeForm = this.closeForm.bind(this);
     }
