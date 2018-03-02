@@ -21,17 +21,17 @@ export default class FiltersSingle extends React.Component {
     renderWidget(name, TaskReportFields) {
         if (ReportsService.isEnum(name, TaskReportFields)) {
             return <div>
-                <AutoField placeholder="Select filter" noLabel={true} name={name}/>
+                <AutoField placeholder="Select filter" labelHidden={true} name={name}/>
                 <ErrorField name={name}/>
             </div>
         }
         if (ReportsService.isDate(name, TaskReportFields)) {
             return (
                 <div>
-                    <AutoField placeholder="Select minimum date" noLabel={true} name={`${name}Start`}/>
+                    <AutoField placeholder="Select minimum date" labelHidden={true} name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
-                    <AutoField placeholder="Select maximum date" noLabel={true} name={`${name}End`}/>
+                    <AutoField placeholder="Select maximum date" labelHidden={true} name={`${name}End`}/>
                     <ErrorField name={`${name}End`}/>
                 </div>
             )
@@ -40,10 +40,10 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isNumber(name, TaskReportFields)) {
             return (
                 <div>
-                    <AutoField noLabel={true} placeholder="Type minimum value" name={`${name}Start`}/>
+                    <AutoField labelHidden={true} placeholder="Type minimum value" name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
-                    <AutoField noLabel={true} placeholder="Type maximum value" name={`${name}End`}/>
+                    <AutoField labelHidden={true} placeholder="Type maximum value" name={`${name}End`}/>
                     <ErrorField name={`${name}End`}/>
                 </div>
             )
@@ -59,10 +59,10 @@ export default class FiltersSingle extends React.Component {
 
         return (
             <div>
-                <AutoField placeholder="Type your filter" name={name}/>
+                <AutoField labelHidden={true} placeholder="Type your filter" name={name}/>
                 <ErrorField name={name}/>
 
-                <AutoField placeholder="Select matching pattern" name={`${name}Match`}/>
+                <AutoField labelHidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
                 <ErrorField name={`${name}Match`}/>
             </div>
         )

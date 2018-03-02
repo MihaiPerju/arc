@@ -15,7 +15,7 @@ const Num_ = ({
                   min,
                   name,
                   onChange,
-                  noLabel,
+                  labelHidden,
                   backgroundStyle,
                   placeholder,
                   step,
@@ -23,7 +23,7 @@ const Num_ = ({
                   ...props
               }) =>
     <div {...filterDOMProps(props)}>
-        {label && !noLabel && (
+        {label && !labelHidden && (
             <label htmlFor={id}>
                 {label}
             </label>

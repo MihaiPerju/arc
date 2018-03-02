@@ -161,12 +161,6 @@ export default class TaskFilterBuilder extends React.Component {
                                     />
                             })
                         }
-                        <Button primary fluid type="submit">
-                            Finish
-                        </Button>
-                        <Segment tertiary>
-                            <div>Extracted filters:{JSON.stringify(filters)}</div>
-                        </Segment>
                         {/*Component for showing filters extracted*/}
                         {/*<div className="label-filter text-light-grey">Extracted filters:{JSON.stringify(filters)}</div>*/}
                     </AutoForm>
