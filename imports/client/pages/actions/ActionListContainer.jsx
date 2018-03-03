@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ActionList from './components/ActionList.jsx';
 import ActionContent from './ActionContent.jsx';
 import ActionCreate from './ActionCreate.jsx';
-import { withQuery } from 'meteor/cultofcoders:grapher-react';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/actions/queries/actionList';
 import Loading from '/imports/client/lib/ui/Loading';
-import { objectFromArray } from '/imports/api/utils';
+import {objectFromArray} from '/imports/api/utils';
 
 class ActionListContainer extends Component {
-    constructor () {
+    constructor() {
         super();
         this.state = {
             actionsSelected: [],
@@ -27,7 +27,7 @@ class ActionListContainer extends Component {
         if (currentAction === _id) {
             this.setState({currentAction: null});
         } else {
-            this.setState({currentAction: _id});
+            this.setState({currentAction: _id, create: false});
         }
     };
 
@@ -41,23 +41,10 @@ class ActionListContainer extends Component {
         this.setState({actionsSelected});
     };
 
-    handleClose = () => {
-        this.setState({
-            actionReasonCodes: false
-        });
-    };
-
-    handleCurrentAction = (actionReasonCodes) => {
-        this.setState({
-            actionReasonCodes
-        });
-    };
-
     createForm = () => {
         this.setState({
             currentAction: false,
-            create: true,
-            rightSide: true
+            create: true
         });
     };
 
@@ -68,15 +55,11 @@ class ActionListContainer extends Component {
 
     };
 
-    render () {
+    render() {
         const {data, loading, error} = this.props;
         const {actionsSelected, currentAction, create} = this.state;
         const action = objectFromArray(data, currentAction);
-        /*
-        const params = _.extend({}, this.getPagerOptions());
-        const ActionListCont = this.ActionListCont;
-        const {sortBy, isSortAscend, actionReasonCodes} = this.state;
-         */
+
         if (loading) {
             return <Loading/>;
         }
@@ -96,7 +79,7 @@ class ActionListContainer extends Component {
                         setAction={this.setAction}
                         actions={data}
                     />
-                    <PaginationBar create={this.createForm}/>
+                    <PaginationBar module="Action" create={this.createForm}/>
                 </div>
                 {
                     (currentAction || create) &&
@@ -107,42 +90,25 @@ class ActionListContainer extends Component {
                     />
                 }
             </div>
-            /*
-                        <Container className="page-container">
-                            <div>
-                                <Header as="h2" textAlign="center">Actions</Header>
-                                <SearchInput handleSearch={this.handleSearch}/>
-                            </div>
-                            <div className='m-t-30'>
-                                {this.getPaginator()}
-                                <ActionListCont params={params}
-                                                handleHeaderClick={this.handleHeaderClick}
-                                                reasonCodesManage={this.handleCurrentAction}/>
-                                {this.getPaginator()}
-                            </div>
-                            {actionReasonCodes && <ReasonCodesDialog actionId={actionReasonCodes}
-                                                                          closeAction={this.handleClose}/>}
-                        </Container>
-            */
         );
     }
 }
 
 class RightSide extends Component {
-    constructor () {
+    constructor() {
         super();
         this.state = {
             fade: false
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         setTimeout(() => {
             this.setState({fade: true});
         }, 300);
     }
 
-    render () {
+    render() {
         const {fade} = this.state;
         const {action, create, close} = this.props;
         return (
@@ -157,4 +123,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(ActionListContainer);
+}, {reactive: true})(ActionListContainer);
