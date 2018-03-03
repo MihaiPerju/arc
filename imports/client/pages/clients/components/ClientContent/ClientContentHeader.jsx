@@ -29,8 +29,10 @@ export default class ClientContentHeader extends Component {
                                className="cc-button btn--white">
                                 Manage facilities
                             </a>
-                            <a href="/region/list" className="cc-button btn--white">Manage regions</a>
-                            <button onClick={this.onEdit} className="btn--white">Edit
+                            <a href={FlowRouter.url('region.list', {id: client._id})} className="cc-button btn--white">
+                                Manage regions
+                            </a>
+                            <button onClick={this.onRedirect.bind(this, client._id)} className="btn--white">Edit
                                 client
                             </button>
                         </div>

@@ -138,7 +138,9 @@ import RegionCreate from '/imports/client/pages/regions/RegionCreate';
 import RegionEdit from '/imports/client/pages/regions/RegionEdit';
 import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
 
-route('/client/:id/region-create', RegionCreate, {}, {
+
+
+route('/client/:id/region/create', RegionCreate, {}, {
     name: 'region.create'
 });
 route('/region/:id/edit', RegionEdit);

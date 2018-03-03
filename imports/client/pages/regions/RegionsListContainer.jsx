@@ -111,5 +111,9 @@ class RightSide extends Component {
 }
 
 export default withQuery((props) => {
-    return query.clone();
+    return query.clone({
+        filters: {
+            clientId: FlowRouter.current().params.id
+        }
+    });
 })(RegionListContainer)
