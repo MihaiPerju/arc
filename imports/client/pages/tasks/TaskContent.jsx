@@ -20,7 +20,7 @@ export default class TaskContent extends Component {
                 <ActionBlock update={update} task={task}/>
                 <LetterList task={task}/>
                 <PdfFiles update={update} task={task}/>
-                {/*{<CommentBlock task={task}/>}*/}
+                {/*<CommentBlock task={task}/>*/}
             </div>
         )
     }

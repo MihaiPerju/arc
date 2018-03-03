@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import Notifier from "../../lib/Notifier";
+import CodeEnum from "../../../api/codes/enums/codes";
+import CodesSchema from "../../../api/codes/schemas/schema";
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 
 export default class CodeCreate extends Component {
     constructor() {
@@ -7,44 +11,71 @@ export default class CodeCreate extends Component {
         this.state = {};
     }
 
+    onSubmit(data) {
+        Meteor.call('code.create', data, (err) => {
+            if (!err) {
+                FlowRouter.go('/code/list');
+                Notifier.success('Code added!');
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
+    }
+
+    onCreateCode = () => {
+        const {form} = this.refs;
+        form.submit();
+    };
+
     render() {
         return (
             <div className="create-form">
-                <form action="">
-                    <div className="create-form__bar">
-                        <button className="btn-add">+ Add user</button>
-                        <div className="btn-group">
-                            <button className="btn-cancel">Cancel</button>
-                            <button className="btn--green">Confirm & save</button>
-                        </div>
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Add code</button>
+                    <div className="btn-group">
+                        <button className="btn-cancel">Cancel</button>
+                        <button onClick={this.onCreateCode} className="btn--green">Confirm & save</button>
                     </div>
-                    <div className="create-form__wrapper">
-                        <div className="action-block i--block">
+                </div>
+                <div className="create-form__wrapper">
+                    <div className="action-block i--block">
+                        <AutoForm schema={CodesSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+
+                            {this.state.error && <div className="error">{this.state.error}</div>}
                             <div className="form-wrapper">
-                                <input type="text" placeholder="Code name"/>
+                                <AutoField labelHidden={true} placeholder="Code" name="code"/>
+                                <ErrorField name="code"/>
                             </div>
+
                             <div className="form-wrapper">
-                                <input type="text" placeholder="Action"/>
+                                <AutoField labelHidden={true} placeholder="Action" name="action"/>
+                                <ErrorField name="action"/>
                             </div>
+
                             <div className="select-group">
                                 <div className="form-wrapper">
-                                    <select name="filter">
-                                        <option value="">Select category</option>
-                                    </select>
+                                    <AutoField name="type" initialValue={CodeEnum.CARC}/>
+                                    <ErrorField name="type"/>
                                 </div>
                             </div>
+
                             <div className="form-wrapper">
-                                <textarea placeholder="Description"></textarea>
+                                <AutoField labelHidden={true} placeholder="Description" name="description"/>
+                                <ErrorField name="description"/>
                             </div>
+
                             <div className="form-wrapper">
-                                <textarea placeholder="*Note"></textarea>
+                                <AutoField labelHidden={true} placeholder="Description short" name="description_short"/>
+                                <ErrorField name="description_short"/>
                             </div>
+
                             <div className="form-wrapper">
-                                <input type="text" placeholder="Action"/>
+                                <AutoField labelHidden={true} placeholder="Denial Action" name="denial_action"/>
+                                <ErrorField name="denial_action"/>
                             </div>
-                        </div>
+                        </AutoForm>
                     </div>
-                </form>
+                </div>
             </div>
         )
     }

@@ -50,7 +50,7 @@ export default class TaskFilterBuilder extends React.Component {
         for (component in components) {
             if (components[component].isActive) {
                 for (option in schemaOptions) {
-                    if (schemaOptions[option].text === component) {
+                    if (schemaOptions[option].label === component) {
                         schemaOptions.splice(option, 1);
                     }
                 }
@@ -95,7 +95,7 @@ export default class TaskFilterBuilder extends React.Component {
         const {components, schemaOptions} = this.state;
 
         components[name].isActive = false;
-        schemaOptions.push({value: name, text: name});
+        schemaOptions.push({value: name, label: name});
 
         this.setState({
             components,
@@ -141,7 +141,7 @@ export default class TaskFilterBuilder extends React.Component {
     render() {
         const {filters, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
         const {filterBuilderData} = this.props;
-
+        console.log(schemaOptions);
         return (
             <div>
                 <main className="cc-main">
@@ -161,12 +161,6 @@ export default class TaskFilterBuilder extends React.Component {
                                     />
                             })
                         }
-                        <Button primary fluid type="submit">
-                            Finish
-                        </Button>
-                        <Segment tertiary>
-                            <div>Extracted filters:{JSON.stringify(filters)}</div>
-                        </Segment>
                         {/*Component for showing filters extracted*/}
                         {/*<div className="label-filter text-light-grey">Extracted filters:{JSON.stringify(filters)}</div>*/}
                     </AutoForm>

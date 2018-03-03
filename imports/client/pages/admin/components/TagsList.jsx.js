@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { Table } from 'semantic-ui-react';
+import React, {Component} from 'react';
+import {Table} from 'semantic-ui-react';
 import TagsService from '../services/TagsService';
-import { Button } from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 
 export default class TagsList extends Component {
-    constructor () {
+    constructor() {
         super();
 
         this.state = {
@@ -13,13 +13,13 @@ export default class TagsList extends Component {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.setState({
             tags: this.props.tags
         });
     }
 
-    removeTag (index) {
+    removeTag(index) {
         const {tags} = this.state;
         const {onTagsChange} = this.props;
 
@@ -38,7 +38,7 @@ export default class TagsList extends Component {
         onTagsChange(tags);
     }
 
-    render () {
+    render() {
         const {tags} = this.state;
 
         return (

@@ -1,44 +1,95 @@
 import React, {Component} from 'react';
+import ActionSchema from "../../../api/actions/schemas/schema";
+import {AutoForm, AutoField, ErrorField, LongTextField, SelectField} from '/imports/ui/forms';
+import Notifier from "../../lib/Notifier";
+import {LabelSubstates} from "../../../api/tasks/enums/substates";
+import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 
 export default class ActionCreate extends Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+            checked: false
+        };
     }
 
+    onSubmit(data) {
+        Meteor.call('action.create', data, (err) => {
+            if (!err) {
+                Notifier.success('Action created!');
+            } else {
+                Notifier.error(err.reason);
+            }
+        });
+    }
+
+    getOptions = (enums) => {
+        return _.map(enums, (value, key) => {
+            const labelPrefix = findStateBySubstate(StatesSubstates, key);
+            const label = `${labelPrefix}: ${value}`;
+            return {value: key, label: label};
+        })
+    };
+
+    handleClick = () => {
+        const {checked} = this.state;
+        this.setState({
+            checked: !checked
+        })
+    };
+
+    onCreateAction = () => {
+        const {form} = this.refs;
+        form.submit();
+    };
+
     render() {
+        const substates = this.getOptions(LabelSubstates);
+        const {checked} = this.state;
         return (
             <div className="create-form action-create-form">
-                <form action="">
                     <div className="create-form__bar">
                         <button className="btn-add">+ Add action</button>
                         <div className="btn-group">
                             <button className="btn-cancel">Cancel</button>
-                            <button className="btn--green">Confirm & save</button>
+                            <button onClick={this.onCreateAction} className="btn--green">Confirm & save</button>
                         </div>
                     </div>
                     <div className="create-form__wrapper">
                         <div className="action-block">
-                            <div className="form-wrapper">
-                                <input type="text" placeholder="Action name"/>
-                            </div>
-                            <div className="form-wrapper">
-                                <textarea placeholder="Description"></textarea>
-                            </div>
-                            <div className="check-group">
-                                <input type="checkbox" id="m1" name="allowedRoles" value="on"/>
-                                <label htmlFor="m1">Allow manager role</label>
-                            </div>
-                            <div className="select-group">
+                            <AutoForm schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+
+                                {this.state.error && <div className="error">{this.state.error}</div>}
+
                                 <div className="form-wrapper">
-                                    <select name="filter">
-                                        <option value="">Select category</option>
-                                    </select>
+                                    <AutoField labelHidden={true} placeholder="Title" name="title"/>
+                                    <ErrorField name="title"/>
                                 </div>
-                            </div>
+
+                                <div className="form-wrapper">
+                                    <LongTextField labelHidden={true} placeholder="Description" name="description"/>
+                                    <ErrorField name="description"/>
+                                </div>
+
+                                <div className="check-group">
+                                    <input type="checkbox" id="n1" onClick={this.handleClick}/>
+                                    <label htmlFor="n1"> Changes the substate of the Account?</label>
+                                </div>
+
+                                {checked &&
+                                <div className="select-group">
+                                    <div className="form-wrapper">
+                                        <SelectField placeholder="Substate"
+                                                     labelHidden={true}
+                                                     options={substates}
+                                                     name="substate"/>
+                                        <ErrorField name="substate"/>
+                                    </div>
+                                </div>
+                                }
+                            </AutoForm>
                         </div>
                     </div>
-                </form>
             </div>
         )
     }

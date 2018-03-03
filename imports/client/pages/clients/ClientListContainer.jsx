@@ -140,7 +140,7 @@ class RightSide extends Component {
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
-                    create ? <ClientCreate  close={close}/> : <ClientContent client={client}/>
+                    create ? <ClientCreate close={close}/> : <ClientContent client={client}/>
                 }
             </div>
         )
@@ -149,4 +149,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(ClientContainer)
+}, {reactive: true})(ClientContainer)

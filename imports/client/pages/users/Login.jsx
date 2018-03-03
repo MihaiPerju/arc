@@ -49,7 +49,6 @@ export class Login extends React.Component {
                                            name="password" type="password"/>
                                 <ErrorField name="password"/>
                             </div>
-
                             <button className="btn-login" type="submit">Login</button>
                         </AutoForm>
                         {error && <div className="alert-message">{error}</div>}

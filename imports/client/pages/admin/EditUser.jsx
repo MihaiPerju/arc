@@ -1,18 +1,18 @@
-import React, { Component } from 'react';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
+import React, {Component} from 'react';
+import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/users/queries/singleUser.js';
-import { AutoForm, AutoField, ErrorField } from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-import { Button } from 'semantic-ui-react';
-import { Container } from 'semantic-ui-react';
-import { Divider } from 'semantic-ui-react';
+import {Button} from 'semantic-ui-react';
+import {Container} from 'semantic-ui-react';
+import {Divider} from 'semantic-ui-react';
 import CreateEditTags from './components/CreateEditTags';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TagsService from './services/TagsService';
 
-class EditUser extends Component {
-    constructor () {
+export default class EditUser extends Component {
+    constructor() {
         super();
 
         this.state = {
@@ -25,112 +25,126 @@ class EditUser extends Component {
         };
     }
 
-    componentWillReceiveProps (newProps) {
-        if (!this.props.data && newProps.data) {
-            this.setState({
-                email: newProps.data.emails[0].address,
-                firstName: newProps.data.profile.firstName,
-                lastName: newProps.data.profile.lastName,
-                phoneNumber: newProps.data.profile.phoneNumber
-            });
-        }
+    componentWillReceiveProps(newProps) {
+        // if (!this.props.data && newProps.data) {
+        //     this.setState({
+        //         email: newProps.data.emails[0].address,
+        //         firstName: newProps.data.profile.firstName,
+        //         lastName: newProps.data.profile.lastName,
+        //         phoneNumber: newProps.data.profile.phoneNumber
+        //     });
+        // }
     }
 
-    componentWillMount () {
-        Meteor.call('tag.getAll', (err, allTags) => {
+    componentWillMount() {
+        this.getTags();
+    }
 
+    getTags = () => {
+        Meteor.call('tag.getAll', (err, allTags) => {
             this.setState({
                 allTags
             });
         });
-    }
+    };
 
-    onSubmit (formData) {
-        Meteor.call('admin.editUser', this.props.data._id, formData, (err) => {
+    onSubmit(formData) {
+        console.log("Ok!");
+        const {user} = this.props;
+        Meteor.call('admin.editUser', user._id, formData, (err) => {
             if (!err) {
                 Notifier.success('Data saved !');
-                FlowRouter.go('/admin/user/list');
             } else {
                 Notifier.error(err.reason);
             }
         });
     }
 
-    onChangeField (fieldName, value) {
-        const stateObj = {};
-        stateObj[fieldName] = value;
-
-        this.setState(stateObj);
+    onChangeField(fieldName, value) {
+        // const stateObj = {};
+        // stateObj[fieldName] = value;
+        //
+        // this.setState(stateObj);
     }
 
     getTagList = () => {
-        const {allTags} = this.state;
-
-        return allTags.map((tag, key) => ({value: tag._id, label: TagsService.getTagName(tag)}));
+        // const {allTags} = this.state;
+        //
+        // return allTags.map((tag, key) => ({value: tag._id, label: TagsService.getTagName(tag)}));
     };
 
     onTagsChange = (tags) => {
-        this.setState({
-           tags
-        });
-    }
+        // this.setState({
+        //    tags
+        // });
+    };
 
-    render () {
-        const {data, loading, error} = this.props;
+    closeEdit = () => {
+        const {setEdit} = this.props;
+        setEdit();
+    };
+
+    onEditUser = () => {
+        const {form} = this.refs;
+        form.submit();
+    };
+
+    render() {
+        const {user} = this.props;
         const {allTags} = this.state;
-        const model = data;
+        user.email = user.emails[0].address;
         const tags = this.getTagList();
-        if (model) {
-            model.email = data && data.emails[0].address;
-        }
-
-        if (loading) {
-            return <div>
-                <span>Loading</span>
-            </div>;
-        }
-
-        if (error) {
-            return <div>
-                <span>Error: {error.reason}</span>
-            </div>;
-        }
 
         return (
-            <Container className="page-container">
-                <AutoForm model={model} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-                    {this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : ''
-                    }
+            <div className="create-form">
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Edit User</button>
+                    <div className="btn-group">
+                        <button onClick={this.closeEdit} className="btn-cancel">Cancel</button>
+                        <button onClick={this.onEditUser} className="btn--green">Confirm & save</button>
+                    </div>
+                </div>
 
-                    <AutoField name="profile.firstName"/>
-                    <ErrorField name="profile.firstName"/>
+                <div className="create-form__wrapper">
+                    <div className="action-block">
+                        <div className="header__block">
+                            <div className="title-block text-uppercase">Client information</div>
+                        </div>
 
-                    <AutoField name="profile.lastName"/>
-                    <ErrorField name="profile.lastName"/>
+                        <AutoForm model={user} schema={EditSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                            {this.state.error
+                                ? <div className="error">{this.state.error}</div>
+                                : ''
+                            }
 
-                    <AutoField name="email"/>
-                    <ErrorField name="email"/>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="First name" name="profile.firstName"/>
+                                <ErrorField name="profile.firstName"/>
+                            </div>
 
-                    <AutoField name="profile.phoneNumber"/>
-                    <ErrorField name="profile.phoneNumber"/>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Last name" name="profile.lastName"/>
+                                <ErrorField name="profile.lastName"/>
+                            </div>
 
-                    <SelectMulti name="tagIds" options={tags}/>
-                    <ErrorField name="tagIds"/>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Email" name="email"/>
+                                <ErrorField name="email"/>
+                            </div>
 
-                    {
-                        allTags &&
-                        <CreateEditTags tags={allTags} onTagsChange={this.onTagsChange}/>
-                    }
-
-                    <Divider/>
-
-                    <Button primary fluid type="submit">
-                        Save
-                    </Button>
-                </AutoForm>
-            </Container>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Phone number" name="profile.phoneNumber"/>
+                                <ErrorField name="profile.phoneNumber"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <SelectMulti labelHidden={true} placeholder="Tags" name="tagIds" options={tags}/>
+                                <ErrorField name="tagIds"/>
+                            </div>
+                            <CreateEditTags getTags={this.getTags} user={user}/>
+                        </AutoForm>
+                    </div>
+                </div>
+            </div>
         );
     }
 }
@@ -153,11 +167,3 @@ const EditSchema = new SimpleSchema({
         type: String
     }
 });
-
-export default (props) => {
-    const Container = createQueryContainer(query.clone({filters: {_id: FlowRouter.current().params.userId}}), EditUser, {
-        single: true
-    });
-
-    return <Container/>;
-};

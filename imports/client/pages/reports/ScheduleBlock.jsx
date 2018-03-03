@@ -44,7 +44,8 @@ class ScheduleBlock extends Component {
 
     getUserOptions(users) {
         return _.map(users, ({_id, profile, roles}) => {
-            const value = `${profile.firstName} ${profile.lastName} (${roles[0]})`;
+            const role = roles && roles[0];
+            const value = profile.firstName + ' ' + profile.lastName + ' (' + role + ')';
             return {value: _id, label: value};
         });
     }
@@ -231,6 +232,5 @@ class CreateSchedule extends Component {
 }
 
 export default withQuery((props) => {
-    console.log(props);
     return query.clone({filters: {reportId: props.report._id}});
 }, {reactive: true})(ScheduleBlock)
