@@ -21,27 +21,6 @@ class UserListContainer extends Component {
             currentUser: null,
             create: false
         }
-        this.renderRightSide = this.renderRightSide.bind(this);
-        this.showBtnGroup = this.showBtnGroup.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
-    }
-
-    renderRightSide() {
-        this.setState({
-            rightSide: true
-        })
-    }
-
-    showBtnGroup() {
-        this.setState({
-            btnGroup: !this.state.btnGroup
-        })
-    }
-
-    showFilterBar() {
-        this.setState({
-            filter: !this.state.filter
-        })
     }
 
     selectUser(objectId) {
@@ -59,7 +38,7 @@ class UserListContainer extends Component {
         if (currentUser === id) {
             this.setState({currentUser: null})
         } else {
-            this.setState({currentUser: id})
+            this.setState({currentUser: id, create: false});
         }
     }
 
@@ -69,13 +48,13 @@ class UserListContainer extends Component {
             create: true,
             rightSide: true
         });
-    }
+    };
 
     closeForm = () => {
         this.setState({
             create: false
         })
-    }
+    };
 
     render() {
         const {data, loading, error} = this.props;
@@ -93,7 +72,7 @@ class UserListContainer extends Component {
         return (
             <div className="cc-container">
                 <div className={(currentUser || create) ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                    <SearchBar btnGroup={usersSelected.length}/>
                     {this.state.filter ? <FilterBar/> : null}
                     <UserList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -106,6 +85,7 @@ class UserListContainer extends Component {
                         users={data}
                     />
                     <PaginationBar
+                        module="User"
                         create={this.createForm}
                         closeForm={this.closeForm}
                     />
@@ -153,4 +133,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(UserListContainer)
+}, {reactive: true})(UserListContainer)
