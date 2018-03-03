@@ -19,5 +19,6 @@ export default Comments.createNamedQuery('listComments', {
             path: 1,
             _id: 1
         }
-    }
+    },
+    createdAt: 1
 });

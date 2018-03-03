@@ -56,6 +56,7 @@ export default Tasks.createNamedQuery('taskList', {
         action: {
             title:1
         },
-        createdAt: 1
+        createdAt: 1,
+        status: 1
     }
 });

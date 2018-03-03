@@ -1,16 +1,49 @@
 import React, {Component} from 'react';
 import moment from "moment/moment";
+import AssigneeSelect from '../AssigneeSelect';
 
 export default class TaskContentHeader extends Component {
 
+    getOptions (users) {
+        if (!users) {
+            [];
+        }
+
+        let options = [];
+        for (user of users) {
+            let item = {
+                label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
+                value: user && user._id
+            };
+            options.push(item);
+        }
+        return options;
+    }
+
+    getFirstOption (task, options) {
+        if (task.assigneeId) {
+            for (option of options) {
+                if (option.value === task.assigneeId) {
+                    return [option];
+                }
+            }
+        }
+        return [{label: 'Unassigned'}];
+    }
+
     render() {
         const {task} = this.props;
+        const options = this.getOptions(task && task.facility && task.facility.users);
+        let userOptions = this.getFirstOption(task, options).concat(options);
 
         return (
             <div className="header-block">
                 <div className="main-info">
                     <div className="left__side">
-                        <div className="name">{task.client && task.client.clientName}</div>
+                        <div className="name">
+                            {task.client && task.client.clientName}
+                            <AssigneeSelect taskId={task._id} options={userOptions}/>
+                        </div>
                         <div className="row__block">
                             <div className="pacient-id text-blue">{task.client && task.client._id}</div>
                             <div className="financial-class">O/D</div>

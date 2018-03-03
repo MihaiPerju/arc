@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import ActionSingle from './ActionSingle';
 
 export default class ActionList extends Component {
+
     constructor() {
         super();
     }
 
     render() {
-        const {actions,setAction, selectAction, actionsSelected, currentAction} = this.props;
+//        const {data, loading, error, handleHeaderClick, sortBy, isSortAscend, reasonCodesManage} = this.props;
+        const {actions, setAction, selectAction, actionsSelected, currentAction} = this.props;
         const actionList = actions.map(function (action, index) {
             return (
                 <ActionSingle

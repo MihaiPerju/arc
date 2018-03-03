@@ -3,7 +3,8 @@ import Notifier from '/imports/client/lib/Notifier';
 
 export default class CreateLetter extends React.Component {
     createLetter = () => {
-        const {letterBody, taskId, reset} = this.props;
+        const {letterBody, taskId, reset, attachments} = this.props;
+
         const data = {
             body: letterBody,
             taskId,

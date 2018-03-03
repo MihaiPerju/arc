@@ -17,6 +17,11 @@ export default class ActionSingle extends Component {
         selectAction(action._id);
     }
 
+    manageCodes = () => {
+        const {action, reasonCodesManage} = this.props;
+        reasonCodesManage(action._id);
+    }
+
     render() {
         const {action, actionsSelected, currentAction} = this.props;
         const checked = actionsSelected.includes(action._id);
