@@ -3,6 +3,7 @@ import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import LetterTemplatesList from './components/LetterTemplatesList.jsx';
 import LetterTemplateContent from './LetterTemplateContent.jsx';
+import LetterTemplateCreate from './LetterTemplateCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/letterTemplates/queries/listLetterTemplates";
 import Loading from '/imports/client/lib/ui/Loading';
@@ -14,7 +15,8 @@ class LetterTemplateListContainer extends Component {
         this.state = {
             templatesSelected: [],
             currentTemplate: null,
-            filter: false
+            filter: false,
+            create: false
         }
     }
 
@@ -38,9 +40,23 @@ class LetterTemplateListContainer extends Component {
         this.setState({templatesSelected});
     };
 
+    createForm = () => {
+        this.setState({
+            create: true,
+            rightSide: true,
+            currentTemplate: false
+        })
+    }
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        })
+    }
+
     render() {
         const {data, loading, error} = this.props;
-        const {templatesSelected, currentTemplate} = this.state;
+        const {templatesSelected, currentTemplate, create} = this.state;
         const template = objectFromArray(data, currentTemplate);
         if (loading) {
             return <Loading/>
@@ -51,7 +67,7 @@ class LetterTemplateListContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={currentTemplate ? "left__side" : "left__side full__width"}>
+                <div className={(create || currentTemplate) ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={templatesSelected.length}/>
                     <LetterTemplatesList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -61,12 +77,15 @@ class LetterTemplateListContainer extends Component {
                         setTemplate={this.setTemplate}
                         templates={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar create={this.createForm}/>
                 </div>
                 {
-                    currentTemplate ? (
-                        <RightSide template={template}/>
-                    ) : null
+                    (currentTemplate || create) &&
+                    <RightSide
+                        template={template}
+                        create={create}
+                        close={this.closeForm}
+                    />
                 }
             </div>
         );
@@ -88,10 +107,13 @@ class RightSide extends Component {
     }
 
     render() {
-        const {template} = this.props;
+        const {fade} = this.state;
+        const {template, create} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <LetterTemplateContent template={template}/>
+            <div className={fade ? "right__side in" : "right__side"}>
+                {
+                    create ? <LetterTemplateCreate/> : <LetterTemplateContent template={template}/>
+                }
             </div>
         )
     }
