@@ -18,7 +18,7 @@ class CodeListContainer extends Component {
             currentCode: null,
             filter: false,
             create: false
-        }
+        };
         this.showFilterBar = this.showFilterBar.bind(this);
     }
 
@@ -34,7 +34,7 @@ class CodeListContainer extends Component {
         if (currentCode === _id) {
             this.setState({currentCode: null});
         } else {
-            this.setState({currentCode: _id});
+            this.setState({currentCode: _id, create: false});
         }
     };
 
@@ -51,16 +51,15 @@ class CodeListContainer extends Component {
     createForm = () => {
         this.setState({
             currentCode: false,
-            create: true,
-            rightSide: true
+            create: true
         })
-    }
+    };
 
     closeForm = () => {
         this.setState({
             create: false
         })
-    }
+    };
 
     render() {
         const {data, loading, error} = this.props;
@@ -86,7 +85,7 @@ class CodeListContainer extends Component {
                         setCode={this.setCode}
                         codes={data}
                     />
-                    <PaginationBar create={this.createForm}/>
+                    <PaginationBar module="Code" create={this.createForm}/>
                 </div>
                 {
                     (currentCode || create) &&
@@ -121,7 +120,7 @@ class RightSide extends Component {
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
-                    create ? <CodeCreate/> : <CodeContent code={code}/>
+                    create ? <CodeCreate close={close}/> : <CodeContent code={code}/>
                 }
             </div>
         )
@@ -130,4 +129,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(CodeListContainer)
+}, {reactive: true})(CodeListContainer)
