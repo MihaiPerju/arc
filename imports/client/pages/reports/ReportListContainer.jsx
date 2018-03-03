@@ -113,7 +113,6 @@ class RightSide extends Component {
 
     render() {
         const {report, create, close} = this.props;
-        console.log(create);
         const {fade} = this.state;
         const classes = classNames({
             "right__side": true,

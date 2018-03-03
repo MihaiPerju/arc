@@ -9,7 +9,6 @@ export default class UserContentHeader extends React.Component {
 
     render() {
         const {user} = this.props;
-        console.log(user);
         return (
             <div className="flex-content">
                 <div className="intro-block text-center">

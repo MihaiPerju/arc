@@ -91,7 +91,6 @@ export default class NewAction extends Component {
                         actionId: actionId
                     }
                 }).fetch((err, reasonCodes) => {
-                    console.log(err);
                     if (!err) {
                         this.setState({
                             reasonCodes

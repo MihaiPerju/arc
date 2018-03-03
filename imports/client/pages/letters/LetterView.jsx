@@ -37,8 +37,6 @@ export default class LetterView extends React.Component {
             return <Loading/>;
         }
 
-        console.log(letter);
-
         return (
             <Container className="page-container">
                 <Header as="h2" textAlign="center">Letter ID: {letter._id}</Header>

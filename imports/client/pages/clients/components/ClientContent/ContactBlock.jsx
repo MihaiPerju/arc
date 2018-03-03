@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 export default class ContactBlock extends Component {
     render() {
         const {client} = this.props;
-        console.log(client.contacts);
         return (
             <div className="action-block">
                 <div className="header__block">
