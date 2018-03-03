@@ -17,10 +17,7 @@ class ClientContainer extends Component {
             clientsSelected: [],
             create: false
         };
-        //this.renderRightSide = this.renderRightSide.bind(this);
-        //this.showFilterBar = this.showFilterBar.bind(this);
-        this.createForm = this.createForm.bind(this);
-        this.closeForm = this.closeForm.bind(this);
+
     }
 
     setClient = (_id) => {
@@ -29,7 +26,7 @@ class ClientContainer extends Component {
         if (currentClient === _id) {
             this.setState({currentClient: null});
         } else {
-            this.setState({currentClient: _id});
+            this.setState({currentClient: _id, create: false});
         }
     }
 
@@ -41,19 +38,11 @@ class ClientContainer extends Component {
             clientsSelected.push(_id);
         }
         this.setState({
-            clientsSelected,
-            create: false
+            clientsSelected
         });
     }
 
-    showFilterBar() {
-        this.setState({
-            clientsSelected,
-            create: false
-        });
-    }
-
-    getClient() {
+    getClient = () => {
         const {data} = this.props;
         const {currentClient} = this.state;
         for (client of data) {
@@ -63,19 +52,18 @@ class ClientContainer extends Component {
         }
     }
 
-    createForm() {
+    createForm = () => {
         this.setState({
             currentClient: false,
-            create: true,
-            rightSide: true
+            create: true
         });
-    }
+    };
 
-    closeForm() {
+    closeForm = () => {
         this.setState({
             create: false
         })
-    }
+    };
 
     render() {
         const {data, loading, error} = this.props;
@@ -103,6 +91,7 @@ class ClientContainer extends Component {
                         clients={data}
                     />
                     <PaginationBar
+                        module="Client"
                         create={this.createForm}
                         closeForm={this.closeForm}
                     />

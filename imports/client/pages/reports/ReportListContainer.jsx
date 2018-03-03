@@ -17,7 +17,6 @@ class ReportListContainer extends Component {
         this.state = {
             reportsSelected: [],
             currentReport: null,
-            filter: false,
             create: false
         };
         this.createForm = this.createForm.bind(this);
@@ -31,7 +30,6 @@ class ReportListContainer extends Component {
         } else {
             this.setState({
                 currentReport: _id,
-                schedule: false,
                 create: false
             });
         }
@@ -47,7 +45,7 @@ class ReportListContainer extends Component {
         this.setState({reportsSelected});
     };
 
-    createForm() {
+    createForm = () => {
         this.setState({
             currentReport: false,
             create: true
@@ -85,7 +83,7 @@ class ReportListContainer extends Component {
                         setReport={this.setReport}
                         reports={data}
                     />
-                    <PaginationBar close={this.closeForm} create={this.createForm}/>
+                    <PaginationBar module="Report" close={this.closeForm} create={this.createForm}/>
                 </div>
                 {
                     (currentReport || create) &&
@@ -115,6 +113,7 @@ class RightSide extends Component {
 
     render() {
         const {report, create, close} = this.props;
+        console.log(create);
         const {fade} = this.state;
         const classes = classNames({
             "right__side": true,
@@ -132,4 +131,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(ReportListContainer)
+}, {reactive: true})(ReportListContainer)
