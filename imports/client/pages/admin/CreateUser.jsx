@@ -17,6 +17,7 @@ export default class CreateUser extends Component {
         Meteor.call('admin.createUser', data, (err, userId) => {
             if (!err) {
                 Notifier.success('User created !');
+                this.onClose();
             } else {
                 Notifier.error(err.reason);
             }
@@ -28,13 +29,18 @@ export default class CreateUser extends Component {
         form.submit();
     };
 
+    onClose = () => {
+        const {close} = this.props;
+        close();
+    };
+
     render() {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
                     <button className="btn-add">+ Add user</button>
                     <div className="btn-group">
-                        <button className="btn-cancel">Cancel</button>
+                        <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreateUser} className="btn--green">Confirm & save</button>
                     </div>
                 </div>

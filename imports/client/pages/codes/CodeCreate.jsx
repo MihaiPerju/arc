@@ -14,8 +14,8 @@ export default class CodeCreate extends Component {
     onSubmit(data) {
         Meteor.call('code.create', data, (err) => {
             if (!err) {
-                FlowRouter.go('/code/list');
                 Notifier.success('Code added!');
+                this.onClose();
             } else {
                 Notifier.error(err.reason);
             }
@@ -27,13 +27,18 @@ export default class CodeCreate extends Component {
         form.submit();
     };
 
+    onClose = () => {
+        const {close} = this.props;
+        close();
+    };
+
     render() {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
                     <button className="btn-add">+ Add code</button>
                     <div className="btn-group">
-                        <button className="btn-cancel">Cancel</button>
+                        <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreateCode} className="btn--green">Confirm & save</button>
                     </div>
                 </div>

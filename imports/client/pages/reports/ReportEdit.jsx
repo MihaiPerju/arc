@@ -20,7 +20,15 @@ export default class ReportEdit extends React.Component {
     }
 
     componentWillMount() {
-        const {report} = this.props;
+        this.initializeData(this.props);
+    }
+
+    componentWillReceiveProps = (props) => {
+        this.initializeData(props);
+    };
+
+    initializeData = (props) => {
+        const {report} = props;
         let components = {};
 
         for (field in report.filterBuilderData) {
@@ -84,6 +92,7 @@ export default class ReportEdit extends React.Component {
         Meteor.call('report.update', {generalInformation, _id}, (err) => {
             if (!err) {
                 Notifier.success("Report modified!");
+                this.onSetEdit();
             } else {
                 Notifier.error(err.reason);
             }
@@ -103,7 +112,7 @@ export default class ReportEdit extends React.Component {
 
     render() {
         const {hasGeneralInformation, allowedRoles, generalInformation, components, filterBuilderData} = this.state;
-
+        console.log("Mounted!");
         return (
             <div className="create-form">
                 <div className="create-form__bar">
@@ -139,16 +148,13 @@ export default class ReportEdit extends React.Component {
                         hasGeneralInformation &&
                         <div className="action-block">
                             <div className="header__block">
-                                <div className="title-block text-uppercase">Edit fillters for report</div>
+                                <div className="title-block text-uppercase">Edit filters for report</div>
                             </div>
-                            {
-                                hasGeneralInformation &&
-                                <TaskFilterBuilder
-                                    onSubmitFilters={this.onSubmitFilters.bind(this)}
-                                    filterBuilderData={filterBuilderData}
-                                    components={components}
-                                    ref="filterBuilder"/>
-                            }
+                            <TaskFilterBuilder
+                                onSubmitFilters={this.onSubmitFilters.bind(this)}
+                                filterBuilderData={filterBuilderData}
+                                components={components}
+                                ref="filterBuilder"/>
                         </div>
                     }
                 </div>

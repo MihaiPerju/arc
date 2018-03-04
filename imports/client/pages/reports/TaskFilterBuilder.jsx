@@ -1,25 +1,25 @@
 import React from 'react';
-import {Container, Dropdown, Header, Button, Segment, Divider} from 'semantic-ui-react'
 import TaskSchema from '/imports/api/tasks/schema';
 import {AutoForm, SelectField} from 'uniforms-semantic';
 import ReportsService from '../../../api/reports/services/ReportsService';
 import FilterSingle from './components/FilterSingle';
 import Notifier from '/imports/client/lib/Notifier';
-import facilityQuery from '/imports/api/facilities/queries/facilityList';
 import assigneeQuery from '/imports/api/users/queries/listUsers';
 import TaskReportFields from '../../../api/tasks/config/tasks';
 import stateEnum from '/imports/api/tasks/enums/states';
 import {Substates} from '/imports/api/tasks/enums/substates';
 import SimpleSchema from 'simpl-schema';
+import Loading from '/imports/client/lib/ui/Loading';
 
 export default class TaskFilterBuilder extends React.Component {
     constructor() {
         super();
         this.state = {
-            schemaOptions: [],
-            components: {},
             facilityOptions: [],
             assigneeOptions: [],
+            schemaOptions: [],
+            components: {},
+            loading: true,
             filters: {},
             schema: {}
         }
@@ -85,6 +85,7 @@ export default class TaskFilterBuilder extends React.Component {
         });
 
         this.setState({
+            loading: false,
             schemaOptions,
             components,
             schema
@@ -139,36 +140,39 @@ export default class TaskFilterBuilder extends React.Component {
     };
 
     render() {
-        const {filters, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
+        const {loading, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
         const {filterBuilderData} = this.props;
-        console.log(schemaOptions);
         return (
             <div>
                 <main className="cc-main">
-                    <AutoForm
-                        model={filterBuilderData}
-                        schema={schema}
-                        onSubmit={this.onSubmit.bind(this)}
-                        ref="filters">
-                        {
-                            _.map(components, (item) => {
-                                return item.isActive &&
-                                    <FilterSingle
-                                        assigneeIdOptions={assigneeOptions}
-                                        facilityIdOptions={facilityOptions}
-                                        deleteFilter={this.deleteFilter}
-                                        name={item.name}
-                                    />
-                            })
-                        }
-                        {/*Component for showing filters extracted*/}
-                        {/*<div className="label-filter text-light-grey">Extracted filters:{JSON.stringify(filters)}</div>*/}
-                    </AutoForm>
-                    <div className="add-filter text-center">
-                        <AutoForm ref="filterSelect" onChange={this.createFilter} schema={filterSchema}>
-                            <SelectField options={schemaOptions} name="filter"/>
-                        </AutoForm>
-                    </div>
+                    {
+                        loading ?
+                            <Loading/> :
+                            <div>
+                                <AutoForm
+                                    model={filterBuilderData}
+                                    schema={schema}
+                                    onSubmit={this.onSubmit.bind(this)}
+                                    ref="filters">
+                                    {
+                                        _.map(components, (item) => {
+                                            return item.isActive &&
+                                                <FilterSingle
+                                                    assigneeIdOptions={assigneeOptions}
+                                                    facilityIdOptions={facilityOptions}
+                                                    deleteFilter={this.deleteFilter}
+                                                    name={item.name}
+                                                />
+                                        })
+                                    }
+                                </AutoForm>
+                                <div className="add-filter text-center">
+                                    <AutoForm ref="filterSelect" onChange={this.createFilter} schema={filterSchema}>
+                                        <SelectField options={schemaOptions} name="filter"/>
+                                    </AutoForm>
+                                </div>
+                            </div>
+                    }
                 </main>
             </div>
 

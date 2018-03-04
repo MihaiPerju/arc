@@ -42,7 +42,6 @@ export default class ReportCreate extends Component {
     };
 
     onSubmitFilters = (filters, components, filterBuilderData) => {
-        const {close} = this.props;
         //Setting state and creating/editing report
         this.setState({
             components,
@@ -55,7 +54,7 @@ export default class ReportCreate extends Component {
         Meteor.call('report.create', generalInformation, (err) => {
             if (!err) {
                 Notifier.success('Report created');
-                close();
+                this.onClose();
             } else {
                 Notifier.error(err.reason);
             }
@@ -68,7 +67,7 @@ export default class ReportCreate extends Component {
         filterForm.submit();
     };
 
-    onCancel = () => {
+    onClose = () => {
         const {close} = this.props;
         close();
     };
@@ -83,7 +82,7 @@ export default class ReportCreate extends Component {
                 <div className="create-form__bar">
                     <button className="btn-add">+ Add report</button>
                     <div className="btn-group">
-                        <button onClick={this.onCancel} className="btn-cancel">Cancel</button>
+                        <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         {
                             hasGeneralInformation &&
                             <button onClick={this.finish} className="btn--green">Confirm & save</button>
@@ -121,11 +120,11 @@ export default class ReportCreate extends Component {
                             </div>
                             {
                                 hasGeneralInformation &&
-                            <TaskFilterBuilder
-                                onSubmitFilters={this.onSubmitFilters.bind(this)}
-                                filterBuilderData={filterBuilderData}
-                                components={components}
-                                ref="filterBuilder"/>
+                                <TaskFilterBuilder
+                                    onSubmitFilters={this.onSubmitFilters.bind(this)}
+                                    filterBuilderData={filterBuilderData}
+                                    components={components}
+                                    ref="filterBuilder"/>
                             }
                         </div>
                     }

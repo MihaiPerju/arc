@@ -18,7 +18,6 @@ export default class ReportContent extends Component {
     render() {
         const {edit} = this.state;
         const {report} = this.props;
-        console.log(report);
 
         return (
             <div>

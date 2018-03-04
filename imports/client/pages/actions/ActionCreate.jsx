@@ -17,6 +17,7 @@ export default class ActionCreate extends Component {
         Meteor.call('action.create', data, (err) => {
             if (!err) {
                 Notifier.success('Action created!');
+                this.onClose();
             } else {
                 Notifier.error(err.reason);
             }
@@ -43,53 +44,58 @@ export default class ActionCreate extends Component {
         form.submit();
     };
 
+    onClose = () => {
+        const {close} = this.props;
+        close();
+    };
+
     render() {
         const substates = this.getOptions(LabelSubstates);
         const {checked} = this.state;
         return (
             <div className="create-form action-create-form">
-                    <div className="create-form__bar">
-                        <button className="btn-add">+ Add action</button>
-                        <div className="btn-group">
-                            <button className="btn-cancel">Cancel</button>
-                            <button onClick={this.onCreateAction} className="btn--green">Confirm & save</button>
-                        </div>
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Add action</button>
+                    <div className="btn-group">
+                        <button onClick={this.onClose} className="btn-cancel">Cancel</button>
+                        <button onClick={this.onCreateAction} className="btn--green">Confirm & save</button>
                     </div>
-                    <div className="create-form__wrapper">
-                        <div className="action-block">
-                            <AutoForm schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                </div>
+                <div className="create-form__wrapper">
+                    <div className="action-block">
+                        <AutoForm schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
 
-                                {this.state.error && <div className="error">{this.state.error}</div>}
+                            {this.state.error && <div className="error">{this.state.error}</div>}
 
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Title" name="title"/>
+                                <ErrorField name="title"/>
+                            </div>
+
+                            <div className="form-wrapper">
+                                <LongTextField labelHidden={true} placeholder="Description" name="description"/>
+                                <ErrorField name="description"/>
+                            </div>
+
+                            <div className="check-group">
+                                <input type="checkbox" id="n1" onClick={this.handleClick}/>
+                                <label htmlFor="n1"> Changes the substate of the Account?</label>
+                            </div>
+
+                            {checked &&
+                            <div className="select-group">
                                 <div className="form-wrapper">
-                                    <AutoField labelHidden={true} placeholder="Title" name="title"/>
-                                    <ErrorField name="title"/>
+                                    <SelectField placeholder="Substate"
+                                                 labelHidden={true}
+                                                 options={substates}
+                                                 name="substate"/>
+                                    <ErrorField name="substate"/>
                                 </div>
-
-                                <div className="form-wrapper">
-                                    <LongTextField labelHidden={true} placeholder="Description" name="description"/>
-                                    <ErrorField name="description"/>
-                                </div>
-
-                                <div className="check-group">
-                                    <input type="checkbox" id="n1" onClick={this.handleClick}/>
-                                    <label htmlFor="n1"> Changes the substate of the Account?</label>
-                                </div>
-
-                                {checked &&
-                                <div className="select-group">
-                                    <div className="form-wrapper">
-                                        <SelectField placeholder="Substate"
-                                                     labelHidden={true}
-                                                     options={substates}
-                                                     name="substate"/>
-                                        <ErrorField name="substate"/>
-                                    </div>
-                                </div>
-                                }
-                            </AutoForm>
-                        </div>
+                            </div>
+                            }
+                        </AutoForm>
                     </div>
+                </div>
             </div>
         )
     }
