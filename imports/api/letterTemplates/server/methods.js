@@ -27,5 +27,13 @@ Meteor.methods({
     'letterTemplate.delete'(id) {
         Security.isAdminOrTech(this.userId);
         LetterTemplates.remove({_id: id});
+    },
+
+    'letterTemplate.deleteMany'(Ids) {
+        Security.isAdminOrTech(this.userId);
+
+        _.each(Ids, (_id) => {
+            LetterTemplates.remove({_id});
+        });
     }
 });
