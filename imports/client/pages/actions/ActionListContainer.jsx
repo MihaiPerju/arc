@@ -9,6 +9,7 @@ import { withQuery } from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/actions/queries/actionList';
 import Loading from '/imports/client/lib/ui/Loading';
 import { objectFromArray } from '/imports/api/utils';
+import Notifier from '/imports/client/lib/Notifier';
 
 class ActionListContainer extends Component {
     constructor () {
@@ -133,4 +134,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(ActionListContainer);
+}, {reactive: true})(ActionListContainer);
