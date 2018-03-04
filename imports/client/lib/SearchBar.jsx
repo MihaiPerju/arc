@@ -51,15 +51,15 @@ export default class SearchBar extends Component {
 
     render() {
         const {filter, active} = this.state;
-        const {options} = this.props;
+        const {options, btnGroup} = this.props;
         return (
             <AutoForm ref="filters" onChange={this.onHandleChange.bind(this)} schema={schema}>
                 <div className="search-bar">
                     <div className="select-type">
                         <div className="btn-select"></div>
                     </div>
-                    {this.props.btnGroup ? <BtnGroup/> : null}
-                    <div className={this.props.btnGroup ? "search-input" : "search-input full__width"}>
+                    {btnGroup ? <BtnGroup deleteAction={this.props.deleteAction}/> : null}
+                    <div className={btnGroup ? "search-input" : "search-input full__width"}>
                         <div className="form-group">
                             <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
                         </div>
@@ -93,11 +93,20 @@ class BtnGroup extends Component {
         }, 1);
     }
 
+
+    deleteAction() {
+        this.props.deleteAction();
+    }
+
     render() {
+        const {deleteAction} = this.props;
         return (
             <div className={this.state.in ? "btn-group in" : "btn-group"}>
                 <button><i className="icon-archive"/></button>
-                <button><i className="icon-trash-o"/></button>
+                {
+                    deleteAction &&
+                    <button onClick={this.deleteAction.bind(this)}><i className="icon-trash-o"/></button>
+                }
             </div>
         )
     }
