@@ -138,6 +138,8 @@ import RegionCreate from '/imports/client/pages/regions/RegionCreate';
 import RegionEdit from '/imports/client/pages/regions/RegionEdit';
 import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
 
+
+
 route('/client/:id/region/create', RegionCreate, {}, {
     name: 'region.create'
 });
@@ -171,3 +173,12 @@ import InsuranceCompanyListContainer from '/imports/client/pages/insuranceCompan
 route('/inscompany/create', InsuranceCompanyCreate);
 route('/inscompany/:id/edit', InsuranceCompanyEdit);
 route('/inscompany/list', InsuranceCompanyListContainer);
+
+//Reason Codes
+import ReasonCodesContainer from '/imports/client/pages/reasonCodes/ReasonCodesContainer';
+import ReasonCodeCreate from '/imports/client/pages/reasonCodes/ReasonCodeCreate';
+import ReasonCodeEdit from '/imports/client/pages/reasonCodes/ReasonCodeEdit';
+
+route('/reason-codes/list', ReasonCodesContainer);
+route('/reason-code/create', ReasonCodeCreate);
+route('/reason-code/:id/edit', ReasonCodeEdit);

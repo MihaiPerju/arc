@@ -50,6 +50,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-calendar-plus-o:before {
+  content: "\f271";
+}
 .icon-check-circle-o:before {
   content: "\f05d";
 }

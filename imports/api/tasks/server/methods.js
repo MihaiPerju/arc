@@ -13,8 +13,13 @@ import os from 'os';
 import FolderConfig from '/imports/api/business';
 
 Meteor.methods({
-    'task.actions.add'(taskId, actionId) {
-        ActionService.createAction(taskId, actionId, this.userId);
+    'task.actions.add'(data) {
+        const taskId = data.taskId,
+              actionId = data.action,
+              reasonId = data.reasonCode,
+              userId = this.userId;
+
+        ActionService.createAction({taskId, actionId, reasonId, userId});
     },
 
     'task.assignee_change'(data) {

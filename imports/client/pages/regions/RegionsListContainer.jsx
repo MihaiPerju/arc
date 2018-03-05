@@ -18,6 +18,18 @@ class RegionListContainer extends Component {
         }
     }
 
+    showBtnGroup() {
+        this.setState({
+            btnGroup: !this.state.btnGroup
+        })
+    }
+    
+    showFilterBar() {
+        this.setState({
+            filter: !this.state.filter
+        })
+    }
+
     setRegion = (_id) => {
         const {currentRegion} = this.state;
 

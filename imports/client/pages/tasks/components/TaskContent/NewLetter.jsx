@@ -3,7 +3,7 @@ import query from '/imports/api/letterTemplates/queries/listLetterTemplates';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import {getImagePath} from '/imports/api/utils';
-import {AutoForm, SelectField} from 'uniforms-semantic';
+import {AutoForm, SelectField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
 
@@ -40,7 +40,9 @@ class NewLetter extends Component {
 
     onHandleChange(label, value) {
         const selectedTemplate = this.getLetterTemplate(value);
-        this.setState({selectedTemplate});
+        this.setState({
+            selectedTemplate
+        });
     }
 
     cancel() {

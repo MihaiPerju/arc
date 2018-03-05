@@ -5,7 +5,8 @@ export default class LetterTemplatesList extends Component {
     render() {
         const {templates} = this.props;
         const letterList = templates.map(function (template, index) {
-            const {setTemplate, selectTemplate, templatesSelected, currentTemplate} = this.props;            return (
+            const {setTemplate, selectTemplate, templatesSelected, currentTemplate} = this.props;
+            return (
                 <LetterTemplateSingle
                     templatesSelected={templatesSelected}
                     currentTemplate={currentTemplate}

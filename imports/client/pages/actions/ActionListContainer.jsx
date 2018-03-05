@@ -4,10 +4,11 @@ import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ActionList from './components/ActionList.jsx';
 import ActionContent from './ActionContent.jsx';
+import ActionCreate from './ActionCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import query from "/imports/api/actions/queries/actionList";
+import query from '/imports/api/actions/queries/actionList';
 import Loading from '/imports/client/lib/ui/Loading';
-import {objectFromArray} from "/imports/api/utils";
+import {objectFromArray} from '/imports/api/utils';
 
 class ActionListContainer extends Component {
     constructor() {
@@ -15,8 +16,9 @@ class ActionListContainer extends Component {
         this.state = {
             actionsSelected: [],
             currentAction: null,
-            filter: false
-        }
+            filter: false,
+            create: false
+        };
     }
 
     setAction = (_id) => {
@@ -25,7 +27,7 @@ class ActionListContainer extends Component {
         if (currentAction === _id) {
             this.setState({currentAction: null});
         } else {
-            this.setState({currentAction: _id});
+            this.setState({currentAction: _id, create: false});
         }
     };
 
@@ -39,36 +41,53 @@ class ActionListContainer extends Component {
         this.setState({actionsSelected});
     };
 
+    createForm = () => {
+        this.setState({
+            currentAction: false,
+            create: true
+        });
+    };
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        });
+
+    };
+
     render() {
         const {data, loading, error} = this.props;
-        const {actionsSelected, currentAction} = this.state;
+        const {actionsSelected, currentAction, create} = this.state;
         const action = objectFromArray(data, currentAction);
 
         if (loading) {
-            return <Loading/>
+            return <Loading/>;
         }
 
         if (error) {
-            return <div>Error: {error.reason}</div>
+            return <div>Error: {error.reason}</div>;
         }
         return (
             <div className="cc-container">
-                <div className={currentAction ? "left__side" : "left__side full__width"}>
+                <div className={(currentAction || create) ? 'left__side' : 'left__side full__width'}>
                     <SearchBar btnGroup={actionsSelected.length}/>
                     <ActionList
-                        class={this.state.filter ? "task-list decreased" : "task-list"}
+                        class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         actionsSelected={actionsSelected}
                         selectAction={this.selectAction}
                         currentAction={currentAction}
                         setAction={this.setAction}
                         actions={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar module="Action" create={this.createForm}/>
                 </div>
                 {
-                    currentAction ? (
-                        <RightSide action={action}/>
-                    ) : null
+                    (currentAction || create) &&
+                    <RightSide
+                        action={action}
+                        create={create}
+                        close={this.closeForm}
+                    />
                 }
             </div>
         );
@@ -80,7 +99,7 @@ class RightSide extends Component {
         super();
         this.state = {
             fade: false
-        }
+        };
     }
 
     componentDidMount() {
@@ -90,16 +109,18 @@ class RightSide extends Component {
     }
 
     render() {
-        const {action} = this.props;
+        const {fade} = this.state;
+        const {action, create, close} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <ActionContent action={action}/>
+            <div className={fade ? 'right__side in' : 'right__side'}>
+                {
+                    create ? <ActionCreate close={close}/> : <ActionContent action={action}/>
+                }
             </div>
-        )
+        );
     }
 }
 
-
 export default withQuery((props) => {
     return query.clone();
-})(ActionListContainer)
+}, {reactive: true})(ActionListContainer);

@@ -6,10 +6,10 @@ export default class LetterList extends Component {
             <div className="action-block">
                 <div className="header__block">
                     <div className="title-block text-uppercase">Comments</div>
-                </div>               
+                </div>
                 <form action="" className="comment-block">
                     <div className="form-group">
-                        <img className="md-avatar img-circle" src="/assets/img/user.svg" alt=""/>                          
+                        <img className="md-avatar img-circle" src="/assets/img/user.svg" alt=""/>
                         <div contentEditable="true" className="text-area" placeholder="Leave you comment"></div>
                         <button className="btn-post">Post</button>
                     </div>

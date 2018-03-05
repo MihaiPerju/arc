@@ -55,7 +55,6 @@ class Header extends Component {
         if (user && user.roles && user.roles.includes(RolesEnum.ADMIN)) {
             routes.push(
                 {name: "/admin/user/list", label: "User Management"},
-                {name: '/region/list', label: 'Regions'},
                 {name: "/letter-templates/list", label: "Letter templates"}
             )
         }

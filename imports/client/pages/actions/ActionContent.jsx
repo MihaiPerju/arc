@@ -1,34 +1,31 @@
 import React, {Component} from 'react';
+import ActionHeader from './components/ActionContentHeader';
+import ActionEdit from './ActionEdit'
 
 export default class UserContent extends Component {
     constructor() {
         super();
+        this.state = {
+            edit: false
+        }
     }
+
+    setEdit = () => {
+        const {edit} = this.state;
+        this.setState({edit: !edit})
+    };
 
     render() {
         const {action} = this.props;
+        const {edit} = this.state;
         return (
-            <div className="main-content action-content">
-                <div className="main-content__wrapper">
-                    <div className="intro-block text-center">
-                        <div className="intro-block__wrapper">
-                            <i className="icon-thumb-tack"/>
-                            <div className="text-light-grey">Action name</div>
-                            <div className="action-name">{action.title}</div>
-                        </div>
-                    </div>
-                    <div className="info-block">
-                        <div className="left-side">
-                            <div className="text-light-grey">Substate</div>
-                            <div className="status">{action.substate}</div>
-                        </div>
-                        <div className="right-side">
-                            <div className="text-light-grey">Description</div>
-                            <p>{action.description}</p>
-                        </div>
-                    </div>
-                    <button className="btn-edit btn--white">Edit action</button>
-                </div>
+            <div>
+                {
+                    edit
+                        ? <ActionEdit setEdit={this.setEdit} action={action}/>
+                        :
+                        <ActionHeader setEdit={this.setEdit} action={action}/>
+                }
             </div>
         )
     }

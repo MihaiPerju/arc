@@ -51,5 +51,12 @@ export default Tasks.createNamedQuery('taskList', {
         path: 1,
         name: 1
     },
-    actionsLinkData: 1
+    actions: {
+        reasonCode: 1,
+        action: {
+            title:1
+        },
+        createdAt: 1,
+        status: 1
+    }
 });

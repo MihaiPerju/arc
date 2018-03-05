@@ -3,6 +3,7 @@ import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import FacilityList from './components/FacilityList.jsx';
 import FacilityContent from './FacilityContent.jsx';
+import FacilityCreate from './FacilityCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/facilities/queries/facilityList";
 import Loading from '/imports/client/lib/ui/Loading';
@@ -48,10 +49,23 @@ class FacilityContainer extends Component {
         }
     }
 
+    createForm = () => {
+        this.setState({
+            currentFacility: false,
+            rightSide: true,
+            create: true
+        })
+    }
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        })
+    }
 
     render() {
         const {data, loading, error} = this.props;
-        const {facilitiesSelected, currentFacility} = this.state;
+        const {facilitiesSelected, currentFacility, create} = this.state;
         const facility = this.getFacility();
 
         if (loading) {
@@ -64,7 +78,7 @@ class FacilityContainer extends Component {
 
         return (
             <div className="cc-container">
-                <div className={currentFacility ? "left__side" : "left__side full__width"}>
+                <div className={(currentFacility || create) ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={facilitiesSelected.length}/>
                     <FacilityList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -74,10 +88,17 @@ class FacilityContainer extends Component {
                         currentFacility={currentFacility}
                         facilities={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar
+                        create={this.createForm}
+                    />
                 </div>
                 {
-                    currentFacility && <RightSide facility={facility}/>
+                    (currentFacility || create) &&
+                    <RightSide
+                        facility={facility}
+                        create={create}
+                        close={this.closeForm}
+                    />
                 }
             </div>
         );
@@ -100,11 +121,13 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {facility} = this.props;
+        const {facility, create, close} = this.props;
 
         return (
             <div className={fade ? "right__side in" : "right__side"}>
-                <FacilityContent facility={facility}/>
+                {
+                    create ? <FacilityCreate close={close}/> : <FacilityContent facility={facility}/>
+                }
             </div>
         )
     }

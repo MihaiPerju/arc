@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import FacilityContentHeader from './components/FacilityContent/FacilityContentHeader';
+import ContactTable from './components/FacilityContent/ContactTable';
 import PlacementBlock from './components/FacilityContent/PlacementBlock';
 import InventoryBlock from './components/FacilityContent/InventoryBlock';
 import PaymentBlock from './components/FacilityContent/PaymentBlock';
@@ -21,6 +22,7 @@ export default class FacilityContent extends Component {
                     </ul>
                 </div>
                 <FacilityContentHeader facility={facility}/>
+                <ContactTable/>
                 <PlacementBlock facility={facility}/>
                 <InventoryBlock facility={facility}/>
                 <PaymentBlock facility={facility}/>

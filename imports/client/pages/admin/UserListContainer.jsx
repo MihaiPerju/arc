@@ -4,6 +4,7 @@ import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import UserList from './components/UserList.jsx';
 import UserContent from './UserContent.jsx';
+import CreateUser from './CreateUser.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/users/queries/listUsers";
 import Loading from '/imports/client/lib/ui/Loading';
@@ -17,29 +18,9 @@ class UserListContainer extends Component {
             btnGroup: false,
             filter: false,
             usersSelected: [],
-            currentUser: null
+            currentUser: null,
+            create: false
         }
-        this.renderRightSide = this.renderRightSide.bind(this);
-        this.showBtnGroup = this.showBtnGroup.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
-    }
-
-    renderRightSide() {
-        this.setState({
-            rightSide: true
-        })
-    }
-
-    showBtnGroup() {
-        this.setState({
-            btnGroup: !this.state.btnGroup
-        })
-    }
-
-    showFilterBar() {
-        this.setState({
-            filter: !this.state.filter
-        })
     }
 
     selectUser(objectId) {
@@ -57,13 +38,27 @@ class UserListContainer extends Component {
         if (currentUser === id) {
             this.setState({currentUser: null})
         } else {
-            this.setState({currentUser: id})
+            this.setState({currentUser: id, create: false});
         }
     }
 
+    createForm = () => {
+        this.setState({
+            currentUser: false,
+            create: true,
+            rightSide: true
+        });
+    };
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        })
+    };
+
     render() {
         const {data, loading, error} = this.props;
-        const {usersSelected, currentUser} = this.state;
+        const {usersSelected, currentUser, create} = this.state;
         const user = objectFromArray(data, currentUser);
 
         if (loading) {
@@ -76,8 +71,8 @@ class UserListContainer extends Component {
 
         return (
             <div className="cc-container">
-                <div className={currentUser ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={this.state.btnGroup} filter={this.showFilterBar}/>
+                <div className={(currentUser || create) ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={usersSelected.length}/>
                     {this.state.filter ? <FilterBar/> : null}
                     <UserList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -89,12 +84,19 @@ class UserListContainer extends Component {
                         currentUser={currentUser}
                         users={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar
+                        module="User"
+                        create={this.createForm}
+                        closeForm={this.closeForm}
+                    />
                 </div>
                 {
-                    currentUser ? (
-                        <RightSide user={user}/>
-                    ) : null
+                    (currentUser || create) &&
+                    <RightSide
+                        user={user}
+                        create={create}
+                        close={this.closeForm}
+                    />
                 }
             </div>
         );
@@ -116,10 +118,13 @@ class RightSide extends Component {
     }
 
     render() {
-        const {user} = this.props;
+        const {user, create, close} = this.props;
+        const {fade} = this.state;
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <UserContent user={user}/>
+            <div className={fade ? "right__side in" : "right__side"}>
+                {
+                    create ? <CreateUser close={close}/> : <UserContent user={user}/>
+                }
             </div>
         )
     }
@@ -128,4 +133,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(UserListContainer)
+}, {reactive: true})(UserListContainer)

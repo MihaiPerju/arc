@@ -1,8 +1,9 @@
 import React from 'react';
-import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
-import {getToken} from '/imports/api/s3-uploads/utils';
-import {Segment, Button, Divider} from 'semantic-ui-react';
+import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import { getToken } from '/imports/api/s3-uploads/utils';
+import { Segment, Button, Divider } from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
+import TaskViewService from '../services/TaskViewService';
 
 const SortableItem = SortableElement(({pdf, index, getPdfName, deletePdf, redirectToPdf}) =>
     <li style={{'listStyleType': 'none'}}>
@@ -41,72 +42,72 @@ const SortableList = SortableContainer(({items, getPdfName, deletePdf, redirectT
 });
 
 export default class SortableTab extends React.Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             items: [],
-        }
+        };
     }
 
-    onSortEnd({oldIndex, newIndex}) {
+    onSortEnd ({oldIndex, newIndex}) {
         this.setState({
             items: arrayMove(this.state.items, oldIndex, newIndex),
         });
     };
 
-    getPdfName(pdf) {
-        return pdf.name.slice(0, pdf.name.indexOf('.'))
+    getPdfName (pdf) {
+        return pdf.name.slice(0, pdf.name.indexOf('.'));
     }
 
-    redirectToPdf(pdf) {
+    redirectToPdf (pdf) {
         window.open('/pdf/' + pdf._id + '/' + getToken(), '_blank');
     }
 
-    deletePdf(pdf) {
+    deletePdf (pdf) {
         const taskId = FlowRouter.current().params._id;
 
         Meteor.call('task.attachment.remove', taskId, pdf._id, pdf.path, (err) => {
             if (!err) {
-                Notifier.success("Attachment removed!");
+                Notifier.success('Attachment removed!');
             } else {
                 Notifier.error(err.reason);
             }
         });
     }
 
-    componentWillMount() {
+    componentWillMount () {
         const {attachments} = this.props;
         let items = [];
         attachments && attachments.map((pdf) => {
             items.push(
                 pdf
-            )
+            );
         });
 
         this.setState({items});
     }
 
-    componentWillReceiveProps({attachments}) {
+    componentWillReceiveProps ({attachments}) {
         let items = [];
         attachments && attachments.map((pdf) => {
             items.push(
                 pdf
-            )
+            );
         });
 
         this.setState({items});
     }
 
-    render() {
+    render () {
         const {items} = this.state;
         return (
             <div>
                 <SortableList items={items}
                               deletePdf={this.deletePdf.bind(this)}
-                              getPdfName={this.getPdfName}
+                              getPdfName={TaskViewService.getPdfName}
                               redirectToPdf={this.redirectToPdf}
                               onSortEnd={this.onSortEnd.bind(this)}/>
             </div>
-        )
+        );
     }
 }

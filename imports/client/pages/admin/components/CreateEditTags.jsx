@@ -1,23 +1,22 @@
-import React, { Component } from 'react';
-import { Button } from 'semantic-ui-react';
+import React, {Component} from 'react';
+import {Button} from 'semantic-ui-react';
 import Dialog from '/imports/client/lib/ui/Dialog';
-import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, SelectField} from '/imports/ui/forms';
 import TagsSchema from '/imports/api/tags/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
 import TagsList from './TagsList.jsx';
 
 export default class CreateEditTags extends Component {
-    constructor () {
+    constructor() {
         super();
 
         this.state = {
             cancelDialogActive: false,
             showSpecificRoles: false,
-            tags: []
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.setState({
             tags: this.props.tags
         });
@@ -80,30 +79,42 @@ export default class CreateEditTags extends Component {
 
         return (
             <div>
-                <Button type="button" onClick={this.dialogToggle}>Manage Tags</Button>
+                <div className="add-filter text-center" onClick={this.dialogToggle}>Manage Tags</div>
                 {
                     cancelDialogActive && (
                         <Dialog closePortal={this.dialogToggle}
                                 title="Manage Tags"
                                 actions={actions}>
+                            <div className="create-form">
+                                <div className="create-form__wrapper">
+                                    <div className="action-block">
 
-                            <AutoForm schema={TagsSchema} onChangeModel={this.onFormChange} onSubmit={this.onSubmitForm}
-                                      ref="tagForm">
+                                        <AutoForm schema={TagsSchema} onChangeModel={this.onFormChange}
+                                                  onSubmit={this.onSubmitForm}
+                                                  ref="tagForm">
 
-                                <AutoField name="name"/>
-                                <ErrorField name="name"/>
+                                            <div className="form-wrapper">
+                                                <AutoField labelHidden={true} placeholder="Name" name="name"/>
+                                                <ErrorField name="name"/>
+                                            </div>
 
-                                <SelectField name="privacy"/>
-
-                                {
-                                    showSpecificRoles &&
-                                    <AutoField name="visibility"/>
-                                }
-
-                                <Button color="green">Create new tag</Button>
-
-                            </AutoForm>
-
+                                            <div className="form-wrapper">
+                                                <SelectField labelHidden={true} placeholder="Privacy" name="privacy"/>
+                                            </div>
+                                            {
+                                                showSpecificRoles &&
+                                                <div className="form-wrapper">
+                                                    <AutoField labelHidden={true} placeholder="Visibility"
+                                                               name="visibility"/>
+                                                </div>
+                                            }
+                                            <div className="form-wrapper">
+                                                <button className="btn--green">Create new tag</button>
+                                            </div>
+                                        </AutoForm>
+                                    </div>
+                                </div>
+                            </div>
                             <h2>List of available tags</h2>
 
                             <TagsList tags={tags} onTagsChange={this.onTagsChange}/>

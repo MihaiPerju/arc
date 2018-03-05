@@ -1,20 +1,78 @@
 import React from 'react';
+import { AutoForm, ErrorField } from 'uniforms-semantic';
+import { Container, Header, Divider, Grid } from 'semantic-ui-react';
+import SelectWithDescription from '/imports/client/lib/uniforms/SelectWithDescription.jsx';
+import letterCreateActionSchema from '/imports/client/pages/letters/schemas/letterCreateAction.js';
+import Notifier from '/imports/client/lib/Notifier';
 import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
+import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
+import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
+import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
 
 class LetterCreateContainer extends React.Component {
-    constructor() {
+    constructor () {
         super();
 
         this.state = {
             letterTemplates: [],
+            selectedTemplate: {},
+            pdfAttachments: [],
+            selectedAttachments: [],
+            attachmentIds: []
         };
     }
 
-    componentWillMount() {
+    componentWillMount () {
         const {data} = this.props;
         this.setState({letterTemplates: data});
+
+        Meteor.call('letterTemplates.get', (err, letterTemplates) => {
+            if (err) {
+                return Notifier.error(
+                    'Error while trying to get letter templates');
+            }
+            this.setState({letterTemplates});
+        });
+
+        taskAttachmentsQuery.clone({_id: this.props.taskId}).fetchOne((err, data) => {
+            if (!err) {
+                this.setState({
+                    pdfAttachments: data.attachments
+                });
+            } else {
+                Notifier.error(err.reason);
+            }
+        });
     }
+
+    getSelectOptions = (letterTemplates) => {
+        let selectOptions = [];
+
+        letterTemplates.forEach(template => {
+            selectOptions.push({
+                label: template.name,
+                value: template.name,
+                description: template.description,
+                templateData: template,
+            });
+        });
+
+        return selectOptions;
+    };
+
+    getAttachmentOptions = (enums) => {
+        return _.map(enums, (value, key) => {
+            return {value: value._id, label: TaskViewService.getPdfName(value)};
+        });
+    };
+
+    onSubmit = (data) => {
+        this.setState({
+            selectedTemplate: data.letterTemplate.templateData,
+            selectedAttachments: data.attachmentIds
+        });
+    };
 
     updateState = (data) => {
         this.setState(data);
@@ -23,6 +81,10 @@ class LetterCreateContainer extends React.Component {
     render() {
         const {taskId, selectedTemplate, reset} = this.props;
         const {keywords, body} = selectedTemplate;
+        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
+        const model = {letterTemplate: null};
+        const options = this.getSelectOptions(letterTemplates);
+        const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
 
         return (
             <div>
@@ -37,7 +99,8 @@ class LetterCreateContainer extends React.Component {
                             reset={reset}
                             taskId={taskId}
                             letterTemplateBody={body}
-                            parentState={this.state}/>
+                            parentState={this.state}
+                            attachments={attachmentIds}/>
                     </div>
                 </div>
             </div>

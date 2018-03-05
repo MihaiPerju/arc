@@ -1,24 +1,25 @@
 import React from 'react';
-import {Container, Dropdown, Header, Button, Segment, Divider} from 'semantic-ui-react'
 import TaskSchema from '/imports/api/tasks/schema';
-import {AutoForm} from 'uniforms-semantic';
+import {AutoForm, SelectField} from 'uniforms-semantic';
 import ReportsService from '../../../api/reports/services/ReportsService';
 import FilterSingle from './components/FilterSingle';
 import Notifier from '/imports/client/lib/Notifier';
-import facilityQuery from '/imports/api/facilities/queries/facilityList';
 import assigneeQuery from '/imports/api/users/queries/listUsers';
 import TaskReportFields from '../../../api/tasks/config/tasks';
 import stateEnum from '/imports/api/tasks/enums/states';
 import {Substates} from '/imports/api/tasks/enums/substates';
+import SimpleSchema from 'simpl-schema';
+import Loading from '/imports/client/lib/ui/Loading';
 
 export default class TaskFilterBuilder extends React.Component {
     constructor() {
         super();
         this.state = {
-            schemaOptions: [],
-            components: {},
             facilityOptions: [],
             assigneeOptions: [],
+            schemaOptions: [],
+            components: {},
+            loading: true,
             filters: {},
             schema: {}
         }
@@ -29,6 +30,7 @@ export default class TaskFilterBuilder extends React.Component {
         let keys = TaskSchema._firstLevelSchemaKeys;
         //also,remove field "createdAt", "actionsLinkData", "attachmentIds"
         keys.splice(keys.indexOf('createdAt'), 1);
+        keys.splice(keys.indexOf('metaData'), 1);
         keys.splice(keys.indexOf('actionsLinkData'), 1);
         keys.splice(keys.indexOf('attachmentIds'), 1);
 
@@ -48,7 +50,7 @@ export default class TaskFilterBuilder extends React.Component {
         for (component in components) {
             if (components[component].isActive) {
                 for (option in schemaOptions) {
-                    if (schemaOptions[option].text === component) {
+                    if (schemaOptions[option].label === component) {
                         schemaOptions.splice(option, 1);
                     }
                 }
@@ -83,36 +85,18 @@ export default class TaskFilterBuilder extends React.Component {
         });
 
         this.setState({
+            loading: false,
             schemaOptions,
             components,
             schema
         });
     }
 
-    selectFilter(e, data) {
-        const {components, schemaOptions} = this.state;
-
-        components[data.value] = {
-            isActive: true,
-            name: data.value
-        };
-
-        schemaOptions.map((option) => {
-            if (option.text === data.value) {
-                schemaOptions.splice(schemaOptions.indexOf(option), 1);
-            }
-        });
-        this.setState({
-            components,
-            schemaOptions
-        });
-    }
-
-    deleteFilter(name) {
+    deleteFilter = (name) => {
         const {components, schemaOptions} = this.state;
 
         components[name].isActive = false;
-        schemaOptions.push({value: name, text: name});
+        schemaOptions.push({value: name, label: name});
 
         this.setState({
             components,
@@ -135,46 +119,70 @@ export default class TaskFilterBuilder extends React.Component {
         }
     }
 
+    createFilter = (field, value) => {
+        const {components, schemaOptions} = this.state;
+
+        components[value] = {
+            isActive: true,
+            name: value
+        };
+
+        schemaOptions.map((option) => {
+            if (option.value === value) {
+                schemaOptions.splice(schemaOptions.indexOf(option), 1);
+            }
+        });
+        this.setState({
+            components,
+            schemaOptions
+        });
+        this.refs.filterSelect.reset();
+    };
+
     render() {
-        const {filters, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
+        const {loading, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
         const {filterBuilderData} = this.props;
-
         return (
-            <main className="cc-main">
-                <Container className="page-container">
-                    <Header as="h3">Select filters</Header>
+            <div>
+                <main className="cc-main">
+                    {
+                        loading ?
+                            <Loading/> :
+                            <div>
+                                <AutoForm
+                                    model={filterBuilderData}
+                                    schema={schema}
+                                    onSubmit={this.onSubmit.bind(this)}
+                                    ref="filters">
+                                    {
+                                        _.map(components, (item) => {
+                                            return item.isActive &&
+                                                <FilterSingle
+                                                    assigneeIdOptions={assigneeOptions}
+                                                    facilityIdOptions={facilityOptions}
+                                                    deleteFilter={this.deleteFilter}
+                                                    name={item.name}
+                                                />
+                                        })
+                                    }
+                                </AutoForm>
+                                <div className="add-filter text-center">
+                                    <AutoForm ref="filterSelect" onChange={this.createFilter} schema={filterSchema}>
+                                        <SelectField options={schemaOptions} name="filter"/>
+                                    </AutoForm>
+                                </div>
+                            </div>
+                    }
+                </main>
+            </div>
 
-                    <Dropdown onChange={this.selectFilter.bind(this)}
-                              placeholder="Task fields"
-                              options={schemaOptions}/>
-                    <Divider/>
-
-                    <AutoForm
-                        model={filterBuilderData}
-                        schema={schema}
-                        onSubmit={this.onSubmit.bind(this)}
-                        ref="form">
-                        {
-                            _.map(components, (item) => {
-                                return item.isActive &&
-                                    <FilterSingle
-                                        assigneeIdOptions={assigneeOptions}
-                                        facilityIdOptions={facilityOptions}
-                                        deleteFilter={this.deleteFilter.bind(this)}
-                                        name={item.name}
-                                    />
-                            })
-                        }
-                        <Button primary fluid type="submit">
-                            Finish
-                        </Button>
-                        <Segment tertiary>
-                            <div>Extracted filters:{JSON.stringify(filters)}</div>
-                        </Segment>
-                    </AutoForm>
-                </Container>
-            </main>
         )
     }
 }
 
+const filterSchema = new SimpleSchema({
+    filter: {
+        type: String,
+        label: false
+    }
+});

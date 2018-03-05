@@ -3,6 +3,7 @@ import CodeList from './components/CodeList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import CodeContent from './CodeContent.jsx';
+import CodeCreate from './CodeCreate.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/codes/queries/listCodes";
@@ -15,8 +16,9 @@ class CodeListContainer extends Component {
         this.state = {
             codesSelected: [],
             currentCode: null,
-            filter: false
-        }
+            filter: false,
+            create: false
+        };
         this.showFilterBar = this.showFilterBar.bind(this);
     }
 
@@ -32,7 +34,7 @@ class CodeListContainer extends Component {
         if (currentCode === _id) {
             this.setState({currentCode: null});
         } else {
-            this.setState({currentCode: _id});
+            this.setState({currentCode: _id, create: false});
         }
     };
 
@@ -46,9 +48,22 @@ class CodeListContainer extends Component {
         this.setState({codesSelected});
     };
 
+    createForm = () => {
+        this.setState({
+            currentCode: false,
+            create: true
+        })
+    };
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        })
+    };
+
     render() {
         const {data, loading, error} = this.props;
-        const {codesSelected, currentCode} = this.state;
+        const {codesSelected, currentCode, create} = this.state;
         const code = objectFromArray(data, currentCode);
 
         if (loading) {
@@ -60,7 +75,7 @@ class CodeListContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={currentCode ? "left__side" : "left__side full__width"}>
+                <div className={(currentCode || create) ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={codesSelected.length} filter={this.showFilterBar}/>
                     <CodeList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -70,12 +85,15 @@ class CodeListContainer extends Component {
                         setCode={this.setCode}
                         codes={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar module="Code" create={this.createForm}/>
                 </div>
                 {
-                    currentCode ? (
-                        <RightSide code={code}/>
-                    ) : null
+                    (currentCode || create) &&
+                    <RightSide
+                        code={code}
+                        create={create}
+                        close={this.closeForm}
+                    />
                 }
             </div>
         );
@@ -97,10 +115,13 @@ class RightSide extends Component {
     }
 
     render() {
-        const {code} = this.props;
+        const {fade} = this.state;
+        const {code, create, close} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <CodeContent code={code}/>
+            <div className={fade ? "right__side in" : "right__side"}>
+                {
+                    create ? <CodeCreate close={close}/> : <CodeContent code={code}/>
+                }
             </div>
         )
     }
@@ -108,4 +129,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(CodeListContainer)
+}, {reactive: true})(CodeListContainer)

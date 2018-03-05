@@ -22,7 +22,7 @@ export default class FacilitySingle extends Component {
         const {facility, facilitiesSelected, currentFacility} = this.props;
         const checked = facilitiesSelected.includes(facility._id);
         const classes = classNames({
-            "list-item": true,
+            "list-item user-item": true,
             "bg--yellow": checked,
             "open": currentFacility === facility._id
         });
@@ -35,10 +35,11 @@ export default class FacilitySingle extends Component {
                     <label onClick={this.onSelectFacility.bind(this)}></label>
                 </div>
                 <div className="row__block align-center">
+                    <div className="item-name">{facility.name}</div>
                     <img src={facility.logoPath ? getImagePath(facility.logoPath) : "/assets/img/user1.svg"}
                          className="md-avatar"
-                         alt=""/>
-                    <div className="item-name">{facility.name}</div>
+                         alt=""
+                    />
                 </div>
             </div>
         )

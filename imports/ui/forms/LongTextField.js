@@ -1,20 +1,21 @@
-import React          from 'react';
-import connectField   from 'uniforms/connectField';
+import React from 'react';
+import connectField from 'uniforms/connectField';
 import filterDOMProps from 'uniforms/filterDOMProps';
 
 const LongText = ({
-    disabled,
-    id,
-    inputRef,
-    label,
-    name,
-    onChange,
-    placeholder,
-    value,
-    ...props
-}) =>
+                      disabled,
+                      id,
+                      inputRef,
+                      label,
+                      name,
+                      onChange,
+                      labelHidden,
+                      placeholder,
+                      value,
+                      ...props
+                  }) =>
     <div {...filterDOMProps(props)}>
-        {label && (
+        {label && !labelHidden && (
             <label htmlFor={id}>
                 {label}
             </label>
