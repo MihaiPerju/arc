@@ -34,8 +34,6 @@ export default class UserContentHeader extends React.Component {
         const {user} = this.props;
         const {tags} = this.state;
 
-        console.log(tags);
-
         return (
             <div className="flex-content">
                 <div className="intro-block text-center">
