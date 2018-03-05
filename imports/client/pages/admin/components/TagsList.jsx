@@ -1,27 +1,20 @@
-import React, {Component} from 'react';
-import {Table} from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Table } from 'semantic-ui-react';
 import TagsService from '../services/TagsService';
-import {Button} from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 
 export default class TagsList extends Component {
-    constructor() {
+    constructor () {
         super();
 
-        this.state = {
-            tags: []
-        };
     }
 
-    componentDidMount() {
-        this.setState({
-            tags: this.props.tags
-        });
+    componentDidMount () {
     }
 
-    removeTag(index) {
-        const {tags} = this.state;
-        const {onTagsChange} = this.props;
+    removeTag (index) {
+        const {tags} = this.props;
 
         Meteor.call('tag.delete', tags[index]._id, (err) => {
             if (!err) {
@@ -30,16 +23,10 @@ export default class TagsList extends Component {
                 Notifier.error('An error has occured: ' + err.reason);
             }
         });
-
-        tags.splice(index, 1);
-        this.setState({
-            tags
-        });
-        onTagsChange(tags);
     }
 
-    render() {
-        const {tags} = this.state;
+    render () {
+        const {tags} = this.props;
 
         return (
             <Table padded>
@@ -55,8 +42,7 @@ export default class TagsList extends Component {
                         <Table.Row>
                             <Table.Cell>{tag.name}</Table.Cell>
                             <Table.Cell>{TagsService.getTagPrivacy(tag)}</Table.Cell>
-                            <Table.Cell><Button onClick={this.removeTag.bind(this, index)}
-                                                color="red">Remove</Button></Table.Cell>
+                            <Table.Cell><Button onClick={this.removeTag.bind(this, index)}>Remove</Button></Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>

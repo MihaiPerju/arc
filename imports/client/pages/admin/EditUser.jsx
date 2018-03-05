@@ -1,31 +1,31 @@
-import React, {Component} from 'react';
-import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
+import React, { Component } from 'react';
+import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/users/queries/singleUser.js';
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import { AutoForm, AutoField, ErrorField } from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-import {Button} from 'semantic-ui-react';
-import {Container} from 'semantic-ui-react';
-import {Divider} from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import CreateEditTags from './components/CreateEditTags';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TagsService from './services/TagsService';
+import TagsListQuery from '/imports/api/tags/queries/listTags.js';
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
 
-export default class EditUser extends Component {
-    constructor() {
+class EditUser extends Component {
+    constructor () {
         super();
 
         this.state = {
             email: '',
             firstName: '',
             lastName: '',
-            phoneNumber: '',
-            allTags: [],
-            tags: []
+            phoneNumber: ''
         };
     }
 
-    componentWillReceiveProps(newProps) {
+    componentWillReceiveProps (newProps) {
         // if (!this.props.data && newProps.data) {
         //     this.setState({
         //         email: newProps.data.emails[0].address,
@@ -36,20 +36,11 @@ export default class EditUser extends Component {
         // }
     }
 
-    componentWillMount() {
-        this.getTags();
+    componentWillMount () {
     }
 
-    getTags = () => {
-        Meteor.call('tag.getAll', (err, allTags) => {
-            this.setState({
-                allTags
-            });
-        });
-    };
-
-    onSubmit(formData) {
-        console.log("Ok!");
+    onSubmit (formData) {
+        console.log('Ok!');
         const {user} = this.props;
         Meteor.call('admin.editUser', user._id, formData, (err) => {
             if (!err) {
@@ -60,7 +51,7 @@ export default class EditUser extends Component {
         });
     }
 
-    onChangeField(fieldName, value) {
+    onChangeField (fieldName, value) {
         // const stateObj = {};
         // stateObj[fieldName] = value;
         //
@@ -68,15 +59,9 @@ export default class EditUser extends Component {
     }
 
     getTagList = () => {
-        // const {allTags} = this.state;
-        //
-        // return allTags.map((tag, key) => ({value: tag._id, label: TagsService.getTagName(tag)}));
-    };
+        const {data} = this.props;
 
-    onTagsChange = (tags) => {
-        // this.setState({
-        //    tags
-        // });
+        return data.map((tag, key) => ({value: tag._id, label: TagsService.getTagName(tag)}));
     };
 
     closeEdit = () => {
@@ -89,11 +74,12 @@ export default class EditUser extends Component {
         form.submit();
     };
 
-    render() {
-        const {user} = this.props;
-        const {allTags} = this.state;
+    render () {
+        const {data, user} = this.props;
         user.email = user.emails[0].address;
         const tags = this.getTagList();
+
+        console.log(user);
 
         return (
             <div className="create-form">
@@ -140,8 +126,8 @@ export default class EditUser extends Component {
                                 <SelectMulti labelHidden={true} placeholder="Tags" name="tagIds" options={tags}/>
                                 <ErrorField name="tagIds"/>
                             </div>
-                            <CreateEditTags getTags={this.getTags} user={user}/>
                         </AutoForm>
+                        <CreateEditTags user={user} tags={data}/>
                     </div>
                 </div>
             </div>
@@ -167,3 +153,7 @@ const EditSchema = new SimpleSchema({
         type: String
     }
 });
+
+export default withQuery((props) => {
+    return TagsListQuery.clone();
+}, {reactive: true})(EditUser);

@@ -11,25 +11,5 @@ export default Users.createNamedQuery('listUsers', {
     _id: 1,
     roles: 1,
     avatar: 1,
-    tags: {
-        $filter({params}) {
-            filters = {
-                $or: [
-                    {
-                        privacy: 'Public'
-                    },
-                    {
-                        userId: params.userId
-                    },
-                    {
-                        visibility: {
-                            $in: params.roles
-                        }
-                    }
-
-                ]
-            };
-        },
-        name: 1
-    }
+    tagIds: 1
 });

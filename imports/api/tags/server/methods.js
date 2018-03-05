@@ -7,7 +7,6 @@ Meteor.methods({
         Security.isAdminOrTech(this.userId);
 
         data.userId = this.userId;
-
         return Tags.insert(data);
     },
 
