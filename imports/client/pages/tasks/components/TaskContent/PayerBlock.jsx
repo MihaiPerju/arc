@@ -33,7 +33,7 @@ export default class PayerBlock extends Component {
                     <div className="slide-payers">
                         <Slider ref="slick" {...settings}>
                             <div><PayItem/></div>
-                            <div><PayItem/></div>
+                            <div><PayItem active/></div>
                             <div><PayItem/></div>
                             <div><PayItem/></div>
                             <div><PayItem/></div>

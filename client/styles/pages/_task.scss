@@ -122,6 +122,32 @@
   }
 }
 
+//Invoice Section
+.invoice-section {
+  display: flex;
+  justify-content: space-between;
+  background: #f6f6f6;
+  border-radius: 3px;
+  margin-bottom: 30px;
+  padding: 11px 15px 2px;
+  .left--side {
+    width: 30%;
+  }
+  .right--side {
+    width: 70%;
+    .invoice-list {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        flex-grow: 1;
+        text-align: right;
+        padding-bottom: 10px;
+      }
+    }
+  }
+}
+
 //Account Dialog
 .account-dialog {
   .cc-dialog__title {
@@ -339,6 +365,9 @@
   .pay-item {
     padding-left: 2px;
     padding-right: 2px;
+    &.active {
+      box-shadow: 0 0 1px 0 #3692d9;
+    }
     &__wrapper {
       background: #f6f6f6;
       padding: 10px 15px;
@@ -447,6 +476,7 @@
     padding: 10px 15px 20px 15px;
     opacity: 0;
     transition: opacity $transition300;
+    border-radius: 3px;
     &.in {
       opacity: 1;
     }
@@ -550,6 +580,7 @@
       margin-top: 2px;
       display: flex;
       justify-content: space-between;
+      border-radius: 3px;
       .btn-group {
         button {
           &:first-of-type, &:nth-of-type(2) {
