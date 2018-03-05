@@ -76,6 +76,7 @@ export default class TaskContentHeader extends Component {
                     <div className="btn-group">
                         <ToggleDialog
                             type={'Assigne'}
+                            taskId={task._id}
                             options={userOptions}
                             title={"Assignee account to someone"}
                         />
@@ -138,26 +139,30 @@ class ToggleDialog extends Component {
 
     render() {
         const {dialogIsActive} = this.state;
-        const {options, type, title, escalate} = this.props;
+        const {taskId, options, type, title, escalate} = this.props;
 
         return (
             <button className="btn--white" onClick={this.openDialog}>
                 <span>{type}</span>
                 {
                     dialogIsActive && (
-                        <Dialog closePortal={this.closeDialog} title={title}>
+                        <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
                             {
                                 escalate ? (
                                     <div className="form-wrapper">
                                         <input type="text" placeholder="Type escalation reason"/>
                                     </div>
                                 ) : (
-                                    <AssigneeSelect taskId={task._id} options={options}/>
+                                    <div className="form-wrapper select-wrapper">
+                                        <AssigneeSelect
+                                            taskId={taskId}
+                                            options={options}
+                                        />
+                                    </div>
                                 )
                             }
-
                             <div className="btn-group">
-                                <button onClick={this.closeDialog}>Cancel</button>
+                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
                                 <button className="btn--light-blue">Confirm & sent</button>
                             </div>
                         </Dialog>

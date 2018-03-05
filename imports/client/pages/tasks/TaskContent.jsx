@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import TaskContentHeader from './components/TaskContent/TaskContentHeader';
+import InvoiceMembers from './components/TaskContent/InvoiceMembers';
 import PayerBlock from './components/TaskContent/PayerBlock';
 import ActionBlock from './components/TaskContent/ActionBlock';
 import LetterList from './components/TaskContent/LetterList';
@@ -17,6 +18,7 @@ export default class TaskContent extends Component {
         return (
             <div className="main-content">
                 <TaskContentHeader task={task}/>
+                <InvoiceMembers/>
                 <PayerBlock task={task}/>
                 <ActionBlock update={update} task={task}/>
                 <LetterList task={task} refetch={update}/>
