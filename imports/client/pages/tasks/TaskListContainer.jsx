@@ -20,6 +20,7 @@ class TaskListContainer extends Pager {
             rightSide: false,
             btnGroup: false,
             taskId: null,
+            dialogIsActive: false,
             tasksSelected: []
         });
 

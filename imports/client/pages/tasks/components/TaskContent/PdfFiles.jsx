@@ -51,7 +51,7 @@ export default class ActionBlock extends Component {
         };
 
         return (
-            <div className="action-block">
+            <div className="action-block drop-file">
                 <div className="header__block">
                     <div className="title-block text-uppercase">pdf files</div>
                 </div>
@@ -59,7 +59,7 @@ export default class ActionBlock extends Component {
                     <div className="btn-group-1">
                         <div className="add-content">
                             <i className="icon-file-pdf-o"/>
-                            <div style={{"margin-left": '20%'}} className="text-center">
+                            <div className="drop-file__wrapper">
                                 <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                             </div>
                         </div>

@@ -18,7 +18,7 @@ export default class PaymentBlock extends Component {
             acceptedFiles: '.csv'
         };
         return (
-            <div className="action-block">
+            <div className="action-block drop-file">
                 <div className="header__block">
                     <div className="title-block text-uppercase">Payment File</div>
                 </div>

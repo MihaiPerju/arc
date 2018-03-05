@@ -20,7 +20,7 @@ export default class PlacementBlock extends Component {
         };
 
         return (
-            <div className="action-block">
+            <div className="action-block drop-file">
                 <div className="header__block">
                     <div className="title-block text-uppercase">Placement file</div>
                 </div>

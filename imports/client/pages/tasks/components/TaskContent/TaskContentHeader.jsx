@@ -1,10 +1,17 @@
 import React, {Component} from 'react';
 import moment from "moment/moment";
 import AssigneeSelect from '../AssigneeSelect';
+import Dialog from "/imports/client/lib/ui/Dialog";
 
 export default class TaskContentHeader extends Component {
+    constructor() {
+        super();
+        this.state = {
+            dialogIsActive: false
+        }
+    }
 
-    getOptions (users) {
+    getOptions(users) {
         if (!users) {
             [];
         }
@@ -20,7 +27,7 @@ export default class TaskContentHeader extends Component {
         return options;
     }
 
-    getFirstOption (task, options) {
+    getFirstOption(task, options) {
         if (task.assigneeId) {
             for (option of options) {
                 if (option.value === task.assigneeId) {
@@ -32,17 +39,17 @@ export default class TaskContentHeader extends Component {
     }
 
     render() {
+        const {dialogIsActive} = this.state;
         const {task} = this.props;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
 
         return (
-            <div className="header-block">
+            <div className="header-block header-account">
                 <div className="main-info">
                     <div className="left__side">
                         <div className="name">
                             {task.client && task.client.clientName}
-                            <AssigneeSelect taskId={task._id} options={userOptions}/>
                         </div>
                         <div className="row__block">
                             <div className="pacient-id text-blue">{task.client && task.client._id}</div>
@@ -53,6 +60,7 @@ export default class TaskContentHeader extends Component {
                                 <div className="label label--grey text-uppercase">carc(TNM)</div>
                                 <div className="label label--grey">Work queue(TBM)</div>
                             </div>
+
                         </div>
                     </div>
                     <div className="right__side">
@@ -64,6 +72,18 @@ export default class TaskContentHeader extends Component {
                             <div className="price">18,586(TBM)</div>
                             <div className="text-light-grey">Remaining balance</div>
                         </div>
+                    </div>
+                    <div className="btn-group">
+                        <ToggleDialog
+                            type={'Assigne'}
+                            options={userOptions}
+                            title={"Assignee account to someone"}
+                        />
+                        <ToggleDialog
+                            escalate
+                            type={'Escalate'}
+                            title={''}
+                        />
                     </div>
                 </div>
                 <div className="additional-info">
@@ -82,7 +102,8 @@ export default class TaskContentHeader extends Component {
                         </li>
                         <li className="text-center">
                             <div className="text-light-grey">Discharge date</div>
-                            <div className="text-dark-grey">{task && moment(task.dischrgDate).format('MM/DD/YYYY')}</div>
+                            <div
+                                className="text-dark-grey">{task && moment(task.dischrgDate).format('MM/DD/YYYY')}</div>
                         </li>
                         <li className="text-center">
                             <div className="text-light-grey">Placement date</div>
@@ -91,6 +112,58 @@ export default class TaskContentHeader extends Component {
                     </ul>
                 </div>
             </div>
+        )
+    }
+}
+
+class ToggleDialog extends Component {
+    constructor() {
+        super();
+        this.state = {
+            dialogIsActive: false
+        }
+    }
+
+    openDialog = () => {
+        this.setState({
+            dialogIsActive: true
+        });
+    }
+
+    closeDialog = () => {
+        this.setState({
+            dialogIsActive: false
+        })
+    }
+
+    render() {
+        const {dialogIsActive} = this.state;
+        const {options, type, title, escalate} = this.props;
+
+        return (
+            <button className="btn--white" onClick={this.openDialog}>
+                <span>{type}</span>
+                {
+                    dialogIsActive && (
+                        <Dialog closePortal={this.closeDialog} title={title}>
+                            {
+                                escalate ? (
+                                    <div className="form-wrapper">
+                                        <input type="text" placeholder="Type escalation reason"/>
+                                    </div>
+                                ) : (
+                                    <AssigneeSelect taskId={task._id} options={options}/>
+                                )
+                            }
+
+                            <div className="btn-group">
+                                <button onClick={this.closeDialog}>Cancel</button>
+                                <button className="btn--light-blue">Confirm & sent</button>
+                            </div>
+                        </Dialog>
+                    )
+                }
+            </button>
         )
     }
 }
