@@ -23,6 +23,7 @@ export default class PaginationBar extends Component {
     }
 
     render() {
+        const {noAddButton, module} = this.props;
         return (
             <div className="pagination-bar">
                 <div className="pagination-bar__wrapper">

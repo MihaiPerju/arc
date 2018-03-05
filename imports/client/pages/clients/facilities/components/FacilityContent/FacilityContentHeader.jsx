@@ -36,6 +36,11 @@ export default class FacilityContentHeader extends Component {
         this.node = node
     }
 
+    onEditFacility = () => {
+        const {onEdit} = this.props;
+        onEdit();
+    }
+
     render() {
         const {dropdown} = this.state;
         const {facility} = this.props;

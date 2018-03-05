@@ -7,6 +7,7 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/regions/queries/regionList";
 import Loading from '/imports/client/lib/ui/Loading';
 import {objectFromArray} from "/imports/api/utils";
+import RegionCreate from "./RegionCreate";
 
 class RegionListContainer extends Component {
     constructor() {
@@ -14,7 +15,8 @@ class RegionListContainer extends Component {
         this.state = {
             regionsSelected: [],
             currentRegion: null,
-            filter: false
+            filter: false,
+            create: false
         }
     }
 
@@ -50,13 +52,24 @@ class RegionListContainer extends Component {
         this.setState({regionsSelected});
     };
 
-    createRegion(){
-        FlowRouter.go('region.create', {id: FlowRouter.current().params.id});
+    createForm = () => {
+        this.setState({
+            currentFacility: false,
+            rightSide: true,
+            create: true
+        })
     }
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        })
+    }
+
 
     render() {
         const {data, loading, error} = this.props;
-        const {regionsSelected, currentRegion} = this.state;
+        const {regionsSelected, currentRegion, create} = this.state;
         const region = objectFromArray(data, currentRegion);
 
         if (loading) {
@@ -68,7 +81,7 @@ class RegionListContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={currentRegion ? "left__side" : "left__side full__width"}>
+                <div className={(currentRegion || create) ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={regionsSelected.length}/>
                     <RegionsList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -78,12 +91,20 @@ class RegionListContainer extends Component {
                         setRegion={this.setRegion}
                         regions={data}
                     />
-                    <PaginationBar noAddButton={false} onAdd={this.createRegion}/>
+                    <PaginationBar
+                        module="Region"
+                        create={this.createForm}
+                        closeForm={this.closeForm}
+                    />
                 </div>
                 {
-                    currentRegion ? (
-                        <RightSide region={region}/>
-                    ) : null
+                    (currentRegion || create) &&
+                        <RightSide
+                            region={region}
+                            create={create}
+                            close={this.closeForm}
+                        />
+
                 }
             </div>
         );
@@ -105,10 +126,13 @@ class RightSide extends Component {
     }
 
     render() {
-        const {region} = this.props;
+        const {fade} = this.state;
+        const {region, create, close} = this.props;
         return (
-            <div className={this.state.fade ? "right__side in" : "right__side"}>
-                <RegionContent region={region}/>
+            <div className={fade ? "right__side in" : "right__side"}>
+                {
+                    create ? <RegionCreate close={close}/> : <RegionContent region={region}/>
+                }
             </div>
         )
     }

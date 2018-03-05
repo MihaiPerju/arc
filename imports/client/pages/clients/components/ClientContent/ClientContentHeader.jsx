@@ -25,6 +25,10 @@ export default class ClientContentHeader extends Component {
                             <span className="text text-blue">{client.email}</span>
                         </div>
                         <div className="btn-group">
+                            <a href={FlowRouter.url('region.list', {id: client._id})}
+                               className="cc-button btn--white">
+                                Manage regions
+                            </a>
                             <a href={"/client/" + client._id + "/manage-facilities"}
                                className="cc-button btn--white">
                                 Manage facilities
