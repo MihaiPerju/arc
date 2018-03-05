@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import RichTextArea from "/imports/client/lib/uniforms/RichTextArea.jsx";
 
 export default class CreateLetterTemplate extends Component {
@@ -10,7 +12,7 @@ export default class CreateLetterTemplate extends Component {
     render() {
 
         return (
-            <div className="create-form">
+            <div className="create-form letter-template-form">
                 <div className="create-form__bar">
                     <button className="btn-add">+ Add letter template</button>
                     <div className="btn-group">
@@ -19,16 +21,16 @@ export default class CreateLetterTemplate extends Component {
                     </div>
                 </div>
                 <div className="create-form__wrapper">
-                    <div className="action-block">
-                        <form action="">
+                    <div className="action-block i--block">
+                        <AutoForm schema={LetterTemplateSchema} >
                             <div className="form-wrapper">
                                 <input type="text" placeholder="Letter name"/>
                             </div>
                             <div className="form-wrapper">
                                 <textarea placeholder="Description"/>
                             </div>
-                            <div className="form-wrapper">
-                                <RichTextArea/>
+                            <div className="form-wrapper rich-text-area">
+                                <RichTextArea name="body"/>
                             </div>
                             <div className="select-group">
                                 <div className="form-wrapper">
@@ -38,7 +40,7 @@ export default class CreateLetterTemplate extends Component {
                                     </select>
                                 </div>
                             </div>
-                        </form>
+                        </AutoForm>
                     </div>
                 </div>
             </div>

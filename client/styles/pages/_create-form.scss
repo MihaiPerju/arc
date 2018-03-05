@@ -133,6 +133,15 @@
     }
     .form-wrapper {
       margin-bottom: 10px;
+      position: relative;
+      &:before {
+        content: '\f107';
+        font-family: $font-icon;
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        color: $extra-light-grey;
+      }
       select {
         border-radius: 3px;
         border: 1px #ebebeb solid;
@@ -186,6 +195,20 @@
     padding-bottom: 0;
     .form-wrapper {
       margin-bottom: 0;
+    }
+  }
+}
+
+.letter-template-form {
+  .rich-text-area {
+    label {
+      display: none
+    }
+    .RichTextEditor__root___2QXK- {
+      border: 0
+    }
+    .RichTextEditor__editor___1QqIU {
+      height: 300px;
     }
   }
 }

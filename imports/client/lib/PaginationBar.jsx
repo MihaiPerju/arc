@@ -6,24 +6,23 @@ export default class PaginationBar extends Component {
         this.state = {
             tooltip: false
         };
-        this.showTooltip = this.showTooltip.bind(this);
-        this.closeTooltip = this.closeTooltip.bind(this);
     }
 
-    showTooltip() {
+    showTooltip = () => {
         this.setState({
             tooltip: !this.state.tooltip
         })
     }
 
-    closeTooltip() {
+    closeTooltip = () => {
         this.setState({
             tooltip: false
         })
     }
 
     render() {
-        const {noAddButton} = this.props;
+        const {tooltip} = this.state;
+        const {create, module} = this.props;
         return (
             <div className="pagination-bar">
                 <div className="pagination-bar__wrapper">
@@ -33,10 +32,10 @@ export default class PaginationBar extends Component {
                         <button className="btn-prev"><i className="icon-angle-left"/></button>
                         <button className="btn-next"><i className="icon-angle-right"/></button>
                     </div>
-                    <div className="toggle-form" onClick={this.props.create} onMouseEnter={this.showTooltip}
+                    <div className="toggle-form" onClick={create} onMouseEnter={this.showTooltip}
                          onMouseLeave={this.closeTooltip}>+
                     </div>
-                    {this.state.tooltip && <Tooltip module={module}/>}
+                    {tooltip && <Tooltip module={module}/>}
                 </div>
             </div>
         )

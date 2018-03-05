@@ -78,7 +78,7 @@ class LetterTemplateListContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={currentTemplate ? "left__side" : "left__side full__width"}>
+                <div className={(currentTemplate || create) ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={templatesSelected.length} deleteAction={this.deleteAction}/>
                     <LetterTemplatesList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
