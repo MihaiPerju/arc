@@ -5,6 +5,7 @@ import Notifier from '/imports/client/lib/Notifier';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import {LabelSubstates} from '/imports/api/tasks/enums/substates.js';
 import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
+import ReasonCodesBlock from './components/ReasonCodesBlock';
 
 export default class ActionEdit extends React.Component {
     constructor(props) {
@@ -22,6 +23,7 @@ export default class ActionEdit extends React.Component {
         Meteor.call('action.edit', action._id, formData, (err) => {
             if (!err) {
                 Notifier.success('Data saved!');
+                this.onSetEdit();
             } else {
                 Notifier.error("An error occurred!");
             }
@@ -124,6 +126,7 @@ export default class ActionEdit extends React.Component {
                         </AutoForm>
                     </div>
                 </div>
+                <ReasonCodesBlock action={action}/>
             </div>
         )
     }
