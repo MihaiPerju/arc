@@ -23,7 +23,7 @@ export default class PaginationBar extends Component {
     }
 
     render() {
-        const {noAddButton} = this.props;
+        const {noAddButton, onAdd} = this.props;
         console.log(noAddButton);
         return (
             <div className="pagination-bar">

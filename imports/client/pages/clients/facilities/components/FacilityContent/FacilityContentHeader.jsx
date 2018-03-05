@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
 
 export default class FacilityContentHeader extends Component {
+    onEditFacility(facility){
+        FlowRouter.go('facility.edit',
+            {
+                _id: FlowRouter.current().params._id,
+                facilityId: facility._id
+            });
+    }
     render() {
         const {facility} = this.props;
         return (
@@ -10,7 +17,9 @@ export default class FacilityContentHeader extends Component {
                         <img src="/assets/img/user.svg" className="lg-avatar-1 img-circle" alt=""/>
                         <div className="title">{facility.name}</div>
                     </div>
-                    <button className="btn-edit btn--white">Edit facillity</button>
+                    <button type="button" onClick={() => this.onEditFacility(facility)} className="btn-edit btn--white">
+                        Edit facility
+                    </button>
                 </div>
                 <ul className="row__info main-info">
                     <li className="text-center">

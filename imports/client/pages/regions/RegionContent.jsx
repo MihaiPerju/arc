@@ -3,6 +3,10 @@ import React, {Component} from 'react';
 export default class RegionContent extends Component {
     constructor() {
         super();
+        this.onEditRegion = this.onEditRegion.bind(this);
+    }
+    onEditRegion(region){
+        FlowRouter.go('region.edit', {id: region._id});
     }
 
     render() {
@@ -15,7 +19,9 @@ export default class RegionContent extends Component {
                     <div className="region">{region.name}</div>
                 </div>
                 <div className="text-center">
-                    <button className="btn-edit btn--white">Edit region</button>
+                    <button type="button" onClick={() => this.onEditRegion(region)} className="btn-edit btn--white">
+                        Edit region
+                    </button>
                 </div>
             </div>
         )

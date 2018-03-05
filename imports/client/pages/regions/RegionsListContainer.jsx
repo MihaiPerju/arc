@@ -38,6 +38,10 @@ class RegionListContainer extends Component {
         this.setState({regionsSelected});
     };
 
+    createRegion(){
+        FlowRouter.go('region.create', {id: FlowRouter.current().params.id});
+    }
+
     render() {
         const {data, loading, error} = this.props;
         const {regionsSelected, currentRegion} = this.state;
@@ -62,7 +66,7 @@ class RegionListContainer extends Component {
                         setRegion={this.setRegion}
                         regions={data}
                     />
-                    <PaginationBar/>
+                    <PaginationBar noAddButton={false} onAdd={this.createRegion}/>
                 </div>
                 {
                     currentRegion ? (
