@@ -29,24 +29,31 @@ export default class TagsList extends Component {
         const {tags} = this.props;
 
         return (
-            <Table padded>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Name</Table.HeaderCell>
-                        <Table.HeaderCell>Visibility</Table.HeaderCell>
-                        <Table.HeaderCell>Actions</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {tags.map((tag, index) => (
-                        <Table.Row>
-                            <Table.Cell>{tag.name}</Table.Cell>
-                            <Table.Cell>{TagsService.getTagPrivacy(tag)}</Table.Cell>
-                            <Table.Cell><Button onClick={this.removeTag.bind(this, index)}>Remove</Button></Table.Cell>
-                        </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table>
+            <div className="action-block schedule-block">
+                <div className="main__block">
+                    <div className="schedule-list">
+                        {tags.map((tag, index) => (
+                            <div key={index} className="schedule-item">
+                                <div className="left__side">
+                                    <div className="info">
+                                        <div className="text-light-grey">
+                                            {tag.name}
+                                        </div>
+                                        <div className="info-label">
+                                            {TagsService.getTagPrivacy(tag)}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="btn-group">
+                                    <button onClick={this.removeTag.bind(this, index)} className="btn--red"><i
+                                        className="icon-trash-o"/> Remove
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
         );
     }
 }
