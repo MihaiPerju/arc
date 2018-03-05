@@ -33,7 +33,7 @@ export default class FacilityContent extends Component {
                     </ul>
                 </div>
                 {
-                    edit ? <FacilityEdit setEdit={this.setEdit}/> :
+                    edit ? <FacilityEdit facility={facility} close={this.setEdit}/> :
                         <div>
                             <FacilityContentHeader onEdit={this.setEdit} facility={facility}/>
                             <ContactTable/>
