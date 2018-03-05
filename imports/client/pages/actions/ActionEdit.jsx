@@ -22,6 +22,7 @@ export default class ActionEdit extends React.Component {
         Meteor.call('action.edit', action._id, formData, (err) => {
             if (!err) {
                 Notifier.success('Data saved!');
+                this.onSetEdit();
             } else {
                 Notifier.error("An error occurred!");
             }
