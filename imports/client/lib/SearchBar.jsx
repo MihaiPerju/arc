@@ -132,11 +132,20 @@ class BtnGroup extends Component {
         }, 1);
     }
 
+
+    deleteAction() {
+        this.props.deleteAction();
+    }
+
     render() {
+        const {deleteAction} = this.props;
         return (
             <div className={this.state.in ? "btn-group in" : "btn-group"}>
                 <button><i className="icon-archive"/></button>
-                <button><i className="icon-trash-o"/></button>
+                {
+                    deleteAction &&
+                    <button onClick={this.deleteAction.bind(this)}><i className="icon-trash-o"/></button>
+                }
             </div>
         )
     }

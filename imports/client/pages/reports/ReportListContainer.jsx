@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import ReportList from './components/ReportList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
@@ -6,10 +6,11 @@ import ReportContent from './ReportContent.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import ReportCreate from './ReportCreate.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import query from "/imports/api/reports/queries/reportsList";
+import query from '/imports/api/reports/queries/reportsList';
 import Loading from '/imports/client/lib/ui/Loading';
-import {objectFromArray} from "/imports/api/utils";
+import {objectFromArray} from '/imports/api/utils';
 import classNames from 'classnames';
+import Notifier from '/imports/client/lib/Notifier';
 
 class ReportListContainer extends Component {
     constructor() {
@@ -45,15 +46,25 @@ class ReportListContainer extends Component {
         this.setState({reportsSelected});
     };
 
-    createForm = () => {
+    createForm() {
         this.setState({
             currentReport: false,
             create: true
-        })
+        });
     }
 
     closeForm = () => {
         this.setState({create: false});
+    };
+
+    deleteAction = () => {
+        const {reportsSelected} = this.state;
+
+        Meteor.call('report.deleteMany', reportsSelected, (err) => {
+            if (!err) {
+                Notifier.success('Reports deleted !');
+            }
+        });
     };
 
     render() {
@@ -62,21 +73,22 @@ class ReportListContainer extends Component {
         const report = objectFromArray(data, currentReport);
 
         if (loading) {
-            return <Loading/>
+            return <Loading/>;
         }
 
         if (error) {
-            return <div>Error: {error.reason}</div>
+            return <div>Error: {error.reason}</div>;
         }
 
         return (
             <div className="cc-container">
                 <div className={
-                    currentReport || create ? "left__side" : "left__side full__width"
+                    currentReport || create ? 'left__side' : 'left__side full__width'
                 }>
-                    <SearchBar btnGroup={reportsSelected.length} filter={this.showFilterBar}/>
+                    <SearchBar btnGroup={reportsSelected.length} filter={this.showFilterBar}
+                               deleteAction={this.deleteAction}/>
                     <ReportList
-                        class={this.state.filter ? "task-list decreased" : "task-list"}
+                        class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         reportsSelected={reportsSelected}
                         selectReport={this.selectReport}
                         currentReport={currentReport}
@@ -102,7 +114,7 @@ class RightSide extends Component {
         super();
         this.state = {
             fade: false
-        }
+        };
     }
 
     componentDidMount() {
@@ -115,8 +127,8 @@ class RightSide extends Component {
         const {report, create, close} = this.props;
         const {fade} = this.state;
         const classes = classNames({
-            "right__side": true,
-            "in": fade
+            'right__side': true,
+            'in': fade
         });
         return (
             <div className={classes}>
@@ -124,10 +136,10 @@ class RightSide extends Component {
                     create ? <ReportCreate close={close}/> : <ReportContent report={report}/>
                 }
             </div>
-        )
+        );
     }
 }
 
 export default withQuery((props) => {
     return query.clone();
-}, {reactive: true})(ReportListContainer)
+})(ReportListContainer);

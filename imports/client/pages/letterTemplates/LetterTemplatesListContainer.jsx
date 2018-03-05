@@ -8,6 +8,7 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from "/imports/api/letterTemplates/queries/listLetterTemplates";
 import Loading from '/imports/client/lib/ui/Loading';
 import {objectFromArray} from "/imports/api/utils";
+import Notifier from '/imports/client/lib/Notifier';
 
 class LetterTemplateListContainer extends Component {
     constructor() {
@@ -54,6 +55,16 @@ class LetterTemplateListContainer extends Component {
         })
     }
 
+    deleteAction = () => {
+        const {templatesSelected} = this.state;
+
+        Meteor.call('letterTemplate.deleteMany', templatesSelected, (err) => {
+            if (!err) {
+                Notifier.success('Letter templates deleted !');
+            }
+        });
+    };
+
     render() {
         const {data, loading, error} = this.props;
         const {templatesSelected, currentTemplate, create} = this.state;
@@ -67,8 +78,8 @@ class LetterTemplateListContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={(create || currentTemplate) ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={templatesSelected.length}/>
+                <div className={currentTemplate ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={templatesSelected.length} deleteAction={this.deleteAction}/>
                     <LetterTemplatesList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         templatesSelected={templatesSelected}

@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import CodeList from './components/CodeList.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
@@ -6,9 +6,10 @@ import CodeContent from './CodeContent.jsx';
 import CodeCreate from './CodeCreate.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import query from "/imports/api/codes/queries/listCodes";
+import query from '/imports/api/codes/queries/listCodes';
 import Loading from '/imports/client/lib/ui/Loading';
-import {objectFromArray} from "/imports/api/utils";
+import {objectFromArray} from '/imports/api/utils';
+import Notifier from '/imports/client/lib/Notifier';
 
 class CodeListContainer extends Component {
     constructor() {
@@ -25,7 +26,7 @@ class CodeListContainer extends Component {
     showFilterBar() {
         this.setState({
             filter: !this.state.filter
-        })
+        });
     }
 
     setCode = (_id) => {
@@ -51,14 +52,25 @@ class CodeListContainer extends Component {
     createForm = () => {
         this.setState({
             currentCode: false,
-            create: true
-        })
+            create: true,
+            rightSide: true
+        });
     };
 
     closeForm = () => {
         this.setState({
             create: false
-        })
+        });
+    };
+
+    deleteAction = () => {
+        const {codesSelected} = this.state;
+
+        Meteor.call('code.deleteMany', codesSelected, (err) => {
+            if (!err) {
+                Notifier.success('Codes deleted !');
+            }
+        });
     };
 
     render() {
@@ -67,18 +79,19 @@ class CodeListContainer extends Component {
         const code = objectFromArray(data, currentCode);
 
         if (loading) {
-            return <Loading/>
+            return <Loading/>;
         }
 
         if (error) {
-            return <div>Error: {error.reason}</div>
+            return <div>Error: {error.reason}</div>;
         }
         return (
             <div className="cc-container">
-                <div className={(currentCode || create) ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={codesSelected.length} filter={this.showFilterBar}/>
+                <div className={(currentCode || create) ? 'left__side' : 'left__side full__width'}>
+                    <SearchBar btnGroup={codesSelected.length} filter={this.showFilterBar}
+                               deleteAction={this.deleteAction}/>
                     <CodeList
-                        class={this.state.filter ? "task-list decreased" : "task-list"}
+                        class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         codesSelected={codesSelected}
                         selectCode={this.selectCode}
                         currentCode={currentCode}
@@ -105,7 +118,7 @@ class RightSide extends Component {
         super();
         this.state = {
             fade: false
-        }
+        };
     }
 
     componentDidMount() {
@@ -118,15 +131,15 @@ class RightSide extends Component {
         const {fade} = this.state;
         const {code, create, close} = this.props;
         return (
-            <div className={fade ? "right__side in" : "right__side"}>
+            <div className={fade ? 'right__side in' : 'right__side'}>
                 {
                     create ? <CodeCreate close={close}/> : <CodeContent code={code}/>
                 }
             </div>
-        )
+        );
     }
 }
 
 export default withQuery((props) => {
     return query.clone();
-}, {reactive: true})(CodeListContainer)
+}, {reactive: true})(CodeListContainer);

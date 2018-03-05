@@ -1,17 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ActionList from './components/ActionList.jsx';
 import ActionContent from './ActionContent.jsx';
 import ActionCreate from './ActionCreate.jsx';
-import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/actions/queries/actionList';
 import Loading from '/imports/client/lib/ui/Loading';
-import {objectFromArray} from '/imports/api/utils';
+import { objectFromArray } from '/imports/api/utils';
+import Notifier from '/imports/client/lib/Notifier';
 
 class ActionListContainer extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             actionsSelected: [],
@@ -44,7 +45,8 @@ class ActionListContainer extends Component {
     createForm = () => {
         this.setState({
             currentAction: false,
-            create: true
+            create: true,
+            rightSide: true
         });
     };
 
@@ -52,10 +54,19 @@ class ActionListContainer extends Component {
         this.setState({
             create: false
         });
-
     };
 
-    render() {
+    deleteAction = () => {
+        const {actionsSelected} = this.state;
+
+        Meteor.call('action.deleteMany', actionsSelected, (err) => {
+            if (!err) {
+                Notifier.success('Actions deleted !');
+            }
+        });
+    };
+
+    render () {
         const {data, loading, error} = this.props;
         const {actionsSelected, currentAction, create} = this.state;
         const action = objectFromArray(data, currentAction);
@@ -70,7 +81,7 @@ class ActionListContainer extends Component {
         return (
             <div className="cc-container">
                 <div className={(currentAction || create) ? 'left__side' : 'left__side full__width'}>
-                    <SearchBar btnGroup={actionsSelected.length}/>
+                    <SearchBar btnGroup={actionsSelected.length} deleteAction={this.deleteAction}/>
                     <ActionList
                         class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         actionsSelected={actionsSelected}
@@ -95,20 +106,20 @@ class ActionListContainer extends Component {
 }
 
 class RightSide extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             fade: false
         };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         setTimeout(() => {
             this.setState({fade: true});
         }, 300);
     }
 
-    render() {
+    render () {
         const {fade} = this.state;
         const {action, create, close} = this.props;
         return (

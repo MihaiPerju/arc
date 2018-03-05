@@ -1,17 +1,18 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import UserList from './components/UserList.jsx';
 import UserContent from './UserContent.jsx';
 import CreateUser from './CreateUser.jsx';
-import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import query from "/imports/api/users/queries/listUsers";
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
+import query from '/imports/api/users/queries/listUsers';
 import Loading from '/imports/client/lib/ui/Loading';
-import {objectFromArray} from "/imports/api/utils";
+import { objectFromArray } from '/imports/api/utils';
+import Notifier from '/imports/client/lib/Notifier';
 
 class UserListContainer extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             rightSide: false,
@@ -20,10 +21,31 @@ class UserListContainer extends Component {
             usersSelected: [],
             currentUser: null,
             create: false
-        }
+        };
+        this.renderRightSide = this.renderRightSide.bind(this);
+        this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
     }
 
-    selectUser(objectId) {
+    renderRightSide () {
+        this.setState({
+            rightSide: true
+        });
+    }
+
+    showBtnGroup () {
+        this.setState({
+            btnGroup: !this.state.btnGroup
+        });
+    }
+
+    showFilterBar () {
+        this.setState({
+            filter: !this.state.filter
+        });
+    }
+
+    selectUser (objectId) {
         const {usersSelected} = this.state;
         if (usersSelected.includes(objectId)) {
             usersSelected.splice(usersSelected.indexOf(objectId), 1);
@@ -33,12 +55,12 @@ class UserListContainer extends Component {
         this.setState({usersSelected});
     }
 
-    setUser(id) {
+    setUser (id) {
         const {currentUser} = this.state;
         if (currentUser === id) {
-            this.setState({currentUser: null})
+            this.setState({currentUser: null});
         } else {
-            this.setState({currentUser: id, create: false});
+            this.setState({currentUser: id});
         }
     }
 
@@ -53,29 +75,40 @@ class UserListContainer extends Component {
     closeForm = () => {
         this.setState({
             create: false
-        })
+        });
     };
 
-    render() {
+    deleteAction = () => {
+        const {usersSelected} = this.state;
+
+        Meteor.call('admin.deleteManyUsers', usersSelected, (err) => {
+            if (!err) {
+                Notifier.success('Users deleted !');
+            }
+        });
+    };
+
+    render () {
         const {data, loading, error} = this.props;
         const {usersSelected, currentUser, create} = this.state;
         const user = objectFromArray(data, currentUser);
 
         if (loading) {
-            return <Loading/>
+            return <Loading/>;
         }
 
         if (error) {
-            return <div>{error.reason}</div>
+            return <div>{error.reason}</div>;
         }
 
         return (
             <div className="cc-container">
-                <div className={(currentUser || create) ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={usersSelected.length}/>
+                <div className={(currentUser || create) ? 'left__side' : 'left__side full__width'}>
+                    <SearchBar btnGroup={usersSelected.length} filter={this.showFilterBar}
+                               deleteAction={this.deleteAction}/>
                     {this.state.filter ? <FilterBar/> : null}
                     <UserList
-                        class={this.state.filter ? "task-list decreased" : "task-list"}
+                        class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         renderContent={this.renderRightSide}
                         selectUser={this.selectUser.bind(this)}
                         setUser={this.setUser.bind(this)}
@@ -104,33 +137,32 @@ class UserListContainer extends Component {
 }
 
 class RightSide extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             fade: false
-        }
+        };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         setTimeout(() => {
             this.setState({fade: true});
         }, 300);
     }
 
-    render() {
+    render () {
         const {user, create, close} = this.props;
         const {fade} = this.state;
         return (
-            <div className={fade ? "right__side in" : "right__side"}>
+            <div className={fade ? 'right__side in' : 'right__side'}>
                 {
                     create ? <CreateUser close={close}/> : <UserContent user={user}/>
                 }
             </div>
-        )
+        );
     }
 }
 
-
 export default withQuery((props) => {
     return query.clone();
-}, {reactive: true})(UserListContainer)
+}, {reactive: true})(UserListContainer);
