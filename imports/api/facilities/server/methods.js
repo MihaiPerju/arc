@@ -21,7 +21,6 @@ Meteor.methods({
     },
 
     'facility.update'(facility) {
-        console.log(facility);
         Security.isAdminOrTech(this.userId);
         const facilityData = FacilitySchema.clean(facility);
 

@@ -40,7 +40,6 @@ class ReasonCodesBlock extends Component {
     render() {
         const {data, error, loading, action} = this.props;
         const {blankSchedule} = this.state;
-        console.log(data);
 
         if (loading) {
             return <Loading/>;
