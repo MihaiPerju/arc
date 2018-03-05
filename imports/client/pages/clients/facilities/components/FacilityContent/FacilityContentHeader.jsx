@@ -36,6 +36,11 @@ export default class FacilityContentHeader extends Component {
         this.node = node
     }
 
+    onEditFacility = () => {
+        const {onEdit} = this.props;
+        onEdit();
+    }
+
     render() {
         const {dropdown} = this.state;
         const {facility} = this.props;
@@ -50,7 +55,9 @@ export default class FacilityContentHeader extends Component {
                         <img src="/assets/img/user.svg" className="lg-avatar-1 img-circle" alt=""/>
                         <div className="title">{facility.name}</div>
                     </div>
-                    <button className="btn-edit btn--white">Edit facillity</button>
+                    <button type="button" onClick={() => this.onEditFacility(facility)} className="btn-edit btn--white">
+                        Edit facility
+                    </button>
                 </div>
                 <ul className="row__info main-info">
                     <li className="text-center">

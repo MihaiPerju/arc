@@ -40,9 +40,11 @@ export default class SelectUsersContainer extends React.Component {
         const users = this.getUserOptions(this.state.users);
 
         return (
-            <div>
-                <SelectMulti name="allowedUsers" options={users}/>
-                <ErrorField name="allowedUsers"/>
+            <div className="select-group">
+                <div className="form-wrapper">
+                    <SelectMulti labelHidden={true} placeholder="Allowed Users" name="allowedUsers" options={users}/>
+                    <ErrorField name="allowedUsers"/>
+                </div>
             </div>
         )
     }

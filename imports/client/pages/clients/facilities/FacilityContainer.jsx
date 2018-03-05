@@ -14,7 +14,8 @@ class FacilityContainer extends Component {
         this.state = {
             currentFacility: null,
             filter: false,
-            facilitiesSelected: []
+            facilitiesSelected: [],
+            create: false
         };
     }
 
@@ -25,7 +26,7 @@ class FacilityContainer extends Component {
         if (currentFacility === _id) {
             this.setState({currentFacility: null});
         } else {
-            this.setState({currentFacility: _id});
+            this.setState({currentFacility: _id, create: false});
         }
     }
 
@@ -52,7 +53,6 @@ class FacilityContainer extends Component {
     createForm = () => {
         this.setState({
             currentFacility: false,
-            rightSide: true,
             create: true
         })
     }
@@ -89,7 +89,9 @@ class FacilityContainer extends Component {
                         facilities={data}
                     />
                     <PaginationBar
+                        module="Facility"
                         create={this.createForm}
+                        closeForm={this.closeForm}
                     />
                 </div>
                 {
@@ -134,5 +136,8 @@ class RightSide extends Component {
 }
 
 export default withQuery(() => {
-    return query.clone();
+    return query.clone({
+        filters: {
+            clientId: FlowRouter.current().params._id
+        }});
 })(FacilityContainer)

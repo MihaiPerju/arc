@@ -143,7 +143,9 @@ import RegionListContainer from '/imports/client/pages/regions/RegionsListContai
 route('/client/:id/region/create', RegionCreate, {}, {
     name: 'region.create'
 });
-route('/region/:id/edit', RegionEdit);
+route('/region/:id/edit', RegionEdit, {}, {
+    name: 'region.edit'
+});
 route('/client/:id/region/list', RegionListContainer, {}, {
     name: 'region.list'
 });
