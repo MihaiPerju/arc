@@ -142,4 +142,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(ReportListContainer);
+}, {reactive: true})(ReportListContainer);

@@ -77,7 +77,7 @@ export default class SearchBar extends Component {
 
     render() {
         const {filter, active, dropdown} = this.state;
-        const {options, btnGroup} = this.props;
+        const {options, btnGroup, deleteAction} = this.props;
         const classes = classNames({
                 'select-type': true,
                 'open': dropdown
@@ -97,7 +97,7 @@ export default class SearchBar extends Component {
                         }
                     </div>
                     <div className="search-bar__wrapper">
-                        {btnGroup ? <BtnGroup deleteAction={this.props.deleteAction}/> : null}
+                        {btnGroup && <BtnGroup deleteAction={deleteAction}/>}
                         <div className={btnGroup ? "search-input" : "search-input full__width"}>
                             <div className="form-group">
                                 <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
@@ -133,9 +133,9 @@ class BtnGroup extends Component {
     }
 
 
-    deleteAction() {
+    deleteAction = () => {
         this.props.deleteAction();
-    }
+    };
 
     render() {
         const {deleteAction} = this.props;
@@ -144,7 +144,7 @@ class BtnGroup extends Component {
                 <button><i className="icon-archive"/></button>
                 {
                     deleteAction &&
-                    <button onClick={this.deleteAction.bind(this)}><i className="icon-trash-o"/></button>
+                    <button onClick={this.deleteAction}><i className="icon-trash-o"/></button>
                 }
             </div>
         )
