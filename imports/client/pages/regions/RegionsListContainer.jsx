@@ -25,7 +25,7 @@ class RegionListContainer extends Component {
             btnGroup: !this.state.btnGroup
         })
     }
-    
+
     showFilterBar() {
         this.setState({
             filter: !this.state.filter
@@ -38,7 +38,7 @@ class RegionListContainer extends Component {
         if (currentRegion === _id) {
             this.setState({currentRegion: null});
         } else {
-            this.setState({currentRegion: _id});
+            this.setState({currentRegion: _id, create: false});
         }
     };
 
@@ -54,17 +54,16 @@ class RegionListContainer extends Component {
 
     createForm = () => {
         this.setState({
-            currentFacility: false,
-            rightSide: true,
+            currentRegion: false,
             create: true
         })
-    }
+    };
 
     closeForm = () => {
         this.setState({
             create: false
         })
-    }
+    };
 
 
     render() {
@@ -99,11 +98,11 @@ class RegionListContainer extends Component {
                 </div>
                 {
                     (currentRegion || create) &&
-                        <RightSide
-                            region={region}
-                            create={create}
-                            close={this.closeForm}
-                        />
+                    <RightSide
+                        region={region}
+                        create={create}
+                        close={this.closeForm}
+                    />
 
                 }
             </div>

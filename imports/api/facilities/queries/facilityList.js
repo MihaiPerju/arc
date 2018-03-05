@@ -16,9 +16,11 @@ export default Facilities.createNamedQuery('facilityList', {
     zipCode: 1,
     addressOne: 1,
     addressTwo: 1,
-    region: 1,
+    regionId: 1,
     status: 1,
     placementRules: 1,
     inventoryRules: 1,
-    paymentRules: 1
+    paymentRules: 1,
+    sftpPath: 1,
+    allowedUsers: 1
 });
