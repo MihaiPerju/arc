@@ -140,5 +140,6 @@ export default withQuery(() => {
     return query.clone({
         filters: {
             clientId: FlowRouter.current().params._id
-        }});
-})(FacilityContainer)
+        }
+    });
+}, {reactive: true})(FacilityContainer)
