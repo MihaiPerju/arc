@@ -112,7 +112,6 @@ export default class ReportEdit extends React.Component {
 
     render() {
         const {hasGeneralInformation, allowedRoles, generalInformation, components, filterBuilderData} = this.state;
-        console.log("Mounted!");
         return (
             <div className="create-form">
                 <div className="create-form__bar">

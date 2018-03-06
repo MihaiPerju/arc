@@ -1,7 +1,16 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import FacilitySchema from '/imports/api/facilities/schema.js'
-import {AutoForm, AutoField, ErrorField, SelectField, LongTextField, ListField, ListItemField, NestField} from '/imports/ui/forms';
+import {
+    AutoForm,
+    AutoField,
+    ErrorField,
+    SelectField,
+    LongTextField,
+    ListField,
+    ListItemField,
+    NestField
+} from '/imports/ui/forms';
 import RegionListQuery from '/imports/api/regions/queries/regionList.js';
 import SelectUsersContainer from '/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx';
 
@@ -13,13 +22,14 @@ export default class FacilityCreate extends Component {
             regions: []
         }
     }
+
     componentWillMount() {
         RegionListQuery.clone({
             filters: {
                 clientId: FlowRouter.current().params._id
             }
         }).fetch((err, regions) => {
-            if (!err){
+            if (!err) {
                 this.setState({
                     regions
                 });
@@ -34,7 +44,6 @@ export default class FacilityCreate extends Component {
     };
 
     onSubmit(data) {
-        console.log(data);
         data.clientId = FlowRouter.current().params._id;
         Meteor.call('facility.update', data, (err) => {
             if (!err) {
@@ -57,7 +66,7 @@ export default class FacilityCreate extends Component {
     };
 
     render() {
-        const {regions } = this.state;
+        const {regions} = this.state;
         const regionIds = this.getRegionOptions(regions);
         const schema = FacilitySchema.omit('clientId');
         const {facility} = this.props;
@@ -67,9 +76,11 @@ export default class FacilityCreate extends Component {
                     <button className="btn-add">+ Add facility</button>
                     <div className="btn-group">
                         <button
-                            onClick={this.onClose} className="btn-cancel">Cancel</button>
+                            onClick={this.onClose} className="btn-cancel">Cancel
+                        </button>
                         <button
-                            onClick={this.onCreateFacility} className="btn--green">Confirm & save</button>
+                            onClick={this.onCreateFacility} className="btn--green">Confirm & save
+                        </button>
                     </div>
                 </div>
                 <div className="create-form__wrapper">
@@ -129,7 +140,8 @@ export default class FacilityCreate extends Component {
                                     <NestField>
                                         <div>
                                             <div className="form-wrapper">
-                                                <AutoField labelHidden={true} placeholder="First Name" name="firstName"/>
+                                                <AutoField labelHidden={true} placeholder="First Name"
+                                                           name="firstName"/>
                                                 <ErrorField name="firstName"/>
                                             </div>
                                             <div className="form-wrapper">
@@ -146,7 +158,8 @@ export default class FacilityCreate extends Component {
                                             </div>
                                             <div className="select-group">
                                                 <div className="form-wrapper">
-                                                    <AutoField labelHidden={true} placeholder="Contact Type" name="contactType"/>
+                                                    <AutoField labelHidden={true} placeholder="Contact Type"
+                                                               name="contactType"/>
                                                     <ErrorField name="contactType"/>
                                                 </div>
                                             </div>
@@ -169,7 +182,7 @@ export default class FacilityCreate extends Component {
 
 class NewContact extends Component {
     render() {
-        const { close } = this.props;
+        const {close} = this.props;
 
         return (
             <div className="action-block action-new-contact">

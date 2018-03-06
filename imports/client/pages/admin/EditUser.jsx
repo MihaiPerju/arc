@@ -49,7 +49,6 @@ export default class EditUser extends Component {
     };
 
     onSubmit(formData) {
-        console.log("Ok!");
         const {user} = this.props;
         Meteor.call('admin.editUser', user._id, formData, (err) => {
             if (!err) {

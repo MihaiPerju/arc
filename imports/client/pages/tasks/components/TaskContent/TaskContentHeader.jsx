@@ -12,17 +12,15 @@ export default class TaskContentHeader extends Component {
     }
 
     getOptions(users) {
-        if (!users) {
-            [];
-        }
-
         let options = [];
-        for (user of users) {
-            let item = {
-                label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
-                value: user && user._id
-            };
-            options.push(item);
+        if (users) {
+            for (user of users) {
+                let item = {
+                    label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
+                    value: user && user._id
+                };
+                options.push(item);
+            }
         }
         return options;
     }

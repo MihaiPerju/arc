@@ -58,10 +58,10 @@ export default new SimpleSchema({
     },
     insurances: {
         type: Array,
-        optional: true,
         label: 'Insurances'
     },
     'insurances.$': {
-        type: insuranceSchema
+        type: insuranceSchema,
+        optional: true
     }
 });
