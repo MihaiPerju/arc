@@ -11,12 +11,14 @@ export default Tasks.createNamedQuery('taskList', {
     ptType: 1,
     ptName: 1,
     dischrgDate: 1,
+    collectedAmount: 1,
     fbDate: 1,
     acctBal: 1,
     finClass: 1,
     admitDate: 1,
     medNo: 1,
     insName: 1,
+    insurances: 1,
     insName2: 1,
     insName3: 1,
     insCode: 1,
@@ -54,7 +56,7 @@ export default Tasks.createNamedQuery('taskList', {
     actions: {
         reasonCode: 1,
         action: {
-            title:1
+            title: 1
         },
         createdAt: 1,
         status: 1

@@ -5,6 +5,10 @@ import ActionSchema from './schemas/actionSchema.js';
 import insuranceSchema from '/imports/api/facilities/schemas/insuranceSchema';
 
 export default new SimpleSchema({
+    collectedAmount: {
+        type: SimpleSchema.Integer,
+        defaultValue: 0
+    },
     createdAt: {
         type: Date,
         defaultValue: new Date
