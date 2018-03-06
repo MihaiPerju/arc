@@ -10,12 +10,12 @@
 			font-size: 1.6rem;
 			padding: 7px 15px 8px 50px;
 			color: $light-grey;
+			border-radius: 3px;
 			i {
 				color: $extra-light-grey;
 			}
-			&:hover {
+			&:hover, &.active {
 				background: $color-white;
-				border-radius: 3px;
 				color: $dark-grey;
 				i {
 					color: $green;

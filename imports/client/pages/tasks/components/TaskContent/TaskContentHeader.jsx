@@ -6,9 +6,6 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 export default class TaskContentHeader extends Component {
     constructor() {
         super();
-        this.state = {
-            dialogIsActive: false
-        }
     }
 
     getOptions(users) {
@@ -37,7 +34,6 @@ export default class TaskContentHeader extends Component {
     }
 
     render() {
-        const {dialogIsActive} = this.state;
         const {task} = this.props;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);

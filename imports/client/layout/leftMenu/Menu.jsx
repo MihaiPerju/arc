@@ -23,7 +23,7 @@ export default class Menu extends Component {
             return (
                 <li key={index} className={routeClasses}>
                     {
-                        <a className="" href={FlowRouter.url(route.name)}>
+                        <a className={FlowRouter.current().route.name === route ? "active" : ""} href={FlowRouter.url(route.name)}>
                             <i className={"icon-" + route.icon}/>
                             <span className="menu__label">{route.label}</span>
                         </a>

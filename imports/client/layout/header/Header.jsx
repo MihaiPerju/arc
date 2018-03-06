@@ -100,7 +100,7 @@ class Header extends Component {
                                 <a href="">
                                     <span>{user.profile.firstName + " " + user.profile.lastName}</span>
                                     <div className="profile-img">
-                                        <img className="img-circle" src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"} alt=""/>
+                                        <img className="md-avatar img-circle" src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"} alt=""/>
                                     </div>
                                 </a>
                             </div>

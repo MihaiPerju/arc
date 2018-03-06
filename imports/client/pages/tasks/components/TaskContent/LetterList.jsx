@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import Dialog from "/imports/client/lib/ui/Dialog";
 import NewLetter from './NewLetter';
 import LetterListQuery from '/imports/api/letters/queries/letterList.js';
-import { withQuery } from 'meteor/cultofcoders:grapher-react';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
-import { getToken } from '/imports/api/s3-uploads/utils';
+import {getToken} from '/imports/api/s3-uploads/utils';
 
 class LetterList extends Component {
-    constructor () {
+    constructor() {
         super();
         this.state = {
             createLetter: false
         };
     }
 
-    toggleLetter () {
+    toggleLetter() {
         const {refetch} = this.props;
         this.setState({
             createLetter: !this.state.createLetter
@@ -31,11 +32,11 @@ class LetterList extends Component {
         });
     };
 
-    redirectToPdf (pdf) {
+    redirectToPdf(pdf) {
         window.open('/letters/pdf/' + pdf, '_blank');
     }
 
-    render () {
+    render() {
         const {data, isLoading, error, task} = this.props;
         if (isLoading) {
             return <Loading/>;
@@ -73,12 +74,10 @@ class LetterList extends Component {
                                                 <i className="icon-download"/></button>
                                             <button className="btn-text--red" onClick={() => (this.handleDelete(
                                                 letter._id))}><i className="icon-trash-o"/></button>
-                                            <button className="btn--blue" onClick={() => (
-                                                FlowRouter.go('letter.view',
-                                                    {taskId: task._id, letterId: letter._id})
-                                            )}>
-                                                View
-                                            </button>
+                                            <LetterPreview
+                                                id={letter._id}
+                                                body={letter.body}
+                                            />
                                         </div>
                                     </div>
                                 );
@@ -95,3 +94,48 @@ export default withQuery((props) => {
     const {task} = props;
     return LetterListQuery.clone({taskId: task._id});
 }, {reactive: true})(LetterList);
+
+class LetterPreview extends Component {
+    constructor() {
+        super();
+        this.state = {
+            dialogIsActive: false
+        }
+    }
+
+    openDialog = () => {
+        this.setState({
+            dialogIsActive: true
+        });
+    }
+
+    closeDialog = () => {
+        this.setState({
+            dialogIsActive: false
+        })
+    }
+
+    render() {
+        const {dialogIsActive} = this.state;
+        const {id, body} = this.props;
+
+        return (
+            <button className="btn--blue" onClick={this.openDialog}>
+                <span>View</span>
+                {
+                    dialogIsActive &&
+                    <Dialog className="letter-dialog" closePortal={this.closeDialog} title={''}>
+                        <div className="text-light-grey id-num">Letter ID: {id}</div>
+                        <div className="letter-content" dangerouslySetInnerHTML={{__html: body}}/>
+                        <div className="btn-group">
+                            <button className="btn--pink" onClick={this.closeDialog}>Close</button>
+                        </div>
+                    </Dialog>
+                }
+            </button>
+        )
+    }
+}
+
+// FlowRouter.go('letter.view',
+//     {taskId: task._id, letterId: letter._id})

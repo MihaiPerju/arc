@@ -148,6 +148,35 @@
   }
 }
 
+//Letter Dialog
+.letter-dialog {
+  background-color: rgba(118, 118, 118, 0.15);
+  .cc-dialog__card {
+    box-shadow: 0 0 207px 0 #cbc9c9;
+    padding: 50px 80px;
+    border-radius: 3px;
+    width: 760px;
+  }
+  .cc-dialog__content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .cc-dialog__title {
+    display: none;
+  }
+  .letter-content {
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+  }
+  .id-num {
+    margin-bottom: 20px;
+  }
+  .btn-group {
+    margin-top: 40px;
+    text-align: right;
+  }
+}
+
 //Account Dialog
 .account-dialog {
   .cc-dialog__title {
