@@ -33,6 +33,7 @@ class RegionListContainer extends Component {
     }
 
     setRegion = (_id) => {
+        this.closeForm();
         const {currentRegion} = this.state;
 
         if (currentRegion === _id) {
@@ -143,4 +144,4 @@ export default withQuery((props) => {
             clientId: FlowRouter.current().params.id
         }
     });
-})(RegionListContainer)
+}, {reactive: true})(RegionListContainer)

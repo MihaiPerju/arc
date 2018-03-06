@@ -21,6 +21,7 @@ class FacilityContainer extends Component {
 
 
     setFacility = (_id) => {
+        this.closeForm();
         const {currentFacility} = this.state;
 
         if (currentFacility === _id) {
