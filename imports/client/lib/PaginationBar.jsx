@@ -27,7 +27,7 @@ export default class PaginationBar extends Component {
 
     render() {
         const {tooltip} = this.state;
-        const {create, module, total, range} = this.props;
+        const {create, module, total, range, buttonHidden} = this.props;
 
         return (
             <div className="pagination-bar">
@@ -44,9 +44,9 @@ export default class PaginationBar extends Component {
                             className="icon-angle-right"/></button>
                     </div>
                     <div className="toggle-form" onClick={create} onMouseEnter={this.showTooltip}
-                         onMouseLeave={this.closeTooltip}>+
+                         onMouseLeave={this.closeTooltip}>{!buttonHidden && '+'}
                     </div>
-                    {tooltip && <Tooltip module={module}/>}
+                    {tooltip && !buttonHidden && < Tooltip module={module}/>}
                 </div>
             </div>
         )

@@ -146,7 +146,7 @@ class TaskListContainer extends Pager {
                     <PaginationBar nextPage={this.nextPage}
                                    range={range}
                                    total={total}
-                                   addButtonHidden={true}/>
+                                   buttonHidden={true}/>
                 </div>
                 {
                     currentTask && <RightSide update={this.update} task={task}/>
