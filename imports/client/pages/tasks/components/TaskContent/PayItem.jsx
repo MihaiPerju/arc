@@ -12,7 +12,7 @@ export default class PayItem extends Component {
         return (
             <div className={classes}>
                 <div className="brand-block">
-                    <img src="/assets/img/slider/s1.png" alt=""/>
+                    <div className="text-light-grey text-center">{insurance.insName}</div>
                 </div>
                 <div className="pay-item__wrapper">
                     <div className="info-row">
