@@ -34,7 +34,6 @@ export default class FacilityCreate extends Component {
     };
 
     onSubmit(data) {
-        console.log(data);
         data.clientId = FlowRouter.current().params._id;
         Meteor.call('facility.update', data, (err) => {
             if (!err) {
