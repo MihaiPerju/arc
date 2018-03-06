@@ -15,9 +15,9 @@ export default class PayerBlock extends Component {
 
     render() {
         const {task} = this.props;
-        const slideLimit = task.insurances.length > 1 ? task.insurances.length - 1 : task.insurances.length;
+        const slideLimit = task.insurances.length > 3 ? 3 : task.insurances.length;
         var settings = {
-            infinite: true,
+            infinite: false,
             speed: 500,
             slidesToShow: slideLimit,
             nextArrow: <RightArrow/>,
