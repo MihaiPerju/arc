@@ -60,11 +60,16 @@ export default class UserContentHeader extends React.Component {
                         <span className="info-label">{user.profile.phoneNumber}</span>
                     </li>
                 </ul>
+                <ul className="row__info">
+                    <li>
+                        <span className="text-light-grey">Tags</span>
+                    </li>
                 {
                     tags.map((tag, index) => {
-                        return <button className="btn-edit btn--blue">{tag.name}</button>;
+                        return <li>{tag.name}</li>;
                     })
                 }
+                </ul>
                 <button onClick={this.onEdit} className="btn-edit btn--white">Edit user</button>
             </div>
         );
