@@ -6,10 +6,6 @@ import RolesEnum from '/imports/api/users/enums/roles';
 import Menu from './Menu';
 
 class LeftMenu extends Component {
-    componentDidMount() {
-        FlowRouter.watchPathChange();
-    }
-
     render() {
         const user = this.props.user;
         let routes = [
