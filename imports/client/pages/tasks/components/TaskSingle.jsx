@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import classNames from 'classnames';
+import moment from "moment/moment";
 
 export default class TaskSingle extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             fontNormal: false,
@@ -10,18 +11,18 @@ export default class TaskSingle extends Component {
         };
     }
 
-    onCheck (e) {
+    onCheck(e) {
         e.stopPropagation();
         const {checkTask, task} = this.props;
         checkTask(task);
     }
 
-    onSelectTask () {
+    onSelectTask() {
         const {selectTask, task} = this.props;
         selectTask(task);
     }
 
-    render () {
+    render() {
         const {task, active, currentTask} = this.props;
         const classes = classNames({
             'list-item task-item': true,
@@ -51,11 +52,11 @@ export default class TaskSingle extends Component {
                             {task.client && task.client._id}
                         </div>
                         <div className="financial-class">O/D</div>
-                        <div className="time">11:20 am</div>
+                        <div className="time">{task && moment(task.createdAt).format(' hh:mm')}</div>
                     </div>
                 </div>
                 <div className="row__item">
-                    <div className="price">18,586</div>
+                    <div className="price">{task.acctBal}</div>
                     <div className="location">{task.facility && task.facility.name}</div>
                 </div>
             </div>

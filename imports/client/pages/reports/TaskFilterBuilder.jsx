@@ -156,7 +156,7 @@ export default class TaskFilterBuilder extends React.Component {
                                     ref="filters">
                                     {
                                         _.map(components, (item) => {
-                                            return item.isActive &&
+                                              return item.isActive &&
                                                 <FilterSingle
                                                     assigneeIdOptions={assigneeOptions}
                                                     facilityIdOptions={facilityOptions}

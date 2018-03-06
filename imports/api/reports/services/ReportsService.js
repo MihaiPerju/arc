@@ -1,5 +1,6 @@
 import React from 'react';
 import SimpleSchema from 'simpl-schema';
+import importingRules from '/imports/api/facilities/enums/importingRules';
 
 const stringMatchOptions = ['Contains', 'Not Contains', 'Is Exact'];
 
@@ -16,10 +17,21 @@ export default class ReportsService {
         return field;
     }
 
+    static getLabel(value) {
+        const {placementRules} = importingRules;
+        for (rule of placementRules) {
+            if (rule.value === value) {
+                return rule.label;
+            }
+        }
+    }
+
     static getOptions(keys) {
         let schemaOptions = [{label: "+ Add Filter"}];
         keys.map((value) => {
-            schemaOptions.push({label: value, value});
+            console.log(value);
+            const label = this.getLabel(value) ? this.getLabel(value) : value;
+            schemaOptions.push({label, value});
         });
         return schemaOptions;
     }

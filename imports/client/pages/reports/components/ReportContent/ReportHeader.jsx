@@ -16,7 +16,15 @@ export default class ReportHeader extends Component {
     }
 
     componentWillMount() {
-        const {report} = this.props;
+        this.getTasks(this.props);
+    }
+
+    componentWillReceiveProps(props) {
+        this.getTasks(props);
+    }
+
+    getTasks(props) {
+        const {report} = props;
         const filters = EJSON.parse(report.mongoFilters);
         taskQuery.clone({filters}).fetch((err, tasks) => {
             if (!err) {

@@ -20,18 +20,16 @@ export default class TaskList extends Component {
                 {
                     data &&
                     data.length
-                        ?
-                        _.map(data, (task) => {
-                            return <TaskSingle active={this.taskIsActive(task)}
-                                               currentTask={currentTask}
-                                               selectTask={selectTask}
-                                               checkTask={checkTask}
-                                               update={this.update}
-                                               key={task._id}
-                                               task={task}/>
-                        })
-                        :
-                        "No tasks. To be replaced by designer"
+                    &&
+                    _.map(data, (task) => {
+                        return <TaskSingle active={this.taskIsActive(task)}
+                                           currentTask={currentTask}
+                                           selectTask={selectTask}
+                                           checkTask={checkTask}
+                                           update={this.update}
+                                           key={task._id}
+                                           task={task}/>
+                    })
                 }
             </div>
         );

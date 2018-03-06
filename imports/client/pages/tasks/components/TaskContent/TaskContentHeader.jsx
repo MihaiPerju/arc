@@ -35,6 +35,7 @@ export default class TaskContentHeader extends Component {
 
     render() {
         const {task} = this.props;
+        console.log(task);
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
 
@@ -59,11 +60,11 @@ export default class TaskContentHeader extends Component {
                     </div>
                     <div className="right__side">
                         <div className="price-col">
-                            <div className="price">0.00(TBM)</div>
+                            <div className="price">{task.collectedAmount}</div>
                             <div className="text-light-grey">Collected amount</div>
                         </div>
                         <div className="price-col">
-                            <div className="price">18,586(TBM)</div>
+                            <div className="price">{task.acctBal ? task.acctBal : 0}</div>
                             <div className="text-light-grey">Remaining balance</div>
                         </div>
                     </div>
@@ -84,12 +85,13 @@ export default class TaskContentHeader extends Component {
                 <div className="additional-info">
                     <ul>
                         <li className="text-center">
-                            <div className="text-light-grey">Status Code</div>
-                            <div className="text-dark-grey text-uppercase">invden(TBM)</div>
+                            <div className="text-light-grey">Substate</div>
+                            <div className="text-dark-grey text-uppercase">{task.substate}</div>
                         </li>
                         <li className="text-center">
                             <div className="text-light-grey">Financial class</div>
-                            <div className="text-dark-grey text-uppercase">{task.finClass}</div>
+                            <div
+                                className="text-dark-grey text-uppercase">{task.finClass ? task.finClass : "None"}</div>
                         </li>
                         <li className="text-center">
                             <div className="text-light-grey">Admin date</div>
@@ -102,7 +104,7 @@ export default class TaskContentHeader extends Component {
                         </li>
                         <li className="text-center">
                             <div className="text-light-grey">Placement date</div>
-                            <div className="text-dark-grey">12/05/2018(TBM)</div>
+                            <div className="text-dark-grey">{task && moment(task.createdAt).format('MM/DD/YYYY')}</div>
                         </li>
                     </ul>
                 </div>
