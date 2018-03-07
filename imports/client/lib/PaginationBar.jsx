@@ -28,12 +28,16 @@ export default class PaginationBar extends Component {
     render() {
         const {tooltip} = this.state;
         const {create, module, total, range, buttonHidden} = this.props;
-
+        const min = range && range.lowest ? range.lowest : 0;
+        let max = range && range.highest ? range.highest : 0;
+        if (total && total < max) {
+            max = total;
+        }
         return (
             <div className="pagination-bar">
                 <div className="pagination-bar__wrapper">
                     <div
-                        className="left__side text-dark-grey">{range && range.lowest ? range.lowest : 0} - {range && range.highest ? range.highest : 0}
+                        className="left__side text-dark-grey">{min} - {max}
                         <span className="text-light-grey"> of </span>
                         {total ? total : 0}
                     </div>

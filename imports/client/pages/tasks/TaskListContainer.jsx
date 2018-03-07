@@ -115,7 +115,7 @@ class TaskListContainer extends Pager {
     nextPage = (inc) => {
         const {perPage, total, page} = this.state;
         const nextPage = PagerService.setPage({page, perPage, total}, inc);
-        const range = PagerService.getRange(nextPage, perPage,total);
+        const range = PagerService.getRange(nextPage, perPage);
         FlowRouter.setQueryParams({page: nextPage});
         this.setState({range, page: nextPage, currentTask: null});
     };
