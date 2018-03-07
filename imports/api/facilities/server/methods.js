@@ -38,6 +38,14 @@ Meteor.methods({
         Facilities.remove(facilityId);
     },
 
+    'facility.removeMany'(facilityIds) {
+        Security.isAdminOrTech(this.userId);
+
+        _.each(facilityIds, (facilityId) => {
+            Facilities.remove(facilityId);
+        });
+    },
+
     'facility.getRegions'(regionIds) {
         Security.isAdminOrTech(this.userId);
 
