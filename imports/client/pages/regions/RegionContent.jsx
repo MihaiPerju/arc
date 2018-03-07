@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import RegionEdit from '/imports/client/pages/regions/RegionEdit.jsx';
+
 export default class RegionContent extends Component {
     constructor() {
         super();
@@ -7,6 +8,11 @@ export default class RegionContent extends Component {
             edit: false
         }
     }
+
+    componentWillReceiveProps() {
+        this.setState({edit: false});
+    }
+
     setEdit = () => {
         const {edit} = this.state;
         this.setState({edit: !edit})

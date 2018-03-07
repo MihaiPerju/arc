@@ -10,6 +10,10 @@ export default class UserContent extends Component {
         }
     }
 
+    componentWillReceiveProps() {
+        this.setState({edit: false})
+    }
+
     setEdit = () => {
         const {edit} = this.state;
         this.setState({edit: !edit})

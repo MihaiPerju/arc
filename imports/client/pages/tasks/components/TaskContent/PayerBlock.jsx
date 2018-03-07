@@ -24,7 +24,6 @@ export default class PayerBlock extends Component {
             prevArrow: <LeftArrow/>,
             slidesToScroll: 1
         };
-        console.log(settings);
         return (
             <div className="action-block">
                 <div className="header__block">

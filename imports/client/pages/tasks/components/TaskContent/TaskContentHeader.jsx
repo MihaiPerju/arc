@@ -70,10 +70,10 @@ export default class TaskContentHeader extends Component {
                     </div>
                     <div className="btn-group">
                         <ToggleDialog
-                            type={'Assigne'}
+                            type={'Assignee'}
                             taskId={task._id}
                             options={userOptions}
-                            title={"Assignee account to someone"}
+                            title={"Assign account to someone"}
                         />
                         <ToggleDialog
                             escalate
