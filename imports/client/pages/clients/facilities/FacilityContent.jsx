@@ -7,16 +7,18 @@ import PaymentBlock from './components/FacilityContent/PaymentBlock';
 import FacilityEdit from '/imports/client/pages/clients/facilities/FacilityEdit.jsx';
 
 export default class FacilityContent extends Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
             edit: false
         }
     }
+
     setEdit = () => {
         const {edit} = this.state;
         this.setState({edit: !edit})
     };
+
     render() {
         const {facility} = this.props;
         const {edit} = this.state;
