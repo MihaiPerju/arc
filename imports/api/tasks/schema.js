@@ -77,6 +77,10 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
+    clientId: {
+        type: String,
+        optional: true
+    },
     attachmentIds: {
         type: Array,
         optional: true

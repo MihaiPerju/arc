@@ -9,6 +9,7 @@ export default class CsvParseService {
 
     //Converting to tasks
     static convertToTasks(results, importRules, isPlacement, facilityId) {
+        const clientId = this.getClientIdByFacilityId(facilityId);
         const tasks = [];
         let rules = {};
         if (importRules.hasHeader) {
@@ -18,10 +19,20 @@ export default class CsvParseService {
         }
 
         for (let i = 0; i < results.length - 1; i++) {
-            const newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId, rules);
+            let newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId, rules);
+            newTask.clientId = clientId;
+
             tasks.push(newTask);
         }
         return tasks;
+    }
+
+    /**
+     * Get client id by facility
+     * @param facilityId
+     */
+    static getClientIdByFacilityId(facilityId) {
+        return Facilities.findOne(facilityId).clientId;
     }
 
     //Filtering existent tasks and new Tasks

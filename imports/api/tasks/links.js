@@ -19,7 +19,7 @@ Tasks.addLinks({
     client: {
         type: 'one',
         collection: Clients,
-        field: 'acctNum'
+        field: 'clientId'
     },
     attachments: {
         type: 'many',

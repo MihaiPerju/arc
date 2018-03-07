@@ -47,7 +47,7 @@ export default class TaskContentHeader extends Component {
                             {task.client && task.client.clientName}
                         </div>
                         <div className="row__block">
-                            <div className="pacient-id text-blue">{task.client && task.client._id}</div>
+                            <div className="pacient-id text-blue">{task.acctNum}</div>
                             <div className="financial-class">O/D</div>
                             <div className="location">{task.facility && task.facility.name}</div>
                             <div className="label-group">
