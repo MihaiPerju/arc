@@ -1,12 +1,12 @@
-import {Meteor} from "meteor/meteor";
-import Facilities from "/imports/api/facilities/collection.js";
+import { Meteor } from 'meteor/meteor';
+import Facilities from '/imports/api/facilities/collection.js';
 import Security from '/imports/api/security/security.js';
-import FacilitySchema from "../schema.js";
+import FacilitySchema from '../schema.js';
 import Regions from '/imports/api/regions/collection';
 import fs from 'fs';
 import os from 'os';
-import FolderConfig from '/imports/api/business';
-import Uploads from "../../s3-uploads/uploads/collection";
+import Business from '/imports/api/business';
+import Uploads from '../../s3-uploads/uploads/collection';
 
 Meteor.methods({
     'facility.create'(data) {
@@ -24,9 +24,12 @@ Meteor.methods({
         Security.isAdminOrTech(this.userId);
         const facilityData = FacilitySchema.clean(facility);
 
-        Facilities.update({_id: facility._id}, {
-            $set: facilityData
-        })
+        Facilities.update(
+            { _id: facility._id },
+            {
+                $set: facilityData
+            }
+        );
     },
 
     'facility.remove'(facilityId) {
@@ -46,22 +49,25 @@ Meteor.methods({
     },
 
     'facility.getNames'() {
-        return Facilities.find({}, {name: 1}).fetch();
+        return Facilities.find({}, { name: 1 }).fetch();
     },
 
     'facility.getLogo'(_id) {
-        const facility = Facilities.findOne({_id});
-        const {logoPath} = facility;
+        const facility = Facilities.findOne({ _id });
+        const { logoPath } = facility;
         return logoPath;
     },
 
     'facility.removeLogo'(_id, path) {
-        Facilities.update({_id}, {
-            $unset: {
-                logoPath: null
+        Facilities.update(
+            { _id },
+            {
+                $unset: {
+                    logoPath: null
+                }
             }
-        });
-        fs.unlinkSync(os.tmpDir() + FolderConfig.LOCAL_STORAGE_FOLDER + '/' + path);
-        Uploads.remove({path});
+        );
+        fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + '/' + path);
+        Uploads.remove({ path });
     }
 });
