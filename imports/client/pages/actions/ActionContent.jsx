@@ -23,7 +23,7 @@ export default class UserContent extends Component {
         const {action} = this.props;
         const {edit} = this.state;
         return (
-            <div>
+            <div className="section-action">
                 {
                     edit
                         ? <ActionEdit setEdit={this.setEdit} action={action}/>
