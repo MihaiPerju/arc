@@ -49,7 +49,7 @@ export default class TaskSingle extends Component {
                     </div>
                     <div className="right__side">
                         <div className="pacient-id text-blue">
-                            {task.client && task.client._id}
+                            {task.acctNum}
                         </div>
                         <div className="financial-class">O/D</div>
                         <div className="time">{task && moment(task.createdAt).format(' hh:mm')}</div>
