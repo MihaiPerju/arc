@@ -1,49 +1,41 @@
 import React, {Component} from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import autoBind from 'react-autobind';
-import {Table} from 'semantic-ui-react'
-import {Button, Dropdown} from 'semantic-ui-react'
+import classNames from "classnames";
 
 export default class RegionSingle extends Component {
-    constructor() {
-        super();
-        autoBind(this);
+    constructor(props) {
+        super(props);
     }
 
-    deleteRegion() {
-        Meteor.call('region.delete', this.props.region._id, (err) => {
-            if (!err) {
-                Notifier.success('Region deleted !');
-                FlowRouter.reload();
-            } else {
-                Notifier.error(err.reason);
-            }
-        });
+    onSetRegion() {
+        const {region, setRegion} = this.props;
+        setRegion(region._id);
     }
 
-    onEditRegion() {
-        FlowRouter.go("/region/:id/edit", {id: this.props.region._id});
+    onSelectRegion(e) {
+        e.stopPropagation();
+        const {region, selectRegion} = this.props;
+        selectRegion(region._id);
     }
 
     render() {
-        const {region} = this.props;
-
+        const {region, regionsSelected, currentRegion} = this.props;
+        const checked = regionsSelected.includes(region._id);
+        const classes = classNames({
+            "list-item": true,
+            "bg--yellow": checked,
+            "open": currentRegion === region._id
+        });
         return (
-            <Table.Row>
-                <Table.Cell>{region.name}</Table.Cell>
-                <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Button primary onClick={this.onEditRegion}>Edit</Button>
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                <Button color="red" onClick={this.deleteRegion}>Delete</Button>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>  
-                </Table.Cell>
-            </Table.Row>
+            <div onClick={this.onSetRegion.bind(this)}
+                 className={classes}>
+                <div className="check-item">
+                    <input checked={checked} type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectRegion.bind(this)}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name">{region.name}</div>
+                </div>
+            </div>
         );
     }
 }

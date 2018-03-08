@@ -1,53 +1,43 @@
 import React, {Component} from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import autoBind from 'react-autobind';
-import {Button} from 'semantic-ui-react'
-import {Table, Dropdown} from 'semantic-ui-react'
+import classNames from 'classnames';
 
 export default class CodeSingle extends Component {
-
-    constructor() {
-        super();
-        autoBind(this);
+    constructor(props) {
+        super(props);
     }
 
-    deleteCode() {
-        Meteor.call('code.delete', this.props.code._id, (err) => {
-            if (!err) {
-                Notifier.success('Code deleted !');
-                FlowRouter.reload();
-            }
-        });
+    onSetCode() {
+        const {code, setCode} = this.props;
+        setCode(code._id);
     }
 
-    onEditCode() {
-        FlowRouter.go("/code/:_id/edit", {_id: this.props.code._id});
+    onSelectCode(e) {
+        e.stopPropagation();
+        const {code, selectCode} = this.props;
+        selectCode(code._id);
     }
 
     render() {
-        const {code} = this.props;
+        const {code, codesSelected, currentCode} = this.props;
+        const checked = codesSelected.includes(code._id);
+        const classes = classNames({
+            "list-item": true,
+            "bg--yellow": checked,
+            "open": currentCode === code._id
+        });
 
         return (
-            <Table.Row>
-                <Table.Cell>{code.code}</Table.Cell>
-                <Table.Cell>{code.action}</Table.Cell>
-                <Table.Cell>{code.type}</Table.Cell>
-                <Table.Cell>{code.description}</Table.Cell>
-                <Table.Cell>{code.description_short}</Table.Cell>
-                <Table.Cell>{code.denial_action}</Table.Cell>
-                <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Button primary onClick={this.onEditCode}>Edit Code</Button>
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                <Button color="red" onClick={this.deleteCode}>Delete</Button>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Table.Cell>
-            </Table.Row>
+            <div
+                className={classes}
+                onClick={this.onSetCode.bind(this)}>
+                <div className="check-item">
+                    <input checked={checked} type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectCode.bind(this)}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name">{code.code}</div>
+                </div>
+            </div>
         );
     }
 }

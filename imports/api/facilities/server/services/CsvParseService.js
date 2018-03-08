@@ -9,6 +9,7 @@ export default class CsvParseService {
 
     //Converting to tasks
     static convertToTasks(results, importRules, isPlacement, facilityId) {
+        const clientId = this.getClientIdByFacilityId(facilityId);
         const tasks = [];
         let rules = {};
         if (importRules.hasHeader) {
@@ -18,10 +19,20 @@ export default class CsvParseService {
         }
 
         for (let i = 0; i < results.length - 1; i++) {
-            const newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId, rules);
+            let newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId, rules);
+            newTask.clientId = clientId;
+
             tasks.push(newTask);
         }
         return tasks;
+    }
+
+    /**
+     * Get client id by facility
+     * @param facilityId
+     */
+    static getClientIdByFacilityId(facilityId) {
+        return Facilities.findOne(facilityId).clientId;
     }
 
     //Filtering existent tasks and new Tasks
@@ -58,21 +69,39 @@ export default class CsvParseService {
     //Create a single task
     static createTask(data, importRules, isPlacement, facilityId, rules) {
         let task = {};
-
         task.facilityId = facilityId;
         for (key in importRules) {
-            let value;
-            if (rules.newImportRules) {
-                value = CsvParseService.convertToType(key, data[rules.newImportRules[key] - 1]);
+            //Get the normal fields
+            if (key !== 'insurances') {
+                let value;
+                if (rules.newImportRules) {
+                    value = CsvParseService.convertToType(key, data[rules.newImportRules[key] - 1]);
+                } else {
+                    value = CsvParseService.convertToType(key, data[importRules[key] - 1]);
+                }
+                task[key] = value;
             } else {
-                value = CsvParseService.convertToType(key, data[importRules[key] - 1]);
+                //Get the insurance fields
+                task[key] = [];
+                // console.log(importRules[key]);
+                for (index in importRules[key]) {
+                    let insuranceFields = importRules[key][index];
+                    if (rules.newImportRules) {
+                        insuranceFields = rules.newImportRules[key][index];
+                    }
+                    // console.log(insuranceFields);
+                    task[key].push({
+                        insName: CsvParseService.convertToType('insName', data[insuranceFields.insName - 1]),
+                        insCode: CsvParseService.convertToType('insCode', data[insuranceFields.insCode - 1]),
+                        insBal: CsvParseService.convertToType('insBal', data[insuranceFields.insBal - 1])
+                    })
+                }
             }
-            task[key] = value;
         }
         if (rules.metaRules) {
             task.metaData = {};
             for (key in rules.metaRules) {
-                metaValue = CsvParseService.convertToType(key, data[rules.metaRules[key] - 1]);
+                let metaValue = CsvParseService.convertToType(key, data[rules.metaRules[key] - 1]);
                 task.metaData[key] = metaValue;
             }
         }
@@ -80,18 +109,38 @@ export default class CsvParseService {
     }
 
     //Get import rules
-    static getImportRules(_id) {
-        const {importRules} = Facilities.findOne({_id});
-        return importRules;
+    static getImportRules(_id, rules) {
+        const facility = Facilities.findOne({_id});
+        return facility[rules];
+    }
+
+    static isInsuranceField(importingRules, field) {
+        const {insurances, newInsBal} = importingRules;
+        if (insurances) {
+            for (i in insurances) {
+                if ([insurances[i].insBal, insurances[i].insCode, insurances[i].insName].includes(field)) {
+                    return true;
+                }
+            }
+        }
+        if (newInsBal) {
+            for (i in newInsBal) {
+                if (newInsBal[i].insBal === field) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     static convertImportingRules(importRules, header) {
         //Trim spaces from Header to avoid crashes and get metafields
         let metaRules = {};
+
         for (index in header) {
             header[index] = header[index].trim();
-            Object.values(importRules);
-            if (!Object.values(importRules).includes(header[index])) {
+            //Ignore the importing rules of insurances
+            if (!Object.values(importRules).includes(header[index]) && !CsvParseService.isInsuranceField(importRules, header[index])) {
                 metaRules[header[index]] = header.indexOf(header[index]) + 1;
             }
         }
@@ -99,7 +148,26 @@ export default class CsvParseService {
         let newImportRules = {};
         delete importRules.hasHeader;
         for (rule in importRules) {
-            newImportRules[rule] = header.indexOf(importRules[rule].trim()) + 1;
+            if (rule !== 'insurances' && rule !== 'newInsBal') {
+                newImportRules[rule] = header.indexOf(importRules[rule].trim()) + 1;
+            }
+            else if (rule === 'insurances') {
+                newImportRules[rule] = [];
+                for (index in importRules[rule]) {
+                    newImportRules[rule].push({
+                        insName: header.indexOf(importRules[rule][index].insName.trim()) + 1,
+                        insCode: header.indexOf(importRules[rule][index].insCode.trim()) + 1,
+                        insBal: header.indexOf(importRules[rule][index].insBal.trim()) + 1
+                    })
+                }
+            } else if (rule === 'newInsBal') {
+                newImportRules[rule] = [];
+                for (index in importRules[rule]) {
+                    newImportRules[rule].push({
+                        insBal: header.indexOf(importRules[rule][index].insBal.trim()) + 1
+                    })
+                }
+            }
         }
         return ({newImportRules, metaRules});
     }

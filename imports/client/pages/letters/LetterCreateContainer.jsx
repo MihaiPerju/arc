@@ -18,11 +18,15 @@ class LetterCreateContainer extends React.Component {
             letterTemplates: [],
             selectedTemplate: {},
             pdfAttachments: [],
-            selectedAttachments: []
+            selectedAttachments: [],
+            attachmentIds: []
         };
     }
 
     componentWillMount () {
+        const {data} = this.props;
+        this.setState({letterTemplates: data});
+
         Meteor.call('letterTemplates.get', (err, letterTemplates) => {
             if (err) {
                 return Notifier.error(
@@ -74,48 +78,32 @@ class LetterCreateContainer extends React.Component {
         this.setState(data);
     };
 
-    render () {
-        const {taskId} = this.props;
-        const {letterTemplates, selectedTemplate, pdfAttachments, selectedAttachments} = this.state;
+    render() {
+        const {taskId, selectedTemplate, reset} = this.props;
         const {keywords, body} = selectedTemplate;
+        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
 
         return (
-            <Container className="page-container">
-                <Header as="h3" textAlign="center">Letter creation</Header>
-                <AutoForm autosave
-                          schema={letterCreateActionSchema}
-                          model={model}
-                          onSubmit={this.onSubmit}>
-                    <SelectWithDescription
-                        placeholder={'Select one of the letter templates'}
-                        name="letterTemplate" options={options}/>
-                    <ErrorField name="letterTemplate"/>
-
-                    <SelectMulti name="attachmentIds" options={attachmentOptions}/>
-                    <ErrorField name="attachmentIds"/>
-                </AutoForm>
-
-                <Divider/>
-                <Grid>
-                    <Grid.Row>
-                        <Grid.Column width={4}>
-                            <GenerateLetterTemplateInputs
-                                templateKeywords={keywords}
-                                onChange={this.updateState}/>
-                        </Grid.Column>
-                        <Grid.Column width={12}>
-                            <LetterTemplatePreview
-                                taskId={taskId}
-                                attachments={selectedAttachments}
-                                letterTemplateBody={body}
-                                parentState={this.state}/>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </Container>
+            <div>
+                <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>
+                    <div className="left-col">
+                        <GenerateLetterTemplateInputs
+                            templateKeywords={keywords}
+                            onChange={this.updateState}/>
+                    </div>
+                    <div className="right-col">
+                        <LetterTemplatePreview
+                            reset={reset}
+                            taskId={taskId}
+                            letterTemplateBody={body}
+                            parentState={this.state}
+                            attachments={attachmentIds}/>
+                    </div>
+                </div>
+            </div>
         );
     }
 }

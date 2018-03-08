@@ -1,82 +1,227 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
-import Loading from "/imports/client/lib/ui/Loading.jsx";
-import FacilityForm from "./components/FacilityForm.jsx";
-import TabSelect from '/imports/client/lib/TabSelect';
-import tabsEnum from '/imports/client/pages/clients/facilities/enums/tabs';
-import ImportingRules from '/imports/client/pages/clients/facilities/components/ImportingRules';
-import UploadPlacementFile from '/imports/client/pages/clients/facilities/components/UploadPlacementFile';
-import {Container} from 'semantic-ui-react'
-import UploadInventoryFile from './components/UploadInventoryFile';
+import FacilitySchema from '/imports/api/facilities/schema.js'
+import {
+    AutoForm,
+    AutoField,
+    ErrorField,
+    SelectField,
+    LongTextField,
+    ListField,
+    ListItemField,
+    NestField
+} from '/imports/ui/forms';
+import RegionListQuery from '/imports/api/regions/queries/regionList.js';
+import SelectUsersContainer from '/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx';
 
-export default class FacilityEdit extends React.Component {
+export default class FacilityCreate extends Component {
     constructor() {
         super();
-
         this.state = {
-            facility: null,
-            loading: true
-        };
+            newContact: false,
+            regions: []
+        }
     }
 
-    componentDidMount() {
-        this.getFacility();
-    }
-
-    getFacility = () => {
-        const {facilityId} = FlowRouter.current().params;
-        Meteor.call('facility.get', facilityId, (err, facility) => {
-            if (err) {
-                return Notifier.error('Error while getting facility!');
+    componentWillMount() {
+        RegionListQuery.clone({
+            filters: {
+                clientId: FlowRouter.current().params._id
             }
-
-            this.setState({
-                facility,
-                loading: false
-            })
+        }).fetch((err, regions) => {
+            if (!err) {
+                this.setState({
+                    regions
+                });
+            } else {
+                Notifier.error('Couldn\'t get regions');
+            }
         })
+    }
+
+    getRegionOptions = (regions) => {
+        return regions.map((region, key) => ({value: region._id, label: region.name}));
     };
 
-    updateFacility = (data) => {
+    onSubmit(data) {
+        data.clientId = FlowRouter.current().params._id;
         Meteor.call('facility.update', data, (err) => {
-            if (err) {
-                return Notifier.error('Error while updating facility!');
+            if (!err) {
+                Notifier.success('Facility updated!');
+                this.onClose();
+            } else {
+                Notifier.error(err.reason);
             }
-
-            Notifier.success('Facility updated!');
-            this.getFacility();
         })
+    }
+
+    onCreateFacility = () => {
+        const {form} = this.refs;
+        form.submit();
+    }
+
+    onClose = () => {
+        const {close} = this.props;
+        close();
     };
 
     render() {
-        const {loading, facility} = this.state;
-        const tabOptions = [
-            {
-                label: tabsEnum.GENERAL,
-                component: <FacilityForm purpose="Edit" model={facility} submitAction={this.updateFacility}/>
-            },
-            {
-                label: tabsEnum.IMP_RULES,
-                component: <ImportingRules updateFacility={this.getFacility} model={facility}/>
-            },
-            {
-                label: tabsEnum.PLACEMENT_FILE,
-                component: <UploadPlacementFile facilityId={facility && facility._id}/>
-            },
-            {
-                label: tabsEnum.INVENTORY_FILE,
-                component: <UploadInventoryFile facilityId={facility && facility._id}/>
-            }
-        ];
+        const {regions} = this.state;
+        const regionIds = this.getRegionOptions(regions);
+        const schema = FacilitySchema.omit('clientId');
+        const {facility} = this.props;
+        return (
+            <div className="create-form">
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Add facility</button>
+                    <div className="btn-group">
+                        <button
+                            onClick={this.onClose} className="btn-cancel">Cancel
+                        </button>
+                        <button
+                            onClick={this.onCreateFacility} className="btn--green">Confirm & save
+                        </button>
+                    </div>
+                </div>
+                <div className="create-form__wrapper">
+                    <div className="action-block i--block">
+                        <AutoForm model={facility} schema={schema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                            {this.state.error && <div className="error">{this.state.error}</div>}
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Name" name="name"/>
+                                <ErrorField name="name"/>
+                            </div>
+                            <div className="select-group">
 
-        if (loading) {
-            return <Loading/>;
-        }
+                                <div className="form-wrapper">
+                                    <AutoField labelHidden={true} placeholder="Status" name="status"/>
+                                    <ErrorField name="status"/>
+                                </div>
+                            </div>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="First address" name="addressOne"/>
+                                <ErrorField name="addressOne"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Second address" name="addressTwo"/>
+                                <ErrorField name="addressTwo"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="City" name="city"/>
+                                <ErrorField name="city"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="State" name="state"/>
+                                <ErrorField name="state"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Sftp path" name="sftpPath"/>
+                                <ErrorField name="sftpPath"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Zip code" name="zipCode"/>
+                                <ErrorField name="zipCode"/>
+                            </div>
+                            <div className="select-group">
+                                <div className="form-wrapper">
+                                    {
+                                        regionIds
+                                        &&
+                                        <div>
+                                            <SelectField name="regionId" options={regionIds}/>
+                                            < ErrorField name="regionId"/>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <SelectUsersContainer/>
+                            <ListField name="contacts">
+                                <ListItemField name="$">
+                                    <NestField>
+                                        <div>
+                                            <div className="form-wrapper">
+                                                <AutoField labelHidden={true} placeholder="First Name"
+                                                           name="firstName"/>
+                                                <ErrorField name="firstName"/>
+                                            </div>
+                                            <div className="form-wrapper">
+                                                <AutoField labelHidden={true} placeholder="Last Name" name="lastName"/>
+                                                <ErrorField name="lastName"/>
+                                            </div>
+                                            <div className="form-wrapper">
+                                                <AutoField labelHidden={true} placeholder="Phone" name="phone"/>
+                                                <ErrorField name="phone"/>
+                                            </div>
+                                            <div className="form-wrapper">
+                                                <AutoField labelHidden={true} placeholder="Email" name="email"/>
+                                                <ErrorField name="email"/>
+                                            </div>
+                                            <div className="select-group">
+                                                <div className="form-wrapper">
+                                                    <AutoField labelHidden={true} placeholder="Contact Type"
+                                                               name="contactType"/>
+                                                    <ErrorField name="contactType"/>
+                                                </div>
+                                            </div>
+                                            <div className="form-wrapper">
+                                                <LongTextField labelHidden={true} placeholder="Notes" name="notes"/>
+                                                <ErrorField name="notes"/>
+                                            </div>
+                                        </div>
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
+                        </AutoForm>
+                    </div>
+
+                </div>
+            </div>
+        );
+    }
+}
+
+class NewContact extends Component {
+    render() {
+        const {close} = this.props;
 
         return (
-            <Container className="page-container">
-                <TabSelect header="Edit facility" options={tabOptions}/>
-            </Container>
-        );
+            <div className="action-block action-new-contact">
+                <div className="header__block">
+                    <div className="title-block text-uppercase">Contact information</div>
+                </div>
+                <div className="row__action">
+                    <div className="type">Contact nr. 1</div>
+                    <div className="btn-delete" onClick={close}>Delete</div>
+                </div>
+                <div className="form-wrapper">
+                    <input type="text" placeholder="Client name"/>
+                </div>
+                <div className="form-wrapper">
+                    <input type="text" placeholder="First name"/>
+                </div>
+                <div className="form-wrapper">
+                    <input type="text" placeholder="Phone number"/>
+                </div>
+                <div className="form-wrapper">
+                    <input type="text" placeholder="Email"/>
+                </div>
+                <div className="form-wrapper">
+                    <input type="text" placeholder="Phone number"/>
+                </div>
+                <div className="form-wrapper">
+                    <input type="text" placeholder="Email"/>
+                </div>
+                <div className="select-group">
+                    <div className="form-wrapper">
+                        <select name="filter">
+                            <option value="">Contact Description</option>
+                        </select>
+                    </div>
+                </div>
+                <div className="form-wrapper">
+                    <textarea placeholder="*Note"></textarea>
+                </div>
+            </div>
+        )
     }
 }

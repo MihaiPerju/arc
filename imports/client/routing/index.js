@@ -88,12 +88,12 @@ route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
 });
 
 //Facilities
-import FacilityListContainer from '/imports/client/pages/clients/facilities/FacilityListContainer.jsx';
+import FacilityContainer from '/imports/client/pages/clients/facilities/FacilityContainer.jsx';
 import FacilityCreate from '/imports/client/pages/clients/facilities/FacilityCreate.jsx';
 import FacilityEdit from '/imports/client/pages/clients/facilities/FacilityEdit.jsx';
 import FacilityView from '/imports/client/pages/clients/facilities/FacilityView.jsx';
 
-route('/client/:_id/manage-facilities', FacilityListContainer, {}, {
+route('/client/:_id/manage-facilities', FacilityContainer, {}, {
     name: 'facility.list'
 });
 route('/client/:_id/manage-facilities/create', FacilityCreate, {}, {
@@ -138,10 +138,14 @@ import RegionCreate from '/imports/client/pages/regions/RegionCreate';
 import RegionEdit from '/imports/client/pages/regions/RegionEdit';
 import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
 
-route('/client/:id/region-create', RegionCreate, {}, {
+
+
+route('/client/:id/region/create', RegionCreate, {}, {
     name: 'region.create'
 });
-route('/region/:id/edit', RegionEdit);
+route('/region/:id/edit', RegionEdit, {}, {
+    name: 'region.edit'
+});
 route('/client/:id/region/list', RegionListContainer, {}, {
     name: 'region.list'
 });

@@ -1,51 +1,42 @@
 import React, {Component} from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import {Table} from 'semantic-ui-react'
-import {Button, Dropdown} from 'semantic-ui-react'
-import Roles from '/imports/api/users/enums/roles';
+import classNames from "classnames";
 
 export default class ReportSingle extends Component {
-    deleteReport() {
-        const {report} = this.props;
-        Meteor.call('report.delete', report._id, (err) => {
-            if (!err) {
-                Notifier.success('Report deleted !');
-                FlowRouter.reload();
-            }
-        });
+    constructor(props) {
+        super(props);
     }
 
-    isAllowedToEdit() {
-        const user = Meteor.user();
-        const {report} = this.props;
-        return user.roles.includes(Roles.ADMIN) || user.roles.includes(Roles.TECH) || report.createdBy === Meteor.userId();
+    onSetReport() {
+        const {report, setReport} = this.props;
+        setReport(report._id);
+    }
+
+    onSelectReport(e) {
+        e.stopPropagation();
+        const {report, selectReport} = this.props;
+        selectReport(report._id);
     }
 
     render() {
-        const {report} = this.props;
-
+        const {report, reportsSelected, currentReport} = this.props;
+        const checked = reportsSelected.includes(report._id);
+        const classes = classNames({
+            "list-item": true,
+            "bg--yellow": checked,
+            "open": currentReport === report._id
+        });
         return (
-            <Table.Row>
-                <Table.Cell>{report.name}</Table.Cell>
-                <Table.Cell>
-                        {
-                            this.isAllowedToEdit()
-                            &&
-                            <div>
-                                <Dropdown button text='Action' icon={null}>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item>
-                                            <Button primary href={"/report/" + report._id + "/edit"}>Edit</Button>
-                                        </Dropdown.Item>
-                                        <Dropdown.Item>
-                                            <Button negative onClick={this.deleteReport.bind(this)}>Delete</Button>
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </div>
-                        }
-                </Table.Cell>
-            </Table.Row>
+            <div
+                className={classes}
+                onClick={this.onSetReport.bind(this)}>
+                <div className="check-item">
+                    <input checked={checked} type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectReport.bind(this)}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name">{report.name}</div>
+                </div>
+            </div>
         );
     }
 }

@@ -1,11 +1,45 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Dropdown, Menu, Container} from 'semantic-ui-react';
 import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
+import {getImagePath} from "../../../api/utils";
 
 class Header extends Component {
+    constructor() {
+        super();
+        this.state = {
+            dropdown: false
+        }
+        this.openDropdown = this.openDropdown.bind(this);
+        this.outsideClick = this.outsideClick.bind(this);
+        this.nodeRef = this.nodeRef.bind(this);
+    }
+
+    openDropdown() {
+        if(!this.state.dropdown) {
+            document.addEventListener('click', this.outsideClick, false);
+        } else {
+            document.removeEventListener('click', this.outsideClick, false)
+        }
+
+        this.setState({
+            dropdown: !this.state.dropdown
+        })
+    }
+
+    outsideClick(e) {
+        if (this.node.contains(e.target)) {
+            return;
+        }
+
+        this.openDropdown();
+    };
+
+    nodeRef(node) {
+        this.node = node;
+    }
+
     state = {activeItem: 'Dashboard'};
 
     handleItemClick = (e, {name}) => this.setState({activeItem: name});
@@ -51,39 +85,31 @@ class Header extends Component {
         }
 
         return (
-            <Container>
+            <div>
                 {user &&
-                <Menu inverted fixed="top">
-                    {
-                        routes.map(value => (
-                            <Menu.Item
-                                href={value.name}
-                                key={value.label}
-                                active={activeItem === value.label}
-                                name={value.label}
-                                color="blue"
-                                onClick={this.handleItemClick}
-                            />
-                        ))
-                    }
-                    <Menu.Menu position='right'>
-                        <Dropdown
-                            icon="user"
-                            item
-                            text={user.profile.firstName + " " + user.profile.lastName}
-                            name="user"
-                            onClick={this.handleItemClick}>
-                            <Dropdown.Menu>
-                                <Dropdown.Item href="/my-profile">My Profile</Dropdown.Item>
-                            </Dropdown.Menu>
-                        </Dropdown>
-                        <Menu.Item>
-                            <Button href="/logout">Log out</Button>
-                        </Menu.Item>
-                    </Menu.Menu>
-                </Menu>
+                <header className="header-bar">
+                    <div className="header-bar__wrapper">
+                        <div className="left__side">
+                            <a href="/home">
+                                <i className="icon-home"/>
+                                <img className="header__logo" src="/assets/img/logo.png" alt=""/>
+                            </a>
+                        </div>
+                        <div className={this.state.dropdown ? "right__side open" : "right__side"} onClick={this.openDropdown} ref={this.nodeRef}>
+                            <div className="owner-menu">
+                                <a href="">
+                                    <span>{user.profile.firstName + " " + user.profile.lastName}</span>
+                                    <div className="profile-img">
+                                        <img className="md-avatar img-circle" src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"} alt=""/>
+                                    </div>
+                                </a>
+                            </div>
+                            {this.state.dropdown ? <BtnGroup/> : null}                            
+                        </div>
+                    </div>
+                </header>
                 }
-            </Container>
+            </div>
         )
     }
 }
@@ -100,3 +126,14 @@ export default HeaderContainer = createContainer(() => {
         user,
     };
 }, Header);
+
+class BtnGroup extends Component {
+    render() {
+        return (
+            <div className="btn-group">
+                <a href="/my-profile"><i className="icon-cog"/><span>Settings</span></a>
+                <a href="/logout"><i className="icon-sign-out"/><span>Log out</span></a>
+            </div>
+        )
+    }
+}

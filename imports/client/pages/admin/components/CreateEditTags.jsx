@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'semantic-ui-react';
 import Dialog from '/imports/client/lib/ui/Dialog';
-import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
+import { AutoForm, AutoField, ErrorField, SelectField } from '/imports/ui/forms';
 import TagsSchema from '/imports/api/tags/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
 import TagsList from './TagsList.jsx';
@@ -13,14 +13,10 @@ export default class CreateEditTags extends Component {
         this.state = {
             cancelDialogActive: false,
             showSpecificRoles: false,
-            tags: []
         };
     }
 
     componentDidMount () {
-        this.setState({
-            tags: this.props.tags
-        });
     }
 
     dialogToggle = () => {
@@ -41,18 +37,10 @@ export default class CreateEditTags extends Component {
     };
 
     onSubmitForm = (model) => {
-        const {tags} = this.state;
-        const {onTagsChange} = this.props;
+        const {tags} = this.props;
 
         Meteor.call('tag.create', model, (err, data) => {
             if (!err) {
-                model._id = data;
-                tags.push(model);
-                this.setState({
-                    tags
-                });
-                onTagsChange(tags);
-
                 Notifier.success('Tag successfully created!');
                 this.refs.tagForm.reset();
             } else {
@@ -61,17 +49,10 @@ export default class CreateEditTags extends Component {
         });
     };
 
-    onTagsChange = (tags) => {
-        const {onTagsChange} = this.props;
-
-        this.setState({
-            tags
-        });
-        onTagsChange(tags);
-    };
-
     render () {
-        const {cancelDialogActive, showSpecificRoles, tags} = this.state;
+        const {cancelDialogActive, showSpecificRoles} = this.state;
+        const {tags} = this.props;
+
         const actions = [
             <Button onClick={this.dialogToggle}>Cancel</Button>,
             <Button onClick={this.saveTags}>Save</Button>,
@@ -80,35 +61,46 @@ export default class CreateEditTags extends Component {
 
         return (
             <div>
-                <Button type="button" onClick={this.dialogToggle}>Manage Tags</Button>
+                <div className="add-filter text-center" onClick={this.dialogToggle}>Manage Tags</div>
                 {
                     cancelDialogActive && (
-                        <Dialog closePortal={this.dialogToggle}
-                                title="Manage Tags"
-                                actions={actions}>
+                        <div>
+                            <div className="create-form">
+                                <div className="create-form__wrapper">
+                                    <div className="action-block">
 
-                            <AutoForm schema={TagsSchema} onChangeModel={this.onFormChange} onSubmit={this.onSubmitForm}
-                                      ref="tagForm">
+                                        <AutoForm schema={TagsSchema} onChangeModel={this.onFormChange}
+                                                  onSubmit={this.onSubmitForm}
+                                                  ref="tagForm">
 
-                                <AutoField name="name"/>
-                                <ErrorField name="name"/>
+                                            <div className="form-wrapper">
+                                                <AutoField labelHidden={true} placeholder="Name" name="name"/>
+                                                <ErrorField name="name"/>
+                                            </div>
 
-                                <SelectField name="privacy"/>
+                                            <div className="form-wrapper">
+                                                <SelectField labelHidden={true} placeholder="Privacy" name="privacy"/>
+                                            </div>
+                                            {
+                                                showSpecificRoles &&
+                                                <div className="form-wrapper">
+                                                    <AutoField labelHidden={true} placeholder="Visibility"
+                                                               name="visibility"/>
+                                                </div>
+                                            }
+                                            <div className="form-wrapper">
+                                                <button className="btn--green">Create new tag</button>
+                                            </div>
+                                        </AutoForm>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="header__block">
+                                <div className="title-block text-uppercase">List of available tags</div>
+                            </div>
+                            <TagsList tags={tags}/>
 
-                                {
-                                    showSpecificRoles &&
-                                    <AutoField name="visibility"/>
-                                }
-
-                                <Button color="green">Create new tag</Button>
-
-                            </AutoForm>
-
-                            <h2>List of available tags</h2>
-
-                            <TagsList tags={tags} onTagsChange={this.onTagsChange}/>
-
-                        </Dialog>
+                        </div>
                     )
                 }
             </div>

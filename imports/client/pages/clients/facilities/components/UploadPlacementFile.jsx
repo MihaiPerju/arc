@@ -1,6 +1,8 @@
 import React from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import Notifier from '/imports/client/lib/Notifier';
+import {Container, Divider} from 'semantic-ui-react'
+import ImportingRules from '/imports/client/pages/clients/facilities/components/ImportingRules';
 
 export default class UploadPlacementFile extends React.Component {
     constructor() {
@@ -8,10 +10,10 @@ export default class UploadPlacementFile extends React.Component {
     }
 
     render() {
-        const {facilityId} = this.props;
+        const {model, updateFacility} = this.props;
 
         const componentConfig = {
-            postUrl: `/uploads/csv/${facilityId}`
+            postUrl: `/uploads/csv/${model && model._id}`
         };
 
         const djsConfig = {
@@ -21,6 +23,12 @@ export default class UploadPlacementFile extends React.Component {
             },
             acceptedFiles: '.csv'
         };
-        return <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
+        return (
+            <Container>
+                <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
+                <Divider/>
+                <ImportingRules rules={"placementRules"} updateFacility={updateFacility} model={model}/>
+            </Container>
+        )
     }
 }

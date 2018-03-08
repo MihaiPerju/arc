@@ -1,0 +1,214 @@
+.create-form {
+  position: relative;
+  height: 100%;
+  form {
+    height: 100%;
+  }
+  .create-form__bar {
+    display: flex;
+    background: $color-white;
+    justify-content: space-between;
+    padding: 7px 30px 8px 10px;
+    margin-top: -15px;
+    margin-left: -14px;
+    margin-right: -15px;
+    border-bottom: 1px #e1e1e1 solid;
+    box-shadow: 0 1px 3px 0 #ebe7e7;
+    .btn-add {
+      color: $dark-grey
+    }
+    .btn-cancel {
+      color: $red;
+      &:hover {
+        color: #d02121;
+      }
+    }
+  }
+  .create-form__wrapper {
+    height: calc(100% - 61px);
+    overflow-y: auto;
+    margin-top: 20px;
+    padding: 0 15px;
+    width: 100%;
+  }
+  .action-block {
+    width: 100%;
+    .form-wrapper {
+      padding-top: 8px;
+    }
+  }
+  .form-wrapper {
+    input, textarea {
+      background: $color-white;
+    }
+    textarea {
+      border-bottom: 0;
+    }
+  }
+  .add-filter {
+    background: rgba($color-white, 0.5);
+    cursor: pointer;
+    padding: 17px 15px;
+    border-radius: 3px;
+    transition: background $transition300;
+    margin-top: 25px;
+    &:hover {
+      background: $color-white;
+    }
+  }
+  .label-filter {
+    background: #d7d7d7;
+    border-radius: 3px;
+    padding: 17px 15px;
+    margin-top: 10px;
+  }
+  .check-group {
+    margin-top: 20px;
+    padding-left: 15px;
+    input {
+      display: none;
+      & + label {
+        position: relative;
+        padding-left: 25px;
+        cursor: pointer;
+        user-select: none;
+        &:before, &:after {
+          position: absolute;
+          left: 0;
+        }
+        &:before {
+          content: ' ';
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          border: 2px #c2c2c2 solid;
+          opacity: 1;
+          top: 1px;
+        }
+        &:after {
+          content: '\f05d';
+          font-family: $font-icon;
+          font-size: 1.7rem;
+          line-height: 1.7rem;
+          color: $green;
+          opacity: 0;
+          top: 0;
+        }
+      }
+      &:checked {
+        & + label {
+          &:before {
+            opacity: 0;
+          }
+          &:after {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+
+  .btn-delete {
+    cursor: pointer;
+    color: $red;
+    padding: 10px 15px;
+    &:hover {
+      color: #d02121;
+    }
+  }
+
+  .select-group {
+    border-bottom: 1px #e1e1e1 solid;
+    padding-bottom: 5px;
+    &:first-of-type {
+      border-top: 1px #e1e1e1 solid;
+    }
+    .row-select {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 15px;
+    }
+    .type {
+      padding: 10px 0;
+    }
+    .form-wrapper {
+      margin-bottom: 10px;
+      position: relative;
+      &:before {
+        content: '\f107';
+        font-family: $font-icon;
+        position: absolute;
+        top: 20px;
+        right: 15px;
+        color: $extra-light-grey;
+      }
+      select {
+        border-radius: 3px;
+        border: 1px #ebebeb solid;
+        background: $color-white;
+        color: $light-grey;
+      }
+    }
+  }
+}
+.i--block {
+  .select-group {
+    border-bottom: 0;
+    padding-bottom: 0;
+    .form-wrapper {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.action-new-contact {
+  padding-bottom: 15px;
+  border-bottom: 1px #e1e1e1 solid;
+  .header__block {
+
+  }
+  .row__action {
+    margin-top: 20px;
+    padding-left: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px #e1e1e1 solid;
+    .type {
+      padding-top: 10px;
+    }
+  }
+  .select-group {
+    border-bottom: 0;
+    padding-bottom: 0;
+    .form-wrapper {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.action-create-form {
+  .check-group {
+    margin-bottom: 10px;
+  }
+  .select-group {
+    border-bottom: 0;
+    padding-bottom: 0;
+    .form-wrapper {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.letter-template-form {
+  .rich-text-area {
+    label {
+      display: none
+    }
+    .RichTextEditor__root___2QXK- {
+      border: 0
+    }
+    .RichTextEditor__editor___1QqIU {
+      height: 300px;
+    }
+  }
+}

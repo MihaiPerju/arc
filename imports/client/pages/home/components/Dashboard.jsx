@@ -3,7 +3,7 @@ import {Container, Card, Grid} from 'semantic-ui-react'
 import {Pie} from 'react-chartjs';
 import Notifier from '/imports/client/lib/Notifier';
 
-export default class Dashboard extends React.Component {
+export default class   Dashboard extends React.Component {
     constructor() {
         super();
         this.state = {

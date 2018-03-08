@@ -18,7 +18,6 @@ export default class LetterView extends React.Component {
     componentDidMount() {
         const {letterId} = FlowRouter.current().params;
 
-        console.log(letterId);
         letterQuery.clone({filters: {_id: letterId}}).fetchOne((err, letter) => {
             if (!err) {
                 this.setState({
@@ -37,8 +36,6 @@ export default class LetterView extends React.Component {
         if (loading) {
             return <Loading/>;
         }
-
-        console.log(letter);
 
         return (
             <Container className="page-container">
