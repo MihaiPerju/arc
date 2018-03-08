@@ -36,10 +36,9 @@ export default class extends React.Component {
             filters,
             page: 1
         });
-
     }
 
-    recount() {
+    recount = () => {
         this.getQuery().getCount((err, res) => {
             this.setState({total: res});
         })

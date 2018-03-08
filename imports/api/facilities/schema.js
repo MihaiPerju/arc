@@ -2,6 +2,7 @@ import SimpleSchema from 'simpl-schema';
 import FacilityContactSchema from '/imports/api/facilities/schemas/contactSchema.js';
 import statusEnum from "/imports/api/facilities/enums/statuses.js";
 import ImportRulesSchema from './schemas/importRulesSchema.js';
+import PaymentRulesSchema from './schemas/PaymentRulesSchema';
 
 export default new SimpleSchema({
     name: {
@@ -57,8 +58,16 @@ export default new SimpleSchema({
     'allowedUsers.$': {
         type: String
     },
-    importRules: {
+    placementRules: {
         type: ImportRulesSchema,
+        optional: true
+    },
+    inventoryRules: {
+        type: ImportRulesSchema,
+        optional: true
+    },
+    paymentRules: {
+        type: PaymentRulesSchema,
         optional: true
     },
     logoPath: {

@@ -7,4 +7,5 @@ import './expose.js';
 import './logoUpload';
 import './csvUpload';
 import './inventoryFileUpload';
+import './paymentFileUpload';
 import './extensions/imageRoute';

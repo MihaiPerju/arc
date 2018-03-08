@@ -1,29 +1,20 @@
 import React, {Component} from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import autoBind from 'react-autobind';
-import {Table, Dropdown} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {LabelSubstates} from '/imports/api/tasks/enums/substates'
+import classNames from "classnames";
 
 export default class ActionSingle extends Component {
-    constructor() {
-        super();
-        autoBind(this);
+    constructor(props) {
+        super(props);
     }
 
-    deleteAction() {
-        const {action} = this.props;
-
-        Meteor.call('action.delete', action._id, (err)=> {
-            if (!err) {
-                Notifier.success('Action deleted !');
-                FlowRouter.reload();
-            }
-        });
+    onSetAction() {
+        const {action, setAction} = this.props;
+        setAction(action._id);
     }
 
-    onEditAction() {
-        FlowRouter.go("/action/:_id/edit", {_id: this.props.action._id});
+    onSelectAction(e) {
+        e.stopPropagation();
+        const {action, selectAction} = this.props;
+        selectAction(action._id);
     }
 
     manageCodes = () => {
@@ -32,29 +23,26 @@ export default class ActionSingle extends Component {
     }
 
     render() {
-        const {action} = this.props;
+        const {action, actionsSelected, currentAction} = this.props;
+        const checked = actionsSelected.includes(action._id);
+        const classes = classNames({
+            "list-item": true,
+            "bg--yellow": checked,
+            "open": currentAction === action._id
+        });
 
         return (
-            <Table.Row>
-                <Table.Cell>{action.title}</Table.Cell>
-                <Table.Cell>{action.description}</Table.Cell>
-                <Table.Cell>{LabelSubstates[action.substate]}</Table.Cell>
-                <Table.Cell>
-                    <Dropdown button text='Action' icon={null}>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Button onClick={this.onEditAction}>Edit</Button> 
-                            </Dropdown.Item>
-                            <Dropdown.Item>
-                                <Button color="red" onClick={this.deleteAction}>Delete</Button>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Table.Cell>
-                <Table.Cell>
-                    <Button color="green" onClick={this.manageCodes}>Manage Reason Codes</Button>
-                </Table.Cell>
-            </Table.Row>
+            <div
+                onClick={this.onSetAction.bind(this)}
+                className={classes}>
+                <div className="check-item">
+                    <input checked={checked} type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectAction.bind(this)}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name">{action.title}</div>
+                </div>
+            </div>
         );
     }
 }

@@ -5,6 +5,7 @@ export default new SimpleSchema({
         type: String
     },
     actionId: {
-        type: String
+        type: String,
+        optional: true
     }
 });

@@ -1,5 +1,6 @@
 //font variables
-//$font-roboto: 'Roboto', sans-serif;
+$font-arial: 'Arial';
+$font-icon: 'arcc_font_set';
 
 //https://www.sitepoint.com/understanding-and-using-rem-units-in-css/
 $base-font-size: 62.5%; //1 rem = 10px
@@ -10,7 +11,21 @@ $base-line-height: 1.2;
 $color-white: #ffffff;
 $color-black: #000000;
 
-$color-page-bg: white;
+// My Colurs
+$dark-grey: #333;
+$light-grey: #838383;
+$extra-light-grey: #b7b7b7;
+$blue: #3370b5;
+$light-blue: #00bff3;
+$green: #3cb878;
+$light-green: #7cc576;
+$purple: #8560a8;
+$yellow: #dac81e;
+$orange: #f26c4f;
+$red: #da6363;
+$pink: #f26d7d;
+
+$color-page-bg: #eae9e9;
 
 $color-main: black;
 $color-main-dark: black;
@@ -29,6 +44,13 @@ $color-info: #03a9f4;
 
 $color-tooltip-bg: black;
 
+// Translate Variables
+$translateY: translateY(-50%);
+$translateX: translateX(-50%);
+$translateXY: translate(-50%, -50%);
+
+// Transition Variables
+$transition300: 300ms ease;
 
 //Material Design shadows
 $shadow-dp0: 0px 0px 0px 0px rgba(black, 0.2), 0px 0px 0px 0px rgba(black, 0.14), 0px 0px 0px 0px rgba(black, 0.12);
@@ -60,6 +82,9 @@ $shadow-dp24: 0px 11px 15px -7px rgba(black, 0.2), 0px 24px 38px 3px rgba(black,
 
 $text-shadow: 2px 2px 7px rgba($color-black, 0.2);
 
+// Header Shadow;
+$shadow-header: 1px 2px 7px 0 rgba(220, 220, 220, 0.8);
+
 //animation curves
 $animation-standard-curve: cubic-bezier(0.4, 0.0, 0.2, 1);;
 
@@ -88,4 +113,5 @@ $mds-z-15: 15;//notifications
 
 //paths
 $img-path: "./assets/img";
-$font-path: "./assets/font";
+$font-path: "./font";
+$font-icons: "./icons";

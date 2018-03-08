@@ -17,5 +17,11 @@ Meteor.methods({
 
     'action.delete'(actionId) {
         Actions.remove({_id: actionId});
+    },
+
+    'action.deleteMany'(Ids) {
+        _.each(Ids, (_id) => {
+            Actions.remove({_id});
+        });
     }
 });

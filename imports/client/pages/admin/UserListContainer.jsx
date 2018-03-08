@@ -1,47 +1,168 @@
 import React, { Component } from 'react';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/users/queries/listUsers.js';
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import UserList from './components/UserList.jsx';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
-import { Container } from 'semantic-ui-react';
-import { Header } from 'semantic-ui-react';
-import { Button } from 'semantic-ui-react';
-import { Divider } from 'semantic-ui-react';
+import UserContent from './UserContent.jsx';
+import CreateUser from './CreateUser.jsx';
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
+import query from '/imports/api/users/queries/listUsers';
+import Loading from '/imports/client/lib/ui/Loading';
+import { objectFromArray } from '/imports/api/utils';
+import Notifier from '/imports/client/lib/Notifier';
 
-export default class UserListContainer extends Pager {
+class UserListContainer extends Component {
     constructor () {
         super();
+        this.state = {
+            rightSide: false,
+            btnGroup: false,
+            filter: false,
+            usersSelected: [],
+            currentUser: null,
+            create: false
+        };
+        this.renderRightSide = this.renderRightSide.bind(this);
+        this.showBtnGroup = this.showBtnGroup.bind(this);
+        this.showFilterBar = this.showFilterBar.bind(this);
+    }
 
-        _.extend(this.state, {
-            perPage: 3,
-            filters: {}
-        });
-
-        this.query = query.clone();
-        this.query.setParams({
-            userId: Meteor.userId(),
-            roles: Meteor.user().roles
-        });
-
-        this.UserListCont = createQueryContainer(this.query, UserList, {
-            reactive: false
+    renderRightSide () {
+        this.setState({
+            rightSide: true
         });
     }
 
+    showBtnGroup () {
+        this.setState({
+            btnGroup: !this.state.btnGroup
+        });
+    }
+
+    showFilterBar () {
+        this.setState({
+            filter: !this.state.filter
+        });
+    }
+
+    selectUser (objectId) {
+        const {usersSelected} = this.state;
+        if (usersSelected.includes(objectId)) {
+            usersSelected.splice(usersSelected.indexOf(objectId), 1);
+        } else {
+            usersSelected.push(objectId);
+        }
+        this.setState({usersSelected});
+    }
+
+    setUser (id) {
+        const {currentUser} = this.state;
+        if (currentUser === id) {
+            this.setState({currentUser: null});
+        } else {
+            this.setState({currentUser: id});
+        }
+    }
+
+    createForm = () => {
+        this.setState({
+            currentUser: false,
+            create: true,
+            rightSide: true
+        });
+    };
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        });
+    };
+
+    deleteAction = () => {
+        const {usersSelected} = this.state;
+
+        Meteor.call('admin.deleteManyUsers', usersSelected, (err) => {
+            if (!err) {
+                Notifier.success('Users deleted !');
+            }
+        });
+    };
+
     render () {
-        const params = _.extend({}, this.getPagerOptions());
-        const UserListCont = this.UserListCont;
+        const {data, loading, error} = this.props;
+        const {usersSelected, currentUser, create} = this.state;
+        const user = objectFromArray(data, currentUser);
+
+        if (loading) {
+            return <Loading/>;
+        }
+
+        if (error) {
+            return <div>{error.reason}</div>;
+        }
+
         return (
-            <Container className="page-container">
-                <div>
-                    <Header textAlign="center" as="h2">Users</Header>
+            <div className="cc-container">
+                <div className={(currentUser || create) ? 'left__side' : 'left__side full__width'}>
+                    <SearchBar btnGroup={usersSelected.length} filter={this.showFilterBar}
+                               deleteAction={this.deleteAction}/>
+                    {this.state.filter ? <FilterBar/> : null}
+                    <UserList
+                        class={this.state.filter ? 'task-list decreased' : 'task-list'}
+                        renderContent={this.renderRightSide}
+                        selectUser={this.selectUser.bind(this)}
+                        setUser={this.setUser.bind(this)}
+                        showBtnGroup={this.showBtnGroup}
+                        usersSelected={usersSelected}
+                        currentUser={currentUser}
+                        users={data}
+                    />
+                    <PaginationBar
+                        module="User"
+                        create={this.createForm}
+                        closeForm={this.closeForm}
+                    />
                 </div>
-                <div className='m-t-30'>
-                    {this.getPaginator()}
-                    <UserListCont params={params}/>
-                    {this.getPaginator()}
-                </div>
-            </Container>
+                {
+                    (currentUser || create) &&
+                    <RightSide
+                        user={user}
+                        create={create}
+                        close={this.closeForm}
+                    />
+                }
+            </div>
         );
     }
 }
+
+class RightSide extends Component {
+    constructor () {
+        super();
+        this.state = {
+            fade: false
+        };
+    }
+
+    componentDidMount () {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render () {
+        const {user, create, close} = this.props;
+        const {fade} = this.state;
+        return (
+            <div className={fade ? 'right__side in' : 'right__side'}>
+                {
+                    create ? <CreateUser close={close}/> : <UserContent user={user}/>
+                }
+            </div>
+        );
+    }
+}
+
+export default withQuery((props) => {
+    return query.clone();
+}, {reactive: true})(UserListContainer);

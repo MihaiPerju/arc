@@ -9,7 +9,7 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}
     if (filenames.length != 1) {
         return error('Invalid number of files');
     }
-    const importRules = ParseService.getImportRules(facilityId);
+    const importRules = ParseService.getImportRules(facilityId, 'placementRules');
 
     for (index in filenames) {
         const stream = fs.readFileSync(filenames[index]);

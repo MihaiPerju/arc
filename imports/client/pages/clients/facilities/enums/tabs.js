@@ -3,5 +3,6 @@ export default {
     IMP_RULES: 'Importing Rules',
     PLACEMENT_FILE: "Upload Placement File",
     VIEW: 'View',
-    INVENTORY_FILE: 'Upload Inventory File'
+    INVENTORY_FILE: 'Upload Inventory File',
+    PAYMENT_FILE: 'Upload Payment File'
 }
