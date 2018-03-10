@@ -1,6 +1,5 @@
 export default {
-    ADMIN: 'admin',
-    TECH: 'tech',
-    REP: 'rep',
-    MANAGER: 'manager'
+    TECHNICAL: 'Technical',
+    MANAGEMENT: 'Management',
+    OTHER: 'Other'
 };
