@@ -29,7 +29,6 @@ export default class ReportsService {
     static getOptions(keys) {
         let schemaOptions = [{label: "+ Add Filter"}];
         keys.map((value) => {
-            console.log(value);
             const label = this.getLabel(value) ? this.getLabel(value) : value;
             schemaOptions.push({label, value});
         });

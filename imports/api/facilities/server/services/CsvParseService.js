@@ -7,17 +7,6 @@ import moment from 'moment';
 
 export default class CsvParseService {
 
-    //Converting to tasks
-
-
-    /**
-     * Get client id by facility
-     * @param facilityId
-     */
-    static getClientIdByFacilityId(facilityId) {
-        return Facilities.findOne(facilityId).clientId;
-    }
-
     //Filtering existent tasks and new Tasks
     static filterTasks(tasks) {
         let oldTasks = [];

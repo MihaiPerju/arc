@@ -1,82 +1,111 @@
 import CsvParseService from './CsvParseService';
-import Tasks from '/imports/api/tasks/collection';
+import Accounts from '/imports/api/tasks/collection';
 import Facilities from "../../collection";
+import moment from "moment/moment";
+import RulesEnum from "../../enums/importingRules";
+import Tasks from "../../../tasks/collection";
+import stateEnum from "../../../tasks/enums/states";
+import {Substates} from "../../../tasks/enums/substates";
 
 export default class TaskService {
     //For placement file
     static upload(results, rules, facilityId) {
 
-        //If importing rules are with header, convert them.
-        let importRules;
-        if (rules.hasHeader) {
-            importRules = this.convertImportRules(rules, results[0]);
-            //Cutting first line
-            results.splice(0, 1);
-        }
-        console.log(results);
+        const {labels, importRules} = this.standardize(results, rules);
 
-        //Get client
+        const accounts = this.convertToAccounts(results, importRules, labels);
         const clientId = this.getClientIdByFacilityId(facilityId);
 
-        const accounts = this.convertToAccounts(results, importRules, rules);
-
-        // Creating tasks
-        // tasks.map((task) => {
-        //     Tasks.insert(task);
-        // });
+        // Creating accounts
+        accounts.map((account) => {
+            Object.assign(account, {facilityId, clientId});
+            Accounts.insert(account);
+        });
     }
 
-    static convertToAccounts(results, importRules, rules) {
+    static standardize(results, rules) {
+        //If importing rules are with header, convert them.
+        let importRules = rules;
+        let labels;
+        if (rules.hasHeader) {
+            importRules = this.convertImportRules(rules, results[0]);
+            //Cutting first line, but keeping labels for metafields
+            labels = results[0];
+            results.splice(0, 1);
+        }
+        delete importRules.hasHeader;
+        return {labels, importRules};
+    }
+
+    static convertToAccounts(results, importRules, labels) {
         const accounts = [];
 
         for (let i = 0; i < results.length - 1; i++) {
-            let account = this.createAccount(results[i], importRules, rules);
-
+            let account = this.createAccount(results[i], importRules, labels);
             accounts.push(account);
         }
+
         return accounts;
     }
 
-    static createAccount(data, importRules, rules) {
+    static createAccount(data, rules, labels) {
+        let importRules = {...rules};
         let account = {};
-        console.log(importRules);
-        for (index of importRules) {
-            console.log(index);
-            //Get the normal fields
-            // if (key !== 'insurances') {
-            //     let value;
-            //     if (rules.newImportRules) {
-            //         value = CsvParseService.convertToType(key, data[rules.newImportRules[key] - 1]);
-            //     } else {
-            //         value = CsvParseService.convertToType(key, data[importRules[key] - 1]);
-            //     }
-            //     task[key] = value;
-            // } else {
-            //     //Get the insurance fields
-            //     task[key] = [];
-            //     // console.log(importRules[key]);
-            //     for (index in importRules[key]) {
-            //         let insuranceFields = importRules[key][index];
-            //         if (rules.newImportRules) {
-            //             insuranceFields = rules.newImportRules[key][index];
-            //         }
-            //         // console.log(insuranceFields);
-            //         task[key].push({
-            //             insName: CsvParseService.convertToType('insName', data[insuranceFields.insName - 1]),
-            //             insCode: CsvParseService.convertToType('insCode', data[insuranceFields.insCode - 1]),
-            //             insBal: CsvParseService.convertToType('insBal', data[insuranceFields.insBal - 1])
-            //         })
-            //     }
-            // }
+        let mainFields = [];
+
+        //Extract insurances first
+        account.insurances = [];
+        importRules.insurances.map(({insName, insCode, insBal}) => {
+            //Mark indexes as used
+            mainFields.push(insBal - 1, insCode - 1, insName - 1);
+            //Get insurances
+            account.insurances.push({
+                insName: this.convertToType('insName', data[insName - 1]),
+                insCode: this.convertToType('insCode', data[insCode - 1]),
+                insBal: this.convertToType('insBal', data[insBal - 1])
+            });
+        });
+
+        delete importRules.insurances;
+
+        for (rule in importRules) {
+            mainFields.push(importRules[rule] - 1);
+            let value = this.convertToType(rule, data[importRules[rule] - 1]);
+            account[rule] = value;
         }
-        // if (rules.metaRules) {
-        //     task.metaData = {};
-        //     for (key in rules.metaRules) {
-        //         let metaValue = CsvParseService.convertToType(key, data[rules.metaRules[key] - 1]);
-        //         task.metaData[key] = metaValue;
-        //     }
-        // }
+
+        //Getting meta fields
+        let metaFields = {};
+        let count = 1;
+        data.map((value, index) => {
+            if (!mainFields.includes(index)) {
+                //Set label
+                let label = "Column#" + (count++);
+                if (labels) {
+                    label = labels[index];
+                }
+                //Set value
+                metaFields[label] = value;
+            }
+        });
+        Object.assign(account, {metaFields});
+
+        //Account is ready: main fields + insurances + meta
         return account;
+    }
+
+    static convertToType(rule, value) {
+        const {types} = RulesEnum;
+        if (types.dates.includes(rule)) {
+            const parsed = moment(value, "MM/DD/YYYY", true);
+            return parsed.isValid() ? parsed.toDate() : 'broken date!!!';
+        } else if (types.numbers.includes(rule)) {
+            const parsed = parseInt(value, 10);
+            return isNaN(parsed) ? 'broken number!!!' : parsed
+        }
+        else {
+            return value;
+        }
     }
 
     static convertImportRules(rules, header) {
@@ -107,28 +136,46 @@ export default class TaskService {
     }
 
     //For inventory file
-    static update(results, importRules, facilityId) {
-        const tasks = CsvParseService.convertToTasks(results, importRules, false, facilityId);
-        const [oldTasks, newTasks] = CsvParseService.filterTasks(tasks);
+    static update(results, rules, facilityId) {
+        const {labels, importRules} = this.standardize(results, rules);
 
-        //Creating new tasks with 'archived' state
-        newTasks.map((task) => {
-            Tasks.insert(task);
+        const accounts = this.convertToAccounts(results, importRules, labels);
+        const clientId = this.getClientIdByFacilityId(facilityId);
+
+        const {oldAccounts, newAccounts} = this.filterAccounts(accounts);
+
+        //Creating new accounts with 'archived' state
+        newAccounts.map((account) => {
+            Object.assign(account, {facilityId, clientId});
+            Accounts.insert(account);
         });
 
-        //Updating old tasks
-        oldTasks.map((task) => {
-            const {acctNum} = task;
-            Tasks.update({acctNum}, {
-                $set: task
+        //Updating old accounts
+        oldAccounts.map((account) => {
+            const {acctNum} = account;
+            Accounts.update({acctNum}, {
+                $set: account
             });
         });
     }
 
-    /**
-     * Get client id by facility
-     * @param facilityId
-     */
+    static filterAccounts(accounts) {
+        let oldAccounts = [];
+        let newAccounts = [];
+
+        accounts.map((account) => {
+            if (Accounts.findOne({acctNum: account.acctNum})) {
+                oldAccounts.push(account);
+            } else {
+                account.state = stateEnum.ARCHIVED;
+                account.substate = Substates.SELF_RETURNED;
+                newAccounts.push(account);
+            }
+        });
+        return {oldAccounts, newAccounts};
+    }
+
+    // Get client id by facility
     static getClientIdByFacilityId(facilityId) {
         return Facilities.findOne(facilityId).clientId;
     }
