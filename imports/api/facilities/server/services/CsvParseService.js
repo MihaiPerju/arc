@@ -8,24 +8,7 @@ import moment from 'moment';
 export default class CsvParseService {
 
     //Converting to tasks
-    static convertToTasks(results, importRules, isPlacement, facilityId) {
-        const clientId = this.getClientIdByFacilityId(facilityId);
-        const tasks = [];
-        let rules = {};
-        if (importRules.hasHeader) {
-            const header = results[0];
-            results.splice(0, 1);
-            rules = CsvParseService.convertImportingRules(importRules, header);
-        }
 
-        for (let i = 0; i < results.length - 1; i++) {
-            let newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId, rules);
-            newTask.clientId = clientId;
-
-            tasks.push(newTask);
-        }
-        return tasks;
-    }
 
     /**
      * Get client id by facility
