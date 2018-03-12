@@ -2,48 +2,29 @@ import React, {Component} from 'react';
 
 export default class ContactTable extends Component {
     render() {
-        const tables = [
+        const columns = [
             {
                 header: 'First Name',
-                row: [
-                    {name: 'yo'},
-                    {name: 'none'},
-                    {name: 'none'}
-                ]
+                contactProp: 'firstName'
             },
             {
-                header: 'Last name',
-                row: [
-                    {name: 'yo'},
-                    {name: 'none'},
-                    {name: 'none'}
-                ]
+                header: 'Last Name',
+                contactProp: 'lastName'
             },
             {
                 header: 'Phone',
-                row: [
-                    {name: 'yo'},
-                    {name: 'none'},
-                    {name: 'none'}
-                ]
+                contactProp: 'phone'
             },
             {
                 header: 'Email',
-                row: [
-                    {name: 'yo'},
-                    {name: 'none'},
-                    {name: 'none'}
-                ]
+                contactProp: 'email'
             },
             {
-                header: 'Contact type',
-                row: [
-                    {name: 'yo'},
-                    {name: 'none'},
-                    {name: 'none'}
-                ]
+                header: 'Contact Type',
+                contactProp: 'contactType'
             }
         ];
+        const {contacts} = this.props;
 
         return (
             <div className="action-block">
@@ -53,13 +34,17 @@ export default class ContactTable extends Component {
                 <div className="main__block">
                     <div className="table">
                         {
-                            tables.map(function (table, index) {
+                            columns.map(function (column, index) {
                                 return (
                                     <div className="table-col text-center" key={index}>
-                                        <div className="table-header text-light-grey">{table.header}</div>
-                                        <div className="table-row">{table.row[0].name}</div>
-                                        <div className="table-row">{table.row[1].name}</div>
-                                        <div className="table-row">{table.row[2].name}</div>
+                                        <div className="table-header text-light-grey">{column.header}</div>
+                                        {
+                                            contacts.map(function (contact){
+                                                return (
+                                                    <div className="table-row">{contact[column.contactProp]}</div>
+                                                )
+                                            })
+                                        }
                                     </div>
                                 )
                             })
