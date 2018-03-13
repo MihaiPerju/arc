@@ -55,13 +55,11 @@ export default class CsvParseService {
             } else {
                 //Get the insurance fields
                 task[key] = [];
-                // console.log(importRules[key]);
                 for (index in importRules[key]) {
                     let insuranceFields = importRules[key][index];
                     if (rules.newImportRules) {
                         insuranceFields = rules.newImportRules[key][index];
                     }
-                    // console.log(insuranceFields);
                     task[key].push({
                         insName: CsvParseService.convertToType('insName', data[insuranceFields.insName - 1]),
                         insCode: CsvParseService.convertToType('insCode', data[insuranceFields.insCode - 1]),
