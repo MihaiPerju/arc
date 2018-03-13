@@ -4,8 +4,6 @@ import UserSingle from './UserSingle';
 export default class UserList extends Component {
     render() {
         const {users} = this.props;
-        console.log("We receive:");
-        console.log(users);
         const {currentUser, setUser, selectUser, usersSelected} = this.props;
 
         const userList = users.map((user, index) => {

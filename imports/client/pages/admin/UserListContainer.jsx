@@ -21,7 +21,7 @@ class UserListContainer extends Pager {
             currentUser: null,
             create: false,
             page: 1,
-            perPage: 3,
+            perPage: 13,
             total: 0,
             range: {}
         });
@@ -70,7 +70,7 @@ class UserListContainer extends Pager {
 
         Meteor.call('admin.deleteManyUsers', usersSelected, (err) => {
             if (!err) {
-                Notifier.success('Users deleted !');
+                Notifier.success('Users deleted!');
             }
         });
     };
@@ -83,13 +83,14 @@ class UserListContainer extends Pager {
         this.setState({range, page: nextPage, currentClient: null});
     };
 
+    componentWillReceiveProps(props) {
+        console.log(props);
+    }
+
     render() {
         const {data, loading, error} = this.props;
         const {usersSelected, currentUser, create, total, range} = this.state;
         const user = objectFromArray(data, currentUser);
-
-        console.log("We pass:");
-        console.log(data);
 
         if (loading) {
             return <Loading/>;
@@ -163,11 +164,6 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
-    const perPage = 3;
-    console.log("Normally:");
-    PagerService.setQuery(query, {page, perPage}).fetch((err, res) => {
-        console.log(err);
-        console.log(res);
-    });
+    const perPage = 13;
     return PagerService.setQuery(query, {page, perPage});
 }, {reactive: true})(UserListContainer);
