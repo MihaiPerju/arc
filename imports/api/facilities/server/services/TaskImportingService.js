@@ -75,7 +75,7 @@ export default class TaskService {
         }
 
         //Getting meta fields
-        let metaFields = {};
+        let metaData = {};
         let count = 1;
         data.map((value, index) => {
             if (!mainFields.includes(index)) {
@@ -85,10 +85,10 @@ export default class TaskService {
                     label = labels[index];
                 }
                 //Set value
-                metaFields[label] = value;
+                metaData[label] = value;
             }
         });
-        Object.assign(account, {metaFields});
+        Object.assign(account, {metaData});
 
         //Account is ready: main fields + insurances + meta
         return account;
