@@ -196,4 +196,4 @@ export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 7;
     return PagerService.setQuery(query, {page, perPage});
-})(TaskListContainer)
+}, {reactive: true})(TaskListContainer)

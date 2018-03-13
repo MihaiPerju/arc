@@ -40,7 +40,6 @@ class EditUser extends Component {
     }
 
     onSubmit(formData) {
-        console.log('Ok!');
         const {user} = this.props;
         Meteor.call('admin.editUser', user._id, formData, (err) => {
             if (!err) {
@@ -79,7 +78,6 @@ class EditUser extends Component {
         user.email = user.emails[0].address;
         const tags = this.getTagList();
 
-        console.log(user);
 
         return (
             <div className="create-form">

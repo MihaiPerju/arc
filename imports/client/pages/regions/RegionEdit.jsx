@@ -19,7 +19,6 @@ export default class RegionEdit extends React.Component {
 
 
     onSubmit (data) {
-        console.log(data);
         data.clientId = FlowRouter.current().params.id;
         Meteor.call('region.update', data, (err) => {
             if (!err) {

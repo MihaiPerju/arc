@@ -7,34 +7,6 @@ import moment from 'moment';
 
 export default class CsvParseService {
 
-    //Converting to tasks
-    static convertToTasks(results, importRules, isPlacement, facilityId) {
-        const clientId = this.getClientIdByFacilityId(facilityId);
-        const tasks = [];
-        let rules = {};
-        if (importRules.hasHeader) {
-            const header = results[0];
-            results.splice(0, 1);
-            rules = CsvParseService.convertImportingRules(importRules, header);
-        }
-
-        for (let i = 0; i < results.length - 1; i++) {
-            let newTask = CsvParseService.createTask(results[i], importRules, isPlacement, facilityId, rules);
-            newTask.clientId = clientId;
-
-            tasks.push(newTask);
-        }
-        return tasks;
-    }
-
-    /**
-     * Get client id by facility
-     * @param facilityId
-     */
-    static getClientIdByFacilityId(facilityId) {
-        return Facilities.findOne(facilityId).clientId;
-    }
-
     //Filtering existent tasks and new Tasks
     static filterTasks(tasks) {
         let oldTasks = [];
@@ -83,13 +55,11 @@ export default class CsvParseService {
             } else {
                 //Get the insurance fields
                 task[key] = [];
-                // console.log(importRules[key]);
                 for (index in importRules[key]) {
                     let insuranceFields = importRules[key][index];
                     if (rules.newImportRules) {
                         insuranceFields = rules.newImportRules[key][index];
                     }
-                    // console.log(insuranceFields);
                     task[key].push({
                         insName: CsvParseService.convertToType('insName', data[insuranceFields.insName - 1]),
                         insCode: CsvParseService.convertToType('insCode', data[insuranceFields.insCode - 1]),

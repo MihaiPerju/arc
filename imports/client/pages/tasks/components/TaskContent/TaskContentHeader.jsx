@@ -35,7 +35,6 @@ export default class TaskContentHeader extends Component {
 
     render() {
         const {task} = this.props;
-        console.log(task);
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
 
