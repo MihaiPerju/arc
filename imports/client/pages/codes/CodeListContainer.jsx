@@ -21,7 +21,7 @@ class CodeListContainer extends Pager {
             currentCode: null,
             create: false,
             page: 1,
-            perPage: 4,
+            perPage: 13,
             total: 0,
             range: {}
         });
@@ -115,11 +115,12 @@ class CodeListContainer extends Pager {
                         setCode={this.setCode}
                         codes={data}
                     />
-                    <PaginationBar create={this.createForm}
-                                   nextPage={this.nextPage}
-                                   module="Code"
-                                   range={range}
-                                   total={total}/>
+                    <PaginationBar
+                        create={this.createForm}
+                        nextPage={this.nextPage}
+                        module="Code"
+                        range={range}
+                        total={total}/>
                 </div>
                 {
                     (currentCode || create) &&
@@ -163,6 +164,6 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
-    const perPage = 4;
+    const perPage = 13;
     return PagerService.setQuery(query, {page, perPage});
 }, {reactive: true})(CodeListContainer);
