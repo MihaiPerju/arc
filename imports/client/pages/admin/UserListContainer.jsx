@@ -83,10 +83,6 @@ class UserListContainer extends Pager {
         this.setState({range, page: nextPage, currentClient: null});
     };
 
-    componentWillReceiveProps(props) {
-        console.log(props);
-    }
-
     render() {
         const {data, loading, error} = this.props;
         const {usersSelected, currentUser, create, total, range} = this.state;
