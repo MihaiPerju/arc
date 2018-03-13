@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import ContactTypes from '/imports/api/clients/enums/contactTypes';
+import ContactTypes from '/imports/api/facilities/enums/contactTypes';
 
 export default new SimpleSchema ({
     contactType: {
