@@ -42,7 +42,7 @@ export default class extends React.Component {
         this.getQuery().getCount((err, res) => {
             this.setState({total: res});
         })
-    }
+    };
 
     getPagerOptions() {
         return {
