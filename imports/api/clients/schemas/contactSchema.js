@@ -9,7 +9,7 @@ export default new SimpleSchema({
     contactType: {
         label: 'Contact type',
         type: String,
-        allowedValues: [ContactTypes.TECHNICAL, ContactTypes.MANAGEMENT, ContactTypes.OTHER],
+        allowedValues: [ContactTypes.ADMIN, ContactTypes.TECH, ContactTypes.REP, ContactTypes.MANAGER],
         optional: true
     },
     firstName: {
