@@ -8,17 +8,30 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from '../../../api/clients/queries/listClients';
 import Loading from '/imports/client/lib/ui/Loading';
 import Notifier from '/imports/client/lib/Notifier';
+import Pager from "../../lib/Pager";
+import PagerService from "../../lib/PagerService";
 
-class ClientContainer extends Component {
+class ClientContainer extends Pager {
     constructor() {
         super();
         this.state = {
+
+        };
+        _.extend(this.state, {
             currentClient: null,
             filter: false,
             clientsSelected: [],
-            create: false
-        };
+            create: false,
+            page: 1,
+            perPage: 2,
+            total: 0,
+            range: {}
+        });
+        this.query = query;
+    }
 
+    componentWillMount() {
+        this.nextPage(0);
     }
 
     setClient = (_id) => {
@@ -52,8 +65,7 @@ class ClientContainer extends Component {
                 return client;
             }
         }
-    }
-
+    };
 
     createForm = () => {
         this.setState({
@@ -79,9 +91,17 @@ class ClientContainer extends Component {
         });
     };
 
+    nextPage = (inc) => {
+        const {perPage, total, page} = this.state;
+        const nextPage = PagerService.setPage({page, perPage, total}, inc);
+        const range = PagerService.getRange(nextPage, perPage);
+        FlowRouter.setQueryParams({page: nextPage});
+        this.setState({range, page: nextPage, currentClient: null});
+    };
+
     render() {
         const {data, loading, error} = this.props;
-        const {clientsSelected, currentClient, create} = this.state;
+        const {clientsSelected, currentClient, create,range, total} = this.state;
         const client = this.getClient();
 
         if (loading) {
@@ -109,6 +129,9 @@ class ClientContainer extends Component {
                         module="Client"
                         create={this.createForm}
                         closeForm={this.closeForm}
+                        nextPage={this.nextPage}
+                        range={range}
+                        total={total}
                     />
                 </div>
                 {
@@ -153,5 +176,7 @@ class RightSide extends Component {
 }
 
 export default withQuery((props) => {
-    return query.clone();
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 2;
+    return PagerService.setQuery(query, {page, perPage});
 }, {reactive: true})(ClientContainer);
