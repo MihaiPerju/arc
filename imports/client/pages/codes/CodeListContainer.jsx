@@ -10,17 +10,26 @@ import query from '/imports/api/codes/queries/listCodes';
 import Loading from '/imports/client/lib/ui/Loading';
 import {objectFromArray} from '/imports/api/utils';
 import Notifier from '/imports/client/lib/Notifier';
+import Pager from "../../lib/Pager";
+import PagerService from "../../lib/PagerService";
 
-class CodeListContainer extends Component {
+class CodeListContainer extends Pager {
     constructor() {
         super();
-        this.state = {
+        _.extend(this.state, {
             codesSelected: [],
             currentCode: null,
-            filter: false,
-            create: false
-        };
-        this.showFilterBar = this.showFilterBar.bind(this);
+            create: false,
+            page: 1,
+            perPage: 4,
+            total: 0,
+            range: {}
+        });
+        this.query = query;
+    }
+
+    componentWillMount() {
+        this.nextPage(0);
     }
 
     showFilterBar() {
@@ -73,9 +82,17 @@ class CodeListContainer extends Component {
         });
     };
 
+    nextPage = (inc) => {
+        const {perPage, total, page} = this.state;
+        const nextPage = PagerService.setPage({page, perPage, total}, inc);
+        const range = PagerService.getRange(nextPage, perPage);
+        FlowRouter.setQueryParams({page: nextPage});
+        this.setState({range, page: nextPage, currentClient: null});
+    };
+
     render() {
         const {data, loading, error} = this.props;
-        const {codesSelected, currentCode, create} = this.state;
+        const {codesSelected, currentCode, create, range, total} = this.state;
         const code = objectFromArray(data, currentCode);
 
         if (loading) {
@@ -98,7 +115,11 @@ class CodeListContainer extends Component {
                         setCode={this.setCode}
                         codes={data}
                     />
-                    <PaginationBar module="Code" create={this.createForm}/>
+                    <PaginationBar create={this.createForm}
+                                   nextPage={this.nextPage}
+                                   module="Code"
+                                   range={range}
+                                   total={total}/>
                 </div>
                 {
                     (currentCode || create) &&
@@ -141,5 +162,7 @@ class RightSide extends Component {
 }
 
 export default withQuery((props) => {
-    return query.clone();
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 4;
+    return PagerService.setQuery(query, {page, perPage});
 }, {reactive: true})(CodeListContainer);

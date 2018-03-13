@@ -14,16 +14,12 @@ import PagerService from "../../lib/PagerService";
 class ClientContainer extends Pager {
     constructor() {
         super();
-        this.state = {
-
-        };
         _.extend(this.state, {
             currentClient: null,
-            filter: false,
             clientsSelected: [],
             create: false,
             page: 1,
-            perPage: 2,
+            perPage: 13,
             total: 0,
             range: {}
         });
@@ -79,7 +75,7 @@ class ClientContainer extends Pager {
         this.setState({
             create: false
         });
-    }
+    };
 
     deleteAction = () => {
         const {clientsSelected} = this.state;
@@ -101,7 +97,7 @@ class ClientContainer extends Pager {
 
     render() {
         const {data, loading, error} = this.props;
-        const {clientsSelected, currentClient, create,range, total} = this.state;
+        const {clientsSelected, currentClient, create, range, total} = this.state;
         const client = this.getClient();
 
         if (loading) {
@@ -116,8 +112,7 @@ class ClientContainer extends Pager {
                 <div className={
                     currentClient ? 'left__side' : create ? 'left__side' : 'left__side full__width'
                 }>
-                    <SearchBar btnGroup={clientsSelected.length} filter={this.showFilterBar}
-                               deleteAction={this.deleteAction}/>
+                    <SearchBar btnGroup={clientsSelected.length} deleteAction={this.deleteAction}/>
                     <ClientList
                         class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         setClient={this.setClient.bind(this)}
@@ -177,6 +172,6 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
-    const perPage = 2;
+    const perPage = 13;
     return PagerService.setQuery(query, {page, perPage});
 }, {reactive: true})(ClientContainer);

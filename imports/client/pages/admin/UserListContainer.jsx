@@ -1,51 +1,38 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
-import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import UserList from './components/UserList.jsx';
 import UserContent from './UserContent.jsx';
 import CreateUser from './CreateUser.jsx';
-import { withQuery } from 'meteor/cultofcoders:grapher-react';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import query from '/imports/api/users/queries/listUsers';
 import Loading from '/imports/client/lib/ui/Loading';
-import { objectFromArray } from '/imports/api/utils';
+import {objectFromArray} from '/imports/api/utils';
 import Notifier from '/imports/client/lib/Notifier';
+import Pager from "../../lib/Pager";
+import PagerService from "../../lib/PagerService";
 
-class UserListContainer extends Component {
-    constructor () {
+class UserListContainer extends Pager {
+    constructor() {
         super();
-        this.state = {
-            rightSide: false,
-            btnGroup: false,
-            filter: false,
+
+        _.extend(this.state, {
             usersSelected: [],
             currentUser: null,
-            create: false
-        };
-        this.renderRightSide = this.renderRightSide.bind(this);
-        this.showBtnGroup = this.showBtnGroup.bind(this);
-        this.showFilterBar = this.showFilterBar.bind(this);
-    }
-
-    renderRightSide () {
-        this.setState({
-            rightSide: true
+            create: false,
+            page: 1,
+            perPage: 3,
+            total: 0,
+            range: {}
         });
+        this.query = query;
     }
 
-    showBtnGroup () {
-        this.setState({
-            btnGroup: !this.state.btnGroup
-        });
+    componentWillMount() {
+        this.nextPage(0);
     }
 
-    showFilterBar () {
-        this.setState({
-            filter: !this.state.filter
-        });
-    }
-
-    selectUser (objectId) {
+    selectUser(objectId) {
         const {usersSelected} = this.state;
         if (usersSelected.includes(objectId)) {
             usersSelected.splice(usersSelected.indexOf(objectId), 1);
@@ -55,7 +42,7 @@ class UserListContainer extends Component {
         this.setState({usersSelected});
     }
 
-    setUser (id) {
+    setUser(id) {
         const {currentUser} = this.state;
         if (currentUser === id) {
             this.setState({currentUser: null});
@@ -67,8 +54,8 @@ class UserListContainer extends Component {
     createForm = () => {
         this.setState({
             currentUser: false,
-            create: true,
-            rightSide: true
+            rightSide: true,
+            create: true
         });
     };
 
@@ -88,10 +75,21 @@ class UserListContainer extends Component {
         });
     };
 
-    render () {
+    nextPage = (inc) => {
+        const {perPage, total, page} = this.state;
+        const nextPage = PagerService.setPage({page, perPage, total}, inc);
+        const range = PagerService.getRange(nextPage, perPage);
+        FlowRouter.setQueryParams({page: nextPage});
+        this.setState({range, page: nextPage, currentClient: null});
+    };
+
+    render() {
         const {data, loading, error} = this.props;
-        const {usersSelected, currentUser, create} = this.state;
+        const {usersSelected, currentUser, create, total, range} = this.state;
         const user = objectFromArray(data, currentUser);
+
+        console.log("We pass:");
+        console.log(data);
 
         if (loading) {
             return <Loading/>;
@@ -104,12 +102,9 @@ class UserListContainer extends Component {
         return (
             <div className="cc-container">
                 <div className={(currentUser || create) ? 'left__side' : 'left__side full__width'}>
-                    <SearchBar btnGroup={usersSelected.length} filter={this.showFilterBar}
-                               deleteAction={this.deleteAction}/>
-                    {this.state.filter ? <FilterBar/> : null}
+                    <SearchBar btnGroup={usersSelected.length} deleteAction={this.deleteAction}/>
                     <UserList
                         class={this.state.filter ? 'task-list decreased' : 'task-list'}
-                        renderContent={this.renderRightSide}
                         selectUser={this.selectUser.bind(this)}
                         setUser={this.setUser.bind(this)}
                         showBtnGroup={this.showBtnGroup}
@@ -118,17 +113,20 @@ class UserListContainer extends Component {
                         users={data}
                     />
                     <PaginationBar
-                        module="User"
-                        create={this.createForm}
                         closeForm={this.closeForm}
+                        create={this.createForm}
+                        nextPage={this.nextPage}
+                        module="User"
+                        range={range}
+                        total={total}
                     />
                 </div>
                 {
                     (currentUser || create) &&
                     <RightSide
-                        user={user}
-                        create={create}
                         close={this.closeForm}
+                        create={create}
+                        user={user}
                     />
                 }
             </div>
@@ -137,20 +135,20 @@ class UserListContainer extends Component {
 }
 
 class RightSide extends Component {
-    constructor () {
+    constructor() {
         super();
         this.state = {
             fade: false
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         setTimeout(() => {
             this.setState({fade: true});
         }, 300);
     }
 
-    render () {
+    render() {
         const {user, create, close} = this.props;
         const {fade} = this.state;
         return (
@@ -164,5 +162,12 @@ class RightSide extends Component {
 }
 
 export default withQuery((props) => {
-    return query.clone();
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 3;
+    console.log("Normally:");
+    PagerService.setQuery(query, {page, perPage}).fetch((err, res) => {
+        console.log(err);
+        console.log(res);
+    });
+    return PagerService.setQuery(query, {page, perPage});
 }, {reactive: true})(UserListContainer);
