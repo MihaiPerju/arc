@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
-import {AutoForm, AutoField} from '/imports/ui/forms';
-import SimpleSchema from "simpl-schema";
+import React, { Component } from 'react';
+import { AutoForm, AutoField } from '/imports/ui/forms';
+import SimpleSchema from 'simpl-schema';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import Dropdown from './Dropdown';
 import classNames from 'classnames';
+import Dialog from '/imports/client/lib/ui/Dialog';
 
 export default class SearchBar extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             active: false,
@@ -15,7 +16,7 @@ export default class SearchBar extends Component {
         };
     }
 
-    manageFilterBar() {
+    manageFilterBar () {
         const {active, filter} = this.state;
         this.setState({
             active: !active,
@@ -24,7 +25,7 @@ export default class SearchBar extends Component {
         this.props.decrease();
     }
 
-    onHandleChange() {
+    onHandleChange () {
         const {changeFilters} = this.props;
         const newFilters = this.refs.filters.state.modelSync;
 
@@ -48,7 +49,7 @@ export default class SearchBar extends Component {
                     delete newFilters.clientName;
                     changeFilters(newFilters);
                 }
-            })
+            });
         }
     }
 
@@ -56,12 +57,12 @@ export default class SearchBar extends Component {
         if (!this.state.dropdown) {
             document.addEventListener('click', this.outsideClick, false);
         } else {
-            document.removeEventListener('click', this.outsideClick, false)
+            document.removeEventListener('click', this.outsideClick, false);
         }
         this.setState({
             dropdown: !this.state.dropdown
-        })
-    }
+        });
+    };
 
     outsideClick = (e) => {
         if (this.node.contains(e.target)) {
@@ -73,9 +74,9 @@ export default class SearchBar extends Component {
 
     nodeRef = (node) => {
         this.node = node;
-    }
+    };
 
-    render() {
+    render () {
         const {filter, active, dropdown} = this.state;
         const {options, btnGroup, deleteAction} = this.props;
         const classes = classNames({
@@ -98,13 +99,13 @@ export default class SearchBar extends Component {
                     </div>
                     <div className="search-bar__wrapper">
                         {btnGroup ? <BtnGroup deleteAction={deleteAction}/> : null}
-                        <div className={btnGroup ? "search-input" : "search-input full__width"}>
+                        <div className={btnGroup ? 'search-input' : 'search-input full__width'}>
                             <div className="form-group">
                                 <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
                             </div>
                         </div>
 
-                        <div className={active ? "filter-block active" : "filter-block"}
+                        <div className={active ? 'filter-block active' : 'filter-block'}
                              onClick={this.manageFilterBar.bind(this)}>
                             <button><i className="icon-filter"/></button>
                         </div>
@@ -114,40 +115,70 @@ export default class SearchBar extends Component {
                     filter && <FilterBar options={options}/>
                 }
             </AutoForm>
-        )
+        );
     }
 }
 
 class BtnGroup extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
-            in: false
-        }
+            in: false,
+            dialogIsActive: false
+        };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         setTimeout(() => {
             this.setState({in: true});
         }, 1);
     }
 
-
     deleteAction = () => {
+        this.setState({
+            dialogIsActive: true
+        });
+        console.log('delete called');
+    };
+
+    closeDialog = () => {
+        this.setState({
+            dialogIsActive: false
+        });
+    };
+
+    confirmDelete = () => {
+        this.setState({
+            dialogIsActive: false
+        });
         this.props.deleteAction();
     };
 
-    render() {
+    render () {
         const {deleteAction} = this.props;
+        const {dialogIsActive} = this.state;
         return (
-            <div className={this.state.in ? "btn-group in" : "btn-group"}>
+            <div className={this.state.in ? 'btn-group in' : 'btn-group'}>
                 <button><i className="icon-archive"/></button>
                 {
                     deleteAction &&
                     <button onClick={this.deleteAction}><i className="icon-trash-o"/></button>
                 }
+                {
+                    dialogIsActive && (
+                        <Dialog className="account-dialog" closePortal={this.closeDialog} title="Attention">
+                            <div className="form-wrapper">
+                                Are you sure you want to delete selected items ?
+                            </div>
+                            <div className="btn-group">
+                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                <button className="btn--light-blue" onClick={this.confirmDelete}>Confirm & delete</button>
+                            </div>
+                        </Dialog>
+                    )
+                }
             </div>
-        )
+        );
     }
 }
 
