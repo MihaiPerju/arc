@@ -141,9 +141,11 @@ export default class EditClient extends React.Component {
                                             <TextField labelHidden={true} placeholder="Last Name"
                                                        name="lastName"/>
                                         </div>
-                                        <div className="form-wrapper">
-                                            <AutoField labelHidden={true} placeholder="Contact type"
-                                                       name="contactType"/>
+                                        <div className="select-group">
+                                            <div className="form-wrapper">
+                                                <AutoField labelHidden={true} placeholder="Contact type"
+                                                           name="contactType"/>
+                                            </div>
                                         </div>
                                         <div className="form-wrapper">
                                             <TextField labelHidden={true} placeholder="Phone" name="phone"/>
