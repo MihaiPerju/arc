@@ -61,6 +61,10 @@ class LetterTemplateListContainer extends Component {
         Meteor.call('letterTemplate.deleteMany', templatesSelected, (err) => {
             if (!err) {
                 Notifier.success('Letter templates deleted !');
+                this.setState({
+                    currentTemplate: null,
+                    templatesSelected: []
+                })
             }
         });
     };
