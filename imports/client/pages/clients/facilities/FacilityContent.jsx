@@ -42,7 +42,7 @@ export default class FacilityContent extends Component {
                     edit ? <FacilityEdit facility={facility} close={this.setEdit}/> :
                         <div>
                             <FacilityContentHeader onEdit={this.setEdit} facility={facility}/>
-                            <ContactTable contacts={facility.contacts}/>
+                            <ContactTable contacts={facility && facility.contacts}/>
                             <PlacementBlock facility={facility}/>
                             <InventoryBlock facility={facility}/>
                             <PaymentBlock facility={facility}/>

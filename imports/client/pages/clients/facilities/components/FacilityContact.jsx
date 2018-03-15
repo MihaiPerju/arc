@@ -2,23 +2,17 @@ import React from 'react';
 import {Divider} from 'semantic-ui-react';
 
 export default class FacilityContact extends React.Component {
-    render () {
-        const {
-            contactType,
-            firstName,
-            lastName,
-            phone,
-            email,
-            notes} = this.props.contact;
+    render() {
+        const {contact} = this.props;
 
         return (
             <div>
-                <h6>First name: {firstName}</h6>
-                <h6>Last name: {lastName}</h6>
-                <h6>Type: {contactType}</h6>
-                <h6>Email: {email}</h6>
-                <h6>Phone: {phone}</h6>
-                <h6>Notes: {notes}</h6>
+                <h6>First name: {contact.firstName}</h6>
+                <h6>Last name: {contact.lastName}</h6>
+                <h6>Type: {contact.contactType}</h6>
+                <h6>Email: {contact.email}</h6>
+                <h6>Phone: {contact.phone}</h6>
+                <h6>Notes: {contact.notes}</h6>
                 <Divider/>
             </div>
         );
