@@ -10,8 +10,7 @@ export default new SimpleSchema({
     },
     category: {
         type: String,
-        allowedValues: CategoryList,
-        defaultValue: CATEGORIES.VENDOR,
+        allowedValues: CategoryList
     },
     description: {
         type: String,
