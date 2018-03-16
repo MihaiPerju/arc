@@ -1,11 +1,10 @@
-import CsvParseService from './CsvParseService';
 import Accounts from '/imports/api/tasks/collection';
 import Facilities from "../../collection";
 import moment from "moment/moment";
 import RulesEnum from "../../enums/importingRules";
-import Tasks from "../../../tasks/collection";
 import stateEnum from "../../../tasks/enums/states";
 import {Substates} from "../../../tasks/enums/substates";
+import Backup from "/imports/api/backup/collection";
 
 export default class TaskService {
     //For placement file
@@ -25,11 +24,14 @@ export default class TaskService {
 
         //Find account numbers of all old accounts that need to be updated and update
         const toUpdateAccountIds = this.getCommonElements(currAcctIds, existentAcctIds);
+
+        //Backup accounts
+        const toBackupAccounts = Accounts.find({acctNum: {$in: toUpdateAccountIds}}).fetch();
+        this.backupAccounts(toBackupAccounts);
+
         _.map(toUpdateAccountIds, (toUpdateAccountId) => {
             const toUpdateAccount = this.getAccount(accounts, toUpdateAccountId);
             Object.assign(toUpdateAccount, {fileId});
-
-            //Backup the old accounts that need to be modified
 
             Accounts.update({acctNum: toUpdateAccount.acctNum}, {
                     $set: toUpdateAccount
@@ -56,6 +58,11 @@ export default class TaskService {
             Object.assign(newAccount, {facilityId, clientId, fileId});
             Accounts.insert(newAccount);
         });
+    }
+
+    static backupAccounts(accounts) {
+        const rawBackup = Backup.rawCollection();
+        rawBackup.insert(accounts);
     }
 
     static getAccount(accounts, acctNum) {
