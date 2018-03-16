@@ -209,7 +209,7 @@ export default class TaskService {
         //Updating old accounts
         oldAccounts.map((account) => {
             const {acctNum} = account;
-            Accounts.update({acctNum}, {
+            Accounts.update({acctNum, facilityId}, {
                 $set: account
             });
         });
@@ -223,8 +223,6 @@ export default class TaskService {
             if (Accounts.findOne({acctNum: account.acctNum})) {
                 oldAccounts.push(account);
             } else {
-                account.state = stateEnum.ARCHIVED;
-                account.substate = Substates.SELF_RETURNED;
                 newAccounts.push(account);
             }
         });
