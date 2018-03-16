@@ -13,14 +13,70 @@ export default class TaskService {
 
         const {labels, importRules} = this.standardize(results, rules);
 
-        const accounts = this.convertToAccounts(results, importRules, labels);
         const clientId = this.getClientIdByFacilityId(facilityId);
 
-        // Creating accounts
-        accounts.map((account) => {
-            Object.assign(account, {facilityId, clientId});
-            Accounts.insert(account);
+        const accounts = this.convertToAccounts(results, importRules, labels);
+        const existentAccounts = Accounts.find({facilityId}).fetch();
+
+        //Find account numbers of all created accounts and existent accounts
+        const currAcctIds = this.getAcctNumbers(accounts);
+        const existentAcctIds = this.getAcctNumbers(existentAccounts);
+
+
+        //Find account numbers of all old accounts that need to be updated and update
+        const toUpdateAccountIds = this.getCommonElements(currAcctIds, existentAcctIds);
+        _.map(toUpdateAccountIds, (toUpdateAccountId) => {
+            const toUpdateAccount = this.getAccount(accounts, toUpdateAccountId);
+
+            Accounts.update({acctNum: toUpdateAccount.acctNum}, {
+                    $set: toUpdateAccount
+                }
+            );
         });
+
+        //Find account numbers of all old accounts that need to be archived and archive
+        const oldAccountIds = this.getDifferentElements(existentAcctIds, toUpdateAccountIds);
+        _.map(oldAccountIds, (oldAccountId) => {
+            Accounts.update({acctNum: oldAccountId}, {
+                    $set: {
+                        state: stateEnum.ARCHIVED,
+                        substate: Substates.SELF_RETURNED
+                    }
+                }
+            );
+        });
+
+        //Find account numbers of all new accounts that need to be inserted and insert
+        const newAccountIds = this.getDifferentElements(currAcctIds, existentAcctIds);
+        _.map(newAccountIds, (newAccountId) => {
+            const newAccount = this.getAccount(accounts, newAccountId);
+            Object.assign(newAccount, {facilityId, clientId});
+            Accounts.insert(newAccount);
+        });
+    }
+
+    static getAccount(accounts, acctNum) {
+        return _.find(accounts, function (account) {
+            return account.acctNum === acctNum;
+        });
+    }
+
+    static getCommonElements(arr1, arr2) {
+        return _.filter(arr1, function (id) {
+            return arr2.indexOf(id) > -1;
+        });
+    }
+
+    static getDifferentElements(arr1, arr2) {
+        return _.filter(arr1, function (id) {
+            return arr2.indexOf(id) === -1;
+        });
+    }
+
+    static getAcctNumbers(accounts) {
+        return _.map(accounts, (account) => {
+            return account.acctNum;
+        })
     }
 
     static standardize(results, rules) {
