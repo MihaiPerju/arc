@@ -3,6 +3,9 @@ import Papa from 'papaparse';
 import fs from 'fs';
 import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
 import ParseService from '/imports/api/facilities/server/services/CsvParseService';
+import Files from '/imports/api/files/collection';
+import os from 'os';
+import Facilities from '/imports/api/facilities/collection';
 
 createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}) => {
 
@@ -11,17 +14,33 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}
     }
     const importRules = ParseService.getImportRules(facilityId, 'placementRules');
 
-    for (index in filenames) {
-        const stream = fs.readFileSync(filenames[index]);
-        const csvString = stream.toString();
+    //Parsing and getting the CSV like a string
+    let fileName = filenames[0].replace(os.tmpDir() + '/', '');
+    const stream = fs.readFileSync(filenames[0]);
+    const csvString = stream.toString();
 
-        Papa.parse(csvString, {
-                chunk: (results) => {
-                    TaskService.upload(results.data, importRules, facilityId);
-                }
+
+    //Keep reference to previous file
+    const {fileId} = Facilities.findOne({_id: facilityId});
+    const newFileId = Files.insert({fileName, previousFileId: fileId});
+
+    //Add reference to facility
+    Facilities.update({_id: facilityId}, {
+        $set: {
+            fileId: newFileId
+        }
+    });
+
+    //Pass links to accounts to link them too
+    const links = {facilityId, fileId: newFileId};
+
+    Papa.parse(csvString, {
+            chunk: (results) => {
+                TaskService.upload(results.data, importRules, links);
             }
-        );
-    }
+        }
+    );
+
 
     success();
 });

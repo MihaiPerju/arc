@@ -9,7 +9,7 @@ import {Substates} from "../../../tasks/enums/substates";
 
 export default class TaskService {
     //For placement file
-    static upload(results, rules, facilityId) {
+    static upload(results, rules, {fileId, facilityId}) {
 
         const {labels, importRules} = this.standardize(results, rules);
 
@@ -27,6 +27,8 @@ export default class TaskService {
         const toUpdateAccountIds = this.getCommonElements(currAcctIds, existentAcctIds);
         _.map(toUpdateAccountIds, (toUpdateAccountId) => {
             const toUpdateAccount = this.getAccount(accounts, toUpdateAccountId);
+
+            //Backup the old accounts that need to be modified
 
             Accounts.update({acctNum: toUpdateAccount.acctNum}, {
                     $set: toUpdateAccount
@@ -50,7 +52,7 @@ export default class TaskService {
         const newAccountIds = this.getDifferentElements(currAcctIds, existentAcctIds);
         _.map(newAccountIds, (newAccountId) => {
             const newAccount = this.getAccount(accounts, newAccountId);
-            Object.assign(newAccount, {facilityId, clientId});
+            Object.assign(newAccount, {facilityId, clientId, fileId});
             Accounts.insert(newAccount);
         });
     }
