@@ -7,5 +7,8 @@ export default new SimpleSchema({
     previousFileId: {
         type: String,
         optional: true
+    },
+    facilityId: {
+        type: String
     }
 });

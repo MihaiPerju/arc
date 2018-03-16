@@ -22,7 +22,7 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}
 
     //Keep reference to previous file
     const {fileId} = Facilities.findOne({_id: facilityId});
-    const newFileId = Files.insert({fileName, previousFileId: fileId});
+    const newFileId = Files.insert({fileName, facilityId, previousFileId: fileId});
 
     //Add reference to facility
     Facilities.update({_id: facilityId}, {

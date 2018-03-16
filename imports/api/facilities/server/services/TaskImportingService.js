@@ -27,6 +27,7 @@ export default class TaskService {
         const toUpdateAccountIds = this.getCommonElements(currAcctIds, existentAcctIds);
         _.map(toUpdateAccountIds, (toUpdateAccountId) => {
             const toUpdateAccount = this.getAccount(accounts, toUpdateAccountId);
+            Object.assign(toUpdateAccount, {fileId});
 
             //Backup the old accounts that need to be modified
 

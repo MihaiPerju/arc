@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import FacilityContentHeader from './components/FacilityContent/FacilityContentHeader';
 import ContactTable from './components/FacilityContent/ContactTable';
+import FacilityFiles from './components/FacilityContent/FacilityFiles';
 import PlacementBlock from './components/FacilityContent/PlacementBlock';
 import InventoryBlock from './components/FacilityContent/InventoryBlock';
 import PaymentBlock from './components/FacilityContent/PaymentBlock';
@@ -43,6 +44,7 @@ export default class FacilityContent extends Component {
                         <div>
                             <FacilityContentHeader onEdit={this.setEdit} facility={facility}/>
                             <ContactTable contacts={facility && facility.contacts}/>
+                            <FacilityFiles facilityId={facility && facility._id}/>
                             <PlacementBlock facility={facility}/>
                             <InventoryBlock facility={facility}/>
                             <PaymentBlock facility={facility}/>
