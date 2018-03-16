@@ -28,22 +28,25 @@ class SelectMulti extends React.Component {
             id,
             label,
             options,
+            labelHidden,
+            placeholder,
             ...props
         } = this.props;
         const {value} = this.state;
 
         return (
             <div {...filterDOMProps(props)}>
-                {label && (
+                {label && !labelHidden && (
                     <label htmlFor={id}>
                         {label}
                     </label>
                 )}
                 <Select
-                    options={options}
-                    multi={true}
+                    placeholder={placeholder}
                     onChange={this.onChange}
+                    options={options}
                     value={value}
+                    multi={true}
                 />
             </div>
         );

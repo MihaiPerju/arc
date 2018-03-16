@@ -91,5 +91,15 @@ Meteor.methods({
         Security.checkAdmin(this.userId);
 
         Users.remove({_id: userId});
+    },
+
+    'admin.deleteManyUsers'(userIds) {
+        Security.checkAdmin(this.userId);
+
+        _.each(userIds, (_id) => {
+            Users.remove({_id});
+        });
     }
+
+
 });

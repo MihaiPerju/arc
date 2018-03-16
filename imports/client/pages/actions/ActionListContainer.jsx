@@ -1,84 +1,163 @@
-import React, { Component } from 'react';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/actions/queries/actionList';
+import React, {Component} from 'react';
+import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
+import FilterBar from '/imports/client/lib/FilterBar.jsx';
+import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import ActionList from './components/ActionList.jsx';
-import { createQueryContainer } from 'meteor/cultofcoders:grapher-react';
-import SearchInput from "/imports/client/lib/SearchInput.jsx";
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
-import {Header} from 'semantic-ui-react'
+import ActionContent from './ActionContent.jsx';
+import ActionCreate from './ActionCreate.jsx';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import query from '/imports/api/actions/queries/actionList';
+import Loading from '/imports/client/lib/ui/Loading';
+import {objectFromArray} from '/imports/api/utils';
+import Notifier from '/imports/client/lib/Notifier';
+import Pager from "../../lib/Pager";
+import PagerService from "../../lib/PagerService";
 
-export default class ActionListContainer extends Pager {
+class ActionListContainer extends Pager {
     constructor() {
         super();
-
         _.extend(this.state, {
-            perPage: 3,
-            filters: {},
+            actionsSelected: [],
+            currentAction: null,
+            create: false,
+            page: 1,
+            perPage: 13,
+            total: 0,
+            range: {}
         });
-
-        this.query = query.clone();
-        this.ActionListCont = createQueryContainer(this.query, ActionList, {
-            reactive: false
-        })
+        this.query = query;
     }
 
-    handleSearch = (searchValue) => {
-        this.updateFilters({
-            filters: {
-                title: {
-                    '$regex': searchValue,
-                    '$options': 'i'
-                }
-            }
-        })
-    };
+    componentWillMount() {
+        this.nextPage(0);
+    }
 
-    handleHeaderClick = (headerName) => {
-        const {sortBy, isSortAscend} = this.state;
-        if (sortBy === headerName) {
-            this.setState({
-                isSortAscend: !isSortAscend
-            }, this.handleSort);
+    setAction = (_id) => {
+        const {currentAction} = this.state;
+
+        if (currentAction === _id) {
+            this.setState({currentAction: null});
         } else {
-            this.setState({
-                sortBy: headerName,
-                isSortAscend: true
-            }, this.handleSort);
+            this.setState({currentAction: _id, create: false});
         }
     };
 
-    handleSort = () => {
-        const {sortBy, isSortAscend} = this.state;
+    selectAction = (_id) => {
+        const {actionsSelected} = this.state;
+        if (actionsSelected.includes(_id)) {
+            actionsSelected.splice(actionsSelected.indexOf(_id), 1);
+        } else {
+            actionsSelected.push(_id);
+        }
+        this.setState({actionsSelected});
+    };
 
-        this.updateFilters({
-            options: {
-                sort: {
-                    [sortBy]: isSortAscend ? 1 : -1
-                }
+    createForm = () => {
+        this.setState({
+            currentAction: false,
+            create: true,
+            rightSide: true
+        });
+    };
+
+    closeForm = () => {
+        this.setState({
+            create: false
+        });
+    };
+
+    deleteAction = () => {
+        const {actionsSelected} = this.state;
+
+        Meteor.call('action.deleteMany', actionsSelected, (err) => {
+            if (!err) {
+                Notifier.success('Actions deleted !');
             }
         });
     };
 
-    render() {
-        const params = _.extend({}, this.getPagerOptions());
-        const ActionListCont = this.ActionListCont;
-        const {sortBy, isSortAscend} = this.state;
+    nextPage = (inc) => {
+        const {perPage, total, page} = this.state;
+        const nextPage = PagerService.setPage({page, perPage, total}, inc);
+        const range = PagerService.getRange(nextPage, perPage);
+        FlowRouter.setQueryParams({page: nextPage});
+        this.setState({range, page: nextPage, currentClient: null});
+    };
 
+    render() {
+        const {data, loading, error} = this.props;
+        const {actionsSelected, currentAction, create, total, range} = this.state;
+        const action = objectFromArray(data, currentAction);
+
+        if (loading) {
+            return <Loading/>;
+        }
+
+        if (error) {
+            return <div>Error: {error.reason}</div>;
+        }
         return (
-            <Container className="page-container">
-                <div>
-                    <Header as="h2" textAlign="center">Actions</Header>
-                    <SearchInput handleSearch={this.handleSearch}/>                    
+            <div className="cc-container">
+                <div className={(currentAction || create) ? 'left__side' : 'left__side full__width'}>
+                    <SearchBar btnGroup={actionsSelected.length} deleteAction={this.deleteAction}/>
+                    <ActionList
+                        class={this.state.filter ? 'task-list decreased' : 'task-list'}
+                        actionsSelected={actionsSelected}
+                        selectAction={this.selectAction}
+                        currentAction={currentAction}
+                        setAction={this.setAction}
+                        actions={data}
+                    />
+                    <PaginationBar
+                        module="Action"
+                        create={this.createForm}
+                        nextPage={this.nextPage}
+                        range={range}
+                        total={total}
+                    />
                 </div>
-                <div className='m-t-30'>
-                    {this.getPaginator()}
-                    <ActionListCont params={params}
-                                    handleHeaderClick={this.handleHeaderClick}/>
-                    {this.getPaginator()}
-                </div>            
-            </Container>
+                {
+                    (currentAction || create) &&
+                    <RightSide
+                        action={action}
+                        create={create}
+                        close={this.closeForm}
+                    />
+                }
+            </div>
         );
     }
 }
+
+class RightSide extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        };
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    render() {
+        const {fade} = this.state;
+        const {action, create, close} = this.props;
+        return (
+            <div className={fade ? 'right__side in' : 'right__side'}>
+                {
+                    create ? <ActionCreate close={close}/> : <ActionContent action={action}/>
+                }
+            </div>
+        );
+    }
+}
+
+export default withQuery((props) => {
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+    return PagerService.setQuery(query, {page, perPage});
+}, {reactive: true})(ActionListContainer);

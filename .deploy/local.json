@@ -1,4 +1,5 @@
 {
+  "LOCAL_STORAGE_PATH": "/tmp/uploads",
   "public": {
     "AWS": {
       "url": "https://s3-eu-central-1.amazonaws.com/testing.cultofcoders.com"

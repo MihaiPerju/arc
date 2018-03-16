@@ -1,54 +1,27 @@
 import React, {Component} from 'react';
-import _ from 'underscore';
-import CodeSingle from './CodeSingle.jsx';
-import CodeHeadList from './CodeHeadList';
-import {Button, Icon, Table, Container} from 'semantic-ui-react'
-import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
+import CodeSingle from './CodeSingle';
 
 export default class CodeList extends Component {
     render() {
-        const {data, loading, error, handleHeaderClick, sortBy, isSortAscend} = this.props;
+        const {codes} = this.props;
+        const codeList = codes.map(function (code, index) {
+            const {setCode, selectCode, codesSelected, currentCode} = this.props;
+            return (
+                <CodeSingle
+                    codesSelected={codesSelected}
+                    currentCode={currentCode}
+                    selectCode={selectCode}
+                    setCode={setCode}
+                    code={code}
+                    key={index}
 
-        if (loading) {
-            return <div>Loading</div>
-        }
-
-        if (error) {
-            return <div>Error: {error.reason}</div>
-        }
-
+                />
+            )
+        }, this)
         return (
-            <Table>
-                <Table.Header>
-                    <CodeHeadList sortBy={sortBy}
-                                    isSortAscend={isSortAscend}
-                                    handleHeaderClick={handleHeaderClick}/>
-                </Table.Header>
-                {
-                    data.length
-                        ?
-                        <Table.Body>
-
-                            {_.map(data, (code, idx) => {
-                                return <CodeSingle code={code} key={idx}/>;
-                            })}
-                        </Table.Body>
-                        :
-                        <Table.Body>
-                            <NoDataFoundCell colSpan="100"/>
-                        </Table.Body>
-                }
-                <Table.Footer fullWidth>
-                        <Table.Row>
-                            <Table.HeaderCell colSpan='100'>
-                            <Button href='/code/create' floated='left' icon labelPosition='left' primary size='small'>
-                                <Icon name='plus' /> Create
-                            </Button>
-                            </Table.HeaderCell>
-                        </Table.Row>
-                </Table.Footer>
-            </Table>
-        
+            <div className={this.props.class}>
+                {codeList}
+            </div>
         );
     }
 }

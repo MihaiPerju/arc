@@ -1,28 +1,36 @@
+let commonRules = [
+    {value: 'acctNum', label: 'Account Number', optional: false},
+    {value: 'facCode', label: 'Facility Code', optional: true},
+    {value: 'ptType', label: 'Payment Type', optional: false},
+    {value: 'ptName', label: 'Payment Name', optional: false},
+    {value: 'dischrgDate', label: 'Discharge Date', optional: false},
+    {value: 'fbDate', label: 'Last Bill Date', optional: true},
+    {value: 'acctBal', label: 'Account Balance', optional: true},
+    {value: 'finClass', label: 'Financial Class', optional: true},
+    {value: 'admitDate', label: 'Admit Date', optional: true},
+    {value: 'medNo', label: 'Medical Number', optional: false}
+];
+
 export default {
-    importingRules: [
-        {value: 'acctNum', label: 'Account Number'},
-        {value: 'facCode', label: 'Facility Code'},
-        {value: 'ptType', label: 'Pt Type'},
-        {value: 'ptName', label: 'Pt Name'},
-        {value: 'dischrgDate', label: 'Discharge Date'},
-        {value: 'fbDate', label: 'Fb Date'},
-        {value: 'acctBal', label: 'Acct Balance'},
-        {value: 'finClass', label: 'Fin Class'},
-        {value: 'admitDate', label: 'Admit Date'},
-        {value: 'medNo', label: 'Med No'},
-        {value: 'insName', label: 'Insurance Name'},
-        {value: 'insName2', label: 'Insurance Name 2'},
-        {value: 'insName3', label: 'Insurance Name 3'},
-        {value: 'insCode', label: 'Insurance Code'},
-        {value: 'insCode2', label: 'Insurance Code 2'},
-        {value: 'insCode3', label: 'Insurance Code 3'},
-        {value: 'insBal', label: 'Insurance Balance'},
-        {value: 'insBal2', label: 'Insurance Balance 2'},
-        {value: 'insBal3', label: 'Insurance Balance 3'}
+    inventoryRules: commonRules,
+    placementRules: commonRules,
+    paymentRules: [
+        {value: 'ptName', label: 'Patient Name', optional: true},
+        {value: 'acctNum', label: 'Account Number', optional: false},
+        {value: 'admitDate', label: 'Admit Date', optional: true},
+        {value: 'dischrgDate', label: 'Discharge Date', optional: true},
+        {value: 'payorCode', label: 'Payor Code', optional: false},
+        {value: 'insName', label: 'Insurance Name', optional: true},
+        {value: 'newAcctBal', label: 'New Account Balance', optional: true},
+        {value: 'ptBal', label: 'Payment Balance', optional: true},
+        {value: 'finClass', label: 'Financial Class', optional: true},
+        {value: 'transDate', label: 'Transaction Date', optional: false},
+        {value: 'transType', label: 'Transaction Type', optional: false},
+        {value: 'transAmount', label: 'Transaction Amount', optional: false}
     ],
     types: {
-        dates: ['dischrgDate', 'fbDate', 'admitDate'],
-        numbers: ['acctBal', 'medNo', 'insCode', 'insCode2', 'insCode3', 'insBal', 'insBal2', 'insBal3'],
-        strings: ['acctNum', 'ptType', 'ptName', 'finClass', 'insName', 'insName2', 'insName3', 'facCode'],
+        dates: ['dischrgDate', 'fbDate', 'admitDate', 'transDate'],
+        numbers: ['acctBal', 'medNo', 'insCode', 'insBal', 'newAcctBal', 'ptBal', 'transAmount'],
+        strings: ['transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode'],
     }
 }

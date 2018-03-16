@@ -1,6 +1,6 @@
 import React from 'react';
 import RegionSchema from '/imports/api/regions/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
@@ -15,34 +15,51 @@ export default class RegionCreate extends React.Component {
     }
 
     onSubmit(data) {
+        data.clientId = FlowRouter.current().params.id;
         Meteor.call('region.create', data, (err) => {
             if (!err) {
                 Notifier.success('Region added!');
-                FlowRouter.go('/region/list');
+                this.onClose();
             } else {
                 Notifier.error(err.reason);
             }
         })
     }
 
+    onCreateRegion = () => {
+        const {form} = this.refs;
+        form.submit();
+    }
+
+    onClose = () =>{
+        const {close} = this.props;
+        close();
+    }
+
     render() {
+        const schema = RegionSchema.omit('clientId');
         return (
-            <Container className="page-container">
-                <Header as="h2" textAlign="center">Add a region</Header>
-                <AutoForm schema={RegionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
-
-                    {this.state.error && <div className="error">{this.state.error}</div>}
-
-                    <AutoField name="name"/>
-                    <ErrorField name="name"/>
-
-                    <Divider/>
-
-                    <Button fluid primary type="submit">
-                        Continue
-                    </Button>
-                </AutoForm>
-            </Container>
+            <div className="create-form">
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Add region</button>
+                    <div className="btn-group">
+                        <button
+                            onClick={this.onClose} className="btn-cancel">Cancel</button>
+                        <button onClick={this.onCreateRegion} className="btn--green">Confirm & save</button>
+                    </div>
+                </div>
+                <div className="create-form__wrapper">
+                    <div className="action-block i--block">
+                        <AutoForm schema={schema} onSubmit={this.onSubmit.bind(this)} ref="form">
+                            {this.state.error && <div className="error">{this.state.error}</div>}
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Name" name="name"/>
+                                <ErrorField name="name"/>
+                            </div>
+                        </AutoForm>
+                    </div>
+                </div>
+            </div>
         )
     }
 }

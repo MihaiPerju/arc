@@ -1,47 +1,36 @@
 import React, {Component} from 'react';
-import _ from 'underscore';
 import TaskSingle from './TaskSingle.jsx';
-import {Icon, Label, Menu, Table} from 'semantic-ui-react'
-import {Container} from 'semantic-ui-react'
-import NoDataFoundCell from '/imports/client/lib/NoDataFoundCell'
+import _ from "underscore";
 
 export default class TaskList extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    taskIsActive(task) {
+        const {tasksSelected} = this.props;
+        return _.includes(tasksSelected, task._id);
+    }
+
     render() {
-        const {data, loading, error} = this.props;
-
-        if (loading) {
-            return <div>Loading</div>
-        }
-
-        if (error) {
-            return <div>Error: {error.reason}</div>
-        }
+        const {data, checkTask, selectTask, currentTask, classes} = this.props;
 
         return (
-            <Table striped>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>Id</Table.HeaderCell>
-                        <Table.HeaderCell>Pacient Name</Table.HeaderCell>
-                        <Table.HeaderCell>Status</Table.HeaderCell>
-                        <Table.HeaderCell>Assignee</Table.HeaderCell>
-                        <Table.HeaderCell>Actions</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
+            <div className={classes}>
                 {
-                    data.length
-                        ?
-                        <Table.Body>
-                            {_.map(data, (task) => {
-                                return <TaskSingle task={task} key={task._id}/>;
-                            })}
-                        </Table.Body>
-                        :
-                        <Table.Body>
-                            <NoDataFoundCell colSpan="100"/>
-                        </Table.Body>
+                    data
+                    &&
+                    _.map(data, (task) => {
+                        return <TaskSingle active={this.taskIsActive(task)}
+                                           currentTask={currentTask}
+                                           selectTask={selectTask}
+                                           checkTask={checkTask}
+                                           update={this.update}
+                                           key={task._id}
+                                           task={task}/>
+                    })
                 }
-            </Table>
+            </div>
         );
     }
-}                   
+}

@@ -1,76 +1,81 @@
 import React from 'react';
-import {Container, Header, Divider, Button} from 'semantic-ui-react'
-import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, SelectField} from '/imports/ui/forms';
 import schema from '/imports/api/reports/schema'
 import RolesEnum from '/imports/api/users/enums/roles';
 import TaskFilterBuilder from './TaskFilterBuilder';
 import Notifier from '/imports/client/lib/Notifier';
 import {EJSON} from 'meteor/ejson'
 import ReportsService from '../../../api/reports/services/ReportsService';
-import ReportStepper from '/imports/client/pages/reports/components/ReportStepper';
 
 export default class ReportEdit extends React.Component {
     constructor() {
         super();
-
         this.state = {
-            hasGeneralInformation: false,
+            hasGeneralInformation: true,
             generalInformation: {},
-            allowedRoles: [],
+            filterBuilderData: {},
+            components: {},
+            filter: false,
         };
     }
 
     componentWillMount() {
-        const reportId = this.props.id;
+        this.initializeData(this.props);
+    }
 
-        Meteor.call('report.getById', reportId, (err, report) => {
-                if (!err) {
-                    let components = {};
+    componentWillReceiveProps = (props) => {
+        this.initializeData(props);
+    };
 
-                    for (field in report.filterBuilderData) {
-                        field = ReportsService.getInitialField(field);
+    initializeData = (props) => {
+        const {report} = props;
+        let components = {};
 
-                        components[field] = {
-                            isActive: true,
-                            name: field
-                        }
-                    }
+        for (field in report.filterBuilderData) {
+            field = ReportsService.getInitialField(field);
 
-                    const {name, allowedRoles, filterBuilderData} = report;
-
-                    this.setState({
-                        generalInformation: {
-                            name,
-                            allowedRoles
-                        },
-                        components,
-                        filterBuilderData
-                    });
-                }
-                else {
-                    Notifier.error(err.reason);
-                }
+            components[field] = {
+                isActive: true,
+                name: field
             }
-        );
+        }
 
-        let allowedRoles = [{value: RolesEnum.MANAGER, label: RolesEnum.MANAGER}];
+        const {name, allowedRoles, filterBuilderData} = report;
         this.setState({
-            allowedRoles
+            generalInformation: {
+                name,
+                allowedRoles
+            },
+            components,
+            filterBuilderData
+        });
+
+        this.setState({
+            allowedRoles: [{value: RolesEnum.MANAGER, label: RolesEnum.MANAGER}]
         })
     }
 
-    goNextStep(generalInformation) {
-        this.setState({
-            hasGeneralInformation: true,
-            generalInformation
-        });
-    }
+    onChange = (field, value) => {
+        let {generalInformation} = this.state;
 
-    goPreviousStep() {
-        this.setState({
-            hasGeneralInformation: false
-        });
-    }
+        //Not allowing to pick up filters if we don't have a name
+        if (field === 'name') {
+            if (value) {
+                this.setState({
+                    hasGeneralInformation: true,
+                })
+            } else {
+                this.setState({
+                    hasGeneralInformation: false
+                })
+            }
+        }
+        const newInformation = {};
+        newInformation[field] = value;
+        _.extend(generalInformation, generalInformation, newInformation);
+        this.setState({generalInformation});
+
+    };
 
     onSubmitFilters(filters, components, filterBuilderData) {
         //Setting state and creating/editing report
@@ -82,68 +87,77 @@ export default class ReportEdit extends React.Component {
         const {generalInformation} = this.state;
         _.extend(generalInformation, {mongoFilters: EJSON.stringify(filters), filterBuilderData});
 
-        const reportId = this.props.id;
-
-        Meteor.call('report.update', {generalInformation, reportId}, (err) => {
+        const {report} = this.props;
+        const {_id} = report;
+        Meteor.call('report.update', {generalInformation, _id}, (err) => {
             if (!err) {
                 Notifier.success("Report modified!");
-                FlowRouter.go('/reports/list');
+                this.onSetEdit();
             } else {
                 Notifier.error(err.reason);
             }
         })
     }
 
+    onSetEdit = () => {
+        const {setEdit} = this.props;
+        setEdit();
+    };
+
+    finish = () => {
+        const filterBuilder = this.refs.filterBuilder;
+        const filterForm = filterBuilder.refs.filters;
+        filterForm.submit();
+    };
+
     render() {
         const {hasGeneralInformation, allowedRoles, generalInformation, components, filterBuilderData} = this.state;
-
         return (
-            <Container className="page-container">
-                <div>
-                    <Header as="h2" textAlign="center">
-                        Edit report
-                    </Header>
+            <div className="create-form">
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Edit report</button>
+                    <div className="btn-group">
+                        <button onClick={this.onSetEdit} className="btn-cancel">Cancel</button>
+                        <button onClick={this.finish} className="btn--green">Confirm & save</button>
+                    </div>
+                </div>
 
-                    <ReportStepper hasGeneralInformation={hasGeneralInformation}/>
-
-                    {hasGeneralInformation
-                        ?
-                        <div>
+                <div className="create-form__wrapper">
+                    {/*General data*/}
+                    <div className="action-block">
+                        <div className="header__block">
+                            <div className="title-block text-uppercase">general data</div>
+                        </div>
+                        <AutoForm onChange={this.onChange}
+                                  ref="generalDataForm"
+                                  schema={schema}
+                                  model={generalInformation}>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Report name" name="name"/>
+                                <ErrorField name="name"/>
+                            </div>
+                            <div className="check-group">
+                                <SelectField options={allowedRoles}
+                                             name="allowedRoles"
+                                             ref="allowedRoles"/>
+                            </div>
+                        </AutoForm>
+                    </div>
+                    {
+                        hasGeneralInformation &&
+                        <div className="action-block">
+                            <div className="header__block">
+                                <div className="title-block text-uppercase">Edit filters for report</div>
+                            </div>
                             <TaskFilterBuilder
+                                onSubmitFilters={this.onSubmitFilters.bind(this)}
                                 filterBuilderData={filterBuilderData}
                                 components={components}
-                                onSubmitFilters={this.onSubmitFilters.bind(this)}/>
-
-                            <Divider/>
-
-                            <Button
-                                fluid
-                                secondary
-                                onClick={this.goPreviousStep.bind(this)}>
-                                Back
-                            </Button>
+                                ref="filterBuilder"/>
                         </div>
-                        :
-                        <AutoForm
-                            model={generalInformation}
-                            schema={schema}
-                            onSubmit={this.goNextStep.bind(this)} ref="form">
-
-                            <AutoField name="name"/>
-                            <ErrorField name="name"/>
-
-                            <SelectField name="allowedRoles"
-                                         options={allowedRoles}/>
-
-                            <Divider/>
-
-                            <Button primary fluid type="submit">
-                                Next
-                            </Button>
-                        </AutoForm>
                     }
                 </div>
-            </Container>
+            </div>
         )
     }
 }

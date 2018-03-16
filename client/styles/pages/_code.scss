@@ -1,0 +1,41 @@
+.code-content {
+    .label {
+        margin-left: 10px;
+    }
+    .main-content__header {
+        .title {
+            &:before {
+                content: '\f126';
+            }
+        }
+    }    
+    .note-list {
+        .note-item {
+            &:first-of-type {
+                margin-top: 0;
+            }
+        }
+    }
+    .note-item {
+        background: rgba($color-white, 0.6);
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 15px;
+        margin-top: 2px;
+        .note-info {
+            display: flex;
+            align-items: flex-start;
+        }
+        .note-time {
+            flex-shrink: 0;
+        }
+        .info {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 6px;
+            .text {
+                margin-top: 5px;
+            }
+        }
+    }
+}

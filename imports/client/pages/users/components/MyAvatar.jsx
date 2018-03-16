@@ -21,12 +21,12 @@ class MyAvatar extends React.Component {
         const user = this.props.user;
 
         return (
-            <div>
+            <div className="avatar-config">
                 {user.avatar && user.avatar.path
                     ?
-                    <div>
+                    <div className="avatar-config-display">
                         <img src={getImagePath(user.avatar.path)}/>
-                        <a href="" onClick={this.onRemoveAvatar.bind(this)}>Delete Avatar</a>
+                        <a  onClick={this.onRemoveAvatar.bind(this)}>Delete Avatar</a>
                     </div>
                     : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                 }

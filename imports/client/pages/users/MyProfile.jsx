@@ -1,13 +1,10 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import MyProfileSchema from '/imports/api/users/schemas/MyProfileSchema';
 import {Notifier, Loading} from '/imports/client/utils';
 import createUserContainer from '/imports/client/lib/createUserContainer';
 import MyAvatar from './components/MyAvatar';
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
 
 class MyProfile extends React.Component {
     constructor() {
@@ -42,30 +39,38 @@ class MyProfile extends React.Component {
         };
 
         return (
-            <Container className="page-container">
-                <MyAvatar user={user}/>
-                <AutoForm schema={MyProfileSchema} onSubmit={this.onSubmit} model={model}>
-                    {error && <div className="error">{error}</div>}
+            <div className="create-form" style={{minWidth: "600px", marginLeft: "20%"}}>
+                <div className="create-form__wrapper">
+                    <div className="action-block i--block">
+                        <MyAvatar user={user}/>
+                        <AutoForm schema={MyProfileSchema} onSubmit={this.onSubmit} model={model}>
+                            {error && <div className="error">{error}</div>}
 
-                    <AutoField name="profile.firstName"/>
-                    <ErrorField name="profile.firstName"/>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="First Name" name="profile.firstName"/>
+                                <ErrorField name="profile.firstName"/>
+                            </div>
 
-                    <AutoField name="profile.lastName"/>
-                    <ErrorField name="profile.lastName"/>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Last Name" name="profile.lastName"/>
+                                <ErrorField name="profile.lastName"/>
+                            </div>
 
-                    <AutoField name="email"/>
-                    <ErrorField name="email"/>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Email" name="email"/>
+                                <ErrorField name="email"/>
+                            </div>
 
-                    <AutoField name="profile.phoneNumber"/>
-                    <ErrorField name="profile.phoneNumber"/>
-
-                    <Divider/>
-
-                    <Button fluid primary type="submit">
-                        Update
-                    </Button>
-                </AutoForm>
-            </Container>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} placeholder="Phone Number" name="profile.phoneNumber"/>
+                                <ErrorField name="profile.phoneNumber"/>
+                            </div>
+                            <br/>
+                            <button type="submit" className="btn--green">Update</button>
+                        </AutoForm>
+                    </div>
+                </div>
+            </div>
         )
     }
 }

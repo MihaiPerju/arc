@@ -1,9 +1,10 @@
 import React from 'react';
-import FacilityContactList from './FacilityContactList.jsx';
-import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
-import FacilitySchema from '/imports/api/facilities/schema.js';
+import FacilityContactList from "./FacilityContactList.jsx";
+import RegionListQuery from '/imports/api/regions/queries/regionList.js';
+import {AutoForm, AutoField, ErrorField, SelectField} from 'uniforms-semantic';
+import FacilitySchema from "/imports/api/facilities/schema.js";
 import FacilityStatusEnum from '/imports/api/facilities/enums/statuses.js';
-import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
+import SelectSimple from '/imports/client/lib/uniforms/SelectSimple.jsx';
 import SelectUsersContainer from './SelectUsersContainer';
 import { Container, Divider, Button } from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
@@ -19,16 +20,21 @@ export default class FacilityForm extends React.Component {
         };
     }
 
-    componentWillMount () {
-        Meteor.call('regions.get', (err, regions) => {
-            if (!err) {
+
+    componentWillMount() {
+        RegionListQuery.clone({
+            filters: {
+                clientId: FlowRouter.current().params._id
+            }
+        }).fetch((err, regions) => {
+            if (!err){
                 this.setState({
                     regions
                 });
             } else {
                 Notifier.error('Couldn\'t get regions');
             }
-        });
+        })
     }
 
     onSubmit = (data) => {
@@ -94,8 +100,8 @@ export default class FacilityForm extends React.Component {
                         regionIds
                         &&
                         <div>
-                            <SelectMulti name="regionIds" options={regionIds}/>
-                            < ErrorField name="regionIds"/>
+                            <SelectField name="regionId" options={regionIds}/>
+                            < ErrorField name="regionId"/>
                         </div>
                     }
 

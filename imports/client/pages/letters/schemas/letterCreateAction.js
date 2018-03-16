@@ -12,5 +12,13 @@ export default new SimpleSchema ({
     },
     'letterTemplate.description': {
         type: String
-    }
+    },
+    attachmentIds: {
+        label: 'PDF attachments',
+        type: Array,
+        optional: true
+    },
+    'attachmentIds.$': {
+        type: String
+    },
 });

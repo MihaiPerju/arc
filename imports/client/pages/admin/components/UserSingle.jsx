@@ -1,83 +1,67 @@
-import React, { Component } from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import { Table, Label } from 'semantic-ui-react';
-import { Button, Dropdown } from 'semantic-ui-react';
-import RolesEnum from '/imports/api/users/enums/roles';
-import _ from 'underscore';
+import React, {Component} from 'react';
+import {getImagePath} from '/imports/api/utils';
+import classNames from 'classnames';
 
 export default class UserSingle extends Component {
-    deleteUser () {
-        const {user} = this.props;
+    constructor(props) {
+        super(props);
+        this.state = {
+            fontNormal: false,
+            open: false
+        }
+        // this.renderContent = this.renderContent.bind(this);
+    }
 
-        Meteor.call('admin.deleteUser', user._id, (err) => {
-            if (!err) {
-                Notifier.success('User deleted!');
-                FlowRouter.reload();
-            }
+    renderContent() {
+        this.setState({
+            fontNormal: true,
+            open: !this.state.open
         });
+        this.props.renderContent();
     }
 
-    userCanSuspend () {
-        return Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN);
-    }
-
-    suspendUser () {
-        const {user} = this.props;
-
-        Meteor.call('admin.suspendUser', user._id, (err) => {
-            if (!err) {
-                Notifier.success('User suspended !');
-                FlowRouter.reload();
-            }
+    changeTaskBg() {
+        this.setState({
+            bgYellow: !this.state.bgYellow
         });
+        this.props.showBtnGroup();
     }
 
-    resumeUser () {
-        const {user} = this.props;
-
-        Meteor.call('admin.resumeUser', user._id, (err) => {
-            if (!err) {
-                Notifier.success('User resumed !');
-                FlowRouter.reload();
-            }
-        });
+    setUser() {
+        const {user, setUser} = this.props;
+        setUser(user._id)
     }
 
-    render () {
-        const {user} = this.props;
+    onSelectUser(e) {
+        e.stopPropagation();
+        const {user, selectUser} = this.props;
+        selectUser(user._id)
+    }
+
+    render() {
+        const {user, setUser, usersSelected, open} = this.props;
+        const classes = classNames({
+            "list-item": true,
+            "user-item": true,
+            "bg--yellow": usersSelected.includes(user._id),
+            "open": open
+        })
+        // className={bgYellow ? "list-item user-item bg--yellow" : open ? "list-item user-item open" : "list-item user-item"}
         return (
-            <Table.Row>
-                <Table.Cell>{user.emails[0].address}</Table.Cell>
-                <Table.Cell>
-                    <div>
-                    {_.map(user.tags, (tag, idx) => {
-                        return <Label as='a' color='teal' tag>{tag.name}</Label>
-                    })}
-                    </div>
-                </Table.Cell>
-                <Table.Cell>
-                    <Dropdown button text='Action' icon={null} simple>
-                        <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Button primary href={'/admin/user/' + user._id + '/edit'}>Edit</Button>
-                            </Dropdown.Item>
-                            {
-                                user._id !== Meteor.userId() && this.userCanSuspend() &&
-
-                                <Dropdown.Item>
-                                    {user.profile.suspended ?
-                                        <Button onClick={this.resumeUser.bind(this)}>Resume</Button>
-                                        : <Button color="black" onClick={this.suspendUser.bind(this)}>Suspend</Button>
-                                    }
-                                </Dropdown.Item>
-                            }
-                            < Dropdown.Item>
-                                < Button color="red" onClick={this.deleteUser.bind(this)}>Delete</Button>
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Table.Cell>
-            </Table.Row>
+            <div
+                className={classes}
+                onClick={this.setUser.bind(this)}>
+                <div className="check-item">
+                    <input checked={usersSelected.includes(user._id)} type="checkbox" className="hidden"/>
+                    <label onClick={this.onSelectUser.bind(this)}></label>
+                </div>
+                <div className="row__block align-center">
+                    <div className="item-name text-blue">{user.emails && user.emails[0].address}</div>
+                    <img src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"}
+                         className="md-avatar img-circle"
+                         alt=""/>
+                </div>
+            </div>
         );
     }
 }

@@ -1,58 +1,65 @@
 import React, {Component} from 'react';
-import {Table} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import AssigneeSelect from './AssigneeSelect';
+import classNames from 'classnames';
+import moment from "moment/moment";
 
 export default class TaskSingle extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.state = {
+            fontNormal: false,
+            checked: false
+        };
     }
 
-    getOptions(users) {
-        if (!users) {
-            [];
-        }
-
-        let options = [];
-        for (user of users) {
-            let item = {
-                label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
-                value: user && user._id
-            };
-            options.push(item);
-        }
-        return options;
+    onCheck(e) {
+        e.stopPropagation();
+        const {checkTask, task} = this.props;
+        checkTask(task);
     }
 
-    getFirstOption(task, options) {
-        if (task.assigneeId) {
-            for (option of options) {
-                if (option.value === task.assigneeId) {
-                    return [option];
-                }
-            }
-        }
-        return [{label: 'Unassigned'}];
+    onSelectTask() {
+        const {selectTask, task} = this.props;
+        selectTask(task);
     }
 
     render() {
-        const {task} = this.props;
-        const options = this.getOptions(task && task.facility && task.facility.users);
-        let userOptions = this.getFirstOption(task, options);
-        userOptions = userOptions.concat(options);
+        const {task, active, currentTask} = this.props;
+        const classes = classNames({
+            'list-item task-item': true,
+            'open': task._id === currentTask,
+            'bg--yellow': active
+        });
 
         return (
-            <Table.Row>
-                <Table.Cell>{task._id}</Table.Cell>
-                <Table.Cell>{task.client && task.client.clientName}</Table.Cell>
-                <Table.Cell>{task.state}</Table.Cell>
-                <Table.Cell>
-                    <AssigneeSelect taskId={task._id} options={userOptions}/>
-                </Table.Cell>
-                <Table.Cell>
-                    <Button href={"/account/" + task._id + '/view'} primary>View</Button>
-                </Table.Cell>
-            </Table.Row>
+            <div className={classes}
+                 onClick={this.onSelectTask.bind(this)}
+            >
+                <div className="check-item">
+                    <input type="checkbox" checked={active} className="hidden"/>
+                    <label onClick={this.onCheck.bind(this)}/>
+                </div>
+                <div className="mark-task">
+                    <input type="checkbox" className="hidden"/>
+                    <label></label>
+                </div>
+                <div className="row__item">
+                    <div className="left__side">
+                        <div
+                            className={this.state.fontNormal ? 'person font-normal' : 'person'}>{task.client && task.client.clientName}</div>
+                    </div>
+                    <div className="right__side">
+                        <div className="pacient-id text-blue">
+                            {task.acctNum}
+                        </div>
+                        <div className="financial-class">O/D</div>
+                        <div className="time">{task && moment(task.createdAt).format(' hh:mm')}</div>
+                    </div>
+                </div>
+                <div className="row__item">
+                    <div className="price">{task.acctBal}</div>
+                    <div className="location">{task.facility && task.facility.name}</div>
+                </div>
+            </div>
         );
     }
 }

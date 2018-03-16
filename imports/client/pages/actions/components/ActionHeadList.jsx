@@ -16,6 +16,7 @@ export default class ActionHeadList extends React.Component {
                 <th>Description</th>
                 <th>Substates</th>
                 <th>Actions</th>
+                <th>Reason Codes</th>
             </tr>
         );
     }
