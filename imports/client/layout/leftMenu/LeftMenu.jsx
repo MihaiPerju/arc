@@ -4,10 +4,32 @@ import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
 import Menu from './Menu';
+import classNames from 'classnames';
 
 class LeftMenu extends Component {
+    constructor() {
+        super();
+        this.state = {
+            collapse: false
+        }
+    }
+
+    collapseMenu = () => {
+        const {collapse} = this.state;
+        this.setState({
+            collapse: !collapse
+        })
+    }
+
     render() {
         const user = this.props.user;
+        const {collapse} = this.state;
+
+        const menuClasses = classNames({
+            'left-menu': true,
+            'collapsed': collapse
+        });
+
         let routes = [
             {name: "/home", label: "Home"},
             {name: "/tasks", label: "Tasks"},
@@ -48,7 +70,7 @@ class LeftMenu extends Component {
         return (
             <div>
                 {user &&
-                <div className="left-menu">
+                <div className={menuClasses}>
                     <Menu routes={[
                         {name: "accounts", label: "Account", icon: 'user'},
                         {name: "accounts", label: "Review", icon: 'inbox'},
@@ -64,7 +86,9 @@ class LeftMenu extends Component {
                         {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
                         {name: "action/list", label: "Actions", icon: 'thumb-tack'}
                     ]}/>
-                    <div className="btn-collapse text-center"><i className="icon-angle-left"/></div>
+                    <div className="btn-collapse text-center" onClick={this.collapseMenu}>
+                        <i className="icon-angle-left"/>
+                    </div>
                 </div>
                 }
             </div>
