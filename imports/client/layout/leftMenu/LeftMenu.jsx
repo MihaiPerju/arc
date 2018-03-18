@@ -64,6 +64,7 @@ class LeftMenu extends Component {
                         {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
                         {name: "action/list", label: "Actions", icon: 'thumb-tack'}
                     ]}/>
+                    <div className="btn-collapse text-center"><i className="icon-angle-left"/></div>
                 </div>
                 }
             </div>
