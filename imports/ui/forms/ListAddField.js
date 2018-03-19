@@ -12,6 +12,7 @@ const ListAdd = ({
 
     return (
         <span
+            className="insurance-action add"
             {...filterDOMProps(props)}
             onClick={() => limitNotReached && parent.onChange(parent.value.concat([value]))}
         >

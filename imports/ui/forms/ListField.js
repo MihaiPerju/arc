@@ -16,10 +16,10 @@ const List = ({
     value,
     ...props
 }) =>
-    <ul {...filterDOMProps(props)}>
+    <div className="insurance-block" {...filterDOMProps(props)}>
         {label && (
-            <label>
-                {label}
+            <label className="add-insurance text-center">
+                <span>Add {label}</span>
 
                 <ListAddField name={`${name}.$`} initialCount={initialCount} />
             </label>
@@ -40,7 +40,7 @@ const List = ({
                 <ListItemField key={index} label={null} name={joinName(name, index)} {...itemProps} />
             )
         )}
-    </ul>
+    </div>
 ;
 
 export default connectField(List, {ensureValue: true, includeInChain: false});
