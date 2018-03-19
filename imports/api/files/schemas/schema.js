@@ -10,5 +10,9 @@ export default new SimpleSchema({
     },
     facilityId: {
         type: String
+    },
+    createdAt: {
+        type: Date,
+        defaultValue: new Date
     }
 });

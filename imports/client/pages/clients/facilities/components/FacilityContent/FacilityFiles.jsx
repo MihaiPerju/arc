@@ -62,5 +62,5 @@ class FacilityFiles extends Component {
 
 export default withQuery((props) => {
     const {facilityId} = props;
-    return query.clone({filters: {facilityId}})
+    return query.clone({filters: {facilityId}, options: {$sort: {createdAt: 1}}});
 }, {reactive: true})(FacilityFiles);
