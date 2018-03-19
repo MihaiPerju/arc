@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import classNames from 'classnames';
 
 export default class PaginationBar extends Component {
     constructor() {
@@ -33,6 +34,11 @@ export default class PaginationBar extends Component {
         if (total && total < max) {
             max = total;
         }
+        const btnClasses = classNames({
+            'toggle-form': true,
+            'invisible': buttonHidden
+        });
+
         return (
             <div className="pagination-bar">
                 <div className="pagination-bar__wrapper">
@@ -47,7 +53,7 @@ export default class PaginationBar extends Component {
                         <button onClick={this.onNextPage.bind(this, 1)} className="btn-next"><i
                             className="icon-angle-right"/></button>
                     </div>
-                    <div className="toggle-form" onClick={create} onMouseEnter={this.showTooltip}
+                    <div className={btnClasses} onClick={create} onMouseEnter={this.showTooltip}
                          onMouseLeave={this.closeTooltip}>{!buttonHidden && '+'}
                     </div>
                     {tooltip && !buttonHidden && < Tooltip module={module}/>}
