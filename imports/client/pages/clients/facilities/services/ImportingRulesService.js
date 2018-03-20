@@ -7,7 +7,7 @@ export default class ImportingRulesService {
             hasHeader: {
                 type: Boolean,
                 allowedValues: [true, false],
-                defaultValue: hasHeader,
+                defaultValue: hasHeader ? hasHeader : true,
                 label: 'File with header'
             },
         };
