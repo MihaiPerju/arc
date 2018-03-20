@@ -1,13 +1,10 @@
 import React from 'react';
 import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
-import { AutoForm, AutoField, ErrorField } from 'uniforms-semantic';
 import Notifier from '/imports/client/lib/Notifier';
-import { Container } from 'semantic-ui-react';
-import { Button } from 'semantic-ui-react';
-import { Divider } from 'semantic-ui-react';
-import { Header } from 'semantic-ui-react';
+import {AutoForm, AutoField, ErrorField, SelectField, LongTextField} from '/imports/ui/forms';
 import RichTextArea from '/imports/client/lib/uniforms/RichTextArea.jsx';
 import codesQuery from '/imports/api/codes/queries/listCodeNames';
+import { CategoryList } from '/imports/api/letterTemplates/enums/categories.js';
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class EditLetterTemplate extends React.Component {
@@ -15,7 +12,6 @@ export default class EditLetterTemplate extends React.Component {
         super();
 
         this.state = {
-            model: {},
             error: null,
             codes: []
         };
@@ -32,31 +28,31 @@ export default class EditLetterTemplate extends React.Component {
             }
         });
 
-        Meteor.call('letterTemplate.get', FlowRouter.current().params.id, (error, model) => {
-            if (!error) {
-                if (model) {
-                    this.setState({model});
-                } else {
-                    this.setState({error: 'Invalid request!'});
-                    Notifier.error('Invalid request!');
-                }
-            } else {
-                this.setState({error});
-                Notifier.error(error.reason);
-            }
-        });
     }
 
+    getCategories = (categories) => {
+        return categories.map((category, key) => ({value: category, label: category}));
+    };
+
     onSubmit = (data) => {
-        data.id = this.state.model._id;
         Meteor.call('letterTemplate.update', data, (err) => {
             if (!err) {
-                Notifier.success('Data saved');
-                FlowRouter.go('/letter-templates/list');
+                Notifier.success('Letter template updated');
+                this.onClose();
             } else {
                 Notifier.error(err.reason);
             }
         });
+    };
+
+    onCreate = () => {
+        const {form} = this.refs;
+        form.submit();
+    };
+
+    onClose = () => {
+        const {close} = this.props;
+        close();
     };
 
     getCodeOptions (codes) {
@@ -66,44 +62,43 @@ export default class EditLetterTemplate extends React.Component {
     }
 
     render () {
-        const {model} = this.state;
-        const codeIds = this.getCodeOptions(this.state.codes);
+        const {model} = this.props;
+        //const codeIds = this.getCodeOptions(this.state.codes);
+        const categories = this.getCategories(CategoryList);
 
         return (
-            <Container className="page-container">
-                <Header as="h2" textAlign="center">Edit Letter template</Header>
-                {
-                    this.state.error
-                        ? <div className="error">{this.state.error}</div>
-                        : <AutoForm model={model} schema={LetterTemplateSchema} onSubmit={this.onSubmit}
-                                    ref="form">
-
-                            <AutoField name="name"/>
-                            <ErrorField name="name"/>
-
-                            <RichTextArea name="body"/>
-                            <ErrorField name="body"/>
-
-                            <AutoField name="category"/>
-                            <ErrorField name="category"/>
-
-                            <AutoField name="description"/>
-                            <ErrorField name="description"/>
-
-                            {
-                                codeIds && model.codeIds &&
-                                <SelectMulti name="codeIds" options={codeIds}/>
-                            }
-
-                            <ErrorField name="codeIds"/>
-
-                            <Divider/>
-                            <Button fluid primary type="submit">
-                                Save
-                            </Button>
+            <div className="create-form letter-template-form">
+                <div className="create-form__bar">
+                    <button className="btn-add">+ Add letter template</button>
+                    <div className="btn-group">
+                        <button onClick={this.onClose} className="btn-cancel">Cancel</button>
+                        <button onClick={this.onCreate} className="btn--green">Confirm & save</button>
+                    </div>
+                </div>
+                <div className="create-form__wrapper">
+                    <div className="action-block i--block">
+                        <AutoForm model={model} schema={LetterTemplateSchema} onSubmit={this.onSubmit} ref="form">
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} type="text" placeholder="Letter name" name="name"/>
+                                <ErrorField name="name"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <LongTextField labelHidden={true} placeholder="Description" name="description"/>
+                            </div>
+                            <div className="form-wrapper rich-text-area">
+                                <RichTextArea name="body"/>
+                                <ErrorField name="body"/>
+                            </div>
+                            <div className="select-group">
+                                <div className="form-wrapper">
+                                    <SelectField name="category" placeholder="Category" options={categories}/>
+                                    <ErrorField name="category"/>
+                                </div>
+                            </div>
                         </AutoForm>
-                }
-            </Container>
-        );
+                    </div>
+                </div>
+            </div>
+        )
     }
 }

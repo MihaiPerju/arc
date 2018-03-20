@@ -13,8 +13,9 @@ class LetterTemplateService {
     }
 
     updateLetterTemplate (data) {
+
         data.keywords = this.getTemplateBodyKeywords(data.body);
-        LetterTemplates.update({_id: data.id}, {
+        LetterTemplates.update({_id: data._id}, {
             $set: data
         })
     }
