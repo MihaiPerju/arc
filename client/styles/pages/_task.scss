@@ -248,6 +248,7 @@
     height: calc(100% - 111px);
     background: rgba(255, 255, 255, 0.4);
     overflow-y: auto;
+    width: 100%;
     &.decreased {
       height: calc(100% - 227px);
     }
@@ -323,6 +324,7 @@
 // Action Block
 .action-block {
   margin-bottom: 35px;
+  width: 100%;
   .status {
     padding-top: 8px;
     position: relative;
@@ -801,12 +803,19 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  box-shadow: 3px 5px 15px 0px #b7b6b6;
   color: $color-white;
   text-align: center;
   line-height: 4rem;
   cursor: pointer;
   user-select: none;
+  box-shadow: none;
+  transition: box-shadow $transition300;
+  &:hover {
+    box-shadow: 3px 5px 15px 0px #b7b6b6;
+  }
+  &.invisible {
+    visibility: hidden;
+  }
 }
 
 .tooltip {

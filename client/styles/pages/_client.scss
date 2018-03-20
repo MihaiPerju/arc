@@ -1,90 +1,99 @@
 .client-content {
-    .header-block {
-        display: flex;
-        .header-block__wrapper {    
-            width: calc(100% - 130px);
-            padding-left: 45px;
-        }
-        .intro-row {
-            border-bottom: 1px #ebebeb solid;
-            padding-bottom: 20px;
-            margin-bottom: 10px;
-            .name {
-                font-size: 2.4rem;
-                margin-top: 5px;
-            }
-        }
-        .info-row {
-            display: flex;
-            padding-right: 10px;
-            justify-content: space-between;
-            .info-item {
-                padding-top: 11px;
-                flex-shrink: 0;
-                margin-top: 10px;
-            }
-            .text {
-                margin-left: 10px;
-            }
-        }
-        .btn-group {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            .cc-button, button {
-                margin-left: 10px;
-                margin-top: 10px;
-            }
-        }
+  .header-block {
+    display: flex;
+    width: 100%;
+    .header-block__wrapper {
+      width: calc(100% - 130px);
+      padding-left: 45px;
     }
+    .intro-row {
+      border-bottom: 1px #ebebeb solid;
+      padding-bottom: 20px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      .name {
+        font-size: 2.4rem;
+        margin-top: 5px;
+      }
+    }
+    .info-row {
+      display: flex;
+      flex-wrap: wrap;
+      padding-right: 10px;
+      justify-content: space-between;
+      .info-item {
+        padding-top: 11px;
+        flex-shrink: 0;
+        flex-grow: 1;
+        margin-top: 10px;
+      }
+      .text {
+        margin-left: 10px;
+      }
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      flex-grow: 0;
+      flex-shrink: 0;
+      flex-basis: 60%;
+      justify-content: flex-end;
+      .cc-button, button {
+        margin-left: 10px;
+        margin-top: 10px;
+        flex-grow: 1;
+        flex-shrink: 0;
+      }
+    }
+  }
 
-    .note-item {
-        background: rgba($color-white, 0.6);
-        padding: 10px 15px;
-        margin-top: 2px;
-        border-radius: 3px;
-        display: flex;
-        justify-content: space-between;
-        .note-info {
-            display: flex;
-            .info {
-                padding-left: 15px;
-                padding-top: 7px;
-                .name {
-                    margin-bottom: 5px;
-                }
-            }
+  .note-item {
+    background: rgba($color-white, 0.6);
+    padding: 10px 15px;
+    margin-top: 2px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    .note-info {
+      display: flex;
+      .info {
+        padding-left: 15px;
+        padding-top: 7px;
+        .name {
+          margin-bottom: 5px;
         }
-        .note-time {
-            flex-shrink: 0;
-        }
+      }
     }
+    .note-time {
+      flex-shrink: 0;
+    }
+  }
 
-    .contact-info {
-        list-style: none;
-        display: flex;
-        background: $color-white;
-        border-radius: 3px;
-        padding: 15px 15px 0;
-        flex-wrap: wrap;
-        li {
-            position: relative;
-            flex-grow: 1;
-            margin-bottom: 15px;
-            padding: 0 15px;
-            &:before {
-                content: ' ';
-                position: absolute;
-                right: 0;
-                height: 26px;
-                width: 1px;
-                background: #ebebeb;
-                top: 50%;
-                transform: $translateY;
-            }
-            .l-info {
-                margin-top: 10px;
-            }
-        }
+  .contact-info {
+    list-style: none;
+    display: flex;
+    background: $color-white;
+    border-radius: 3px;
+    padding: 15px 15px 0;
+    flex-wrap: wrap;
+    li {
+      position: relative;
+      flex-grow: 1;
+      margin-bottom: 15px;
+      padding: 0 15px;
+      &:before {
+        content: ' ';
+        position: absolute;
+        right: 0;
+        height: 26px;
+        width: 1px;
+        background: #ebebeb;
+        top: 50%;
+        transform: $translateY;
+      }
+      .l-info {
+        margin-top: 10px;
+      }
     }
+  }
 }

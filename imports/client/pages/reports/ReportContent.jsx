@@ -24,7 +24,7 @@ export default class ReportContent extends Component {
         const {report} = this.props;
 
         return (
-            <div>
+            <div className="report-section">
                 {
                     edit ? <ReportEdit setEdit={this.setEdit} report={report}/> :
                         <ReportHeader setEdit={this.setEdit} report={report}/>
