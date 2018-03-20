@@ -73,7 +73,7 @@ export default class FacilityCreate extends Component {
         const regionIds = this.getRegionOptions(regions);
         const schema = FacilitySchema.omit('clientId');
         return (
-            <div className="create-form">
+            <div className="create-form create-facility">
                     <div className="create-form__bar">
                         <button className="btn-add">+ Add facility</button>
                         <div className="btn-group">

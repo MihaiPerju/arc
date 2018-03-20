@@ -1,26 +1,102 @@
-import CsvParseService from './CsvParseService';
 import Accounts from '/imports/api/tasks/collection';
 import Facilities from "../../collection";
 import moment from "moment/moment";
 import RulesEnum from "../../enums/importingRules";
-import Tasks from "../../../tasks/collection";
 import stateEnum from "../../../tasks/enums/states";
 import {Substates} from "../../../tasks/enums/substates";
+import Backup from "/imports/api/backup/collection";
 
 export default class TaskService {
     //For placement file
-    static upload(results, rules, facilityId) {
+    static upload(results, rules, {fileId, facilityId}) {
 
         const {labels, importRules} = this.standardize(results, rules);
 
-        const accounts = this.convertToAccounts(results, importRules, labels);
         const clientId = this.getClientIdByFacilityId(facilityId);
 
-        // Creating accounts
-        accounts.map((account) => {
-            Object.assign(account, {facilityId, clientId});
-            Accounts.insert(account);
+        const accounts = this.convertToAccounts(results, importRules, labels);
+        const existentAccounts = Accounts.find({facilityId}).fetch();
+
+        //Find account numbers of all created accounts and existent accounts
+        const currAcctIds = this.getAcctNumbers(accounts);
+        const existentAcctIds = this.getAcctNumbers(existentAccounts);
+
+        //Find account numbers of all old accounts that need to be updated and update
+        const toUpdateAccountIds = this.getCommonElements(currAcctIds, existentAcctIds);
+
+        //Backup accounts
+        let accountsToBackup = Accounts.find({acctNum: {$in: toUpdateAccountIds}}).fetch();
+        this.backupAccounts(accountsToBackup);
+
+        _.map(toUpdateAccountIds, (toUpdateAccountId) => {
+            const toUpdateAccount = this.getAccount(accounts, toUpdateAccountId);
+            Object.assign(toUpdateAccount, {fileId});
+
+            Accounts.update({acctNum: toUpdateAccountId, facilityId}, {
+                    $set: toUpdateAccount
+                }
+            );
         });
+
+        //Find account numbers of all old accounts that need to be archived and archive
+        const oldAccountIds = this.getDifferentElements(existentAcctIds, toUpdateAccountIds);
+
+        //Select only unarchived accounts and store this in backup
+        accountsToBackup = Accounts.find({
+            acctNum: {$in: oldAccountIds},
+            state: {$ne: stateEnum.ARCHIVED},
+            facilityId,
+        }).fetch();
+
+        this.backupAccounts(accountsToBackup);
+
+        _.map(oldAccountIds, (oldAccountId) => {
+            Accounts.update({acctNum: oldAccountId, state: {$ne: stateEnum.ARCHIVED}, facilityId}, {
+                    $set: {
+                        state: stateEnum.ARCHIVED,
+                        substate: Substates.SELF_RETURNED,
+                        fileId
+                    }
+                }
+            );
+        });
+
+        //Find account numbers of all new accounts that need to be inserted and insert
+        const newAccountIds = this.getDifferentElements(currAcctIds, existentAcctIds);
+        _.map(newAccountIds, (newAccountId) => {
+            const newAccount = this.getAccount(accounts, newAccountId);
+            Object.assign(newAccount, {facilityId, clientId, fileId});
+            Accounts.insert(newAccount);
+        });
+    }
+
+    static backupAccounts(accounts) {
+        const rawBackup = Backup.rawCollection();
+        rawBackup.insert(accounts);
+    }
+
+    static getAccount(accounts, acctNum) {
+        return _.find(accounts, function (account) {
+            return account.acctNum === acctNum;
+        });
+    }
+
+    static getCommonElements(arr1, arr2) {
+        return _.filter(arr1, function (id) {
+            return arr2.indexOf(id) > -1;
+        });
+    }
+
+    static getDifferentElements(arr1, arr2) {
+        return _.filter(arr1, function (id) {
+            return arr2.indexOf(id) === -1;
+        });
+    }
+
+    static getAcctNumbers(accounts) {
+        return _.map(accounts, (account) => {
+            return account.acctNum;
+        })
     }
 
     static standardize(results, rules) {
@@ -136,43 +212,50 @@ export default class TaskService {
     }
 
     //For inventory file
-    static update(results, rules, facilityId) {
+    static update(results, rules, {fileId, facilityId}) {
         const {labels, importRules} = this.standardize(results, rules);
 
         const accounts = this.convertToAccounts(results, importRules, labels);
         const clientId = this.getClientIdByFacilityId(facilityId);
 
-        const {oldAccounts, newAccounts} = this.filterAccounts(accounts);
+        const {oldAccountIds, newAccountIds} = this.filterAccounts(accounts);
 
-        //Creating new accounts with 'archived' state
-        newAccounts.map((account) => {
-            Object.assign(account, {facilityId, clientId});
+        //Creating new accounts
+        _.map(newAccountIds, (accountId) => {
+            const newAccount = this.getAccount(accounts, accountId);
+            Object.assign(newAccount, {facilityId, fileId, clientId});
+
             Accounts.insert(account);
         });
 
+        //Backup old accounts
+        let accountsToBackup = Accounts.find({acctNum: {$in: oldAccountIds}}).fetch();
+        this.backupAccounts(accountsToBackup);
+
         //Updating old accounts
-        oldAccounts.map((account) => {
-            const {acctNum} = account;
-            Accounts.update({acctNum}, {
-                $set: account
+        _.map(oldAccountIds, (accountId) => {
+            const toUpdateAccount = this.getAccount(accounts, accountId);
+            Object.assign(toUpdateAccount, {fileId});
+
+            Accounts.update({acctNum: accountId, facilityId}, {
+                $set: toUpdateAccount
             });
         });
     }
 
     static filterAccounts(accounts) {
-        let oldAccounts = [];
-        let newAccounts = [];
+        let oldAccountIds = [];
+        let newAccountIds = [];
 
         accounts.map((account) => {
-            if (Accounts.findOne({acctNum: account.acctNum})) {
-                oldAccounts.push(account);
+            const {acctNum} = account;
+            if (Accounts.findOne({acctNum})) {
+                oldAccountIds.push(acctNum);
             } else {
-                account.state = stateEnum.ARCHIVED;
-                account.substate = Substates.SELF_RETURNED;
-                newAccounts.push(account);
+                newAccountIds.push(acctNum);
             }
         });
-        return {oldAccounts, newAccounts};
+        return {oldAccountIds, newAccountIds};
     }
 
     // Get client id by facility
