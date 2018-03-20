@@ -26,7 +26,7 @@ export default class LetterTemplateContent extends Component {
         const {edit} = this.state;
         return (
             <div>
-                { edit ? <LetterTemplateEdit template={template} close={this.setEdit}/> :
+                { edit ? <LetterTemplateEdit model={template} close={this.setEdit}/> :
                     <div className="main-content letter-temp-content">
                         <LetterTemplateHeader onEdit={this.setEdit} template={template}/>
                         <DescriptionBlock template={template}/>

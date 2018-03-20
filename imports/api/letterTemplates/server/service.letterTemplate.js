@@ -13,7 +13,6 @@ class LetterTemplateService {
     }
 
     updateLetterTemplate (data) {
-        console.log(data);
 
         data.keywords = this.getTemplateBodyKeywords(data.body);
         LetterTemplates.update({_id: data._id}, {

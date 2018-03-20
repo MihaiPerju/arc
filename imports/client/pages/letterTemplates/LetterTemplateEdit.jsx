@@ -62,7 +62,7 @@ export default class EditLetterTemplate extends React.Component {
     }
 
     render () {
-        const {template} = this.props;
+        const {model} = this.props;
         //const codeIds = this.getCodeOptions(this.state.codes);
         const categories = this.getCategories(CategoryList);
 
@@ -77,7 +77,7 @@ export default class EditLetterTemplate extends React.Component {
                 </div>
                 <div className="create-form__wrapper">
                     <div className="action-block i--block">
-                        <AutoForm model={template} schema={LetterTemplateSchema} onSubmit={this.onSubmit} ref="form">
+                        <AutoForm model={model} schema={LetterTemplateSchema} onSubmit={this.onSubmit} ref="form">
                             <div className="form-wrapper">
                                 <AutoField labelHidden={true} type="text" placeholder="Letter name" name="name"/>
                                 <ErrorField name="name"/>
@@ -86,7 +86,7 @@ export default class EditLetterTemplate extends React.Component {
                                 <LongTextField labelHidden={true} placeholder="Description" name="description"/>
                             </div>
                             <div className="form-wrapper rich-text-area">
-                                <RichTextArea name="body"/>
+                                <RichTextArea value={model.body} name="body"/>
                                 <ErrorField name="body"/>
                             </div>
                             <div className="select-group">
