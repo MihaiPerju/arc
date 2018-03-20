@@ -809,7 +809,7 @@
   cursor: pointer;
   user-select: none;
   box-shadow: none;
-  transition: box-shadow $transition100;
+  transition: box-shadow $transition300;
   &:hover {
     box-shadow: 3px 5px 15px 0px #b7b6b6;
   }
