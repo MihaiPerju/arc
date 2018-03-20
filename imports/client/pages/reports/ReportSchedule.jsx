@@ -85,6 +85,33 @@ export default class ReportSchedule extends React.Component {
 
         return (
             <Container>
+                {
+                    !blankSchedule &&
+                    <Button primary fluid onClick={this.onAddSchedule.bind(this)}>Add Scheduling</Button>
+                }
+                {
+                    blankSchedule &&
+                    <div>
+                        <Header as="h2" textAlign="center">
+                            Create Schedule
+                        </Header>
+                        < ScheduleWidget
+                            users={users}
+                            clients={clients}
+                            reportId={id}
+                            onCancelSchedule={this.onCancelSchedule.bind(this)}/>
+                    </div>
+                }
+                <Header as="h2" textAlign="center">
+                    Report Schedules
+                </Header>
+                {
+                    data.map((schedule, index) => {
+                        return (
+                            <ScheduleWidget reportId={id} users={users} clients={clients} key={index} model={schedule}/>
+                        );
+                    })
+                }
                 {/*{*/}
                     {/*!blankSchedule &&*/}
                     {/*<Button primary fluid onClick={this.onAddSchedule.bind(this)}>Add Scheduling</Button>*/}

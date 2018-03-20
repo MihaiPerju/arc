@@ -1,55 +1,97 @@
 .left-menu {
-	width: 280px;
-	padding: 25px 15px;
-	&__wrapper {
-		list-style: none;
-	}
-	.menu__item {
-		> a {
-			position: relative;
-			font-size: 1.6rem;
-			padding: 7px 15px 8px 50px;
-			color: $light-grey;
-			border-radius: 3px;
-			i {
-				color: $extra-light-grey;
-			}
-			&:hover, &.active {
-				background: $color-white;
-				color: $dark-grey;
-				i {
-					color: $green;
-				}
-			}
-		}
-		&:first-of-type {
-			i {
-				font-size: 1.8rem;
-				left: 17px;
-			}
-		}
-		&:nth-of-type(2) {
-			i {
-				font-size: 1.8rem;
-			}
-		}
-		&:nth-of-type(5) {
-			i {
-				left: 20px;
-			}
-		}
-		&:nth-of-type(7) {
-			margin-bottom: 25px;
-		}
-		&:nth-of-type(10) {
-			i {
-				left: 18px;
-			}
-		}
-		i {
-			position: absolute;
-			left: 15px;
-			top: 8px;
-		}
-	}
+  width: 280px;
+  padding: 25px 15px;
+  transition: width $transition300;
+  flex-shrink: 0;
+  overflow: hidden;
+  &.collapsed {
+    width: 75px;
+    .menu__item>a {
+      padding-left: 30px;
+      span {
+        opacity: 0;
+      }
+    }
+    .btn-collapse i {
+      transform: rotate(180deg);
+    }
+  }
+  &__wrapper {
+    list-style: none;
+  }
+  .menu__item {
+    > a {
+      height: 34px;
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
+      font-size: 1.6rem;
+      padding: 7px 15px 8px 50px;
+      color: $light-grey;
+      border-radius: 3px;
+      transition: padding-left $transition300;
+      i {
+        color: $extra-light-grey;
+      }
+      span {
+        transition: opacity $transition300;
+        opacity: 1;
+      }
+      &:hover, &.active {
+        background: $color-white;
+        color: $dark-grey;
+        i {
+          color: $green;
+        }
+      }
+    }
+    &:first-of-type {
+      i {
+        font-size: 1.8rem;
+        left: 17px;
+      }
+    }
+    &:nth-of-type(2) {
+      i {
+        font-size: 1.8rem;
+      }
+    }
+    &:nth-of-type(5) {
+      i {
+        left: 20px;
+      }
+    }
+    &:nth-of-type(7) {
+      margin-bottom: 25px;
+    }
+    &:nth-of-type(10) {
+      i {
+        left: 18px;
+      }
+    }
+    i {
+      position: absolute;
+      left: 15px;
+      top: 8px;
+    }
+  }
+  .btn-collapse {
+    cursor: pointer;
+    font-size: 2rem;
+    padding: 10px;
+    background: #f2f2f2;
+    color: $extra-light-grey;
+    border-radius: 3px;
+    margin-top: 10px;
+    &:hover {
+      background: $color-white;
+      color: $green;
+    }
+    i {
+      display: block;
+      transform: rotate(0);
+      transition: transform $transition100;
+    }
+  }
 }
