@@ -148,3 +148,17 @@ h6 {
   overflow: hidden;
   text-overflow: ellipsis
 }
+
+.alert-notice {
+  color: #da1919;
+  margin-top: 9px;
+  padding-left: 17px;
+  position: relative;
+  &:before {
+    font-family: $font-icon;
+    content: '\f06a';
+    position: absolute;
+    top: -1px;
+    left: 0;
+  }
+}

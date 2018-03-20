@@ -50,6 +50,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-alert:before {
+  content: "\f06a";
+}
 .icon-calendar-plus-o:before {
   content: "\f271";
 }
