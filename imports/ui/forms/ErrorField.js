@@ -5,7 +5,7 @@ import nothing        from 'uniforms/nothing';
 
 const Error = ({children, error, errorMessage, ...props}) =>
     !error ? nothing : (
-        <div {...filterDOMProps(props)}>
+        <div className="alert-notice" {...filterDOMProps(props)}>
             {children || errorMessage}
         </div>
     )
