@@ -81,6 +81,7 @@
 .cc-container {
   width: 100%;
   display: flex;
+  overflow: hidden;
   justify-content: space-between;
   > .left__side {
     width: 520px;
