@@ -86,7 +86,7 @@ export default class EditLetterTemplate extends React.Component {
                                 <LongTextField labelHidden={true} placeholder="Description" name="description"/>
                             </div>
                             <div className="form-wrapper rich-text-area">
-                                <RichTextArea value={model.body} name="body"/>
+                                <RichTextArea name="body"/>
                                 <ErrorField name="body"/>
                             </div>
                             <div className="select-group">
