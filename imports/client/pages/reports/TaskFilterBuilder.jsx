@@ -10,6 +10,7 @@ import stateEnum from '/imports/api/tasks/enums/states';
 import {Substates} from '/imports/api/tasks/enums/substates';
 import SimpleSchema from 'simpl-schema';
 import Loading from '/imports/client/lib/ui/Loading';
+import facilityNames from '/imports/api/facilities/queries/facilityListNames';
 
 export default class TaskFilterBuilder extends React.Component {
     constructor() {
@@ -33,6 +34,7 @@ export default class TaskFilterBuilder extends React.Component {
         keys.splice(keys.indexOf('metaData'), 1);
         keys.splice(keys.indexOf('actionsLinkData'), 1);
         keys.splice(keys.indexOf('attachmentIds'), 1);
+        keys.splice(keys.indexOf('collectedAmount'), 1);
 
         //Creating schema
         const schema = ReportsService.createSchema(keys, TaskReportFields, {stateEnum, substateEnum: Substates});
@@ -59,14 +61,15 @@ export default class TaskFilterBuilder extends React.Component {
 
         //Getting assignee and facility options
         let facilityOptions = [], assigneeOptions = [];
-
-        //Getting facility options
-        Meteor.call('facility.getNames', (err, facilities) => {
+        facilityNames.fetch((err, facilities) => {
             if (!err) {
                 facilities.map((facility) => {
-                    facilityOptions.push({value: facility._id, label: facility.name});
+                    facilityOptions.push({
+                        value: facility._id,
+                        label: facility.name + " - " + facility.client.clientName
+                    });
+                    this.setState({facilityOptions});
                 });
-                this.setState({facilityOptions});
             } else {
                 Notifier.error(err.reason);
             }
@@ -156,7 +159,7 @@ export default class TaskFilterBuilder extends React.Component {
                                     ref="filters">
                                     {
                                         _.map(components, (item) => {
-                                              return item.isActive &&
+                                            return item.isActive &&
                                                 <FilterSingle
                                                     assigneeIdOptions={assigneeOptions}
                                                     facilityIdOptions={facilityOptions}
