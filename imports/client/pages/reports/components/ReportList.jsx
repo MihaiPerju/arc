@@ -13,7 +13,7 @@ export default class ReportList extends Component {
                     selectReport={selectReport}
                     setReport={setReport}
                     report={report}
-                    key={index}
+                    key={report._id}
                 />
             )
         }, this);

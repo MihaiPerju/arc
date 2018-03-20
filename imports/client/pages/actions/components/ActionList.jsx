@@ -18,7 +18,7 @@ export default class ActionList extends Component {
                     selectAction={selectAction}
                     setAction={setAction}
                     action={action}
-                    key={index}
+                    key={action._id}
                 />
             )
         }, this)
