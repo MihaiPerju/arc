@@ -838,3 +838,41 @@
     background: #0f0f0f;
   }
 }
+
+//Insurance Block
+.insurance-block {
+  .add-insurance {
+    display: block;
+    margin-bottom: 20px;
+    > span {
+      display: inline-block;
+    }
+  }
+  .remove-insurance {
+    margin-bottom: 20px;
+  }
+  .insurance-action {
+    cursor: pointer;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    font-size: 2rem;
+    border-radius: 3px;
+    color: $color-white;
+    margin-left: 5px;
+    text-align: center;
+    opacity: 1;
+    transition: opacity $transition300;
+    &:hover {
+      opacity: 0.8;
+    }
+    &.add {
+      line-height: 2.2rem;
+      background: $green;
+    }
+    &.delete {
+      background: $red;
+      line-height: 2rem;
+    }
+  }
+}

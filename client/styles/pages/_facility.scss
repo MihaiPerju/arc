@@ -102,6 +102,7 @@
       padding-top: 11px;
     }
     .btn-group {
+      text-align: right;
       button {
         &:nth-of-type(2) {
           margin-left: 10px;
@@ -259,5 +260,11 @@
         padding-top: 5px;
       }
     }
+  }
+}
+
+.create-facility {
+  .insurance-block {
+    margin-top: 20px;
   }
 }

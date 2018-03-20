@@ -25,7 +25,6 @@ export default class ContactTable extends Component {
             }
         ];
         const {contacts} = this.props;
-
         return (
             <div className="action-block">
                 <div className="header__block">
@@ -39,7 +38,7 @@ export default class ContactTable extends Component {
                                     <div className="table-col text-center" key={index}>
                                         <div className="table-header text-light-grey">{column.header}</div>
                                         {
-                                            contacts.map(function (contact){
+                                            contacts && contacts.map(function (contact) {
                                                 return (
                                                     <div className="table-row">{contact[column.contactProp]}</div>
                                                 )
