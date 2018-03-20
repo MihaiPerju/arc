@@ -61,7 +61,7 @@ class ReportListContainer extends Pager {
             currentReport: false,
             create: true
         });
-    }
+    };
 
     closeForm = () => {
         this.setState({create: false});

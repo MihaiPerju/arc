@@ -37,8 +37,15 @@
       border-radius: 0 3px 3px 0;
       .table-container {
         min-width: 200px;
-        float: left;
+        display: table;
         border-right: 1px #d7d7d7 solid;
+        .table-row {
+          padding: 10px;
+        }
+        .table-header {
+          padding-left: 10px;
+          padding-right: 10px;
+        }
       }
     }
     .left-side {
@@ -48,8 +55,6 @@
       padding: 15px 15px 0;
       border-right: 1px #d7d7d7 solid;
       border-radius: 3px 0 0 3px;
-      .table-container {
-      }
     }
   }
 
@@ -60,6 +65,7 @@
     .table-row {
       border-top: 1px #d7d7d7 solid;
       padding: 10px 0;
+      height: 37px;
       .right-side {
         .table-container {
           float: left;

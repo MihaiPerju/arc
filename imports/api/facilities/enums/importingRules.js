@@ -1,8 +1,8 @@
 let commonRules = [
     {value: 'acctNum', label: 'Account Number', optional: false},
     {value: 'facCode', label: 'Facility Code', optional: true},
-    {value: 'ptType', label: 'Payment Type', optional: false},
-    {value: 'ptName', label: 'Payment Name', optional: false},
+    {value: 'ptType', label: 'Patient Type', optional: false},
+    {value: 'ptName', label: 'Patient Name', optional: false},
     {value: 'dischrgDate', label: 'Discharge Date', optional: false},
     {value: 'fbDate', label: 'Last Bill Date', optional: true},
     {value: 'acctBal', label: 'Account Balance', optional: true},
