@@ -56,12 +56,12 @@ class ReportListContainer extends Pager {
         this.setState({reportsSelected});
     };
 
-    createForm() {
+    createForm = () => {
         this.setState({
             currentReport: false,
             create: true
         });
-    }
+    };
 
     closeForm = () => {
         this.setState({create: false});
