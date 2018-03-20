@@ -77,5 +77,9 @@ export default new SimpleSchema({
     },
     sftpPath: {
         type: String
+    },
+    fileId: {
+        type: String,
+        optional: true
     }
 })

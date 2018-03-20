@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 
 export default class LetterTemplateHeader extends Component {
+
+    onEditTemplate = () => {
+        const {onEdit} = this.props;
+        onEdit();
+    }
+
     render() {
         const {template} = this.props;
         return (
@@ -15,7 +21,9 @@ export default class LetterTemplateHeader extends Component {
                         <div className="type">{template.category}</div>
                     </div>
                     <div className="btn-group">
-                        <button className="btn--white">Edit lettter</button>
+                        <button onClick={() => this.onEditTemplate(template)} className="btn--white">
+                            Edit letter
+                        </button>
                     </div>
                 </div>
             </div>

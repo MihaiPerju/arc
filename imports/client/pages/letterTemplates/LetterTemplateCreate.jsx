@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import {AutoForm, AutoField, ErrorField, SelectField, LongTextField} from '/imports/ui/forms';
 import RichTextArea from "/imports/client/lib/uniforms/RichTextArea.jsx";
+import Notifier from '/imports/client/lib/Notifier';
+import { CategoryList } from '/imports/api/letterTemplates/enums/categories.js';
 
 export default class CreateLetterTemplate extends Component {
     constructor() {
@@ -9,35 +11,61 @@ export default class CreateLetterTemplate extends Component {
         this.state = {};
     }
 
+    onSubmit = (data) => {
+        Meteor.call('letterTemplate.create', data, (err) => {
+            if (!err) {
+                Notifier.success('Letter template added!');
+                this.onClose();
+            } else {
+                Notifier.error(err.reason);
+            }
+        });
+    };
+
+    getCategories = (categories) => {
+        return categories.map((category, key) => ({value: category, label: category}));
+    };
+
+    onCreate = () => {
+        const {form} = this.refs;
+        form.submit();
+    };
+
+    onClose = () => {
+        const {close} = this.props;
+        close();
+    };
+
     render() {
+        const categories = this.getCategories(CategoryList);
 
         return (
             <div className="create-form letter-template-form">
                 <div className="create-form__bar">
                     <button className="btn-add">+ Add letter template</button>
                     <div className="btn-group">
-                        <button className="btn-cancel">Cancel</button>
-                        <button className="btn--green">Confirm & save</button>
+                        <button onClick={this.onClose} className="btn-cancel">Cancel</button>
+                        <button onClick={this.onCreate} className="btn--green">Confirm & save</button>
                     </div>
                 </div>
                 <div className="create-form__wrapper">
                     <div className="action-block i--block">
-                        <AutoForm schema={LetterTemplateSchema} >
+                        <AutoForm schema={LetterTemplateSchema} onSubmit={this.onSubmit} ref="form">
                             <div className="form-wrapper">
-                                <input type="text" placeholder="Letter name"/>
+                                <AutoField labelHidden={true} type="text" placeholder="Letter name" name="name"/>
+                                <ErrorField name="name"/>
                             </div>
                             <div className="form-wrapper">
-                                <textarea placeholder="Description"/>
+                                <LongTextField labelHidden={true} placeholder="Description" name="description"/>
                             </div>
                             <div className="form-wrapper rich-text-area">
                                 <RichTextArea name="body"/>
+                                <ErrorField name="body"/>
                             </div>
                             <div className="select-group">
                                 <div className="form-wrapper">
-                                    <select>
-                                        <option>Select category</option>
-                                        <option>Category 1</option>
-                                    </select>
+                                    <SelectField name="category" placeholder="Category" options={categories}/>
+                                    <ErrorField name="category"/>
                                 </div>
                             </div>
                         </AutoForm>

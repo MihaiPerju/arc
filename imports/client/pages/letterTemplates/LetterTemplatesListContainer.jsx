@@ -61,6 +61,10 @@ class LetterTemplateListContainer extends Component {
         Meteor.call('letterTemplate.deleteMany', templatesSelected, (err) => {
             if (!err) {
                 Notifier.success('Letter templates deleted !');
+                this.setState({
+                    currentTemplate: null,
+                    templatesSelected: []
+                })
             }
         });
     };
@@ -119,11 +123,11 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {template, create} = this.props;
+        const {template, create, close} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
-                    create ? <LetterTemplateCreate/> : <LetterTemplateContent template={template}/>
+                    create ? <LetterTemplateCreate close={close}/> : <LetterTemplateContent template={template}/>
                 }
             </div>
         )
@@ -132,4 +136,4 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     return query.clone();
-})(LetterTemplateListContainer)
+}, {reactive: true})(LetterTemplateListContainer)

@@ -12,15 +12,20 @@ const ListDel = ({
     const limitNotReached = !disabled && !(parent.minCount >= parent.value.length);
 
     return (
-        <span
-            {...filterDOMProps(props)}
-            onClick={() => limitNotReached && parent.onChange([]
-                .concat(parent.value.slice(0,  fieldIndex))
-                .concat(parent.value.slice(1 + fieldIndex))
-            )}
-        >
-            -
-        </span>
+        <div className="remove-insurance">
+            <span>Remove</span>
+            <span
+                className="insurance-action delete"
+                {...filterDOMProps(props)}
+                onClick={() => limitNotReached && parent.onChange([]
+                    .concat(parent.value.slice(0,  fieldIndex))
+                    .concat(parent.value.slice(1 + fieldIndex))
+                )}
+            >
+                -
+            </span>
+        </div>
+
     );
 };
 

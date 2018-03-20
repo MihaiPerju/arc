@@ -99,5 +99,8 @@ export default new SimpleSchema({
         type: Object,
         blackbox: true,
         optional: true
+    },
+    fileId: {
+        type: String
     }
 })
