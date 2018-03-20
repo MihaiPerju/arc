@@ -138,7 +138,6 @@ class BtnGroup extends Component {
         this.setState({
             dialogIsActive: true
         });
-        console.log('delete called');
     };
 
     closeDialog = () => {
