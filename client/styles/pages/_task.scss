@@ -435,6 +435,14 @@
     justify-content: space-between;
     width: 70%;
     align-items: flex-start;
+    > form {
+      display: flex;
+      width: 100%;
+      > div {
+        flex-grow: 1;
+        padding-right: 15px;
+      }
+    }
     .select-action {
       width: 50%;
     }

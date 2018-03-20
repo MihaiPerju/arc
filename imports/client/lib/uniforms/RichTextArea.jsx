@@ -18,6 +18,11 @@ class RichTextArea extends React.Component {
             this.setState({value: RichTextEditor.createValueFromString(props.value, 'html')})
         }
     }
+    componentWillMount() {
+        if (this.props.value) {
+            this.setState({value: RichTextEditor.createValueFromString(this.props.value, 'html')})
+        }
+    }
 
     onChange = (value) => {
         this.setState({value});

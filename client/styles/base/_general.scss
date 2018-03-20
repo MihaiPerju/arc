@@ -104,7 +104,7 @@ h6 {
 }
 
 .font-normal {
-  font-weight: 400!important;
+  font-weight: 400 !important;
 }
 
 .img-circle {
@@ -140,4 +140,11 @@ h6 {
 
 .hidden {
   display: none
+}
+
+.truncate {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis
 }
