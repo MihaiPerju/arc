@@ -3,7 +3,7 @@ import TableReport from './TableReport';
 import ScheduleBlock from './../../ScheduleBlock.jsx';
 import Notifier from "../../../../lib/Notifier";
 import {EJSON} from "meteor/ejson";
-import taskQuery from "/imports/api/tasks/queries/taskList";
+import accountsQuery from "/imports/api/tasks/queries/taskList";
 import moment from "moment/moment";
 
 export default class ReportHeader extends Component {
@@ -11,7 +11,7 @@ export default class ReportHeader extends Component {
         super();
         this.state = {
             schedule: false,
-            tasks: []
+            accounts: []
         }
     }
 
@@ -26,10 +26,12 @@ export default class ReportHeader extends Component {
     getTasks(props) {
         const {report} = props;
         const filters = EJSON.parse(report.mongoFilters);
-        taskQuery.clone({filters}).fetch((err, tasks) => {
+        const options = {limit: 20};
+        accountsQuery.clone({filters, options}).fetch((err, accounts) => {
             if (!err) {
+                console.log(accounts);
                 this.setState({
-                    tasks
+                    accounts
                 })
             } else {
                 Notifier.error(err.reason);
@@ -63,11 +65,11 @@ export default class ReportHeader extends Component {
 
     render() {
         const {report} = this.props;
-        const {schedule, tasks} = this.state;
+        const {schedule, accounts} = this.state;
 
         const mainTable = {
             header: 'Account name',
-            row: tasks.map((task, index) => {
+            row: accounts.map((task, index) => {
                 return {title: "Account No." + (index + 1)}
             })
         };
@@ -75,31 +77,31 @@ export default class ReportHeader extends Component {
         const tableList = [
             {
                 header: 'Account number',
-                row: tasks.map((task, index) => {
+                row: accounts.map((task, index) => {
                     return {title: task.acctNum}
                 })
             },
             {
                 header: 'Discharge date',
-                row: tasks.map((task, index) => {
+                row: accounts.map((task, index) => {
                     return {title: moment(task.dischrgDate).format('MM/DD/YYYY hh:mm')}
                 })
             },
             {
                 header: 'Payment Type',
-                row: tasks.map((task, index) => {
+                row: accounts.map((task, index) => {
                     return {title: task.ptType}
                 })
             },
             {
                 header: "Facility Code",
-                row: tasks.map((task, index) => {
+                row: accounts.map((task, index) => {
                     return {title: task.facCode}
                 })
             },
             {
                 header: "Payment Name",
-                row: tasks.map((task, index) => {
+                row: accounts.map((task, index) => {
                     return {title: task.ptName}
                 })
             }

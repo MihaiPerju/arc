@@ -28,7 +28,7 @@ export default class TaskFilterBuilder extends React.Component {
     componentWillMount() {
         //Getting schema keys
         let keys = TaskSchema._firstLevelSchemaKeys;
-        //also,remove field "createdAt", "actionsLinkData", "attachmentIds"
+        //also,remove field unnecessary fields
         keys.splice(keys.indexOf('createdAt'), 1);
         keys.splice(keys.indexOf('metaData'), 1);
         keys.splice(keys.indexOf('actionsLinkData'), 1);
@@ -156,7 +156,7 @@ export default class TaskFilterBuilder extends React.Component {
                                     ref="filters">
                                     {
                                         _.map(components, (item) => {
-                                              return item.isActive &&
+                                            return item.isActive &&
                                                 <FilterSingle
                                                     assigneeIdOptions={assigneeOptions}
                                                     facilityIdOptions={facilityOptions}
