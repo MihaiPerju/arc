@@ -6,8 +6,7 @@ export default class FacilityContentHeader extends Component {
     constructor() {
         super();
         this.state = {
-            dropdown: false,
-            users: []
+            dropdown: false
         }
     }
 
