@@ -1,10 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
 import DropzoneComponent from 'react-dropzone-component';
 import {getToken} from '/imports/api/s3-uploads/utils';
 import {Notifier} from '/imports/client/utils';
 import {getImagePath} from '/imports/api/utils';
 
-class MyAvatar extends React.Component {
+class MyAvatar extends Component {
+    constructor() {
+        super();
+        this.state = {
+            tooltip: false
+        }
+    }
+
+    showTooltip = () => {
+        this.setState({
+            tooltip: !this.state.tooltip
+        })
+    };
+
+    closeTooltip = () => {
+        this.setState({
+            tooltip: false
+        })
+    };
+
     render() {
         const componentConfig = {
             postUrl: '/uploads/avatar/' + getToken()
@@ -19,16 +38,34 @@ class MyAvatar extends React.Component {
         };
 
         const user = this.props.user;
+        const {tooltip} = this.state;
 
         return (
-            <div className="avatar-config">
+            <div className="avatar-config text-center">
                 {user.avatar && user.avatar.path
                     ?
-                    <div className="avatar-config-display">
-                        <img src={getImagePath(user.avatar.path)}/>
-                        <a  onClick={this.onRemoveAvatar.bind(this)}>Delete Avatar</a>
+                    <div className="avatar-config__wrapper">
+                        <img className="xlg-avatar img-circle" src={getImagePath(user.avatar.path)}/>
+                        <a className='btn-remove'
+                           onClick={this.onRemoveAvatar.bind(this)}
+                           onMouseEnter={this.showTooltip}
+                           onMouseLeave={this.closeTooltip}
+                        >
+                            <i className="icon-trash-o"/>
+                        </a>
+                        {
+                            tooltip && <Tooltip/>
+                        }
                     </div>
-                    : <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
+                    :
+                    <div className="main__block">
+                        <div className="add-content">
+                            <i className="icon-upload"/>
+                            <div className="drop-file__wrapper">
+                                <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
+                            </div>
+                        </div>
+                    </div>
                 }
             </div>
         );
@@ -50,3 +87,11 @@ MyAvatar.propTypes = {
 };
 
 export default MyAvatar;
+
+class Tooltip extends Component {
+    render() {
+        return (
+            <div className="tooltip">Delete avatar</div>
+        )
+    }
+}
