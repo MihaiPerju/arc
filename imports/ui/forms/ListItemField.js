@@ -7,7 +7,7 @@ import AutoField    from './AutoField';
 import ListDelField from './ListDelField';
 
 const ListItem = props =>
-    <div>
+    <div className="add-insurance-item">
         <ListDelField name={props.name} />
 
         {props.children ? (

@@ -82,7 +82,7 @@ export default class ImportingRules extends React.Component {
                             <div className="form-wrapper">
                                 <div className="upload-section">
                                     <div className="radio-group">
-                                        <RadioField name="hasHeader" options={options}/>
+                                        <RadioField className="radio-group__wrapper" name="hasHeader" options={options}/>
                                         <ErrorField name="hasHeader"/>
                                     </div>
                                 </div>
@@ -102,28 +102,16 @@ export default class ImportingRules extends React.Component {
                                             <ListItemField name="$">
                                                 <NestField className="upload-item text-center">
                                                     <AutoField
-                                                        backgroundStyle={{
-                                                            "background": "#FFFFFF",
-                                                            "text-align": "center"
-                                                        }}
                                                         className="text-light-grey"
                                                         name="insName"
                                                     />
                                                     <ErrorField name="insName"/>
                                                     <AutoField
-                                                        backgroundStyle={{
-                                                            "background": "#FFFFFF",
-                                                            "text-align": "center"
-                                                        }}
                                                         className="text-light-grey"
                                                         name="insCode"/>
                                                     <ErrorField name="insCode"/>
 
                                                     <AutoField
-                                                        backgroundStyle={{
-                                                            "background": "#FFFFFF",
-                                                            "text-align": "center"
-                                                        }}
                                                         className="text-light-grey"
                                                         name="insBal"/>
                                                     <ErrorField name="insBal"/>
@@ -136,10 +124,6 @@ export default class ImportingRules extends React.Component {
                                                 <NestField className="upload-item text-center">
                                                     <div>
                                                         <AutoField
-                                                            backgroundStyle={{
-                                                                "background": "#FFFFFF",
-                                                                "text-align": "center"
-                                                            }}
                                                             className="text-light-grey" name="insBal"/>
                                                         <ErrorField name="insBal"/>
                                                     </div>

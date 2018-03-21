@@ -64,13 +64,45 @@
   .upload-list {
     background: rgba($color-white, 0.8);
     margin-top: 2px;
-    padding: 0 15px;
+    border-radius: 3px;
+    .add-insurance-item {
+      .upload-item {
+        border-top: 0;
+      }
+      .text-light-grey {
+        padding: 0 5px;
+        flex-basis: 33.3%;
+        label {
+          display: block;
+          margin-bottom: 5px;
+        }
+        input {
+          text-align: center;
+          background: #f2f2f2;
+        }
+      }
+    }
     .upload-item {
       list-style: none;
       display: flex;
-      padding-top: 15px;
-      padding-bottom: 15px;
       border-top: 1px #ebebeb solid;
+      padding-bottom: 15px;
+      flex-wrap: wrap;
+      .text-center {
+        flex-grow: 1;
+        flex-basis: 25%;
+        flex-shrink: 0;
+        padding: 15px 5px 0;
+        label {
+          margin-bottom: 5px;
+          display: block;
+          white-space: nowrap;
+        }
+        input {
+          background: #f2f2f2;
+          text-align: center;
+        }
+      }
       .info-label {
         margin-top: 7px;
       }
@@ -98,8 +130,9 @@
       font-size: 1.4rem;
     }
     .radio-group {
-      display: flex;
-      padding-top: 11px;
+      &__wrapper {
+        display: flex;
+      }
     }
     .btn-group {
       text-align: right;
