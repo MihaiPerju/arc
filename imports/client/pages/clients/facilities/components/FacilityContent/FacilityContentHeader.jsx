@@ -23,7 +23,7 @@ export default class FacilityContentHeader extends Component {
         this.setState({
             dropdown: !dropdown
         })
-    }
+    };
 
     handleOutsideClick = (e) => {
         // ignore clicks on the component itself
@@ -32,16 +32,16 @@ export default class FacilityContentHeader extends Component {
         }
 
         this.openDropdown();
-    }
+    };
 
     nodeRef = (node) => {
         this.node = node
-    }
+    };
 
     onEditFacility = () => {
         const {onEdit} = this.props;
         onEdit();
-    }
+    };
 
     render() {
         const {dropdown} = this.state;
@@ -134,7 +134,7 @@ class Dropdown extends Component {
                                     <div className="name">{user.profile.firstName + ' ' + user.profile.lastName}</div>
                                     {user.avatar ?
                                         <img className="md-avatar img-circle"
-                                             src={getImagePath(user.avatar.path)} alt={imgPath + 'user.svg'}/>
+                                             src={getImagePath(user.avatar.path)} alt=''/>
                                         :
                                         <img className="md-avatar img-circle" src={imgPath + 'user.svg'} alt=""/>}
 
