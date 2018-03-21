@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
+import {getImagePath} from '/imports/api/utils.js';
 
 export default class FacilityContentHeader extends Component {
     constructor() {
         super();
         this.state = {
-            dropdown: false
+            dropdown: false,
+            users: []
         }
     }
 
@@ -21,7 +23,7 @@ export default class FacilityContentHeader extends Component {
         this.setState({
             dropdown: !dropdown
         })
-    }
+    };
 
     handleOutsideClick = (e) => {
         // ignore clicks on the component itself
@@ -30,16 +32,16 @@ export default class FacilityContentHeader extends Component {
         }
 
         this.openDropdown();
-    }
+    };
 
     nodeRef = (node) => {
         this.node = node
-    }
+    };
 
     onEditFacility = () => {
         const {onEdit} = this.props;
         onEdit();
-    }
+    };
 
     render() {
         const {dropdown} = this.state;
@@ -104,10 +106,10 @@ export default class FacilityContentHeader extends Component {
                         <div className={classes}>
                             <div className="dropdown__header">
                                 <div className="text-light-grey">Allowed users</div>
-                                <div className="info-label"><span>5 users</span></div>
+                                <div className="info-label"><span>{facility.users.length} users</span></div>
                             </div>
                             {
-                                dropdown && <Dropdown/>
+                                dropdown && <Dropdown users={facility.users}/>
                             }
                         </div>
 
@@ -121,12 +123,7 @@ export default class FacilityContentHeader extends Component {
 class Dropdown extends Component {
     render() {
         const imgPath = '/assets/img/';
-        const users = [
-            {name: 'Clemy Fost', avatar: imgPath + 'user.svg'},
-            {name: 'Solomon Ben', avatar: imgPath + 'user1.svg'},
-            {name: 'Gimmy Pell', avatar: imgPath + 'user2.svg'},
-            {name: 'Clemy Fost', avatar: imgPath + 'user.svg'}
-        ]
+        const {users} = this.props;
         return (
             <div className="dropdown__wrapper">
                 <ul className="allow-list">
@@ -134,8 +131,13 @@ class Dropdown extends Component {
                         users.map(function (user, index) {
                             return (
                                 <li className="allow-item" key={index}>
-                                    <div className="name">{user.name}</div>
-                                    <img className="md-avatar img-circle" src={user.avatar} alt=""/>
+                                    <div className="name">{user.profile.firstName + ' ' + user.profile.lastName}</div>
+                                    {user.avatar ?
+                                        <img className="md-avatar img-circle"
+                                             src={getImagePath(user.avatar.path)} alt=''/>
+                                        :
+                                        <img className="md-avatar img-circle" src={imgPath + 'user.svg'} alt=""/>}
+
                                 </li>
                             )
                         })

@@ -18,8 +18,7 @@ export default class TaskList extends Component {
         return (
             <div className={classes}>
                 {
-                    data &&
-                    data.length
+                    data
                     &&
                     _.map(data, (task) => {
                         return <TaskSingle active={this.taskIsActive(task)}

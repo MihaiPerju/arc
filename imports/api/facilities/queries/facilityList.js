@@ -26,5 +26,10 @@ export default Facilities.createNamedQuery('facilityList', {
     contacts: 1,
     region: {
         name: 1
+    },
+    users: {
+        avatar: 1,
+        profile: 1
+
     }
 });

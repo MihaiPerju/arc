@@ -18,7 +18,7 @@ class TaskListContainer extends Pager {
             tasksSelected: [],
             currentTask: null,
             page: 1,
-            perPage: 7,
+            perPage: 13,
             total: 0,
             range: {}
         });
@@ -194,6 +194,6 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
-    const perPage = 7;
+    const perPage = 13;
     return PagerService.setQuery(query, {page, perPage});
-})(TaskListContainer)
+}, {reactive: true})(TaskListContainer)
