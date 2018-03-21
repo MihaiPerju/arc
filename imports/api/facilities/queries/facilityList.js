@@ -23,5 +23,8 @@ export default Facilities.createNamedQuery('facilityList', {
     paymentRules: 1,
     sftpPath: 1,
     allowedUsers: 1,
-    contacts: 1
+    contacts: 1,
+    region: {
+        name: 1
+    }
 });

@@ -1,34 +1,11 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
-import RegionListQuery from '/imports/api/regions/queries/regionList.js';
 
 export default class FacilityContentHeader extends Component {
     constructor() {
         super();
         this.state = {
             dropdown: false
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps !== this.props){
-            if (this.props.facility.regionId){
-                RegionListQuery.clone({
-                    filters: {
-                        _id: this.props.facility.regionId
-                    }
-                }).fetchOne((err, region) => {
-                    if (!err){
-                        this.setState({
-                            region
-                        })
-                    }
-                })
-            } else {
-                this.setState({
-                    region: null
-                })
-            }
         }
     }
 
@@ -65,7 +42,7 @@ export default class FacilityContentHeader extends Component {
     }
 
     render() {
-        const {dropdown, region} = this.state;
+        const {dropdown} = this.state;
         const {facility} = this.props;
         const classes = classNames({
             'dropdown': true,
@@ -121,7 +98,7 @@ export default class FacilityContentHeader extends Component {
                     </li>
                     <li className="text-center">
                         <div className="text-light-grey">Region</div>
-                        <div className="info-label">{region ? region.name : "None"}</div>
+                        <div className="info-label">{facility.region ? facility.region.name : "None"}</div>
                     </li>
                     <li className="text-center toggle-allow-users" onClick={this.openDropdown} ref={this.nodeRef}>
                         <div className={classes}>
