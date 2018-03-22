@@ -14,12 +14,12 @@ import Business from '/imports/api/business';
 
 Meteor.methods({
     'task.actions.add'(data) {
-        const taskId = data.taskId,
+        const accountId = data.taskId,
             actionId = data.action,
             reasonId = data.reasonCode,
             userId = this.userId;
 
-        ActionService.createAction({ taskId, actionId, reasonId, userId });
+        ActionService.createAction({ accountId, actionId, reasonId, userId });
     },
 
     'task.assignee_change'(data) {

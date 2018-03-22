@@ -3,8 +3,8 @@ import Facilities from "../../collection";
 import moment from "moment/moment";
 import RulesEnum from "../../enums/importingRules";
 import stateEnum from "../../../tasks/enums/states";
-import {Substates} from "../../../tasks/enums/substates";
 import Backup from "/imports/api/backup/collection";
+import ActionService from "../../../tasks/server/services/ActionService";
 
 export default class TaskService {
     //For placement file
@@ -50,16 +50,8 @@ export default class TaskService {
 
         this.backupAccounts(accountsToBackup);
 
-        _.map(oldAccountIds, (oldAccountId) => {
-            Accounts.update({acctNum: oldAccountId, state: {$ne: stateEnum.ARCHIVED}, facilityId}, {
-                    $set: {
-                        state: stateEnum.ARCHIVED,
-                        substate: Substates.SELF_RETURNED,
-                        fileId
-                    }
-                }
-            );
-        });
+        //Apply system action
+        ActionService.archive(oldAccountIds, facilityId, fileId);
 
         //Find account numbers of all new accounts that need to be inserted and insert
         const newAccountIds = this.getDifferentElements(currAcctIds, existentAcctIds);
