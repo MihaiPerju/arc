@@ -31,6 +31,9 @@ export default class TaskFilterBuilder extends React.Component {
         let keys = TaskSchema._firstLevelSchemaKeys;
         //also,remove field unnecessary fields
         keys.splice(keys.indexOf('createdAt'), 1);
+        keys.splice(keys.indexOf('hasLastSysAction'), 1);
+        keys.splice(keys.indexOf('fileId'), 1);
+        keys.splice(keys.indexOf('insurances'), 1);
         keys.splice(keys.indexOf('metaData'), 1);
         keys.splice(keys.indexOf('actionsLinkData'), 1);
         keys.splice(keys.indexOf('attachmentIds'), 1);
