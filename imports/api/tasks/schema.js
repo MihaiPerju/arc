@@ -102,5 +102,9 @@ export default new SimpleSchema({
     },
     fileId: {
         type: String
+    },
+    hasLastSysAction: {
+        type: Boolean,
+        defaultValue: true
     }
 })
