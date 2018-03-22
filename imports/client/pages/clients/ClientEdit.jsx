@@ -87,7 +87,7 @@ export default class EditClient extends React.Component {
                 </div>
 
                 <div className="create-form__wrapper">
-                    <div className="action-block">
+                    <div className="action-block drop-file">
                         <div className="header__block">
                             <div className="title-block text-uppercase">Client information</div>
                         </div>
@@ -108,7 +108,7 @@ export default class EditClient extends React.Component {
                                 <ErrorField name="financialGoals"/>
                             </div>
 
-                            <div className="header__block">
+                            <div className="header__block m-t--20">
                                 <div className="title-block text-uppercase">Client Logo</div>
                             </div>
                             <div className="main__block">
@@ -123,14 +123,18 @@ export default class EditClient extends React.Component {
 
                                             <div className="add-content">
                                                 <i className="icon-upload"/>
-                                                <DropzoneComponent config={componentConfig}
-                                                                   djsConfig={djsConfig}/>
+                                                <div className="drop-file__wrapper">
+                                                    <DropzoneComponent
+                                                        config={componentConfig}
+                                                        djsConfig={djsConfig}
+                                                    />
+                                                </div>
                                             </div>
                                         )
                                 }
                             </div>
 
-                            <ListField name="contacts" className="add-filter text-center">
+                            <ListField name="contacts" className="insurance-block">
                                 <ListItemField name="$">
                                     <NestField name="">
                                         <div className="form-wrapper">
@@ -141,8 +145,8 @@ export default class EditClient extends React.Component {
                                             <TextField labelHidden={true} placeholder="Last Name"
                                                        name="lastName"/>
                                         </div>
-                                        <div className="select-group">
-                                            <div className="form-wrapper">
+                                        <div className="select-group b-b--0 p-b--0">
+                                            <div className="form-wrapper m-b--0">
                                                 <AutoField labelHidden={true} placeholder="Contact type"
                                                            name="contactType"/>
                                             </div>

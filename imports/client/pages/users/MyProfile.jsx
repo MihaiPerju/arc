@@ -39,35 +39,39 @@ class MyProfile extends React.Component {
         };
 
         return (
-            <div className="create-form" style={{minWidth: "600px", marginLeft: "20%"}}>
-                <div className="create-form__wrapper">
-                    <div className="action-block i--block">
-                        <MyAvatar user={user}/>
-                        <AutoForm schema={MyProfileSchema} onSubmit={this.onSubmit} model={model}>
-                            {error && <div className="error">{error}</div>}
+            <div className="cc-container settings-container">
+                <div className="create-form">
+                    <div className="create-form__wrapper">
+                        <div className="action-block drop-file i--block">
+                            <MyAvatar user={user}/>
+                            <AutoForm schema={MyProfileSchema} onSubmit={this.onSubmit} model={model}>
+                                {error && <div className="error">{error}</div>}
 
-                            <div className="form-wrapper">
-                                <AutoField labelHidden={true} placeholder="First Name" name="profile.firstName"/>
-                                <ErrorField name="profile.firstName"/>
-                            </div>
+                                <div className="form-wrapper">
+                                    <AutoField labelHidden={true} placeholder="First Name" name="profile.firstName"/>
+                                    <ErrorField name="profile.firstName"/>
+                                </div>
 
-                            <div className="form-wrapper">
-                                <AutoField labelHidden={true} placeholder="Last Name" name="profile.lastName"/>
-                                <ErrorField name="profile.lastName"/>
-                            </div>
+                                <div className="form-wrapper">
+                                    <AutoField labelHidden={true} placeholder="Last Name" name="profile.lastName"/>
+                                    <ErrorField name="profile.lastName"/>
+                                </div>
 
-                            <div className="form-wrapper">
-                                <AutoField labelHidden={true} placeholder="Email" name="email"/>
-                                <ErrorField name="email"/>
-                            </div>
+                                <div className="form-wrapper">
+                                    <AutoField labelHidden={true} placeholder="Email" name="email"/>
+                                    <ErrorField name="email"/>
+                                </div>
 
-                            <div className="form-wrapper">
-                                <AutoField labelHidden={true} placeholder="Phone Number" name="profile.phoneNumber"/>
-                                <ErrorField name="profile.phoneNumber"/>
-                            </div>
-                            <br/>
-                            <button type="submit" className="btn--green">Update</button>
-                        </AutoForm>
+                                <div className="form-wrapper">
+                                    <AutoField labelHidden={true} placeholder="Phone Number"
+                                               name="profile.phoneNumber"/>
+                                    <ErrorField name="profile.phoneNumber"/>
+                                </div>
+                                <div className="btn-group">
+                                    <button type="submit" className="btn--green">Update</button>
+                                </div>
+                            </AutoForm>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -11,7 +11,8 @@ export default class SearchBar extends Component {
         this.state = {
             active: false,
             filter: false,
-            dropdown: false
+            dropdown: false,
+            selectAll: false
         };
     }
 
@@ -75,20 +76,31 @@ export default class SearchBar extends Component {
         this.node = node;
     }
 
+    selectAll = () => {
+        const {selectAll} = this.state;
+        this.setState({
+            selectAll: !selectAll
+        })
+    }
+
     render() {
-        const {filter, active, dropdown} = this.state;
+        const {filter, active, dropdown, selectAll} = this.state;
         const {options, btnGroup, deleteAction} = this.props;
         const classes = classNames({
                 'select-type': true,
                 'open': dropdown
             }
         );
+        const btnSelectClasses = classNames({
+            'btn-select': true,
+            'active': selectAll
+        });
 
         return (
             <AutoForm ref="filters" onChange={this.onHandleChange.bind(this)} schema={schema}>
                 <div className="search-bar">
                     <div className={classes} ref={this.nodeRef}>
-                        <div className="btn-select"/>
+                        <div className={btnSelectClasses} onClick={this.selectAll}/>
                         <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
                             <i className="icon-angle-down"/>
                         </div>

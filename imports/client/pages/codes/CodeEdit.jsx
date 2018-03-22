@@ -66,8 +66,8 @@ export default class CodeEdit extends React.Component {
                                 <ErrorField name="action"/>
                             </div>
 
-                            <div className="select-group">
-                                <div className="form-wrapper">
+                            <div className="select-group b-b--0 p-b--0">
+                                <div className="form-wrapper m-b--0">
                                     <AutoField labelHidden={true} placeholder="Type" name="type"/>
                                     <ErrorField name="type"/>
                                 </div>

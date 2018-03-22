@@ -10,10 +10,11 @@ export default class UploadItem extends Component {
                     if (field !== 'newInsBal')
                         return (
                             <div className="text-center" key={index}>
-                                <AutoField backgroundStyle={{"background": "#FFFFFF", "text-align": "center"}}
-                                           className="text-light-grey"
-                                           placeholder={"Not configured"}
-                                           name={field.value}/>
+                                <AutoField
+                                    className="text-light-grey"
+                                    placeholder={"Not configured"}
+                                    name={field.value}
+                                />
                                 <ErrorField name={field.value}/>
                             </div>
                         )
