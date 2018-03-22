@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { AutoForm, AutoField, ErrorField } from '/imports/ui/forms';
+import React, {Component} from 'react';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import query from '/imports/api/actions/queries/actionList';
 import Notifier from '../../../../lib/Notifier';
@@ -17,7 +17,7 @@ const ActionSchema = new SimpleSchema({
 });
 
 export default class NewAction extends Component {
-    constructor () {
+    constructor() {
         super();
         this.state = {
             fade: false,
@@ -26,14 +26,14 @@ export default class NewAction extends Component {
         };
     }
 
-    getActionOptions (actions) {
+    getActionOptions(actions) {
         return _.map(actions, ({_id, title}) => {
             const value = title;
             return {value: _id, label: value};
         });
     }
 
-    componentWillMount () {
+    componentWillMount() {
         query.clone().fetch((err, actions) => {
             if (!err) {
                 this.setState({
@@ -43,24 +43,24 @@ export default class NewAction extends Component {
         });
     }
 
-    componentWillReceiveProps (props) {
+    componentWillReceiveProps(props) {
         const {actionId} = this.state;
 
     }
 
-    componentDidMount () {
+    componentDidMount() {
         setTimeout(() => {
             this.setState({fade: true});
         }, 1);
     }
 
-    getReasonOptions (reasons) {
+    getReasonOptions(reasons) {
         return _.map(reasons, ({_id, reason}) => {
             return {value: _id, label: reason};
         });
     }
 
-    onSubmit (data) {
+    onSubmit(data) {
         const {task, hide, update} = this.props;
         data.taskId = task._id;
         Meteor.call('task.actions.add', data
@@ -77,7 +77,7 @@ export default class NewAction extends Component {
             });
     }
 
-    onHide (e) {
+    onHide(e) {
         const {hide} = this.props;
         hide();
     }
@@ -101,7 +101,7 @@ export default class NewAction extends Component {
         }
     };
 
-    render () {
+    render() {
         const actions = this.getActionOptions(this.state.actions);
         const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
 
@@ -115,16 +115,18 @@ export default class NewAction extends Component {
                 <div className="action-form">
                     <AutoForm schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} onChange={this.onHandleChange}
                               ref="form">
-                        <AutoField name="action" options={actions}/>
-                        <ErrorField name="action"/>
-
-                        {reasonCodes.length>0 &&
-                        <div>
-                            <AutoField name="reasonCode" options={reasonCodes}/>
-                            <ErrorField name="reasonCode"/>
+                        <div className="select-row">
+                            <div className="select-group">
+                                <AutoField name="action" options={actions}/>
+                                <ErrorField name="action"/>
+                            </div>
+                            {reasonCodes.length > 0 &&
+                            <div className="select-group">
+                                <AutoField name="reasonCode" options={reasonCodes}/>
+                                <ErrorField name="reasonCode"/>
+                            </div>
+                            }
                         </div>
-                        }
-
                         <div className="btn-group">
                             <button type="button" className="btn--red" onClick={this.onHide.bind(this)}>Cancel</button>
                             <button type="submit" className="btn--green">Save</button>

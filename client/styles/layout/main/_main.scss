@@ -156,7 +156,6 @@
     display: flex;
     position: relative;
     justify-content: flex-end;
-    overflow: hidden;
     height: 35px;
   }
   .search-input {
@@ -219,13 +218,15 @@
       border-radius: 3px;
       background: $color-white;
       position: relative;
-      &:before {
-        content: '-';
-        position: absolute;
-        top: -6px;
-        left: 3px;
-        font-size: 2.4rem;
-        line-height: 2.2rem;
+      &.active {
+        &:before {
+          content: '-';
+          position: absolute;
+          top: -6px;
+          left: 3px;
+          font-size: 2.4rem;
+          line-height: 2.2rem;
+        }
       }
     }
   }
@@ -401,9 +402,15 @@
     > ul {
       list-style: none;
       display: flex;
+      overflow-y: hidden;
+      overflow-x: auto;
+      justify-content: space-between;
       li {
-        width: 20%;
+        display: table;
+        padding-right: 15px;
+        padding-left: 15px;
         position: relative;
+        min-width: 20%;
         &:last-of-type {
           &:before {
             display: none;
@@ -412,7 +419,7 @@
         &:before {
           content: ' ';
           position: absolute;
-          right: 0;
+          right: -1px;
           width: 1px;
           background: #ebebeb;
           height: 26px;
