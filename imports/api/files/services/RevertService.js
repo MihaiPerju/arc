@@ -65,6 +65,7 @@ export default class RevertService {
                     delete backUpAccount.actionsLinkData;
                     delete backUpAccount.state;
                     delete backUpAccount.substate;
+                    delete backUpAccount.hasLastSysAction;
                 }
 
                 Accounts.update({acctNum}, {

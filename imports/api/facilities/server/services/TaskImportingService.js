@@ -217,7 +217,7 @@ export default class TaskService {
             const newAccount = this.getAccount(accounts, accountId);
             Object.assign(newAccount, {facilityId, fileId, clientId});
 
-            Accounts.insert(account);
+            Accounts.insert(newAccount);
         });
 
         //Backup old accounts
