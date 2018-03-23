@@ -82,7 +82,8 @@ export default class ImportingRules extends React.Component {
                             <div className="form-wrapper">
                                 <div className="upload-section">
                                     <div className="radio-group">
-                                        <RadioField className="radio-group__wrapper" name="hasHeader" options={options}/>
+                                        <RadioField className="radio-group__wrapper" name="hasHeader"
+                                                    options={options}/>
                                         <ErrorField name="hasHeader"/>
                                     </div>
                                 </div>
@@ -101,20 +102,25 @@ export default class ImportingRules extends React.Component {
                                         <ListField name="insurances">
                                             <ListItemField name="$">
                                                 <NestField className="upload-item text-center">
-                                                    <AutoField
-                                                        className="text-light-grey"
-                                                        name="insName"
-                                                    />
-                                                    <ErrorField name="insName"/>
-                                                    <AutoField
-                                                        className="text-light-grey"
-                                                        name="insCode"/>
-                                                    <ErrorField name="insCode"/>
-
-                                                    <AutoField
-                                                        className="text-light-grey"
-                                                        name="insBal"/>
-                                                    <ErrorField name="insBal"/>
+                                                    <div className="insurance-item__wrapper">
+                                                        <AutoField
+                                                            className="text-light-grey"
+                                                            name="insName"
+                                                        />
+                                                        <ErrorField name="insName"/>
+                                                    </div>
+                                                    <div className="insurance-item__wrapper">
+                                                        <AutoField
+                                                            className="text-light-grey"
+                                                            name="insCode"/>
+                                                        <ErrorField name="insCode"/>
+                                                    </div>
+                                                    <div className="insurance-item__wrapper">
+                                                        <AutoField
+                                                            className="text-light-grey"
+                                                            name="insBal"/>
+                                                        <ErrorField name="insBal"/>
+                                                    </div>
                                                 </NestField>
                                             </ListItemField>
                                         </ListField>
