@@ -63,6 +63,10 @@ export default class TaskService {
     }
 
     static backupAccounts(accounts) {
+        for (account of accounts) {
+            delete account._id;
+        }
+
         const rawBackup = Backup.rawCollection();
         rawBackup.insert(accounts);
     }
