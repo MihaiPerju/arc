@@ -6,7 +6,7 @@
   overflow: hidden;
   &.collapsed {
     width: 75px;
-    .menu__item>a {
+    .menu__item > a {
       padding-left: 30px;
       span {
         opacity: 0;
@@ -30,7 +30,9 @@
       padding: 7px 15px 8px 50px;
       color: $light-grey;
       border-radius: 3px;
-      transition: padding-left $transition300;
+      transition: padding-left $transition300,
+                  background 300ms cubic-bezier(.08, .52, .52, 1),
+                  color 300ms cubic-bezier(.08, .52, .52, 1);
       i {
         color: $extra-light-grey;
       }

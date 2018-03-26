@@ -88,7 +88,7 @@ export default class ReportHeader extends Component {
                 })
             },
             {
-                header: 'Payment Type',
+                header: 'Patient Type',
                 row: accounts.map((task, index) => {
                     return {title: task.ptType}
                 })
@@ -100,7 +100,7 @@ export default class ReportHeader extends Component {
                 })
             },
             {
-                header: "Payment Name",
+                header: "Patient Name",
                 row: accounts.map((task, index) => {
                     return {title: task.ptName}
                 })

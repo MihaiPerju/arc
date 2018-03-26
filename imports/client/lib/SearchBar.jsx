@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { AutoForm, AutoField } from '/imports/ui/forms';
+import React, {Component} from 'react';
+import {AutoForm, AutoField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import FilterBar from '/imports/client/lib/FilterBar.jsx';
 import Dropdown from './Dropdown';
@@ -7,16 +7,17 @@ import classNames from 'classnames';
 import Dialog from '/imports/client/lib/ui/Dialog';
 
 export default class SearchBar extends Component {
-    constructor () {
+    constructor() {
         super();
         this.state = {
             active: false,
             filter: false,
-            dropdown: false
+            dropdown: false,
+            selectAll: false
         };
     }
 
-    manageFilterBar () {
+    manageFilterBar() {
         const {active, filter} = this.state;
         this.setState({
             active: !active,
@@ -25,7 +26,7 @@ export default class SearchBar extends Component {
         this.props.decrease();
     }
 
-    onHandleChange () {
+    onHandleChange() {
         const {changeFilters} = this.props;
         const newFilters = this.refs.filters.state.modelSync;
 
@@ -76,20 +77,32 @@ export default class SearchBar extends Component {
         this.node = node;
     };
 
-    render () {
-        const {filter, active, dropdown} = this.state;
+    selectAll = () => {
+        const {selectAll} = this.state;
+        this.setState({
+            selectAll: !selectAll
+        })
+    }
+,
+
+    render() {
+        const {filter, active, dropdown, selectAll} = this.state;
         const {options, btnGroup, deleteAction} = this.props;
         const classes = classNames({
                 'select-type': true,
                 'open': dropdown
             }
         );
+        const btnSelectClasses = classNames({
+            'btn-select': true,
+            'active': selectAll
+        });
 
         return (
             <AutoForm ref="filters" onChange={this.onHandleChange.bind(this)} schema={schema}>
                 <div className="search-bar">
                     <div className={classes} ref={this.nodeRef}>
-                        <div className="btn-select"/>
+                        <div className={btnSelectClasses} onClick={this.selectAll}/>
                         <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
                             <i className="icon-angle-down"/>
                         </div>
@@ -120,7 +133,7 @@ export default class SearchBar extends Component {
 }
 
 class BtnGroup extends Component {
-    constructor () {
+    constructor() {
         super();
         this.state = {
             in: false,
@@ -128,7 +141,7 @@ class BtnGroup extends Component {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         setTimeout(() => {
             this.setState({in: true});
         }, 1);
@@ -153,7 +166,7 @@ class BtnGroup extends Component {
         this.props.deleteAction();
     };
 
-    render () {
+    render() {
         const {deleteAction} = this.props;
         const {dialogIsActive} = this.state;
         return (
@@ -171,7 +184,8 @@ class BtnGroup extends Component {
                             </div>
                             <div className="btn-group">
                                 <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                <button className="btn--light-blue" onClick={this.confirmDelete}>Confirm & delete</button>
+                                <button className="btn--light-blue" onClick={this.confirmDelete}>Confirm & delete
+                                </button>
                             </div>
                         </Dialog>
                     )

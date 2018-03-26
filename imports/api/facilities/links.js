@@ -21,9 +21,9 @@ Facilities.addLinks({
         type: 'many',
         inversedBy: 'facility'
     },
-    regions: {
+    region: {
         collection: Regions,
-        type: 'many',
-        field: 'regionIds'
+        type: 'one',
+        field: 'regionId'
     }
 });

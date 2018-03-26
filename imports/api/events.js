@@ -4,7 +4,7 @@ const Dispatcher = new EventEmitter();
 export default Dispatcher;
 
 const Events = {
-    TASK_ACTION_ADDED: 'task_action_added'
+    ACCOUNT_ACTION_ADDED: 'account_action_added'
 };
 
 export { Dispatcher, Events }
