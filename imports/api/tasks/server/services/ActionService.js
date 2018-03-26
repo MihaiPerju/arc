@@ -36,7 +36,7 @@ export default class ActionService {
 
     static archive(accountIds, facilityId, fileId) {
         _.map(accountIds, (accountId) => {
-            const action = {title: "System archive", substate: Substates.SELF_RETURNED};
+            const action = {title: "System archive", substate: Substates.SELF_RETURNED, systemAction: true};
             const actionId = Actions.insert(action);
             const accountActionId = AccountActions.insert({
                 actionId,
