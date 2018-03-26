@@ -8,6 +8,7 @@ import query from "/imports/api/regions/queries/regionList";
 import Loading from '/imports/client/lib/ui/Loading';
 import {objectFromArray} from "/imports/api/utils";
 import RegionCreate from "./RegionCreate";
+import Notifier from '/imports/client/lib/Notifier';
 
 class RegionListContainer extends Component {
     constructor() {
@@ -66,6 +67,15 @@ class RegionListContainer extends Component {
         })
     };
 
+    deleteAction = () => {
+        const {regionsSelected} = this.state;
+
+        Meteor.call('region.deleteMany', regionsSelected, (err) => {
+            if (!err) {
+                Notifier.success('Regions deleted !');
+            }
+        });
+    };
 
     render() {
         const {data, loading, error} = this.props;
@@ -82,7 +92,7 @@ class RegionListContainer extends Component {
         return (
             <div className="cc-container">
                 <div className={(currentRegion || create) ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={regionsSelected.length}/>
+                    <SearchBar btnGroup={regionsSelected.length} deleteAction={this.deleteAction}/>
                     <RegionsList
                         class={this.state.filter ? "task-list decreased" : "task-list"}
                         regionsSelected={regionsSelected}

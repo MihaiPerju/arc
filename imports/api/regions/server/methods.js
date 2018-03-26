@@ -30,6 +30,14 @@ Meteor.methods({
         Regions.remove({_id: id});
     },
 
+    'region.deleteMany'(Ids) {
+        Security.isAdminOrTech(this.userId);
+
+        _.each(Ids, (_id) => {
+            Regions.remove({_id});
+        });
+    },
+
     'regions.get'() {
 
         return Regions.find().fetch();

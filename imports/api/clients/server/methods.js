@@ -65,31 +65,37 @@ Meteor.methods({
     'client.removeLogo'(clientId) {
         Security.isAdminOrTech(this.userId);
 
-        const { logoPath } = Clients.findOne({ _id: clientId });
+        const client = Clients.findOne({ _id: clientId });
 
-        //Delete from local storage
-        Uploads.remove({ path: logoPath });
+        if (client) {
+            const {logoPath} = client;
 
-        Clients.update(
-            { _id: clientId },
-            {
-                $unset: {
-                    logoPath: null
+            //Delete from local storage
+            Uploads.remove({path: logoPath});
+
+            Clients.update(
+                {_id: clientId},
+                {
+                    $unset: {
+                        logoPath: null
+                    }
                 }
-            }
-        );
-        if (logoPath)
-            fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + '/' + logoPath);
+            );
+            if (logoPath)
+                fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + '/' + logoPath);
+        }
     },
 
-    'client.delete'(id) {
+    'client.delete'(_id) {
         Security.isAdminOrTech(this.userId);
 
-        const existingClient = Clients.findOne({ _id: id });
-        const logoPath = existingClient.logoPath;
+        const existingClient = Clients.findOne({ _id });
+        if (existingClient) {
+            const logoPath = existingClient.logoPath;
 
-        Uploads.remove({ path: logoPath });
-        Clients.remove({ _id: id });
+            Uploads.remove({path: logoPath});
+            Clients.remove({_id: id});
+        }
     },
 
     'client.deleteMany'(Ids) {

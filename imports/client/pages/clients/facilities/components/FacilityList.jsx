@@ -15,7 +15,7 @@ export default class Facility extends Component {
                                 selectFacility={selectFacility}
                                 setFacility={setFacility}
                                 facility={facility}
-                                key={index}
+                                key={facility._id}
                             />
                         )
                     })

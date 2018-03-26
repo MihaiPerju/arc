@@ -13,8 +13,7 @@ export default class CodeList extends Component {
                     selectCode={selectCode}
                     setCode={setCode}
                     code={code}
-                    key={index}
-
+                    key={code._id}
                 />
             )
         }, this)
