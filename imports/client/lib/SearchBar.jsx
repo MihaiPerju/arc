@@ -82,8 +82,7 @@ export default class SearchBar extends Component {
         this.setState({
             selectAll: !selectAll
         })
-    }
-,
+    };
 
     render() {
         const {filter, active, dropdown, selectAll} = this.state;
