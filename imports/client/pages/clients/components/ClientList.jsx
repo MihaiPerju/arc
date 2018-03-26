@@ -15,7 +15,7 @@ export default class ClientList extends Component {
                     setClient={setClient}
                     mail={client.email}
                     id={client._id}
-                    key={index}
+                    key={client._id}
                 />
             )
         }, this);

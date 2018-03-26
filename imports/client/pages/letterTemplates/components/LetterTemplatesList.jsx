@@ -13,7 +13,7 @@ export default class LetterTemplatesList extends Component {
                     selectTemplate={selectTemplate}
                     setTemplate={setTemplate}
                     template={template}
-                    key={index}
+                    key={template._id}
                 />
             )
         }, this);

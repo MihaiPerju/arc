@@ -83,8 +83,13 @@ class ClientContainer extends Pager {
         Meteor.call('client.deleteMany', clientsSelected, (err) => {
             if (!err) {
                 Notifier.success('Clients deleted !');
+                this.setState({
+                    clientsSelected: []
+                });
             }
         });
+
+        console.log('delete called');
     };
 
     nextPage = (inc) => {
@@ -99,6 +104,8 @@ class ClientContainer extends Pager {
         const {data, loading, error} = this.props;
         const {clientsSelected, currentClient, create, range, total} = this.state;
         const client = this.getClient();
+
+        console.log(clientsSelected);
 
         if (loading) {
             return <Loading/>;

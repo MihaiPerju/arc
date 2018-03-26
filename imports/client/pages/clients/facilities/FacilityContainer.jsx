@@ -1,15 +1,16 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
 import SearchBar from '/imports/client/lib/SearchBar.jsx';
 import FacilityList from './components/FacilityList.jsx';
 import FacilityContent from './FacilityContent.jsx';
 import FacilityCreate from './FacilityCreate.jsx';
-import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import query from "/imports/api/facilities/queries/facilityList";
+import { withQuery } from 'meteor/cultofcoders:grapher-react';
+import query from '/imports/api/facilities/queries/facilityList';
 import Loading from '/imports/client/lib/ui/Loading';
+import Notifier from '/imports/client/lib/Notifier';
 
 class FacilityContainer extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             currentFacility: null,
@@ -18,7 +19,6 @@ class FacilityContainer extends Component {
             create: false
         };
     }
-
 
     setFacility = (_id) => {
         this.closeForm();
@@ -29,7 +29,7 @@ class FacilityContainer extends Component {
         } else {
             this.setState({currentFacility: _id, create: false});
         }
-    }
+    };
 
     selectFacility = (_id) => {
         const {facilitiesSelected} = this.state;
@@ -39,9 +39,9 @@ class FacilityContainer extends Component {
             facilitiesSelected.push(_id);
         }
         this.setState({facilitiesSelected});
-    }
+    };
 
-    getFacility() {
+    getFacility () {
         const {data} = this.props;
         const {currentFacility} = this.state;
         for (facility of data) {
@@ -55,34 +55,44 @@ class FacilityContainer extends Component {
         this.setState({
             currentFacility: false,
             create: true
-        })
-    }
+        });
+    };
 
     closeForm = () => {
         this.setState({
             create: false
-        })
-    }
+        });
+    };
 
-    render() {
+    deleteAction = () => {
+        const {facilitiesSelected} = this.state;
+
+        Meteor.call('facility.removeMany', facilitiesSelected, (err) => {
+            if (!err) {
+                Notifier.success('Facilities deleted !');
+            }
+        });
+    };
+
+    render () {
         const {data, loading, error} = this.props;
         const {facilitiesSelected, currentFacility, create} = this.state;
         const facility = this.getFacility();
 
         if (loading) {
-            return <Loading/>
+            return <Loading/>;
         }
 
         if (error) {
-            return <div>Error: {error.reason}</div>
+            return <div>Error: {error.reason}</div>;
         }
 
         return (
             <div className="cc-container">
-                <div className={(currentFacility || create) ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={facilitiesSelected.length}/>
+                <div className={(currentFacility || create) ? 'left__side' : 'left__side full__width'}>
+                    <SearchBar btnGroup={facilitiesSelected.length} deleteAction={this.deleteAction}/>
                     <FacilityList
-                        class={this.state.filter ? "task-list decreased" : "task-list"}
+                        class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         facilitiesSelected={facilitiesSelected}
                         setFacility={this.setFacility.bind(this)}
                         selectFacility={this.selectFacility}
@@ -109,30 +119,30 @@ class FacilityContainer extends Component {
 }
 
 class RightSide extends Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             fade: false
-        }
+        };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         setTimeout(() => {
             this.setState({fade: true});
         }, 300);
     }
 
-    render() {
+    render () {
         const {fade} = this.state;
         const {facility, create, close} = this.props;
 
         return (
-            <div className={fade ? "right__side in" : "right__side"}>
+            <div className={fade ? 'right__side in' : 'right__side'}>
                 {
                     create ? <FacilityCreate close={close}/> : <FacilityContent facility={facility}/>
                 }
             </div>
-        )
+        );
     }
 }
 
@@ -142,4 +152,4 @@ export default withQuery(() => {
             clientId: FlowRouter.current().params._id
         }
     });
-}, {reactive: true})(FacilityContainer)
+}, {reactive: true})(FacilityContainer);

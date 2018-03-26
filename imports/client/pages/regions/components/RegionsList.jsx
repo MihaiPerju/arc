@@ -12,7 +12,7 @@ export default class RegionsList extends Component {
                     selectRegion={selectRegion}
                     setRegion={setRegion}
                     region={region}
-                    key={index}
+                    key={region._id}
                 />
             )
         }, this);

@@ -4,9 +4,8 @@ import UserSingle from './UserSingle';
 export default class UserList extends Component {
     render() {
         const {users} = this.props;
-        const {currentUser, setUser, selectUser, usersSelected} = this.props;
-
-        const userList = users.map((user, index) => {
+        const userList = users.map(function (user, index) {
+            const {currentUser, setUser, selectUser, usersSelected} = this.props;
             return (
                 <UserSingle
                     open={currentUser === user._id}
@@ -14,7 +13,7 @@ export default class UserList extends Component {
                     currentUser={currentUser}
                     selectUser={selectUser}
                     setUser={setUser}
-                    key={index}
+                    key={user._id}
                     user={user}
                 />
             )
