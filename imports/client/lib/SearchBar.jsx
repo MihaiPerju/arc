@@ -177,7 +177,7 @@ class BtnGroup extends Component {
                 }
                 {
                     dialogIsActive && (
-                        <Dialog className="account-dialog" closePortal={this.closeDialog} title="Attention">
+                        <Dialog className="account-dialog" closePortal={this.closeDialog}>
                             <div className="form-wrapper">
                                 Are you sure you want to delete selected items ?
                             </div>
