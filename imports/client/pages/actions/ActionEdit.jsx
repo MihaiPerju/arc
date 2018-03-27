@@ -125,8 +125,8 @@ export default class ActionEdit extends React.Component {
                             }
                         </AutoForm>
                     </div>
+                    <ReasonCodesBlock action={action}/>
                 </div>
-                <ReasonCodesBlock action={action}/>
             </div>
         )
     }
