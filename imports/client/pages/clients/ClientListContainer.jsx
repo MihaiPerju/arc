@@ -105,8 +105,6 @@ class ClientContainer extends Pager {
         const {clientsSelected, currentClient, create, range, total} = this.state;
         const client = this.getClient();
 
-        console.log(clientsSelected);
-
         if (loading) {
             return <Loading/>;
         }

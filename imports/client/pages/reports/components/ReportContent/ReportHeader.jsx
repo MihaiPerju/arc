@@ -29,7 +29,6 @@ export default class ReportHeader extends Component {
         const options = {limit: 20};
         accountsQuery.clone({filters, options}).fetch((err, accounts) => {
             if (!err) {
-                console.log(accounts);
                 this.setState({
                     accounts
                 })
