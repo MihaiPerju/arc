@@ -166,10 +166,10 @@ export default class TaskService {
         const {types} = RulesEnum;
         if (types.dates.includes(rule)) {
             const parsed = moment(value, "MM/DD/YYYY", true);
-            return parsed.isValid() ? parsed.toDate() : 'broken date!!!';
+            return parsed.isValid() ? parsed.toDate() : null;
         } else if (types.numbers.includes(rule)) {
             const parsed = parseInt(value, 10);
-            return isNaN(parsed) ? 'broken number!!!' : parsed
+            return isNaN(parsed) ? null : parsed
         }
         else {
             return value;
