@@ -23,12 +23,12 @@ export default class PayItem extends Component {
                     </div>
                     <div className="info-row">
                         <div className="text-light-grey">Phone number</div>
-                        <div className="text-dark-grey">(214) 905-5487</div>
+                        <div className="text-dark-grey">{insurance.phone}</div>
                     </div>
                     <div className="info-row">
                         <div className="text-light-grey">Last bill date</div>
                         <div className="text-dark-grey">
-                            {insurance.billDate ? insurance.billDate : ""}
+                            {insurance.billDate}
                         </div>
                     </div>
                 </div>

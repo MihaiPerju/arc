@@ -60,6 +60,10 @@ export default new SimpleSchema({
     'insurances.$': {
         type: insuranceSchema
     },
+    "insurances.$.zip": {
+        type: SimpleSchema.Integer,
+        optional: true
+    },
     state: {
         type: String,
         defaultValue: StateEnum.ACTIVE,
