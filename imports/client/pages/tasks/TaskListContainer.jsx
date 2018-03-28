@@ -194,6 +194,8 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
+    const {state} = FlowRouter.current().params;
     const perPage = 13;
-    return PagerService.setQuery(query, {page, perPage});
+    const params = {page, perPage, state};
+    return PagerService.setQuery(query, params);
 }, {reactive: true})(TaskListContainer)

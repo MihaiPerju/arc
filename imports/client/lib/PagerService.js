@@ -1,7 +1,22 @@
-export default class PagerService {
-    static setQuery(query, {page, perPage}) {
+import stateEnum from '/imports/api/tasks/enums/states';
+
+export default class agerService {
+    static setQuery(query, {page, perPage, state}) {
         const params = this.getPagerOptions(page, perPage);
+        if (state) {
+            this.getAccountFilters(state, params);
+        }
         return query.clone(params);
+    }
+
+    static getAccountFilters(state, params) {
+        if (state === "unassigned") {
+            _.extend(params, {filters: {assigneeId: null}});
+        }
+        else {
+            state = stateEnum[state.toUpperCase()];
+            _.extend(params, {filters: {state}});
+        }
     }
 
     static getRange(page, perPage) {

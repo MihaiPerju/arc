@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from 'react-dom';
+import {render} from 'react-dom';
 
 import route from './router';
 import './logoutRoute';
@@ -120,6 +120,7 @@ import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
 import TaskViewContainer from '/imports/client/pages/tasks/TaskViewContainer';
 
 route('/accounts', TaskListContainer);
+route('/accounts/:state', TaskListContainer);
 route('/account/:_id/view', TaskViewContainer, {}, {
     name: 'task.view'
 });
@@ -137,7 +138,6 @@ route('/action/:actionId/edit', EditAction);
 import RegionCreate from '/imports/client/pages/regions/RegionCreate';
 import RegionEdit from '/imports/client/pages/regions/RegionEdit';
 import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
-
 
 
 route('/client/:id/region/create', RegionCreate, {}, {

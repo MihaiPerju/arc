@@ -1,36 +1,37 @@
 const States = {
     ACTIVE: 'Active',
     ARCHIVED: 'Archived',
-    HOLD: 'Hold'
-}
+    HOLD: 'Hold',
+    ESCALATED: 'Escalated'
+};
 
 import {LabelSubstates, Substates} from './substates';
 
 export const StatesSubstates = {
     [States.HOLD]: [
-        Substates.PENDING_PAYMENT, 
-        Substates.AWAITING_PAYMENT, 
+        Substates.PENDING_PAYMENT,
+        Substates.AWAITING_PAYMENT,
         Substates.TOO_SOON_FOR_FOLLOW_UP,
-        Substates.BILLED, 
-        Substates.APPEALED, 
+        Substates.BILLED,
+        Substates.APPEALED,
         Substates.HOSPITAL_REVIEW
     ],
     [States.ARCHIVED]: [
-        Substates.SUCCESSFUL_COLLECTION, 
-        Substates.FAIL, 
-        Substates.PAID, 
+        Substates.SUCCESSFUL_COLLECTION,
+        Substates.FAIL,
+        Substates.PAID,
         Substates.REPORTED,
-        Substates.SELF_RETURNED, 
-        Substates.MERGED, 
+        Substates.SELF_RETURNED,
+        Substates.MERGED,
         Substates.UNKNOWN
     ],
     [States.ACTIVE]: [
-        Substates.NEW, 
-        Substates.FOLLOW_UP, 
-        Substates.DENIED, 
+        Substates.NEW,
+        Substates.FOLLOW_UP,
+        Substates.DENIED,
         Substates.RETURNED,
-        Substates.BILLABLE, 
-        Substates.SELF_PAY, 
+        Substates.BILLABLE,
+        Substates.SELF_PAY,
         Substates.ESCALATED
     ]
 }
