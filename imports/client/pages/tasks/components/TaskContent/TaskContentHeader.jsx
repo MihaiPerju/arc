@@ -156,7 +156,7 @@ class ToggleDialog extends Component {
         const {taskId, options, title, escalate, metaData, metaDataGroups} = this.props;
         if (metaData){
             return (
-                <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
+                <div>
                     <div className="main-content">
                         <div className="header-block header-account">
                             <div className="main-content__header header-block">
@@ -201,12 +201,12 @@ class ToggleDialog extends Component {
                     <div className="btn-group">
                         <button className="btn-cancel" onClick={this.closeDialog}>Close</button>
                     </div>
-                </Dialog>
+                </div>
             )
         }
         if (escalate){
             return (
-                <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
+                <div className="meta-dialog" closePortal={this.closeDialog} title={title}>
                     <div className="form-wrapper">
                         <input type="text" placeholder="Type escalation reason"/>
                     </div>
@@ -214,11 +214,11 @@ class ToggleDialog extends Component {
                         <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
                         <button className="btn--light-blue">Confirm & send</button>
                     </div>
-                </Dialog>
+                </div>
             )
         } else {
             return (
-                <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
+                <div>
                     <div className="form-wrapper select-wrapper">
                         <AssigneeSelect
                             taskId={taskId}
@@ -229,20 +229,24 @@ class ToggleDialog extends Component {
                         <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
                         <button className="btn--light-blue">Confirm & send</button>
                     </div>
-                </Dialog>
+                </div>
             )
         }
     }
 
     render() {
         const {dialogIsActive} = this.state;
-        const {type} = this.props;
+        const {type, title} = this.props;
         return (
             <button className="btn--white" onClick={this.openDialog}>
                 <span>{type}</span>
-                {
-                    dialogIsActive && this.showDialog()
-                }
+                        {
+                            dialogIsActive &&
+                            <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
+                                {this.showDialog()}
+                            </Dialog>
+                        }
+
             </button>
         )
     }
