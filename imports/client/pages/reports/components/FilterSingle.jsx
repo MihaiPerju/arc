@@ -17,7 +17,7 @@ export default class FiltersSingle extends React.Component {
     }
 
     renderWidget(name, TaskReportFields) {
-        if (ReportsService.isEnum(name, TaskReportFields)) {
+        if (ReportsService.isEnum(name)) {
             return <div className="select-wrapper m-t--0">
                 <AutoField placeholder="Select filter" labelHidden={true} name={name}/>
                 <ErrorField name={name}/>

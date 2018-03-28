@@ -4,11 +4,11 @@ import Notifier from '/imports/client/lib/Notifier';
 import {AutoForm, AutoField, ErrorField, SelectField, LongTextField} from '/imports/ui/forms';
 import RichTextArea from '/imports/client/lib/uniforms/RichTextArea.jsx';
 import codesQuery from '/imports/api/codes/queries/listCodeNames';
-import { CategoryList } from '/imports/api/letterTemplates/enums/categories.js';
+import {CategoryList} from '/imports/api/letterTemplates/enums/categories.js';
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class EditLetterTemplate extends React.Component {
-    constructor () {
+    constructor() {
         super();
 
         this.state = {
@@ -17,7 +17,7 @@ export default class EditLetterTemplate extends React.Component {
         };
     }
 
-    componentWillMount () {
+    componentWillMount() {
         codesQuery.clone({}).fetch((err, codes) => {
             if (!err) {
                 this.setState({
@@ -55,13 +55,13 @@ export default class EditLetterTemplate extends React.Component {
         close();
     };
 
-    getCodeOptions (codes) {
+    getCodeOptions(codes) {
         return _.map(codes, ({_id, code}) => {
             return {value: _id, label: code};
         })
     }
 
-    render () {
+    render() {
         const {model} = this.props;
         //const codeIds = this.getCodeOptions(this.state.codes);
         const categories = this.getCategories(CategoryList);
@@ -91,7 +91,12 @@ export default class EditLetterTemplate extends React.Component {
                             </div>
                             <div className="select-group">
                                 <div className="form-wrapper">
-                                    <SelectField name="category" placeholder="Category" options={categories}/>
+                                    <SelectField
+                                        labelHidden={true}
+                                        name="category"
+                                        placeholder="Category"
+                                        options={categories}
+                                    />
                                     <ErrorField name="category"/>
                                 </div>
                             </div>

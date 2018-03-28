@@ -3,7 +3,7 @@ import LetterTemplateSchema from '/imports/api/letterTemplates/schemas/schema';
 import {AutoForm, AutoField, ErrorField, SelectField, LongTextField} from '/imports/ui/forms';
 import RichTextArea from "/imports/client/lib/uniforms/RichTextArea.jsx";
 import Notifier from '/imports/client/lib/Notifier';
-import { CategoryList } from '/imports/api/letterTemplates/enums/categories.js';
+import {CategoryList} from '/imports/api/letterTemplates/enums/categories.js';
 
 export default class CreateLetterTemplate extends Component {
     constructor() {
@@ -64,7 +64,12 @@ export default class CreateLetterTemplate extends Component {
                             </div>
                             <div className="select-group">
                                 <div className="form-wrapper">
-                                    <SelectField name="category" placeholder="Category" options={categories}/>
+                                    <SelectField
+                                        labelHidden={true}
+                                        name="category"
+                                        placeholder="Category"
+                                        options={categories}
+                                    />
                                     <ErrorField name="category"/>
                                 </div>
                             </div>

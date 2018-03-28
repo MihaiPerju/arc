@@ -128,7 +128,7 @@ export default class FacilityCreate extends Component {
                                         regionIds
                                         &&
                                         <div>
-                                            <SelectField name="regionId" options={regionIds}/>
+                                            <SelectField labelHidden={true} name="regionId" options={regionIds}/>
                                             < ErrorField name="regionId"/>
                                         </div>
                                     }

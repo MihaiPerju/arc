@@ -92,7 +92,7 @@ class LetterTemplateListContainer extends Component {
                         setTemplate={this.setTemplate}
                         templates={data}
                     />
-                    <PaginationBar create={this.createForm}/>
+                    <PaginationBar module="Template" create={this.createForm}/>
                 </div>
                 {
                     (currentTemplate || create) &&

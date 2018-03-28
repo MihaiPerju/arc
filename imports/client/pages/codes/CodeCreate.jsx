@@ -59,7 +59,7 @@ export default class CodeCreate extends Component {
 
                             <div className="select-group">
                                 <div className="form-wrapper">
-                                    <AutoField name="type" initialValue={CodeEnum.CARC}/>
+                                    <AutoField labelHidden={true} name="type" initialValue={CodeEnum.CARC}/>
                                     <ErrorField name="type"/>
                                 </div>
                             </div>
