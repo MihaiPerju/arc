@@ -88,8 +88,6 @@ class ClientContainer extends Pager {
                 });
             }
         });
-
-        console.log('delete called');
     };
 
     nextPage = (inc) => {

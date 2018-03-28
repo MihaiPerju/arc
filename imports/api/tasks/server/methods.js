@@ -2,7 +2,7 @@ import ActionService from './services/ActionService.js';
 import Tasks from '../collection';
 import TaskSecurity from './../security';
 import Security from '/imports/api/security/security';
-import { roleGroups } from '/imports/api/users/enums/roles';
+import {roleGroups} from '/imports/api/users/enums/roles';
 import StateEnum from '/imports/api/tasks/enums/states';
 import TimeService from './services/TimeService';
 import moment from 'moment';
@@ -11,6 +11,9 @@ import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import fs from 'fs';
 import os from 'os';
 import Business from '/imports/api/business';
+import Files from '/imports/api/files/collection';
+import Backup from '/imports/api/backup/collection';
+import TaskActions from '/imports/api/taskActions/collection';
 
 Meteor.methods({
     'task.actions.add'(data) {
@@ -19,7 +22,7 @@ Meteor.methods({
             reasonId = data.reasonCode,
             userId = this.userId;
 
-        ActionService.createAction({ accountId, actionId, reasonId, userId });
+        ActionService.createAction({accountId, actionId, reasonId, userId});
     },
 
     'task.assignee_change'(data) {
@@ -27,7 +30,7 @@ Meteor.methods({
         Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
 
         Tasks.update(
-            { _id: data.taskId },
+            {_id: data.taskId},
             {
                 $set: {
                     assigneeId: data.value
@@ -39,22 +42,22 @@ Meteor.methods({
     'task.attachment.remove'(_id, attachmentId, key) {
         TaskSecurity.hasRightsOnTask(this.userId, _id);
         Tasks.update(
-            { _id },
+            {_id},
             {
                 $pull: {
                     attachmentIds: attachmentId
                 }
             }
         );
-        const { path } = Uploads.findOne({ _id: attachmentId });
-        Uploads.remove({ _id: attachmentId });
+        const {path} = Uploads.findOne({_id: attachmentId});
+        Uploads.remove({_id: attachmentId});
         fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + '/' + path);
     },
 
     'task.attachment.update_order'(_id, attachmentIds) {
         TaskSecurity.hasRightsOnTask(this.userId, _id);
         Tasks.update(
-            { _id },
+            {_id},
             {
                 $set: {
                     attachmentIds
@@ -90,7 +93,7 @@ Meteor.methods({
                 let currentMonth = 0;
                 let currentWeek = 0;
                 //select tasks this month and week. To be optimized.
-                const tasks = Tasks.find({ facilityId: facility._id }).fetch();
+                const tasks = Tasks.find({facilityId: facility._id}).fetch();
                 for (index in tasks) {
                     const task = tasks[index];
 
@@ -133,5 +136,12 @@ Meteor.methods({
             assigneeId: this.userId
         }).count();
         return result;
+    },
+
+    'reset'() {
+        Tasks.remove({});
+        TaskActions.remove({});
+        Files.remove({});
+        Backup.remove({});
     }
 });

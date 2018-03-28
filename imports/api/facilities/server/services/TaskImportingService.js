@@ -63,6 +63,10 @@ export default class TaskService {
     }
 
     static backupAccounts(accounts) {
+        for (account of accounts) {
+            delete account._id;
+        }
+
         const rawBackup = Backup.rawCollection();
         rawBackup.insert(accounts);
     }
@@ -173,7 +177,7 @@ export default class TaskService {
         const {types} = RulesEnum;
         if (types.dates.includes(rule)) {
             const parsed = moment(value, "MM/DD/YYYY", true);
-            return parsed.isValid() ? parsed.toDate() : 'broken date!!!';
+            return parsed.isValid() ? parsed.toDate() : null;
         } else if (types.numbers.includes(rule)) {
             const parsed = parseInt(value, 10);
             return isNaN(parsed) ? null : parsed;
@@ -224,7 +228,7 @@ export default class TaskService {
             const newAccount = this.getAccount(accounts, accountId);
             Object.assign(newAccount, {facilityId, fileId, clientId});
 
-            Accounts.insert(account);
+            Accounts.insert(newAccount);
         });
 
         //Backup old accounts

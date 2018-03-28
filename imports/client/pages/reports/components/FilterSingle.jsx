@@ -1,8 +1,6 @@
 import React from 'react';
-import {Segment, Button, Divider} from 'semantic-ui-react'
 import ReportsService from '../../../../api/reports/services/ReportsService';
-import {AutoForm, AutoField, ErrorField, SelectField} from '/imports/ui/forms';
-import TaskReportFields from '../../../../api/tasks/config/tasks';
+import {AutoField, ErrorField, SelectField} from '/imports/ui/forms';
 
 export default class FiltersSingle extends React.Component {
     constructor() {
@@ -18,17 +16,17 @@ export default class FiltersSingle extends React.Component {
         return name === 'assigneeId' ? assigneeIdOptions : facilityIdOptions;
     }
 
-    renderWidget(name, TaskReportFields) {
-        if (ReportsService.isEnum(name, TaskReportFields)) {
+    renderWidget(name) {
+        if (ReportsService.isEnum(name)) {
             return <div>
-                <AutoField placeholder="Select filter" labelHidden={true} name={name}/>
+                <AutoField placeholder="Select filter" name={name}/>
                 <ErrorField name={name}/>
             </div>
         }
-        if (ReportsService.isDate(name, TaskReportFields)) {
+        if (ReportsService.isDate(name)) {
             return (
                 <div>
-                    <AutoField placeholder="Select minimum date" labelHidden={true} name={`${name}Start`}/>
+                    <AutoField placeholder="Select minimum date" name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
                     <AutoField placeholder="Select maximum date" labelHidden={true} name={`${name}End`}/>
@@ -37,10 +35,10 @@ export default class FiltersSingle extends React.Component {
             )
         }
 
-        if (ReportsService.isNumber(name, TaskReportFields)) {
+        if (ReportsService.isNumber(name)) {
             return (
                 <div>
-                    <AutoField labelHidden={true} placeholder="Type minimum value" name={`${name}Start`}/>
+                    <AutoField placeholder="Type minimum value" name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
                     <AutoField labelHidden={true} placeholder="Type maximum value" name={`${name}End`}/>
@@ -49,7 +47,7 @@ export default class FiltersSingle extends React.Component {
             )
         }
 
-        if (ReportsService.isLink(name, TaskReportFields)) {
+        if (ReportsService.isLink(name)) {
             return (
                 <div className="check-group">
                     <SelectField name={name} options={this.getOptions(name)}/>
@@ -59,7 +57,7 @@ export default class FiltersSingle extends React.Component {
 
         return (
             <div>
-                <AutoField labelHidden={true} placeholder="Type your filter" name={name}/>
+                <AutoField placeholder="Type your filter" name={name}/>
                 <ErrorField name={name}/>
 
                 <AutoField labelHidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
@@ -74,12 +72,11 @@ export default class FiltersSingle extends React.Component {
             <div>
                 <div className="select-group">
                     <div className="row-select">
-                        <div className="type">{name}</div>
                         <div onClick={this.deleteFilter.bind(this, name)} className="btn-delete">Delete</div>
                     </div>
                     <div className="form-wrapper">
                         {
-                            this.renderWidget(name, TaskReportFields)
+                            this.renderWidget(name)
                         }
                     </div>
                 </div>
