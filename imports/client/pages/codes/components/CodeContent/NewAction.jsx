@@ -47,8 +47,12 @@ export default class NewAction extends Component {
 
                 <div className="action-form">
                     <AutoForm schema={ActionSchema} ref="form">
-                        <AutoField labelHidden={true} name="action" options={actions}/>
-                        <ErrorField name="action"/>
+                        <div className="select-row">
+                            <div className="select-group">
+                                <AutoField labelHidden={true} name="action" options={actions}/>
+                                <ErrorField name="action"/>
+                            </div>
+                        </div>
 
                         <div className="btn-group">
                             <button type="button" className="btn--red" onClick={this.onHide.bind(this)}>Cancel</button>
