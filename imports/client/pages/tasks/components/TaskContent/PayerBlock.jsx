@@ -9,7 +9,7 @@ export default class PayerBlock extends Component {
         super();
     }
 
-    componentDidiMount() {
+    componentDidMount() {
         window.addEventListener('resize', () => {
             this.refs.slick.innerSlider.onWindowResized()
         })
