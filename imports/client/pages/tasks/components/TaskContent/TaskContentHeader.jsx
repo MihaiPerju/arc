@@ -47,23 +47,11 @@ export default class TaskContentHeader extends Component {
     }
 
     render() {
-        const x = {
-            v1: 1,
-            v2: 2,
-            v3: 3,
-            v4: 4,
-            v5: 5,
-            v6: 6,
-            v7: 7,
-            v8: 8,
-            v9: 9,
-            v10: 10
-        }
         const {task} = this.props;
         const {metaData} = task;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
-        const metaDataGroups = this.groupFields(Object.keys(x));
+        const metaDataGroups = this.groupFields(Object.keys(metaData));
 
         return (
             <div className="header-block header-account">
@@ -107,7 +95,7 @@ export default class TaskContentHeader extends Component {
                             title={''}
                         />
                         <ToggleDialog
-                            metaData={x}
+                            metaData={metaData}
                             metaDataGroups={metaDataGroups}
                             type={'View Meta Data'}
                         />
@@ -186,9 +174,9 @@ class ToggleDialog extends Component {
                                                 <div className="additional-info">
                                                     <ul>
                                                         {
-                                                            group.map((element) => {
+                                                            group.map((element, index) => {
                                                                 return (
-                                                                    <li className="text-center">
+                                                                    <li className="text-center" key={index}>
                                                                         <div className="text-light-grey">{element}</div>
                                                                         <div className="text-dark-grey text-uppercase">
                                                                             {metaData[element]}
