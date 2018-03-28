@@ -6,10 +6,14 @@ export default new SimpleSchema({
     },
     description: {
         type: String,
-        optional: true        
+        optional: true
     },
     substate: {
         type: String,
         optional: true
+    },
+    systemAction: {
+        type: Boolean,
+        defaultValue: false
     }
 });

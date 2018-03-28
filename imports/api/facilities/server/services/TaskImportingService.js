@@ -63,6 +63,10 @@ export default class TaskService {
     }
 
     static backupAccounts(accounts) {
+        for (account of accounts) {
+            delete account._id;
+        }
+
         const rawBackup = Backup.rawCollection();
         rawBackup.insert(accounts);
     }
@@ -123,14 +127,21 @@ export default class TaskService {
 
         //Extract insurances first
         account.insurances = [];
-        importRules.insurances.map(({insName, insCode, insBal}) => {
+        importRules.insurances.map(({insName, insCode, insBal, address1, address2, city, state, zip, policy, phone}) => {
             //Mark indexes as used
-            mainFields.push(insBal - 1, insCode - 1, insName - 1);
+            mainFields.push(insBal - 1, insCode - 1, insName - 1, address1 - 1, address2 - 1, city - 1, state - 1, zip - 1, policy - 1, phone - 1);
             //Get insurances
             account.insurances.push({
                 insName: this.convertToType('insName', data[insName - 1]),
                 insCode: this.convertToType('insCode', data[insCode - 1]),
-                insBal: this.convertToType('insBal', data[insBal - 1])
+                insBal: this.convertToType('insBal', data[insBal - 1]),
+                address1: this.convertToType('address1', data[address1 - 1]),
+                address2: this.convertToType('address2', data[address2 - 1]),
+                city: this.convertToType('city', data[city - 1]),
+                state: this.convertToType('state', data[state - 1]),
+                zip: this.convertToType('zip', data[zip - 1]),
+                policy: this.convertToType('policy', data[policy - 1]),
+                phone: this.convertToType('phone', data[phone - 1]),
             });
         });
 
@@ -166,10 +177,10 @@ export default class TaskService {
         const {types} = RulesEnum;
         if (types.dates.includes(rule)) {
             const parsed = moment(value, "MM/DD/YYYY", true);
-            return parsed.isValid() ? parsed.toDate() : 'broken date!!!';
+            return parsed.isValid() ? parsed.toDate() : null;
         } else if (types.numbers.includes(rule)) {
             const parsed = parseInt(value, 10);
-            return isNaN(parsed) ? 'broken number!!!' : parsed
+            return isNaN(parsed) ? null : parsed;
         }
         else {
             return value;
@@ -217,7 +228,7 @@ export default class TaskService {
             const newAccount = this.getAccount(accounts, accountId);
             Object.assign(newAccount, {facilityId, fileId, clientId});
 
-            Accounts.insert(account);
+            Accounts.insert(newAccount);
         });
 
         //Backup old accounts

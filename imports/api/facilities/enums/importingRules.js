@@ -30,7 +30,7 @@ export default {
     ],
     types: {
         dates: ['dischrgDate', 'fbDate', 'admitDate', 'transDate'],
-        numbers: ['acctBal', 'medNo', 'insCode', 'insBal', 'newAcctBal', 'ptBal', 'transAmount'],
-        strings: ['transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode'],
+        numbers: ['zip', 'acctBal', 'medNo', 'insCode', 'insBal', 'newAcctBal', 'ptBal', 'transAmount'],
+        strings: ['address1', 'address2', 'city', 'state', 'policy', 'phone', 'transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode'],
     }
 }

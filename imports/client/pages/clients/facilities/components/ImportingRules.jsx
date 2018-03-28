@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import RulesService from '/imports/client/pages/clients/facilities/services/ImportingRulesService';
 import Loading from '/imports/client/lib/ui/Loading';
 import UploadItem from './FacilityContent/UploadItem'
+import InsuranceRules from './InsuranceRules';
 
 export default class ImportingRules extends React.Component {
     constructor() {
@@ -99,31 +100,7 @@ export default class ImportingRules extends React.Component {
                             <div className="upload-list">
                                 {
                                     schema._schemaKeys.includes("insurances") ?
-                                        <ListField name="insurances">
-                                            <ListItemField name="$">
-                                                <NestField className="upload-item text-center">
-                                                    <div className="insurance-item__wrapper">
-                                                        <AutoField
-                                                            className="text-light-grey"
-                                                            name="insName"
-                                                        />
-                                                        <ErrorField name="insName"/>
-                                                    </div>
-                                                    <div className="insurance-item__wrapper">
-                                                        <AutoField
-                                                            className="text-light-grey"
-                                                            name="insCode"/>
-                                                        <ErrorField name="insCode"/>
-                                                    </div>
-                                                    <div className="insurance-item__wrapper">
-                                                        <AutoField
-                                                            className="text-light-grey"
-                                                            name="insBal"/>
-                                                        <ErrorField name="insBal"/>
-                                                    </div>
-                                                </NestField>
-                                            </ListItemField>
-                                        </ListField>
+                                        <InsuranceRules/>
                                         :
                                         <ListField name="newInsBal">
                                             <ListItemField name="$">

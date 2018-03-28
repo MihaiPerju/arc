@@ -68,6 +68,7 @@ const renderSelect = ({
 
 const Select = ({
                     allowedValues,
+                    labelHidden,
                     checkboxes,
                     disabled,
                     fieldType,
@@ -83,7 +84,11 @@ const Select = ({
                     ...props
                 }) =>
     <div {...filterDOMProps(props)}>
-
+        {label && !labelHidden && (
+            <label htmlFor={id}>
+                {label}
+            </label>
+        )}
         {/* TODO: Better handling of these props. */}
         {/* eslint-disable max-len */}
         {checkboxes || fieldType === Array
