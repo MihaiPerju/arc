@@ -50,7 +50,7 @@ class ReasonCodesBlock extends Component {
         }
 
         return (
-            <div className="action-block schedule-block">
+            <div className="action-block reason-code-block">
                 <div className="header__block">
                     <div className="title-block text-uppercase">Reason Codes</div>
                 </div>
@@ -64,11 +64,11 @@ class ReasonCodesBlock extends Component {
                         <CreateReasonCode close={this.close} action={action}/>
                     }
 
-                    <div className="schedule-list">
+                    <div className="code-list">
                         {
                             data.map((reasonCode, index) => {
                                 return (
-                                    <div key={index} className="schedule-item">
+                                    <div key={index} className="code-item">
                                         <div className="left__side">
                                             <div className="info">
                                                 <div className="text-light-grey">Reason</div>
@@ -77,7 +77,7 @@ class ReasonCodesBlock extends Component {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="btn-group">
+                                        <div className="btn-group-1">
                                             <button
                                                 onClick={this.onDeleteReasonCode.bind(this, reasonCode._id)}
                                                 className="btn-cancel">
@@ -119,7 +119,7 @@ class CreateReasonCode extends Component {
         return (
             <div className="new-section">
                 <div className="text-label">Create Reason Code</div>
-                <div className="schedule-form">
+                <div className="reason-code-form">
                     <AutoForm schema={schema} onSubmit={this.onSubmit} ref="form">
                         <div className="form-wrapper">
                             <AutoField labelHidden={true} placeholder="Reason" name="reason"/>
