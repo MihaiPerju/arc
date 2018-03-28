@@ -16,7 +16,7 @@ export default class FiltersSingle extends React.Component {
         return name === 'assigneeId' ? assigneeIdOptions : facilityIdOptions;
     }
 
-    renderWidget(name, TaskReportFields) {
+    renderWidget(name) {
         if (ReportsService.isEnum(name)) {
             return <div className="select-wrapper m-t--0">
                 <AutoField placeholder="Select filter" labelHidden={true} name={name}/>
