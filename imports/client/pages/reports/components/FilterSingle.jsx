@@ -50,7 +50,7 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isLink(name)) {
             return (
                 <div className="check-group">
-                    <SelectField name={name} options={this.getOptions(name)}/>
+                    <SelectField labelHidden={true} name={name} options={this.getOptions(name)}/>
                 </div>
             )
         }
