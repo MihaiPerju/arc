@@ -88,8 +88,6 @@ class ClientContainer extends Pager {
                 });
             }
         });
-
-        console.log('delete called');
     };
 
     nextPage = (inc) => {
@@ -104,8 +102,6 @@ class ClientContainer extends Pager {
         const {data, loading, error} = this.props;
         const {clientsSelected, currentClient, create, range, total} = this.state;
         const client = this.getClient();
-
-        console.log(clientsSelected);
 
         if (loading) {
             return <Loading/>;
