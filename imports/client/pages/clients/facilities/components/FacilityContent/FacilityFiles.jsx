@@ -6,7 +6,16 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 
 class FacilityFiles extends Component {
-    onRollBack = (_id) => {
+    constructor() {
+        super();
+        this.state = {
+            dialogIsActive: false
+        }
+    }
+
+    onRollBack = () => {
+        const {_id} = this.state;
+
         Meteor.call("file.rollback", _id, (err) => {
             if (!err) {
                 Notifier.success("File reverted");
@@ -18,8 +27,30 @@ class FacilityFiles extends Component {
         })
     };
 
+    closeDialog = () => {
+        this.setState({
+            dialogIsActive: false
+        });
+    };
+
+    confirmDelete = () => {
+        this.setState({
+            dialogIsActive: false
+        });
+        this.onRollBack();
+    };
+
+    deleteAction = (_id) => {
+        this.setState({
+            dialogIsActive: true,
+            _id
+        });
+    };
+
     render() {
         const {data, loading, error} = this.props;
+        const {dialogIsActive} = this.state;
+
         if (loading) {
             return <Loading/>;
         }
@@ -45,7 +76,7 @@ class FacilityFiles extends Component {
                                             </div>
                                         </div>
                                         <div className="btn-group">
-                                            <button onClick={this.onRollBack.bind(this, file._id)}
+                                            <button onClick={this.deleteAction.bind(this, file._id)}
                                                     className="btn-cancel">Roll Back
                                             </button>
                                         </div>
@@ -55,6 +86,20 @@ class FacilityFiles extends Component {
                         }
                     </div>
                 </div>
+                {
+                    dialogIsActive && (
+                        <Dialog className="account-dialog" closePortal={this.closeDialog} title="Confirm Rollback">
+                            <div className="form-wrapper">
+                                Are you sure you want to revert all the changes?
+                            </div>
+                            <div className="btn-group">
+                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                <button className="btn--light-blue" onClick={this.confirmDelete}>Confirm & delete
+                                </button>
+                            </div>
+                        </Dialog>
+                    )
+                }
             </div>
         )
     }
