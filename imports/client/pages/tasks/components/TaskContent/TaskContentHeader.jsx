@@ -9,8 +9,8 @@ export default class TaskContentHeader extends Component {
     }
 
     groupFields(fields) {
-        const numInRow = 4;
-        const numGroups = Math.round(fields.length / numInRow);
+        const numInRow = 5;
+        const numGroups = Math.ceil(fields.length / numInRow);
         let result = [];
         for (let i = 0; i < numGroups; i++) {
             const startIndex = i * numInRow;
@@ -47,11 +47,23 @@ export default class TaskContentHeader extends Component {
     }
 
     render() {
+        const x = {
+            v1: 1,
+            v2: 2,
+            v3: 3,
+            v4: 4,
+            v5: 5,
+            v6: 6,
+            v7: 7,
+            v8: 8,
+            v9: 9,
+            v10: 10
+        }
         const {task} = this.props;
         const {metaData} = task;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
-        const metaDataGroups = this.groupFields(Object.keys(metaData));
+        const metaDataGroups = this.groupFields(Object.keys(x));
 
         return (
             <div className="header-block header-account">
@@ -95,7 +107,7 @@ export default class TaskContentHeader extends Component {
                             title={''}
                         />
                         <ToggleDialog
-                            metaData={metaData}
+                            metaData={x}
                             metaDataGroups={metaDataGroups}
                             type={'View Meta Data'}
                         />
@@ -152,52 +164,26 @@ class ToggleDialog extends Component {
         })
     };
 
-    render() {
-        const {dialogIsActive} = this.state;
-        const {taskId, options, type, title, escalate, metaData, metaDataGroups} = this.props;
-        console.log(metaDataGroups);
-        return (
-            <button className="btn--white" onClick={this.openDialog}>
-                <span>{type}</span>
-                {
-                    (dialogIsActive && !metaDataGroups) && (
-                        <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
-                            {
-                                escalate ? (
-                                    <div className="form-wrapper">
-                                        <input type="text" placeholder="Type escalation reason"/>
+    showDialog = () => {
+        const {taskId, options, title, escalate, metaData, metaDataGroups} = this.props;
+        if (metaData){
+            return (
+                <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
+                    <div className="main-content">
+                        <div className="header-block header-account">
+                            <div className="main-content__header header-block">
+                                <div className="row__header">
+                                    <div className="row__wrapper">
+                                        <div className="title text-center">Meta Data</div>
                                     </div>
-                                ) : (
-                                    <div className="form-wrapper select-wrapper">
-                                        <AssigneeSelect
-                                            taskId={taskId}
-                                            options={options}
-                                        />
-                                    </div>
-                                )
-                            }
-                            <div className="btn-group">
-                                {
-                                    <div>
-                                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                        <button className="btn--light-blue">Confirm & sent</button>
-                                    </div>
-                                }
-
+                                </div>
                             </div>
-                        </Dialog>
-                    )
-
-                }
-                {
-                    (dialogIsActive && metaDataGroups) && (
-                        <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
-                            <div className="main-content">
-                                <div className="header-block header-account">
-                                    <div className="additional-info">
-                                        {
-                                            metaDataGroups.map((group) => {
-                                                return (
+                            <div className="additional-info">
+                                {
+                                    metaDataGroups && (
+                                        metaDataGroups.map((group) => {
+                                            return (
+                                                <div className="additional-info">
                                                     <ul>
                                                         {
                                                             group.map((element) => {
@@ -212,17 +198,51 @@ class ToggleDialog extends Component {
                                                             })
                                                         }
                                                     </ul>
-                                                )
-                                            })
-                                        }
-                                        <ul>
+                                                </div>
+                                            )
+                                        })
+                                    )
 
-                                        </ul>
-                                    </div>
-                                </div>
+                                }
+                                <ul>
+
+                                </ul>
                             </div>
-                        </Dialog>
-                    )
+                        </div>
+                    </div>
+                </Dialog>
+            )
+        }
+        if (escalate){
+            return (
+                <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
+                    <div className="form-wrapper">
+                        <input type="text" placeholder="Type escalation reason"/>
+                    </div>
+                </Dialog>
+            )
+        } else {
+            return (
+                <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
+                    <div className="form-wrapper select-wrapper">
+                        <AssigneeSelect
+                            taskId={taskId}
+                            options={options}
+                        />
+                    </div>
+                </Dialog>
+            )
+        }
+    }
+
+    render() {
+        const {dialogIsActive} = this.state;
+        const {type} = this.props;
+        return (
+            <button className="btn--white" onClick={this.openDialog}>
+                <span>{type}</span>
+                {
+                    dialogIsActive && this.showDialog()
                 }
             </button>
         )
