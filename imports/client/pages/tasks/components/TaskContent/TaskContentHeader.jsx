@@ -8,6 +8,19 @@ export default class TaskContentHeader extends Component {
         super();
     }
 
+    groupFields(fields) {
+        const numInRow = 5;
+        const numGroups = Math.ceil(fields.length / numInRow);
+        let result = [];
+        for (let i = 0; i < numGroups; i++) {
+            const startIndex = i * numInRow;
+            const finishIndex = Math.min((i + 1) * numInRow, fields.length);
+            const groupOfFields = fields.slice(startIndex, finishIndex);
+            result.push(groupOfFields);
+        }
+        return result;
+    }
+
     getOptions(users) {
         let options = [];
         if (users) {
@@ -35,8 +48,10 @@ export default class TaskContentHeader extends Component {
 
     render() {
         const {task} = this.props;
+        const {metaData} = task;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
+        const metaDataGroups = this.groupFields(Object.keys(metaData));
 
         return (
             <div className="header-block header-account">
@@ -78,6 +93,11 @@ export default class TaskContentHeader extends Component {
                             escalate
                             type={'Escalate'}
                             title={''}
+                        />
+                        <ToggleDialog
+                            metaData={metaData}
+                            metaDataGroups={metaDataGroups}
+                            type={'View Meta Data'}
                         />
                     </div>
                 </div>
@@ -124,45 +144,109 @@ class ToggleDialog extends Component {
         this.setState({
             dialogIsActive: true
         });
-    }
+    };
 
     closeDialog = () => {
         this.setState({
             dialogIsActive: false
         })
+    };
+
+    showDialog = () => {
+        const {taskId, options, title, escalate, metaData, metaDataGroups} = this.props;
+        if (metaData){
+            return (
+                <div>
+                    <div className="main-content">
+                        <div className="header-block header-account">
+                            <div className="main-content__header header-block">
+                                <div className="row__header">
+                                    <div className="row__wrapper">
+                                        <div className="title text-center">Meta Data</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="additional-info">
+                                {
+                                    metaDataGroups && (
+                                        metaDataGroups.map((group) => {
+                                            return (
+                                                <div className="additional-info">
+                                                    <ul>
+                                                        {
+                                                            group.map((element, index) => {
+                                                                return (
+                                                                    <li className="text-center" key={index}>
+                                                                        <div className="text-light-grey">{element}</div>
+                                                                        <div className="text-dark-grey text-uppercase">
+                                                                            {metaData[element]}
+                                                                        </div>
+                                                                    </li>
+                                                                )
+                                                            })
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            )
+                                        })
+                                    )
+
+                                }
+                                <ul>
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="btn-group">
+                        <button className="btn-cancel" onClick={this.closeDialog}>Close</button>
+                    </div>
+                </div>
+            )
+        }
+        if (escalate){
+            return (
+                <div className="meta-dialog" closePortal={this.closeDialog} title={title}>
+                    <div className="form-wrapper">
+                        <input type="text" placeholder="Type escalation reason"/>
+                    </div>
+                    <div className="btn-group">
+                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                        <button className="btn--light-blue">Confirm & send</button>
+                    </div>
+                </div>
+            )
+        } else {
+            return (
+                <div>
+                    <div className="form-wrapper select-wrapper">
+                        <AssigneeSelect
+                            taskId={taskId}
+                            options={options}
+                        />
+                    </div>
+                    <div className="btn-group">
+                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                        <button className="btn--light-blue">Confirm & send</button>
+                    </div>
+                </div>
+            )
+        }
     }
 
     render() {
         const {dialogIsActive} = this.state;
-        const {taskId, options, type, title, escalate} = this.props;
-
+        const {type, title} = this.props;
         return (
             <button className="btn--white" onClick={this.openDialog}>
                 <span>{type}</span>
-                {
-                    dialogIsActive && (
-                        <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
-                            {
-                                escalate ? (
-                                    <div className="form-wrapper">
-                                        <input type="text" placeholder="Type escalation reason"/>
-                                    </div>
-                                ) : (
-                                    <div className="form-wrapper select-wrapper">
-                                        <AssigneeSelect
-                                            taskId={taskId}
-                                            options={options}
-                                        />
-                                    </div>
-                                )
-                            }
-                            <div className="btn-group">
-                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                <button className="btn--light-blue">Confirm & sent</button>
-                            </div>
-                        </Dialog>
-                    )
-                }
+                        {
+                            dialogIsActive &&
+                            <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
+                                {this.showDialog()}
+                            </Dialog>
+                        }
+
             </button>
         )
     }
