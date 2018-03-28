@@ -13,7 +13,7 @@ const xor = (item, array) => {
 
 const renderCheckboxes = ({allowedValues, disabled, fieldType, id, name, onChange, transform, value}) =>
     allowedValues.map(item =>
-        <div key={item}>
+        <div className="check__row" key={item}>
             <input
                 style={{"color": "red !important"}}
                 checked={fieldType === Array ? value.includes(item) : value === item}

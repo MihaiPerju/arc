@@ -20,14 +20,14 @@ export default class FiltersSingle extends React.Component {
 
     renderWidget(name, TaskReportFields) {
         if (ReportsService.isEnum(name, TaskReportFields)) {
-            return <div>
+            return <div className="select-wrapper m-t--0">
                 <AutoField placeholder="Select filter" labelHidden={true} name={name}/>
                 <ErrorField name={name}/>
             </div>
         }
         if (ReportsService.isDate(name, TaskReportFields)) {
             return (
-                <div>
+                <div className="input-datetime">
                     <AutoField placeholder="Select minimum date" labelHidden={true} name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
@@ -39,7 +39,7 @@ export default class FiltersSingle extends React.Component {
 
         if (ReportsService.isNumber(name, TaskReportFields)) {
             return (
-                <div>
+                <div className="form-wrapper__i">
                     <AutoField labelHidden={true} placeholder="Type minimum value" name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
@@ -59,11 +59,14 @@ export default class FiltersSingle extends React.Component {
 
         return (
             <div>
-                <AutoField labelHidden={true} placeholder="Type your filter" name={name}/>
-                <ErrorField name={name}/>
-
-                <AutoField labelHidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
-                <ErrorField name={`${name}Match`}/>
+                <div className="form-wrapper__i">
+                    <AutoField labelHidden={true} placeholder="Type your filter" name={name}/>
+                    <ErrorField name={name}/>
+                </div>
+                <div className="select-wrapper">
+                    <AutoField labelHidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
+                    <ErrorField name={`${name}Match`}/>
+                </div>
             </div>
         )
     }
@@ -72,16 +75,14 @@ export default class FiltersSingle extends React.Component {
         const {name} = this.props;
         return (
             <div>
-                <div className="select-group">
+                <div className="filter-type__wrapper">
                     <div className="row-select">
-                        <div className="type">{name}</div>
+                        <div className="type text-light-grey">{name}</div>
                         <div onClick={this.deleteFilter.bind(this, name)} className="btn-delete">Delete</div>
                     </div>
-                    <div className="form-wrapper">
-                        {
-                            this.renderWidget(name, TaskReportFields)
-                        }
-                    </div>
+                    {
+                        this.renderWidget(name, TaskReportFields)
+                    }
                 </div>
             </div>
         )
