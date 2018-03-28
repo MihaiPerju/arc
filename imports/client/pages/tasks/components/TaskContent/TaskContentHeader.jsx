@@ -47,22 +47,11 @@ export default class TaskContentHeader extends Component {
     }
 
     render() {
-        const obj = {
-            key1: "something",
-            key2: "something",
-            key3: "something",
-            key4: "something",
-            key5: "something",
-            key6: "something",
-            key7: "something",
-            key8: "something",
-
-
-        }
         const {task} = this.props;
+        const {metaData} = task;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
-        const metaDataGroups = this.groupFields(Object.keys(obj));
+        const metaDataGroups = this.groupFields(Object.keys(metaData));
 
         return (
             <div className="header-block header-account">
@@ -106,10 +95,9 @@ export default class TaskContentHeader extends Component {
                             title={''}
                         />
                         <ToggleDialog
-                            metaData={obj}
+                            metaData={metaData}
                             metaDataGroups={metaDataGroups}
                             type={'View Meta Data'}
-                            title={''}
                         />
                     </div>
                 </div>
@@ -156,13 +144,13 @@ class ToggleDialog extends Component {
         this.setState({
             dialogIsActive: true
         });
-    }
+    };
 
     closeDialog = () => {
         this.setState({
             dialogIsActive: false
         })
-    }
+    };
 
     render() {
         const {dialogIsActive} = this.state;
@@ -172,7 +160,7 @@ class ToggleDialog extends Component {
             <button className="btn--white" onClick={this.openDialog}>
                 <span>{type}</span>
                 {
-                    (dialogIsActive && !metaData) && (
+                    (dialogIsActive && !metaDataGroups) && (
                         <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
                             {
                                 escalate ? (
@@ -202,21 +190,36 @@ class ToggleDialog extends Component {
 
                 }
                 {
-                    (dialogIsActive && metaData) && (
+                    (dialogIsActive && metaDataGroups) && (
                         <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
-                            <div className="main-content__header header-block">
-                                <div className="row__header">
-                                    <div className="row__wrapper">
-                                        <img src="/assets/img/user.svg" className="lg-avatar-1 img-circle" alt=""/>
-                                        <div className="title">header</div>
+                            <div className="main-content">
+                                <div className="header-block header-account">
+                                    <div className="additional-info">
+                                        {
+                                            metaDataGroups.map((group) => {
+                                                return (
+                                                    <ul>
+                                                        {
+                                                            group.map((element) => {
+                                                                return (
+                                                                    <li className="text-center">
+                                                                        <div className="text-light-grey">{element}</div>
+                                                                        <div className="text-dark-grey text-uppercase">
+                                                                            {metaData[element]}
+                                                                        </div>
+                                                                    </li>
+                                                                )
+                                                            })
+                                                        }
+                                                    </ul>
+                                                )
+                                            })
+                                        }
+                                        <ul>
+
+                                        </ul>
                                     </div>
                                 </div>
-                                <ul style={{listStyle:'none'}}className="row__info main-info">
-                                    <li className="text-center">
-                                        <div className="text-light-grey">Status</div>
-                                        <div className="info-label">X</div>
-                                    </li>
-                                </ul>
                             </div>
                         </Dialog>
                     )
