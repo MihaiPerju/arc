@@ -13,7 +13,7 @@ const xor = (item, array) => {
 
 const renderCheckboxes = ({allowedValues, disabled, fieldType, id, name, onChange, transform, value}) =>
     allowedValues.map(item =>
-        <div key={item}>
+        <div className="check__row" key={item}>
             <input
                 style={{"color": "red !important"}}
                 checked={fieldType === Array ? value.includes(item) : value === item}
@@ -68,6 +68,7 @@ const renderSelect = ({
 
 const Select = ({
                     allowedValues,
+                    labelHidden,
                     checkboxes,
                     disabled,
                     fieldType,
@@ -83,7 +84,11 @@ const Select = ({
                     ...props
                 }) =>
     <div {...filterDOMProps(props)}>
-
+        {label && !labelHidden && (
+            <label htmlFor={id}>
+                {label}
+            </label>
+        )}
         {/* TODO: Better handling of these props. */}
         {/* eslint-disable max-len */}
         {checkboxes || fieldType === Array

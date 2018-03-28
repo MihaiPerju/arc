@@ -51,7 +51,43 @@ export default class ImportingRulesService {
                     },
                     insBal: {
                         type: hasHeader ? String : SimpleSchema.Integer,
-                        label: "Insurance Balance"
+                        label: "Insurance Balance",
+                        optional: true
+                    },
+                    address1: {
+                        type: hasHeader ? String : SimpleSchema.Integer,
+                        optional: true,
+                        label: "Address 1"
+                    },
+                    address2: {
+                        type: hasHeader ? String : SimpleSchema.Integer,
+                        optional: true,
+                        label: "Address 2"
+                    },
+                    city: {
+                        type: hasHeader ? String : SimpleSchema.Integer,
+                        optional: true,
+                        label: "City"
+                    },
+                    state: {
+                        type: hasHeader ? String : SimpleSchema.Integer,
+                        optional: true,
+                        label: "State"
+                    },
+                    zip: {
+                        type: hasHeader ? String : SimpleSchema.Integer,
+                        optional: true,
+                        label: "Zip Code"
+                    },
+                    policy: {
+                        type: hasHeader ? String : SimpleSchema.Integer,
+                        optional: true,
+                        label: "Policy"
+                    },
+                    phone: {
+                        type: hasHeader ? String : SimpleSchema.Integer,
+                        optional: true,
+                        label: "Phone"
                     }
                 })
             };

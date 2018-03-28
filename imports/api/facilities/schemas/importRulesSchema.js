@@ -63,5 +63,9 @@ export default new SimpleSchema({
     'insurances.$': {
         type: insuranceSchema,
         optional: true
+    },
+    "insurances.$.zip": {
+        type: String,
+        optional: true
     }
 });

@@ -1,13 +1,9 @@
 import React from 'react';
-import TaskSchema from '/imports/api/tasks/schema';
 import {AutoForm, SelectField} from 'uniforms-semantic';
 import ReportsService from '../../../api/reports/services/ReportsService';
 import FilterSingle from './components/FilterSingle';
 import Notifier from '/imports/client/lib/Notifier';
 import assigneeQuery from '/imports/api/users/queries/listUsers';
-import TaskReportFields from '../../../api/tasks/config/tasks';
-import stateEnum from '/imports/api/tasks/enums/states';
-import {Substates} from '/imports/api/tasks/enums/substates';
 import SimpleSchema from 'simpl-schema';
 import Loading from '/imports/client/lib/ui/Loading';
 import facilityNames from '/imports/api/facilities/queries/facilityListNames';
@@ -16,9 +12,9 @@ export default class TaskFilterBuilder extends React.Component {
     constructor() {
         super();
         this.state = {
+            fullSchemaOptions: [],
             facilityOptions: [],
             assigneeOptions: [],
-            schemaOptions: [],
             components: {},
             loading: true,
             filters: {},
@@ -26,40 +22,32 @@ export default class TaskFilterBuilder extends React.Component {
         }
     }
 
-    componentWillMount() {
-        //Getting schema keys
-        let keys = TaskSchema._firstLevelSchemaKeys;
-        //also,remove field unnecessary fields
-        keys.splice(keys.indexOf('createdAt'), 1);
-        keys.splice(keys.indexOf('hasLastSysAction'), 1);
-        keys.splice(keys.indexOf('fileId'), 1);
-        keys.splice(keys.indexOf('insurances'), 1);
-        keys.splice(keys.indexOf('metaData'), 1);
-        keys.splice(keys.indexOf('actionsLinkData'), 1);
-        keys.splice(keys.indexOf('attachmentIds'), 1);
-        keys.splice(keys.indexOf('collectedAmount'), 1);
+    clearSchemaOptions = () => {
+        const {components, fullSchemaOptions} = this.state;
+        //Duplicating the full schema and remove used fields
+        let schemaOptions = _.clone(fullSchemaOptions);
 
-        //Creating schema
-        const schema = ReportsService.createSchema(keys, TaskReportFields, {stateEnum, substateEnum: Substates});
-
-        //Getting options for Select Menu
-        let schemaOptions = ReportsService.getOptions(keys);
-
-        //Creating set of Components based on schema field types
-        let {components} = this.props;
-        if (!components) {
-            components = ReportsService.getComponents(keys);
-        }
-
-        //Clearing schemaOptions if in editing mode
         for (component in components) {
             if (components[component].isActive) {
                 for (option in schemaOptions) {
-                    if (schemaOptions[option].label === component) {
+                    if (schemaOptions[option].value === component) {
                         schemaOptions.splice(option, 1);
                     }
                 }
             }
+        }
+        return schemaOptions;
+    };
+
+    componentWillMount() {
+        //Creating schema for filters
+        const schema = ReportsService.createSchema();
+        let fullSchemaOptions = ReportsService.getOptions();
+
+        //Creating set of Components based on schema field types
+        let {components} = this.props;
+        if (!components) {
+            components = ReportsService.getComponents();
         }
 
         //Getting assignee and facility options
@@ -82,7 +70,7 @@ export default class TaskFilterBuilder extends React.Component {
         assigneeQuery.fetch((err, assignees) => {
             if (!err) {
                 assignees.map((assignee) => {
-                    assigneeOptions.push({value: assignee._id, label: assignee._id});
+                    assigneeOptions.push({value: assignee._id, label: assignee.profile.firstName});
                 });
                 this.setState({assigneeOptions});
             } else {
@@ -91,29 +79,27 @@ export default class TaskFilterBuilder extends React.Component {
         });
 
         this.setState({
+            fullSchemaOptions,
             loading: false,
-            schemaOptions,
             components,
             schema
         });
     }
 
     deleteFilter = (name) => {
-        const {components, schemaOptions} = this.state;
+        const {components} = this.state;
 
         components[name].isActive = false;
-        schemaOptions.push({value: name, label: name});
 
         this.setState({
-            components,
-            schemaOptions
+            components
         });
-    }
+    };
 
-    onSubmit(data) {
+    onSubmit = (data) => {
         const {components} = this.state;
         const {onSubmitFilters} = this.props;
-        const {result, filterBuilderData, error} = ReportsService.getFilters(data, components, TaskReportFields);
+        const {result, filterBuilderData, error} = ReportsService.getFilters(data, components);
 
         if (error) {
             Notifier.error(error);
@@ -123,31 +109,26 @@ export default class TaskFilterBuilder extends React.Component {
                 filters: result
             });
         }
-    }
+    };
 
     createFilter = (field, value) => {
-        const {components, schemaOptions} = this.state;
+        const {components} = this.state;
 
         components[value] = {
             isActive: true,
             name: value
         };
 
-        schemaOptions.map((option) => {
-            if (option.value === value) {
-                schemaOptions.splice(schemaOptions.indexOf(option), 1);
-            }
-        });
         this.setState({
-            components,
-            schemaOptions
+            components
         });
         this.refs.filterSelect.reset();
     };
 
     render() {
-        const {loading, facilityOptions, assigneeOptions, schemaOptions, components, schema} = this.state;
+        const {loading, facilityOptions, assigneeOptions, components, schema} = this.state;
         const {filterBuilderData} = this.props;
+        const schemaOptions = this.clearSchemaOptions();
         return (
             <div>
                 <main className="cc-main">
@@ -158,7 +139,7 @@ export default class TaskFilterBuilder extends React.Component {
                                 <AutoForm
                                     model={filterBuilderData}
                                     schema={schema}
-                                    onSubmit={this.onSubmit.bind(this)}
+                                    onSubmit={this.onSubmit}
                                     ref="filters">
                                     {
                                         _.map(components, (item) => {
@@ -172,7 +153,7 @@ export default class TaskFilterBuilder extends React.Component {
                                         })
                                     }
                                 </AutoForm>
-                                <div className="add-filter text-center">
+                                <div className="add-report-filter">
                                     <AutoForm ref="filterSelect" onChange={this.createFilter} schema={filterSchema}>
                                         <SelectField options={schemaOptions} name="filter"/>
                                     </AutoForm>

@@ -117,12 +117,12 @@ export default class NewAction extends Component {
                               ref="form">
                         <div className="select-row">
                             <div className="select-group">
-                                <AutoField name="action" options={actions}/>
+                                <AutoField labelHidden={true} name="action" options={actions}/>
                                 <ErrorField name="action"/>
                             </div>
                             {reasonCodes.length > 0 &&
                             <div className="select-group">
-                                <AutoField name="reasonCode" options={reasonCodes}/>
+                                <AutoField labelHidden={true} name="reasonCode" options={reasonCodes}/>
                                 <ErrorField name="reasonCode"/>
                             </div>
                             }

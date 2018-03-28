@@ -137,9 +137,11 @@ export default class ReportEdit extends React.Component {
                                 <ErrorField name="name"/>
                             </div>
                             <div className="check-group">
-                                <SelectField options={allowedRoles}
-                                             name="allowedRoles"
-                                             ref="allowedRoles"/>
+                                <SelectField
+                                    labelHidden={true}
+                                    options={allowedRoles}
+                                    name="allowedRoles"
+                                    ref="allowedRoles"/>
                             </div>
                         </AutoForm>
                     </div>
