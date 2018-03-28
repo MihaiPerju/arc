@@ -227,6 +227,55 @@
   }
 }
 
+.meta-dialog {
+  .cc-dialog__title {
+    font-size: 1.4rem;
+    font-weight: 400;
+    padding-left: 40px;
+  }
+  .cc-dialog__card {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  &.cc-dialog--active {
+    background: transparent;
+    .cc-dialog__card {
+      width: 1000px;
+      box-shadow: 0 0 117px 0 rgba(131, 132, 133, 0.49)
+    }
+  }
+  .btn-cancel {
+    color: $red
+  }
+  .form-wrapper {
+    margin-bottom: 35px;
+    position: relative;
+    &.select-wrapper {
+      label {
+        display: none;
+      }
+      &:before {
+        content: '\f107';
+        font-family: $font-icon;
+        position: absolute;
+        top: 11px;
+        right: 15px;
+        color: $extra-light-grey;
+      }
+    }
+    select, input {
+      background: #ebebeb;
+      border-radius: 3px;
+      border-bottom: 0;
+      color: $light-grey;
+    }
+  }
+  .btn-group {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 //Header Acccount
 .header-account {
   .right__side {

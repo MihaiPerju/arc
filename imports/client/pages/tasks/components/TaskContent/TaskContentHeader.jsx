@@ -8,6 +8,19 @@ export default class TaskContentHeader extends Component {
         super();
     }
 
+    groupFields(fields) {
+        const numInRow = 4;
+        const numGroups = Math.round(fields.length / numInRow);
+        let result = [];
+        for (let i = 0; i < numGroups; i++) {
+            const startIndex = i * numInRow;
+            const finishIndex = Math.min((i + 1) * numInRow, fields.length);
+            const groupOfFields = fields.slice(startIndex, finishIndex);
+            result.push(groupOfFields);
+        }
+        return result;
+    }
+
     getOptions(users) {
         let options = [];
         if (users) {
@@ -34,9 +47,22 @@ export default class TaskContentHeader extends Component {
     }
 
     render() {
+        const obj = {
+            key1: "something",
+            key2: "something",
+            key3: "something",
+            key4: "something",
+            key5: "something",
+            key6: "something",
+            key7: "something",
+            key8: "something",
+
+
+        }
         const {task} = this.props;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
+        const metaDataGroups = this.groupFields(Object.keys(obj));
 
         return (
             <div className="header-block header-account">
@@ -77,6 +103,12 @@ export default class TaskContentHeader extends Component {
                         <ToggleDialog
                             escalate
                             type={'Escalate'}
+                            title={''}
+                        />
+                        <ToggleDialog
+                            metaData={obj}
+                            metaDataGroups={metaDataGroups}
+                            type={'View Meta Data'}
                             title={''}
                         />
                     </div>
@@ -134,13 +166,13 @@ class ToggleDialog extends Component {
 
     render() {
         const {dialogIsActive} = this.state;
-        const {taskId, options, type, title, escalate} = this.props;
-
+        const {taskId, options, type, title, escalate, metaData, metaDataGroups} = this.props;
+        console.log(metaDataGroups);
         return (
             <button className="btn--white" onClick={this.openDialog}>
                 <span>{type}</span>
                 {
-                    dialogIsActive && (
+                    (dialogIsActive && !metaData) && (
                         <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
                             {
                                 escalate ? (
@@ -157,8 +189,34 @@ class ToggleDialog extends Component {
                                 )
                             }
                             <div className="btn-group">
-                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                <button className="btn--light-blue">Confirm & sent</button>
+                                {
+                                    <div>
+                                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                        <button className="btn--light-blue">Confirm & sent</button>
+                                    </div>
+                                }
+
+                            </div>
+                        </Dialog>
+                    )
+
+                }
+                {
+                    (dialogIsActive && metaData) && (
+                        <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
+                            <div className="main-content__header header-block">
+                                <div className="row__header">
+                                    <div className="row__wrapper">
+                                        <img src="/assets/img/user.svg" className="lg-avatar-1 img-circle" alt=""/>
+                                        <div className="title">header</div>
+                                    </div>
+                                </div>
+                                <ul style={{listStyle:'none'}}className="row__info main-info">
+                                    <li className="text-center">
+                                        <div className="text-light-grey">Status</div>
+                                        <div className="info-label">X</div>
+                                    </li>
+                                </ul>
                             </div>
                         </Dialog>
                     )
