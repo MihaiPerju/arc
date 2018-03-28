@@ -198,25 +198,36 @@ class ToggleDialog extends Component {
                             </div>
                         </div>
                     </div>
+                    <div className="btn-group">
+                        <button className="btn-cancel" onClick={this.closeDialog}>Close</button>
+                    </div>
                 </Dialog>
             )
         }
         if (escalate){
             return (
-                <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
+                <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
                     <div className="form-wrapper">
                         <input type="text" placeholder="Type escalation reason"/>
+                    </div>
+                    <div className="btn-group">
+                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                        <button className="btn--light-blue">Confirm & send</button>
                     </div>
                 </Dialog>
             )
         } else {
             return (
-                <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
+                <Dialog className="meta-dialog" closePortal={this.closeDialog} title={title}>
                     <div className="form-wrapper select-wrapper">
                         <AssigneeSelect
                             taskId={taskId}
                             options={options}
                         />
+                    </div>
+                    <div className="btn-group">
+                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                        <button className="btn--light-blue">Confirm & send</button>
                     </div>
                 </Dialog>
             )
