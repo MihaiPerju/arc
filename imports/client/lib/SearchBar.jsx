@@ -84,6 +84,7 @@ export default class SearchBar extends Component {
         })
     };
 
+
     render() {
         const {filter, active, dropdown, selectAll} = this.state;
         const {options, btnGroup, deleteAction} = this.props;
