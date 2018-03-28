@@ -74,3 +74,108 @@
     }
   }
 }
+
+.add-report-filter {
+  margin-top: 25px;
+  position: relative;
+  &:before {
+    content: '\f107';
+    font-family: $font-icon;
+    position: absolute;
+    right: 15px;
+    top: 14px;
+    font-size: 1.8rem;
+    color: $extra-light-grey;
+  }
+  select {
+    background: $color-white;
+    border-bottom: 0;
+    border-radius: 3px;
+    color: $dark-grey;
+    padding: 17px 15px;
+    line-height: 1.6rem;
+  }
+}
+
+//Create form Report
+.create-form {
+  .filter-type__wrapper {
+    padding-bottom: 15px;
+    border-bottom: 1px #e1e1e1 solid;
+    .row-select {
+      padding-left: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .check {
+      &-group {
+        background: $color-white;
+        border-radius: 3px;
+        padding: 10px 15px;
+        margin-top: 0;
+      }
+      &__row {
+        margin-bottom: 3px;
+        &:last-of-type {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  .input-datetime {
+    > div {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+    label {
+      flex: 0 0 20%;
+      padding-top: 11px;
+    }
+    input {
+      border: 0;
+      border-radius: 3px;
+      padding: 9px 15px 10px;
+      outline: 0;
+      font-size: 1.4rem;
+      line-height: 1.2rem;
+      font-family: $font-arial;
+      flex: 0 0 80%;
+    }
+  }
+  .select-wrapper {
+    position: relative;
+    margin-top: 10px;
+    &:before {
+      content: '\f107';
+      font-family: $font-icon;
+      position: absolute;
+      right: 15px;
+      top: 12px;
+      color: $extra-light-grey;
+    }
+    select {
+      border-radius: 3px;
+      background: $color-white;
+      border-bottom: 0;
+      color: $light-grey;
+    }
+
+  }
+  .form-wrapper__i {
+    input {
+      background: $color-white;
+      border-radius: 3px;
+    }
+    > div {
+      margin-bottom: 10px;
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

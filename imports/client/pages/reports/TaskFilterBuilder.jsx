@@ -153,7 +153,7 @@ export default class TaskFilterBuilder extends React.Component {
                                         })
                                     }
                                 </AutoForm>
-                                <div className="add-filter text-center">
+                                <div className="add-report-filter">
                                     <AutoForm ref="filterSelect" onChange={this.createFilter} schema={filterSchema}>
                                         <SelectField options={schemaOptions} name="filter"/>
                                     </AutoForm>

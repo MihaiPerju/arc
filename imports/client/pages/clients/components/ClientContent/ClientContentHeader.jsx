@@ -12,7 +12,7 @@ export default class ClientContentHeader extends Component {
         return (
             <div className="header-block">
                 <img src={client.logoPath ? getImagePath(client.logoPath) : '/assets/img/user.svg'}
-                     className="lg-avatar"
+                     className="lg-avatar img-circle"
                      alt=""/>
                 <div className="header-block__wrapper">
                     <div className="intro-row">

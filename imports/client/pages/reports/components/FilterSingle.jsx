@@ -18,15 +18,15 @@ export default class FiltersSingle extends React.Component {
 
     renderWidget(name) {
         if (ReportsService.isEnum(name)) {
-            return <div>
-                <AutoField placeholder="Select filter" name={name}/>
+            return <div className="select-wrapper m-t--0">
+                <AutoField placeholder="Select filter" labelHidden={true} name={name}/>
                 <ErrorField name={name}/>
             </div>
         }
         if (ReportsService.isDate(name)) {
             return (
-                <div>
-                    <AutoField placeholder="Select minimum date" name={`${name}Start`}/>
+                <div className="input-datetime">
+                    <AutoField placeholder="Select minimum date" labelHidden={true} name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
                     <AutoField placeholder="Select maximum date" labelHidden={true} name={`${name}End`}/>
@@ -37,8 +37,8 @@ export default class FiltersSingle extends React.Component {
 
         if (ReportsService.isNumber(name)) {
             return (
-                <div>
-                    <AutoField placeholder="Type minimum value" name={`${name}Start`}/>
+                <div className="form-wrapper__i">
+                    <AutoField labelHidden={true} placeholder="Type minimum value" name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
                     <AutoField labelHidden={true} placeholder="Type maximum value" name={`${name}End`}/>
@@ -50,18 +50,21 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isLink(name)) {
             return (
                 <div className="check-group">
-                    <SelectField name={name} options={this.getOptions(name)}/>
+                    <SelectField labelHidden={true} name={name} options={this.getOptions(name)}/>
                 </div>
             )
         }
 
         return (
             <div>
-                <AutoField placeholder="Type your filter" name={name}/>
-                <ErrorField name={name}/>
-
-                <AutoField labelHidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
-                <ErrorField name={`${name}Match`}/>
+                <div className="form-wrapper__i">
+                    <AutoField labelHidden={true} placeholder="Type your filter" name={name}/>
+                    <ErrorField name={name}/>
+                </div>
+                <div className="select-wrapper">
+                    <AutoField labelHidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
+                    <ErrorField name={`${name}Match`}/>
+                </div>
             </div>
         )
     }
@@ -70,15 +73,14 @@ export default class FiltersSingle extends React.Component {
         const {name} = this.props;
         return (
             <div>
-                <div className="select-group">
+                <div className="filter-type__wrapper">
                     <div className="row-select">
+                        <div className="type text-light-grey">{name}</div>
                         <div onClick={this.deleteFilter.bind(this, name)} className="btn-delete">Delete</div>
                     </div>
-                    <div className="form-wrapper">
-                        {
-                            this.renderWidget(name)
-                        }
-                    </div>
+                    {
+                        this.renderWidget(name)
+                    }
                 </div>
             </div>
         )
