@@ -26,7 +26,6 @@ export default class FacilityContent extends Component {
 
     render() {
         const {facility} = this.props;
-        console.log(facility)
         const {edit} = this.state;
         return (
             <div className="main-content facility-content">
