@@ -27,15 +27,15 @@ Meteor.methods({
         ActionService.createAction({accountId, actionId, reasonId, userId});
     },
 
-    'task.assignee_change'(data) {
-        TaskSecurity.hasRightsOnTask(this.userId, data.taskId);
+    'task.assignee_change'({_id, assigneeId}) {
+        TaskSecurity.hasRightsOnTask(this.userId, _id);
         Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
 
         Tasks.update(
-            {_id: data.taskId},
+            {_id},
             {
                 $set: {
-                    assigneeId: data.value
+                    assigneeId
                 }
             }
         );

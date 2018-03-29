@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import moment from "moment/moment";
-import AssigneeSelect from '../AssigneeSelect';
 import Dialog from "/imports/client/lib/ui/Dialog";
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
@@ -87,7 +86,8 @@ export default class TaskContentHeader extends Component {
                     <div className="btn-group">
                         <ToggleDialog
                             type={'Assign'}
-                            taskId={task._id}
+                            model={task}
+                            accountId={task._id}
                             options={userOptions}
                             title={"Assign account to someone"}
                         />
@@ -186,8 +186,20 @@ class ToggleDialog extends Component {
         })
     };
 
+    assign = ({assigneeId}) => {
+        const {accountId} = this.props;
+        Meteor.call('task.assignee_change', {_id: accountId, assigneeId}, (err) => {
+            if (!err) {
+                Notifier.success('Assignee changed!');
+                this.closeDialog();
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
+    };
+
     showDialog = () => {
-        const {taskId, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
+        const {task, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
         if (tickle) {
             return (
                 <div className="create-form">
@@ -283,15 +295,21 @@ class ToggleDialog extends Component {
         } else {
             return (
                 <div>
-                    <div className="form-wrapper select-wrapper">
-                        <AssigneeSelect
-                            taskId={taskId}
-                            options={options}
-                        />
-                    </div>
-                    <div className="btn-group">
-                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                        <button className="btn--light-blue">Confirm & send</button>
+                    <div className="meta-dialog" title={title}>
+                        <AutoForm model={task}
+                                  schema={assignSchema}
+                                  onSubmit={this.assign}>
+                            <div className="form-wrapper">
+                                <AutoField labelHidden={true} name="assigneeId" options={options}/>
+                                <ErrorField name='assigneeId'/>
+                            </div>
+                            <div className="btn-group">
+                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                <button type="submit" className="btn--light-blue">
+                                    Confirm & send
+                                </button>
+                            </div>
+                        </AutoForm>
                     </div>
                 </div>
             )
@@ -324,5 +342,11 @@ const escalateSchema = new SimpleSchema({
 const tickleSchema = new SimpleSchema({
     tickleDate: {
         type: Date
+    }
+});
+
+const assignSchema = new SimpleSchema({
+    assigneeId: {
+        type: String
     }
 });
