@@ -61,5 +61,6 @@ export default Tasks.createNamedQuery('taskList', {
         createdAt: 1,
         status: 1
     },
-    metaData: 1
+    metaData: 1,
+    escalateReason: 1
 });

@@ -7,6 +7,7 @@ import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/sta
 import {Dispatcher, Events} from '/imports/api/events';
 import stateEnum from "../../../tasks/enums/states";
 import {Substates} from "../../../tasks/enums/substates";
+import Tasks from "../../collection";
 
 export default class ActionService {
 
@@ -68,8 +69,22 @@ export default class ActionService {
                 $set: {
                     state,
                     substate
+                },
+                $unset: {
+                    tickleDate: null,
+                    escalateReason: null
                 }
             });
         }
+    }
+
+    static createEscalation({reason, _id, userId}) {
+        const actionId = Actions.insert({title: "Escalated", substate: Substates.ESCALATED});
+        ActionService.createAction({accountId: _id, actionId, userId});
+        Tasks.update({_id}, {
+            $set: {
+                escalateReason: reason
+            }
+        })
     }
 }
