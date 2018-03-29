@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Badge from "/imports/client/lib/Badge";
 import FlowHelpers from '/imports/client/routing/helpers';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -26,6 +27,9 @@ export default class Menu extends Component {
                         <a className="" href={FlowRouter.url(route.name)}>
                             <i className={"icon-" + route.icon}/>
                             <span className="menu__label">{route.label}</span>
+                            {
+                                route.badge && <Badge num={route.badge}/>
+                            }
                         </a>
                     }
                 </li>

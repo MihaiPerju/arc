@@ -49,6 +49,19 @@
   height: calc(100% - 80px);
 }
 
+//Badges
+.badge {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 1.1rem;
+  line-height: 1.1rem;
+  background: $green;
+  color: $color-white;
+  border-radius: 3px;
+  padding: 2px 2px 1px;
+}
+
 // Labels
 .label {
   padding: 1px 3px;
