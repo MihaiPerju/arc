@@ -14,6 +14,8 @@ import Business from '/imports/api/business';
 import Files from '/imports/api/files/collection';
 import Backup from '/imports/api/backup/collection';
 import TaskActions from '/imports/api/taskActions/collection';
+import {Substates} from "../enums/substates";
+import Actions from "../../actions/collection";
 
 Meteor.methods({
     'task.actions.add'(data) {
@@ -25,15 +27,15 @@ Meteor.methods({
         ActionService.createAction({accountId, actionId, reasonId, userId});
     },
 
-    'task.assignee_change'(data) {
-        TaskSecurity.hasRightsOnTask(this.userId, data.taskId);
+    'task.assignee_change'({_id, assigneeId}) {
+        TaskSecurity.hasRightsOnTask(this.userId, _id);
         Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
 
         Tasks.update(
-            {_id: data.taskId},
+            {_id},
             {
                 $set: {
-                    assigneeId: data.value
+                    assigneeId
                 }
             }
         );
@@ -136,6 +138,19 @@ Meteor.methods({
             assigneeId: this.userId
         }).count();
         return result;
+    },
+
+    'account.tickle'({tickleDate, _id}) {
+        Tasks.update({_id}, {
+            $set: {
+                tickleDate
+            }
+        })
+    },
+
+
+    'account.escalate'({reason, taskId}) {
+        ActionService.createEscalation({reason, _id: taskId, userId: this.userId});
     },
 
     'reset'() {

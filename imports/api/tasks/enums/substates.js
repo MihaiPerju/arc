@@ -18,8 +18,8 @@ export const Substates = {
     RETURNED: 'returned',
     BILLABLE: 'billable',
     SELF_PAY: 'self_pay',
-    ESCALATED: 'escalated'
-}
+    ESCALATED: 'user_escalated'
+};
 
 export const LabelSubstates = {
     [Substates.PENDING_PAYMENT]: 'Pending Payment',
@@ -41,5 +41,5 @@ export const LabelSubstates = {
     [Substates.RETURNED]: 'Returned (to be returned)',
     [Substates.BILLABLE]: 'Billable',
     [Substates.SELF_PAY]: 'Self-pay',
-    [Substates.ESCALATED]: 'Escalated'
-}
+    [Substates.ESCALATED]: 'User escalated'
+};
