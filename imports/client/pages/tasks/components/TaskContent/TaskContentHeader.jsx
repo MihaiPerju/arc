@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import moment from "moment/moment";
 import AssigneeSelect from '../AssigneeSelect';
 import Dialog from "/imports/client/lib/ui/Dialog";
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import SimpleSchema from 'simpl-schema';
+import Notifier from '/imports/client/lib/Notifier';
 
 export default class TaskContentHeader extends Component {
     constructor() {
@@ -69,7 +72,6 @@ export default class TaskContentHeader extends Component {
                                 <div className="label label--grey text-uppercase">carc(TNM)</div>
                                 <div className="label label--grey">Work queue(TBM)</div>
                             </div>
-
                         </div>
                     </div>
                     <div className="right__side">
@@ -84,13 +86,14 @@ export default class TaskContentHeader extends Component {
                     </div>
                     <div className="btn-group">
                         <ToggleDialog
-                            type={'Assignee'}
+                            type={'Assign'}
                             taskId={task._id}
                             options={userOptions}
                             title={"Assign account to someone"}
                         />
                         <ToggleDialog
                             escalate
+                            taskId={task._id}
                             type={'Escalate'}
                             title={''}
                         />
@@ -98,6 +101,12 @@ export default class TaskContentHeader extends Component {
                             metaData={metaData}
                             metaDataGroups={metaDataGroups}
                             type={'View Meta Data'}
+                        />
+                        <ToggleDialog
+                            tickle={true}
+                            type="Tickle"
+                            accountId={task._id}
+                            title="Tickle an account"
                         />
                     </div>
                 </div>
@@ -152,9 +161,61 @@ class ToggleDialog extends Component {
         })
     };
 
+    escalate = ({reason}) => {
+        const {taskId} = this.props;
+        Meteor.call("account.escalate", {reason, taskId}, (err) => {
+            if (!err) {
+                Notifier.success("Account escalated!");
+                this.closeDialog();
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
+    };
+
+    tickle = (data) => {
+        const {accountId} = this.props;
+        data._id = accountId;
+        Meteor.call("account.tickle", data, (err) => {
+            if (!err) {
+                Notifier.success("Account Tickled!");
+                this.closeDialog();
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
+    };
+
     showDialog = () => {
-        const {taskId, options, title, escalate, metaData, metaDataGroups} = this.props;
-        if (metaData){
+        const {taskId, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
+        if (tickle) {
+            return (
+                <div className="create-form">
+                    <div className="create-form__wrapper">
+                        <div className="action-block">
+                            <main className="cc-main">
+                                <AutoForm onSubmit={this.tickle} schema={tickleSchema}>
+                                    <div className="filter-type__wrapper">
+                                        <div className="input-datetime">
+                                            <AutoField placeholder="Select tickle date" labelHidden={true}
+                                                       name="tickleDate"/>
+                                            <ErrorField name="tickleDate"/>
+                                        </div>
+                                    </div>
+                                    <div className="btn-group">
+                                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                        <button type="submit" className="btn--light-blue">
+                                            Confirm & send
+                                        </button>
+                                    </div>
+                                </AutoForm>
+                            </main>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        if (metaData) {
             return (
                 <div>
                     <div className="main-content">
@@ -190,10 +251,8 @@ class ToggleDialog extends Component {
                                             )
                                         })
                                     )
-
                                 }
                                 <ul>
-
                                 </ul>
                             </div>
                         </div>
@@ -204,16 +263,21 @@ class ToggleDialog extends Component {
                 </div>
             )
         }
-        if (escalate){
+        if (escalate) {
             return (
-                <div className="meta-dialog" closePortal={this.closeDialog} title={title}>
-                    <div className="form-wrapper">
-                        <input type="text" placeholder="Type escalation reason"/>
-                    </div>
-                    <div className="btn-group">
-                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                        <button className="btn--light-blue">Confirm & send</button>
-                    </div>
+                <div className="meta-dialog" title={title}>
+                    <AutoForm onSubmit={this.escalate} schema={escalateSchema}>
+                        <div className="form-wrapper">
+                            <AutoField labelHidden={true} placeholder="Type Escalation Reason" name="reason"/>
+                            <ErrorField name="reason"/>
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                            <button type="submit" className="btn--light-blue">
+                                Confirm & send
+                            </button>
+                        </div>
+                    </AutoForm>
                 </div>
             )
         } else {
@@ -232,7 +296,7 @@ class ToggleDialog extends Component {
                 </div>
             )
         }
-    }
+    };
 
     render() {
         const {dialogIsActive} = this.state;
@@ -240,14 +304,25 @@ class ToggleDialog extends Component {
         return (
             <button className="btn--white" onClick={this.openDialog}>
                 <span>{type}</span>
-                        {
-                            dialogIsActive &&
-                            <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
-                                {this.showDialog()}
-                            </Dialog>
-                        }
-
+                {
+                    dialogIsActive &&
+                    <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
+                        {this.showDialog()}
+                    </Dialog>
+                }
             </button>
         )
     }
 }
+
+const escalateSchema = new SimpleSchema({
+    reason: {
+        type: String
+    }
+});
+
+const tickleSchema = new SimpleSchema({
+    tickleDate: {
+        type: Date
+    }
+});

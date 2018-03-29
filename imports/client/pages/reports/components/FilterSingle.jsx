@@ -26,10 +26,10 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isDate(name)) {
             return (
                 <div className="input-datetime">
-                    <AutoField placeholder="Select minimum date" labelHidden={true} name={`${name}Start`}/>
+                    <AutoField placeholder="Select start date" labelHidden={true} name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
-                    <AutoField placeholder="Select maximum date" labelHidden={true} name={`${name}End`}/>
+                    <AutoField placeholder="Select finish date" labelHidden={true} name={`${name}End`}/>
                     <ErrorField name={`${name}End`}/>
                 </div>
             )
@@ -72,16 +72,14 @@ export default class FiltersSingle extends React.Component {
     render() {
         const {name} = this.props;
         return (
-            <div>
-                <div className="filter-type__wrapper">
-                    <div className="row-select">
-                        <div className="type text-light-grey">{name}</div>
-                        <div onClick={this.deleteFilter.bind(this, name)} className="btn-delete">Delete</div>
-                    </div>
-                    {
-                        this.renderWidget(name)
-                    }
+            <div className="filter-type__wrapper">
+                <div className="row-select">
+                    <div className="type text-light-grey">{name}</div>
+                    <div onClick={this.deleteFilter.bind(this, name)} className="btn-delete">Delete</div>
                 </div>
+                {
+                    this.renderWidget(name)
+                }
             </div>
         )
     }

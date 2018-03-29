@@ -68,6 +68,10 @@ export default class ActionService {
                 $set: {
                     state,
                     substate
+                },
+                $unset: {
+                    tickleDate: null,
+                    escalateReason: null
                 }
             });
         }

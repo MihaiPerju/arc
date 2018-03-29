@@ -14,6 +14,8 @@ import Business from '/imports/api/business';
 import Files from '/imports/api/files/collection';
 import Backup from '/imports/api/backup/collection';
 import TaskActions from '/imports/api/taskActions/collection';
+import {Substates} from "../enums/substates";
+import Actions from "../../actions/collection";
 
 Meteor.methods({
     'task.actions.add'(data) {
@@ -136,6 +138,25 @@ Meteor.methods({
             assigneeId: this.userId
         }).count();
         return result;
+    },
+
+    'account.tickle'({tickleDate, _id}) {
+        Tasks.update({_id}, {
+            $set: {
+                tickleDate
+            }
+        })
+    },
+
+
+    'account.escalate'({reason, taskId}) {
+        const actionId = Actions.insert({title: "Escalated", substate: Substates.ESCALATED});
+        ActionService.createAction({accountId: taskId, actionId, userId: this.userId});
+        Tasks.update({_id: taskId}, {
+            $set: {
+                escalateReason: reason
+            }
+        })
     },
 
     'reset'() {

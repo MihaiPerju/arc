@@ -11,11 +11,15 @@ export default class agerService {
 
     static getAccountFilters(state, params) {
         if (state === "unassigned") {
-            _.extend(params, {filters: {assigneeId: null}});
+            _.extend(params, {filters: {assigneeId: null, tickleDate: null, escalateReason: null}});
+        } else if (state === "tickles") {
+            _.extend(params, {filters: {tickleDate: {$exists: true}, escalateReason: null}});
+        } else if (state === "escalated") {
+            _.extend(params, {filters: {tickleDate: null, escalateReason: {$exists: true}}});
         }
         else {
             state = stateEnum[state.toUpperCase()];
-            _.extend(params, {filters: {state}});
+            _.extend(params, {filters: {state, tickleDate: null, escalateReason: null}});
         }
     }
 

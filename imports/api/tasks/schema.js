@@ -110,5 +110,13 @@ export default new SimpleSchema({
     hasLastSysAction: {
         type: Boolean,
         defaultValue: true
+    },
+    tickleDate: {
+        type: Date,
+        optional: true
+    },
+    escalateReason: {
+        type: String,
+        optional: true
     }
 })

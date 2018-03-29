@@ -31,10 +31,12 @@ export const StatesSubstates = {
         Substates.DENIED,
         Substates.RETURNED,
         Substates.BILLABLE,
-        Substates.SELF_PAY,
+        Substates.SELF_PAY
+    ],
+    [States.ESCALATED]: [
         Substates.ESCALATED
     ]
-}
+};
 
 export function findStateBySubstate(statesWithSubstates, substate) {
     for (key in statesWithSubstates) {
