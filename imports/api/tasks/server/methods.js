@@ -150,13 +150,7 @@ Meteor.methods({
 
 
     'account.escalate'({reason, taskId}) {
-        const actionId = Actions.insert({title: "Escalated", substate: Substates.ESCALATED});
-        ActionService.createAction({accountId: taskId, actionId, userId: this.userId});
-        Tasks.update({_id: taskId}, {
-            $set: {
-                escalateReason: reason
-            }
-        })
+        ActionService.createEscalation({reason, _id: taskId, userId: this.userId});
     },
 
     'reset'() {
