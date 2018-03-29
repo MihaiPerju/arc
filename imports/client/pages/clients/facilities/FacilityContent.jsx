@@ -26,6 +26,7 @@ export default class FacilityContent extends Component {
 
     render() {
         const {facility} = this.props;
+        console.log(facility)
         const {edit} = this.state;
         return (
             <div className="main-content facility-content">
@@ -33,6 +34,9 @@ export default class FacilityContent extends Component {
                     <ul>
                         <li>
                             <a href={FlowRouter.url('/client/list')}>Clients</a>
+                        </li>
+                        <li>
+                            <a style={{pointerEvents: 'none', cursor: 'default'}}>{facility.client.clientName}</a>
                         </li>
                         <li>
                             <span>{facility.name}</span>
