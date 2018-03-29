@@ -13,17 +13,34 @@ export default class TaskContent extends Component {
         super();
     }
 
+    escalateReason() {
+        const {task} = this.props;
+        const {state} = FlowRouter.current().params;
+        if (state === "escalated") {
+            return (
+                <div className="breadcrumb">
+                    <ul>
+                        <li>
+                            Escalate Reason :{task.escalateReason}
+                        </li>
+                    </ul>
+                </div>
+            );
+        }
+    }
+
     render() {
         const {task, update} = this.props;
         return (
             <div className="main-content">
+                {this.escalateReason()}
                 <TaskContentHeader task={task}/>
                 <PayerBlock task={task}/>
                 <InvoiceMembers/>
                 <ActionBlock update={update} task={task}/>
                 <LetterList task={task} refetch={update}/>
                 <PdfFiles update={update} task={task}/>
-                <CommentsListContainer taskId={task._id} />
+                <CommentsListContainer taskId={task._id}/>
             </div>
         )
     }

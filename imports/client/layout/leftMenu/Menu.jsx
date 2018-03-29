@@ -16,6 +16,9 @@ export default class Menu extends Component {
     render() {
         const {routes} = this.props;
         const menuRoutes = routes.map(function (route, index) {
+            const currRoute = FlowRouter.current().path;
+            //Use this variable to display current route with highlighted background color
+            const isCurrentRoute = currRoute.includes(route.name);
             let routeClasses = classNames(
                 'menu__item', {
                     'cc--active': FlowHelpers.isCurrentRoute(route.name)
