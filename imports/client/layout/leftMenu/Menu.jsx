@@ -20,7 +20,7 @@ export default class Menu extends Component {
             const isCurrentRoute = currRoute.includes(route.name);
             let routeClasses = classNames(
                 'menu__item', {
-                    'cc--active': FlowHelpers.isCurrentRoute(route.name)
+                    'cc--active': isCurrentRoute
                 }
             );
             return (
