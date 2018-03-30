@@ -406,11 +406,12 @@
       overflow-x: auto;
       justify-content: space-between;
       li {
-        display: table;
+        display: flex;
         padding-right: 15px;
         padding-left: 15px;
         position: relative;
-        min-width: 20%;
+        flex-basis: 20%;
+        flex-wrap: wrap;
         &:last-of-type {
           &:before {
             display: none;
@@ -425,6 +426,10 @@
           height: 26px;
           top: 50%;
           transform: $translateY;
+        }
+        > div {
+          width: 100%;
+          white-space: nowrap;
         }
         > div {
           &:first-of-type {

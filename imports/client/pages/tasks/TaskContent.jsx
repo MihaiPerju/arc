@@ -5,6 +5,7 @@ import PayerBlock from './components/TaskContent/PayerBlock';
 import ActionBlock from './components/TaskContent/ActionBlock';
 import LetterList from './components/TaskContent/LetterList';
 import PdfFiles from './components/TaskContent/PdfFiles';
+import EscalateReason from './components/TaskContent/EscalateReason';
 import CommentBlock from './components/TaskContent/CommentBlock';
 import CommentsListContainer from '/imports/client/pages/comments/CommentsListContainer.jsx';
 
@@ -18,13 +19,7 @@ export default class TaskContent extends Component {
         const {state} = FlowRouter.current().params;
         if (state === "escalated") {
             return (
-                <div className="breadcrumb">
-                    <ul>
-                        <li>
-                            Escalate Reason :{task.escalateReason}
-                        </li>
-                    </ul>
-                </div>
+                <EscalateReason reason={task.escalateReason}/>
             );
         }
     }
@@ -33,8 +28,8 @@ export default class TaskContent extends Component {
         const {task, update} = this.props;
         return (
             <div className="main-content">
-                {this.escalateReason()}
                 <TaskContentHeader task={task}/>
+                {this.escalateReason()}
                 <PayerBlock task={task}/>
                 <InvoiceMembers/>
                 <ActionBlock update={update} task={task}/>
