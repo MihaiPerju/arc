@@ -27,15 +27,32 @@ Meteor.methods({
         ActionService.createAction({accountId, actionId, reasonId, userId});
     },
 
-    'task.assignee_change'({_id, assigneeId}) {
+    'account.assignUser'({_id, assigneeId}) {
         TaskSecurity.hasRightsOnTask(this.userId, _id);
         Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-
         Tasks.update(
             {_id},
             {
                 $set: {
                     assigneeId
+                },
+                $unset: {
+                    workQueue: null
+                }
+            }
+        );
+    },
+    'account.assignWorkQueue'({_id, workQueue}) {
+        TaskSecurity.hasRightsOnTask(this.userId, _id);
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+        Tasks.update(
+            {_id},
+            {
+                $set: {
+                    workQueue
+                },
+                $unset: {
+                    assigneeId: null
                 }
             }
         );

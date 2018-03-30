@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import moment from "moment/moment";
-import Dialog from "/imports/client/lib/ui/Dialog";
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
-import SimpleSchema from 'simpl-schema';
-import Notifier from '/imports/client/lib/Notifier';
+import AccountActioning from './AccountActioning';
 
 export default class TaskContentHeader extends Component {
     constructor() {
@@ -84,25 +81,24 @@ export default class TaskContentHeader extends Component {
                         </div>
                     </div>
                     <div className="btn-group">
-                        <ToggleDialog
+                        <AccountActioning
                             type={'Assign'}
                             model={task}
                             accountId={task._id}
                             options={userOptions}
-                            title={"Assign account to someone"}
                         />
-                        <ToggleDialog
+                        <AccountActioning
                             escalate
                             taskId={task._id}
                             type={'Escalate'}
                             title={''}
                         />
-                        <ToggleDialog
+                        <AccountActioning
                             metaData={metaData}
                             metaDataGroups={metaDataGroups}
                             type={'View Meta Data'}
                         />
-                        <ToggleDialog
+                        <AccountActioning
                             tickle={true}
                             type="Tickle"
                             accountId={task._id}
@@ -122,7 +118,7 @@ export default class TaskContentHeader extends Component {
                                 className="text-dark-grey text-uppercase">{task.finClass ? task.finClass : "None"}</div>
                         </li>
                         <li className="text-center">
-                            <div className="text-light-grey">Admin date</div>
+                            <div className="text-light-grey">Admit date</div>
                             <div className="text-dark-grey">{task && moment(task.admitDate).format('MM/DD/YYYY')}</div>
                         </li>
                         <li className="text-center">
@@ -140,213 +136,3 @@ export default class TaskContentHeader extends Component {
         )
     }
 }
-
-class ToggleDialog extends Component {
-    constructor() {
-        super();
-        this.state = {
-            dialogIsActive: false
-        }
-    }
-
-    openDialog = () => {
-        this.setState({
-            dialogIsActive: true
-        });
-    };
-
-    closeDialog = () => {
-        this.setState({
-            dialogIsActive: false
-        })
-    };
-
-    escalate = ({reason}) => {
-        const {taskId} = this.props;
-        Meteor.call("account.escalate", {reason, taskId}, (err) => {
-            if (!err) {
-                Notifier.success("Account escalated!");
-                this.closeDialog();
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    };
-
-    tickle = (data) => {
-        const {accountId} = this.props;
-        data._id = accountId;
-        Meteor.call("account.tickle", data, (err) => {
-            if (!err) {
-                Notifier.success("Account Tickled!");
-                this.closeDialog();
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    };
-
-    assign = ({assigneeId}) => {
-        const {accountId} = this.props;
-        Meteor.call('task.assignee_change', {_id: accountId, assigneeId}, (err) => {
-            if (!err) {
-                Notifier.success('Assignee changed!');
-                this.closeDialog();
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    };
-
-    showDialog = () => {
-        const {task, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
-        if (tickle) {
-            return (
-                <div className="create-form">
-                    <div className="create-form__wrapper">
-                        <div className="action-block">
-                            <main className="cc-main">
-                                <AutoForm onSubmit={this.tickle} schema={tickleSchema}>
-                                    <div className="filter-type__wrapper">
-                                        <div className="input-datetime">
-                                            <AutoField placeholder="Select tickle date" labelHidden={true}
-                                                       name="tickleDate"/>
-                                            <ErrorField name="tickleDate"/>
-                                        </div>
-                                    </div>
-                                    <div className="btn-group">
-                                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                        <button type="submit" className="btn--light-blue">
-                                            Confirm & send
-                                        </button>
-                                    </div>
-                                </AutoForm>
-                            </main>
-                        </div>
-                    </div>
-                </div>
-            )
-        }
-        if (metaData) {
-            return (
-                <div>
-                    <div className="main-content">
-                        <div className="header-block header-account">
-                            <div className="main-content__header header-block">
-                                <div className="row__header">
-                                    <div className="row__wrapper">
-                                        <div className="title text-center">Meta Data</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="additional-info">
-                                {
-                                    metaDataGroups && (
-                                        metaDataGroups.map((group) => {
-                                            return (
-                                                <div className="additional-info">
-                                                    <ul>
-                                                        {
-                                                            group.map((element, index) => {
-                                                                return (
-                                                                    <li className="text-center" key={index}>
-                                                                        <div className="text-light-grey">{element}</div>
-                                                                        <div className="text-dark-grey text-uppercase">
-                                                                            {metaData[element]}
-                                                                        </div>
-                                                                    </li>
-                                                                )
-                                                            })
-                                                        }
-                                                    </ul>
-                                                </div>
-                                            )
-                                        })
-                                    )
-                                }
-                                <ul>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="btn-group">
-                        <button className="btn-cancel" onClick={this.closeDialog}>Close</button>
-                    </div>
-                </div>
-            )
-        }
-        if (escalate) {
-            return (
-                <div className="meta-dialog" title={title}>
-                    <AutoForm onSubmit={this.escalate} schema={escalateSchema}>
-                        <div className="form-wrapper">
-                            <AutoField labelHidden={true} placeholder="Type Escalation Reason" name="reason"/>
-                            <ErrorField name="reason"/>
-                        </div>
-                        <div className="btn-group">
-                            <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                            <button type="submit" className="btn--light-blue">
-                                Confirm & send
-                            </button>
-                        </div>
-                    </AutoForm>
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    <div className="meta-dialog" title={title}>
-                        <AutoForm model={task}
-                                  schema={assignSchema}
-                                  onSubmit={this.assign}>
-                            <div className="form-wrapper">
-                                <AutoField labelHidden={true} name="assigneeId" options={options}/>
-                                <ErrorField name='assigneeId'/>
-                            </div>
-                            <div className="btn-group">
-                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                <button type="submit" className="btn--light-blue">
-                                    Confirm & send
-                                </button>
-                            </div>
-                        </AutoForm>
-                    </div>
-                </div>
-            )
-        }
-    };
-
-    render() {
-        const {dialogIsActive} = this.state;
-        const {type, title} = this.props;
-        return (
-            <button className="btn--white" onClick={this.openDialog}>
-                <span>{type}</span>
-                {
-                    dialogIsActive &&
-                    <Dialog className="account-dialog" closePortal={this.closeDialog} title={title}>
-                        {this.showDialog()}
-                    </Dialog>
-                }
-            </button>
-        )
-    }
-}
-
-const escalateSchema = new SimpleSchema({
-    reason: {
-        type: String
-    }
-});
-
-const tickleSchema = new SimpleSchema({
-    tickleDate: {
-        type: Date
-    }
-});
-
-const assignSchema = new SimpleSchema({
-    assigneeId: {
-        type: String
-    }
-});

@@ -118,5 +118,9 @@ export default new SimpleSchema({
     escalateReason: {
         type: String,
         optional: true
+    },
+    workQueue: {
+        type: String,
+        optional: true
     }
 })
