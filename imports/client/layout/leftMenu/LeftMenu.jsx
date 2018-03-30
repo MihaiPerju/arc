@@ -72,13 +72,12 @@ class LeftMenu extends Component {
                 {user &&
                 <div className={menuClasses}>
                     <Menu routes={[
-                        {name: "accounts", label: "Account", icon: 'user', badge: 1},
-                        {name: "accounts", label: "Review", icon: 'inbox', badge: 10},
-                        {name: "accounts", label: "On Hold", icon: 'hand-paper-o', badge: 39},
-                        {name: "accounts", label: "Archived", icon: 'archive', badge: 12},
-                        {name: "accounts", label: "Escalations", icon: 'info', badge: 9},
-                        {name: "accounts", label: "Tickles", icon: 'comments-o', badge: 1},
-                        {name: "accounts", label: "Unassigned", icon: 'question-circle-o', badge: 20},
+                        {name: "accounts/active", label: "Account", icon: 'user',badge:1},
+                        {name: "accounts/review", label: "Review", icon: 'inbox',badge:12},
+                        {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o',badge:9},
+                        {name: "accounts/archived", label: "Archived", icon: 'archive',badge:5},
+                        {name: "accounts/escalated", label: "Escalations", icon: 'info',badge:3},
+                        {name: "accounts/tickles", label: "Tickles", icon: 'comments-o',badge:2},
                         {name: "client/list", label: "Clients", icon: 'users'},
                         {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
                         {name: "code/list", label: "Codes", icon: 'code-fork'},
