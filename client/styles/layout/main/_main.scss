@@ -52,16 +52,18 @@
 //Badges
 .badge {
   position: absolute;
-  right: 1px;
-  top: 1px;
-  font-size: 1.2rem;
-  line-height: 1.6rem;
-  background: $green;
+  transform: translate(0);
+  right: 15px;
+  top: 9px;
+  font-size: 1.1rem;
+  line-height: 1.7rem;
+  background: #f5222d;
   color: $color-white;
-  border-radius: 50%;
+  border-radius: 10px;
   padding: 0 4px;
   min-width: 16px;
   height: 16px;
+  transition: transform $transition300;
 }
 
 // Labels
