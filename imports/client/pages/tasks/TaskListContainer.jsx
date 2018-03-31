@@ -128,12 +128,19 @@ class TaskListContainer extends Pager {
         this.setState({range, page: nextPage, currentTask: null});
     };
 
+    getProperAccounts = (assign) => {
+        FlowRouter.setQueryParams({assign});
+    };
+
     render() {
         const {data, loading, error} = this.props;
         const {tasksSelected, currentTask, range, total, filter} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
-        const dropdownOptions = ['Personal Accounts', 'Work Queue Accounts'];
+        const dropdownOptions = [
+            {label: 'Personal Accounts', filter: 'assigneeId'},
+            {label: 'Work Queue Accounts', filter: 'workQueue'}
+        ];
         const icons = [{icon: 'user', method: this.assignToUser}, {icon: 'users', method: this.assignToWorkQueue}];
 
         if (loading) {
@@ -148,6 +155,7 @@ class TaskListContainer extends Pager {
                 <div className={currentTask ? "left__side" : "left__side full__width"}>
                     <SearchBar options={options}
                                icons={icons}
+                               getProperAccounts={this.getProperAccounts}
                                changeFilters={this.changeFilters}
                                decrease={this.decreaseList}
                                dropdownOptions={dropdownOptions}
@@ -206,8 +214,9 @@ class RightSide extends Component {
 
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
+    const assign = FlowRouter.getQueryParam("assign");
     const {state} = FlowRouter.current().params;
     const perPage = 13;
-    const params = {page, perPage, state};
+    const params = {page, perPage, state, assign};
     return PagerService.setQuery(query, params);
 }, {reactive: true})(TaskListContainer)

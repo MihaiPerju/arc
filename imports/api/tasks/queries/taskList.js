@@ -63,5 +63,8 @@ export default Tasks.createNamedQuery('taskList', {
     },
     metaData: 1,
     escalateReason: 1,
-    workQueue: 1
+    workQueue: 1,
+    tag: {
+        name: 1
+    }
 });
