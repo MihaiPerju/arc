@@ -80,7 +80,7 @@ class TaskListContainer extends Pager {
         }
     }
 
-    checkTask(task) {
+    checkTask = (task) => {
         const {tasksSelected} = this.state;
         if (tasksSelected.includes(task._id)) {
             tasksSelected.splice(tasksSelected.indexOf(task._id), 1);
@@ -90,7 +90,7 @@ class TaskListContainer extends Pager {
         this.setState({
             tasksSelected
         })
-    }
+    };
 
     changeFilters(filters) {
         this.updateFilters({filters})
@@ -101,7 +101,15 @@ class TaskListContainer extends Pager {
         this.setState({
             filter: !this.state.filter
         })
-    }
+    };
+
+    assignToUser = () => {
+        console.log("I'm gonna assign it to User");
+    };
+
+    assignToWorkQueue = () => {
+        console.log("I'm gonna assign it to WQ");
+    };
 
     getTask(currentTask) {
         const {data} = this.props;
@@ -125,6 +133,8 @@ class TaskListContainer extends Pager {
         const {tasksSelected, currentTask, range, total, filter} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
+        const dropdownOptions = ['Personal Accounts', 'Work Queue Accounts'];
+        const icons = [{icon: 'user', method: this.assignToUser}, {icon: 'users', method: this.assignToWorkQueue}];
 
         if (loading) {
             return <Loading/>
@@ -137,8 +147,10 @@ class TaskListContainer extends Pager {
             <div className="cc-container">
                 <div className={currentTask ? "left__side" : "left__side full__width"}>
                     <SearchBar options={options}
+                               icons={icons}
                                changeFilters={this.changeFilters}
                                decrease={this.decreaseList}
+                               dropdownOptions={dropdownOptions}
                                btnGroup={tasksSelected.length}
                     />
                     <TaskList

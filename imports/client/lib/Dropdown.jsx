@@ -2,13 +2,16 @@ import React, {Component} from 'react';
 
 export default class Dropdown extends Component {
     render() {
+        const {options} = this.props;
+
         return (
             <div className="dropdown">
                 <ul className="dropdown__wrapper">
-                    <li><a href="">All</a></li>
-                    <li><a href="">None</a></li>
-                    <li><a href="">Read</a></li>
-                    <li><a href="">Unread</a></li>
+                    {
+                        options && options.map((option) => {
+                            return <li><a href="">{option}</a></li>
+                        })
+                    }
                 </ul>
             </div>
         )
