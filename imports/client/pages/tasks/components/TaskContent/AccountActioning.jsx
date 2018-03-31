@@ -11,6 +11,8 @@ export default class AccountActioning extends React.Component {
         super();
         this.state = {
             dialogIsActive: false,
+            asignToUser: true,
+            asignToWorkQueue: false,
             workQueueOptions: []
         }
     }
@@ -24,11 +26,27 @@ export default class AccountActioning extends React.Component {
         })
     }
 
+    showQueueForm = () => {
+        this.setState({
+            asignToUser: false,
+            asignToWorkQueue: true
+        })
+    }
+
+    showUserForm = () => {
+        this.setState({
+            asignToUser: true,
+            asignToWorkQueue: false
+        })
+    }
+
     openDialog = () => {
         this.setState({
             dialogIsActive: true
         });
     };
+
+
 
     closeDialog = () => {
         this.setState({
@@ -86,7 +104,7 @@ export default class AccountActioning extends React.Component {
 
     showDialog = () => {
         const {model, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
-        const {workQueueOptions} = this.state;
+        const {workQueueOptions, asignToUser, asignToWorkQueue} = this.state;
         console.log(model);
 
         if (tickle) {
@@ -184,36 +202,53 @@ export default class AccountActioning extends React.Component {
         } else {
             return (
                 <div className="meta-dialog">
-                    Assign account to a user
-                    <AutoForm model={model}
-                              schema={assignSchema}
-                              onSubmit={this.assignToUser}>
-                        <div className="form-wrapper">
-                            <AutoField labelHidden={true} name="assigneeId" options={options}/>
-                            <ErrorField name='assigneeId'/>
-                        </div>
-                        <div className="btn-group">
-                            <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                            <button type="submit" className="btn--light-blue">
-                                Confirm
-                            </button>
-                        </div>
-                    </AutoForm>
-                    Assign account to Work Queue
-                    <AutoForm model={model}
-                              schema={workQueueSchema}
-                              onSubmit={this.assignToWorkQueue}>
-                        <div className="form-wrapper">
-                            <AutoField labelHidden={true} name="workQueue" options={workQueueOptions}/>
-                            <ErrorField name='workQueue'/>
-                        </div>
-                        <div className="btn-group">
-                            <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                            <button type="submit" className="btn--light-blue">
-                                Confirm
-                            </button>
-                        </div>
-                    </AutoForm>
+                    <div onClick={this.showUserForm}>
+                        <label htmlFor="a1">Assign account to a user</label>
+                        <input id="a1" type="radio" name="assign"/>
+                    </div>
+                    <div onClick={this.showQueueForm}>
+                        <label htmlFor="a2">Assign account to Work Queue</label>
+                        <input id="a2" type="radio" name="assign"/>
+                    </div>
+                    {
+                        asignToUser ? (
+                            <div>
+                                Assign account to a user...
+                                <AutoForm model={model}
+                                          schema={assignSchema}
+                                          onSubmit={this.assignToUser}>
+                                    <div className="form-wrapper">
+                                        <AutoField labelHidden={true} name="assigneeId" options={options}/>
+                                        <ErrorField name='assigneeId'/>
+                                    </div>
+                                    <div className="btn-group">
+                                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                        <button type="submit" className="btn--light-blue">
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </AutoForm>
+                            </div>
+                        ) : (
+                            <div>
+                                Assign account to Work Queue
+                                <AutoForm model={model}
+                                          schema={workQueueSchema}
+                                          onSubmit={this.assignToWorkQueue}>
+                                    <div className="form-wrapper">
+                                        <AutoField labelHidden={true} name="workQueue" options={workQueueOptions}/>
+                                        <ErrorField name='workQueue'/>
+                                    </div>
+                                    <div className="btn-group">
+                                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                        <button type="submit" className="btn--light-blue">
+                                            Confirm
+                                        </button>
+                                    </div>
+                                </AutoForm>
+                            </div>
+                        )
+                    }
                 </div>
             )
         }
