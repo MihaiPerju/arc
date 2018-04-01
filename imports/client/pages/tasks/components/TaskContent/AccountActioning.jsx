@@ -80,7 +80,9 @@ export default class AccountActioning extends React.Component {
 
     assignToUser = ({assigneeId}) => {
         const {accountId} = this.props;
-        Meteor.call('account.assignUser', {_id: accountId, assigneeId}, (err) => {
+        let accountIds = [];
+        accountIds.push(accountId);
+        Meteor.call('account.assignUser.bulk', {accountIds, assigneeId}, (err) => {
             if (!err) {
                 Notifier.success('Account assigned to user!');
                 this.closeDialog();
@@ -91,6 +93,8 @@ export default class AccountActioning extends React.Component {
     };
     assignToWorkQueue = ({workQueue}) => {
         const {accountId} = this.props;
+        let accountIds = [];
+        accountIds.push(accountId);
         Meteor.call("account.assignWorkQueue", {_id: accountId, workQueue}, (err) => {
             if (!err) {
                 Notifier.success('Account assigned to Work Queue!');
