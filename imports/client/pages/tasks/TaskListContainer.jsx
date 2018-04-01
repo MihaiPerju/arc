@@ -108,13 +108,13 @@ class TaskListContainer extends Pager {
 
     getFirstOption(tasks, options) {
         const commonAssigneeId = tasks[0].assigneeId;
-        for (task of tasks){
-            if (task.assigneeId !== commonAssigneeId){
+        for (task of tasks) {
+            if (task.assigneeId !== commonAssigneeId) {
                 return [{label: 'Unassigned'}];
             }
         }
-        for (let option of options){
-            if (option.value === commonAssigneeId){
+        for (let option of options) {
+            if (option.value === commonAssigneeId) {
                 return [option];
             }
         }
