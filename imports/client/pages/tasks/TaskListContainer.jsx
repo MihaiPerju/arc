@@ -138,6 +138,7 @@ class TaskListContainer extends Pager {
         const options = this.getData(data);
         const task = this.getTask(currentTask);
         const dropdownOptions = [
+            {label: 'All'},
             {label: 'Personal Accounts', filter: 'assigneeId'},
             {label: 'Work Queue Accounts', filter: 'workQueue'}
         ];

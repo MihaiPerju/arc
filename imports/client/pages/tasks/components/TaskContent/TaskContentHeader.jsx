@@ -68,7 +68,7 @@ export default class TaskContentHeader extends Component {
                                 <div className="label label--green">158 points(TBM)</div>
                                 <div className="label label--grey text-uppercase">CARC(TNM)</div>
                                 <div
-                                    className="label label--grey">{task.workQueue ? task.tag.name : "Assigned to you"}</div>
+                                    className="label label--grey">{task.workQueue && task.tag.name}</div>
                             </div>
                         </div>
                     </div>

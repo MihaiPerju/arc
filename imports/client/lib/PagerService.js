@@ -12,10 +12,10 @@ export default class PagerService {
 
     static getProperAccounts(params, assign) {
         if (assign === 'workQueue') {
-            _.extend(params.filters, {assigneeId: null});
+            _.extend(params.filters, {workQueue: {$exists: true}});
         }
-        else {
-            _.extend(params.filters, {workQueue: null});
+        else if (assign === 'assigneeId') {
+            _.extend(params.filters, {assigneeId: {$exists: true}});
         }
     }
 
