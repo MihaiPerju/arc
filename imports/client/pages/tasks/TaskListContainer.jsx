@@ -9,6 +9,7 @@ import query from '/imports/api/tasks/queries/taskList';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import PagerService from '/imports/client/lib/PagerService';
+import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent/AccountAssigning.jsx'
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -20,7 +21,9 @@ class TaskListContainer extends Pager {
             page: 1,
             perPage: 13,
             total: 0,
-            range: {}
+            range: {},
+            assignUser: false,
+            assignWQ: false
         });
         this.query = query;
     }
@@ -103,12 +106,48 @@ class TaskListContainer extends Pager {
         })
     };
 
+    getFirstOption(tasks, options) {
+        const commonAssigneeId = tasks[0].assigneeId;
+        for (task of tasks){
+            if (task.assigneeId !== commonAssigneeId){
+                return [{label: 'Unassigned'}];
+            }
+        }
+        for (let option of options){
+            if (option.value === commonAssigneeId){
+                return [option];
+            }
+        }
+    }
+
     assignToUser = () => {
-        console.log("I'm gonna assign it to User");
+        const tasks = this.getTasks(this.state.tasksSelected);
+        const options = this.getUserOptions(tasks);
+        let userOptions = this.getFirstOption(tasks, options).concat(options);
+        this.setState({
+            assignUser: true,
+            userOptions
+        })
+
+    };
+    closeAssignUser = () => {
+        this.setState({
+            assignUser: false
+        })
+
     };
 
+
     assignToWorkQueue = () => {
-        console.log("I'm gonna assign it to WQ");
+        this.setState({
+            assignWQ: true
+        })
+    };
+
+    closeAssignWQ = () => {
+        this.setState({
+            assignWQ: false
+        })
     };
 
     getTask(currentTask) {
@@ -118,6 +157,32 @@ class TaskListContainer extends Pager {
                 return task;
         }
         return null;
+    }
+
+    getTasks(tasksSelected){
+        const {data} = this.props;
+        let tasks = [];
+        for (task of data) {
+            if (tasksSelected.includes(task._id))
+                tasks.push(task);
+        }
+        return tasks;
+    }
+
+    getUserOptions(tasks){
+        let userOptions = [];
+        for (task of tasks){
+            for (user of task.facility.users){
+                let item = {
+                    label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
+                    value: user && user._id
+                };
+                if (!userOptions.includes(item)){
+                    userOptions.push(item);
+                }
+            }
+        }
+        return userOptions;
     }
 
     nextPage = (inc) => {
@@ -134,7 +199,7 @@ class TaskListContainer extends Pager {
 
     render() {
         const {data, loading, error} = this.props;
-        const {tasksSelected, currentTask, range, total, filter} = this.state;
+        const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
         const dropdownOptions = [
@@ -161,6 +226,25 @@ class TaskListContainer extends Pager {
                                dropdownOptions={dropdownOptions}
                                btnGroup={tasksSelected.length}
                     />
+                    {
+                        assignUser &&
+                        <AccountAssigning
+                            assignToUser={true}
+                            accountIds={tasksSelected}
+                            closeDialog={this.closeAssignUser}
+                            title={''}
+                            options={this.state.userOptions}
+                        />
+                    }
+                    {
+                        assignWQ &&
+                        <AccountAssigning
+                            assignToUser={false}
+                            accountIds={tasksSelected}
+                            closeDialog={this.closeAssignWQ}
+                            title={''}
+                        />
+                    }
                     <TaskList
                         classes={filter ? 'task-list decreased' : 'task-list'}
                         tasksSelected={tasksSelected}
