@@ -86,7 +86,7 @@ export default class SearchBar extends Component {
 
     render() {
         const {filter, active, dropdown, selectAll} = this.state;
-        const {options, btnGroup, deleteAction} = this.props;
+        const {options, btnGroup, deleteAction, dropdownOptions, icons, getProperAccounts} = this.props;
         const classes = classNames({
                 'select-type': true,
                 'open': dropdown
@@ -106,11 +106,14 @@ export default class SearchBar extends Component {
                             <i className="icon-angle-down"/>
                         </div>
                         {
-                            dropdown && <Dropdown/>
+                            dropdown &&
+                            <Dropdown toggleDropdown={this.openDropdown} getProperAccounts={getProperAccounts}
+                                      options={dropdownOptions}/>
                         }
                     </div>
                     <div className="search-bar__wrapper">
-                        {btnGroup ? <BtnGroup deleteAction={deleteAction}/> : null}
+                        {btnGroup ? <BtnGroup getProperAccounts={getProperAccounts} icons={icons}
+                                              deleteAction={deleteAction}/> : null}
                         <div className={btnGroup ? 'search-input' : 'search-input full__width'}>
                             <div className="form-group">
                                 <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
@@ -166,11 +169,20 @@ class BtnGroup extends Component {
     };
 
     render() {
-        const {deleteAction} = this.props;
+        const {deleteAction, icons} = this.props;
         const {dialogIsActive} = this.state;
         return (
             <div className={this.state.in ? 'btn-group in' : 'btn-group'}>
-                <button><i className="icon-archive"/></button>
+                {
+                    icons
+                        ?
+                        icons.map((element) => {
+                            return <button onClick={element.method}><i className={"icon-" + element.icon}/></button>
+                        })
+                        :
+                        <button><i className="icon-archive"/></button>
+
+                }
                 {
                     deleteAction &&
                     <button onClick={this.deleteAction}><i className="icon-trash-o"/></button>

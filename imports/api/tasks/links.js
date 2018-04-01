@@ -4,6 +4,7 @@ import Users from '/imports/api/users/collection';
 import Clients from '/imports/api/clients/collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import TaskActions from '/imports/api/taskActions/collection';
+import Tags from '/imports/api/tags/collection';
 
 Tasks.addLinks({
     facility: {
@@ -31,5 +32,10 @@ Tasks.addLinks({
         type: 'many',
         collection: TaskActions,
         field: 'actionsLinkData'
+    },
+    tag: {
+        type: "one",
+        collection: Tags,
+        field: "workQueue"
     }
 });
