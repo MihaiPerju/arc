@@ -49,39 +49,6 @@ class LeftMenu extends Component {
             {name: "action/list", label: "Actions", icon: 'thumb-tack'}
         ];
 
-        // if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
-        //     routes.push(
-        //         {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o'},
-        //         {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
-        //     )
-        // }
-        // if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
-        //     routes.push(
-        //         {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o'},
-        //         {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
-        //     )
-        // }
-        //
-        // const adminAndTechRoutes = [
-        //     {name: "client/list", label: "Clients", icon: 'users'},
-        //     {name: "code/list", label: "Codes", icon: 'code-fork'},
-        //     {name: "reports/list", label: "Reports", icon: 'file-text-o'},
-        //     {name: "action/list", label: "Actions", icon: 'thumb-tack'},
-        // ];
-        //
-        // const managerRoutes = [
-        //     {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
-        //     {name: "reports/list", label: "Reports", icon: 'file-text-o'},
-        //     {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o'},
-        // ];
-        //
-        // if (Roles.userIsInRole(Meteor.userId(), [RolesEnum.ADMIN, RolesEnum.TECH])) {
-        //     routes = routes.concat(adminAndTechRoutes);
-        // }
-        // if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-        //     routes = routes.concat(managerRoutes);
-        // }
-
         if (loading) {
             return <Loading/>
         }
