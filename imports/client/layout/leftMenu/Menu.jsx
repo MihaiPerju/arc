@@ -31,7 +31,7 @@ export default class Menu extends Component {
                             <i className={"icon-" + route.icon}/>
                             <span className="menu__label">{route.label}</span>
                             {
-                                route.badge && <Badge num={route.badge}/>
+                                route.badge ? <Badge num={route.badge}/> : null
                             }
                         </a>
                     }
