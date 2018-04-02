@@ -49,12 +49,7 @@ class FacilityFiles extends Component {
 
     getFileName(name) {
         let firstIndex = name.indexOf('.');
-        name = name.replace(name[firstIndex], '');
-
-        while (name[firstIndex] !== '.') {
-            name = name.replace(name[firstIndex], '');
-        }
-
+        name = name.substr(0, firstIndex) + name.substr(firstIndex + name.length);
         return name;
     }
 
@@ -72,28 +67,35 @@ class FacilityFiles extends Component {
         return (
             <div className="action-block schedule-block">
                 <div className="header__block">
-                    <div className="title-block text-uppercase">Files</div>
+                    <div className="title-block text-uppercase">Last Uploaded File</div>
                 </div>
                 <div className="main__block">
                     <div className="schedule-list">
                         {
-                            data.map((file, index) => {
-                                return (
-                                    <div key={index} className="schedule-item">
-                                        <div className="left__side">
-                                            <div className="info">
-                                                <div className="text-light-grey">File Name</div>
-                                                <div className="info-label">{this.getFileName(file.fileName)}</div>
+                            data.length ? data.map((file, index) => {
+                                    return (
+                                        <div key={index} className="schedule-item">
+                                            <div className="left__side">
+                                                <div className="info">
+                                                    <div className="text-light-grey">File Name</div>
+                                                    <div className="info-label">{this.getFileName(file.fileName)}</div>
+                                                </div>
+                                            </div>
+                                            <div className="btn-group">
+                                                <button onClick={this.deleteAction.bind(this, file._id)}
+                                                        className="btn-cancel">Roll Back
+                                                </button>
                                             </div>
                                         </div>
-                                        <div className="btn-group">
-                                            <button onClick={this.deleteAction.bind(this, file._id)}
-                                                    className="btn-cancel">Roll Back
-                                            </button>
+                                    )
+                                }) :
+                                <div className="schedule-item">
+                                    <div className="left__side">
+                                        <div className="info">
+                                            <div className="info-label">No Backup available</div>
                                         </div>
                                     </div>
-                                )
-                            })
+                                </div>
                         }
                     </div>
                 </div>
@@ -118,5 +120,8 @@ class FacilityFiles extends Component {
 
 export default withQuery((props) => {
     const {facilityId} = props;
-    return query.clone({filters: {facilityId}, options: {$sort: {createdAt: 1}}});
+    return query.clone({
+        filters: {facilityId},
+        options: {sort: {createdAt: -1}, limit: 1}
+    });
 }, {reactive: true})(FacilityFiles);
