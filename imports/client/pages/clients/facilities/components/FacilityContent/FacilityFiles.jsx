@@ -49,9 +49,12 @@ class FacilityFiles extends Component {
 
     getFileName(name) {
         let firstIndex = name.indexOf('.');
-        // while (firstIndex !== '.') {
-        //     name.replace(name[firstIndex], '');
-        // }
+        name = name.replace(name[firstIndex], '');
+
+        while (name[firstIndex] !== '.') {
+            name = name.replace(name[firstIndex], '');
+        }
+
         return name;
     }
 
