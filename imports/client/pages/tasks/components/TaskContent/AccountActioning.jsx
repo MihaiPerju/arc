@@ -107,29 +107,7 @@ export default class AccountActioning extends React.Component {
 
         if (tickle) {
             return (
-                <div className="create-form">
-                    <div className="create-form__wrapper">
-                        <div className="action-block">
-                            <main className="cc-main">
-                                <AutoForm onSubmit={this.tickle} schema={tickleSchema}>
-                                    <div className="filter-type__wrapper">
-                                        <div className="input-datetime">
-                                            <AutoField placeholder="Select tickle date" labelHidden={true}
-                                                       name="tickleDate"/>
-                                            <ErrorField name="tickleDate"/>
-                                        </div>
-                                    </div>
-                                    <div className="btn-group">
-                                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                        <button type="submit" className="btn--light-blue">
-                                            Confirm & send
-                                        </button>
-                                    </div>
-                                </AutoForm>
-                            </main>
-                        </div>
-                    </div>
-                </div>
+
             )
         }
         if (metaData) {
@@ -274,11 +252,7 @@ const escalateSchema = new SimpleSchema({
     }
 });
 
-const tickleSchema = new SimpleSchema({
-    tickleDate: {
-        type: Date
-    }
-});
+
 
 const assignSchema = new SimpleSchema({
     assigneeId: {
