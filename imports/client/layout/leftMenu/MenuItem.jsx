@@ -12,7 +12,7 @@ export default class MenuItem extends Component {
                         <i className={"icon-" + icon}/>
                         <span className="menu__label">{label}</span>
                         {
-                            badge && <Badge num={badge}/>
+                            badge ? <Badge num={badge}/> : null
                         }
                     </a>
                 }
