@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Badge from "/imports/client/lib/Badge";
+import MenuItem from './MenuItem';
 import FlowHelpers from '/imports/client/routing/helpers';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -14,25 +14,20 @@ export default class Menu extends Component {
 
     componentDidMount() {
         FlowRouter.watchPathChange();
-        this.setActive();
     }
 
     setActive = () => {
+        const {routes} = this.props;
         const currRoute = FlowRouter.current().path;
-        const {routes} = this.props
-        const {thisRoute} = this.state;
-        //Use this variable to display current route with highlighted background color
-        // const isCurrentRoute = currRoute.includes(route.name);
+
         this.setState({
             thisRoute: currRoute.includes(routes.name)
         });
-        console.log('Curent Route: ' + currRoute);
-        console.log(thisRoute)
     }
 
     render() {
         const {routes} = this.props;
-        const {thisRoute} = this.state;
+
         const menuRoutes = routes.map(function (route, index) {
             const currRoute = FlowRouter.current().path;
             //Use this variable to display current route with highlighted background color
@@ -42,18 +37,18 @@ export default class Menu extends Component {
                     'cc--active': isCurrentRoute
                 }
             );
+
             return (
-                <li key={index} className={routeClasses}>
-                    {
-                        <a className="" href={FlowRouter.url(route.name)}>
-                            <i className={"icon-" + route.icon}/>
-                            <span className="menu__label">{route.label}</span>
-                            {
-                                route.badge ? <Badge num={route.badge}/> : null
-                            }
-                        </a>
-                    }
-                </li>
+                <MenuItem
+                    key={index}
+                    className={routeClasses}
+                    name={route.name}
+                    href={FlowRouter.url(route.name)}
+                    icon={route.icon}
+                    label={route.label}
+                    badge={route.badge}
+                    active={this.setActive}
+                />
             )
         }, this);
 
