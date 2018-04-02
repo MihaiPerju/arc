@@ -12,10 +12,7 @@ export default class AccountActioning extends React.Component {
     constructor() {
         super();
         this.state = {
-            dialogIsActive: false,
-            assignToUser: true,
-            assignToWorkQueue: false,
-            workQueueOptions: []
+            dialogIsActive: false
         }
     }
 
@@ -24,7 +21,6 @@ export default class AccountActioning extends React.Component {
             dialogIsActive: true
         });
     };
-
 
     closeDialog = () => {
         this.setState({
@@ -42,7 +38,7 @@ export default class AccountActioning extends React.Component {
         }
         if (metaData) {
             return (
-                <AccountMetaData metaData={metaData} metaDataGroups={metaDataGroups}/>
+                <AccountMetaData close={this.closeDialog} metaData={metaData} metaDataGroups={metaDataGroups}/>
             )
         }
         if (escalate) {
