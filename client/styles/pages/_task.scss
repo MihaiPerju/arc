@@ -122,6 +122,9 @@
   }
 }
 
+//Assign Pop-up
+
+
 //Invoice Section
 .invoice-section {
   display: flex;
@@ -179,6 +182,29 @@
 
 //Account Dialog
 .account-dialog {
+  h1 {
+    font-weight: 700;
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    margin-bottom: 20px;
+  }
+  .select-item {
+    &:before {
+      content: '\f107';
+      font-family: $font-icon;
+      position: absolute;
+      right: 15px;
+      top: 11px;
+      color: $extra-light-grey;
+    }
+  }
+  .check-block {
+    display: flex;
+    .check-group {
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+  }
   .cc-dialog__title {
     font-size: 1.4rem;
     font-weight: 400;
