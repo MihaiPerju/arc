@@ -101,9 +101,9 @@ export default class FacilityContentHeader extends Component {
                         <div className="text-light-grey">Region</div>
                         <div className="info-label">{facility.region ? facility.region.name : "None"}</div>
                     </li>
-                    <li className="text-center toggle-allow-users" onClick={this.openDropdown} ref={this.nodeRef}>
+                    <li className="text-center toggle-allow-users">
                         <div className={classes}>
-                            <div className="dropdown__header">
+                            <div className="dropdown__header" onClick={this.openDropdown} ref={this.nodeRef}>
                                 <div className="text-light-grey">Allowed users</div>
                                 <div className="info-label"><span>{facility.users.length} users</span></div>
                             </div>
@@ -130,7 +130,7 @@ class Dropdown extends Component {
                         users.map(function (user, index) {
                             return (
                                 <li className="allow-item" key={index}>
-                                    <div className="name">{user.profile.firstName + ' ' + user.profile.lastName}</div>
+                                    <div className="name truncate">{user.profile.firstName + ' ' + user.profile.lastName}</div>
                                     {user.avatar ?
                                         <img className="md-avatar img-circle"
                                              src={getImagePath(user.avatar.path)} alt=''/>

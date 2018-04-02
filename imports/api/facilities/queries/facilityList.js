@@ -31,5 +31,8 @@ export default Facilities.createNamedQuery('facilityList', {
         avatar: 1,
         profile: 1
 
+    },
+    client: {
+        clientName: 1
     }
 });
