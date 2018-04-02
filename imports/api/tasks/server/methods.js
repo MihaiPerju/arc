@@ -43,7 +43,7 @@ Meteor.methods({
         );
     },
     'account.assignUser.bulk'({accountIds, assigneeId}) {
-        for (let accountId of accountIds){
+        for (let accountId of accountIds) {
             TaskSecurity.hasRightsOnTask(this.userId, accountId);
             Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
             Tasks.update(
@@ -75,7 +75,7 @@ Meteor.methods({
         );
     },
     'account.assignWorkQueue.bulk'({accountIds, workQueue}) {
-        for (let accountId of accountIds){
+        for (let accountId of accountIds) {
             TaskSecurity.hasRightsOnTask(this.userId, accountId);
             Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
             Tasks.update(
@@ -200,8 +200,9 @@ Meteor.methods({
     },
 
 
-    'account.escalate'({reason, taskId}) {
-        ActionService.createEscalation({reason, _id: taskId, userId: this.userId});
+    'account.escalate'({reason, accountId}) {
+        console.log(accountId);
+        ActionService.createEscalation({reason, _id: accountId, userId: this.userId});
     },
 
     'reset'() {

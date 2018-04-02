@@ -91,14 +91,14 @@ export default class TaskContentHeader extends Component {
                         />
                         <AccountActioning
                             escalate
-                            taskId={task._id}
-                            type={'Escalate'}
-                            title={''}
+                            accountId={task._id}
+                            type="Escalate"
+                            title="Escalate"
                         />
                         <AccountActioning
                             metaData={metaData}
                             metaDataGroups={metaDataGroups}
-                            type={'View Meta Data'}
+                            type="View Meta Data"
                         />
                         <AccountActioning
                             tickle={true}

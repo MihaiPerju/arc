@@ -5,7 +5,9 @@ import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 import WorkQueueService from './../../services/WorkQueueService';
 import workQueueQuery from "/imports/api/tags/queries/listTags";
+import AccountMetaData from "./AccountMetaData";
 import AccountTickle from "./AccountTickle";
+import AccountEscalation from "./AccountEscalation";
 
 export default class AccountActioning extends React.Component {
     constructor() {
@@ -32,14 +34,14 @@ export default class AccountActioning extends React.Component {
             assignToUser: false,
             assignToWorkQueue: true
         })
-    }
+    };
 
     showUserForm = () => {
         this.setState({
             assignToUser: true,
             assignToWorkQueue: false
         })
-    }
+    };
 
     openDialog = () => {
         this.setState({
@@ -54,19 +56,6 @@ export default class AccountActioning extends React.Component {
         })
     };
 
-    escalate = ({reason}) => {
-        const {taskId} = this.props;
-        Meteor.call("account.escalate", {reason, taskId}, (err) => {
-            if (!err) {
-                Notifier.success("Account escalated!");
-                this.closeDialog();
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    };
-
-
     assignToUser = ({assigneeId}) => {
         const {accountId} = this.props;
         let accountIds = [];
@@ -80,6 +69,7 @@ export default class AccountActioning extends React.Component {
             }
         })
     };
+
     assignToWorkQueue = ({workQueue}) => {
         const {accountId} = this.props;
         let accountIds = [];
@@ -95,78 +85,22 @@ export default class AccountActioning extends React.Component {
     };
 
     showDialog = () => {
-        const {model, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
+        const {model, accountId, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
         const {workQueueOptions, assignToUser, assignToWorkQueue} = this.state;
 
         if (tickle) {
             return (
-                <AccountTickle close={this.closeDialog}/>
+                <AccountTickle accountId={accountId} close={this.closeDialog}/>
             )
         }
         if (metaData) {
             return (
-                <div>
-                    <div className="main-content">
-                        <div className="header-block header-account">
-                            <div className="main-content__header header-block">
-                                <div className="row__header">
-                                    <div className="row__wrapper">
-                                        <div className="title text-center">Meta Data</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="additional-info">
-                                {
-                                    metaDataGroups && (
-                                        metaDataGroups.map((group) => {
-                                            return (
-                                                <div className="additional-info">
-                                                    <ul>
-                                                        {
-                                                            group.map((element, index) => {
-                                                                return (
-                                                                    <li className="text-center" key={index}>
-                                                                        <div className="text-light-grey">{element}</div>
-                                                                        <div className="text-dark-grey text-uppercase">
-                                                                            {metaData[element]}
-                                                                        </div>
-                                                                    </li>
-                                                                )
-                                                            })
-                                                        }
-                                                    </ul>
-                                                </div>
-                                            )
-                                        })
-                                    )
-                                }
-                                <ul>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="btn-group">
-                        <button className="btn-cancel" onClick={this.closeDialog}>Close</button>
-                    </div>
-                </div>
+                <AccountMetaData metaData={metaData} metaDataGroups={metaDataGroups}/>
             )
         }
         if (escalate) {
             return (
-                <div className="meta-dialog" title={title}>
-                    <AutoForm onSubmit={this.escalate} schema={escalateSchema}>
-                        <div className="form-wrapper">
-                            <AutoField labelHidden={true} placeholder="Type Escalation Reason" name="reason"/>
-                            <ErrorField name="reason"/>
-                        </div>
-                        <div className="btn-group">
-                            <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                            <button type="submit" className="btn--light-blue">
-                                Confirm & send
-                            </button>
-                        </div>
-                    </AutoForm>
-                </div>
+                <AccountEscalation close={this.closeDialog} title={title} accountId={accountId}/>
             )
         } else {
             return (
@@ -238,13 +172,6 @@ export default class AccountActioning extends React.Component {
         )
     }
 }
-
-const escalateSchema = new SimpleSchema({
-    reason: {
-        type: String
-    }
-});
-
 
 const assignSchema = new SimpleSchema({
     assigneeId: {
