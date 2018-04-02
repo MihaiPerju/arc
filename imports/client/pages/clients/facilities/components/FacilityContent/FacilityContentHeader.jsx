@@ -130,7 +130,7 @@ class Dropdown extends Component {
                         users.map(function (user, index) {
                             return (
                                 <li className="allow-item" key={index}>
-                                    <div className="name">{user.profile.firstName + ' ' + user.profile.lastName}</div>
+                                    <div className="name truncate">{user.profile.firstName + ' ' + user.profile.lastName}</div>
                                     {user.avatar ?
                                         <img className="md-avatar img-circle"
                                              src={getImagePath(user.avatar.path)} alt=''/>

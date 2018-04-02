@@ -35,6 +35,9 @@ export default class FacilityContent extends Component {
                             <a href={FlowRouter.url('/client/list')}>Clients</a>
                         </li>
                         <li>
+                            <a style={{pointerEvents: 'none', cursor: 'default'}}>{facility.client.clientName}</a>
+                        </li>
+                        <li>
                             <span>{facility.name}</span>
                         </li>
                     </ul>
