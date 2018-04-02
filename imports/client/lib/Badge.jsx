@@ -5,7 +5,7 @@ export default class Badge extends Component {
         const {num} = this.props;
 
         return (
-            <div className="badge">{num}</div>
+            <div className="badge text-center">{num}</div>
         )
     }
 }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import moment from "moment/moment";
 import AccountActioning from './AccountActioning';
+import tagQuery from "/imports/api/tags/queries/listTags";
 
 export default class TaskContentHeader extends Component {
     constructor() {
@@ -65,8 +66,9 @@ export default class TaskContentHeader extends Component {
                             <div className="location">{task.facility && task.facility.name}</div>
                             <div className="label-group">
                                 <div className="label label--green">158 points(TBM)</div>
-                                <div className="label label--grey text-uppercase">carc(TNM)</div>
-                                <div className="label label--grey">Work queue(TBM)</div>
+                                <div className="label label--grey text-uppercase">CARC(TNM)</div>
+                                <div
+                                    className="label label--grey">{task.workQueue && task.tag.name}</div>
                             </div>
                         </div>
                     </div>
@@ -89,14 +91,14 @@ export default class TaskContentHeader extends Component {
                         />
                         <AccountActioning
                             escalate
-                            taskId={task._id}
-                            type={'Escalate'}
-                            title={''}
+                            accountId={task._id}
+                            type="Escalate"
+                            title="Escalate"
                         />
                         <AccountActioning
                             metaData={metaData}
                             metaDataGroups={metaDataGroups}
-                            type={'View Meta Data'}
+                            type="View Meta Data"
                         />
                         <AccountActioning
                             tickle={true}
