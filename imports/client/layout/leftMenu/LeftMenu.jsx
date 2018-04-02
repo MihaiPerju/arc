@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
 import Menu from './Menu';
 import classNames from 'classnames';
+import accountListQuery from '/imports/api/tasks/queries/taskList';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import Loading from '/imports/client/lib/ui/Loading';
 
 class LeftMenu extends Component {
     constructor() {
@@ -19,10 +21,11 @@ class LeftMenu extends Component {
         this.setState({
             collapse: !collapse
         })
-    }
+    };
 
     render() {
-        const user = this.props.user;
+        const {data, loading, error} = this.props;
+
         const {collapse} = this.state;
 
         const menuClasses = classNames({
@@ -31,61 +34,30 @@ class LeftMenu extends Component {
         });
 
         let routes = [
-            {name: "/home", label: "Home"},
-            {name: "/tasks", label: "Tasks"},
+            {name: "accounts/active", label: "Account", icon: 'user'},
+            {name: "accounts/review", label: "Review", icon: 'inbox'},
+            {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
+            {name: "accounts/archived", label: "Archived", icon: 'archive'},
+            {name: "accounts/escalated", label: "Escalations", icon: 'info'},
+            {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: data.length},
+            {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o'},
+            {name: "client/list", label: "Clients", icon: 'users'},
+            {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
+            {name: "code/list", label: "Codes", icon: 'code-fork'},
+            {name: "reports/list", label: "Reports", icon: 'file-text-o'},
+            {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
+            {name: "action/list", label: "Actions", icon: 'thumb-tack'}
         ];
 
-        if (user && user.roles && user.roles.includes(RolesEnum.ADMIN)) {
-            routes.push(
-                {name: "/admin/user/list", label: "User Management"},
-                {name: '/region/list', label: 'Regions'},
-                {name: "/letter-templates/list", label: "Letter templates"}
-            )
-        }
-        if (user && user.roles && user.roles.includes(RolesEnum.TECH)) {
-            routes.push(
-                {name: "/letter-templates/list", label: "Letter templates"}
-            )
-        }
-
-        const adminAndTechRoutes = [
-            {name: "/client/list", label: "Clients"},
-            {name: "/code/list", label: "CARC/RARC Codes"},
-            {name: "/reports/list", label: "Reports"},
-            {name: "/action/list", label: "Actions"}
-        ];
-
-        const managerRoutes = [
-            {name: "/letter-templates/list", label: "Letter templates"},
-            {name: "/reports/list", label: "Reports"}
-        ];
-
-        if (user && Roles.userIsInRole(user._id, [UserRoles.ADMIN, UserRoles.TECH])) {
-            routes = routes.concat(adminAndTechRoutes);
-        }
-        if (user && Roles.userIsInRole(user._id, [UserRoles.MANAGER])) {
-            routes = routes.concat(managerRoutes);
+        if (loading) {
+            return <Loading/>
         }
 
         return (
             <div>
-                {user &&
+                {Meteor.userId() &&
                 <div className={menuClasses}>
-                    <Menu routes={[
-                        {name: "accounts/active", label: "Account", icon: 'user'},
-                        {name: "accounts/review", label: "Review", icon: 'inbox'},
-                        {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
-                        {name: "accounts/archived", label: "Archived", icon: 'archive'},
-                        {name: "accounts/escalated", label: "Escalations", icon: 'info'},
-                        {name: "accounts/tickles", label: "Tickles", icon: 'comments-o'},
-                        {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o'},
-                        {name: "client/list", label: "Clients", icon: 'users'},
-                        {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
-                        {name: "code/list", label: "Codes", icon: 'code-fork'},
-                        {name: "reports/list", label: "Reports", icon: 'file-text-o'},
-                        {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
-                        {name: "action/list", label: "Actions", icon: 'thumb-tack'}
-                    ]}/>
+                    <Menu routes={routes}/>
                     <div className="btn-collapse text-center" onClick={this.collapseMenu}>
                         <i className="icon-angle-left"/>
                     </div>
@@ -96,15 +68,15 @@ class LeftMenu extends Component {
     }
 }
 
-LeftMenu.propTypes = {
-    user: React.PropTypes.object,
-};
-LeftMenu.defaultProps = {};
+const now = new Date;
 
-export default LeftMenuContainer = createContainer(() => {
-    const user = Meteor.user();
-
-    return {
-        user,
-    };
-}, LeftMenu);
+export default withQuery(() => {
+    return accountListQuery.clone({
+        filters: {
+            tickleDate: {
+                $exists: true,
+                $lte: now
+            }
+        }
+    });
+}, {reactive: true})(LeftMenu)

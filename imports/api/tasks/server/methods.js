@@ -27,18 +27,69 @@ Meteor.methods({
         ActionService.createAction({accountId, actionId, reasonId, userId});
     },
 
-    'task.assignee_change'({_id, assigneeId}) {
+    'account.assignUser'({_id, assigneeId}) {
         TaskSecurity.hasRightsOnTask(this.userId, _id);
         Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-
         Tasks.update(
             {_id},
             {
                 $set: {
                     assigneeId
+                },
+                $unset: {
+                    workQueue: null
                 }
             }
         );
+    },
+    'account.assignUser.bulk'({accountIds, assigneeId}) {
+        for (let accountId of accountIds) {
+            TaskSecurity.hasRightsOnTask(this.userId, accountId);
+            Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+            Tasks.update(
+                {_id: accountId},
+                {
+                    $set: {
+                        assigneeId
+                    },
+                    $unset: {
+                        workQueue: null
+                    }
+                }
+            );
+        }
+    },
+    'account.assignWorkQueue'({_id, workQueue}) {
+        TaskSecurity.hasRightsOnTask(this.userId, _id);
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+        Tasks.update(
+            {_id},
+            {
+                $set: {
+                    workQueue
+                },
+                $unset: {
+                    assigneeId: null
+                }
+            }
+        );
+    },
+    'account.assignWorkQueue.bulk'({accountIds, workQueue}) {
+        for (let accountId of accountIds) {
+            TaskSecurity.hasRightsOnTask(this.userId, accountId);
+            Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+            Tasks.update(
+                {_id: accountId},
+                {
+                    $set: {
+                        workQueue
+                    },
+                    $unset: {
+                        assigneeId: null
+                    }
+                }
+            );
+        }
     },
 
     'task.attachment.remove'(_id, attachmentId, key) {
@@ -149,8 +200,8 @@ Meteor.methods({
     },
 
 
-    'account.escalate'({reason, taskId}) {
-        ActionService.createEscalation({reason, _id: taskId, userId: this.userId});
+    'account.escalate'({reason, accountId}) {
+        ActionService.createEscalation({reason, _id: accountId, userId: this.userId});
     },
 
     'reset'() {

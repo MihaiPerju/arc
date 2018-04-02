@@ -1,14 +1,25 @@
 import React, {Component} from 'react';
 
 export default class Dropdown extends Component {
+
+    onFilterAssignee = (filter) => {
+        const {getProperAccounts, toggleDropdown} = this.props;
+        getProperAccounts(filter);
+        toggleDropdown();
+    };
+
     render() {
+        const {options} = this.props;
+
         return (
             <div className="dropdown">
                 <ul className="dropdown__wrapper">
-                    <li><a href="">All</a></li>
-                    <li><a href="">None</a></li>
-                    <li><a href="">Read</a></li>
-                    <li><a href="">Unread</a></li>
+                    {
+                        options && options.map((option) => {
+                            return <li><a onClick={this.onFilterAssignee.bind(this, option.filter)}>{option.label}</a>
+                            </li>
+                        })
+                    }
                 </ul>
             </div>
         )

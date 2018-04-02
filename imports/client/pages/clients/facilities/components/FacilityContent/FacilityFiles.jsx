@@ -47,6 +47,14 @@ class FacilityFiles extends Component {
         });
     };
 
+    getFileName(name) {
+        let firstIndex = name.indexOf('.');
+        // while (firstIndex !== '.') {
+        //     name.replace(name[firstIndex], '');
+        // }
+        return name;
+    }
+
     render() {
         const {data, loading, error} = this.props;
         const {dialogIsActive} = this.state;
@@ -72,7 +80,7 @@ class FacilityFiles extends Component {
                                         <div className="left__side">
                                             <div className="info">
                                                 <div className="text-light-grey">File Name</div>
-                                                <div className="info-label">{file.fileName}</div>
+                                                <div className="info-label">{this.getFileName(file.fileName)}</div>
                                             </div>
                                         </div>
                                         <div className="btn-group">
