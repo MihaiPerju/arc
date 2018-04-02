@@ -1,12 +1,22 @@
 import stateEnum from '/imports/api/tasks/enums/states';
 
-export default class agerService {
-    static setQuery(query, {page, perPage, state}) {
+export default class PagerService {
+    static setQuery(query, {page, perPage, state, assign}) {
         const params = this.getPagerOptions(page, perPage);
         if (state) {
             this.getAccountFilters(state, params);
+            this.getProperAccounts(params, assign);
         }
         return query.clone(params);
+    }
+
+    static getProperAccounts(params, assign) {
+        if (assign === 'workQueue') {
+            _.extend(params.filters, {workQueue: {$exists: true}});
+        }
+        else if (assign === 'assigneeId') {
+            _.extend(params.filters, {assigneeId: {$exists: true}});
+        }
     }
 
     static getAccountFilters(state, params) {
