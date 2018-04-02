@@ -201,7 +201,6 @@ Meteor.methods({
 
 
     'account.escalate'({reason, accountId}) {
-        console.log(accountId);
         ActionService.createEscalation({reason, _id: accountId, userId: this.userId});
     },
 

@@ -1,13 +1,12 @@
 import React from "react";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
-import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-import WorkQueueService from './../../services/WorkQueueService';
-import workQueueQuery from "/imports/api/tags/queries/listTags";
+
 import AccountMetaData from "./AccountMetaData";
 import AccountTickle from "./AccountTickle";
 import AccountEscalation from "./AccountEscalation";
+import AccountAssign from "./AccountAssign";
 
 export default class AccountActioning extends React.Component {
     constructor() {
@@ -19,29 +18,6 @@ export default class AccountActioning extends React.Component {
             workQueueOptions: []
         }
     }
-
-    componentWillMount() {
-        workQueueQuery.clone().fetch((err, res) => {
-            if (!err) {
-                const workQueueOptions = WorkQueueService.createOptions(res);
-                this.setState({workQueueOptions});
-            }
-        })
-    }
-
-    showQueueForm = () => {
-        this.setState({
-            assignToUser: false,
-            assignToWorkQueue: true
-        })
-    };
-
-    showUserForm = () => {
-        this.setState({
-            assignToUser: true,
-            assignToWorkQueue: false
-        })
-    };
 
     openDialog = () => {
         this.setState({
@@ -56,37 +32,8 @@ export default class AccountActioning extends React.Component {
         })
     };
 
-    assignToUser = ({assigneeId}) => {
-        const {accountId} = this.props;
-        let accountIds = [];
-        accountIds.push(accountId);
-        Meteor.call('account.assignUser.bulk', {accountIds, assigneeId}, (err) => {
-            if (!err) {
-                Notifier.success('Account assigned to user!');
-                this.closeDialog();
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    };
-
-    assignToWorkQueue = ({workQueue}) => {
-        const {accountId} = this.props;
-        let accountIds = [];
-        accountIds.push(accountId);
-        Meteor.call("account.assignWorkQueue", {_id: accountId, workQueue}, (err) => {
-            if (!err) {
-                Notifier.success('Account assigned to Work Queue!');
-                this.closeDialog();
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    };
-
     showDialog = () => {
         const {model, accountId, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
-        const {workQueueOptions, assignToUser, assignToWorkQueue} = this.state;
 
         if (tickle) {
             return (
@@ -104,52 +51,7 @@ export default class AccountActioning extends React.Component {
             )
         } else {
             return (
-                <div className="meta-dialog">
-                    <h1>Assign account:</h1>
-                    <div className="check-block">
-                        <div className="check-group" onClick={this.showUserForm}>
-                            <input id="a1" type="radio" name="assign" value="user" checked={assignToUser}/>
-                            <label htmlFor="a1">User</label>
-                        </div>
-                        <div className="check-group" onClick={this.showQueueForm}>
-                            <input id="a2" type="radio" name="assign" value="workQueue"/>
-                            <label htmlFor="a2">Work Queue</label>
-                        </div>
-                    </div>
-                    {
-                        assignToUser ? (
-                            <AutoForm model={model}
-                                      schema={assignSchema}
-                                      onSubmit={this.assignToUser}>
-                                <div className="form-wrapper select-item">
-                                    <AutoField labelHidden={true} name="assigneeId" options={options}/>
-                                    <ErrorField name='assigneeId'/>
-                                </div>
-                                <div className="btn-group">
-                                    <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                    <button type="submit" className="btn--light-blue">
-                                        Confirm
-                                    </button>
-                                </div>
-                            </AutoForm>
-                        ) : (
-                            <AutoForm model={model}
-                                      schema={workQueueSchema}
-                                      onSubmit={this.assignToWorkQueue}>
-                                <div className="form-wrapper select-item">
-                                    <AutoField labelHidden={true} name="workQueue" options={workQueueOptions}/>
-                                    <ErrorField name='workQueue'/>
-                                </div>
-                                <div className="btn-group">
-                                    <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                    <button type="submit" className="btn--light-blue">
-                                        Confirm
-                                    </button>
-                                </div>
-                            </AutoForm>
-                        )
-                    }
-                </div>
+                <AccountAssign accountId={accountId} userOptions={options} close={this.closeDialog} model={model}/>
             )
         }
     };
@@ -172,15 +74,3 @@ export default class AccountActioning extends React.Component {
         )
     }
 }
-
-const assignSchema = new SimpleSchema({
-    assigneeId: {
-        type: String
-    }
-});
-
-const workQueueSchema = new SimpleSchema({
-    workQueue: {
-        type: String
-    }
-});
