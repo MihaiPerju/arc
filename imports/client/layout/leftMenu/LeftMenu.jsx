@@ -24,7 +24,7 @@ class LeftMenu extends Component {
     };
 
     render() {
-        const {data, loading, error} = this.props;
+        const {data, loading, error, currRoute} = this.props;
 
         const {collapse} = this.state;
 
@@ -70,7 +70,8 @@ class LeftMenu extends Component {
 
 const now = new Date;
 
-export default withQuery(() => {
+export default withQuery((props) => {
+    const currRoute = FlowRouter.current().path;
     return accountListQuery.clone({
         filters: {
             tickleDate: {
