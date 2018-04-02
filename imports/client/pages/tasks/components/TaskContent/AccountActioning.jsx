@@ -38,7 +38,7 @@ export default class AccountActioning extends React.Component {
         }
         if (metaData) {
             return (
-                <AccountMetaData metaData={metaData} metaDataGroups={metaDataGroups}/>
+                <AccountMetaData close={this.closeDialog} metaData={metaData} metaDataGroups={metaDataGroups}/>
             )
         }
         if (escalate) {
