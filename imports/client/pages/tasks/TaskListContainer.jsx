@@ -10,6 +10,7 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import PagerService from '/imports/client/lib/PagerService';
 import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent/AccountAssigning.jsx'
+import AccountSearchBar from './components/AccountSearchBar';
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -159,7 +160,7 @@ class TaskListContainer extends Pager {
         return null;
     }
 
-    getTasks(tasksSelected){
+    getTasks(tasksSelected) {
         const {data} = this.props;
         let tasks = [];
         for (task of data) {
@@ -169,15 +170,15 @@ class TaskListContainer extends Pager {
         return tasks;
     }
 
-    getUserOptions(tasks){
+    getUserOptions(tasks) {
         let userOptions = [];
-        for (task of tasks){
-            for (user of task.facility.users){
+        for (task of tasks) {
+            for (user of task.facility.users) {
                 let item = {
                     label: user && user.profile && user.profile.firstName + ' ' + user.profile.lastName + '(' + user.roles[0] + ')',
                     value: user && user._id
                 };
-                if (!userOptions.includes(item)){
+                if (!userOptions.includes(item)) {
                     userOptions.push(item);
                 }
             }
@@ -219,13 +220,13 @@ class TaskListContainer extends Pager {
         return (
             <div className="cc-container">
                 <div className={currentTask ? "left__side" : "left__side full__width"}>
-                    <SearchBar options={options}
-                               icons={icons}
-                               getProperAccounts={this.getProperAccounts}
-                               changeFilters={this.changeFilters}
-                               decrease={this.decreaseList}
-                               dropdownOptions={dropdownOptions}
-                               btnGroup={tasksSelected.length}
+                    <AccountSearchBar options={options}
+                                      icons={icons}
+                                      getProperAccounts={this.getProperAccounts}
+                                      changeFilters={this.changeFilters}
+                                      decrease={this.decreaseList}
+                                      dropdownOptions={dropdownOptions}
+                                      btnGroup={tasksSelected.length}
                     />
                     {
                         assignUser &&
@@ -298,10 +299,7 @@ class RightSide extends Component {
 }
 
 export default withQuery((props) => {
-    const page = FlowRouter.getQueryParam("page");
-    const assign = FlowRouter.getQueryParam("assign");
-    const {state} = FlowRouter.current().params;
-    const perPage = 13;
-    const params = {page, perPage, state, assign};
+    const params = PagerService.getAccountQueryParams();
     return PagerService.setQuery(query, params);
+
 }, {reactive: true})(TaskListContainer)
