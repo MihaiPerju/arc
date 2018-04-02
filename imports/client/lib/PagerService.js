@@ -34,7 +34,7 @@ export default class PagerService {
 
     static getAccountFilters(params, state, {acctNum, facilityId, clientId}) {
         if (state === "unassigned") {
-            _.extend(params, {filters: {assigneeId: null, tickleDate: null, escalateReason: null}});
+            _.extend(params, {filters: {assigneeId: null, workQueue: null, tickleDate: null, escalateReason: null}});
         } else if (state === "tickles") {
             _.extend(params, {filters: {tickleDate: {$exists: true}, escalateReason: null}});
         } else if (state === "escalated") {
