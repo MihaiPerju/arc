@@ -5,6 +5,7 @@ import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 import WorkQueueService from './../../services/WorkQueueService';
 import workQueueQuery from "/imports/api/tags/queries/listTags";
+import AccountTickle from "./AccountTickle";
 
 export default class AccountActioning extends React.Component {
     constructor() {
@@ -65,18 +66,6 @@ export default class AccountActioning extends React.Component {
         })
     };
 
-    tickle = (data) => {
-        const {accountId} = this.props;
-        data._id = accountId;
-        Meteor.call("account.tickle", data, (err) => {
-            if (!err) {
-                Notifier.success("Account Tickled!");
-                this.closeDialog();
-            } else {
-                Notifier.error(err.reason);
-            }
-        })
-    };
 
     assignToUser = ({assigneeId}) => {
         const {accountId} = this.props;
@@ -107,7 +96,7 @@ export default class AccountActioning extends React.Component {
 
         if (tickle) {
             return (
-
+                <AccountTickle close={this.closeDialog}/>
             )
         }
         if (metaData) {
@@ -251,7 +240,6 @@ const escalateSchema = new SimpleSchema({
         type: String
     }
 });
-
 
 
 const assignSchema = new SimpleSchema({

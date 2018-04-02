@@ -1,8 +1,27 @@
 import React from 'react';
 import SimpleSchema from "simpl-schema";
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import Notifier from "../../../../lib/Notifier";
 
 export default class AccountTickle extends React.Component {
+    tickle = (data) => {
+        const {accountId} = this.props;
+        data._id = accountId;
+        Meteor.call("account.tickle", data, (err) => {
+            if (!err) {
+                Notifier.success("Account Tickled!");
+                this.closeDialog();
+            } else {
+                Notifier.error(err.reason);
+            }
+        })
+    };
+
+    closeDialog = () => {
+        const {close} = this.props;
+        close();
+    };
+
     render() {
         return (
             <div className="create-form">
