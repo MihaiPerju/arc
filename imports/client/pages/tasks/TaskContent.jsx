@@ -25,10 +25,10 @@ export default class TaskContent extends Component {
     }
 
     render() {
-        const {task, update} = this.props;
+        const {task, update, openMetaData} = this.props;
         return (
             <div className="main-content">
-                <TaskContentHeader task={task}/>
+                <TaskContentHeader task={task} openMetaData={openMetaData}/>
                 {this.escalateReason()}
                 <PayerBlock task={task}/>
                 <InvoiceMembers/>
