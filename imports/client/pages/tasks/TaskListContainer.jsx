@@ -363,7 +363,7 @@ class MetaDataSlider extends Component {
             <div className={fade ? "right__side in" : "right__side"}>
                 <div className="create-form__bar">
                     <div className="btn-group">
-                        <button onClick={this.closeSlider} className="btn-cancel">Cancel</button>
+                        <button onClick={this.closeSlider} className="btn-cancel">Back</button>
                     </div>
                 </div>
                 {
