@@ -1,13 +1,26 @@
 import stateEnum from '/imports/api/tasks/enums/states';
 
 export default class PagerService {
-    static setQuery(query, {page, perPage, state, assign}) {
-        const params = this.getPagerOptions(page, perPage);
+    static setQuery(query, {page, perPage, state, assign, filters}) {
+        let params = this.getPagerOptions(page, perPage);
+
         if (state) {
-            this.getAccountFilters(state, params);
+            this.getAccountFilters(params, state, filters);
             this.getProperAccounts(params, assign);
         }
         return query.clone(params);
+    }
+
+    static getAccountQueryParams() {
+        const page = FlowRouter.getQueryParam("page");
+        const assign = FlowRouter.getQueryParam("assign");
+        const {state} = FlowRouter.current().params;
+        const facilityId = FlowRouter.getQueryParam("facilityId");
+        const clientId = FlowRouter.getQueryParam("clientId");
+        const acctNum = FlowRouter.getQueryParam("acctNum");
+        const perPage = 13;
+
+        return {filters: {facilityId, clientId, acctNum}, page, perPage, state, assign,};
     }
 
     static getProperAccounts(params, assign) {
@@ -19,7 +32,7 @@ export default class PagerService {
         }
     }
 
-    static getAccountFilters(state, params) {
+    static getAccountFilters(params, state, {acctNum, facilityId, clientId}) {
         if (state === "unassigned") {
             _.extend(params, {filters: {assigneeId: null, workQueue: null, tickleDate: null, escalateReason: null}});
         } else if (state === "tickles") {
@@ -30,6 +43,17 @@ export default class PagerService {
         else {
             state = stateEnum[state.toUpperCase()];
             _.extend(params, {filters: {state, tickleDate: null, escalateReason: null}});
+        }
+
+        //adding query options
+        if (acctNum) {
+            _.extend(params.filters, {acctNum: {'$regex': acctNum, '$options': 'i'}});
+        }
+        if (facilityId) {
+            _.extend(params.filters, {facilityId});
+        }
+        if (clientId) {
+            _.extend(params.filters, {clientId});
         }
     }
 
