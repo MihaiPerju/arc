@@ -11,6 +11,7 @@ import Loading from '/imports/client/lib/ui/Loading';
 import PagerService from '/imports/client/lib/PagerService';
 import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent/AccountAssigning.jsx'
 import AccountSearchBar from './components/AccountSearchBar';
+import AccountMetaData from '/imports/client/pages/tasks/components/TaskContent/AccountMetaData'
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -24,7 +25,8 @@ class TaskListContainer extends Pager {
             total: 0,
             range: {},
             assignUser: false,
-            assignWQ: false
+            assignWQ: false,
+            showMetaData: false
         });
         this.query = query;
     }
@@ -78,9 +80,15 @@ class TaskListContainer extends Pager {
     selectTask = (newTask) => {
         const {currentTask} = this.state;
         if (currentTask === newTask._id) {
-            this.setState({currentTask: null})
+            this.setState({
+                currentTask: null,
+                showMetaData: false
+            })
         } else {
-            this.setState({currentTask: newTask._id});
+            this.setState({
+                currentTask: newTask._id,
+                showMetaData: false
+            });
         }
     }
 
@@ -198,9 +206,21 @@ class TaskListContainer extends Pager {
         FlowRouter.setQueryParams({assign});
     };
 
+    openMetaDataSlider = () => {
+        this.setState({
+            showMetaData: true
+        })
+    };
+
+    closeMetaDataSlider = () => {
+        this.setState({
+            showMetaData: false
+        })
+    };
+
     render() {
         const {data, loading, error} = this.props;
-        const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ} = this.state;
+        const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ, showMetaData} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
         const dropdownOptions = [
@@ -261,7 +281,11 @@ class TaskListContainer extends Pager {
                                    buttonHidden={true}/>
                 </div>
                 {
-                    currentTask && <RightSide update={this.update} task={task}/>
+                    currentTask && !showMetaData &&
+                    <RightSide update={this.update} task={task} openMetaData={this.openMetaDataSlider}/>
+                }
+                {
+                    showMetaData && <MetaDataSlider task={task} closeMetaData={this.closeMetaDataSlider}/>
                 }
             </div>
         );
@@ -284,14 +308,68 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {task, update} = this.props;
+        const {task, update, openMetaData} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
                     task ?
-                        <TaskContent update={update} task={task}/>
+                        <TaskContent update={update} task={task} openMetaData={openMetaData}/>
                         :
                         'No component provided for bulk accounts'
+                }
+            </div>
+        )
+    }
+}
+
+class MetaDataSlider extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fade: false
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({fade: true});
+        }, 300);
+    }
+
+    closeSlider = () => {
+        const {closeMetaData} = this.props;
+        this.setState({fade: true});
+        closeMetaData();
+    }
+
+    groupFields(fields) {
+        const numInRow = 5;
+        const numGroups = Math.ceil(fields.length / numInRow);
+        let result = [];
+        for (let i = 0; i < numGroups; i++) {
+            const startIndex = i * numInRow;
+            const finishIndex = Math.min((i + 1) * numInRow, fields.length);
+            const groupOfFields = fields.slice(startIndex, finishIndex);
+            result.push(groupOfFields);
+        }
+        return result;
+    }
+
+    render() {
+        const {fade} = this.state;
+        const {task} = this.props;
+        const {metaData} = task;
+        const metaDataGroups = this.groupFields(Object.keys(metaData));
+        return (
+            <div className={fade ? "right__side in" : "right__side"}>
+                <div className="create-form__bar">
+                    <div className="btn-group">
+                        <button onClick={this.closeSlider} className="btn-cancel">Back</button>
+                    </div>
+                </div>
+                {
+                    task &&
+                    <AccountMetaData close={this.closeSlider} metaData={task.metaData} metaDataGroups={metaDataGroups}/>
                 }
             </div>
         )

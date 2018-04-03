@@ -1,24 +1,12 @@
 import React, {Component} from 'react';
 import moment from "moment/moment";
 import AccountActioning from './AccountActioning';
+
 import tagQuery from "/imports/api/tags/queries/listTags";
 
 export default class TaskContentHeader extends Component {
     constructor() {
         super();
-    }
-
-    groupFields(fields) {
-        const numInRow = 5;
-        const numGroups = Math.ceil(fields.length / numInRow);
-        let result = [];
-        for (let i = 0; i < numGroups; i++) {
-            const startIndex = i * numInRow;
-            const finishIndex = Math.min((i + 1) * numInRow, fields.length);
-            const groupOfFields = fields.slice(startIndex, finishIndex);
-            result.push(groupOfFields);
-        }
-        return result;
     }
 
     getOptions(users) {
@@ -47,11 +35,9 @@ export default class TaskContentHeader extends Component {
     }
 
     render() {
-        const {task} = this.props;
-        const {metaData} = task;
+        const {task, openMetaData} = this.props;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
-        const metaDataGroups = this.groupFields(Object.keys(metaData));
 
         return (
             <div className="header-block header-account">
@@ -96,9 +82,9 @@ export default class TaskContentHeader extends Component {
                             title="Escalate"
                         />
                         <AccountActioning
-                            metaData={metaData}
-                            metaDataGroups={metaDataGroups}
+                            metaData={true}
                             type="View Meta Data"
+                            openMetaData={openMetaData}
                         />
                         <AccountActioning
                             tickle={true}
