@@ -2,11 +2,6 @@ import React from 'react';
 
 export default class AccountMetaData extends React.Component {
 
-    closeDialog = () => {
-        const {close} = this.props;
-        close();
-    };
-
     render() {
         const {metaDataGroups, metaData} = this.props;
         return (
@@ -49,9 +44,6 @@ export default class AccountMetaData extends React.Component {
                             </ul>
                         </div>
                     </div>
-                </div>
-                <div className="btn-group">
-                    <button className="btn-cancel" onClick={this.closeDialog}>Close</button>
                 </div>
             </div>
         )

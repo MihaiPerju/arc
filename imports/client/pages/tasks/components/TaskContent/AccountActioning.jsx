@@ -29,7 +29,7 @@ export default class AccountActioning extends React.Component {
     };
 
     showDialog = () => {
-        const {model, accountId, options, title, escalate, metaData, metaDataGroups, tickle} = this.props;
+        const {model, accountId, options, title, escalate, metaData, metaDataGroups, tickle, openMetaData} = this.props;
 
         if (tickle) {
             return (
@@ -37,9 +37,7 @@ export default class AccountActioning extends React.Component {
             )
         }
         if (metaData) {
-            return (
-                <AccountMetaData close={this.closeDialog} metaData={metaData} metaDataGroups={metaDataGroups}/>
-            )
+            openMetaData();
         }
         if (escalate) {
             return (
