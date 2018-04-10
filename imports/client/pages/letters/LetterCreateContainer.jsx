@@ -1,17 +1,12 @@
 import React from 'react';
-import { AutoForm, ErrorField } from 'uniforms-semantic';
-import { Container, Header, Divider, Grid } from 'semantic-ui-react';
-import SelectWithDescription from '/imports/client/lib/uniforms/SelectWithDescription.jsx';
-import letterCreateActionSchema from '/imports/client/pages/letters/schemas/letterCreateAction.js';
 import Notifier from '/imports/client/lib/Notifier';
 import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
 import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
-import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
 
 class LetterCreateContainer extends React.Component {
-    constructor () {
+    constructor() {
         super();
 
         this.state = {
@@ -23,9 +18,12 @@ class LetterCreateContainer extends React.Component {
         };
     }
 
-    componentWillMount () {
-        const {data} = this.props;
+    componentWillMount() {
+        const {data, account} = this.props;
         this.setState({letterTemplates: data});
+        const {profile} = Meteor.user();
+        _.extend(account, profile);
+        this.updateState(account);
 
         Meteor.call('letterTemplates.get', (err, letterTemplates) => {
             if (err) {
@@ -79,7 +77,7 @@ class LetterCreateContainer extends React.Component {
     };
 
     render() {
-        const {taskId, selectedTemplate, reset} = this.props;
+        const {account, selectedTemplate, reset} = this.props;
         const {keywords, body} = selectedTemplate;
         const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
         const model = {letterTemplate: null};
@@ -91,13 +89,14 @@ class LetterCreateContainer extends React.Component {
                 <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>
                     <div className="left-col">
                         <GenerateLetterTemplateInputs
+                            account={account}
                             templateKeywords={keywords}
                             onChange={this.updateState}/>
                     </div>
                     <div className="right-col">
                         <LetterTemplatePreview
                             reset={reset}
-                            taskId={taskId}
+                            taskId={account._id}
                             letterTemplateBody={body}
                             parentState={this.state}
                             attachments={attachmentIds}/>

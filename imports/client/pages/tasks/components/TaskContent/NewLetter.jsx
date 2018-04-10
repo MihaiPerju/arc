@@ -83,7 +83,7 @@ class NewLetter extends Component {
                     </div>
                 </div>
                 <LetterCreateContainer selectedTemplate={selectedTemplate}
-                                       taskId={task && task._id}
+                                       account={task}
                                        reset={cancel}
                                        data={data}/>
             </div>
