@@ -15,7 +15,11 @@ export default class LetterTemplatePreview extends React.Component {
 
         parser.addRule(/{(.*?)}/g, function (tag) {
             const word = tag.substring(1).slice(0, -1);
-            return `${parentState[variablesEnum[word].field] ? parentState[variablesEnum[word].field] : `{${word}}`}`;
+            if (variablesEnum[word]) {
+                return `${parentState[variablesEnum[word].field] ? parentState[variablesEnum[word].field] : `{${word}}`}`;
+            } else {
+                return `${parentState[word] ? parentState[word] : `{${word}}`}`;
+            }
         });
 
         return parser.render(letterTemplateBody);

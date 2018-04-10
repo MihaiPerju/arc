@@ -43,10 +43,18 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             return new SimpleSchema(schema);
         }
         options.forEach((opt) => {
-            schema[variablesEnum[opt].field] = {
-                type: String,
-                optional: true
-            };
+            if (variablesEnum[opt]) {
+                schema[variablesEnum[opt].field] = {
+                    type: String,
+                    optional: true
+                };
+            }
+            else {
+                schema[opt] = {
+                    type: String,
+                    optional: true
+                };
+            }
         });
 
         schema['attachmentIds'] = {
@@ -67,15 +75,28 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             const fields = [];
 
             templateKeywords.forEach((keyword, index) => {
-                fields.push(
-                    <div className="form-group">
-                        <AutoField
-                            key={index}
-                            name={variablesEnum[keyword].field}
-                            placeholder={keyword}
-                        />
-                    </div>
-                );
+                if (variablesEnum[keyword]) {
+                    fields.push(
+                        <div className="form-group">
+                            <AutoField
+                                key={index}
+                                name={variablesEnum[keyword].field}
+                                placeholder={keyword}
+                            />
+                        </div>
+                    );
+                } else {
+                    fields.push(
+                        <div className="form-group">
+                            <AutoField
+                                key={index}
+                                name={keyword}
+                                placeholder={keyword}
+                            />
+                        </div>
+                    );
+                }
+
             });
             return fields;
         }
