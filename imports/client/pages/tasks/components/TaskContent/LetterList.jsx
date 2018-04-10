@@ -15,11 +15,9 @@ class LetterList extends Component {
     }
 
     toggleLetter() {
-        const {refetch} = this.props;
         this.setState({
             createLetter: !this.state.createLetter
         });
-        refetch();
     }
 
     handleDelete = (letterId) => {
@@ -136,6 +134,3 @@ class LetterPreview extends Component {
         )
     }
 }
-
-// FlowRouter.go('letter.view',
-//     {taskId: task._id, letterId: letter._id})

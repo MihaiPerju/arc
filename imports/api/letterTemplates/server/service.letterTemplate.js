@@ -7,28 +7,32 @@ class LetterTemplateService {
         this.parser = new Parser();
     }
 
-    addLetterTemplate (data) {
-        data.keywords = this.getTemplateBodyKeywords(data.body);
+    async addLetterTemplate(data) {
+        data.keywords = await this.getTemplateBodyKeywords(data.body);
         LetterTemplates.insert(data);
     }
 
-    updateLetterTemplate (data) {
-
-        data.keywords = this.getTemplateBodyKeywords(data.body);
+    async updateLetterTemplate(data) {
+        data.keywords = await this.getTemplateBodyKeywords(data.body);
         LetterTemplates.update({_id: data._id}, {
             $set: data
         })
     }
 
-    getTemplateBodyKeywords (body) {
-        let keywords = [];
-
-        this.parser.addRule(/<code>(.*?)<\/code>/g, function(tag) {
-            const word = tag.substring(6).slice(0, -7);
-            keywords.push(word);
+    getTemplateBodyKeywords(body) {
+        this.parser.addRule(/{(.*?)}/g, (tag) => {
+            const word = tag.substring(1).slice(0, -1);
+            return {type: "tag", word};
         });
 
-        this.parser.render(body);
+        const resObj = this.parser.toTree(body);
+
+        const keywords = [];
+        _.each(resObj, (obj) => {
+            if (obj.word) {
+                keywords.push(obj.word);
+            }
+        });
         return _.unique(keywords);
     }
 
