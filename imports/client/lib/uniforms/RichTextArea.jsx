@@ -3,6 +3,7 @@ import connectField from 'uniforms/connectField';
 import filterDOMProps from 'uniforms/filterDOMProps';
 import 'react-select/dist/react-select.css';
 import RichTextEditor from 'react-rte';
+import EditorDropdown from "./EditorDropdown";
 
 class RichTextArea extends React.Component {
     constructor(props) {
@@ -18,6 +19,7 @@ class RichTextArea extends React.Component {
             this.setState({value: RichTextEditor.createValueFromString(props.value, 'html')})
         }
     }
+
     componentWillMount() {
         if (this.props.value) {
             this.setState({value: RichTextEditor.createValueFromString(this.props.value, 'html')})
@@ -31,7 +33,22 @@ class RichTextArea extends React.Component {
         this._intermediate = '';
     };
 
+    setEditorValue = (newValue, editorState) => {
+        const letterContent = editorState.getCurrentContent().getPlainText();
+        const cursorPoint = editorState.getSelection().getEndOffset();
+        const output = [letterContent.slice(0, cursorPoint), " {", newValue, "} ", letterContent.slice(cursorPoint)].join('');
+        const value = RichTextEditor.createValueFromString(output, 'html');
+        this.setState({value});
+        this._intermediate = value.toString('html');
+        this.props.onChange(this._intermediate);
+    };
+
     render() {
+        const customControls = [
+            (setter, getter, editorState) => {
+                return <EditorDropdown editorState={editorState} setEditorValue={this.setEditorValue}/>
+            }
+        ];
         const {
             id,
             label,
@@ -49,6 +66,7 @@ class RichTextArea extends React.Component {
                 <RichTextEditor
                     value={value}
                     onChange={this.onChange}
+                    customControls={customControls}
                 />
             </div>
         );

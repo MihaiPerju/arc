@@ -5,6 +5,7 @@ import SimpleSchema from 'simpl-schema';
 import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum'
 
 export default class GenerateLetterTemplateInputs extends React.Component {
     constructor(props) {
@@ -42,10 +43,18 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             return new SimpleSchema(schema);
         }
         options.forEach((opt) => {
-            schema[opt] = {
-                type: String,
-                optional: true
-            };
+            if (variablesEnum[opt]) {
+                schema[variablesEnum[opt].field] = {
+                    type: String,
+                    optional: true
+                };
+            }
+            else {
+                schema[opt] = {
+                    type: String,
+                    optional: true
+                };
+            }
         });
 
         schema['attachmentIds'] = {
@@ -62,23 +71,33 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
     generateFields() {
         const {templateKeywords} = this.props;
-
         if (templateKeywords) {
             const fields = [];
 
             templateKeywords.forEach((keyword, index) => {
-                fields.push(
-                    <div className="form-group">
-                        <AutoField
-                            key={index}
-                            name={keyword}
-                            placeholder={keyword}
-                        />
-                    </div>,
-                    <ErrorField key={keyword + index} name={keyword}/>,
-                );
-            });
+                if (variablesEnum[keyword]) {
+                    fields.push(
+                        <div className="form-group">
+                            <AutoField
+                                key={index}
+                                name={variablesEnum[keyword].field}
+                                placeholder={keyword}
+                            />
+                        </div>
+                    );
+                } else {
+                    fields.push(
+                        <div className="form-group">
+                            <AutoField
+                                key={index}
+                                name={keyword}
+                                placeholder={keyword}
+                            />
+                        </div>
+                    );
+                }
 
+            });
             return fields;
         }
     }
@@ -97,25 +116,28 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     render() {
         const {schema} = this.state;
         const fields = this.generateFields();
-        const {templateKeywords} = this.props;
+        const {templateKeywords, account} = this.props;
         const {pdfAttachments, selectedAttachments} = this.state;
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
-
         if (!templateKeywords || !templateKeywords.length) {
             return <div/>;
         }
 
         return (
             <div>
-                <AutoForm autosave
-                          schema={schema}
-                          onSubmit={this.submit}>
+                {
+                    schema &&
+                    <AutoForm autosave
+                              schema={schema}
+                              model={account}
+                              onSubmit={this.submit}>
 
-                    <SelectMulti name="attachmentIds" options={attachmentOptions}/>
-                    <ErrorField name="attachmentIds"/>
+                        <SelectMulti name="attachmentIds" options={attachmentOptions}/>
+                        <ErrorField name="attachmentIds"/>
 
-                    {fields}
-                </AutoForm>
+                        {fields}
+                    </AutoForm>
+                }
             </div>
         );
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import Parser from 'simple-text-parser';
 import CreateLetter from './CreateLetter';
 import {Divider} from 'semantic-ui-react';
+import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
 export default class LetterTemplatePreview extends React.Component {
     tagParser = () => {
@@ -12,9 +13,13 @@ export default class LetterTemplatePreview extends React.Component {
             return;
         }
 
-        parser.addRule(/<code>(.*?)<\/code>/g, function (tag) {
-            const word = tag.substring(6).slice(0, -7);
-            return `${parentState[word] ? parentState[word] : `<code>${word}</code>`}`;
+        parser.addRule(/{(.*?)}/g, function (tag) {
+            const word = tag.substring(1).slice(0, -1);
+            if (variablesEnum[word]) {
+                return `${parentState[variablesEnum[word].field] ? parentState[variablesEnum[word].field] : `{${word}}`}`;
+            } else {
+                return `${parentState[word] ? parentState[word] : `{${word}}`}`;
+            }
         });
 
         return parser.render(letterTemplateBody);
