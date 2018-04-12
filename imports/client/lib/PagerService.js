@@ -38,7 +38,7 @@ export default class PagerService {
         } else if (state === "tickles") {
             _.extend(params, {filters: {tickleDate: {$exists: true}, escalateReason: null}});
         } else if (state === "escalated") {
-            _.extend(params, {filters: {tickleDate: null, }});
+            _.extend(params, {filters: {tickleDate: null, escalateReason: {$exists: true}}});
         }
         else {
             state = stateEnum[state.toUpperCase()];
