@@ -8,7 +8,6 @@ export default class PagerService {
             this.getAccountFilters(params, state, filters);
             this.getProperAccounts(params, assign);
         }
-        console.log(params);
         return query.clone(params);
     }
 
