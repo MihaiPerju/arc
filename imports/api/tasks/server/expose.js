@@ -10,19 +10,29 @@ TaskAttachmentsQuery.expose({});
 
 TaskListQuery.expose({
     firewall(userId, params) {
-        if (Roles.userIsInRole(userId, [RolesEnum.REP, RolesEnum.MANAGER])) {
-            const userFacilities = Facilities.find({
-                    allowedUsers: {$in: [userId]}
-                },
-                {fields: {_id: 1}})
-                .fetch();
+        const userFacilities = Facilities.find({
+                allowedUsers: {$in: [userId]}
+            },
+            {fields: {_id: 1}})
+            .fetch();
 
-            let userFacilitiesArr = [];
+        let userFacilitiesArr = [];
 
-            for (let element of userFacilities) {
-                userFacilitiesArr.push(element._id);
-            }
+        for (let element of userFacilities) {
+            userFacilitiesArr.push(element._id);
+        }
 
+        if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
+
+            _.extend(params, {
+                filters: {
+                    facilityId: {
+                        $in: userFacilitiesArr
+                    }
+                }
+            });
+        }
+        if (Roles.userIsInRole(userId, RolesEnum.REP)) {
             //Getting tags and accounts from within the work queue
             let {tagIds} = Users.findOne({_id: userId});
             if (tagIds) {
@@ -36,7 +46,7 @@ TaskListQuery.expose({
                     },
                     $or: [
                         {assigneeId: userId},
-                        // {workQueue: {$in: tagIds}}
+                        {workQueue: {$in: tagIds}}
                     ]
                 }
             });
