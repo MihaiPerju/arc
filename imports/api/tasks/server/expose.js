@@ -24,7 +24,10 @@ TaskListQuery.expose({
             }
 
             //Getting tags and accounts from within the work queue
-            const {tagIds} = Users.findOne({_id: userId});
+            let {tagIds} = Users.findOne({_id: userId});
+            if (tagIds) {
+                tagIds = [];
+            }
 
             _.extend(params, {
                 filters: {
@@ -33,7 +36,7 @@ TaskListQuery.expose({
                     },
                     $or: [
                         {assigneeId: userId},
-                        {workQueue: {$in: tagIds}}
+                        // {workQueue: {$in: tagIds}}
                     ]
                 }
             });
