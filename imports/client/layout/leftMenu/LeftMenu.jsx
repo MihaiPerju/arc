@@ -7,7 +7,7 @@ import classNames from 'classnames';
 import accountListQuery from '/imports/api/tasks/queries/taskList';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
-import RolesService from './RolesService';
+import RoutesService from './RoutesService';
 
 class LeftMenu extends Component {
     constructor() {
@@ -33,8 +33,8 @@ class LeftMenu extends Component {
             'left-menu': true,
             'collapsed': collapse
         });
-
-        let routes = RolesService.getRoutesByRole(data);
+        const counters = RoutesService.countBadges(data);
+        let routes = RoutesService.getRoutesByRole(counters);
 
         if (loading) {
             return <Loading/>
@@ -55,16 +55,7 @@ class LeftMenu extends Component {
     }
 }
 
-const now = new Date;
-
 export default withQuery((props) => {
     const currRoute = FlowRouter.current().path;
-    return accountListQuery.clone({
-        filters: {
-            tickleDate: {
-                $exists: true,
-                $lte: now
-            }
-        }
-    });
+    return accountListQuery.clone({});
 }, {reactive: true})(LeftMenu)
