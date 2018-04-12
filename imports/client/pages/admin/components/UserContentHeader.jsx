@@ -1,13 +1,10 @@
 import React from 'react';
-import { getImagePath } from '../../../../api/utils';
-import { Label } from 'semantic-ui-react';
+import {getImagePath} from '../../../../api/utils';
+import {Label} from 'semantic-ui-react';
 
 export default class UserContentHeader extends React.Component {
-    constructor () {
+    constructor() {
         super();
-        this.state = {
-            tags: []
-        };
     }
 
     onEdit = () => {
@@ -15,24 +12,8 @@ export default class UserContentHeader extends React.Component {
         setEdit();
     };
 
-    componentWillMount () {
-        this.getUserTags();
-    };
-
-    getUserTags = () => {
+    render() {
         const {user} = this.props;
-        Meteor.call('user.getTags', user.tagIds, (err, tags) => {
-            if (!err) {
-                this.setState({
-                    tags
-                });
-            }
-        });
-    };
-
-    render () {
-        const {user} = this.props;
-        const {tags} = this.state;
 
         return (
             <div className="flex-content">
@@ -64,11 +45,11 @@ export default class UserContentHeader extends React.Component {
                     <li>
                         <span className="text-light-grey">Tags</span>
                     </li>
-                {
-                    tags.map((tag, index) => {
-                        return <li>{tag.name}</li>;
-                    })
-                }
+                    {
+                        user.tags && user.tags.map((tag, index) => {
+                            return <li key={tag._id}>{tag.name}</li>;
+                        })
+                    }
                 </ul>
                 <button onClick={this.onEdit} className="btn-edit btn--white">Edit user</button>
             </div>
