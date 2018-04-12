@@ -38,13 +38,12 @@ export default class TaskContentHeader extends Component {
         const {task, openMetaData} = this.props;
         const options = this.getOptions(task && task.facility && task.facility.users);
         let userOptions = this.getFirstOption(task, options).concat(options);
-
         return (
             <div className="header-block header-account">
                 <div className="main-info">
                     <div className="left__side">
                         <div className="name">
-                            {task.client && task.client.clientName}
+                            {task.ptName}
                         </div>
                         <div className="row__block">
                             <div className="pacient-id text-blue">{task.acctNum}</div>
