@@ -8,14 +8,7 @@ import Business from '/imports/api/business';
 Meteor.methods({
     'client.create'(data) {
         Security.isAdminOrTech(this.userId);
-
-        const existingClient = Clients.findOne({ email: data.email });
-        if (existingClient) {
-            throw new Meteor.Error(
-                'Email taken!',
-                'This email is already taken!'
-            );
-        }
+        
         return Clients.insert(data);
     },
 
