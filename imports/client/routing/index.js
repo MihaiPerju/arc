@@ -13,8 +13,8 @@ import ResetPassword from '/imports/client/pages/users/ResetPassword.jsx';
 import Login from '/imports/client/pages/users/Login';
 import Dashboard from '/imports/client/pages/users/Dashboard';
 
-route('/home', Home, {}, {
-    name: 'home',
+route('/dashboard', Home, {}, {
+    name: 'dashboard',
 
 });
 route('/', Login, {}, {
