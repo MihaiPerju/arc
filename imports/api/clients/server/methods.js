@@ -94,7 +94,7 @@ Meteor.methods({
             const logoPath = existingClient.logoPath;
 
             Uploads.remove({path: logoPath});
-            Clients.remove({_id: id});
+            Clients.remove({_id});
         }
     },
 

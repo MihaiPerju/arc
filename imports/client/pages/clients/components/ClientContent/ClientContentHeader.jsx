@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {getImagePath} from "../../../../../api/utils";
+import {roleGroups} from '/imports/api/users/enums/roles';
 
 export default class ClientContentHeader extends Component {
     onEdit = () => {
@@ -24,19 +25,22 @@ export default class ClientContentHeader extends Component {
                             <span className="text-light-grey">Email</span>
                             <span className="text text-blue">{client.email}</span>
                         </div>
-                        <div className="btn-group">
-                            <a href={FlowRouter.url('region.list', {id: client._id})}
-                               className="cc-button btn--white">
-                                Manage regions
-                            </a>
-                            <a href={"/client/" + client._id + "/manage-facilities"}
-                               className="cc-button btn--white">
-                                Manage facilities
-                            </a>
-                            <button onClick={this.onEdit} className="btn--white">Edit
-                                client
-                            </button>
-                        </div>
+                        {
+                            Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) &&
+                            <div className="btn-group">
+                                <a href={FlowRouter.url('region.list', {id: client._id})}
+                                className="cc-button btn--white">
+                                    Manage regions
+                                </a>
+                                <a href={"/client/" + client._id + "/manage-facilities"}
+                                className="cc-button btn--white">
+                                    Manage facilities
+                                </a>
+                                <button onClick={this.onEdit} className="btn--white">Edit
+                                    client
+                                </button>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
