@@ -41,6 +41,7 @@ class LeftMenu extends Component {
             {name: "accounts/escalated", label: "Escalations", icon: 'info'},
             {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: data.length},
             {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o'},
+            {name: "home", label: "Dashboard", icon: ''},
             {name: "client/list", label: "Clients", icon: 'users'},
             {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
             {name: "code/list", label: "Codes", icon: 'code-fork'},
