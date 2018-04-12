@@ -45,7 +45,7 @@ export default class TaskSingle extends Component {
                 <div className="row__item">
                     <div className="left__side">
                         <div
-                            className={this.state.fontNormal ? 'person font-normal' : 'person'}>{task.client && task.client.clientName}</div>
+                            className={this.state.fontNormal ? 'person font-normal' : 'person'}>{task.ptName}</div>
                     </div>
                     <div className="right__side">
                         <div className="pacient-id text-blue">
