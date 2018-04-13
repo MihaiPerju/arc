@@ -167,7 +167,7 @@ export default class FacilityContentHeader extends Component {
                             </div>
                             <div className="btn-group">
                                 <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                <button className="btn--light-blue" onClick={this.confirmDisable}>Confirm & disable
+                                <button className="btn--light-blue" onClick={this.confirmDisable}>Confirm & {facility.status ? 'disable' : 'enable'}
                                 </button>
                             </div>
                         </Dialog>
