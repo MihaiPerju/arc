@@ -29,7 +29,6 @@ export default {
 
     isAllowed(userId, roles) {
         this.checkLoggedIn(userId);
-
         if (!Roles.userIsInRole(userId, roles)) {
             throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
         }

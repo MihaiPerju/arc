@@ -123,6 +123,7 @@ export default class ReportHeader extends Component {
                                 <div className="btn-group">
                                     <button className="btn--white" onClick={this.openSchedule}>Schedule</button>
                                     <button onClick={this.onEdit} className="btn--white">Edit report</button>
+                                    <button style={{marginLeft: "2rem"}} className="btn--white">Run report</button>
                                 </div>
                             </div>
                         </div>

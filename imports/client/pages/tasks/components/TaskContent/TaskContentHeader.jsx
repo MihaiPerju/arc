@@ -23,6 +23,29 @@ export default class TaskContentHeader extends Component {
         return options;
     }
 
+    getAssignee() {
+        const {task} = this.props;
+        if (task.assignee) {
+            const {profile} = task.assignee;
+            return (
+                <div className="label label--grey">
+                    {profile.firstName + " " + profile.lastName}
+                </div>
+            )
+        } else if (task.tag) {
+            return (
+                <div className="label label--grey">
+                    {task.tag.name}
+                </div>
+            )
+        }
+        return (
+            <div style={{color: "red"}} className="label label--grey">
+                Unassigned
+            </div>
+        )
+    }
+
     getFirstOption(task, options) {
         if (task.assigneeId) {
             for (option of options) {
@@ -52,8 +75,7 @@ export default class TaskContentHeader extends Component {
                             <div className="label-group">
                                 <div className="label label--green">158 points(TBM)</div>
                                 <div className="label label--grey text-uppercase">CARC(TNM)</div>
-                                <div
-                                    className="label label--grey">{task.workQueue && task.tag.name}</div>
+                                {this.getAssignee()}
                             </div>
                         </div>
                     </div>

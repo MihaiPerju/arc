@@ -3,6 +3,7 @@ import {getImagePath} from "../../../../../api/utils";
 import {roleGroups} from '/imports/api/users/enums/roles';
 import Notifier from '/imports/client/lib/Notifier';
 import Dialog from "/imports/client/lib/ui/Dialog";
+import RolesEnum from '/imports/api/users/enums/roles';
 
 export default class ClientContentHeader extends Component {
     constructor() {
