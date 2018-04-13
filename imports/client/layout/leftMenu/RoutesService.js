@@ -5,6 +5,7 @@ export default class RouteService {
     static getRoutesByRole({unassigned, escalations, tickles}) {
         if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
             return [
+                {name: "dashboard", label: "Dashboard", icon: "dashboard"},
                 {name: "accounts/active", label: "Account", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
@@ -12,7 +13,6 @@ export default class RouteService {
                 {name: "accounts/escalated", label: "Escalations", icon: 'info', badge: escalations},
                 {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles},
                 {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o', badge: unassigned},
-                {name: "dashboard", label: "Dashboard", icon: ''},
                 {name: "client/list", label: "Clients", icon: 'users'},
                 {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
                 {name: "code/list", label: "Codes", icon: 'code-fork'},
@@ -22,6 +22,7 @@ export default class RouteService {
             ];
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
             return [
+                {name: "dashboard", label: "Dashboard", icon: "dashboard"},
                 {name: "accounts/active", label: "Account", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
@@ -29,7 +30,6 @@ export default class RouteService {
                 {name: "accounts/escalated", label: "Escalations", icon: 'info', badge: escalations},
                 {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles},
                 {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o', badge: unassigned},
-                {name: "dashboard", label: "Dashboard", icon: ''},
                 {name: "client/list", label: "Clients", icon: 'users'},
                 {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
                 {name: "code/list", label: "Codes", icon: 'code-fork'},
@@ -39,6 +39,7 @@ export default class RouteService {
             ];
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
             return [
+                {name: "dashboard", label: "Dashboard", icon: "dashboard"},
                 {name: "accounts/active", label: "Account", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
@@ -46,7 +47,6 @@ export default class RouteService {
                 {name: "accounts/escalated", label: "Escalations", icon: 'info', badge: escalations},
                 {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles},
                 {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o', badge: unassigned},
-                {name: "dashboard", label: "Dashboard", icon: ''},
                 {name: "client/list", label: "Clients", icon: 'users'},
                 {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
                 {name: "code/list", label: "Codes", icon: 'code-fork'},
@@ -56,11 +56,11 @@ export default class RouteService {
             ];
         } else {
             return [
+                {name: "dashboard", label: "Dashboard", icon: "dashboard"},
                 {name: "accounts/active", label: "Account", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/escalated", label: "Escalations", icon: 'info', badge: escalations},
                 {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles},
-                {name: "dashboard", label: "Dashboard", icon: ''},
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
             ];
         }
