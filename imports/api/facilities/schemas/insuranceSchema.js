@@ -5,7 +5,8 @@ export default new SimpleSchema({
         type: String
     },
     insCode: {
-        type: String
+        type: String,
+        optional: true
     },
     insBal: {
         type: String,

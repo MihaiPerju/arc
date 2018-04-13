@@ -47,7 +47,8 @@ export default class ImportingRulesService {
                     },
                     insCode: {
                         type: hasHeader ? String : SimpleSchema.Integer,
-                        label: "Insurance Code"
+                        label: "Insurance Code",
+                        optional: true
                     },
                     insBal: {
                         type: hasHeader ? String : SimpleSchema.Integer,
