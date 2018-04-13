@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
 import {getImagePath} from '/imports/api/utils.js';
+import {roleGroups} from '/imports/api/users/enums/roles';
+import Notifier from '/imports/client/lib/Notifier';
+import Dialog from "/imports/client/lib/ui/Dialog";
 
 export default class FacilityContentHeader extends Component {
     constructor() {
         super();
         this.state = {
-            dropdown: false
+            dropdown: false,
+            dialogIsActive: false
         }
     }
 
@@ -42,13 +46,51 @@ export default class FacilityContentHeader extends Component {
         onEdit();
     };
 
+    closeDialog = () => {
+        this.setState({
+            dialogIsActive: false
+        });
+    };
+
+    confirmDisable = () => {
+        this.setState({
+            dialogIsActive: false
+        });
+        this.onToggleFacilityStatus();
+    };
+
+    disableAction = (_id, status) => {
+        this.setState({
+            dialogIsActive: true,
+            _id,
+            status
+        });
+    };
+
+    onClose = () => {
+        const {setFacility} = this.props;
+        setFacility();
+    }
+
+    onToggleFacilityStatus = () => {
+        const {_id, status} = this.state;
+        Meteor.call('facility.switchStatus', _id, status, (err, res) => {
+            if(!err) {
+                const message = status ? 'Facility disabled !' : 'Facility enabled !';
+                Notifier.success(message);
+                this.onClose();
+            }
+        })
+    };
+
     render() {
-        const {dropdown} = this.state;
+        const {dropdown, dialogIsActive} = this.state;
         const {facility} = this.props;
         const classes = classNames({
             'dropdown': true,
             'open': dropdown
         })
+
         return (
             <div className="main-content__header header-block">
                 <div className="row__header">
@@ -56,14 +98,22 @@ export default class FacilityContentHeader extends Component {
                         <img src="/assets/img/user.svg" className="lg-avatar-1 img-circle" alt=""/>
                         <div className="title">{facility.name}</div>
                     </div>
-                    <button type="button" onClick={() => this.onEditFacility(facility)} className="btn-edit btn--white">
-                        Edit facility
-                    </button>
+                    {
+                        Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) &&
+                        <div className="btn-group">
+                            <button type="button" onClick={() => this.onEditFacility(facility)} className="btn-edit btn--white">
+                                Edit facility
+                            </button>
+                            <button type="button" onClick={() => this.disableAction(facility._id, facility.status)} className="btn-edit btn--white">
+                                {facility.status ? 'Disable facility' : 'Enable facility'}
+                            </button>
+                        </div>
+                    }
                 </div>
                 <ul className="row__info main-info">
                     <li className="text-center">
                         <div className="text-light-grey">Status</div>
-                        <div className="info-label">{facility.status ? facility.status : "None"}</div>
+                        <div className="info-label">{facility.status ? "Active" : "Inactive"}</div>
                     </li>
                     <li className="text-center">
                         <div className="text-light-grey">First address</div>
@@ -114,6 +164,20 @@ export default class FacilityContentHeader extends Component {
 
                     </li>
                 </ul>
+                {
+                    dialogIsActive && (
+                        <Dialog className="account-dialog" closePortal={this.closeDialog} title="Confirm">
+                            <div className="form-wrapper">
+                                Are you sure you want to {facility.status ? 'disable' : 'enable'} this facility?
+                            </div>
+                            <div className="btn-group">
+                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                                <button className="btn--light-blue" onClick={this.confirmDisable}>Confirm & {facility.status ? 'disable' : 'enable'}
+                                </button>
+                            </div>
+                        </Dialog>
+                    )
+                }
             </div>
         )
     }

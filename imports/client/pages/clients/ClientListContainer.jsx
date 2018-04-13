@@ -138,6 +138,7 @@ class ClientContainer extends Pager {
                         client={client}
                         create={create}
                         close={this.closeForm}
+                        setClient={this.setClient}
                     />
                 }
             </div>
@@ -160,13 +161,13 @@ class RightSide extends Component {
     }
 
     render() {
-        const {client, create, close} = this.props;
+        const {client, create, close, setClient} = this.props;
         const {fade} = this.state;
 
         return (
             <div className={fade ? 'right__side in' : 'right__side'}>
                 {
-                    create ? <ClientCreate close={close}/> : <ClientContent client={client}/>
+                    create ? <ClientCreate close={close}/> : <ClientContent setClient={setClient} client={client}/>
                 }
             </div>
         );

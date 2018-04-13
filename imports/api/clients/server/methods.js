@@ -1,6 +1,7 @@
 import Security from '/imports/api/security/security.js';
 import Clients from '/imports/api/clients/collection.js';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import Facilities from '/imports/api/facilities/collection.js';
 import fs from 'fs';
 import os from 'os';
 import Business from '/imports/api/business';
@@ -87,7 +88,7 @@ Meteor.methods({
             const logoPath = existingClient.logoPath;
 
             Uploads.remove({path: logoPath});
-            Clients.remove({_id: id});
+            Clients.remove({_id});
         }
     },
 
@@ -107,5 +108,26 @@ Meteor.methods({
                 $options: 'i'
             }
         }).fetch();
-    }
+    },
+
+    'client.switchStatus'(_id, status) {
+        Security.isAdminOrTech(this.userId);
+
+        return Clients.update({ _id: _id }, {
+            $set: {
+                status: !status
+            }
+        }, (err) => {
+            if(!err && !!status) {
+                Facilities.update({ clientId: _id }, {
+                    $set: {
+                        status: false
+                    }
+                },
+                {multi: true});
+            }
+        });
+
+
+    },
 });

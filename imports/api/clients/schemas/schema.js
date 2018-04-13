@@ -23,5 +23,9 @@ export default new SimpleSchema({
     },
     'contacts.$': {
         type: ContactSchema,
+    },
+    status: {
+        type: Boolean,
+        defaultValue: true
     }
 });

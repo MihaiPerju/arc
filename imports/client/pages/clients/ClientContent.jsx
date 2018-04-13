@@ -22,7 +22,7 @@ export default class ClientContent extends Component {
     };
 
     render() {
-        const {client} = this.props;
+        const {client, setClient} = this.props;
         const {edit} = this.state;
         return (
             <div className="main-content client-content">
@@ -30,7 +30,7 @@ export default class ClientContent extends Component {
                     edit ?
                         <ClientEdit setEdit={this.setEdit} client={client}/> :
                         <div>
-                            <ClientContentHeader setEdit={this.setEdit} client={client}/>
+                            <ClientContentHeader setClient={setClient} setEdit={this.setEdit} client={client}/>
                             <ContactBlock client={client}/>
                             <NoteBlock/>
                         </div>

@@ -25,7 +25,7 @@ export default class FacilityContent extends Component {
     };
 
     render() {
-        const {facility} = this.props;
+        const {facility, setFacility} = this.props;
         const {edit} = this.state;
         return (
             <div className="main-content facility-content">
@@ -45,7 +45,7 @@ export default class FacilityContent extends Component {
                 {
                     edit ? <FacilityEdit facility={facility} close={this.setEdit}/> :
                         <div>
-                            <FacilityContentHeader onEdit={this.setEdit} facility={facility}/>
+                            <FacilityContentHeader onEdit={this.setEdit} setFacility={setFacility} facility={facility}/>
                             <ContactTable contacts={facility && facility.contacts}/>
                             <FacilityFiles facilityId={facility && facility._id}/>
                             <PlacementBlock facility={facility}/>
