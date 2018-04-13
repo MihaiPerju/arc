@@ -9,7 +9,9 @@ export default class MenuItem extends Component {
             <li className={className}>
                 {
                     <a className="" href={href} onClick={active}>
-                        <i className={"icon-" + icon}/>
+                        <div className="menu__icon">
+                            <i className={"icon-" + icon}/>
+                        </div>
                         <span className="menu__label">{label}</span>
                         {
                             badge ? <Badge num={badge}/> : null
