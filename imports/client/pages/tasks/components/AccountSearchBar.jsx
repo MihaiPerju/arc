@@ -40,8 +40,7 @@ export default class AccountSearchBar extends Component {
                 });
                 this.setState({clientOptions});
             }
-        })
-
+        });
     }
 
     manageFilterBar() {
@@ -54,6 +53,11 @@ export default class AccountSearchBar extends Component {
     }
 
     onHandleChange(field, value) {
+        console.log(field, value);
+        if (field === "state") {
+            console.log(value);
+            FlowRouter.setQueryParams({state: value});
+        }
         if (field === "acctNum") {
             FlowRouter.setQueryParams({acctNum: value});
         } else if (field === "clientId") {
@@ -96,6 +100,10 @@ export default class AccountSearchBar extends Component {
     render() {
         const {filter, active, dropdown, selectAll, facilityOptions, clientOptions} = this.state;
         const {options, btnGroup, deleteAction, dropdownOptions, icons, getProperAccounts} = this.props;
+        const stateOptions = [
+            {label: "All", value: "all"},
+            {label: "Current State", value: FlowRouter.current().params.state},
+        ];
 
         const classes = classNames({
                 'select-type': true,
@@ -153,6 +161,12 @@ export default class AccountSearchBar extends Component {
                                     name="facilityId"
                                     options={facilityOptions}
                                 />
+                            </div>
+                            <div className="select-form" style={{marginTop: "1rem"}}>
+                                <div className="form-group">
+                                    <AutoField options={stateOptions} labelHidden={true} name="state"
+                                               placeholder="State"/>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -249,5 +263,10 @@ const schema = new SimpleSchema({
         type: String,
         optional: true,
         label: "Search by Account Number"
+    },
+    state: {
+        type: String,
+        optional: true,
+        label: "Choose global state or current one"
     }
 });

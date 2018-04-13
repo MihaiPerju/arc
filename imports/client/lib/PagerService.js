@@ -14,10 +14,13 @@ export default class PagerService {
     static getAccountQueryParams() {
         const page = FlowRouter.getQueryParam("page");
         const assign = FlowRouter.getQueryParam("assign");
-        const {state} = FlowRouter.current().params;
         const facilityId = FlowRouter.getQueryParam("facilityId");
         const clientId = FlowRouter.getQueryParam("clientId");
         const acctNum = FlowRouter.getQueryParam("acctNum");
+        let state = FlowRouter.getQueryParam("state");
+        if (!state) {
+            state = FlowRouter.current().params.state;
+        }
         const perPage = 13;
 
         return {filters: {facilityId, clientId, acctNum}, page, perPage, state, assign,};
@@ -39,8 +42,7 @@ export default class PagerService {
             _.extend(params, {filters: {tickleDate: {$exists: true}, escalateReason: null}});
         } else if (state === "escalated") {
             _.extend(params, {filters: {tickleDate: null, escalateReason: {$exists: true}}});
-        }
-        else {
+        }else if (state !== "all") {
             state = stateEnum[state.toUpperCase()];
             _.extend(params, {filters: {state, tickleDate: null, escalateReason: null}});
         }
