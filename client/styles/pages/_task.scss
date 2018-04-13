@@ -124,7 +124,6 @@
 
 //Assign Pop-up
 
-
 //Invoice Section
 .invoice-section {
   display: flex;
@@ -974,6 +973,41 @@
     &.delete {
       background: $red;
       line-height: 2rem;
+    }
+  }
+}
+
+//Metadata Container
+.metadata-container {
+  margin-top: 20px;
+  .main-content {
+    .main-content__header {
+      margin-bottom: 0;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .additional-info {
+      margin-top: 0;
+      > ul {
+        flex-wrap: wrap;
+        overflow: hidden;
+        li {
+          flex-basis: 100%;
+          border-bottom: 1px #ebebeb solid;
+          &:last-of-type {
+            border-bottom: 0;
+          }
+          > div {
+            width: 50%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            &:first-of-type {
+              margin-bottom: 0;
+              border-right: 1px #ebebeb solid;
+            }
+          }
+        }
+      }
     }
   }
 }

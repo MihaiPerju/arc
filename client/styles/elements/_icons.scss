@@ -50,6 +50,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-dashboard:before {
+  content: "\f2a1";
+}
 .icon-alert:before {
   content: "\f06a";
 }
