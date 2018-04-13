@@ -80,10 +80,10 @@ Meteor.methods({
     },
 
 
-    'facility.disable'(_id, status) {
+    'facility.switchStatus'(_id, status) {
         Security.isAdminOrTech(this.userId);
 
-        return Facilities.update({ _id: _id }, {
+        return Facilities.update({ _id }, {
             $set: {
                 status: !status 
             }

@@ -26,7 +26,7 @@ export default class ClientContentHeader extends Component {
         this.setState({
             dialogIsActive: false
         });
-        this.onDisableClient();
+        this.onToggleClientStatus();
     };
 
     disableAction = (_id, status) => {
@@ -42,11 +42,12 @@ export default class ClientContentHeader extends Component {
         setClient();
     }
 
-    onDisableClient = () => {
+    onToggleClientStatus = () => {
         const {_id, status} = this.state;
-        Meteor.call('client.disable', _id, status, (err, res) => {
+        Meteor.call('client.switchStatus', _id, status, (err, res) => {
             if(!err) {
-                Notifier.success('Client disabled !');
+                const message = status ? 'Client disabled !' : 'Client enabled !';
+                Notifier.success(message);
                 this.onClose();
             }
         })

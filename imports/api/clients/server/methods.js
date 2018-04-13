@@ -117,7 +117,7 @@ Meteor.methods({
         }).fetch();
     },
 
-    'client.disable'(_id, status) {
+    'client.switchStatus'(_id, status) {
         Security.isAdminOrTech(this.userId);
 
         return Clients.update({ _id: _id }, {

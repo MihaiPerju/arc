@@ -56,7 +56,7 @@ export default class FacilityContentHeader extends Component {
         this.setState({
             dialogIsActive: false
         });
-        this.onDisableFacility();
+        this.onToggleFacilityStatus();
     };
 
     disableAction = (_id, status) => {
@@ -72,11 +72,12 @@ export default class FacilityContentHeader extends Component {
         setFacility();
     }
 
-    onDisableFacility = () => {
+    onToggleFacilityStatus = () => {
         const {_id, status} = this.state;
-        Meteor.call('facility.disable', _id, status, (err, res) => {
+        Meteor.call('facility.switchStatus', _id, status, (err, res) => {
             if(!err) {
-                Notifier.success('Facilities disabled !');
+                const message = status ? 'Facility disabled !' : 'Facility enabled !';
+                Notifier.success(message);
                 this.onClose();
             }
         })
@@ -110,6 +111,10 @@ export default class FacilityContentHeader extends Component {
                     }
                 </div>
                 <ul className="row__info main-info">
+                    <li className="text-center">
+                        <div className="text-light-grey">Status</div>
+                        <div className="info-label">{facility.status ? "Active" : "Inactive"}</div>
+                    </li>
                     <li className="text-center">
                         <div className="text-light-grey">First address</div>
                         <div className="info-label">
