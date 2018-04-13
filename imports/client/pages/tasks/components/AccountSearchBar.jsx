@@ -53,9 +53,7 @@ export default class AccountSearchBar extends Component {
     }
 
     onHandleChange(field, value) {
-        console.log(field, value);
         if (field === "state") {
-            console.log(value);
             FlowRouter.setQueryParams({state: value});
         }
         if (field === "acctNum") {
