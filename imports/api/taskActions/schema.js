@@ -23,5 +23,9 @@ export default new SimpleSchema({
     fileId: {
         type: String,
         optional: true
+    },
+    addedBy: {
+        type: String,
+        optional: true
     }
 });

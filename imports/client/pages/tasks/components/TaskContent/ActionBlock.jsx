@@ -19,7 +19,7 @@ export default class ActionBlock extends Component {
     }
 
     render () {
-        const {task, update} = this.props;
+        const {task} = this.props;
         const actionsPerformed = task.actions;
         return (
             <div className="action-block">
@@ -31,7 +31,7 @@ export default class ActionBlock extends Component {
                         <i className="icon-thumb-tack"/>
                         <div className="text-center">+ Add new action</div>
                     </div>
-                    {this.state.createAction ? <NewAction update={update} hide={this.newAction} task={task}/> : null}
+                    {this.state.createAction ? <NewAction hide={this.newAction} task={task}/> : null}
                     <div className="action-list">
                         {
                             actionsPerformed &&

@@ -61,15 +61,19 @@ export default class NewAction extends Component {
     }
 
     onSubmit(data) {
-        const {task, hide, update} = this.props;
+        const {task, hide} = this.props;
         data.taskId = task._id;
+        if(task.assignee) {
+            data.addedBy = `${task.assignee.profile.firstName} ${task.assignee.profile.lastName}`;
+        } else if(task.workQueue) {
+            data.addedBy = task.tag.name;
+        }
         Meteor.call('task.actions.add', data
             , (err) => {
                 if (!err) {
                     Notifier.success('Data saved');
                     //Clear inputs
                     this.refs.form.reset();
-                    update();
                     hide();
                 } else {
                     Notifier.error(err.reason);

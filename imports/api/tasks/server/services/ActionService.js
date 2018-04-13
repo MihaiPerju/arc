@@ -13,13 +13,14 @@ export default class ActionService {
 
     //Adding action to account
     static createAction(data) {
-        const {accountId, actionId, reasonId, userId} = data;
+        const {accountId, actionId, reasonId, userId, addedBy} = data;
         const action = Actions.findOne({_id: actionId});
         const reason = ReasonCodes.findOne({_id: reasonId});
         const accountActionId = AccountActions.insert({
             userId,
             actionId,
-            reasonCode: reason && reason.reason
+            reasonCode: reason && reason.reason,
+            addedBy
         });
         Accounts.update({_id: accountId}, {
             $set: {
