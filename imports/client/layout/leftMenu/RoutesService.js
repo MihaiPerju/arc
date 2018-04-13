@@ -60,7 +60,6 @@ export default class RouteService {
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/escalated", label: "Escalations", icon: 'info', badge: escalations},
                 {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles},
-                {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o', badge: unassigned},
                 {name: "home", label: "Dashboard", icon: ''},
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
             ];

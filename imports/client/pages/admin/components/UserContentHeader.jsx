@@ -46,7 +46,7 @@ export default class UserContentHeader extends React.Component {
                         <span className="text-light-grey">Tags</span>
                     </li>
                     {
-                        user.tags && user.tags.map((tag, index) => {
+                        user.tags && user.tags.map((tag) => {
                             return <li key={tag._id}>{tag.name}</li>;
                         })
                     }
