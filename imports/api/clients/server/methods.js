@@ -1,6 +1,7 @@
 import Security from '/imports/api/security/security.js';
 import Clients from '/imports/api/clients/collection.js';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import Facilities from '/imports/api/facilities/collection.js';
 import fs from 'fs';
 import os from 'os';
 import Business from '/imports/api/business';
@@ -8,14 +9,7 @@ import Business from '/imports/api/business';
 Meteor.methods({
     'client.create'(data) {
         Security.isAdminOrTech(this.userId);
-
-        const existingClient = Clients.findOne({ email: data.email });
-        if (existingClient) {
-            throw new Meteor.Error(
-                'Email taken!',
-                'This email is already taken!'
-            );
-        }
+        
         return Clients.insert(data);
     },
 
@@ -94,7 +88,7 @@ Meteor.methods({
             const logoPath = existingClient.logoPath;
 
             Uploads.remove({path: logoPath});
-            Clients.remove({_id: id});
+            Clients.remove({_id});
         }
     },
 
@@ -114,5 +108,26 @@ Meteor.methods({
                 $options: 'i'
             }
         }).fetch();
-    }
+    },
+
+    'client.switchStatus'(_id, status) {
+        Security.isAdminOrTech(this.userId);
+
+        return Clients.update({ _id: _id }, {
+            $set: {
+                status: !status
+            }
+        }, (err) => {
+            if(!err && !!status) {
+                Facilities.update({ clientId: _id }, {
+                    $set: {
+                        status: false
+                    }
+                },
+                {multi: true});
+            }
+        });
+
+
+    },
 });

@@ -282,7 +282,7 @@ class TaskListContainer extends Pager {
                 </div>
                 {
                     currentTask && !showMetaData &&
-                    <RightSide update={this.update} task={task} openMetaData={this.openMetaDataSlider}/>
+                    <RightSide task={task} openMetaData={this.openMetaDataSlider}/>
                 }
                 {
                     showMetaData && <MetaDataSlider task={task} closeMetaData={this.closeMetaDataSlider}/>
@@ -308,12 +308,12 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {task, update, openMetaData} = this.props;
+        const {task, openMetaData} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
                     task ?
-                        <TaskContent update={update} task={task} openMetaData={openMetaData}/>
+                        <TaskContent task={task} openMetaData={openMetaData}/>
                         :
                         'No component provided for bulk accounts'
                 }

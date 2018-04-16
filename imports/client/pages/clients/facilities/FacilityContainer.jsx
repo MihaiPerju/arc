@@ -111,6 +111,7 @@ class FacilityContainer extends Component {
                         facility={facility}
                         create={create}
                         close={this.closeForm}
+                        setFacility={this.setFacility}
                     />
                 }
             </div>
@@ -134,12 +135,12 @@ class RightSide extends Component {
 
     render () {
         const {fade} = this.state;
-        const {facility, create, close} = this.props;
+        const {facility, create, close, setFacility} = this.props;
 
         return (
             <div className={fade ? 'right__side in' : 'right__side'}>
                 {
-                    create ? <FacilityCreate close={close}/> : <FacilityContent facility={facility}/>
+                    create ? <FacilityCreate close={close}/> : <FacilityContent setFacility={setFacility} facility={facility}/>
                 }
             </div>
         );

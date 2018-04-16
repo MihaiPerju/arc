@@ -14,6 +14,10 @@ export default class ContactBlock extends Component {
                             return (
                                 <ul className="contact-info">
                                     <li className="text-center">
+                                        <div className="text-light-grey">Status</div>
+                                        <div className="l-info">{client.status ? "Active" : "Inactive"}</div>
+                                    </li>
+                                    <li className="text-center">
                                         <div className="text-light-grey">First name</div>
                                         <div className="l-info">{contact.firstName}</div>
                                     </li>

@@ -10,5 +10,6 @@ export default Clients.createNamedQuery('listClients', {
     email: 1,
     financialGoals: 1,
     logoPath: 1,
-    contacts: 1
+    contacts: 1,
+    status: 1
 });

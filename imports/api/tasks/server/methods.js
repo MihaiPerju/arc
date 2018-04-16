@@ -23,8 +23,9 @@ Meteor.methods({
             actionId = data.action,
             reasonId = data.reasonCode,
             userId = this.userId;
+            addedBy = data.addedBy;
 
-        ActionService.createAction({accountId, actionId, reasonId, userId});
+        ActionService.createAction({accountId, actionId, reasonId, userId, addedBy});
     },
 
     'account.assignUser'({_id, assigneeId}) {

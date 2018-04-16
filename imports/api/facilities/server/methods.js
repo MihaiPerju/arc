@@ -77,5 +77,16 @@ Meteor.methods({
         );
         fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + '/' + path);
         Uploads.remove({ path });
-    }
+    },
+
+
+    'facility.switchStatus'(_id, status) {
+        Security.isAdminOrTech(this.userId);
+
+        return Facilities.update({ _id }, {
+            $set: {
+                status: !status 
+            }
+        });
+    },
 });

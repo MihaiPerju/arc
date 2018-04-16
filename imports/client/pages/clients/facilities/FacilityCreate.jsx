@@ -91,13 +91,6 @@ export default class FacilityCreate extends Component {
                                         <AutoField labelHidden={true} placeholder="Name" name="name"/>
                                         <ErrorField name="name"/>
                                     </div>
-                                <div className="select-group">
-
-                                    <div className="form-wrapper">
-                                        <AutoField labelHidden={true} placeholder="Status" name="status"/>
-                                        <ErrorField name="status"/>
-                                    </div>
-                                </div>
                                 <div className="form-wrapper">
                                     <AutoField labelHidden={true} placeholder="First address" name="addressOne"/>
                                     <ErrorField name="addressOne"/>

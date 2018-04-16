@@ -5,7 +5,7 @@ export default class AccountMetaData extends React.Component {
     render() {
         const {metaDataGroups, metaData} = this.props;
         return (
-            <div>
+            <div className="metadata-container">
                 <div className="main-content">
                     <div className="header-block header-account">
                         <div className="main-content__header header-block">
@@ -20,28 +20,24 @@ export default class AccountMetaData extends React.Component {
                                 metaDataGroups && (
                                     metaDataGroups.map((group) => {
                                         return (
-                                            <div className="additional-info">
-                                                <ul>
-                                                    {
-                                                        group.map((element, index) => {
-                                                            return (
-                                                                <li className="text-center" key={index}>
-                                                                    <div className="text-light-grey">{element}</div>
-                                                                    <div className="text-dark-grey text-uppercase">
-                                                                        {metaData[element]}
-                                                                    </div>
-                                                                </li>
-                                                            )
-                                                        })
-                                                    }
-                                                </ul>
-                                            </div>
+                                            <ul>
+                                                {
+                                                    group.map((element, index) => {
+                                                        return (
+                                                            <li className="text-center" key={index}>
+                                                                <div className="text-light-grey">{element}</div>
+                                                                <div className="text-dark-grey text-uppercase">
+                                                                    {metaData[element]}
+                                                                </div>
+                                                            </li>
+                                                        )
+                                                    })
+                                                }
+                                            </ul>
                                         )
                                     })
                                 )
                             }
-                            <ul>
-                            </ul>
                         </div>
                     </div>
                 </div>
