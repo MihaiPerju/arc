@@ -122,5 +122,10 @@ export default new SimpleSchema({
     workQueue: {
         type: String,
         optional: true
+    },
+    numberOfViews: {
+        type: Number,
+        optional: true,
+        defaultValue: 0
     }
 })

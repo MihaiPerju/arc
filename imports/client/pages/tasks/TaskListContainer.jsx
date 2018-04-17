@@ -12,6 +12,8 @@ import PagerService from '/imports/client/lib/PagerService';
 import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent/AccountAssigning.jsx'
 import AccountSearchBar from './components/AccountSearchBar';
 import AccountMetaData from '/imports/client/pages/tasks/components/TaskContent/AccountMetaData'
+import Notifier from '/imports/client/lib/Notifier';
+
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -89,7 +91,20 @@ class TaskListContainer extends Pager {
                 currentTask: newTask._id,
                 showMetaData: false
             });
+            const {state} = FlowRouter.current().params;
+            if(state === "active") {
+                this.incrementViewCount(newTask._id);
+            }
         }
+    }
+
+    incrementViewCount = (_id) => {
+        Meteor.call('tasks.increment_view_count', _id
+            , (err) => {
+                if (err) {
+                    Notifier.error(err.reason);
+                }
+            });
     }
 
     checkTask = (task) => {
