@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
+import _ from "underscore";
 import query from '/imports/api/actions/queries/actionList';
 import Notifier from '../../../../lib/Notifier';
 import reasonCodesQuery from '/imports/api/reasonCodes/queries/reasonCodesList';
+import {StatesSubstates} from '/imports/api/tasks/enums/states.js';
 
 const ActionSchema = new SimpleSchema({
     action: {
@@ -68,6 +70,16 @@ export default class NewAction extends Component {
         } else if(task.workQueue) {
             data.addedBy = task.tag.name;
         }
+
+        const {actions} = this.state;
+        const selectedAction = _.findWhere(actions, {_id: data.action});
+        const actionsSubState = _.flatten([StatesSubstates['Archived'], StatesSubstates['Hold']]);
+        const index = _.indexOf(actionsSubState, selectedAction.substate);
+
+        if(index > -1) {
+            this.removeAssignee(task._id);
+        }
+
         Meteor.call('task.actions.add', data
             , (err) => {
                 if (!err) {
@@ -76,6 +88,15 @@ export default class NewAction extends Component {
                     this.refs.form.reset();
                     hide();
                 } else {
+                    Notifier.error(err.reason);
+                }
+            });
+    }
+
+    removeAssignee(_id) {
+        Meteor.call('task.assignee_remove', _id
+            , (err) => {
+                if (err) {
                     Notifier.error(err.reason);
                 }
             });
