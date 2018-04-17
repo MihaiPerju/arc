@@ -4,7 +4,6 @@ import {roleGroups} from '/imports/api/users/enums/roles';
 import Notifier from '/imports/client/lib/Notifier';
 import Dialog from "/imports/client/lib/ui/Dialog";
 
-
 export default class ClientContentHeader extends Component {
     constructor() {
         super();
