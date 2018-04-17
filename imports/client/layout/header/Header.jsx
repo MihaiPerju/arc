@@ -100,11 +100,10 @@ class Header extends Component {
                                 <a href="">
                                     <span>{user.profile.firstName + " " + user.profile.lastName}</span>
                                     <div className="profile-img">
-                                        <img className="md-avatar img-circle" src={user.avatar ? getImagePath(user.avatar.path) : "/assets/img/user1.svg"} alt=""/>
                                     </div>
                                 </a>
                             </div>
-                            {this.state.dropdown ? <BtnGroup/> : null}                            
+                            {this.state.dropdown ? <BtnGroup/> : null}
                         </div>
                     </div>
                 </header>

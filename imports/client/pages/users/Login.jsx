@@ -78,7 +78,7 @@ export default LoginContainer = createContainer(() => {
     const loggingIn = Meteor.loggingIn();
 
     if (!loggingIn && user) {
-        FlowRouter.go('/home');
+        FlowRouter.go('/dashboard');
     }
 
     return {

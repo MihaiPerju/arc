@@ -7,6 +7,7 @@ import assigneeQuery from '/imports/api/users/queries/listUsers';
 import SimpleSchema from 'simpl-schema';
 import Loading from '/imports/client/lib/ui/Loading';
 import facilityNames from '/imports/api/facilities/queries/facilityListNames';
+import clientsQuery from '/imports/api/clients/queries/listClients';
 
 export default class TaskFilterBuilder extends React.Component {
     constructor() {
@@ -15,6 +16,7 @@ export default class TaskFilterBuilder extends React.Component {
             fullSchemaOptions: [],
             facilityOptions: [],
             assigneeOptions: [],
+            clientOptions: [],
             components: {},
             loading: true,
             filters: {},
@@ -51,7 +53,7 @@ export default class TaskFilterBuilder extends React.Component {
         }
 
         //Getting assignee and facility options
-        let facilityOptions = [], assigneeOptions = [];
+        let facilityOptions = [], assigneeOptions = [], clientOptions = [];
         facilityNames.fetch((err, facilities) => {
             if (!err) {
                 facilities.map((facility) => {
@@ -74,6 +76,19 @@ export default class TaskFilterBuilder extends React.Component {
                 });
                 this.setState({assigneeOptions});
             } else {
+                Notifier.error(err.reason);
+            }
+        });
+
+        //Getting client options
+        clientsQuery.fetch((err, clients) => {
+            if (!err) {
+                clients.map((client) => {
+                    clientOptions.push({value: client._id, label: client.clientName});
+                });
+                this.setState({clientOptions});
+            }
+            else {
                 Notifier.error(err.reason);
             }
         });
@@ -126,7 +141,7 @@ export default class TaskFilterBuilder extends React.Component {
     };
 
     render() {
-        const {loading, facilityOptions, assigneeOptions, components, schema} = this.state;
+        const {loading, facilityOptions, assigneeOptions, components, schema, clientOptions} = this.state;
         const {filterBuilderData} = this.props;
         const schemaOptions = this.clearSchemaOptions();
         return (
@@ -146,6 +161,7 @@ export default class TaskFilterBuilder extends React.Component {
                                             <FilterSingle
                                                 assigneeIdOptions={assigneeOptions}
                                                 facilityIdOptions={facilityOptions}
+                                                clientIdOptions={clientOptions}
                                                 deleteFilter={this.deleteFilter}
                                                 name={item.name}
                                             />

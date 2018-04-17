@@ -34,6 +34,7 @@ export default class CsvParseService {
             return isNaN(parsed) ? 'broken number!!!' : parsed
         }
         else {
+            //string
             return value;
         }
     }
