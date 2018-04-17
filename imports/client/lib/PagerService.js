@@ -30,6 +30,12 @@ export default class PagerService {
         else if (assign === 'assigneeId') {
             _.extend(params.filters, {assigneeId: {$exists: true}});
         }
+        else if (assign === 'none') {
+            _.extend(params.filters, {
+                assigneeId: {$exists: true},
+                workQueue: {$exists: true}
+            });
+        }
     }
 
     static getAccountFilters(params, state, {acctNum, facilityId, clientId}) {

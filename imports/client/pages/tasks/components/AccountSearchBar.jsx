@@ -95,7 +95,7 @@ export default class AccountSearchBar extends Component {
 
     render() {
         const {filter, active, dropdown, selectAll, facilityOptions, clientOptions} = this.state;
-        const {options, btnGroup, deleteAction, dropdownOptions, icons, getProperAccounts} = this.props;
+        const {options, btnGroup, deleteAction, dropdownOptions, icons, getProperAccounts, assignFilterArr} = this.props;
 
         const classes = classNames({
                 'select-type': true,
@@ -118,7 +118,7 @@ export default class AccountSearchBar extends Component {
                         {
                             dropdown &&
                             <Dropdown toggleDropdown={this.openDropdown} getProperAccounts={getProperAccounts}
-                                      options={dropdownOptions}/>
+                                      options={dropdownOptions} assignFilterArr={assignFilterArr}/>
                         }
                     </div>
                     <div className="search-bar__wrapper">
