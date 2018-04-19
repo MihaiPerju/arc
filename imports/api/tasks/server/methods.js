@@ -175,6 +175,12 @@ Meteor.methods({
         return result;
     },
 
+    'tasks.increment_view_count'(_id) {
+        Tasks.update({ _id: _id },
+            { $inc: { numberOfViews: 1 } }
+        );
+    },
+
     'tasks.get'() {
         let result = {
             hold: [],
