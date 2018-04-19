@@ -35,6 +35,8 @@ export default class PagerService {
                 assigneeId: {$exists: true},
                 workQueue: {$exists: true}
             });
+        } else if (assign) {
+            _.extend(params.filters, {workQueue: assign});
         }
     }
 

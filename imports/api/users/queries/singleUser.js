@@ -8,5 +8,8 @@ export default Users.createNamedQuery('singleUser', {
     $paginate: true,
     profile: 1,
     emails: 1,
-    tagIds: 1
+    tagIds: 1,
+    tags: {
+        name: 1
+    }
 });

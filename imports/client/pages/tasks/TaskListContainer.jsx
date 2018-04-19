@@ -12,6 +12,7 @@ import PagerService from '/imports/client/lib/PagerService';
 import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent/AccountAssigning.jsx'
 import AccountSearchBar from './components/AccountSearchBar';
 import AccountMetaData from '/imports/client/pages/tasks/components/TaskContent/AccountMetaData'
+import userQuery from '/imports/api/users/queries/singleUser.js'
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -27,13 +28,44 @@ class TaskListContainer extends Pager {
             assignUser: false,
             assignWQ: false,
             showMetaData: false,
-            assignFilterArr: ['assigneeId', 'workQueue']
+            assignFilterArr: ['assigneeId', 'workQueue'],
+            tags: []
         });
         this.query = query;
     }
 
     componentWillMount() {
         this.nextPage(0);
+        /*
+         letterQuery.clone({filters: {_id: letterId}}).fetchOne((err, letter) => {
+         if (!err) {
+         this.setState({
+         letter,
+         loading: false
+         });
+         } else {
+         Notifier.error(err.reason);
+         }
+         });
+        */
+
+        //get the user's tags
+        // Meteor.call('user.tags.get', (err, tagIds) => {
+        //     if (!err) {
+        //         console.log(tagIds);
+        //     }
+        // })
+        userQuery.clone({
+            filters: {
+                _id: Meteor.userId()
+            }
+        }).fetchOne((err, user) => {
+            if (!err) {
+                const tags = user.tags;
+                this.setState({tags});
+            }
+        })
+
     }
 
     getData(tasks) {
@@ -235,13 +267,19 @@ class TaskListContainer extends Pager {
     render() {
         const {data, loading, error} = this.props;
         const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ, showMetaData,
-            assignFilterArr} = this.state;
+            assignFilterArr, tags} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
-        const dropdownOptions = [
+/*        const dropdownOptions = [
             {label: 'Personal Accounts', filter: 'assigneeId'},
             {label: 'Work Queue Accounts', filter: 'workQueue'}
+        ];*/
+        let dropdownOptions = [
+            {label: 'Personal Accounts', filter: 'assigneeId'}
         ];
+        _.each(tags, (tag) => {
+            dropdownOptions.push({label: tag.name, filter: tag._id});
+        })
         const icons = [{icon: 'user', method: this.assignToUser}, {icon: 'users', method: this.assignToWorkQueue}];
 
         if (loading) {
