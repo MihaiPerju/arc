@@ -198,18 +198,6 @@ Meteor.methods({
         return result;
     },
 
-    'task.assignee_remove'(_id) {
-        Tasks.update(
-            {_id},
-            {
-                $unset: {
-                    workQueue: null,
-                    assigneeId: null
-                }
-            }
-        );
-    },
-
     'account.tickle'({tickleDate, _id}) {
         Tasks.update({_id}, {
             $set: {
