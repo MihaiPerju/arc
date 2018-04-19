@@ -15,5 +15,8 @@ export default new SimpleSchema({
   timeStamp: {
     type: String,
     optional: true
+  },
+  status: {
+    type: String
   }
 });

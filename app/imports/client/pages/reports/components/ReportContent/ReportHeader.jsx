@@ -6,8 +6,11 @@ import { EJSON } from "meteor/ejson";
 import accountsQuery from "/imports/api/tasks/queries/taskList";
 import moment from "moment/moment";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
+import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
+import { withQuery } from "meteor/cultofcoders:grapher-react";
+import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 
-export default class ReportHeader extends Component {
+export class ReportHeader extends Component {
   constructor() {
     super();
     this.state = {
@@ -67,20 +70,26 @@ export default class ReportHeader extends Component {
     const { report } = this.props;
     Meteor.call(
       "jobQueue.create",
-      { reportId: report._id, type: JobQueueEnum.RUN_REPORT },
+      {
+        reportId: report._id,
+        type: JobQueueEnum.RUN_REPORT,
+        status: JobQueueStatuses.NEW
+      },
       err => {
         if (err) {
           Notifier.error(err.reason);
-        }else{
-            Notifier.success("Job started");
+        } else {
+          Notifier.success("Job started");
         }
       }
     );
   };
 
   render() {
-    const { report } = this.props;
+    const { report, data } = this.props;
     const { schedule, accounts } = this.state;
+    const job = data[0];
+    console.log(job);
 
     const mainTable = {
       header: "Account name",
@@ -143,13 +152,19 @@ export default class ReportHeader extends Component {
                 <button onClick={this.onEdit} className="btn--white">
                   Edit report
                 </button>
-                <button
-                  style={{ marginLeft: "2rem" }}
-                  onClick={this.onRunReport}
-                  className="btn--white"
-                >
-                  Run report
-                </button>
+                {job && job.status === JobQueueStatuses.NEW ? (
+                  <button style={{ marginLeft: "2rem" }} className="btn--white">
+                    Loading...
+                  </button>
+                ) : (
+                  <button
+                    style={{ marginLeft: "2rem" }}
+                    onClick={this.onRunReport}
+                    className="btn--white"
+                  >
+                    Run report
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -177,3 +192,10 @@ export default class ReportHeader extends Component {
     );
   }
 }
+
+export default withQuery(
+  props => {
+    return jobQueueQuery.clone({ filters: { reportId: props.report._id } });
+  },
+  { reactive: true }
+)(ReportHeader);
