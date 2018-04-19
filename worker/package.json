@@ -2,7 +2,7 @@
   "name": "worker",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "MONGO_URL=mongodb://localhost:27017/db meteor run --port 4000"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.42",

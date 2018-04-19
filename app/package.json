@@ -2,7 +2,7 @@
   "name": "boilerplate",
   "private": true,
   "scripts": {
-    "start": "meteor run --settings .deploy/local.json",
+    "start": "MONGO_URL=mongodb://localhost:27017/web meteor run --settings .deploy/local.json",
     "deploy:qa": "meteor npm i ; cd .deploy/qa && mup deploy"
   },
   "dependencies": {
