@@ -116,17 +116,12 @@ class TaskListContainer extends Pager {
     };
 
     getFirstOption(tasks, options) {
-        const commonAssigneeId = tasks[0].assigneeId;
-        for (task of tasks) {
-            if (task.assigneeId !== commonAssigneeId) {
+        for (let task of tasks) {
+            if (!task.assigneeId) {
                 return [{label: 'Unassigned'}];
             }
         }
-        for (let option of options) {
-            if (option.value === commonAssigneeId) {
-                return [option];
-            }
-        }
+        return [options[0]];
     }
 
     assignToUser = () => {
@@ -191,7 +186,10 @@ class TaskListContainer extends Pager {
                 }
             }
         }
-        return userOptions;
+        const uniqueOptions  = _.unique(userOptions, false, function(item){
+            return item.value;
+        });
+        return uniqueOptions;
     }
 
     nextPage = (inc) => {
