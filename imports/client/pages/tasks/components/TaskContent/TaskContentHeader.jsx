@@ -44,7 +44,7 @@ export default class TaskContentHeader extends Component {
       return <div className="label label--grey">{task.tag.name}</div>;
     }
     return (
-      <div style={{ color: "red" }} className="label label--grey">
+      <div className="label label--red">
         Unassigned
       </div>
     );
