@@ -1,55 +1,38 @@
 import Tags from '../collection.js';
 import Security from '/imports/api/security/security.js';
 import Users from '/imports/api/users/collection.js';
+import {roleGroups} from '/imports/api/users/enums/roles';
 
 Meteor.methods({
     'tag.create'(data) {
-        Security.isAdminOrTech(this.userId);
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
 
-        data.userId = this.userId;
         return Tags.insert(data);
     },
 
     'tag.delete'(_id) {
-        Security.isAdminOrTech(this.userId);
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
 
-        Tags.remove({ _id: _id });
+        Tags.remove({ _id });
     },
+    
 
-    'tag.getAll'() {
-        const user = Users.findOne({ _id: this.userId }, { roles: 1 });
+    'tag.edit' (id, {client, name}) {
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
 
-        let tags = Tags.find({
-            $or: [
-                {
-                    userId: this.userId
-                },
-                {
-                    privacy: 'Public'
-                },
-                {
-                    visibility: {
-                        $in: user.roles
-                    }
-                }
-            ]
-        }).fetch();
-
-        return tags;
-    },
-
-    'user.getTags'(tagIds) {
-        tagIds = tagIds || [];
-        Security.isAdminOrTech(this.userId);
-
-        if (tagIds.length === 0) {
-            return [];
-        }
-
-        return Tags.find({
-            _id: {
-                $in: tagIds
+        Tags.update({_id: id}, {
+            $set: {
+                client,
+                name
             }
-        }).fetch();
+        });
+    },
+
+    'tags.deleteMany' (Ids) {
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+
+        _.each(Ids, (_id) => {
+            Tags.remove({_id});
+        });
     }
 });

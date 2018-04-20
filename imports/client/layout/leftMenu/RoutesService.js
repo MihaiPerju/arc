@@ -18,7 +18,8 @@ export default class RouteService {
                 {name: "code/list", label: "Codes", icon: 'code-fork'},
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
                 {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
-                {name: "action/list", label: "Actions", icon: 'thumb-tack'}
+                {name: "action/list", label: "Actions", icon: 'thumb-tack'},
+                {name: "tag/list", label: "Tags", icon: 'paperclip'}
             ];
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
             return [
@@ -35,7 +36,8 @@ export default class RouteService {
                 {name: "code/list", label: "Codes", icon: 'code-fork'},
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
                 {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
-                {name: "action/list", label: "Actions", icon: 'thumb-tack'}
+                {name: "action/list", label: "Actions", icon: 'thumb-tack'},
+                {name: "tag/list", label: "Tags", icon: 'paperclip'}
             ];
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
             return [
@@ -52,7 +54,8 @@ export default class RouteService {
                 {name: "code/list", label: "Codes", icon: 'code-fork'},
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
                 {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
-                {name: "action/list", label: "Actions", icon: 'thumb-tack'}
+                {name: "action/list", label: "Actions", icon: 'thumb-tack'},
+                {name: "tag/list", label: "Tags", icon: 'paperclip'}
             ];
         } else {
             return [

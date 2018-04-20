@@ -6,7 +6,7 @@ export default Tags.createNamedQuery('listTags', {
         _.extend(options, params.options);
     },
     $paginate: true,
-    privacy: 1,
     name: 1,
-    userId: 1
+    client: 1,
+    _id: 1
 });
