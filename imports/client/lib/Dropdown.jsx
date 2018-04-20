@@ -5,7 +5,6 @@ export default class Dropdown extends Component {
     onFilterAssignee = (filter) => {
         const {getProperAccounts, toggleDropdown} = this.props;
         getProperAccounts(filter);
-        toggleDropdown();
     };
 
     render() {

@@ -28,7 +28,7 @@ class TaskListContainer extends Pager {
             assignUser: false,
             assignWQ: false,
             showMetaData: false,
-            assignFilterArr: ['assigneeId', 'workQueue'],
+            assignFilterArr: ['assigneeId'],
             tags: []
         });
         this.query = query;
@@ -36,25 +36,6 @@ class TaskListContainer extends Pager {
 
     componentWillMount() {
         this.nextPage(0);
-        /*
-         letterQuery.clone({filters: {_id: letterId}}).fetchOne((err, letter) => {
-         if (!err) {
-         this.setState({
-         letter,
-         loading: false
-         });
-         } else {
-         Notifier.error(err.reason);
-         }
-         });
-        */
-
-        //get the user's tags
-        // Meteor.call('user.tags.get', (err, tagIds) => {
-        //     if (!err) {
-        //         console.log(tagIds);
-        //     }
-        // })
         userQuery.clone({
             filters: {
                 _id: Meteor.userId()
@@ -62,7 +43,11 @@ class TaskListContainer extends Pager {
         }).fetchOne((err, user) => {
             if (!err) {
                 const tags = user.tags;
-                this.setState({tags});
+                let assignFilterArr = ['assigneeId']
+                _.each(tags, (tag) => {
+                    assignFilterArr.push(tag._id)
+                })
+                this.setState({tags, assignFilterArr});
             }
         })
 
@@ -236,19 +221,21 @@ class TaskListContainer extends Pager {
     };
 
     getProperAccounts = (assign) => {
-        let {assignFilterArr} = this.state;
+        let {tags, assignFilterArr} = this.state;
+
         if (_.contains(assignFilterArr, assign)){
             assignFilterArr.splice(assignFilterArr.indexOf(assign), 1);
         } else {
             assignFilterArr.push(assign);
         }
         this.setState({assignFilterArr});
-        if (assignFilterArr.length === 2) {
+
+        if (assignFilterArr.length === tags.length + 1){
             FlowRouter.setQueryParams({assign: null});
         } else if (assignFilterArr.length === 0) {
-            FlowRouter.setQueryParams({assign: "none"});
+            FlowRouter.setQueryParams({assign: 'none'});
         } else {
-            FlowRouter.setQueryParams({assign: assignFilterArr[0]});
+            FlowRouter.setQueryParams({assign: assignFilterArr.toString()});
         }
     };
 
@@ -264,22 +251,25 @@ class TaskListContainer extends Pager {
         })
     };
 
+    getDropdownOptions = () => {
+        const {tags} = this.state;
+        let options = [{label: 'Personal Accounts', filter: 'assigneeId'}];
+
+        if (tags) {
+            _.each(tags, (tag) => {
+                options.push({label: tag.name, filter: tag._id});
+            })
+        }
+        return options;
+    }
+
     render() {
         const {data, loading, error} = this.props;
         const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ, showMetaData,
             assignFilterArr, tags} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
-/*        const dropdownOptions = [
-            {label: 'Personal Accounts', filter: 'assigneeId'},
-            {label: 'Work Queue Accounts', filter: 'workQueue'}
-        ];*/
-        let dropdownOptions = [
-            {label: 'Personal Accounts', filter: 'assigneeId'}
-        ];
-        _.each(tags, (tag) => {
-            dropdownOptions.push({label: tag.name, filter: tag._id});
-        })
+        const dropdownOptions = this.getDropdownOptions();
         const icons = [{icon: 'user', method: this.assignToUser}, {icon: 'users', method: this.assignToWorkQueue}];
 
         if (loading) {
