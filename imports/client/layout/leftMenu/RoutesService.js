@@ -65,28 +65,4 @@ export default class RouteService {
             ];
         }
     }
-
-    static countBadges(data) {
-        let unassigned = 0;
-        let escalations = 0;
-        let tickles = 0;
-        let today = moment();
-
-        let startOfDay = moment(today).startOf("day");
-        startOfDay = startOfDay.add(1, "day");
-
-        for (account of data) {
-
-            if (!account.assigneeId && !account.workQueue) {
-                unassigned++;
-            }
-            if (account.escalateReason) {
-                escalations++;
-            }
-            if (account.tickleDate && startOfDay.isAfter(account.tickleDate)) {
-                tickles++;
-            }
-        }
-        return {tickles, escalations, unassigned};
-    }
 }

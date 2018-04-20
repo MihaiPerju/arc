@@ -40,7 +40,6 @@ export default class Menu extends Component {
                     'cc--active': isCurrentRoute
                 }
             );
-
             return (
                 <MenuItem
                     key={index}
