@@ -10,7 +10,7 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import RoutesService from './RoutesService';
 
-class LeftMenu extends Component {
+export class LeftMenu extends Component {
     constructor() {
         super();
         this.state = {
@@ -37,7 +37,7 @@ class LeftMenu extends Component {
             }
         });
 
-        let today = moment();
+        const today = moment();
         let startOfDay = moment(today).startOf("day");
         startOfDay = startOfDay.add(1, "day");
 
@@ -84,9 +84,3 @@ class LeftMenu extends Component {
         )
     }
 }
-
-export default withQuery((props) => {
-    return accountListQuery.clone({});
-}, {reactive: true})(LeftMenu)
-
-// export default LeftMenu;
