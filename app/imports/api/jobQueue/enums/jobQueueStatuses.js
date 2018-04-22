@@ -1,3 +1,5 @@
 export default {
-  NEW: "new"
+  NEW: "New",
+  IN_PROGRESS: "In progress",
+  FINISHED: "Finished"
 };

@@ -1,2 +1,3 @@
-import './exposure';
-import './methods';
+import "./exposure";
+import "./methods";
+import "./reportRoute";

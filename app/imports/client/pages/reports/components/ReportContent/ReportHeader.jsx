@@ -73,7 +73,7 @@ export class ReportHeader extends Component {
       {
         reportId: report._id,
         type: JobQueueEnum.RUN_REPORT,
-        status: JobQueueStatuses.NEW
+        status: JobQueueStatuses.IN_PROGRESS
       },
       err => {
         if (err) {
@@ -85,12 +85,48 @@ export class ReportHeader extends Component {
     );
   };
 
+  downloadReport = () => {
+    const { data } = this.props;
+    const { reportId, _id } = data[0];
+    window.open("/report/" + reportId + "/" + _id);
+  };
+
+  getRunButton(status) {
+    switch (status) {
+      case JobQueueStatuses.IN_PROGRESS:
+        return (
+          <button style={{ marginLeft: "2rem" }} className="btn--white">
+            Loading...
+          </button>
+        );
+      case JobQueueStatuses.FINISHED:
+        return (
+          <button
+            onClick={this.downloadReport}
+            style={{ marginLeft: "2rem" }}
+            className="btn--white"
+          >
+            Download report
+          </button>
+        );
+      default:
+        return (
+          <button
+            style={{ marginLeft: "2rem" }}
+            onClick={this.onRunReport}
+            className="btn--white"
+          >
+            Run report
+          </button>
+        );
+    }
+  }
+
   render() {
     const { report, data } = this.props;
     const { schedule, accounts } = this.state;
     const job = data[0];
     console.log(job);
-
     const mainTable = {
       header: "Account name",
       row: accounts.map((task, index) => {
@@ -152,19 +188,7 @@ export class ReportHeader extends Component {
                 <button onClick={this.onEdit} className="btn--white">
                   Edit report
                 </button>
-                {job && job.status === JobQueueStatuses.NEW ? (
-                  <button style={{ marginLeft: "2rem" }} className="btn--white">
-                    Loading...
-                  </button>
-                ) : (
-                  <button
-                    style={{ marginLeft: "2rem" }}
-                    onClick={this.onRunReport}
-                    className="btn--white"
-                  >
-                    Run report
-                  </button>
-                )}
+                {this.getRunButton(job && job.status)}
               </div>
             </div>
           </div>
