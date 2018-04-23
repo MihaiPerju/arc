@@ -4,8 +4,10 @@ export default class PagerService {
   static setQuery(query, { page, perPage, state, assign, filters }) {
     let params = this.getPagerOptions(page, perPage);
 
-    this.getAccountFilters(params, state, filters);
-    this.getProperAccounts(params, assign);
+    if (state || state === "") {
+      this.getAccountFilters(params, state, filters);
+      this.getProperAccounts(params, assign);
+    }
     return query.clone(params);
   }
 
