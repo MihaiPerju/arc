@@ -12,7 +12,7 @@ import PagerService from '/imports/client/lib/PagerService';
 import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent/AccountAssigning.jsx'
 import AccountSearchBar from './components/AccountSearchBar';
 import AccountMetaData from '/imports/client/pages/tasks/components/TaskContent/AccountMetaData'
-import userQuery from '/imports/api/users/queries/singleUser.js'
+import userTagsQuery from '/imports/api/users/queries/userTags.js'
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -29,25 +29,36 @@ class TaskListContainer extends Pager {
             assignWQ: false,
             showMetaData: false,
             assignFilterArr: ['assigneeId'],
-            tags: []
+            tags: [],
+            dropdownOptions: []
         });
         this.query = query;
     }
 
     componentWillMount() {
         this.nextPage(0);
-        userQuery.clone({
+        userTagsQuery.clone({
             filters: {
                 _id: Meteor.userId()
             }
         }).fetchOne((err, user) => {
             if (!err) {
                 const tags = user.tags;
-                let assignFilterArr = ['assigneeId']
+                let assignFilterArr = ['assigneeId'];
+                let dropdownOptions = [{label: 'Personal Accounts', filter: 'assigneeId'}];
+
                 _.each(tags, (tag) => {
-                    assignFilterArr.push(tag._id)
+                    assignFilterArr.push(tag._id);
+                    dropdownOptions.push({label: tag.name, filter: tag._id});
                 })
-                this.setState({tags, assignFilterArr});
+                this.setState({tags, assignFilterArr, dropdownOptions});
+            } else {
+                let assignFilterArr = ['assigneeId', 'workQueue'];
+                let dropdownOptions = [
+                    {label: 'Personal Accounts', filter: 'assigneeId'},
+                    {label: 'Work Queue Accounts', filter: 'workQueue'}
+                ]
+                this.setState({assignFilterArr, dropdownOptions});
             }
         })
 
@@ -229,14 +240,24 @@ class TaskListContainer extends Pager {
             assignFilterArr.push(assign);
         }
         this.setState({assignFilterArr});
-
-        if (assignFilterArr.length === tags.length + 1){
-            FlowRouter.setQueryParams({assign: null});
-        } else if (assignFilterArr.length === 0) {
-            FlowRouter.setQueryParams({assign: 'none'});
+        if (tags.length !== 0) {
+            if (assignFilterArr.length === tags.length + 1){
+                FlowRouter.setQueryParams({assign: null});
+            } else if (assignFilterArr.length === 0) {
+                FlowRouter.setQueryParams({assign: 'none'});
+            } else {
+                FlowRouter.setQueryParams({assign: assignFilterArr.toString()});
+            }
         } else {
-            FlowRouter.setQueryParams({assign: assignFilterArr.toString()});
+            if (assignFilterArr.length === tags.length + 2){
+                FlowRouter.setQueryParams({assign: null});
+            } else if (assignFilterArr.length === 0) {
+                FlowRouter.setQueryParams({assign: 'none'});
+            } else {
+                FlowRouter.setQueryParams({assign: assignFilterArr.toString()});
+            }
         }
+
     };
 
     openMetaDataSlider = () => {
@@ -251,25 +272,12 @@ class TaskListContainer extends Pager {
         })
     };
 
-    getDropdownOptions = () => {
-        const {tags} = this.state;
-        let options = [{label: 'Personal Accounts', filter: 'assigneeId'}];
-
-        if (tags) {
-            _.each(tags, (tag) => {
-                options.push({label: tag.name, filter: tag._id});
-            })
-        }
-        return options;
-    }
-
     render() {
         const {data, loading, error} = this.props;
         const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ, showMetaData,
-            assignFilterArr, tags} = this.state;
+            assignFilterArr, dropdownOptions} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
-        const dropdownOptions = this.getDropdownOptions();
         const icons = [{icon: 'user', method: this.assignToUser}, {icon: 'users', method: this.assignToWorkQueue}];
 
         if (loading) {
