@@ -12,6 +12,7 @@ import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TagsService from './services/TagsService';
 import TagsListQuery from '/imports/api/tags/queries/listTags.js';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
+import queryClients from '../../../api/clients/queries/listClients';
 
 class EditUser extends Component {
     constructor() {
@@ -21,7 +22,8 @@ class EditUser extends Component {
             email: '',
             firstName: '',
             lastName: '',
-            phoneNumber: ''
+            phoneNumber: '',
+            clients: []
         };
     }
 
@@ -37,6 +39,11 @@ class EditUser extends Component {
     }
 
     componentWillMount() {
+        queryClients.fetch((err, res) => {
+            if(!err) {
+                this.setState({clients: res})
+            }
+        })
     }
 
     onSubmit(formData) {
@@ -75,6 +82,7 @@ class EditUser extends Component {
 
     render() {
         const {data, user} = this.props;
+        const {clients} = this.state;
         user.email = user.emails[0].address;
         const tags = this.getTagList();
 
@@ -125,7 +133,7 @@ class EditUser extends Component {
                                 <ErrorField name="tagIds"/>
                             </div>
                         </AutoForm>
-                        <CreateEditTags user={user} tags={data}/>
+                        <CreateEditTags user={user} clients={clients} tags={data}/>
                     </div>
                 </div>
             </div>

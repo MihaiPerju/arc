@@ -2,16 +2,17 @@ export default class TagsService {
 
     static getTagName (tag) {
 
-        return `${tag.name} (${this.getTagPrivacy(tag)})`;
+        // return `${tag.name} (${this.getTagPrivacy(tag)})`;
+        return `${tag.name}`;
     }
 
-    static getTagPrivacy (tag) {
-        let privacy = tag.privacy;
+    // static getTagPrivacy (tag) {
+    //     let privacy = tag.privacy;
 
-        if (tag.visibility && privacy == 'Specific roles') {
-            privacy = tag.visibility.join(', ');
-        }
+    //     if (tag.visibility && privacy == 'Specific roles') {
+    //         privacy = tag.visibility.join(', ');
+    //     }
 
-        return privacy;
-    }
+    //     return privacy;
+    // }
 }

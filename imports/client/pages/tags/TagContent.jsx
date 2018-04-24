@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
+import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import TagContentHeader from './components/TagContent/TagContentHeader';
 import TagEdit from './TagEdit';
+import TagContentDescription from './components/TagContent/TagContentDescription';
+import queryUsers from '/imports/api/users/queries/listUsers';
+import PagerService from "/imports/client/lib/PagerService";
 
-export default class TagContent extends Component {
+class TagContent extends Component {
     constructor() {
         super();
         this.state = {
@@ -21,16 +25,26 @@ export default class TagContent extends Component {
 
     render() {
         const {edit} = this.state;
-        const {tag, clients} = this.props;
+        const {tag, clients, data, loading, error} = this.props;
+
+        if (error) {
+            return <div>Error: {error.reason}</div>;
+        }
+
         return (
             <div className="main-content tag-content">
                 {
                     edit ? <TagEdit setEdit={this.setEdit} clients={clients} tag={tag}/> :
                         <div>
                             <TagContentHeader setEdit={this.setEdit} tag={tag}/>
+                            <TagContentDescription users={data} currentTag={tag} />
                         </div>
                 }
             </div>
         )
     }
 }
+
+export default withQuery((props) => {
+    return PagerService.setQuery(queryUsers, {});
+}, {reactive: true})(TagContent);

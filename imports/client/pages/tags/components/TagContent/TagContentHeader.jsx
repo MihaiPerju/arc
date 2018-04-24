@@ -9,16 +9,17 @@ export default class TagContentHeader extends Component {
     render() {
         const {tag} = this.props;
         return (
-            <div className="main-content action-content">
-                <div className="main-content__wrapper">
-                    <div className="intro-block text-center">
-                        <div className="intro-block__wrapper">
-                            <i className="icon-paperclip"/>
-                            <div className="text-light-grey">Tag name</div>
-                            <div className="action-name">{tag.name}</div>
-                        </div>
+            <div className="main-content__header header-block">
+                <div className="row__header">
+                    <div className="text-light-grey">Tag name</div>
+                    <div className="title">{tag.name}</div>
+                </div>
+                <div className="row__header">
+                    <div className="btn-group">
+                        <button onClick={this.onEdit} className="btn--white">
+                            Edit tag
+                        </button>
                     </div>
-                    <button onClick={this.onEdit} className="btn-edit btn--white">Edit Tag</button>
                 </div>
             </div>
         )

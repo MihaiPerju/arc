@@ -163,7 +163,7 @@ class RightSide extends Component {
         return (
             <div className={fade ? 'right__side in' : 'right__side'}>
                 {
-                    create ? <TagCreate clients={clients} close={close}/> : <TagContent clients={clients} tag={tag}/>
+                    create ? <TagCreate clients={clients} close={close}/> : <TagContent clients={clients} tag={tag} />
                 }
             </div>
         );

@@ -49,9 +49,17 @@ export default class CreateEditTags extends Component {
         });
     };
 
+    getOptions = (enums) => {
+        return _.map(enums, (value, key) => {
+            return {value: value._id, label: value.clientName};
+        })
+    };
+
     render () {
         const {cancelDialogActive, showSpecificRoles} = this.state;
-        const {tags} = this.props;
+        const {tags, clients} = this.props;
+
+        const clientOptns = this.getOptions(clients);
 
         const actions = [
             <Button onClick={this.dialogToggle}>Cancel</Button>,
@@ -78,16 +86,15 @@ export default class CreateEditTags extends Component {
                                                 <ErrorField name="name"/>
                                             </div>
 
-                                            <div className="form-wrapper">
-                                                <SelectField labelHidden={true} placeholder="Privacy" name="privacy"/>
-                                            </div>
-                                            {
-                                                showSpecificRoles &&
+                                            <div className="select-group">
                                                 <div className="form-wrapper">
-                                                    <AutoField labelHidden={true} placeholder="Visibility"
-                                                               name="visibility"/>
+                                                    <SelectField placeholder="Select Client"
+                                                                labelHidden={true}
+                                                                options={clientOptns}
+                                                                name="client"/>
+                                                    <ErrorField name="client"/>
                                                 </div>
-                                            }
+                                            </div>
                                             <div className="form-wrapper">
                                                 <button className="btn--green">Create new tag</button>
                                             </div>
