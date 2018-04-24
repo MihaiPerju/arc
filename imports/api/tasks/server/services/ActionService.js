@@ -1,3 +1,4 @@
+import _ from "underscore";
 import Accounts from '/imports/api/tasks/collection';
 import Actions from '/imports/api/actions/collection';
 import ReasonCodes from '/imports/api/reasonCodes/collection';
@@ -33,6 +34,13 @@ export default class ActionService {
         Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, {accountId, action});
 
         this.changeState(accountId, action.substate);
+
+        const actionsSubState = _.flatten([StatesSubstates['Archived'], StatesSubstates['Hold']]);
+        const index = _.indexOf(actionsSubState, action.substate);
+
+        if(index > -1) {
+            this.removeAssignee(accountId);
+        }
 
     }
 
@@ -87,5 +95,17 @@ export default class ActionService {
                 escalateReason: reason
             }
         })
+    }
+
+    static removeAssignee(_id) {
+        Tasks.update(
+            {_id},
+            {
+                $unset: {
+                    workQueue: null,
+                    assigneeId: null
+                }
+            }
+        );
     }
 }
