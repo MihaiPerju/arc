@@ -26,7 +26,6 @@ class TagContent extends Component {
     render() {
         const {edit} = this.state;
         const {tag, clients, data, loading, error} = this.props;
-
         if (error) {
             return <div>Error: {error.reason}</div>;
         }
@@ -46,5 +45,8 @@ class TagContent extends Component {
 }
 
 export default withQuery((props) => {
-    return PagerService.setQuery(queryUsers, {});
+    const params = {
+        filters: {roles: {$in: ['rep']}}
+    }
+    return queryUsers.clone(params);
 }, {reactive: true})(TagContent);

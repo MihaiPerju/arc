@@ -99,24 +99,6 @@ Meteor.methods({
         _.each(userIds, (_id) => {
             Users.remove({_id});
         });
-    },
-
-    'admin.addTag'({_id, tagId}) {
-        Security.checkAdmin(this.userId);
-
-        Users.update(
-            {_id},
-            {$push: {tagIds: tagId}}
-        )
-    },
-
-    'admin.removeTag'({_id, tagId}) {
-        Security.checkAdmin(this.userId);
-
-        Users.update(
-            {_id},
-            {$pull: {tagIds: tagId}}
-        )
     }
 
 });
