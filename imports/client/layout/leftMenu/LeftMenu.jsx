@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
@@ -7,13 +8,49 @@ import classNames from 'classnames';
 import accountListQuery from '/imports/api/tasks/queries/taskList';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
+import RoutesService from './RoutesService';
 
-class LeftMenu extends Component {
+export class LeftMenu extends Component {
     constructor() {
         super();
         this.state = {
-            collapse: false
+            collapse: false,
+            unassigned: 0,
+            escalations: 0,
+            tickles: 0
         }
+    }
+
+    componentWillMount() {
+        const that = this;
+        accountListQuery.clone({
+            filters: {assigneeId: {$exists: false}, workQueue: {$exists: false}}
+        }).getCount((err, count) => {
+            if(!err) {
+                that.setState({unassigned: count})
+            }
+        });
+
+        accountListQuery.clone({filters: {escalateReason: {$exists: true }}}).getCount((err, count) => {
+            if(!err) {
+                that.setState({escalations: count})
+            }
+        });
+
+        const today = moment();
+        let startOfDay = moment(today).startOf("day");
+        startOfDay = startOfDay.add(1, "day");
+
+        accountListQuery.clone({
+            filters: {
+                "tickleDate":
+                { "$lt" : new Date(moment(startOfDay).format()) }
+            }
+        }).getCount((err, count) => {
+            if(!err) {
+                that.setState({tickles: count})
+            }
+        });
     }
 
     collapseMenu = () => {
@@ -24,34 +61,14 @@ class LeftMenu extends Component {
     };
 
     render() {
-        const {data, loading, error, currRoute} = this.props;
-
-        const {collapse} = this.state;
+        const {collapse, unassigned, escalations, tickles} = this.state;
 
         const menuClasses = classNames({
             'left-menu': true,
             'collapsed': collapse
         });
 
-        let routes = [
-            {name: "accounts/active", label: "Account", icon: 'user'},
-            {name: "accounts/review", label: "Review", icon: 'inbox'},
-            {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
-            {name: "accounts/archived", label: "Archived", icon: 'archive'},
-            {name: "accounts/escalated", label: "Escalations", icon: 'info'},
-            {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: data.length},
-            {name: "accounts/unassigned", label: "Unassigned", icon: 'question-circle-o'},
-            {name: "client/list", label: "Clients", icon: 'users'},
-            {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
-            {name: "code/list", label: "Codes", icon: 'code-fork'},
-            {name: "reports/list", label: "Reports", icon: 'file-text-o'},
-            {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
-            {name: "action/list", label: "Actions", icon: 'thumb-tack'}
-        ];
-
-        if (loading) {
-            return <Loading/>
-        }
+        let routes = RoutesService.getRoutesByRole({unassigned, escalations, tickles});
 
         return (
             <div>
@@ -67,17 +84,3 @@ class LeftMenu extends Component {
         )
     }
 }
-
-const now = new Date;
-
-export default withQuery((props) => {
-    const currRoute = FlowRouter.current().path;
-    return accountListQuery.clone({
-        filters: {
-            tickleDate: {
-                $exists: true,
-                $lte: now
-            }
-        }
-    });
-}, {reactive: true})(LeftMenu)

@@ -13,4 +13,5 @@ export default [
     {value: 'substate', label: 'Substate'},
     {value: 'facilityId', label: 'Facility Id'},
     {value: 'assigneeId', label: 'Assignee Id'},
+    {value: 'clientId', label: 'ClientId'},
 ]

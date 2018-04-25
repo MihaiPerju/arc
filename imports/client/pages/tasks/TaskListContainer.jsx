@@ -13,6 +13,7 @@ import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent
 import AccountSearchBar from './components/AccountSearchBar';
 import AccountMetaData from '/imports/client/pages/tasks/components/TaskContent/AccountMetaData'
 import userTagsQuery from '/imports/api/users/queries/userTags.js'
+import Notifier from '/imports/client/lib/Notifier';
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -118,7 +119,20 @@ class TaskListContainer extends Pager {
                 currentTask: newTask._id,
                 showMetaData: false
             });
+            const {state} = FlowRouter.current().params;
+            if(state === "active") {
+                this.incrementViewCount(newTask._id);
+            }
         }
+    }
+
+    incrementViewCount = (_id) => {
+        Meteor.call('tasks.increment_view_count', _id
+            , (err) => {
+                if (err) {
+                    Notifier.error(err.reason);
+                }
+            });
     }
 
     checkTask = (task) => {
@@ -145,17 +159,12 @@ class TaskListContainer extends Pager {
     };
 
     getFirstOption(tasks, options) {
-        const commonAssigneeId = tasks[0].assigneeId;
-        for (task of tasks) {
-            if (task.assigneeId !== commonAssigneeId) {
+        for (let task of tasks) {
+            if (!task.assigneeId) {
                 return [{label: 'Unassigned'}];
             }
         }
-        for (let option of options) {
-            if (option.value === commonAssigneeId) {
-                return [option];
-            }
-        }
+        return [options[0]];
     }
 
     assignToUser = () => {
@@ -220,7 +229,10 @@ class TaskListContainer extends Pager {
                 }
             }
         }
-        return userOptions;
+        const uniqueOptions  = _.unique(userOptions, false, function(item){
+            return item.value;
+        });
+        return uniqueOptions;
     }
 
     nextPage = (inc) => {

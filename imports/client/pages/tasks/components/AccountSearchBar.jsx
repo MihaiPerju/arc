@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
-import {AutoForm, AutoField} from '/imports/ui/forms';
-import SimpleSchema from 'simpl-schema';
-import Dropdown from '/imports/client/lib/Dropdown';
-import classNames from 'classnames';
-import Dialog from '/imports/client/lib/ui/Dialog';
-import {SelectField} from '/imports/ui/forms';
+import React, { Component } from "react";
+import { AutoForm, AutoField } from "/imports/ui/forms";
+import SimpleSchema from "simpl-schema";
+import Dropdown from "/imports/client/lib/Dropdown";
+import classNames from "classnames";
+import Dialog from "/imports/client/lib/ui/Dialog";
+import { SelectField } from "/imports/ui/forms";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 
@@ -27,25 +27,24 @@ export default class AccountSearchBar extends Component {
 
         facilityQuery.fetch((err, res) => {
             if (!err) {
-                res.map((facility) => {
-                    facilityOptions.push({label: facility.name, value: facility._id});
+                res.map(facility => {
+                    facilityOptions.push({ label: facility.name, value: facility._id });
                 });
-                this.setState({facilityOptions});
+                this.setState({ facilityOptions });
             }
         });
         clientsQuery.fetch((err, res) => {
             if (!err) {
-                res.map((client) => {
-                    clientOptions.push({label: client.clientName, value: client._id});
+                res.map(client => {
+                    clientOptions.push({ label: client.clientName, value: client._id });
                 });
-                this.setState({clientOptions});
+                this.setState({ clientOptions });
             }
-        })
-
+        });
     }
 
     manageFilterBar() {
-        const {active, filter} = this.state;
+        const { active, filter } = this.state;
         this.setState({
             active: !active,
             filter: !filter
@@ -55,26 +54,26 @@ export default class AccountSearchBar extends Component {
 
     onHandleChange(field, value) {
         if (field === "acctNum") {
-            FlowRouter.setQueryParams({acctNum: value});
+            FlowRouter.setQueryParams({ acctNum: value });
         } else if (field === "clientId") {
-            FlowRouter.setQueryParams({clientId: value});
+            FlowRouter.setQueryParams({ clientId: value });
         } else if (field === "facilityId") {
-            FlowRouter.setQueryParams({facilityId: value});
+            FlowRouter.setQueryParams({ facilityId: value });
         }
     }
 
     openDropdown = () => {
         if (!this.state.dropdown) {
-            document.addEventListener('click', this.outsideClick, false);
+            document.addEventListener("click", this.outsideClick, false);
         } else {
-            document.removeEventListener('click', this.outsideClick, false);
+            document.removeEventListener("click", this.outsideClick, false);
         }
         this.setState({
             dropdown: !this.state.dropdown
         });
     };
 
-    outsideClick = (e) => {
+    outsideClick = e => {
         if (this.node.contains(e.target)) {
             return;
         }
@@ -82,17 +81,16 @@ export default class AccountSearchBar extends Component {
         this.openDropdown();
     };
 
-    nodeRef = (node) => {
+    nodeRef = node => {
         this.node = node;
     };
 
     selectAll = () => {
-        const {selectAll} = this.state;
+        const { selectAll } = this.state;
         this.setState({
             selectAll: !selectAll
-        })
+        });
     };
-
     render() {
         const {filter, active, dropdown, selectAll, facilityOptions, clientOptions} = this.state;
         const {options, btnGroup, deleteAction, dropdownOptions, icons, getProperAccounts, assignFilterArr} = this.props;
@@ -173,7 +171,7 @@ class BtnGroup extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.setState({in: true});
+            this.setState({ in: true });
         }, 1);
     }
 
@@ -197,38 +195,43 @@ class BtnGroup extends Component {
     };
 
     render() {
-        const {deleteAction, icons} = this.props;
-        const {dialogIsActive} = this.state;
+        const { deleteAction, icons } = this.props;
+        const { dialogIsActive } = this.state;
         return (
-            <div className={this.state.in ? 'btn-group in' : 'btn-group'}>
-                {
-                    icons
-                        ?
-                        icons.map((element) => {
-                            return <button onClick={element.method}><i className={"icon-" + element.icon}/></button>
-                        })
-                        :
-                        <button><i className="icon-archive"/></button>
-
-                }
-                {
-                    deleteAction &&
-                    <button onClick={this.deleteAction}><i className="icon-trash-o"/></button>
-                }
-                {
-                    dialogIsActive && (
-                        <Dialog className="account-dialog" closePortal={this.closeDialog}>
-                            <div className="form-wrapper">
-                                Are you sure you want to delete selected items ?
-                            </div>
-                            <div className="btn-group">
-                                <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                <button className="btn--light-blue" onClick={this.confirmDelete}>Confirm & delete
-                                </button>
-                            </div>
-                        </Dialog>
-                    )
-                }
+            <div className={this.state.in ? "btn-group in" : "btn-group"}>
+                {icons ? (
+                    icons.map(element => {
+                        return (
+                            <button onClick={element.method}>
+                                <i className={"icon-" + element.icon} />
+                            </button>
+                        );
+                    })
+                ) : (
+                    <button>
+                        <i className="icon-archive" />
+                    </button>
+                )}
+                {deleteAction && (
+                    <button onClick={this.deleteAction}>
+                        <i className="icon-trash-o" />
+                    </button>
+                )}
+                {dialogIsActive && (
+                    <Dialog className="account-dialog" closePortal={this.closeDialog}>
+                        <div className="form-wrapper">
+                            Are you sure you want to delete selected items ?
+                        </div>
+                        <div className="btn-group">
+                            <button className="btn-cancel" onClick={this.closeDialog}>
+                                Cancel
+                            </button>
+                            <button className="btn--light-blue" onClick={this.confirmDelete}>
+                                Confirm & delete
+                            </button>
+                        </div>
+                    </Dialog>
+                )}
             </div>
         );
     }

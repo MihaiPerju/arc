@@ -11,9 +11,16 @@ export default class FiltersSingle extends React.Component {
         this.props.deleteFilter(name);
     };
 
-    getOptions() {
-        const {name, assigneeIdOptions, facilityIdOptions} = this.props;
-        return name === 'assigneeId' ? assigneeIdOptions : facilityIdOptions;
+    getOptions(name) {
+        const {clientIdOptions, assigneeIdOptions, facilityIdOptions,} = this.props;
+        switch (name) {
+            case "assigneeId":
+                return assigneeIdOptions;
+            case "facilityId":
+                return facilityIdOptions;
+            default:
+                return clientIdOptions;
+        }
     }
 
     renderWidget(name) {

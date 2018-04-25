@@ -7,8 +7,6 @@ export default Clients.createNamedQuery('listClients', {
     },
     $paginate: true,
     clientName: 1,
-    firstName: 1,
-    lastName: 1,
     email: 1,
     financialGoals: 1,
     logoPath: 1,

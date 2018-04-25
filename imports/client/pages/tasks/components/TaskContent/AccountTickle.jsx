@@ -1,12 +1,26 @@
 import React from 'react';
 import SimpleSchema from "simpl-schema";
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import Notifier from "../../../../lib/Notifier";
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class AccountTickle extends React.Component {
-    tickle = (data) => {
+
+    constructor() {
+        super();
+        this.state = {
+            tickleDate: moment()
+        }
+    }
+
+    tickle = (e) => {
+        e.preventDefault();
         const {accountId} = this.props;
+        const {tickleDate} = this.state;
+        const data = {};
         data._id = accountId;
+        data.tickleDate = new Date(tickleDate);
         Meteor.call("account.tickle", data, (err) => {
             if (!err) {
                 Notifier.success("Account Tickled!");
@@ -17,23 +31,28 @@ export default class AccountTickle extends React.Component {
         })
     };
 
+    onChange = (date) => {
+        this.setState({tickleDate: date});
+    }
+
     closeDialog = () => {
         const {close} = this.props;
         close();
     };
 
     render() {
+        const {tickleDate} = this.state;
         return (
             <div className="create-form">
                 <div className="create-form__wrapper">
                     <div className="action-block">
                         <main className="cc-main">
-                            <AutoForm onSubmit={this.tickle} schema={tickleSchema}>
+                            <form onSubmit={this.tickle}>
                                 <div className="filter-type__wrapper">
                                     <div className="input-datetime">
-                                        <AutoField placeholder="Select tickle date" labelHidden={true}
-                                                   name="tickleDate"/>
-                                        <ErrorField name="tickleDate"/>
+                                        <div style={{float: 'left', padding: '10px 20px'}}>Tickle date</div>
+                                        <DatePicker selected={tickleDate} onChange={this.onChange} />
+                                        {!tickleDate && <div className="alert-notice" required="">Tickle date is required</div>}
                                     </div>
                                 </div>
                                 <div className="btn-group">
@@ -42,7 +61,7 @@ export default class AccountTickle extends React.Component {
                                         Confirm & send
                                     </button>
                                 </div>
-                            </AutoForm>
+                            </form>
                         </main>
                     </div>
                 </div>
@@ -50,9 +69,3 @@ export default class AccountTickle extends React.Component {
         )
     }
 }
-
-const tickleSchema = new SimpleSchema({
-    tickleDate: {
-        type: Date
-    }
-});

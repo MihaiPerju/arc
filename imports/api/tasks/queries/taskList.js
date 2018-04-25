@@ -10,6 +10,7 @@ export default Tasks.createNamedQuery('taskList', {
     facCode: 1,
     ptType: 1,
     ptName: 1,
+    tickleDate: 1,
     dischrgDate: 1,
     collectedAmount: 1,
     fbDate: 1,

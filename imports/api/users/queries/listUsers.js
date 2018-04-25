@@ -11,5 +11,8 @@ export default Users.createNamedQuery('listUsers', {
     _id: 1,
     roles: 1,
     avatar: 1,
-    tagIds: 1
+    tagIds: 1,
+    tags: {
+        name: 1
+    }
 });
