@@ -139,6 +139,7 @@
   }
   .select-form {
     position: relative;
+    margin-bottom: 15px;
     &:before {
       content: '\f107';
       font-family: $font-icon;
@@ -146,9 +147,6 @@
       top: 9px;
       right: 15px;
       color: $extra-light-grey;
-    }
-    &:first-of-type {
-      margin-bottom: 15px;
     }
     select {
       background: #f2f1f1;
@@ -161,6 +159,13 @@
         padding-top: 4px;
         padding-bottom: 5px;
       }
+    }
+  }
+  .form-group {
+    position: relative;
+    margin-bottom: 15px;
+    .react-datepicker-wrapper, .react-datepicker__input-container {
+      width: 100%;
     }
   }
 }
