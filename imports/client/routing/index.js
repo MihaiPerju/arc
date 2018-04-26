@@ -182,3 +182,8 @@ import ReasonCodeEdit from '/imports/client/pages/reasonCodes/ReasonCodeEdit';
 route('/reason-codes/list', ReasonCodesContainer);
 route('/reason-code/create', ReasonCodeCreate);
 route('/reason-code/:id/edit', ReasonCodeEdit);
+
+//Substates 
+import SubStatesListContainer from '/imports/client/pages/subStates/SubStatesListContainer';
+
+route('/substate/list', SubStatesListContainer)

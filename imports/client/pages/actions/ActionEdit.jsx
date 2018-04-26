@@ -2,9 +2,6 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField, LongTextField, SelectField} from '/imports/ui/forms';
 import ActionSchema from '/imports/api/actions/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
-import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
-import {LabelSubstates} from '/imports/api/tasks/enums/substates.js';
-import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 import ReasonCodesBlock from './components/ReasonCodesBlock';
 
 export default class ActionEdit extends React.Component {
@@ -32,9 +29,8 @@ export default class ActionEdit extends React.Component {
 
     getOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            const labelPrefix = findStateBySubstate(StatesSubstates, key);
-            const label = `${labelPrefix}: ${value}`;
-            return {value: key, label: label};
+            const label = `${value.stateName}: ${value.name}`;
+            return {value: value.name.replace(/ /g,"_"), label: label};
         })
     };
 
@@ -71,9 +67,9 @@ export default class ActionEdit extends React.Component {
     };
 
     render() {
-        const {action} = this.props;
+        const {action, subStates} = this.props;
         const {checked} = this.state;
-        const substates = this.getOptions(LabelSubstates);
+        const substates = this.getOptions(subStates);
 
         return (
             <div className="create-form">

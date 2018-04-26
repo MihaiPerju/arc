@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import ActionSchema from "../../../api/actions/schemas/schema";
 import {AutoForm, AutoField, ErrorField, LongTextField, SelectField} from '/imports/ui/forms';
 import Notifier from "../../lib/Notifier";
-import {LabelSubstates} from "../../../api/tasks/enums/substates";
-import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 
 export default class ActionCreate extends Component {
     constructor() {
@@ -26,9 +24,8 @@ export default class ActionCreate extends Component {
 
     getOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            const labelPrefix = findStateBySubstate(StatesSubstates, key);
-            const label = `${labelPrefix}: ${value}`;
-            return {value: key, label: label};
+            const label = `${value.stateName}: ${value.name}`;
+            return {value: value.name.replace(/ /g,"_"), label: label};
         })
     };
 
@@ -50,7 +47,8 @@ export default class ActionCreate extends Component {
     };
 
     render() {
-        const substates = this.getOptions(LabelSubstates);
+        const {subStates} = this.props;
+        const substates = this.getOptions(subStates);
         const {checked} = this.state;
         return (
             <div className="create-form action-create-form">
