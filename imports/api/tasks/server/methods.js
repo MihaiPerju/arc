@@ -176,7 +176,7 @@ Meteor.methods({
     },
 
     'tasks.increment_view_count'(_id) {
-        Tasks.update({ _id: _id },
+        Tasks.update({ _id },
             { $inc: { numberOfViews: 1 } }
         );
     },
