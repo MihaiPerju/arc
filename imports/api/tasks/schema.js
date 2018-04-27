@@ -57,7 +57,7 @@ export default new SimpleSchema({
         type: Array,
         optional: true,
         autoValue: function() {
-            const arrayLen = this.value.length;
+            const arrayLen = this.value ? this.value.length : 0;
             for(let i = 0; i < arrayLen; i++) {
                 let index = i;
                 const objectValues = Object.values(this.value[i]);
@@ -144,7 +144,7 @@ export default new SimpleSchema({
         optional: true
     },
     numberOfViews: {
-        type: Number,
+        type: SimpleSchema.Integer,
         optional: true,
         defaultValue: 0
     }

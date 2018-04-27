@@ -5,21 +5,26 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import { SelectField } from "/imports/ui/forms";
+import DatePicker from 'react-datepicker';
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import {LabelSubstates} from "/imports/api/tasks/enums/substates";
+import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 
 export default class AccountSearchBar extends Component {
-    constructor() {
-        super();
-        this.state = {
-            active: false,
-            filter: false,
-            dropdown: false,
-            selectAll: false,
-            facilityOptions: [],
-            clientOptions: []
-        };
-    }
+  constructor() {
+    super();
+    this.state = {
+      active: false,
+      filter: false,
+      dropdown: false,
+      selectAll: false,
+      facilityOptions: [],
+      clientOptions: [],
+      dischrgDate: null,
+      fbDate: null
+    };
+  }
 
     componentWillMount() {
         const facilityOptions = [];
@@ -41,7 +46,36 @@ export default class AccountSearchBar extends Component {
                 this.setState({ clientOptions });
             }
         });
-    }
+  }
+
+  manageFilterBar() {
+    const { active, filter } = this.state;
+    this.setState({
+      active: !active,
+      filter: !filter
+    });
+    this.props.decrease();
+  }
+
+  onHandleChange(field, value) {
+      if (field === "acctNum") {
+          FlowRouter.setQueryParams({acctNum: value});
+      } else if (field === "clientId") {
+          FlowRouter.setQueryParams({clientId: value});
+      } else if (field === "facilityId") {
+          FlowRouter.setQueryParams({facilityId: value});
+      } else if (field === "facCode") {
+          FlowRouter.setQueryParams({facCode: value});
+      } else if (field === "ptType") {
+          FlowRouter.setQueryParams({ptType: value});
+      } else if (field === "acctBal") {
+          FlowRouter.setQueryParams({acctBal: value});
+      } else if (field === "finClass") {
+          FlowRouter.setQueryParams({finClass: value});
+      } else if (field === "substate") {
+          FlowRouter.setQueryParams({substate: value});
+      }
+  }
 
     manageFilterBar() {
         const { active, filter } = this.state;
@@ -50,16 +84,6 @@ export default class AccountSearchBar extends Component {
             filter: !filter
         });
         this.props.decrease();
-    }
-
-    onHandleChange(field, value) {
-        if (field === "acctNum") {
-            FlowRouter.setQueryParams({ acctNum: value });
-        } else if (field === "clientId") {
-            FlowRouter.setQueryParams({ clientId: value });
-        } else if (field === "facilityId") {
-            FlowRouter.setQueryParams({ facilityId: value });
-        }
     }
 
     openDropdown = () => {
@@ -85,15 +109,44 @@ export default class AccountSearchBar extends Component {
         this.node = node;
     };
 
-    selectAll = () => {
-        const { selectAll } = this.state;
-        this.setState({
-            selectAll: !selectAll
-        });
-    };
-    render() {
-        const {filter, active, dropdown, selectAll, facilityOptions, clientOptions} = this.state;
-        const {options, btnGroup, deleteAction, dropdownOptions, icons, getProperAccounts, assignFilterArr} = this.props;
+  getOptions = (enums) => {
+    return _.map(enums, (value, key) => {
+      const labelPrefix = findStateBySubstate(StatesSubstates, key);
+      const label = `${labelPrefix}: ${value}`;
+      return {value: key, label: label};
+    })
+  };
+
+  onDateSelect = (date, field) => {
+    if(field === 'dischrgDate') {
+      this.setState({ dischrgDate: date });
+      FlowRouter.setQueryParams({ dischrgDate: new Date(date) });
+    } else if(field === 'fbDate') {
+      this.setState({ fbDate: date });
+      FlowRouter.setQueryParams({ fbDate: new Date(date) });
+    }
+  }
+
+  render() {
+    const {
+      filter,
+      active,
+      dropdown,
+      selectAll,
+      facilityOptions,
+      clientOptions,
+      dischrgDate,
+      fbDate
+    } = this.state;
+    const {
+      options,
+      btnGroup,
+      deleteAction,
+      dropdownOptions,
+      icons,
+      getProperAccounts,
+        assignFilterArr
+    } = this.props;
 
         const classes = classNames({
                 'select-type': true,
@@ -105,59 +158,131 @@ export default class AccountSearchBar extends Component {
             'active': selectAll
         });
 
-        return (
-            <AutoForm ref="filters" onChange={this.onHandleChange.bind(this)} schema={schema}>
-                <div className="search-bar">
-                    <div className={classes} ref={this.nodeRef}>
-                        <div className={btnSelectClasses} onClick={this.selectAll}/>
-                        <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
-                            <i className="icon-angle-down"/>
-                        </div>
-                        {
-                            dropdown &&
-                            <Dropdown toggleDropdown={this.openDropdown} getProperAccounts={getProperAccounts}
-                                      options={dropdownOptions} assignFilterArr={assignFilterArr}/>
-                        }
-                    </div>
-                    <div className="search-bar__wrapper">
-                        {btnGroup ? <BtnGroup getProperAccounts={getProperAccounts} icons={icons}
-                                              deleteAction={deleteAction}/> : null}
-                        <div className={btnGroup ? 'search-input' : 'search-input full__width'}>
-                            <div className="form-group">
-                                <AutoField labelHidden={true} name="acctNum" placeholder="Search by Account Number"/>
-                            </div>
-                        </div>
+          const substates = this.getOptions(LabelSubstates);
 
-                        <div className={active ? 'filter-block active' : 'filter-block'}
-                             onClick={this.manageFilterBar.bind(this)}>
-                            <button><i className="icon-filter"/></button>
-                        </div>
-                    </div>
-                </div>
-                {
-                    filter &&
-                    <div className="filter-bar">
-                        <div className="select-wrapper">
-                            <div className="select-form">
-                                <SelectField
-                                    labelHidden={true}
-                                    name="clientId"
-                                    options={clientOptions}
-                                />
-                            </div>
-                            <div className="select-form">
-                                <SelectField
-                                    labelHidden={true}
-                                    name="facilityId"
-                                    options={facilityOptions}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                }
-            </AutoForm>
-        );
-    }
+    return (
+      <AutoForm
+        ref="filters"
+        onChange={this.onHandleChange.bind(this)}
+        schema={schema}
+      >
+        <div className="search-bar">
+          <div className={classes} ref={this.nodeRef}>
+            <div className={btnSelectClasses} onClick={this.selectAll} />
+            <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
+              <i className="icon-angle-down" />
+            </div>
+            {dropdown && (
+              <Dropdown
+                toggleDropdown={this.openDropdown}
+                getProperAccounts={getProperAccounts}
+                options={dropdownOptions}
+                assignFilterArr={assignFilterArr}
+                />
+            )}
+          </div>
+          <div className="search-bar__wrapper">
+            {btnGroup ? (
+              <BtnGroup
+                getProperAccounts={getProperAccounts}
+                icons={icons}
+                deleteAction={deleteAction}
+              />
+            ) : null}
+            <div
+              className={btnGroup ? "search-input" : "search-input full__width"}
+            >
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="acctNum"
+                  placeholder="Search by Account Number"
+                />
+              </div>
+            </div>
+
+            <div
+              className={active ? "filter-block active" : "filter-block"}
+              onClick={this.manageFilterBar.bind(this)}
+            >
+              <button>
+                <i className="icon-filter" />
+              </button>
+            </div>
+          </div>
+        </div>
+        {filter && (
+          <div className="filter-bar">
+            <div className="select-wrapper">
+              <div className="select-form">
+                <SelectField
+                  labelHidden={true}
+                  name="clientId"
+                  options={clientOptions}
+                />
+              </div>
+              <div className="select-form">
+                <SelectField
+                  labelHidden={true}
+                  name="facilityId"
+                  options={facilityOptions}
+                />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="facCode"
+                  placeholder="Search by Facility Code"
+                />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="ptType"
+                  placeholder="Search by Patient Type"
+                />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="acctBal"
+                  placeholder="Search by Account Balance"
+                />
+              </div>
+              <div className="form-group">
+                <DatePicker
+                  placeholderText="Search by Discharge Date"
+                  selected={dischrgDate}
+                  onChange={(date) => this.onDateSelect(date, 'dischrgDate')}
+                />
+              </div>
+              <div className="form-group">
+                <DatePicker
+                  placeholderText="Search by Last Bill Date"
+                  selected={fbDate}
+                  onChange={(date) => this.onDateSelect(date, 'fbDate')}
+                />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="finClass"
+                  placeholder="Search by Financial Class"
+                />
+              </div>
+              <div className="select-form">
+                <SelectField
+                  placeholder="Substate"
+                  labelHidden={true}
+                  options={substates}
+                  name="substate"/>
+              </div>
+            </div>
+          </div>
+        )}
+      </AutoForm>
+    );
+  }
 }
 
 class BtnGroup extends Component {
@@ -238,19 +363,44 @@ class BtnGroup extends Component {
 }
 
 const schema = new SimpleSchema({
-    facilityId: {
-        type: String,
-        optional: true,
-        label: "Filter by Facility"
-    },
-    clientId: {
-        type: String,
-        optional: true,
-        label: "Filter by Client"
-    },
-    acctNum: {
-        type: String,
-        optional: true,
-        label: "Search by Account Number"
-    }
+  facilityId: {
+    type: String,
+    optional: true,
+    label: "Filter by Facility"
+  },
+  clientId: {
+    type: String,
+    optional: true,
+    label: "Filter by Client"
+  },
+  acctNum: {
+    type: String,
+    optional: true,
+    label: "Search by Account Number"
+  },
+  facCode: {
+    type: String,
+    optional: true,
+    label: "Search by Facility Code"
+  },
+  ptType: {
+    type: String,
+    optional: true,
+    label: "Search by Patient Type"
+  },
+  acctBal: {
+    type: SimpleSchema.Integer,
+    optional: true,
+    label: "Search by Account Balance"
+  },
+  finClass: {
+    type: String,
+    optional: true,
+    label: "Search by Financial Class"
+  },
+  substate: {
+    type: String,
+    optional: true,
+    label: "Search by SubState"
+  },
 });

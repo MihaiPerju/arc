@@ -1,3 +1,4 @@
+import moment from 'moment';
 import stateEnum from "/imports/api/tasks/enums/states";
 
 export default class PagerService {
@@ -11,13 +12,20 @@ export default class PagerService {
         return query.clone(params);
     }
 
-    static getAccountQueryParams() {
-        const page = FlowRouter.getQueryParam("page");
-        const assign = FlowRouter.getQueryParam("assign");
-        const facilityId = FlowRouter.getQueryParam("facilityId");
-        const clientId = FlowRouter.getQueryParam("clientId");
-        const acctNum = FlowRouter.getQueryParam("acctNum");
-        let state = FlowRouter.current().params.state;
+  static getAccountQueryParams() {
+    const page = FlowRouter.getQueryParam("page");
+    const assign = FlowRouter.getQueryParam("assign");
+    const facilityId = FlowRouter.getQueryParam("facilityId");
+    const clientId = FlowRouter.getQueryParam("clientId");
+    const acctNum = FlowRouter.getQueryParam("acctNum");
+    const facCode = FlowRouter.getQueryParam("facCode");
+    const ptType = FlowRouter.getQueryParam("ptType");
+    const acctBal = FlowRouter.getQueryParam("acctBal");
+    const finClass = FlowRouter.getQueryParam("finClass");
+    const substate = FlowRouter.getQueryParam("substate");
+    const dischrgDate = FlowRouter.getQueryParam("dischrgDate");
+    const fbDate = FlowRouter.getQueryParam("fbDate");
+    let state = FlowRouter.current().params.state;
 
         if (stateEnum.ACTIVE.toLowerCase() === state && acctNum) {
             state = "";
@@ -33,29 +41,31 @@ export default class PagerService {
     }
 
     static getProperAccounts(params, assign) {
+        console.log(params)
+        console.log(assign)
         if (assign === 'none') { // maybe remove
             _.extend(params.filters, {
                 assigneeId: {$exists: true},
                 workQueue: {$exists: true}
             });
         } else if (assign) {
-            const arr = assign.split(",");
-            if (_.contains(arr, "assigneeId")){
+            const filterArr = assign.split(",");
+            if (_.contains(filterArr, "assigneeId")){
                 _.extend(params.filters, {
                     $or: [
-                        {workQueue: {$in: arr}},
+                        {workQueue: {$in: filterArr}},
                         {
                             assigneeId: {$exists: true}
                         }
                     ]
                 });
             } else {
-                _.extend(params.filters, {workQueue: {$in: arr}});
+                _.extend(params.filters, {workQueue: {$in: filterArr}});
             }
         }
     }
 
-    static getAccountFilters(params, state, { acctNum, facilityId, clientId }) {
+    static getAccountFilters(params, state, { acctNum, facilityId, clientId, facCode, ptType, acctBal, finClass, substate, dischrgDate, fbDate }) {
         if (state === "unassigned") {
             _.extend(params, {
                 filters: {
@@ -94,6 +104,37 @@ export default class PagerService {
         }
         if (clientId) {
             _.extend(params.filters, { clientId });
+        }
+        if (facCode) {
+            _.extend(params.filters, { facCode });
+        }
+        if (ptType) {
+            _.extend(params.filters, { ptType });
+        }
+        if (acctBal) {
+            _.extend(params.filters, { acctBal });
+        }
+        if (finClass) {
+            _.extend(params.filters, { finClass });
+        }
+        if (substate) {
+            _.extend(params.filters, { substate });
+        }
+        if (dischrgDate) {
+            _.extend(params.filters, {
+                dischrgDate: {
+                    $gte: new Date(moment(new Date(dischrgDate)).startOf("day")),
+                    $lt: new Date(moment(new Date(dischrgDate)).startOf("day").add(1, 'day'))
+                }
+            });
+        }
+        if (fbDate) {
+            _.extend(params.filters, {
+                fbDate: {
+                    $gte: new Date(moment(new Date(fbDate)).startOf("day")),
+                    $lt: new Date(moment(new Date(fbDate)).startOf("day").add(1, 'day'))
+                }
+            });
         }
     }
 
