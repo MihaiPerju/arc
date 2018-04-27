@@ -35,7 +35,7 @@ TaskListQuery.expose({
         if (Roles.userIsInRole(userId, RolesEnum.REP)) {
             //Getting tags and accounts from within the work queue
             let {tagIds} = Users.findOne({_id: userId});
-            if (tagIds) {
+            if (!tagIds) {
                 tagIds = [];
             }
 
