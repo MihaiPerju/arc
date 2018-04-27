@@ -7,9 +7,8 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import { SelectField } from "/imports/ui/forms";
 import DatePicker from 'react-datepicker';
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
+import subStateQuery from "/imports/api/subStates/queries/listSubStates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
-import {LabelSubstates} from "/imports/api/tasks/enums/substates";
-import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -22,13 +21,15 @@ export default class AccountSearchBar extends Component {
       facilityOptions: [],
       clientOptions: [],
       dischrgDate: null,
-      fbDate: null
+      fbDate: null,
+      subStates: []
     };
   }
 
   componentWillMount() {
     const facilityOptions = [];
     const clientOptions = [];
+    const subStates = [];
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -46,6 +47,15 @@ export default class AccountSearchBar extends Component {
         this.setState({ clientOptions });
       }
     });
+    subStateQuery.clone().fetch((err, data) => {
+      if(!err) {
+        data.map(substates => {
+          const label = `${substates.stateName}: ${substates.name}`;
+          subStates.push({ label: label, value: substates.name.replace(/ /g,"_") });
+        });
+        this.setState({ subStates });
+      }
+  })
   }
 
   manageFilterBar() {
@@ -107,14 +117,6 @@ export default class AccountSearchBar extends Component {
     });
   };
 
-  getOptions = (enums) => {
-    return _.map(enums, (value, key) => {
-      const labelPrefix = findStateBySubstate(StatesSubstates, key);
-      const label = `${labelPrefix}: ${value}`;
-      return {value: key, label: label};
-    })
-  };
-
   onDateSelect = (date, field) => {
     if(field === 'dischrgDate') {
       this.setState({ dischrgDate: date });
@@ -134,7 +136,8 @@ export default class AccountSearchBar extends Component {
       facilityOptions,
       clientOptions,
       dischrgDate,
-      fbDate
+      fbDate,
+      subStates
     } = this.state;
     const {
       options,
@@ -153,8 +156,6 @@ export default class AccountSearchBar extends Component {
       "btn-select": true,
       active: selectAll
     });
-
-    const substates = this.getOptions(LabelSubstates);
 
     return (
       <AutoForm
@@ -269,7 +270,7 @@ export default class AccountSearchBar extends Component {
                 <SelectField
                   placeholder="Substate"
                   labelHidden={true}
-                  options={substates}
+                  options={subStates}
                   name="substate"/>
               </div>
             </div>
