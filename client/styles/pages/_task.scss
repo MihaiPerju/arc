@@ -940,6 +940,35 @@
 }
 
 //Insurance Block
+.add-insurance__section {
+  position: relative;
+  .btn-collapse {
+    position: absolute;
+    top: 2px;
+    right: 0;
+    cursor: pointer;
+    color: $light-grey;
+    padding: 2px 20px 2px 5px;
+    user-select: none;
+
+    &.rotate {
+      &:before {
+        transform: rotate(180deg);
+      }
+    }
+    &:before {
+      content: '\f106';
+      font-family: $font-icon;
+      position: absolute;
+      top: 3px;
+      right: 5px;
+    }
+    &:hover {
+      color: $dark-grey
+    }
+  }
+}
+
 .insurance-block {
   .add-insurance {
     display: block;

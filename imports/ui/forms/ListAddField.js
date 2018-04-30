@@ -6,15 +6,20 @@ const ListAdd = ({
     disabled,
     parent,
     value,
+    showListField,
     ...props
 }) => {
     const limitNotReached = !disabled && !(parent.maxCount <= value.length);
+    const handleClick = () => {
+        limitNotReached && parent.onChange(parent.value.concat([value]));
+        showListField();
+    }
 
     return (
         <span
             className="insurance-action add"
             {...filterDOMProps(props)}
-            onClick={() => limitNotReached && parent.onChange(parent.value.concat([value]))}
+            onClick={handleClick}
         >
             +
         </span>
