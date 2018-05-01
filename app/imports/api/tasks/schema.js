@@ -55,10 +55,30 @@ export default new SimpleSchema({
     },
     insurances: {
         type: Array,
-        optional: true
+        optional: true,
+        autoValue: function() {
+            const arrayLen = this.value ? this.value.length : 0;
+            for(let i = 0; i < arrayLen; i++) {
+                let index = i;
+                const objectValues = Object.values(this.value[i]);
+                const objectValuesLen = objectValues.length;
+                let isNull = true;
+                for(let j = 0; j < objectValuesLen; j++) {
+                    if(objectValues[j]) {
+                        isNull = false;
+                        index = null;
+                        break;
+                    }
+                }
+                if(isNull && index) {
+                    this.value.splice(index, 1);
+                }
+            }
+        }
     },
     'insurances.$': {
-        type: insuranceSchema
+        type: insuranceSchema,
+        optional: true
     },
     "insurances.$.zip": {
         type: SimpleSchema.Integer,
@@ -71,8 +91,7 @@ export default new SimpleSchema({
     },
     substate: {
         type: String,
-        defaultValue: Substates.NEW,
-        allowedValues: _.map(Substates, (value, key) => (value))
+        defaultValue: Substates.NEW
     },
     facilityId: {
         type: String
@@ -124,7 +143,7 @@ export default new SimpleSchema({
         optional: true
     },
     numberOfViews: {
-        type: Number,
+        type: SimpleSchema.Integer,
         optional: true,
         defaultValue: 0
     }

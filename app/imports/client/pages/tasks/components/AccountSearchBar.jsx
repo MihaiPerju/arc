@@ -5,7 +5,9 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import { SelectField } from "/imports/ui/forms";
+import DatePicker from 'react-datepicker';
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
+import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 
 export default class AccountSearchBar extends Component {
@@ -17,13 +19,17 @@ export default class AccountSearchBar extends Component {
       dropdown: false,
       selectAll: false,
       facilityOptions: [],
-      clientOptions: []
+      clientOptions: [],
+      dischrgDate: null,
+      fbDate: null,
+      substates: []
     };
   }
 
   componentWillMount() {
     const facilityOptions = [];
     const clientOptions = [];
+    const substates = [];
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -41,6 +47,15 @@ export default class AccountSearchBar extends Component {
         this.setState({ clientOptions });
       }
     });
+    substateQuery.clone().fetch((err, res) => {
+      if(!err) {
+        res.map(substate => {
+          const label = `${substate.stateName}: ${substate.name}`;
+          substates.push({ label: label, value: substate.name.replace(/ /g,"_") });
+        });
+        this.setState({ substates });
+      }
+  })
   }
 
   manageFilterBar() {
@@ -59,6 +74,16 @@ export default class AccountSearchBar extends Component {
       FlowRouter.setQueryParams({ clientId: value });
     } else if (field === "facilityId") {
       FlowRouter.setQueryParams({ facilityId: value });
+    } else if (field === "facCode") {
+      FlowRouter.setQueryParams({ facCode: value });
+    } else if (field === "ptType") {
+      FlowRouter.setQueryParams({ ptType: value });
+    } else if (field === "acctBal") {
+      FlowRouter.setQueryParams({ acctBal: value });
+    } else if (field === "finClass") {
+      FlowRouter.setQueryParams({ finClass: value });
+    } else if (field === "substate") {
+      FlowRouter.setQueryParams({ substate: value });
     }
   }
 
@@ -92,6 +117,25 @@ export default class AccountSearchBar extends Component {
     });
   };
 
+  getOptions = (enums) => {
+    return _.map(enums, (value, key) => {
+      const labelPrefix = findStateBySubstate(StatesSubstates, key);
+      const label = `${labelPrefix}: ${value}`;
+      return {value: key, label: label};
+    })
+  };
+
+  onDateSelect = (selectedDate, field) => {
+    const date = selectedDate ? new Date(selectedDate).toString() : "";
+    if(field === 'dischrgDate') {
+      this.setState({ dischrgDate: selectedDate });
+      FlowRouter.setQueryParams({ dischrgDate: date });
+    } else if(field === 'fbDate') {
+      this.setState({ fbDate: selectedDate });
+      FlowRouter.setQueryParams({ fbDate: date });
+    }
+  }
+
   render() {
     const {
       filter,
@@ -99,7 +143,10 @@ export default class AccountSearchBar extends Component {
       dropdown,
       selectAll,
       facilityOptions,
-      clientOptions
+      clientOptions,
+      dischrgDate,
+      fbDate,
+      substates
     } = this.state;
     const {
       options,
@@ -185,6 +232,55 @@ export default class AccountSearchBar extends Component {
                   name="facilityId"
                   options={facilityOptions}
                 />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="facCode"
+                  placeholder="Search by Facility Code"
+                />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="ptType"
+                  placeholder="Search by Patient Type"
+                />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="acctBal"
+                  placeholder="Search by Account Balance"
+                />
+              </div>
+              <div className="form-group">
+                <DatePicker
+                  placeholderText="Search by Discharge Date"
+                  selected={dischrgDate}
+                  onChange={(date) => this.onDateSelect(date, 'dischrgDate')}
+                />
+              </div>
+              <div className="form-group">
+                <DatePicker
+                  placeholderText="Search by Last Bill Date"
+                  selected={fbDate}
+                  onChange={(date) => this.onDateSelect(date, 'fbDate')}
+                />
+              </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="finClass"
+                  placeholder="Search by Financial Class"
+                />
+              </div>
+              <div className="select-form">
+                <SelectField
+                  placeholder="Substate"
+                  labelHidden={true}
+                  options={substates}
+                  name="substate"/>
               </div>
             </div>
           </div>
@@ -286,5 +382,30 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by Account Number"
-  }
+  },
+  facCode: {
+    type: String,
+    optional: true,
+    label: "Search by Facility Code"
+  },
+  ptType: {
+    type: String,
+    optional: true,
+    label: "Search by Patient Type"
+  },
+  acctBal: {
+    type: SimpleSchema.Integer,
+    optional: true,
+    label: "Search by Account Balance"
+  },
+  finClass: {
+    type: String,
+    optional: true,
+    label: "Search by Financial Class"
+  },
+  substate: {
+    type: String,
+    optional: true,
+    label: "Search by Substate"
+  },
 });

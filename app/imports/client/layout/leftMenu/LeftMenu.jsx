@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import moment from 'moment';
 import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
@@ -9,12 +10,47 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import RoutesService from './RoutesService';
 
-class LeftMenu extends Component {
+export class LeftMenu extends Component {
     constructor() {
         super();
         this.state = {
-            collapse: false
+            collapse: false,
+            unassigned: 0,
+            escalations: 0,
+            tickles: 0
         }
+    }
+
+    componentWillMount() {
+        const that = this;
+        accountListQuery.clone({
+            filters: {assigneeId: {$exists: false}, workQueue: {$exists: false}}
+        }).getCount((err, count) => {
+            if(!err) {
+                that.setState({unassigned: count})
+            }
+        });
+
+        accountListQuery.clone({filters: {escalateReason: {$exists: true }}}).getCount((err, count) => {
+            if(!err) {
+                that.setState({escalations: count})
+            }
+        });
+
+        const today = moment();
+        let startOfDay = moment(today).startOf("day");
+        startOfDay = startOfDay.add(1, "day");
+
+        accountListQuery.clone({
+            filters: {
+                "tickleDate":
+                { "$lt" : new Date(moment(startOfDay).format()) }
+            }
+        }).getCount((err, count) => {
+            if(!err) {
+                that.setState({tickles: count})
+            }
+        });
     }
 
     collapseMenu = () => {
@@ -25,20 +61,14 @@ class LeftMenu extends Component {
     };
 
     render() {
-        const {data, loading, error, currRoute} = this.props;
-
-        const {collapse} = this.state;
+        const {collapse, unassigned, escalations, tickles} = this.state;
 
         const menuClasses = classNames({
             'left-menu': true,
             'collapsed': collapse
         });
-        const counters = RoutesService.countBadges(data);
-        let routes = RoutesService.getRoutesByRole(counters);
 
-        if (loading) {
-            return <Loading/>
-        }
+        let routes = RoutesService.getRoutesByRole({unassigned, escalations, tickles});
 
         return (
             <div>
@@ -54,8 +84,3 @@ class LeftMenu extends Component {
         )
     }
 }
-
-export default withQuery((props) => {
-    const currRoute = FlowRouter.current().path;
-    return accountListQuery.clone({});
-}, {reactive: true})(LeftMenu)

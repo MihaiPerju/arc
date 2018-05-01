@@ -46,4 +46,13 @@ export function findStateBySubstate(statesWithSubstates, substate) {
     }
 }
 
+const StateList = [
+    States.HOLD,
+    States.ARCHIVED,
+    States.ACTIVE,
+    States.ESCALATED
+];
+
+export { StateList };
+
 export default States;

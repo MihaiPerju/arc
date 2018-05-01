@@ -90,7 +90,7 @@ export default class RunReports {
       "insurances[3].state": Headers.state.label + " 4",
       "insurances[3].policy": Headers.policy.label + " 4",
       "insurances[3].zip": Headers.zip.label + " 4",
-      "insurances[3].phone": Headers.phone.label + " 4",
+      "insurances[3].phone": Headers.phone.label + " 4"
     };
   }
 

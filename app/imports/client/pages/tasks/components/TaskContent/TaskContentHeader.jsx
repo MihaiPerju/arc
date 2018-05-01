@@ -63,7 +63,6 @@ export default class TaskContentHeader extends Component {
 
   render() {
     const { task, openMetaData } = this.props;
-    console.log(task);
     const options = this.getOptions(
       task && task.facility && task.facility.users
     );
