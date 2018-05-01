@@ -52,7 +52,7 @@ class ReasonCodesBlock extends Component {
         return (
             <div className="action-block reason-code-block">
                 <div className="header__block">
-                    <div className="title-block text-uppercase">Reason Codes</div>
+                    <div className="title-block text-uppercase">Global Reason Codes</div>
                 </div>
                 <div className="main__block">
                     <div className="add-content" onClick={this.onAddReasonCode}>
@@ -143,7 +143,8 @@ export default withQuery((props) => {
     const {action} = props;
     return query.clone({
         filters: {
-            actionId: action._id
+            actionId: action._id,
+            managerId:null
         }
     });
 }, {reactive: true})(ReasonCodesBlock)
