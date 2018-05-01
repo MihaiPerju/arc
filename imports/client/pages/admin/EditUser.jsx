@@ -162,5 +162,6 @@ const EditSchema = new SimpleSchema({
 
 export default withQuery((props) => {
     const {user} = props;
-    return TagsListQuery.clone({filters: {_id: {$in: user.tagIds}}});
+    const ids = user.tagIds || [];
+    return TagsListQuery.clone({filters: {_id: {$in: ids}}});
 }, {reactive: true})(EditUser);
