@@ -88,7 +88,7 @@ export class ReportHeader extends Component {
   downloadReport = () => {
     const { data } = this.props;
     const { reportId, _id } = data[0];
-    window.open("/report/" + reportId + "/" + _id);
+    window.open("/report/" + reportId);
   };
 
   getRunButton(status) {

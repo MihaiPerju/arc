@@ -11,7 +11,6 @@ Meteor.startup(() => {
   const path = os.tmpDir() + FoldersEnum.APP_FOLDER;
   if (!fs.existsSync(path)) {
     // Do something
-    console.log(path);
     fs.mkdirSync(path);
     fs.mkdirSync(path + FoldersEnum.REPORTS_FOLDER);
   }
