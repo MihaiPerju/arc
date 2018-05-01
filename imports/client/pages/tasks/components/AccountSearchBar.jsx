@@ -117,13 +117,26 @@ export default class AccountSearchBar extends Component {
     });
   };
 
+<<<<<<< HEAD
   onDateSelect = (date, field) => {
+=======
+  getOptions = (enums) => {
+    return _.map(enums, (value, key) => {
+      const labelPrefix = findStateBySubstate(StatesSubstates, key);
+      const label = `${labelPrefix}: ${value}`;
+      return {value: key, label: label};
+    })
+  };
+
+  onDateSelect = (selectedDate, field) => {
+    const date = selectedDate ? new Date(selectedDate).toString() : "";
+>>>>>>> 9a7ce24a6123d1278a1f69d2c3daf7a62a470e9c
     if(field === 'dischrgDate') {
-      this.setState({ dischrgDate: date });
-      FlowRouter.setQueryParams({ dischrgDate: new Date(date) });
+      this.setState({ dischrgDate: selectedDate });
+      FlowRouter.setQueryParams({ dischrgDate: date });
     } else if(field === 'fbDate') {
-      this.setState({ fbDate: date });
-      FlowRouter.setQueryParams({ fbDate: new Date(date) });
+      this.setState({ fbDate: selectedDate });
+      FlowRouter.setQueryParams({ fbDate: date });
     }
   }
 
