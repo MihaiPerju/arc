@@ -66,7 +66,7 @@ export default class ImportingRules extends React.Component {
         return result;
     }
 
-    onCollapse = () => {
+    toggleInsurances = () => {
         const {collapse} = this.state;
 
         this.setState({
@@ -74,7 +74,7 @@ export default class ImportingRules extends React.Component {
         })
     }
 
-    showListField = () => {
+    showInsurances = () => {
         this.setState({
             collapse: false
         })
@@ -120,12 +120,12 @@ export default class ImportingRules extends React.Component {
                                 {
                                     schema._schemaKeys.includes("insurances") ? (
                                         <div className="add-insurance__section">
-                                            <span className={btnCollapseClasses} onClick={this.onCollapse}>
+                                            <span className={btnCollapseClasses} onClick={this.toggleInsurances}>
                                                 { collapse ? 'show' : 'hide' }
                                             </span>
                                             <InsuranceRules
                                                 collapse={collapse}
-                                                showListField={this.showListField}
+                                                showListField={this.showInsurances}
                                             />
                                         </div>
                                         )
