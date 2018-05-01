@@ -62,8 +62,8 @@ export default class TagCreate extends Component {
                                     <SelectField placeholder="Select Client"
                                                 labelHidden={true}
                                                 options={clientOptns}
-                                                name="client"/>
-                                    <ErrorField name="client"/>
+                                                name="clientId"/>
+                                    <ErrorField name="clientId"/>
                                 </div>
                             </div>
                         </AutoForm>

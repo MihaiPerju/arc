@@ -39,8 +39,9 @@ export default class CreateEditTags extends Component {
     onSubmitForm = (model) => {
         const {tags} = this.props;
 
-        Meteor.call('tag.create', model, (err, data) => {
+        Meteor.call('tag.create', model, (err, tagId) => {
             if (!err) {
+                this.addTagToUser(tagId)
                 Notifier.success('Tag successfully created!');
                 this.refs.tagForm.reset();
             } else {
@@ -48,6 +49,15 @@ export default class CreateEditTags extends Component {
             }
         });
     };
+
+    addTagToUser = (tagId) => {
+        const {user} = this.props;
+        Meteor.call('user.addTag', {_id: user._id, tagId}, (err, data) => {
+            if (err) {
+                Notifier.error(err.reason);
+            }
+        });
+    }
 
     getOptions = (enums) => {
         return _.map(enums, (value, key) => {
@@ -91,8 +101,8 @@ export default class CreateEditTags extends Component {
                                                     <SelectField placeholder="Select Client"
                                                                 labelHidden={true}
                                                                 options={clientOptns}
-                                                                name="client"/>
-                                                    <ErrorField name="client"/>
+                                                                name="clientId"/>
+                                                    <ErrorField name="clientId"/>
                                                 </div>
                                             </div>
                                             <div className="form-wrapper">

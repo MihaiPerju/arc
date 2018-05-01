@@ -4,7 +4,7 @@ import Notifier from "/imports/client/lib/Notifier";
 export default class TagContentSingle extends Component {
 
     addTag = (_id, tagId) => {
-        Meteor.call('tag.addTag', {_id, tagId}, (err, res) => {
+        Meteor.call('user.addTag', {_id, tagId}, (err, res) => {
             if(!err) {
                 Notifier.success('Successfully added !')
             }
@@ -12,7 +12,7 @@ export default class TagContentSingle extends Component {
     }
 
     removeTag = (_id, tagId) => {
-        Meteor.call('tag.removeTag', {_id, tagId}, (err, res) => {
+        Meteor.call('user.removeTag', {_id, tagId}, (err, res) => {
             if(!err) {
                 Notifier.success('removed successfully !')
             }

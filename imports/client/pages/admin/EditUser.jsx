@@ -13,6 +13,7 @@ import TagsService from './services/TagsService';
 import TagsListQuery from '/imports/api/tags/queries/listTags.js';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import queryClients from '../../../api/clients/queries/listClients';
+import RolesEnum from '/imports/api/users/enums/roles';
 
 class EditUser extends Component {
     constructor() {
@@ -85,7 +86,6 @@ class EditUser extends Component {
         const {clients} = this.state;
         user.email = user.emails[0].address;
         const tags = this.getTagList();
-
 
         return (
             <div className="create-form">
@@ -161,5 +161,6 @@ const EditSchema = new SimpleSchema({
 });
 
 export default withQuery((props) => {
-    return TagsListQuery.clone();
+    const {user} = props;
+    return TagsListQuery.clone({filters: {_id: {$in: user.tagIds}}});
 }, {reactive: true})(EditUser);

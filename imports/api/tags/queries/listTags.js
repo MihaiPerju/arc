@@ -7,6 +7,6 @@ export default Tags.createNamedQuery('listTags', {
     },
     $paginate: true,
     name: 1,
-    client: 1,
+    clientId: 1,
     _id: 1
 });

@@ -4,7 +4,7 @@ export default new SimpleSchema({
     name: {
         type: String
     },
-    client: {
+    clientId: {
         type: String
     }
 });
