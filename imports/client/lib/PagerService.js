@@ -41,8 +41,6 @@ export default class PagerService {
     }
 
     static getProperAccounts(params, assign) {
-        console.log(params)
-        console.log(assign)
         if (assign === 'none') { // maybe remove
             _.extend(params.filters, {
                 assigneeId: {$exists: true},
