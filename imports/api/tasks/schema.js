@@ -91,8 +91,7 @@ export default new SimpleSchema({
     },
     substate: {
         type: String,
-        defaultValue: Substates.NEW,
-        allowedValues: _.map(Substates, (value, key) => (value))
+        defaultValue: Substates.NEW
     },
     facilityId: {
         type: String

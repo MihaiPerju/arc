@@ -12,6 +12,7 @@ import {objectFromArray} from '/imports/api/utils';
 import Notifier from '/imports/client/lib/Notifier';
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
+import substateQuery from '/imports/api/substates/queries/listSubstates';
 
 class ActionListContainer extends Pager {
     constructor() {
@@ -23,13 +24,19 @@ class ActionListContainer extends Pager {
             page: 1,
             perPage: 13,
             total: 0,
-            range: {}
+            range: {},
+            substates: []
         });
         this.query = query;
     }
 
     componentWillMount() {
         this.nextPage(0);
+        substateQuery.clone().fetch((err, substates) => {
+            if(!err) {
+                this.setState({substates});
+            }
+        })
     }
 
     setAction = (_id) => {
@@ -86,7 +93,7 @@ class ActionListContainer extends Pager {
 
     render() {
         const {data, loading, error} = this.props;
-        const {actionsSelected, currentAction, create, total, range} = this.state;
+        const {actionsSelected, currentAction, create, total, range, substates} = this.state;
         const action = objectFromArray(data, currentAction);
 
         if (loading) {
@@ -122,6 +129,7 @@ class ActionListContainer extends Pager {
                         action={action}
                         create={create}
                         close={this.closeForm}
+                        substates={substates}
                     />
                 }
             </div>
@@ -145,11 +153,11 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {action, create, close} = this.props;
+        const {action, create, close, substates} = this.props;
         return (
             <div className={fade ? 'right__side in' : 'right__side'}>
                 {
-                    create ? <ActionCreate close={close}/> : <ActionContent action={action}/>
+                    create ? <ActionCreate substates={substates} close={close}/> : <ActionContent substates={substates} action={action}/>
                 }
             </div>
         );

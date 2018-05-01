@@ -9,13 +9,8 @@ import {
 import ActionSchema from "/imports/api/actions/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
 import { createQueryContainer } from "meteor/cultofcoders:grapher-react";
-import { LabelSubstates } from "/imports/api/tasks/enums/substates.js";
-import {
-  StatesSubstates,
-  findStateBySubstate
-} from "/imports/api/tasks/enums/states.js";
 import ReasonCodesBlock from "./components/ReasonCodesBlock";
-import ManagerReasonCodes from "./components/ManagerReasonCodes";
+// import ManagerReasonCodes from "./components/ManagerReasonCodes";
 import RolesEnum from "/imports/api/users/enums/roles.js";
 
 export default class ActionEdit extends React.Component {
@@ -43,9 +38,8 @@ export default class ActionEdit extends React.Component {
 
   getOptions = enums => {
     return _.map(enums, (value, key) => {
-      const labelPrefix = findStateBySubstate(StatesSubstates, key);
-      const label = `${labelPrefix}: ${value}`;
-      return { value: key, label: label };
+      const label = `${value.stateName}: ${value.name}`;
+      return {value: value.name.replace(/ /g,"_"), label: label};
     });
   };
 
@@ -82,10 +76,10 @@ export default class ActionEdit extends React.Component {
   };
 
   render() {
-    const { action } = this.props;
+    const { action, substates } = this.props;
     const { checked } = this.state;
-    const substates = this.getOptions(LabelSubstates);
-
+    const substatesOptions = this.getOptions(substates);
+    
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -149,7 +143,7 @@ export default class ActionEdit extends React.Component {
                     <SelectField
                       placeholder="Substate"
                       labelHidden={true}
-                      options={substates}
+                      options={substatesOptions}
                       name="substate"
                     />
                     <ErrorField name="substate" />
@@ -160,9 +154,9 @@ export default class ActionEdit extends React.Component {
           </div>
 
           <ReasonCodesBlock action={action} />
-          {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+          {/* {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
             <ManagerReasonCodes action={action} />
-          )}
+          )} */}
         </div>
       </div>
     );
