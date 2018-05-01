@@ -6,8 +6,8 @@ import TagContent from './TagContent';
 import TagCreate from './TagCreate';
 import FilterBar from '/imports/client/lib/FilterBar';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import queryClients from '../../../api/clients/queries/listClients';
-import queryTags from '/imports/api/tags/queries/listTags';
+import clientsQuery from '../../../api/clients/queries/listClients';
+import tagsQuery from '/imports/api/tags/queries/listTags';
 import Loading from '/imports/client/lib/ui/Loading';
 import {objectFromArray} from '/imports/api/utils';
 import Notifier from '/imports/client/lib/Notifier';
@@ -27,14 +27,13 @@ class TagListContainer extends Pager {
             range: {},
             clients: []
         });
-        this.query = queryTags;
     }
 
     componentWillMount() {
         this.nextPage(0);
-        queryClients.fetch((err, res) => {
+        clientsQuery.fetch((err, clients) => {
             if(!err) {
-                this.setState({clients: res})
+                this.setState({clients})
             }
         })
     }
@@ -173,5 +172,5 @@ class RightSide extends Component {
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(queryTags, {page, perPage});
+    return PagerService.setQuery(tagsQuery, {page, perPage});
 }, {reactive: true})(TagListContainer);

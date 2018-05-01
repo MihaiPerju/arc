@@ -12,7 +12,7 @@ import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TagsService from './services/TagsService';
 import TagsListQuery from '/imports/api/tags/queries/listTags.js';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
-import queryClients from '../../../api/clients/queries/listClients';
+import clientsQuery from '../../../api/clients/queries/listClients';
 import RolesEnum from '/imports/api/users/enums/roles';
 
 class EditUser extends Component {
@@ -40,9 +40,9 @@ class EditUser extends Component {
     }
 
     componentWillMount() {
-        queryClients.fetch((err, res) => {
+        clientsQuery.fetch((err, clients) => {
             if(!err) {
-                this.setState({clients: res})
+                this.setState({clients})
             }
         })
     }

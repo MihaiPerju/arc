@@ -37,11 +37,15 @@ export default class CreateEditTags extends Component {
     };
 
     onSubmitForm = (model) => {
-        const {tags} = this.props;
+        const {tags, user} = this.props;
 
         Meteor.call('tag.create', model, (err, tagId) => {
             if (!err) {
-                this.addTagToUser(tagId)
+                Meteor.call('user.addTag', {_id: user._id, tagId}, (err, data) => {
+                    if (err) {
+                        Notifier.error(err.reason);
+                    }
+                });
                 Notifier.success('Tag successfully created!');
                 this.refs.tagForm.reset();
             } else {
@@ -49,15 +53,6 @@ export default class CreateEditTags extends Component {
             }
         });
     };
-
-    addTagToUser = (tagId) => {
-        const {user} = this.props;
-        Meteor.call('user.addTag', {_id: user._id, tagId}, (err, data) => {
-            if (err) {
-                Notifier.error(err.reason);
-            }
-        });
-    }
 
     getOptions = (enums) => {
         return _.map(enums, (value, key) => {

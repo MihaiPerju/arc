@@ -3,7 +3,7 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import TagContentHeader from './components/TagContent/TagContentHeader';
 import TagEdit from './TagEdit';
 import TagContentDescription from './components/TagContent/TagContentDescription';
-import queryUsers from '/imports/api/users/queries/listUsers';
+import usersQuery from '/imports/api/users/queries/listUsers';
 import PagerService from "/imports/client/lib/PagerService";
 
 class TagContent extends Component {
@@ -48,5 +48,5 @@ export default withQuery((props) => {
     const params = {
         filters: {roles: {$in: ['rep']}}
     }
-    return queryUsers.clone(params);
+    return usersQuery.clone(params);
 }, {reactive: true})(TagContent);
