@@ -47,8 +47,8 @@ export default class ActionCreate extends Component {
     };
 
     render() {
-        const {subStates} = this.props;
-        const substates = this.getOptions(subStates);
+        const {substates} = this.props;
+        const substatesOptions = this.getOptions(substates);
         const {checked} = this.state;
         return (
             <div className="create-form action-create-form">
@@ -85,7 +85,7 @@ export default class ActionCreate extends Component {
                                 <div className="form-wrapper">
                                     <SelectField placeholder="Substate"
                                                  labelHidden={true}
-                                                 options={substates}
+                                                 options={substatesOptions}
                                                  name="substate"/>
                                     <ErrorField name="substate"/>
                                 </div>

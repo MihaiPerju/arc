@@ -20,13 +20,13 @@ export default class UserContent extends Component {
     };
 
     render() {
-        const {action, subStates} = this.props;
+        const {action, substates} = this.props;
         const {edit} = this.state;
         return (
             <div className="section-action">
                 {
                     edit
-                        ? <ActionEdit setEdit={this.setEdit} subStates={subStates} action={action}/>
+                        ? <ActionEdit setEdit={this.setEdit} substates={substates} action={action}/>
                         :
                         <ActionHeader setEdit={this.setEdit} action={action}/>
                 }

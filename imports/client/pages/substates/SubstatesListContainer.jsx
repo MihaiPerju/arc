@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar';
 import SearchBar from '/imports/client/lib/SearchBar';
-import SubStatesList from './components/SubStatesList';
-import SubStateContent from './SubStateContent';
-import SubStateCreate from './SubStateCreate';
+import SubstatesList from './components/SubstatesList';
+import SubstateContent from './SubstateContent';
+import SubstateCreate from './SubstateCreate';
 import { withQuery } from 'meteor/cultofcoders:grapher-react';
-import query from "/imports/api/subStates/queries/listSubStates";
+import query from "/imports/api/substates/queries/listSubstates";
 import Loading from '/imports/client/lib/ui/Loading';
 import { objectFromArray } from "/imports/api/utils";
 import Notifier from '/imports/client/lib/Notifier';
 import PagerService from "/imports/client/lib/PagerService";
 
-class SubStatesListContainer extends Component {
+class SubstatesListContainer extends Component {
     constructor() {
         super();
         this.state = {
-            subStateSelected: [],
-            currentSubState: null,
+            substateSelected: [],
+            currentSubstate: null,
             filter: false,
             create: false,
             page: 1,
@@ -30,31 +30,31 @@ class SubStatesListContainer extends Component {
         this.nextPage(0);
     }
 
-    setSubState = (_id) => {
-        const { currentSubState } = this.state;
+    setSubstate = (_id) => {
+        const { currentSubstate } = this.state;
 
-        if (currentSubState === _id) {
-            this.setState({ currentSubState: null });
+        if (currentSubstate === _id) {
+            this.setState({ currentSubstate: null });
         } else {
-            this.setState({ currentSubState: _id });
+            this.setState({ currentSubstate: _id });
         }
     };
 
-    selectSubState = (_id) => {
-        const { subStateSelected } = this.state;
-        if (subStateSelected.includes(_id)) {
-            subStateSelected.splice(subStateSelected.indexOf(_id), 1);
+    selectSubstate = (_id) => {
+        const { substateSelected } = this.state;
+        if (substateSelected.includes(_id)) {
+            substateSelected.splice(substateSelected.indexOf(_id), 1);
         } else {
-            subStateSelected.push(_id);
+            substateSelected.push(_id);
         }
-        this.setState({ subStateSelected });
+        this.setState({ substateSelected });
     };
 
     createForm = () => {
         this.setState({
             create: true,
             rightSide: true,
-            currentSubState: false
+            currentSubstate: false
         })
     }
 
@@ -65,14 +65,14 @@ class SubStatesListContainer extends Component {
     }
 
     deleteAction = () => {
-        const { subStateSelected } = this.state;
+        const { substateSelected } = this.state;
 
-        Meteor.call('subState.deleteMany', subStateSelected, (err) => {
+        Meteor.call('substate.deleteMany', substateSelected, (err) => {
             if (!err) {
-                Notifier.success('Sub states deleted !');
+                Notifier.success('Substates deleted !');
                 this.setState({
-                    currentSubState: null,
-                    subStateSelected: []
+                    currentSubstate: null,
+                    substateSelected: []
                 })
             }
         });
@@ -88,8 +88,8 @@ class SubStatesListContainer extends Component {
 
     render() {
         const { data, loading, error } = this.props;
-        const { subStateSelected, currentSubState, create, filter, range, total } = this.state;
-        const subState = objectFromArray(data, currentSubState);
+        const { substateSelected, currentSubstate, create, filter, range, total } = this.state;
+        const substate = objectFromArray(data, currentSubstate);
         if (loading) {
             return <Loading />
         }
@@ -99,19 +99,19 @@ class SubStatesListContainer extends Component {
         }
         return (
             <div className="cc-container">
-                <div className={(currentSubState || create) ? "left__side" : "left__side full__width"}>
-                    <SearchBar btnGroup={subStateSelected.length} deleteAction={this.deleteAction} />
+                <div className={(currentSubstate || create) ? "left__side" : "left__side full__width"}>
+                    <SearchBar btnGroup={substateSelected.length} deleteAction={this.deleteAction} />
 
-                    <SubStatesList
+                    <SubstatesList
                         class={filter ? "task-list decreased" : "task-list"}
-                        subStateSelected={subStateSelected}
-                        selectSubState={this.selectSubState}
-                        currentSubState={currentSubState}
-                        setSubState={this.setSubState}
-                        subStates={data}
+                        substateSelected={substateSelected}
+                        selectSubstate={this.selectSubstate}
+                        currentSubstate={currentSubstate}
+                        setSubstate={this.setSubstate}
+                        substates={data}
                     />
                     <PaginationBar
-                        module="SubState"
+                        module="Substate"
                         create={this.createForm}
                         nextPage={this.nextPage}
                         range={range}
@@ -119,9 +119,9 @@ class SubStatesListContainer extends Component {
                     />
                 </div>
                 {
-                    (currentSubState || create) &&
+                    (currentSubstate || create) &&
                     <RightSide
-                        subState={subState}
+                        substate={substate}
                         create={create}
                         close={this.closeForm}
                     />
@@ -147,11 +147,11 @@ class RightSide extends Component {
 
     render() {
         const { fade } = this.state;
-        const { subState, create, close } = this.props;
+        const { substate, create, close } = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
-                    create ? <SubStateCreate close={close} /> : <SubStateContent subState={subState} />
+                    create ? <SubstateCreate close={close} /> : <SubstateContent substate={substate} />
                 }
             </div>
         )
@@ -162,4 +162,4 @@ export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
     return PagerService.setQuery(query, { page, perPage });
-}, { reactive: true })(SubStatesListContainer)
+}, { reactive: true })(SubstatesListContainer)

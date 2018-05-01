@@ -7,7 +7,7 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import { SelectField } from "/imports/ui/forms";
 import DatePicker from 'react-datepicker';
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
-import subStateQuery from "/imports/api/subStates/queries/listSubStates";
+import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 
 export default class AccountSearchBar extends Component {
@@ -22,14 +22,14 @@ export default class AccountSearchBar extends Component {
       clientOptions: [],
       dischrgDate: null,
       fbDate: null,
-      subStates: []
+      substates: []
     };
   }
 
   componentWillMount() {
     const facilityOptions = [];
     const clientOptions = [];
-    const subStates = [];
+    const substates = [];
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -47,13 +47,13 @@ export default class AccountSearchBar extends Component {
         this.setState({ clientOptions });
       }
     });
-    subStateQuery.clone().fetch((err, data) => {
+    substateQuery.clone().fetch((err, res) => {
       if(!err) {
-        data.map(substates => {
-          const label = `${substates.stateName}: ${substates.name}`;
-          subStates.push({ label: label, value: substates.name.replace(/ /g,"_") });
+        res.map(substate => {
+          const label = `${substate.stateName}: ${substate.name}`;
+          substates.push({ label: label, value: substate.name.replace(/ /g,"_") });
         });
-        this.setState({ subStates });
+        this.setState({ substates });
       }
   })
   }
@@ -137,7 +137,7 @@ export default class AccountSearchBar extends Component {
       clientOptions,
       dischrgDate,
       fbDate,
-      subStates
+      substates
     } = this.state;
     const {
       options,
@@ -270,7 +270,7 @@ export default class AccountSearchBar extends Component {
                 <SelectField
                   placeholder="Substate"
                   labelHidden={true}
-                  options={subStates}
+                  options={substates}
                   name="substate"/>
               </div>
             </div>
@@ -397,6 +397,6 @@ const schema = new SimpleSchema({
   substate: {
     type: String,
     optional: true,
-    label: "Search by SubState"
+    label: "Search by Substate"
   },
 });

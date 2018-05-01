@@ -12,7 +12,7 @@ import {objectFromArray} from '/imports/api/utils';
 import Notifier from '/imports/client/lib/Notifier';
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
-import subStateQuery from '/imports/api/subStates/queries/listSubStates';
+import substateQuery from '/imports/api/substates/queries/listSubstates';
 
 class ActionListContainer extends Pager {
     constructor() {
@@ -25,16 +25,16 @@ class ActionListContainer extends Pager {
             perPage: 13,
             total: 0,
             range: {},
-            subStates: []
+            substates: []
         });
         this.query = query;
     }
 
     componentWillMount() {
         this.nextPage(0);
-        subStateQuery.clone().fetch((err, data) => {
+        substateQuery.clone().fetch((err, substates) => {
             if(!err) {
-                this.setState({subStates: data});
+                this.setState({substates});
             }
         })
     }
@@ -93,7 +93,7 @@ class ActionListContainer extends Pager {
 
     render() {
         const {data, loading, error} = this.props;
-        const {actionsSelected, currentAction, create, total, range, subStates} = this.state;
+        const {actionsSelected, currentAction, create, total, range, substates} = this.state;
         const action = objectFromArray(data, currentAction);
 
         if (loading) {
@@ -129,7 +129,7 @@ class ActionListContainer extends Pager {
                         action={action}
                         create={create}
                         close={this.closeForm}
-                        subStates={subStates}
+                        substates={substates}
                     />
                 }
             </div>
@@ -153,11 +153,11 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {action, create, close, subStates} = this.props;
+        const {action, create, close, substates} = this.props;
         return (
             <div className={fade ? 'right__side in' : 'right__side'}>
                 {
-                    create ? <ActionCreate subStates={subStates} close={close}/> : <ActionContent subStates={subStates} action={action}/>
+                    create ? <ActionCreate substates={substates} close={close}/> : <ActionContent substates={substates} action={action}/>
                 }
             </div>
         );

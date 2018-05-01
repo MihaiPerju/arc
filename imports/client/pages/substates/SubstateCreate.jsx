@@ -1,27 +1,28 @@
 import React, { Component } from 'react';
-import SubStateSchema from '/imports/api/subStates/schemas/schema';
-import Notifier from '/imports/client/lib/Notifier';
+import SubstateSchema from '/imports/api/substates/schemas/schema';
 import { AutoForm, AutoField, ErrorField, SelectField } from '/imports/ui/forms';
+import Notifier from '/imports/client/lib/Notifier';
 import { StateList } from '/imports/api/tasks/enums/states';
 
-export default class EditSubState extends Component {
+export default class SubstateCreate extends Component {
     constructor() {
         super();
+        this.state = {};
     }
 
-    getStates = (stateList) => {
-        return stateList.map((state, key) => ({ value: state, label: state }));
-    };
-
     onSubmit = (data) => {
-        Meteor.call('subState.update', data, (err) => {
+        Meteor.call('substate.create', data, (err) => {
             if (!err) {
-                Notifier.success('Sub state updated');
+                Notifier.success('Substate added!');
                 this.onClose();
             } else {
                 Notifier.error(err.reason);
             }
         });
+    };
+
+    getStates = (stateList) => {
+        return stateList.map((state, key) => ({ value: state, label: state }));
     };
 
     onCreate = () => {
@@ -35,13 +36,12 @@ export default class EditSubState extends Component {
     };
 
     render() {
-        const { model } = this.props;
         const states = this.getStates(StateList);
 
         return (
             <div className="create-form letter-template-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Edit Sub state</button>
+                    <button className="btn-add">+ Add Substate</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreate} className="btn--green">Confirm & save</button>
@@ -49,7 +49,7 @@ export default class EditSubState extends Component {
                 </div>
                 <div className="create-form__wrapper">
                     <div className="action-block i--block">
-                        <AutoForm model={model} schema={SubStateSchema} onSubmit={this.onSubmit} ref="form">
+                        <AutoForm schema={SubstateSchema} onSubmit={this.onSubmit} ref="form">
                             <div className="select-group">
                                 <div className="form-wrapper">
                                     <SelectField
@@ -58,12 +58,12 @@ export default class EditSubState extends Component {
                                         placeholder="State"
                                         options={states}
                                     />
-                                    <ErrorField name="stateName"/>
+                                    <ErrorField name="stateName" />
                                 </div>
                             </div>
                             <div className="form-wrapper">
-                                <AutoField labelHidden={true} type="text" placeholder="Sub state name" name="name"/>
-                                <ErrorField name="name"/>
+                                <AutoField labelHidden={true} type="text" placeholder="Substate name" name="name" />
+                                <ErrorField name="name" />
                             </div>
                         </AutoForm>
                     </div>

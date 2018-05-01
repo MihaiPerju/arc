@@ -19,7 +19,7 @@ export default class RouteService {
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
                 {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
                 {name: "action/list", label: "Actions", icon: 'thumb-tack'},
-                {name: "substate/list", label: "Sub States", icon: 'thumb-tack'}
+                {name: "substate/list", label: "Substates", icon: 'thumb-tack'}
             ];
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
             return [
