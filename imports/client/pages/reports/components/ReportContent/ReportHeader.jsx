@@ -73,39 +73,6 @@ export default class ReportHeader extends Component {
             })
         };
 
-        const tableList = [
-            {
-                header: "Account number",
-                row: accounts.map((task, index) => {
-                    return {title: task.acctNum};
-                })
-            },
-            {
-                header: "Discharge date",
-                row: accounts.map((task, index) => {
-                    return {title: moment(task.dischrgDate).format("MM/DD/YYYY hh:mm")};
-                })
-            },
-            {
-                header: "Patient Type",
-                row: accounts.map((task, index) => {
-                    return {title: task.ptType};
-                })
-            },
-            {
-                header: "Facility Code",
-                row: accounts.map((task, index) => {
-                    return {title: task.facCode};
-                })
-            },
-            {
-                header: "Patient Name",
-                row: accounts.map((task, index) => {
-                    return {title: task.ptName};
-                })
-            }
-        ];
-
         const tableHeader = [
             'Account name', 'Account number', 'Discharge date', 'Patient Type', 'Facility Code', 'Patient Name'
         ];
@@ -145,13 +112,11 @@ export default class ReportHeader extends Component {
                             <div className="table-container">
                                 <div className="table-row">
                                     {
-
                                         tableHeader.map(function (header, index) {
-
                                             return (
                                                 (index == 0) ? (
                                                     <div key={index} className="left-side">
-                                                        <div className="table-header truncate text-left table-field text-light-grey">
+                                                        <div className="table-header truncate text-left table-field table-field--fixed text-light-grey">
                                                             {header}
                                                         </div>
                                                     </div>
@@ -163,7 +128,6 @@ export default class ReportHeader extends Component {
                                                 )
                                             )
                                         })
-
                                     }
                                 </div>
 
@@ -172,7 +136,7 @@ export default class ReportHeader extends Component {
                                         return (
                                             <div className="table-row" key={index}>
                                                 <div className="left-side">
-                                                    <div className="table-field truncate text-center">
+                                                    <div className="table-field table-field--fixed truncate text-center">
                                                         {'Account No.' + (index + 1)}
                                                     </div>
                                                 </div>
@@ -186,7 +150,6 @@ export default class ReportHeader extends Component {
                                                     <div className="table-field text-center">{account.ptName}</div>
                                                 </div>
                                             </div>
-
                                         )
                                     })
                                 }
