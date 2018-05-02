@@ -141,21 +141,29 @@ export default class ReportHeader extends Component {
                 )}
                 {!schedule && (
                     <div className="table-list">
-                        {/*<div className="left-side">*/}
-                        {/*<TableReport title={mainTable.header} rows={mainTable.row}/>*/}
-                        {/*</div>*/}
-                        <div className="right-side">
+                        <div className="table-list__wrapper">
                             <div className="table-container">
                                 <div className="table-row">
                                     {
-                                        tableHeader.map(function (header, index) {
-                                            return (
-                                                <div key={index} className="table-header text-center table-field text-light-grey">
-                                                    {header}
-                                                </div>
-                                            )
 
+                                        tableHeader.map(function (header, index) {
+
+                                            return (
+                                                (index == 0) ? (
+                                                    <div key={index} className="left-side">
+                                                        <div className="table-header truncate text-left table-field text-light-grey">
+                                                            {header}
+                                                        </div>
+                                                    </div>
+                                                ) : (
+                                                    <div key={index}
+                                                         className="table-header text-center table-field text-light-grey">
+                                                        {header}
+                                                    </div>
+                                                )
+                                            )
                                         })
+
                                     }
                                 </div>
 
@@ -163,35 +171,26 @@ export default class ReportHeader extends Component {
                                     accounts.map((account, index) => {
                                         return (
                                             <div className="table-row" key={index}>
-                                                <div className="table-field text-center">
-                                                    {'Account No.' + (index + 1)}
+                                                <div className="left-side">
+                                                    <div className="table-field truncate text-center">
+                                                        {'Account No.' + (index + 1)}
+                                                    </div>
                                                 </div>
-                                                <div className="table-field text-center">{account.acctNum}</div>
-                                                <div className="table-field text-center">
-                                                    {moment(account.dischrgDate).format("MM/DD/YYYY hh:mm")}
+                                                <div className="right-side">
+                                                    <div className="table-field text-center">{account.acctNum}</div>
+                                                    <div className="table-field text-center">
+                                                        {moment(account.dischrgDate).format("MM/DD/YYYY hh:mm")}
+                                                    </div>
+                                                    <div className="table-field text-center">{account.ptType}</div>
+                                                    <div className="table-field text-center">{account.facCode}</div>
+                                                    <div className="table-field text-center">{account.ptName}</div>
                                                 </div>
-                                                <div className="table-field text-center">{account.ptType}</div>
-                                                <div className="table-field text-center">{account.facCode}</div>
-                                                <div className="table-field text-center">{account.ptName}</div>
                                             </div>
 
                                         )
                                     })
                                 }
-                                {/*<div className="table-header text-light-grey">{title}</div>*/}
-                                {/*<div key={index} className="table-row">{row.title}</div>*/}
                             </div>
-
-                            {/*{tableList.map(function (table, index) {*/}
-                            {/*return (*/}
-                            {/*<TableReport*/}
-                            {/*center*/}
-                            {/*key={index}*/}
-                            {/*title={table.header}*/}
-                            {/*rows={table.row}*/}
-                            {/*/>*/}
-                            {/*);*/}
-                            {/*})}*/}
                         </div>
                     </div>
                 )}
