@@ -5,19 +5,26 @@ export default class Dropdown extends Component {
     onFilterAssignee = (filter) => {
         const {getProperAccounts, toggleDropdown} = this.props;
         getProperAccounts(filter);
-        toggleDropdown();
     };
 
     render() {
-        const {options} = this.props;
+        const {options, assignFilterArr} = this.props;
 
         return (
             <div className="dropdown">
                 <ul className="dropdown__wrapper">
                     {
                         options && options.map((option) => {
-                            return <li><a onClick={this.onFilterAssignee.bind(this, option.filter)}>{option.label}</a>
-                            </li>
+                            return(
+                                <div key={option.filter} className="check-group">
+                                    <input checked={assignFilterArr.includes(option.filter)} type="checkbox"/>
+                                    <label onClick={this.onFilterAssignee.bind(this, option.filter)}>
+                                        {option.label}
+                                    </label>
+                                </div>
+                            )
+
+
                         })
                     }
                 </ul>
