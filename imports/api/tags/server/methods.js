@@ -2,12 +2,14 @@ import Tags from '../collection.js';
 import Security from '/imports/api/security/security.js';
 import Users from '/imports/api/users/collection.js';
 import RolesEnum from '/imports/api/users/enums/roles';
+import TagService from '/imports/api/tags/server/services/TagService';
 
 Meteor.methods({
     'tag.create'(data) {
         if(Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
-            return Tags.insert(data);
+            return TagService.createTag(data);
         }
+        
         throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
     },
 
@@ -43,10 +45,7 @@ Meteor.methods({
 
     'user.addTag'({_id, tagId}) {
         if(Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
-            return Users.update(
-                {_id},
-                {$push: {tagIds: tagId}}
-            )
+            return TagService.addTagToUser({_id, tagId});
         }
         throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
     },

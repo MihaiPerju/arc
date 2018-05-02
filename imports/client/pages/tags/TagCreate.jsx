@@ -11,7 +11,7 @@ export default class TagCreate extends Component {
     }
 
     onSubmit(data) {
-        Meteor.call('tag.create', data, (err) => {
+        Meteor.call('tag.create', {data}, (err) => {
             if (!err) {
                 Notifier.success('Tag added!');
                 this.onClose();

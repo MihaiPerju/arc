@@ -36,16 +36,11 @@ export default class CreateEditTags extends Component {
         });
     };
 
-    onSubmitForm = (model) => {
+    onSubmitForm = (data) => {
         const {tags, user} = this.props;
 
-        Meteor.call('tag.create', model, (err, tagId) => {
+        Meteor.call('tag.create', {data, _id: user._id}, (err, tagId) => {
             if (!err) {
-                Meteor.call('user.addTag', {_id: user._id, tagId}, (err, data) => {
-                    if (err) {
-                        Notifier.error(err.reason);
-                    }
-                });
                 Notifier.success('Tag successfully created!');
                 this.refs.tagForm.reset();
             } else {

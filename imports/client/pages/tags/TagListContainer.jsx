@@ -27,6 +27,7 @@ class TagListContainer extends Pager {
             range: {},
             clients: []
         });
+        this.query = tagsQuery;
     }
 
     componentWillMount() {
