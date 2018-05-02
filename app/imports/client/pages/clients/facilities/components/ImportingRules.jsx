@@ -6,6 +6,7 @@ import RulesService from '/imports/client/pages/clients/facilities/services/Impo
 import Loading from '/imports/client/lib/ui/Loading';
 import UploadItem from './FacilityContent/UploadItem'
 import InsuranceRules from './InsuranceRules';
+import classNames from 'classnames';
 
 export default class ImportingRules extends React.Component {
     constructor() {
@@ -20,6 +21,7 @@ export default class ImportingRules extends React.Component {
         const schema = RulesService.createSchema(rules, model && model[rules] && model[rules].hasHeader);
         this.setState({
             loading: false,
+            collapse: false,
             schema
         });
     }
@@ -64,13 +66,30 @@ export default class ImportingRules extends React.Component {
         return result;
     }
 
+    toggleInsurances = () => {
+        const {collapse} = this.state;
+
+        this.setState({
+            collapse: !collapse
+        })
+    }
+
+    showInsurances = () => {
+        this.setState({
+            collapse: false
+        })
+    }
+
     render() {
-        const {schema, loading} = this.state;
+        const {schema, loading, collapse} = this.state;
         const {model, rules} = this.props;
         const fields = RulesService.getSchemaFields(rules);
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
         const fieldGroups = this.groupFields(fields);
-
+        const btnCollapseClasses = classNames({
+            'btn-collapse': true,
+            'rotate': collapse
+        });
         return (
             <div>
                 {
@@ -99,8 +118,17 @@ export default class ImportingRules extends React.Component {
                             </div>
                             <div className="upload-list">
                                 {
-                                    schema._schemaKeys.includes("insurances") ?
-                                        <InsuranceRules/>
+                                    schema._schemaKeys.includes("insurances") ? (
+                                        <div className="add-insurance__section">
+                                            <span className={btnCollapseClasses} onClick={this.toggleInsurances}>
+                                                { collapse ? 'show' : 'hide' }
+                                            </span>
+                                            <InsuranceRules
+                                                collapse={collapse}
+                                                showListField={this.showInsurances}
+                                            />
+                                        </div>
+                                        )
                                         :
                                         <ListField name="newInsBal">
                                             <ListItemField name="$">

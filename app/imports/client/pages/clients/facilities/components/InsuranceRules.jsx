@@ -3,8 +3,10 @@ import {AutoField, ErrorField, ListField, ListItemField, NestField} from '/impor
 
 export default class InsuranceRules extends React.Component {
     render() {
+        const {collapse, showListField} = this.props;
+
         return (
-            <ListField name="insurances">
+            <ListField name="insurances" collapse={collapse} showListField={showListField}>
                 <ListItemField name="$">
                     <NestField className="upload-item text-center">
                         <div className="insurance-item__wrapper">
