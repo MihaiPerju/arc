@@ -101,5 +101,4 @@ Meteor.methods({
         });
     }
 
-
 });

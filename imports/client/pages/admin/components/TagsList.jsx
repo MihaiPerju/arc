@@ -39,9 +39,6 @@ export default class TagsList extends Component {
                                         <div className="text-light-grey">
                                             {tag.name}
                                         </div>
-                                        <div className="info-label">
-                                            {TagsService.getTagPrivacy(tag)}
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="btn-group">

@@ -117,9 +117,6 @@ export default class AccountSearchBar extends Component {
     });
   };
 
-<<<<<<< HEAD
-  onDateSelect = (date, field) => {
-=======
   getOptions = (enums) => {
     return _.map(enums, (value, key) => {
       const labelPrefix = findStateBySubstate(StatesSubstates, key);
@@ -130,7 +127,6 @@ export default class AccountSearchBar extends Component {
 
   onDateSelect = (selectedDate, field) => {
     const date = selectedDate ? new Date(selectedDate).toString() : "";
->>>>>>> 9a7ce24a6123d1278a1f69d2c3daf7a62a470e9c
     if(field === 'dischrgDate') {
       this.setState({ dischrgDate: selectedDate });
       FlowRouter.setQueryParams({ dischrgDate: date });
