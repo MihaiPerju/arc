@@ -7,9 +7,8 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import { SelectField } from "/imports/ui/forms";
 import DatePicker from 'react-datepicker';
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
+import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
-import {LabelSubstates} from "/imports/api/tasks/enums/substates";
-import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -22,13 +21,15 @@ export default class AccountSearchBar extends Component {
       facilityOptions: [],
       clientOptions: [],
       dischrgDate: null,
-      fbDate: null
+      fbDate: null,
+      substates: []
     };
   }
 
   componentWillMount() {
     const facilityOptions = [];
     const clientOptions = [];
+    const substates = [];
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -46,6 +47,15 @@ export default class AccountSearchBar extends Component {
         this.setState({ clientOptions });
       }
     });
+    substateQuery.clone().fetch((err, res) => {
+      if(!err) {
+        res.map(substate => {
+          const label = `${substate.stateName}: ${substate.name}`;
+          substates.push({ label: label, value: substate.name.replace(/ /g,"_") });
+        });
+        this.setState({ substates });
+      }
+  })
   }
 
   manageFilterBar() {
@@ -115,13 +125,14 @@ export default class AccountSearchBar extends Component {
     })
   };
 
-  onDateSelect = (date, field) => {
+  onDateSelect = (selectedDate, field) => {
+    const date = selectedDate ? new Date(selectedDate).toString() : "";
     if(field === 'dischrgDate') {
-      this.setState({ dischrgDate: date });
-      FlowRouter.setQueryParams({ dischrgDate: new Date(date) });
+      this.setState({ dischrgDate: selectedDate });
+      FlowRouter.setQueryParams({ dischrgDate: date });
     } else if(field === 'fbDate') {
-      this.setState({ fbDate: date });
-      FlowRouter.setQueryParams({ fbDate: new Date(date) });
+      this.setState({ fbDate: selectedDate });
+      FlowRouter.setQueryParams({ fbDate: date });
     }
   }
 
@@ -134,7 +145,8 @@ export default class AccountSearchBar extends Component {
       facilityOptions,
       clientOptions,
       dischrgDate,
-      fbDate
+      fbDate,
+      substates
     } = this.state;
     const {
       options,
@@ -153,8 +165,6 @@ export default class AccountSearchBar extends Component {
       "btn-select": true,
       active: selectAll
     });
-
-    const substates = this.getOptions(LabelSubstates);
 
     return (
       <AutoForm
@@ -396,6 +406,6 @@ const schema = new SimpleSchema({
   substate: {
     type: String,
     optional: true,
-    label: "Search by SubState"
+    label: "Search by Substate"
   },
 });

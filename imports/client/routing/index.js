@@ -187,3 +187,8 @@ route('/reason-code/:id/edit', ReasonCodeEdit);
 import TagListContainer from '/imports/client/pages/tags/TagListContainer.jsx';
 
 route('/tag/list', TagListContainer);
+
+//Substates 
+import SubstatesListContainer from '/imports/client/pages/substates/SubstatesListContainer';
+
+route('/substate/list', SubstatesListContainer)

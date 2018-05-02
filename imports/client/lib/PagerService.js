@@ -97,7 +97,7 @@ export default class PagerService {
       _.extend(params.filters, { ptType });
     }
     if (acctBal) {
-      _.extend(params.filters, { acctBal });
+      _.extend(params.filters, { acctBal: +acctBal });
     }
     if (finClass) {
       _.extend(params.filters, { finClass });
