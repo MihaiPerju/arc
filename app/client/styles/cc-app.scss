@@ -1,0 +1,66 @@
+//helpers
+@import "_helpers/variables";
+@import "_helpers/functions";
+@import "_helpers/mixins";
+
+//base
+@import "base/font";
+@import "base/normalize";
+@import "base/animation";
+@import "base/general";
+@import "_helpers/helpers";
+
+//plugins
+@import "plugins/react-notification-system";
+
+//form
+@import "form/text";
+@import "form/textarea";
+@import "form/select";
+@import "form/radio";
+@import "form/checkbox";
+@import "form/button";
+@import "form/form-helpers";
+
+//elements
+@import "elements/root-container";
+@import "elements/icons";
+@import "components/loader";
+@import "elements/hamburger";
+
+//components
+@import "components/background-img";
+@import "components/popover";
+@import "components/dialog";
+@import "components/tooltip-button-icon";
+@import "components/avatar_config";
+//uniforms
+
+
+//header
+@import "layout/header/header";
+@import "layout/header/menu";
+@import "layout/leftMenu/leftMenu";
+
+//footer
+@import "layout/footer/footer";
+
+//main
+@import "layout/main/main";
+
+//pages
+@import "pages/login";
+@import "pages/task";
+@import "pages/action";
+@import "pages/report";
+@import "pages/code";
+@import "pages/letter";
+@import "pages/user";
+@import "pages/region";
+@import "pages/client";
+@import "pages/facility";
+@import "pages/create-form";
+@import "pages/schedule";
+@import "pages/create-form";
+@import "pages/settings";
+// @import "pages/tag";
