@@ -12,27 +12,29 @@ export default class PagerService {
         return query.clone(params);
     }
 
-  static getAccountQueryParams() {
-    const page = FlowRouter.getQueryParam("page");
-    const assign = FlowRouter.getQueryParam("assign");
-    const facilityId = FlowRouter.getQueryParam("facilityId");
-    const clientId = FlowRouter.getQueryParam("clientId");
-    const acctNum = FlowRouter.getQueryParam("acctNum");
-    const facCode = FlowRouter.getQueryParam("facCode");
-    const ptType = FlowRouter.getQueryParam("ptType");
-    const acctBal = FlowRouter.getQueryParam("acctBal");
-    const finClass = FlowRouter.getQueryParam("finClass");
-    const substate = FlowRouter.getQueryParam("substate");
-    const dischrgDate = FlowRouter.getQueryParam("dischrgDate");
-    const fbDate = FlowRouter.getQueryParam("fbDate");
-    let state = FlowRouter.current().params.state;
+    static getAccountQueryParams() {
+        const page = FlowRouter.getQueryParam("page");
+        const assign = FlowRouter.getQueryParam("assign");
+        const facilityId = FlowRouter.getQueryParam("facilityId");
+        const clientId = FlowRouter.getQueryParam("clientId");
+        const acctNum = FlowRouter.getQueryParam("acctNum");
+        const facCode = FlowRouter.getQueryParam("facCode");
+        const ptType = FlowRouter.getQueryParam("ptType");
+        const acctBal = FlowRouter.getQueryParam("acctBal");
+        const finClass = FlowRouter.getQueryParam("finClass");
+        const substate = FlowRouter.getQueryParam("substate");
+        const dischrgDate = FlowRouter.getQueryParam("dischrgDate");
+        const fbDate = FlowRouter.getQueryParam("fbDate");
+        let state = FlowRouter.current().params.state;
 
         if (stateEnum.ACTIVE.toLowerCase() === state && acctNum) {
             state = "";
         }
+
         const perPage = 13;
+
         return {
-            filters: { facilityId, clientId, acctNum },
+            filters: { facilityId, clientId, acctNum, facCode, ptType, acctBal, finClass, substate, dischrgDate, fbDate },
             page,
             perPage,
             state,
@@ -41,25 +43,10 @@ export default class PagerService {
     }
 
     static getProperAccounts(params, assign) {
-        if (assign === 'none') { // maybe remove
-            _.extend(params.filters, {
-                assigneeId: {$exists: true},
-                workQueue: {$exists: true}
-            });
-        } else if (assign) {
-            const filterArr = assign.split(",");
-            if (_.contains(filterArr, "assigneeId")){
-                _.extend(params.filters, {
-                    $or: [
-                        {workQueue: {$in: filterArr}},
-                        {
-                            assigneeId: {$exists: true}
-                        }
-                    ]
-                });
-            } else {
-                _.extend(params.filters, {workQueue: {$in: filterArr}});
-            }
+        if (assign === "workQueue") {
+            _.extend(params.filters, { workQueue: { $exists: true } });
+        } else if (assign === "assigneeId") {
+            _.extend(params.filters, { assigneeId: { $exists: true } });
         }
     }
 
@@ -110,7 +97,7 @@ export default class PagerService {
             _.extend(params.filters, { ptType });
         }
         if (acctBal) {
-            _.extend(params.filters, { acctBal });
+            _.extend(params.filters, { acctBal: +acctBal });
         }
         if (finClass) {
             _.extend(params.filters, { finClass });
