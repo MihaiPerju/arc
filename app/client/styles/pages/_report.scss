@@ -20,56 +20,92 @@
     }
   }
 
-  .table-list {
-    position: relative;
-    display: flex;
-    height: 100%;
-    overflow-y: auto;
-    align-items: flex-start;
-    .right-side {
-      width: calc(100% - 200px);
-      height: 100%;
+  .table {
+    &-list {
+      position: relative;
       display: flex;
-      overflow-x: auto;
-      overflow-y: hidden;
-      background: #f2f1f1;
-      padding-top: 15px;
-      border-radius: 0 3px 3px 0;
-      .table-container {
-        min-width: 200px;
-        display: table;
+      height: 100%;
+
+      &:before {
+        content: '';
+        position: absolute;
+        background: $color-white;
+        top: 0;
+        left: 0;
+        width: 200px;
+        bottom: 0;
         border-right: 1px #d7d7d7 solid;
-        .table-row {
-          padding: 10px;
-        }
-        .table-header {
-          padding-left: 10px;
-          padding-right: 10px;
+      }
+      &:after {
+        content: '';
+        position: absolute;
+        background: #f2f1f1;
+        top: 0;
+        right: 0;
+        width: calc(100% - 200px);
+        bottom: 0;
+      }
+      &__wrapper {
+        position: relative;
+        display: flex;
+        height: 100%;
+        overflow-y: auto;
+        align-items: flex-start;
+        z-index: 1;
+      }
+      .left-side {
+        width: 200px;
+        position: relative;
+      }
+      .right-side {
+        width: calc(100% - 200px);
+        height: 100%;
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        background: #f2f1f1;
+        border-radius: 0 3px 3px 0;
+        .table-field:last-of-type {
+          border-right: 0;
         }
       }
     }
-    .left-side {
-      width: 200px;
-      height: 100%;
-      background: $color-white;
-      padding: 15px 15px 0;
-      border-right: 1px #d7d7d7 solid;
-      border-radius: 3px 0 0 3px;
-    }
-  }
 
-  .table-container {
-    .table-header {
-      padding-bottom: 15px;
+    &-container {
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
-    .table-row {
+
+    &-field {
+      min-width: 200px;
+      padding: 10px;
+      border-right: 1px #d7d7d7 solid;
+
+      &--fixed {
+        position: fixed;
+        width: 200px;
+        background: $color-white;
+        text-align: left;
+        border-right: 1px #d7d7d7 solid;
+      }
+    }
+
+    &-header {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      &:last-of-type {
+        border-right: 0;
+      }
+    }
+
+    &-row {
+      display: flex;
       border-top: 1px #d7d7d7 solid;
-      padding: 10px 0;
-      height: 37px;
-      .right-side {
-        .table-container {
-          float: left;
-        }
+      position: relative;
+
+      &:first-of-type {
+        border-top: 0;
       }
     }
   }
