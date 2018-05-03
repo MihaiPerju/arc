@@ -70,7 +70,15 @@ class FacilityContainer extends Component {
         Meteor.call('facility.removeMany', facilitiesSelected, (err) => {
             if (!err) {
                 Notifier.success('Facilities deleted !');
+                this.closeRightPanel();
             }
+        });
+    };
+
+    closeRightPanel = () => {
+        this.setState({
+            create: false,
+            currentFacility: null
         });
     };
 

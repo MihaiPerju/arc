@@ -71,6 +71,7 @@ class UserListContainer extends Pager {
         Meteor.call('admin.deleteManyUsers', usersSelected, (err) => {
             if (!err) {
                 Notifier.success('Users deleted!');
+                this.closeRightPanel();
             }
         });
     };
@@ -81,6 +82,13 @@ class UserListContainer extends Pager {
         const range = PagerService.getRange(nextPage, perPage);
         FlowRouter.setQueryParams({page: nextPage});
         this.setState({range, page: nextPage, currentClient: null});
+    };
+
+    closeRightPanel = () => {
+        this.setState({
+            create: false,
+            currentUser: null
+        });
     };
 
     render() {

@@ -18,9 +18,9 @@ export default class AccountMetaData extends React.Component {
                         <div className="additional-info">
                             {
                                 metaDataGroups && (
-                                    metaDataGroups.map((group) => {
+                                    metaDataGroups.map((group, index) => {
                                         return (
-                                            <ul>
+                                            <ul key={index}>
                                                 {
                                                     group.map((element, index) => {
                                                         return (

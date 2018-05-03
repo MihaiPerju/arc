@@ -25,10 +25,10 @@ export default class TaskContent extends Component {
     }
 
     render() {
-        const {task, openMetaData} = this.props;
+        const {task, openMetaData, closeRightPanel} = this.props;
         return (
             <div className="main-content">
-                <TaskContentHeader task={task} openMetaData={openMetaData}/>
+                <TaskContentHeader task={task} openMetaData={openMetaData} closeRightPanel={closeRightPanel}/>
                 {this.escalateReason()}
                 <PayerBlock task={task}/>
                 <InvoiceMembers/>

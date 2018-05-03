@@ -41,8 +41,8 @@ export default class PayerBlock extends Component {
                             {
                                 task &&
                                 task.insurances &&
-                                task.insurances.map((insurance) => {
-                                    return <div><PayItem insurance={insurance}/></div>
+                                task.insurances.map((insurance, index) => {
+                                    return <div key={index}><PayItem insurance={insurance}/></div>
                                 })
                             }
 

@@ -78,6 +78,7 @@ class CodeListContainer extends Pager {
         Meteor.call('code.deleteMany', codesSelected, (err) => {
             if (!err) {
                 Notifier.success('Codes deleted !');
+                this.closeRightPanel();
             }
         });
     };
@@ -88,6 +89,13 @@ class CodeListContainer extends Pager {
         const range = PagerService.getRange(nextPage, perPage);
         FlowRouter.setQueryParams({page: nextPage});
         this.setState({range, page: nextPage, currentClient: null});
+    };
+
+    closeRightPanel = () => {
+        this.setState({
+            create: false,
+            currentCode: null
+        });
     };
 
     render() {

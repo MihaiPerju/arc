@@ -31,7 +31,8 @@ class TaskListContainer extends Pager {
             showMetaData: false,
             assignFilterArr: ['assigneeId'],
             tags: [],
-            dropdownOptions: []
+            dropdownOptions: [],
+            currentRouteState: null
         });
         this.query = query;
     }
@@ -62,7 +63,17 @@ class TaskListContainer extends Pager {
                 this.setState({assignFilterArr, dropdownOptions});
             }
         })
+        const { state } = this.props;
+        this.setState({ currentRouteState: state });
+    }
 
+    componentWillReceiveProps(newProps) {
+        const { currentRouteState } = this.state;
+        const { state } = newProps;
+        if(currentRouteState !== state) {
+            this.closeRightPanel();
+            this.setState({ currentRouteState: state });
+        }
     }
 
     getData(tasks) {
@@ -181,7 +192,7 @@ class TaskListContainer extends Pager {
         this.setState({
             assignUser: false
         })
-
+        this.closeRightPanel();
     };
 
 
@@ -195,6 +206,7 @@ class TaskListContainer extends Pager {
         this.setState({
             assignWQ: false
         })
+        this.closeRightPanel();
     };
 
     getTask(currentTask) {
@@ -284,6 +296,13 @@ class TaskListContainer extends Pager {
         })
     };
 
+    closeRightPanel = () => {
+        this.setState({
+            currentTask: null,
+            showMetaData: false
+        })
+    }
+
     render() {
         const {data, loading, error} = this.props;
         const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ, showMetaData,
@@ -345,7 +364,7 @@ class TaskListContainer extends Pager {
                 </div>
                 {
                     currentTask && !showMetaData &&
-                    <RightSide task={task} openMetaData={this.openMetaDataSlider}/>
+                    <RightSide task={task} openMetaData={this.openMetaDataSlider} closeRightPanel={this.closeRightPanel}/>
                 }
                 {
                     showMetaData && <MetaDataSlider task={task} closeMetaData={this.closeMetaDataSlider}/>
@@ -371,12 +390,12 @@ class RightSide extends Component {
 
     render() {
         const {fade} = this.state;
-        const {task, openMetaData} = this.props;
+        const {task, openMetaData, closeRightPanel} = this.props;
         return (
             <div className={fade ? "right__side in" : "right__side"}>
                 {
                     task ?
-                        <TaskContent task={task} openMetaData={openMetaData}/>
+                        <TaskContent task={task} openMetaData={openMetaData} closeRightPanel={closeRightPanel}/>
                         :
                         'No component provided for bulk accounts'
                 }

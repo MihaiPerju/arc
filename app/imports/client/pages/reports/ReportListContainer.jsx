@@ -73,6 +73,7 @@ class ReportListContainer extends Pager {
         Meteor.call('report.deleteMany', reportsSelected, (err) => {
             if (!err) {
                 Notifier.success('Reports deleted !');
+                this.closeRightPanel();
             }
         });
     };
@@ -83,6 +84,13 @@ class ReportListContainer extends Pager {
         const range = PagerService.getRange(nextPage, perPage);
         FlowRouter.setQueryParams({page: nextPage});
         this.setState({range, page: nextPage, currentClient: null});
+    };
+
+    closeRightPanel = () => {
+        this.setState({
+            create: false,
+            currentReport: null
+        })
     };
 
     render() {
