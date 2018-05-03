@@ -62,7 +62,7 @@ export default class TaskContentHeader extends Component {
   }
 
   render() {
-    const { task, openMetaData } = this.props;
+    const { task, openMetaData, closeRightPanel } = this.props;
     const options = this.getOptions(
       task && task.facility && task.facility.users
     );
@@ -103,23 +103,29 @@ export default class TaskContentHeader extends Component {
               model={task}
               accountId={task._id}
               options={userOptions}
+              closeRightPanel={closeRightPanel}
+              title=""
             />
             <AccountActioning
               escalate
               accountId={task._id}
               type="Escalate"
               title="Escalate"
+              closeRightPanel={closeRightPanel}
             />
             <AccountActioning
               metaData={true}
               type="View Meta Data"
               openMetaData={openMetaData}
+              closeRightPanel={closeRightPanel}
+              title=""
             />
             <AccountActioning
               tickle={true}
               type="Tickle"
               accountId={task._id}
               title="Tickle an account"
+              closeRightPanel={closeRightPanel}
             />
           </div>
         </div>

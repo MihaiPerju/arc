@@ -5,11 +5,12 @@ import Notifier from "../../../../lib/Notifier";
 
 export default class AccountEscalation extends React.Component {
     escalate = ({reason}) => {
-        const {accountId} = this.props;
+        const {accountId, closeRightPanel} = this.props;
         Meteor.call("account.escalate", {reason, accountId}, (err) => {
             if (!err) {
                 Notifier.success("Account escalated!");
                 this.closeDialog();
+                closeRightPanel();
             } else {
                 Notifier.error(err.reason);
             }

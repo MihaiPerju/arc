@@ -16,7 +16,7 @@ export default class AccountTickle extends React.Component {
 
     tickle = (e) => {
         e.preventDefault();
-        const {accountId} = this.props;
+        const {accountId, closeRightPanel} = this.props;
         const {tickleDate} = this.state;
         const data = {};
         data._id = accountId;
@@ -25,6 +25,7 @@ export default class AccountTickle extends React.Component {
             if (!err) {
                 Notifier.success("Account Tickled!");
                 this.closeDialog();
+                closeRightPanel();
             } else {
                 Notifier.error(err.reason);
             }

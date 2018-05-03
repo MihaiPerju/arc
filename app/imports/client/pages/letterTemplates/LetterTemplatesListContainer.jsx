@@ -65,6 +65,7 @@ class LetterTemplateListContainer extends Component {
                     currentTemplate: null,
                     templatesSelected: []
                 })
+                this.closeForm();
             }
         });
     };

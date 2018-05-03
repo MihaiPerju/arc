@@ -10,9 +10,9 @@ export default class ContactBlock extends Component {
                 </div>
                 <div className="main__block">
                     {
-                        client.contacts && client.contacts.map((contact) => {
+                        client.contacts && client.contacts.map((contact, index) => {
                             return (
-                                <ul className="contact-info">
+                                <ul key={index} className="contact-info">
                                     <li className="text-center">
                                         <div className="text-light-grey">Status</div>
                                         <div className="l-info">{client.status ? "Active" : "Inactive"}</div>

@@ -44,13 +44,14 @@ export default class AccountAssign extends React.Component {
     }
 
     assignToUser = ({assigneeId}) => {
-        const {accountId} = this.props;
+        const {accountId, closeRightPanel} = this.props;
         let accountIds = [];
         accountIds.push(accountId);
         Meteor.call('account.assignUser.bulk', {accountIds, assigneeId}, (err) => {
             if (!err) {
                 Notifier.success('Account assigned to user!');
                 this.closeDialog();
+                closeRightPanel();
             } else {
                 Notifier.error(err.reason);
             }
@@ -58,13 +59,14 @@ export default class AccountAssign extends React.Component {
     };
 
     assignToWorkQueue = ({workQueue}) => {
-        const {accountId} = this.props;
+        const {accountId, closeRightPanel} = this.props;
         let accountIds = [];
         accountIds.push(accountId);
         Meteor.call("account.assignWorkQueue", {_id: accountId, workQueue}, (err) => {
             if (!err) {
                 Notifier.success('Account assigned to Work Queue!');
                 this.closeDialog();
+                closeRightPanel();
             } else {
                 Notifier.error(err.reason);
             }
@@ -80,7 +82,7 @@ export default class AccountAssign extends React.Component {
                 <h1>Assign account:</h1>
                 <div className="check-block">
                     <div className="check-group" onClick={this.showUserForm}>
-                        <input id="a1" type="radio" name="assign" value="user" checked={assignToUser}/>
+                        <input id="a1" type="radio" name="assign" value="user" defaultChecked={assignToUser}/>
                         <label htmlFor="a1">User</label>
                     </div>
                     <div className="check-group" onClick={this.showQueueForm}>

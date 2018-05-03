@@ -29,11 +29,11 @@ export default class AccountActioning extends React.Component {
     };
 
     showDialog = () => {
-        const {model, accountId, options, title, escalate, metaData, metaDataGroups, tickle, openMetaData} = this.props;
+        const {model, accountId, options, title, escalate, metaData, metaDataGroups, tickle, openMetaData, closeRightPanel} = this.props;
 
         if (tickle) {
             return (
-                <AccountTickle accountId={accountId} close={this.closeDialog}/>
+                <AccountTickle accountId={accountId} close={this.closeDialog} closeRightPanel={closeRightPanel}/>
             )
         }
         if (metaData) {
@@ -41,11 +41,11 @@ export default class AccountActioning extends React.Component {
         }
         if (escalate) {
             return (
-                <AccountEscalation close={this.closeDialog} title={title} accountId={accountId}/>
+                <AccountEscalation close={this.closeDialog} title={title} accountId={accountId} closeRightPanel={closeRightPanel}/>
             )
         } else {
             return (
-                <AccountAssign accountId={accountId} userOptions={options} close={this.closeDialog} model={model}/>
+                <AccountAssign accountId={accountId} userOptions={options} close={this.closeDialog} model={model} closeRightPanel={closeRightPanel}/>
             )
         }
     };

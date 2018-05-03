@@ -73,8 +73,16 @@ class RegionListContainer extends Component {
         Meteor.call('region.deleteMany', regionsSelected, (err) => {
             if (!err) {
                 Notifier.success('Regions deleted !');
+                this.closeRightPanel();
             }
         });
+    };
+
+    closeRightPanel = () => {
+        this.setState({
+            create: false,
+            currentRegion: null,
+        })
     };
 
     render() {
