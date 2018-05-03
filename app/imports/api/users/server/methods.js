@@ -38,5 +38,11 @@ Meteor.methods({
 
     'users.get'(userIds) {
         return Users.find({ _id: { $in: userIds } }).fetch();
+    },
+    'user.tags.get'(){
+        const userId = Meteor.userId();
+        const {tagIds} = Users.findOne({_id: userId});
+
+        return tagIds;
     }
 });

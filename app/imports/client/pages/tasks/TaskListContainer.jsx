@@ -12,8 +12,8 @@ import PagerService from '/imports/client/lib/PagerService';
 import AccountAssigning from '/imports/client/pages/tasks/components/TaskContent/AccountAssigning.jsx'
 import AccountSearchBar from './components/AccountSearchBar';
 import AccountMetaData from '/imports/client/pages/tasks/components/TaskContent/AccountMetaData'
+import userTagsQuery from '/imports/api/users/queries/userTags.js'
 import Notifier from '/imports/client/lib/Notifier';
-
 
 class TaskListContainer extends Pager {
     constructor() {
@@ -28,13 +28,41 @@ class TaskListContainer extends Pager {
             range: {},
             assignUser: false,
             assignWQ: false,
-            showMetaData: false
+            showMetaData: false,
+            assignFilterArr: ['assigneeId'],
+            tags: [],
+            dropdownOptions: []
         });
         this.query = query;
     }
 
     componentWillMount() {
         this.nextPage(0);
+        userTagsQuery.clone({
+            filters: {
+                _id: Meteor.userId()
+            }
+        }).fetchOne((err, user) => {
+            if (!err) {
+                const tags = user.tags;
+                let assignFilterArr = ['assigneeId'];
+                let dropdownOptions = [{label: 'Personal Accounts', filter: 'assigneeId'}];
+
+                _.each(tags, (tag) => {
+                    assignFilterArr.push(tag._id);
+                    dropdownOptions.push({label: tag.name, filter: tag._id});
+                })
+                this.setState({tags, assignFilterArr, dropdownOptions});
+            } else {
+                let assignFilterArr = ['assigneeId', 'workQueue'];
+                let dropdownOptions = [
+                    {label: 'Personal Accounts', filter: 'assigneeId'},
+                    {label: 'Work Queue Accounts', filter: 'workQueue'}
+                ]
+                this.setState({assignFilterArr, dropdownOptions});
+            }
+        })
+
     }
 
     getData(tasks) {
@@ -216,7 +244,32 @@ class TaskListContainer extends Pager {
     };
 
     getProperAccounts = (assign) => {
-        FlowRouter.setQueryParams({assign});
+        let {tags, assignFilterArr} = this.state;
+
+        if (_.contains(assignFilterArr, assign)){
+            assignFilterArr.splice(assignFilterArr.indexOf(assign), 1);
+        } else {
+            assignFilterArr.push(assign);
+        }
+        this.setState({assignFilterArr});
+        if (tags.length !== 0) {
+            if (assignFilterArr.length === tags.length + 1){
+                FlowRouter.setQueryParams({assign: null});
+            } else if (assignFilterArr.length === 0) {
+                FlowRouter.setQueryParams({assign: 'none'});
+            } else {
+                FlowRouter.setQueryParams({assign: assignFilterArr.toString()});
+            }
+        } else {
+            if (assignFilterArr.length === tags.length + 2){
+                FlowRouter.setQueryParams({assign: null});
+            } else if (assignFilterArr.length === 0) {
+                FlowRouter.setQueryParams({assign: 'none'});
+            } else {
+                FlowRouter.setQueryParams({assign: assignFilterArr.toString()});
+            }
+        }
+
     };
 
     openMetaDataSlider = () => {
@@ -233,14 +286,10 @@ class TaskListContainer extends Pager {
 
     render() {
         const {data, loading, error} = this.props;
-        const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ, showMetaData} = this.state;
+        const {tasksSelected, currentTask, range, total, filter, assignUser, assignWQ, showMetaData,
+            assignFilterArr, dropdownOptions} = this.state;
         const options = this.getData(data);
         const task = this.getTask(currentTask);
-        const dropdownOptions = [
-            {label: 'All'},
-            {label: 'Personal Accounts', filter: 'assigneeId'},
-            {label: 'Work Queue Accounts', filter: 'workQueue'}
-        ];
         const icons = [{icon: 'user', method: this.assignToUser}, {icon: 'users', method: this.assignToWorkQueue}];
 
         if (loading) {
@@ -260,6 +309,7 @@ class TaskListContainer extends Pager {
                                       decrease={this.decreaseList}
                                       dropdownOptions={dropdownOptions}
                                       btnGroup={tasksSelected.length}
+                                      assignFilterArr={assignFilterArr}
                     />
                     {
                         assignUser &&
