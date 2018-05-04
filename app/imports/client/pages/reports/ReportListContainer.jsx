@@ -13,6 +13,7 @@ import classNames from 'classnames';
 import Notifier from '/imports/client/lib/Notifier';
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
+import substatesQuery from '/imports/api/substates/queries/listSubstates';
 
 class ReportListContainer extends Pager {
     constructor() {
@@ -24,13 +25,19 @@ class ReportListContainer extends Pager {
             page: 1,
             perPage: 13,
             total: 0,
-            range: {}
+            range: {},
+            substates: []
         });
         this.query = query;
     }
 
     componentWillMount() {
         this.nextPage(0);
+        substatesQuery.fetch((err, substates) => {
+            if(!err) {
+                this.setState({substates});
+            }
+        })
     }
 
     setReport = (_id) => {
@@ -95,7 +102,7 @@ class ReportListContainer extends Pager {
 
     render() {
         const {data, loading, error} = this.props;
-        const {reportsSelected, currentReport, create, total, range} = this.state;
+        const {reportsSelected, currentReport, create, total, range, substates} = this.state;
         const report = objectFromArray(data, currentReport);
 
         if (loading) {
@@ -134,6 +141,7 @@ class ReportListContainer extends Pager {
                     <RightSide close={this.closeForm}
                                report={report}
                                create={create}
+                               substates={substates}
                     />
                 }
             </div>
@@ -156,7 +164,7 @@ class RightSide extends Component {
     }
 
     render() {
-        const {report, create, close} = this.props;
+        const {report, create, close, substates} = this.props;
         const {fade} = this.state;
         const classes = classNames({
             'right__side': true,
@@ -165,7 +173,7 @@ class RightSide extends Component {
         return (
             <div className={classes}>
                 {
-                    create ? <ReportCreate close={close}/> : <ReportContent report={report}/>
+                    create ? <ReportCreate close={close} substates={substates}/> : <ReportContent substates={substates} report={report}/>
                 }
             </div>
         );

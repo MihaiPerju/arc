@@ -144,7 +144,7 @@ export default class ReportsService {
         return {result, filterBuilderData};
     }
 
-    static createSchema() {
+    static createSchema(substates) {
 
         const fields = {};
         ReportFields.map((rule) => {
@@ -202,7 +202,7 @@ export default class ReportsService {
 
                 fields[value] = {
                     type: String,
-                    allowedValues: _.map(Enums[`${value}Enum`], (value) => (value)),
+                    allowedValues: _.map(substates, (value) => (value.name)),
                     optional: true,
                     label
                 }
