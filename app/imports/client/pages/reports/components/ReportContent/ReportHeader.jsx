@@ -10,7 +10,7 @@ import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 
-export class ReportHeader extends Component {
+class ReportHeader extends Component {
   constructor() {
     super();
     this.state = {
@@ -37,7 +37,8 @@ export class ReportHeader extends Component {
           accounts
         });
       } else {
-        Notifier.error(err.reason);
+        Notifier.error("Couldn't get sample accounts");
+        console.log(err);
       }
     });
   }
@@ -91,13 +92,13 @@ export class ReportHeader extends Component {
     window.open("/report/" + reportId);
   };
 
-  getRunButton(status) {
+  getRunButton = (status) => {
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
         return (
           <button style={{ marginLeft: "2rem" }} className="btn--white">
             Loading...
-          </button>
+              </button>
         );
       case JobQueueStatuses.FINISHED:
         return (
@@ -107,7 +108,7 @@ export class ReportHeader extends Component {
             className="btn--white"
           >
             Download report
-          </button>
+              </button>
         );
       default:
         return (
@@ -117,99 +118,95 @@ export class ReportHeader extends Component {
             className="btn--white"
           >
             Run report
-          </button>
+              </button>
         );
     }
-  }
+  };
 
   render() {
     const { report, data } = this.props;
     const { schedule, accounts } = this.state;
-    const job = data[0];
-    console.log(job);
-    console.log('accounts', accounts)
-    const mainTable = {
-      header: "Account name",
-      row: accounts.map((task, index) => {
-        return { title: "Account No." + (index + 1) };
-      })
-    };
+    const job = data;
 
-    const tableList = [
-      {
-        header: "Account number",
-        row: accounts.map((task, index) => {
-          return { title: task.acctNum };
-        })
-      },
-      {
-        header: "Discharge date",
-        row: accounts.map((task, index) => {
-          return { title: moment(task.dischrgDate).format("MM/DD/YYYY hh:mm") };
-        })
-      },
-      {
-        header: "Patient Type",
-        row: accounts.map((task, index) => {
-          return { title: task.ptType };
-        })
-      },
-      {
-        header: "Facility Code",
-        row: accounts.map((task, index) => {
-          return { title: task.facCode };
-        })
-      },
-      {
-        header: "Patient Name",
-        row: accounts.map((task, index) => {
-          return { title: task.ptName };
-        })
-      }
+    const tableHeader = [
+      'Account name', 'Account number', 'Discharge date', 'Patient Type', 'Facility Code', 'Patient Name'
     ];
+
     return (
       <div className="main-content report-content">
         {schedule ? (
           <ScheduleBlock report={report} />
         ) : (
-          <div className="main-content__header header-block">
-            <div className="row__header">
-              <div className="text-light-grey">Report name</div>
-              <div className="title">{report.name}</div>
-            </div>
-            <div className="row__header">
-              <div className="plasment-block">
-                <div className="text-light-grey">Placement date</div>
-                <div className="time">11:20</div>
+            <div className="main-content__header header-block">
+              <div className="row__header">
+                <div className="text-light-grey">Report name</div>
+                <div className="title">{report.name}</div>
               </div>
-              <div className="btn-group">
-                <button className="btn--white" onClick={this.openSchedule}>
-                  Schedule
-                </button>
-                <button onClick={this.onEdit} className="btn--white">
-                  Edit report
-                </button>
-                {this.getRunButton(job && job.status)}
+              <div className="row__header">
+                <div className="plasment-block">
+                  <div className="text-light-grey">Placement date</div>
+                  <div className="time">11:20</div>
+                </div>
+                <div className="btn-group">
+                  <button className="btn--white" onClick={this.openSchedule}>
+                    Schedule
+                                </button>
+                  <button onClick={this.onEdit} className="btn--white">
+                    Edit report
+                                </button>
+                  {this.getRunButton(job && job.status)}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
         {!schedule && (
           <div className="table-list">
-            <div className="left-side">
-              <TableReport title={mainTable.header} rows={mainTable.row} />
-            </div>
-            <div className="right-side" id="table">
-              {tableList.map(function(table, index) {
-                return (
-                  <TableReport
-                    center
-                    key={index}
-                    title={table.header}
-                    rows={table.row}
-                  />
-                );
-              })}
+            <div className="table-list__wrapper">
+              <div className="table-container">
+                <div className="table-row">
+                  {
+                    tableHeader.map(function (header, index) {
+                      return (
+                        (index == 0) ? (
+                          <div key={index} className="left-side">
+                            <div className="table-header truncate text-left table-field table-field--fixed text-light-grey">
+                              {header}
+                            </div>
+                          </div>
+                        ) : (
+                            <div key={index}
+                              className="table-header text-center table-field text-light-grey">
+                              {header}
+                            </div>
+                          )
+                      )
+                    })
+                  }
+                </div>
+
+                {
+                  accounts.map((account, index) => {
+                    return (
+                      <div className="table-row" key={index}>
+                        <div className="left-side">
+                          <div className="table-field table-field--fixed truncate text-center">
+                            {'Account No.' + (index + 1)}
+                          </div>
+                        </div>
+                        <div className="right-side">
+                          <div className="table-field text-center">{account.acctNum}</div>
+                          <div className="table-field text-center">
+                            {moment(account.dischrgDate).format("MM/DD/YYYY hh:mm")}
+                          </div>
+                          <div className="table-field text-center">{account.ptType}</div>
+                          <div className="table-field text-center">{account.facCode}</div>
+                          <div className="table-field text-center">{account.ptName}</div>
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
             </div>
           </div>
         )}
@@ -222,5 +219,5 @@ export default withQuery(
   props => {
     return jobQueueQuery.clone({ filters: { reportId: props.report._id } });
   },
-  { reactive: true }
+  { single: true, reactive: true }
 )(ReportHeader);
