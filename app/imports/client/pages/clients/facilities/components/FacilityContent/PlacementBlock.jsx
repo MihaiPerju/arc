@@ -6,7 +6,7 @@ import ImportingRules from '../ImportingRules';
 
 export default class PlacementBlock extends Component {
     render() {
-        const {facility} = this.props;
+        const {facility, setTempRules} = this.props;
         const componentConfig = {
             postUrl: `/uploads/csv/${facility._id}`
         };
@@ -31,7 +31,7 @@ export default class PlacementBlock extends Component {
                     </div>
                 </div>
                 <div className="upload-section">
-                    <ImportingRules rules={"placementRules"} model={facility}/>
+                    <ImportingRules rules={"placementRules"} model={facility} setTempRules={setTempRules}/>
                 </div>
             </div>
         )

@@ -4,6 +4,12 @@ import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
 
 export default class InventoryBlock extends Component {
+
+    copyRules = () => {
+        const {copyPlacementRules} = this.props;
+        copyPlacementRules();
+    };
+
     render() {
         const {facility} = this.props;
         const componentConfig = {
@@ -28,6 +34,9 @@ export default class InventoryBlock extends Component {
                         <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                     </div>
                     <div className="upload-section">
+                        <div>
+                            <button style={{float: 'right'}} type="button" className="btn--white" onClick={this.copyRules}>Copy placement file headers</button>
+                        </div>
                         <ImportingRules rules={"inventoryRules"} model={facility}/>
                     </div>
                 </div>
