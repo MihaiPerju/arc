@@ -26,6 +26,15 @@ export default class ImportingRules extends React.Component {
         });
     }
 
+    componentWillReceiveProps(newProps) {
+        if(newProps.resetImportForm) {
+            const {form} = this.refs;
+            const {changeResetStatus} = this.props;
+            form.reset();
+            changeResetStatus();
+        }
+    }
+
     onSubmitImportingRules = (importRules) => {
         const facilityId = this.props.model._id;
         const {rules} = this.props;
@@ -106,7 +115,8 @@ export default class ImportingRules extends React.Component {
                         <AutoForm model={model[rules]} schema={schema}
                                   onChange={this.onChange.bind(this)}
                                   onSubmit={this.onSubmitImportingRules}
-                                  onChangeModel={this.onChangeModel}>
+                                  onChangeModel={this.onChangeModel}
+                                  ref="form">
 
                             <div className="form-wrapper">
                                 <div className="upload-section">
