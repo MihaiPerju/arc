@@ -43,10 +43,25 @@ export default class PagerService {
     }
 
     static getProperAccounts(params, assign) {
-        if (assign === "workQueue") {
-            _.extend(params.filters, { workQueue: { $exists: true } });
-        } else if (assign === "assigneeId") {
-            _.extend(params.filters, { assigneeId: { $exists: true } });
+        if (assign === 'none') {
+            _.extend(params.filters, {
+                assigneeId: {$exists: true},
+                workQueue: {$exists: true}
+            });
+        } else if (assign) {
+            const filterArr = assign.split(",");
+            if (_.contains(filterArr, "assigneeId")){
+                _.extend(params.filters, {
+                    $or: [
+                        {workQueue: {$in: filterArr}},
+                        {
+                            assigneeId: {$exists: true}
+                        }
+                    ]
+                });
+            } else {
+                _.extend(params.filters, {workQueue: {$in: filterArr}});
+            }
         }
     }
 
