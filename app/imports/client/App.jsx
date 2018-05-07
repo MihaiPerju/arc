@@ -2,7 +2,7 @@ import React from 'react';
 import NotificationsSystem from 'react-notification-system';
 import Notifier from '/imports/client/lib/Notifier';
 import Header from '/imports/client/layout/header/Header';
-import {LeftMenu} from '/imports/client/layout/leftMenu/LeftMenu';
+import LeftMenu from '/imports/client/layout/leftMenu/LeftMenu';
 import Footer from '/imports/client/layout/footer/Footer';
 import Login from "/imports/client/pages/users/Login";
 

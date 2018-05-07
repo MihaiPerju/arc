@@ -26,6 +26,15 @@ export default class ImportingRules extends React.Component {
         });
     }
 
+    componentWillReceiveProps(newProps) {
+        if(newProps.resetImportForm) {
+            const {form} = this.refs;
+            const {changeResetStatus} = this.props;
+            form.reset();
+            changeResetStatus();
+        }
+    }
+
     onSubmitImportingRules = (importRules) => {
         const facilityId = this.props.model._id;
         const {rules} = this.props;
@@ -80,6 +89,13 @@ export default class ImportingRules extends React.Component {
         })
     }
 
+    onChangeModel = (model) => {
+        const {rules, setTempRules} = this.props;
+        if(rules === 'placementRules') {
+            setTempRules(model);
+        }
+    }
+
     render() {
         const {schema, loading, collapse} = this.state;
         const {model, rules} = this.props;
@@ -90,6 +106,7 @@ export default class ImportingRules extends React.Component {
             'btn-collapse': true,
             'rotate': collapse
         });
+
         return (
             <div>
                 {
@@ -97,7 +114,9 @@ export default class ImportingRules extends React.Component {
                         <Loading/> :
                         <AutoForm model={model[rules]} schema={schema}
                                   onChange={this.onChange.bind(this)}
-                                  onSubmit={this.onSubmitImportingRules}>
+                                  onSubmit={this.onSubmitImportingRules}
+                                  onChangeModel={this.onChangeModel}
+                                  ref="form">
 
                             <div className="form-wrapper">
                                 <div className="upload-section">

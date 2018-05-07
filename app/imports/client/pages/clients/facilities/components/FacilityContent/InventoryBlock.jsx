@@ -4,8 +4,14 @@ import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
 
 export default class InventoryBlock extends Component {
+
+    copyRules = () => {
+        const {copyPlacementRules} = this.props;
+        copyPlacementRules();
+    };
+
     render() {
-        const {facility} = this.props;
+        const {facility, resetImportForm, changeResetStatus} = this.props;
         const componentConfig = {
             postUrl: `/uploads/inventory/${facility && facility._id}`
         };
@@ -17,6 +23,7 @@ export default class InventoryBlock extends Component {
             },
             acceptedFiles: '.csv'
         };
+
         return (
             <div className="action-block drop-file">
                 <div className="header__block">
@@ -28,7 +35,10 @@ export default class InventoryBlock extends Component {
                         <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                     </div>
                     <div className="upload-section">
-                        <ImportingRules rules={"inventoryRules"} model={facility}/>
+                        <div>
+                            <button style={{float: 'right'}} type="button" className="btn--white" onClick={this.copyRules}>Copy placement file headers</button>
+                        </div>
+                        <ImportingRules rules={"inventoryRules"} model={facility} resetImportForm={resetImportForm} changeResetStatus={changeResetStatus}/>
                     </div>
                 </div>
             </div>

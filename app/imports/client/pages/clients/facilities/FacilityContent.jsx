@@ -11,8 +11,17 @@ export default class FacilityContent extends Component {
     constructor() {
         super();
         this.state = {
-            edit: false
+            edit: false,
+            copiedPlacementRules: {},
+            inventoryFacility: null,
+            resetImportForm: false
         }
+    }
+
+    componentWillMount() {
+        const {facility} = this.props;
+        const {placementRules} = facility;
+        this.setState({copiedPlacementRules: placementRules, inventoryFacility: facility});
     }
 
     componentWillReceiveProps() {
@@ -24,9 +33,26 @@ export default class FacilityContent extends Component {
         this.setState({edit: !edit})
     };
 
+    setTempRules = (model) => {
+        this.setState({copiedPlacementRules: model});
+    };
+
+    copyPlacementRules = () => {
+        this.setState({resetImportForm: true})
+        const {copiedPlacementRules} = this.state;
+        const {facility} = this.props;
+        const tempFacility = _.clone(facility);
+        tempFacility.inventoryRules = copiedPlacementRules;
+        this.setState({inventoryFacility: tempFacility})
+    };
+
+    changeResetStatus = () => {
+        this.setState({resetImportForm: false})
+    };
+
     render() {
         const {facility, setFacility} = this.props;
-        const {edit} = this.state;
+        const {edit, inventoryFacility, resetImportForm} = this.state;
         return (
             <div className="main-content facility-content">
                 <div className="breadcrumb">
@@ -48,8 +74,12 @@ export default class FacilityContent extends Component {
                             <FacilityContentHeader onEdit={this.setEdit} setFacility={setFacility} facility={facility}/>
                             <ContactTable contacts={facility && facility.contacts}/>
                             <FacilityFiles facilityId={facility && facility._id}/>
-                            <PlacementBlock facility={facility}/>
-                            <InventoryBlock facility={facility}/>
+                            <PlacementBlock facility={facility} setTempRules={this.setTempRules}/>
+                            <InventoryBlock
+                                facility={inventoryFacility}
+                                copyPlacementRules={this.copyPlacementRules}
+                                resetImportForm={resetImportForm}
+                                changeResetStatus={this.changeResetStatus}/>
                             <PaymentBlock facility={facility}/>
                         </div>
                 }
