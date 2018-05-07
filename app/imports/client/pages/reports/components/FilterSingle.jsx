@@ -13,7 +13,6 @@ export default class FiltersSingle extends React.Component {
 
     getOptions(name) {
         const {clientIdOptions, assigneeIdOptions, facilityIdOptions,} = this.props;
-        console.log(facilityIdOptions)
         switch (name) {
             case "assigneeId":
                 return assigneeIdOptions;
@@ -79,7 +78,6 @@ export default class FiltersSingle extends React.Component {
 
     render() {
         const {name} = this.props;
-        console.log('re-render')
         return (
             <div className="filter-type__wrapper">
                 <div className="row-select">
