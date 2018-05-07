@@ -157,7 +157,8 @@ class TaskListContainer extends Pager {
       tasksSelected.push(task._id);
     }
     this.setState({
-      tasksSelected
+      tasksSelected,
+      showMetaData: false
     });
   };
 
@@ -336,9 +337,16 @@ class TaskListContainer extends Pager {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
+    console.log((currentTask || tasksSelected.length) && !showMetaData);
     return (
       <div className="cc-container">
-        <div className={currentTask ? "left__side" : "left__side full__width"}>
+        <div
+          className={
+            currentTask || tasksSelected.length
+              ? "left__side"
+              : "left__side full__width"
+          }
+        >
           <AccountSearchBar
             options={options}
             icons={icons}
@@ -381,11 +389,12 @@ class TaskListContainer extends Pager {
             buttonHidden={true}
           />
         </div>
-        {currentTask &&
+        {(currentTask || tasksSelected.length) &&
           !showMetaData && (
             <RightSide
               task={task}
               openMetaData={this.openMetaDataSlider}
+              accountsSelected={tasksSelected}
               closeRightPanel={this.closeRightPanel}
             />
           )}
@@ -416,18 +425,21 @@ class RightSide extends Component {
 
   render() {
     const { fade } = this.state;
-    const { task, openMetaData, closeRightPanel } = this.props;
+    const {
+      task,
+      openMetaData,
+      closeRightPanel,
+      accountsSelected
+    } = this.props;
+    console.log(fade);
     return (
       <div className={fade ? "right__side in" : "right__side"}>
-        {task ? (
-          <TaskContent
-            task={task}
-            openMetaData={openMetaData}
-            closeRightPanel={closeRightPanel}
-          />
-        ) : (
-          "No component provided for bulk accounts"
-        )}
+        <TaskContent
+          task={task}
+          openMetaData={openMetaData}
+          accountsSelected={accountsSelected}
+          closeRightPanel={closeRightPanel}
+        />
       </div>
     );
   }
