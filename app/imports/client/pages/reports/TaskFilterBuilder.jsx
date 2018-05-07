@@ -99,6 +99,17 @@ export default class TaskFilterBuilder extends React.Component {
             components,
             schema
         });
+        const {filterBuilderData} = this.props;
+        if (filterBuilderData.clientId) {
+            console.log('nu e null');
+            console.log(filterBuilderData.clientId);
+            this.getProperFacilities(filterBuilderData.clientId);
+        } else console.log('e null');
+
+        if (filterBuilderData.facilityId) {
+            console.log(filterBuilderData.facilityId);
+            this.setState({facilityOptions: filterBuilderData.facilityId});
+        } else console.log('filterBuilderData.facilityId e null');
     }
 
     deleteFilter = (name) => {
@@ -145,6 +156,7 @@ export default class TaskFilterBuilder extends React.Component {
     };
 
     onHandleChange = (field, value) => {
+        console.log('a intrat in onHandleChange')
         if (field === 'clientId') {
             this.getProperFacilities(value);
         }
@@ -152,7 +164,8 @@ export default class TaskFilterBuilder extends React.Component {
     };
 
     getProperFacilities = (clientIds) => {
-        const {components} = this.state;
+        console.log('a intrat in getProperFacilities')
+        console.log(clientIds);
         let facilityOptions = [];
 
         if (clientIds.length !== 0){
@@ -171,6 +184,7 @@ export default class TaskFilterBuilder extends React.Component {
                         });
 
                     });
+                    console.log(facilityOptions);
                     this.setState({facilityOptions});
                 } else {
                     Notifier.error(err.reason);
@@ -220,6 +234,7 @@ export default class TaskFilterBuilder extends React.Component {
                                                 clientIdOptions={clientOptions}
                                                 deleteFilter={this.deleteFilter}
                                                 name={item.name}
+                                                getProperFacilities={this.getProperFacilities}
                                             />
                                     })
                                 }
