@@ -73,7 +73,7 @@ export default class ReportHeader extends Component {
 
         const tableHeader = [
             'Account name', 'Account number', 'Discharge date', 'Patient Type', 'Facility Code', 'Patient Name'
-        ];
+           ,"Last Bill Date","Account Balance","Financial Class","Admit Date","Medical Number"];
 
         return (
             <div className="main-content report-content">
@@ -146,6 +146,15 @@ export default class ReportHeader extends Component {
                                                     <div className="table-field text-center">{account.ptType}</div>
                                                     <div className="table-field text-center">{account.facCode}</div>
                                                     <div className="table-field text-center">{account.ptName}</div>
+                                                    <div className="table-field text-center">
+                                                        {moment(account.fbDate).format("MM/DD/YYYY hh:mm")}
+                                                    </div>
+                                                    <div className="table-field text-center">{account.acctBal}</div>
+                                                    <div className="table-field text-center">{account.finClass}</div>
+                                                    <div className="table-field text-center">
+                                                        {moment(account.admitDate).format("MM/DD/YYYY hh:mm")}
+                                                    </div>
+                                                    <div className="table-field text-center">{account.medNo}</div>
                                                 </div>
                                             </div>
                                         )
