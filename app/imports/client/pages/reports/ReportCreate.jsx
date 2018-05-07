@@ -75,6 +75,7 @@ export default class ReportCreate extends Component {
     render() {
         const {hasGeneralInformation, components, filterBuilderData} = this.state;
         const allowedRoles = [{value: Roles.MANAGER, label: "Allow " + Roles.MANAGER + " role"}];
+        const {substates} = this.props;
 
         return (
             <div className="create-form">
@@ -125,6 +126,7 @@ export default class ReportCreate extends Component {
                                     onSubmitFilters={this.onSubmitFilters.bind(this)}
                                     filterBuilderData={filterBuilderData}
                                     components={components}
+                                    substates={substates}
                                     ref="filterBuilder"/>
                             }
                         </div>

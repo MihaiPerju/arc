@@ -43,7 +43,8 @@ export default class TaskFilterBuilder extends React.Component {
 
     componentWillMount() {
         //Creating schema for filters
-        const schema = ReportsService.createSchema();
+        const {substates} = this.props;
+        const schema = ReportsService.createSchema(substates);
         let fullSchemaOptions = ReportsService.getOptions();
 
         //Creating set of Components based on schema field types

@@ -21,12 +21,12 @@ export default class ReportContent extends Component {
 
     render() {
         const {edit} = this.state;
-        const {report} = this.props;
+        const {report, substates} = this.props;
 
         return (
             <div className="report-section">
                 {
-                    edit ? <ReportEdit setEdit={this.setEdit} report={report}/> :
+                    edit ? <ReportEdit substates={substates} setEdit={this.setEdit} report={report}/> :
                         <ReportHeader setEdit={this.setEdit} report={report}/>
                 }
             </div>
