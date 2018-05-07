@@ -106,6 +106,10 @@ export default class TaskFilterBuilder extends React.Component {
 
         components[name].isActive = false;
 
+        if (name === 'clientId'){
+            this.getProperFacilities([]);
+        }
+
         this.setState({
             components
         });
@@ -140,6 +144,57 @@ export default class TaskFilterBuilder extends React.Component {
         this.refs.filterSelect.reset();
     };
 
+    onHandleChange = (field, value) => {
+        if (field === 'clientId') {
+            this.getProperFacilities(value);
+        }
+
+    };
+
+    getProperFacilities = (clientIds) => {
+        const {components} = this.state;
+        let facilityOptions = [];
+
+        if (clientIds.length !== 0){
+            facilityNames.clone(
+                {
+                    filters: {
+                        clientId: {$in: clientIds}
+                    }
+                }
+            ).fetch((err, facilities) => {
+                if (!err) {
+                    facilities.map((facility) => {
+                        facilityOptions.push({
+                            value: facility._id,
+                            label: facility.name + " - " + facility.client.clientName
+                        });
+
+                    });
+                    this.setState({facilityOptions});
+                } else {
+                    Notifier.error(err.reason);
+                }
+            });
+        } else {
+            let facilityOptions = [];
+            facilityNames.fetch((err, facilities) => {
+                if (!err) {
+                    facilities.map((facility) => {
+                        facilityOptions.push({
+                            value: facility._id,
+                            label: facility.name + " - " + facility.client.clientName
+                        });
+                    });
+                    this.setState({facilityOptions});
+                } else {
+                    Notifier.error(err.reason);
+                }
+            });
+        }
+
+    }
+
     render() {
         const {loading, facilityOptions, assigneeOptions, components, schema, clientOptions} = this.state;
         const {filterBuilderData} = this.props;
@@ -154,7 +209,8 @@ export default class TaskFilterBuilder extends React.Component {
                                 model={filterBuilderData}
                                 schema={schema}
                                 onSubmit={this.onSubmit}
-                                ref="filters">
+                                ref="filters"
+                                onChange={this.onHandleChange}>
                                 {
                                     _.map(components, (item) => {
                                         return item.isActive &&
