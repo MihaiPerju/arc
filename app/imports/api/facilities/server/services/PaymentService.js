@@ -5,12 +5,10 @@ export default class PaymentService {
     //For placement file
     static upload(results, importRules, facilityId) {
         const payments = PaymentService.convertToPayment(results, importRules, facilityId);
-        // console.log(payments);
 
         // Creating payments
         payments.map((payment) => {
             Payments.insert(payment);
-            // console.log("inserted");
         });
     }
 
