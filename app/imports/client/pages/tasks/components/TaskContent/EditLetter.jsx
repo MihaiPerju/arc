@@ -1,23 +1,42 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Loading from '/imports/client/lib/ui/Loading';
-import {getImagePath} from '/imports/api/utils';
-import {AutoForm, SelectField, ErrorField} from 'uniforms-semantic';
+import { getImagePath } from '/imports/api/utils';
+import { AutoForm, SelectField, ErrorField } from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
 
-export default class NewLetter extends Component {
+export default class EditLetter extends Component {
     constructor() {
         super();
         this.state = {
             fade: false,
-            selectedTemplate: {}
+            selectedTemplate: {},
+            model: {}
         }
     }
 
     componentDidMount() {
+        const { selectedLetter } = this.props;
+        this.getSelectedLetter(selectedLetter);
         setTimeout(() => {
-            this.setState({fade: true});
+            this.setState({ fade: true });
         }, 1);
+    }
+
+    componentWillReceiveProps(newProps) {
+        const { selectedLetter } = newProps;
+        this.getSelectedLetter(selectedLetter);
+    }
+
+    getSelectedLetter = (selectedLetter) => {
+        let model = {};
+        const selectedTemplate = this.getLetterTemplate(selectedLetter.letterTemplateId) || {};
+        if (!_.isEmpty(selectedTemplate)) {
+            model = {
+                selectedOption: selectedTemplate._id
+            }
+        }
+        this.setState({ model, selectedTemplate });
     }
 
     getOptions = (data) => {
@@ -28,7 +47,7 @@ export default class NewLetter extends Component {
     };
 
     getLetterTemplate(value) {
-        const {letterTemplates} = this.props;
+        const { letterTemplates } = this.props;
         for (letterTemplate of letterTemplates) {
             if (letterTemplate._id === value) {
                 return letterTemplate;
@@ -44,14 +63,14 @@ export default class NewLetter extends Component {
     }
 
     cancel() {
-        const {cancel} = this.props;
-        cancel();
+        const { cancelEdit } = this.props;
+        cancelEdit();
     }
 
     render() {
-        const {letterTemplates, task, cancel} = this.props;
-        const {selectedTemplate} = this.state;
-        const {avatar, profile} = Meteor.user();
+        const { letterTemplates, task, cancelEdit, selectedLetter } = this.props;
+        const { selectedTemplate, model } = this.state;
+        const { avatar, profile } = Meteor.user();
         const options = this.getOptions(letterTemplates);
 
         return (
@@ -59,23 +78,24 @@ export default class NewLetter extends Component {
                 <div className="row-block">
                     <div className="info">
                         <img className="md-avatar img-circle"
-                             src={avatar ? getImagePath(avatar.path) : "/assets/img/user1.svg"} alt=""/>
+                            src={avatar ? getImagePath(avatar.path) : "/assets/img/user1.svg"} alt="" />
                         <div className="name">{profile.firstName + " " + profile.lastName}</div>
                     </div>
                     <div className="form-group">
-                        <AutoForm onChange={this.onHandleChange.bind(this)} schema={schema}>
+                        <AutoForm model={model} onChange={this.onHandleChange.bind(this)} schema={schema}>
                             <SelectField
                                 name="selectedOption"
                                 placeholder="Select letter"
-                                options={options}/>
+                                options={options} />
                         </AutoForm>
                         <button onClick={this.cancel.bind(this)} className="btn--red">Cancel</button>
                     </div>
                 </div>
-                <LetterCreateContainer selectedTemplate={selectedTemplate}
-                                       account={task}
-                                       reset={cancel}
-                                       data={letterTemplates}/>
+                <LetterCreateContainer
+                    selectedTemplate={selectedTemplate}
+                    account={task}
+                    reset={cancelEdit}
+                    data={letterTemplates} />
             </div>
         )
     }

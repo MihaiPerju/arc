@@ -3,12 +3,13 @@ import Notifier from '/imports/client/lib/Notifier';
 
 export default class CreateLetter extends React.Component {
     createLetter = () => {
-        const {letterBody, taskId, reset, attachments} = this.props;
+        const {letterBody, taskId, reset, attachments, letterTemplateId} = this.props;
 
         const data = {
             body: letterBody,
             taskId,
-            attachments
+            attachments,
+            letterTemplateId
         };
 
         Meteor.call('letter.create', data, (err) => {

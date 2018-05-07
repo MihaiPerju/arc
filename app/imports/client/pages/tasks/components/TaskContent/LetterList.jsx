@@ -1,22 +1,43 @@
 import React, {Component} from 'react';
 import Dialog from "/imports/client/lib/ui/Dialog";
 import NewLetter from './NewLetter';
+import EditLetter from './EditLetter';
 import LetterListQuery from '/imports/api/letters/queries/letterList.js';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import {getToken} from '/imports/api/s3-uploads/utils';
+import letterTemplateQuery from '/imports/api/letterTemplates/queries/listLetterTemplates';
 
 class LetterList extends Component {
     constructor() {
         super();
         this.state = {
-            createLetter: false
+            createLetter: false,
+            editLetter: false,
+            selectedLetter: null,
+            letterTemplates: []
         };
+    }
+
+    componentWillMount() {
+        letterTemplateQuery.fetch((err, letterTemplates) => {
+            if(!err) {
+                this.setState({letterTemplates});
+            }
+        })
     }
 
     toggleLetter() {
         this.setState({
-            createLetter: !this.state.createLetter
+            createLetter: !this.state.createLetter,
+            editLetter: false
+        });
+    }
+
+    toggleEditLetter() {
+        this.setState({
+            editLetter: !this.state.editLetter,
+            createLetter: false
         });
     }
 
@@ -34,8 +55,17 @@ class LetterList extends Component {
         window.open('/letters/pdf/' + pdf, '_blank');
     }
 
+    handleEdit = (letter) => {
+        const {editLetter} = this.state;
+        this.setState({selectedLetter: letter});
+        if(!editLetter) {
+            this.toggleEditLetter();
+        }
+    }
+
     render() {
         const {data, isLoading, error, task} = this.props;
+        const {editLetter, selectedLetter, letterTemplates, createLetter} = this.state;
         if (isLoading) {
             return <Loading/>;
         }
@@ -43,6 +73,7 @@ class LetterList extends Component {
         if (error) {
             return <div>Error: {error.reason}</div>;
         }
+
         return (
             <div className="action-block">
                 <div className="header__block">
@@ -53,7 +84,23 @@ class LetterList extends Component {
                         <i className="icon-envelope-o"/>
                         <div className="text-center">+ Create a new letter</div>
                     </div>
-                    {this.state.createLetter ? <NewLetter cancel={this.toggleLetter.bind(this)} task={task}/> : null}
+                    {createLetter
+                        ? <NewLetter
+                            letterTemplates={letterTemplates}
+                            cancel={this.toggleLetter.bind(this)}
+                            task={task}
+                        />
+                        : null}
+
+                    {editLetter
+                        ? <EditLetter
+                            letterTemplates={letterTemplates}
+                            selectedLetter={selectedLetter}
+                            cancelEdit={() => this.toggleEditLetter()}
+                            task={task}
+                        />
+                        : null}
+
                     <div className="block-list letter-list">
                         {
                             data &&
@@ -65,6 +112,12 @@ class LetterList extends Component {
                                             <div className="status pending">{letter.status}</div>
                                         </div>
                                         <div className="btn-group">
+                                            {letter.status === 'pending' &&
+                                                (<button
+                                                    className="btn-text--blue"
+                                                    onClick={() => this.handleEdit(letter)}
+                                                >edit</button>)
+                                            }
                                             <button
                                                 className="btn-text--blue"
                                                 onClick={this.redirectToPdf.bind(this, `${task._id}/${letter._id}/${getToken()}`)}
