@@ -337,7 +337,6 @@ class TaskListContainer extends Pager {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
-    console.log((currentTask || tasksSelected.length) && !showMetaData);
     return (
       <div className="cc-container">
         <div
@@ -431,7 +430,6 @@ class RightSide extends Component {
       closeRightPanel,
       accountsSelected
     } = this.props;
-    console.log(fade);
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         <TaskContent
