@@ -5,7 +5,7 @@ import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInp
 import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
 import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
 
-class LetterCreateContainer extends React.Component {
+class LetterEditContainer extends React.Component {
     constructor() {
         super();
 
@@ -77,7 +77,7 @@ class LetterCreateContainer extends React.Component {
     };
 
     render() {
-        const {account, selectedTemplate, reset} = this.props;
+        const {account, selectedTemplate, reset, selectedLetter} = this.props;
         const {keywords, body, _id: letterId} = selectedTemplate;
         const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
         const model = {letterTemplate: null};
@@ -101,7 +101,8 @@ class LetterCreateContainer extends React.Component {
                             letterTemplateId={letterId}
                             parentState={this.state}
                             attachments={attachmentIds}
-                            currentComponent='create'/>
+                            currentComponent='edit'
+                            selectedLetter={selectedLetter}/>
                     </div>
                 </div>
             </div>
@@ -109,4 +110,4 @@ class LetterCreateContainer extends React.Component {
     }
 }
 
-export default LetterCreateContainer;
+export default LetterEditContainer;

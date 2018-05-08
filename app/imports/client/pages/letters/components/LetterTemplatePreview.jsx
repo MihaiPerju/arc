@@ -1,6 +1,7 @@
 import React from 'react';
 import Parser from 'simple-text-parser';
 import CreateLetter from './CreateLetter';
+import LetterEdit from './LetterEdit';
 import {Divider} from 'semantic-ui-react';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
@@ -26,7 +27,7 @@ export default class LetterTemplatePreview extends React.Component {
     };
 
     render() {
-        const {letterTemplateBody, taskId, reset, attachments, letterTemplateId} = this.props;
+        const {letterTemplateBody, taskId, reset, attachments, letterTemplateId, currentComponent, selectedLetter} = this.props;
         const letterBody = this.tagParser();
 
         return (
@@ -35,7 +36,22 @@ export default class LetterTemplatePreview extends React.Component {
                 {letterTemplateBody &&
                 <div>
                     <Divider/>
-                    <CreateLetter letterTemplateId={letterTemplateId} reset={reset} taskId={taskId} letterBody={letterBody} attachments={attachments}/>
+                    {
+                        currentComponent === 'create'
+                        ? <CreateLetter
+                            letterTemplateId={letterTemplateId}
+                            reset={reset}
+                            taskId={taskId}
+                            letterBody={letterBody}
+                            attachments={attachments} />
+                        : <LetterEdit
+                            letterTemplateId={letterTemplateId}
+                            reset={reset}
+                            taskId={taskId}
+                            letterBody={letterBody}
+                            attachments={attachments}
+                            selectedLetterId={selectedLetter._id} />
+                    }
                 </div>
                 }
             </div>

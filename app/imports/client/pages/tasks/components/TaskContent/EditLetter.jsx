@@ -3,7 +3,7 @@ import Loading from '/imports/client/lib/ui/Loading';
 import { getImagePath } from '/imports/api/utils';
 import { AutoForm, SelectField, ErrorField } from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
-import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
+import LetterEditContainer from '/imports/client/pages/letters/LetterEditContainer.jsx';
 
 export default class EditLetter extends Component {
     constructor() {
@@ -91,11 +91,12 @@ export default class EditLetter extends Component {
                         <button onClick={this.cancel.bind(this)} className="btn--red">Cancel</button>
                     </div>
                 </div>
-                <LetterCreateContainer
+                <LetterEditContainer
                     selectedTemplate={selectedTemplate}
                     account={task}
                     reset={cancelEdit}
-                    data={letterTemplates} />
+                    data={letterTemplates}
+                    selectedLetter={selectedLetter}/>
             </div>
         )
     }

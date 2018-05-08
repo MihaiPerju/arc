@@ -7,6 +7,7 @@ import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import {getToken} from '/imports/api/s3-uploads/utils';
 import letterTemplateQuery from '/imports/api/letterTemplates/queries/listLetterTemplates';
+import Notifier from '/imports/client/lib/Notifier';
 
 class LetterList extends Component {
     constructor() {
