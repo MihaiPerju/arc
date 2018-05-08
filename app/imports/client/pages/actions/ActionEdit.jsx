@@ -80,8 +80,7 @@ export default class ActionEdit extends React.Component {
     const { checked } = this.state;
     const substatesOptions = this.getOptions(substates);
     
-    return (
-      <div className="create-form">
+    return <div className="create-form">
         <div className="create-form__bar">
           <button className="btn-add">+ Edit code</button>
           <div className="btn-group">
@@ -102,30 +101,17 @@ export default class ActionEdit extends React.Component {
               </div>
             </div>
 
-            <AutoForm
-              model={action}
-              schema={ActionSchema}
-              onSubmit={this.onSubmit.bind(this)}
-              ref="form"
-            >
-              {this.state.error && (
-                <div className="error">{this.state.error}</div>
-              )}
+            <AutoForm model={action} schema={ActionSchema} onSubmit={this.onSubmit.bind(this)} ref="form">
+              {this.state.error && <div className="error">
+                  {this.state.error}
+                </div>}
               <div className="form-wrapper">
-                <AutoField
-                  labelHidden={true}
-                  placeholder="Title"
-                  name="title"
-                />
+                <AutoField labelHidden={true} placeholder="Title" name="title" />
                 <ErrorField name="title" />
               </div>
 
               <div className="form-wrapper">
-                <LongTextField
-                  labelHidden={true}
-                  placeholder="Description"
-                  name="description"
-                />
+                <LongTextField labelHidden={true} placeholder="Description" name="description" />
                 <ErrorField name="description" />
               </div>
 
@@ -137,28 +123,18 @@ export default class ActionEdit extends React.Component {
                 </label>
               </div>
 
-              {checked && (
-                <div className="select-group">
+              {checked && <div className="select-group">
                   <div className="form-wrapper">
-                    <SelectField
-                      placeholder="Substate"
-                      labelHidden={true}
-                      options={substatesOptions}
-                      name="substate"
-                    />
+                    <SelectField placeholder="Substate" labelHidden={true} options={substatesOptions} name="substate" />
                     <ErrorField name="substate" />
                   </div>
-                </div>
-              )}
+                </div>}
             </AutoForm>
           </div>
 
           <ReasonCodesBlock action={action} />
-          {/* {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
-            <ManagerReasonCodes action={action} />
-          )} */}
+          {/* {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && <ManagerReasonCodes action={action} />} */}
         </div>
-      </div>
-    );
+      </div>;
   }
 }
