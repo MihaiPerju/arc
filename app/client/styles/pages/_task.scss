@@ -1040,3 +1040,78 @@
     }
   }
 }
+
+//Pdf Attachment
+.select-helper {
+  position: relative;
+  &:before {
+    content: '\f107';
+    font-family: $font-icon;
+    position: absolute;
+    top: 26px;
+    right: 5px;
+    color: #b7b7b7;
+  }
+
+  select {
+    background: #ebebeb;
+    border-bottom: 0;
+    border-radius: 3px;
+    color: #838383;
+    padding: 9px 15px 10px;
+    line-height: 1.6rem;
+  }
+}
+
+.attachment {
+  &-block {
+    margin-bottom: 10px;
+    .select-attachment {
+      position: relative;
+      &:before {
+        content: '\f107';
+        font-family: $font-icon;
+        color: $extra-light-grey;
+        position: absolute;
+        top: 12px;
+        right: 15px;
+      }
+      select {
+        border: 0;
+        border-radius: 3px;
+        background: #ebebeb;
+        color: $light-grey;
+      }
+    }
+  }
+  &-list {
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  &-item {
+    background: $green;
+    border-radius: 3px;
+    margin-top: 3px;
+    padding: 6px 27px 6px 10px;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    span {
+      font-size: 1.2rem;
+      line-height: 1.2rem;
+    }
+    .btn-rmv {
+      font-size: 1.6rem;
+      line-height: 1.6rem;
+      color: #ab2222;
+      position: absolute;
+      right: 5px;
+      top: 0;
+      cursor: pointer;
+      padding: 3px 5px;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}

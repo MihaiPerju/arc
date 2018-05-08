@@ -36,7 +36,6 @@ export default class CreateClient extends Component {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Add client</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreateClient} className="btn--green">Confirm & save</button>

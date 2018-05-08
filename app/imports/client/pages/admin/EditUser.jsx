@@ -76,7 +76,6 @@ class EditUser extends Component {
     return (
       <div className="create-form">
         <div className="create-form__bar">
-          <button className="btn-add">+ Edit User</button>
           <div className="btn-group">
             <button onClick={this.closeEdit} className="btn-cancel">
               Cancel

@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4a42f0af-9891-4700-a2cd-4250aa162d69" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/app/imports/client/pages/letters/components/PdfAttachment.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/client/styles/base/_general.scss" afterPath="$PROJECT_DIR$/app/client/styles/base/_general.scss" />
+      <change beforePath="$PROJECT_DIR$/app/client/styles/pages/_create-form.scss" afterPath="$PROJECT_DIR$/app/client/styles/pages/_create-form.scss" />
+      <change beforePath="$PROJECT_DIR$/app/client/styles/pages/_report.scss" afterPath="$PROJECT_DIR$/app/client/styles/pages/_report.scss" />
+      <change beforePath="$PROJECT_DIR$/app/client/styles/pages/_task.scss" afterPath="$PROJECT_DIR$/app/client/styles/pages/_task.scss" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/admin/CreateUser.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/admin/CreateUser.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/admin/EditUser.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/admin/EditUser.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/letters/components/GenerateLetterTemplateInputs.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/letters/components/GenerateLetterTemplateInputs.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/ReportHeader.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/ReportHeader.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateEdit.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/tags/TagCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/tags/TagCreate.jsx" />
+      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/tags/TagEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/tags/TagEdit.jsx" />
+    </list>
+    <ignored path="$PROJECT_DIR$/.tmp/" />
+    <ignored path="$PROJECT_DIR$/temp/" />
+    <ignored path="$PROJECT_DIR$/tmp/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="_task.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/client/styles/pages/_task.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="777">
+              <caret line="1088" column="23" lean-forward="false" selection-start-line="1088" selection-start-column="23" selection-end-line="1088" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_report.scss" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/client/styles/pages/_report.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="270">
+              <caret line="42" column="40" lean-forward="false" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TableReport.jsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/TableReport.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReportHeader.jsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/ReportHeader.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="385">
+              <caret line="194" column="93" lean-forward="false" selection-start-line="194" selection-start-column="93" selection-end-line="194" selection-end-column="93" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+                <marker date="1525814479207" expanded="true" signature="5485:9331" ph="&lt;div/&gt;" />
+                <marker date="1525814479207" expanded="true" signature="5887:6216" ph="&lt;div/&gt;" />
+                <marker date="1525814479207" expanded="true" signature="7041:7348" ph="&lt;div/&gt;" />
+                <marker date="1525814479207" expanded="true" signature="7349:9123" ph="&lt;div/&gt;" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="_general.scss" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/client/styles/base/_general.scss">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="137" column="11" lean-forward="false" selection-start-line="137" selection-start-column="1" selection-end-line="137" selection-end-column="11" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PdfAttachment.jsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/components/PdfAttachment.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="324">
+              <caret line="18" column="18" lean-forward="true" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReportEdit.jsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/ReportEdit.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="303">
+              <caret line="120" column="55" lean-forward="true" selection-start-line="120" selection-start-column="55" selection-end-line="120" selection-end-column="55" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LetterCreateContainer.jsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/LetterCreateContainer.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="89" column="46" lean-forward="false" selection-start-line="89" selection-start-column="46" selection-end-line="89" selection-end-column="46" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GenerateLetterTemplateInputs.jsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/components/GenerateLetterTemplateInputs.jsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="435">
+              <caret line="138" column="61" lean-forward="false" selection-start-line="138" selection-start-column="48" selection-end-line="138" selection-end-column="61" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>CreateUser</find>
+      <find>create-form__</find>
+      <find>\n                    \&lt;button className\=\&quot;btn\-add\&quot;\&gt;\+ Add region\&lt;\/button\&gt;</find>
+      <find>create</find>
+      <find>crea</find>
+      <find>attachmentOptions</find>
+      <find>PdfAttachment</find>
+      <find>fields</find>
+      <find>create-form__bar</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/app/imports/client/pages/admin/CreateUser.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/tags/TagCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/tags/TagEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/admin/EditUser.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/codes/CodeEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/regions/RegionCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/regions/RegionEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/codes/CodeCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/reports/ReportCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/actions/ActionEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/clients/ClientEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/clients/ClientCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/actions/ActionCreate.jsx" />
+        <option value="$PROJECT_DIR$/app/client/styles/pages/_create-form.scss" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/letters/LetterCreateContainer.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/letters/components/PdfAttachment.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/letters/components/GenerateLetterTemplateInputs.jsx" />
+        <option value="$PROJECT_DIR$/app/client/styles/pages/_task.scss" />
+        <option value="$PROJECT_DIR$/app/client/styles/base/_general.scss" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/reports/ReportEdit.jsx" />
+        <option value="$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/ReportHeader.jsx" />
+        <option value="$PROJECT_DIR$/app/client/styles/pages/_report.scss" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="NodeModulesDirectoryManager">
+    <handled-path value="$PROJECT_DIR$/app/node_modules" />
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="55" />
+    <option name="y" value="24" />
+    <option name="width" value="1545" />
+    <option name="height" value="876" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource ProjectPane="true" />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="styles" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="styles" type="462c0819:PsiDirectoryNode" />
+              <item name="_helpers" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="styles" type="462c0819:PsiDirectoryNode" />
+              <item name="base" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="styles" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="actions" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="clients" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="clients" type="462c0819:PsiDirectoryNode" />
+              <item name="facilities" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="codes" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="letters" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="letters" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="letterTemplates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="ReportContent" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="substates" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="tags" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="tasks" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="tasks" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="arcc" type="b2602c69:ProjectViewProjectNode" />
+              <item name="arcc" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="imports" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="pages" type="462c0819:PsiDirectoryNode" />
+              <item name="tasks" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="TaskContent" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="HbShouldOpenHtmlAsHb" value="enabled" />
+    <property name="js.meteor.project" value="true" />
+    <property name="js.meteor.library.was.enabled" value="true" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4a42f0af-9891-4700-a2cd-4250aa162d69" name="Default" comment="" />
+      <created>1525791827279</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1525791827279</updated>
+      <workItem from="1525791828914" duration="17530000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="17530000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="55" y="-4" width="1545" height="904" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24967149" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.50262815" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33806452" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4812903" sideWeight="0.49737188" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/admin/CreateUser.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="39" column="50" lean-forward="false" selection-start-line="39" selection-start-column="50" selection-end-line="39" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/substates/SubstateCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="42" column="50" lean-forward="false" selection-start-line="42" selection-start-column="50" selection-end-line="42" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/substates/SubstateEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="42" column="50" lean-forward="false" selection-start-line="42" selection-start-column="50" selection-end-line="42" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/tags/TagCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="44" column="50" lean-forward="false" selection-start-line="44" selection-start-column="50" selection-end-line="44" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/tags/TagEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="48" column="50" lean-forward="false" selection-start-line="48" selection-start-column="50" selection-end-line="48" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/admin/EditUser.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="77" column="42" lean-forward="false" selection-start-line="77" selection-start-column="42" selection-end-line="77" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/codes/CodeEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="41" column="50" lean-forward="false" selection-start-line="41" selection-start-column="50" selection-end-line="41" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/regions/RegionCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="42" column="50" lean-forward="false" selection-start-line="42" selection-start-column="50" selection-end-line="42" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/regions/RegionEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="48" column="50" lean-forward="false" selection-start-line="48" selection-start-column="50" selection-end-line="48" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/codes/CodeCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="37" column="50" lean-forward="false" selection-start-line="37" selection-start-column="50" selection-end-line="37" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/ReportCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="82" column="50" lean-forward="false" selection-start-line="82" selection-start-column="50" selection-end-line="82" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="70" column="50" lean-forward="false" selection-start-line="70" selection-start-column="50" selection-end-line="70" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="52" column="42" lean-forward="false" selection-start-line="52" selection-start-column="42" selection-end-line="52" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/actions/ActionEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="84" column="42" lean-forward="false" selection-start-line="84" selection-start-column="42" selection-end-line="84" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/clients/ClientEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="80" column="50" lean-forward="false" selection-start-line="80" selection-start-column="50" selection-end-line="80" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="76" column="54" lean-forward="false" selection-start-line="76" selection-start-column="54" selection-end-line="76" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="74" column="50" lean-forward="false" selection-start-line="74" selection-start-column="50" selection-end-line="74" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/clients/ClientCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="37" column="50" lean-forward="false" selection-start-line="37" selection-start-column="50" selection-end-line="37" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/actions/ActionCreate.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="46" column="6" lean-forward="true" selection-start-line="46" selection-start-column="6" selection-end-line="46" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/client/styles/pages/_create-form.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="496">
+          <caret line="63" column="17" lean-forward="false" selection-start-line="63" selection-start-column="17" selection-end-line="63" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/components/CreateLetter.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#26#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/components/LetterTemplatePreview.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-108">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#26#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/tasks/components/TaskContent/NewLetter.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplatesListContainer.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1188">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/LetterCreateContainer.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="89" column="46" lean-forward="false" selection-start-line="89" selection-start-column="46" selection-end-line="89" selection-end-column="46" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/components/GenerateLetterTemplateInputs.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="138" column="61" lean-forward="false" selection-start-line="138" selection-start-column="48" selection-end-line="138" selection-end-column="61" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/client/styles/base/_general.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="137" column="11" lean-forward="false" selection-start-line="137" selection-start-column="1" selection-end-line="137" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/letters/components/PdfAttachment.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="18" lean-forward="true" selection-start-line="18" selection-start-column="18" selection-end-line="18" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/ReportEdit.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="303">
+          <caret line="120" column="55" lean-forward="true" selection-start-line="120" selection-start-column="55" selection-end-line="120" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/ReportListContainer.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2711">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#39#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/client/styles/_helpers/_helpers.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/TableReport.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/client/styles/pages/_task.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="777">
+          <caret line="1088" column="23" lean-forward="false" selection-start-line="1088" selection-start-column="23" selection-end-line="1088" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/ReportHeader.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="194" column="93" lean-forward="false" selection-start-line="194" selection-start-column="93" selection-end-line="194" selection-end-column="93" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+            <marker date="1525814479207" expanded="true" signature="5485:9331" ph="&lt;div/&gt;" />
+            <marker date="1525814479207" expanded="true" signature="5887:6216" ph="&lt;div/&gt;" />
+            <marker date="1525814479207" expanded="true" signature="7041:7348" ph="&lt;div/&gt;" />
+            <marker date="1525814479207" expanded="true" signature="7349:9123" ph="&lt;div/&gt;" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/client/styles/pages/_report.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="42" column="40" lean-forward="false" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
