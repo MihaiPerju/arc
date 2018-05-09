@@ -11,6 +11,7 @@ import Loading from "/imports/client/lib/ui/Loading";
 import RoutesService from "./RoutesService";
 import Accounts from "/imports/api/tasks/collection";
 import { withTracker } from "meteor/react-meteor-data";
+import EscalateReason from "../../pages/tasks/components/TaskContent/EscalateReason";
 
 class LeftMenu extends Component {
   constructor(props) {
@@ -33,7 +34,9 @@ class LeftMenu extends Component {
       .clone({
         filters: {
           assigneeId: { $exists: false },
-          workQueue: { $exists: false }
+          workQueue: { $exists: false },
+          escalateReason: { $exists: false },
+          tickleDate: { $exists: false }
         }
       })
       .getCount((err, count) => {
