@@ -23,68 +23,58 @@
   .table {
     &-list {
       position: relative;
-      display: flex;
+      overflow-y: auto;
       height: 100%;
-
+      border-radius: 3px;
+      
+      &__wrapper {
+        position: relative;
+        z-index: 1;
+        height: 100%;
+      }
       &:before {
-        content: '';
+        content: ' ';
         position: absolute;
-        background: $color-white;
-        top: 0;
-        left: 0;
         width: 200px;
+        left: 0;
+        top: 0;
         bottom: 0;
+        background: $color-white;
         border-right: 1px #d7d7d7 solid;
       }
       &:after {
-        content: '';
+        content: ' ';
         position: absolute;
-        background: #f2f1f1;
-        top: 0;
+        width: calc(100% - 200px);
         right: 0;
-        width: calc(100% - 200px);
+        top: 0;
         bottom: 0;
-      }
-      &__wrapper {
-        position: relative;
-        display: flex;
-        height: 100%;
-        overflow-y: auto;
-        align-items: flex-start;
-        z-index: 1;
-      }
-      .left-side {
-        width: 200px;
-        position: relative;
-      }
-      .right-side {
-        width: calc(100% - 200px);
-        height: 100%;
-        display: flex;
-        overflow-x: auto;
-        overflow-y: hidden;
         background: #f2f1f1;
-        border-radius: 0 3px 3px 0;
-        .table-field:last-of-type {
-          border-right: 0;
-        }
+        z-index: 0;
       }
     }
 
     &-container {
-      display: flex;
-      flex-direction: column;
-      position: relative;
+      margin-left: 200px;
+      overflow-x: scroll;
+      overflow-y: hidden;
+      min-height: 100%;
     }
 
     &-field {
       min-width: 200px;
       padding: 10px;
+      border-bottom: 1px #d7d7d7 solid;
       border-right: 1px #d7d7d7 solid;
+      display: table-cell;
 
+      &--grey {
+        background: #f2f1f1
+      }
       &--fixed {
-        position: fixed;
         width: 200px;
+        position: absolute;
+        left: 0;
         background: $color-white;
         text-align: left;
         border-right: 1px #d7d7d7 solid;
@@ -100,12 +90,21 @@
     }
 
     &-row {
-      display: flex;
-      border-top: 1px #d7d7d7 solid;
-      position: relative;
+      display: table-row;
+
+      .table-field:last-of-type {
+        border-right: 0;
+      }
+      &:last-of-type {
+        .table-field {
+          border-bottom: 0;
+        }
+      }
 
       &:first-of-type {
-        border-top: 0;
+        .table-field {
+          border-bottom: 1px #d7d7d7 solid;
+        }
       }
     }
   }

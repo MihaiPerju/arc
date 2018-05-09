@@ -38,7 +38,6 @@ export default class CreateUser extends Component {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Add user</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreateUser} className="btn--green">Confirm & save</button>
