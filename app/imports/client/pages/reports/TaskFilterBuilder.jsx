@@ -54,19 +54,25 @@ export default class TaskFilterBuilder extends React.Component {
 
         //Getting assignee and facility options
         let facilityOptions = [], assigneeOptions = [], clientOptions = [];
-        facilityNames.fetch((err, facilities) => {
-            if (!err) {
-                facilities.map((facility) => {
-                    facilityOptions.push({
-                        value: facility._id,
-                        label: facility.name + " - " + facility.client.clientName
+        const {filterBuilderData} = this.props;
+
+        if (filterBuilderData.clientId) {
+            this.getProperFacilities(filterBuilderData.clientId);
+        } else {
+            facilityNames.fetch((err, facilities) => {
+                if (!err) {
+                    facilities.map((facility) => {
+                        facilityOptions.push({
+                            value: facility._id,
+                            label: facility.name + " - " + facility.client.clientName
+                        });
+                        this.setState({facilityOptions});
                     });
-                    this.setState({facilityOptions});
-                });
-            } else {
-                Notifier.error(err.reason);
-            }
-        });
+                } else {
+                    Notifier.error(err.reason);
+                }
+            });
+        }
 
         //Getting assignee options
         assigneeQuery.fetch((err, assignees) => {
