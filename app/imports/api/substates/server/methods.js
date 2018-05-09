@@ -9,13 +9,17 @@ Meteor.methods({
     },
     'substate.update'(data) {
         Security.checkAdmin(this.userId);
-
+        data.updatedAt = new Date();
         Substates.update(
             { _id: data._id },
             {
                 $set: data
             }
         );
+    },
+    'substate.delete'(_id) {
+        Security.checkAdmin(this.userId);
+        Substates.remove({ _id });
     },
     'substate.deleteMany'(Ids) {
         Security.checkAdmin(this.userId);

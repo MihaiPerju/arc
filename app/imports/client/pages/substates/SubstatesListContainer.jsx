@@ -97,8 +97,9 @@ class SubstatesListContainer extends Component {
         if (error) {
             return <div>Error: {error.reason}</div>
         }
+
         return (
-            <div className="cc-container">
+            <div className="cc-container substates-container">
                 <div className={(currentSubstate || create) ? "left__side" : "left__side full__width"}>
                     <SearchBar btnGroup={substateSelected.length} deleteAction={this.deleteAction} />
 
@@ -110,6 +111,80 @@ class SubstatesListContainer extends Component {
                         setSubstate={this.setSubstate}
                         substates={data}
                     />
+                    {/* <div className="table-list">
+                        <div className="table-list__wrapper">
+                            <div className="table-container">
+                                <div className="table-row">
+                                    <div className="table-header text-center table-field text-light-grey"></div>
+                                    <div className="table-header text-center table-field text-light-grey">
+                                        State Name
+                                    </div>
+                                    <div className="table-header text-center table-field text-light-grey">
+                                        Substate Name
+                                    </div>
+                                    <div className="table-header text-center table-field text-light-grey">
+                                        Descriptions
+                                    </div>
+                                    <div className="table-header text-center table-field text-light-grey">
+                                        Triggering Actions
+                                    </div>
+                                    <div className="table-header text-center table-field text-light-grey">
+                                        Actions
+                                    </div>
+                                </div>
+                                <div className="table-row">
+                                    <div className="right-side">
+                                        <div className="table-field text-center">
+                                            <div className="check-item">
+                                                <input checked type="checkbox" className="hidden" />
+                                                <label></label>
+                                            </div>
+                                        </div>
+                                        <div className="table-field text-center">
+                                            S name
+                                        </div>
+                                        <div className="table-field text-center">
+                                            sub s name
+                                        </div>
+                                        <div className="table-field text-center">
+                                            desc
+                                        </div>
+                                        <div className="table-field text-center">
+                                            trigger
+                                        </div>
+                                        <div className="table-field text-center">
+                                            action
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="table-row">
+                                    <div className="right-side">
+                                        <div className="table-field text-center">
+                                            <div className="check-item">
+                                                <input type="checkbox" className="hidden" />
+                                                <label></label>
+                                            </div>
+                                        </div>
+                                        <div className="table-field text-center">
+                                            S name
+                                            </div>
+                                        <div className="table-field text-center">
+                                            sub s name
+                                            </div>
+                                        <div className="table-field text-center">
+                                            desc
+                                            </div>
+                                        <div className="table-field text-center">
+                                            trigger
+                                            </div>
+                                        <div className="table-field text-center">
+                                            action
+                                            </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> */}
                     <PaginationBar
                         module="Substate"
                         create={this.createForm}

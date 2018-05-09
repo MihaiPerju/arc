@@ -9,5 +9,7 @@ export default Substates.createNamedQuery('listSubstates', {
     $paginate: true,
     name: 1,
     stateName: 1,
-    _id: 1
+    _id: 1,
+    description: 1,
+    actionIds: 1
 });
