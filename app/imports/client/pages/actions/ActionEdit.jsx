@@ -10,7 +10,6 @@ import ActionSchema from "/imports/api/actions/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
 import { createQueryContainer } from "meteor/cultofcoders:grapher-react";
 import ReasonCodesBlock from "./components/ReasonCodesBlock";
-// import ManagerReasonCodes from "./components/ManagerReasonCodes";
 import RolesEnum from "/imports/api/users/enums/roles.js";
 
 export default class ActionEdit extends React.Component {
@@ -39,7 +38,7 @@ export default class ActionEdit extends React.Component {
   getOptions = enums => {
     return _.map(enums, (value, key) => {
       const label = `${value.stateName}: ${value.name}`;
-      return {value: value.name.replace(/ /g,"_"), label: label};
+      return { value: value.name.replace(/ /g, "_"), label: label };
     });
   };
 
@@ -79,7 +78,7 @@ export default class ActionEdit extends React.Component {
     const { action, substates } = this.props;
     const { checked } = this.state;
     const substatesOptions = this.getOptions(substates);
-    
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -153,9 +152,9 @@ export default class ActionEdit extends React.Component {
           </div>
 
           <ReasonCodesBlock action={action} />
-          {/* {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
-            <ManagerReasonCodes action={action} />
-          )} */}
+          {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+            <ReasonCodesBlock isPrivate action={action} />
+          )}
         </div>
       </div>
     );

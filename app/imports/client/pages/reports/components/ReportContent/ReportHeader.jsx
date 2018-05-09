@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import TableReport from "./TableReport";
 import ScheduleBlock from "./../../ScheduleBlock.jsx";
 import Notifier from "../../../../lib/Notifier";
 import {EJSON} from "meteor/ejson";
@@ -48,18 +47,6 @@ class ReportHeader extends Component {
         this.setState({
             schedule: !schedule
         });
-    };
-
-    componentDidMount() {
-        this.count.bind(this);
-    }
-
-    count = () => {
-        const parent = document.getElementById("table");
-        const sameClass = parent.getElementByClassName("table-container");
-        for (i = 0; i < sameClass; i++) {
-            console.log("sameClass.length");
-        }
     };
 
     onEdit = () => {
