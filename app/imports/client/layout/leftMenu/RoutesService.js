@@ -6,7 +6,7 @@ export default class RouteService {
         if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
             return [
                 {name: "dashboard", label: "Dashboard", icon: "dashboard"},
-                {name: "accounts/active", label: "Account", icon: 'user'},
+                {name: "accounts/active", label: "Active", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
                 {name: "accounts/archived", label: "Archived", icon: 'archive'},
@@ -24,7 +24,7 @@ export default class RouteService {
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
             return [
                 {name: "dashboard", label: "Dashboard", icon: "dashboard"},
-                {name: "accounts/active", label: "Account", icon: 'user'},
+                {name: "accounts/active", label: "Active", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
                 {name: "accounts/archived", label: "Archived", icon: 'archive'},
@@ -41,7 +41,7 @@ export default class RouteService {
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
             return [
                 {name: "dashboard", label: "Dashboard", icon: "dashboard"},
-                {name: "accounts/active", label: "Account", icon: 'user'},
+                {name: "accounts/active", label: "Active", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/hold", label: "On Hold", icon: 'hand-paper-o'},
                 {name: "accounts/archived", label: "Archived", icon: 'archive'},
@@ -59,7 +59,7 @@ export default class RouteService {
         } else {
             return [
                 {name: "dashboard", label: "Dashboard", icon: "dashboard"},
-                {name: "accounts/active", label: "Account", icon: 'user'},
+                {name: "accounts/active", label: "Active", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/escalated", label: "Escalations", icon: 'info', badge: escalations},
                 {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles},
