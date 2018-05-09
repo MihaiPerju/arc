@@ -75,7 +75,6 @@ export default class FacilityCreate extends Component {
         return (
             <div className="create-form create-facility">
                     <div className="create-form__bar">
-                        <button className="btn-add">+ Add facility</button>
                         <div className="btn-group">
                             <button
                                onClick={this.onClose} className="btn-cancel">Cancel</button>

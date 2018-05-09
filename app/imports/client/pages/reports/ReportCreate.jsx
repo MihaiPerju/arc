@@ -81,7 +81,6 @@ export default class ReportCreate extends Component {
             <div className="create-form">
                 {/*Upper bar*/}
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Add report</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         {

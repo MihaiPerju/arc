@@ -79,7 +79,6 @@ export default class EditClient extends React.Component {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Edit client</button>
                     <div className="btn-group">
                         <button onClick={this.closeEdit} className="btn-cancel">Cancel</button>
                         <button onClick={this.onEditClient} className="btn--green">Confirm & save</button>

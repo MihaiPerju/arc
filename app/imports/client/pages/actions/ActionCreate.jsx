@@ -53,7 +53,6 @@ export default class ActionCreate extends Component {
         return (
             <div className="create-form action-create-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Add action</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreateAction} className="btn--green">Confirm & save</button>

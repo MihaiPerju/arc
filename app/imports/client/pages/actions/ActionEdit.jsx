@@ -82,7 +82,6 @@ export default class ActionEdit extends React.Component {
     return (
       <div className="create-form">
         <div className="create-form__bar">
-          <button className="btn-add">+ Edit code</button>
           <div className="btn-group">
             <button onClick={this.onSetEdit} className="btn-cancel">
               Cancel
