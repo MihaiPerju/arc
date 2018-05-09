@@ -12,7 +12,7 @@ export default class FiltersSingle extends React.Component {
     };
 
     getOptions(name) {
-        const {clientIdOptions, assigneeIdOptions, facilityIdOptions,} = this.props;
+        const {clientIdOptions, assigneeIdOptions, facilityIdOptions} = this.props;
         switch (name) {
             case "assigneeId":
                 return assigneeIdOptions;
