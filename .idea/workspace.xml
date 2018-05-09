@@ -1,35 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4a42f0af-9891-4700-a2cd-4250aa162d69" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/app/imports/client/pages/letters/components/PdfAttachment.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/client/styles/base/_general.scss" afterPath="$PROJECT_DIR$/app/client/styles/base/_general.scss" />
-      <change beforePath="$PROJECT_DIR$/app/client/styles/pages/_create-form.scss" afterPath="$PROJECT_DIR$/app/client/styles/pages/_create-form.scss" />
-      <change beforePath="$PROJECT_DIR$/app/client/styles/pages/_report.scss" afterPath="$PROJECT_DIR$/app/client/styles/pages/_report.scss" />
-      <change beforePath="$PROJECT_DIR$/app/client/styles/pages/_task.scss" afterPath="$PROJECT_DIR$/app/client/styles/pages/_task.scss" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/actions/ActionEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/admin/CreateUser.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/admin/CreateUser.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/admin/EditUser.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/admin/EditUser.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/ClientEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/clients/facilities/FacilityEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/codes/CodeEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/letterTemplates/LetterTemplateEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/letters/components/GenerateLetterTemplateInputs.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/letters/components/GenerateLetterTemplateInputs.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/regions/RegionEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/reports/ReportEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/ReportHeader.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/reports/components/ReportContent/ReportHeader.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/substates/SubstateEdit.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/tags/TagCreate.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/tags/TagCreate.jsx" />
-      <change beforePath="$PROJECT_DIR$/app/imports/client/pages/tags/TagEdit.jsx" afterPath="$PROJECT_DIR$/app/imports/client/pages/tags/TagEdit.jsx" />
-    </list>
+    <list default="true" id="4a42f0af-9891-4700-a2cd-4250aa162d69" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -55,7 +27,7 @@
       <file leaf-file-name="_report.scss" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/client/styles/pages/_report.scss">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
+            <state relative-caret-position="-216">
               <caret line="42" column="40" lean-forward="false" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
               <folding />
             </state>
@@ -488,16 +460,15 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1525791827279</updated>
-      <workItem from="1525791828914" duration="17530000" />
+      <workItem from="1525791828914" duration="18776000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17530000" />
+    <option name="totallyTimeSpent" value="18776000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="55" y="-4" width="1545" height="904" extended-state="6" />
-    <editor active="true" />
+    <frame x="55" y="24" width="1545" height="876" extended-state="6" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24967149" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -507,7 +478,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33806452" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4812903" sideWeight="0.49737188" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.49933067" sideWeight="0.49737188" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -825,7 +796,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/client/styles/pages/_report.scss">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="-216">
           <caret line="42" column="40" lean-forward="false" selection-start-line="42" selection-start-column="40" selection-end-line="42" selection-end-column="40" />
           <folding />
         </state>
