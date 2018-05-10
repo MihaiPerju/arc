@@ -27,5 +27,10 @@ export default new SimpleSchema({
     letterTemplateId: {
         type: String,
         optional: true,
+    },
+    letterValues: {
+        type: Object,
+        optional: true,
+        blackbox: true
     }
 });

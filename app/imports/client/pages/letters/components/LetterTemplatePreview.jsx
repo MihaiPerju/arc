@@ -13,7 +13,7 @@ export default class LetterTemplatePreview extends React.Component {
         if (!letterTemplateBody) {
             return;
         }
-
+        
         parser.addRule(/{(.*?)}/g, function (tag) {
             const word = tag.substring(1).slice(0, -1);
             if (variablesEnum[word]) {
@@ -22,12 +22,12 @@ export default class LetterTemplatePreview extends React.Component {
                 return `${parentState[word] ? parentState[word] : `{${word}}`}`;
             }
         });
-
+        
         return parser.render(letterTemplateBody);
     };
 
     render() {
-        const {letterTemplateBody, taskId, reset, attachments, letterTemplateId, currentComponent, selectedLetter} = this.props;
+        const {letterTemplateBody, taskId, reset, attachments, letterTemplateId, currentComponent, selectedLetter, keywordsValues} = this.props;
         const letterBody = this.tagParser();
 
         return (
@@ -43,14 +43,16 @@ export default class LetterTemplatePreview extends React.Component {
                             reset={reset}
                             taskId={taskId}
                             letterBody={letterBody}
-                            attachments={attachments} />
+                            attachments={attachments}
+                            keywordsValues={keywordsValues} />
                         : <LetterEdit
                             letterTemplateId={letterTemplateId}
                             reset={reset}
                             taskId={taskId}
                             letterBody={letterBody}
                             attachments={attachments}
-                            selectedLetterId={selectedLetter._id} />
+                            selectedLetterId={selectedLetter._id}
+                            keywordsValues={keywordsValues} />
                     }
                 </div>
                 }

@@ -4,6 +4,7 @@ import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
 import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
 import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
 class LetterEditContainer extends React.Component {
     constructor() {
@@ -14,16 +15,21 @@ class LetterEditContainer extends React.Component {
             selectedTemplate: {},
             pdfAttachments: [],
             selectedAttachments: [],
-            attachmentIds: []
+            attachmentIds: [],
+            keywordsValues: {}
         };
     }
 
     componentWillMount() {
-        const {data, account} = this.props;
+        const {data, account, selectedLetter} = this.props;
         this.setState({letterTemplates: data});
         const {profile} = Meteor.user();
         _.extend(account, profile);
-        this.updateState(account);
+
+        const clonedAccount = _.clone(account);
+        const {letterValues} = selectedLetter;
+        Object.assign(clonedAccount, letterValues);
+        this.updateState(clonedAccount);
 
         Meteor.call('letterTemplates.get', (err, letterTemplates) => {
             if (err) {
@@ -74,22 +80,41 @@ class LetterEditContainer extends React.Component {
 
     updateState = (data) => {
         this.setState(data);
+        this.getKeywordsValues();
     };
+
+    getKeywordsValues = () => {
+        const {selectedTemplate} = this.props;
+        const {keywords} = selectedTemplate;
+        const keywordsValues = {};
+        _.each(keywords, (value, index) => {
+            if(variablesEnum[value]) {
+                keywordsValues[variablesEnum[value].field] = this.state[variablesEnum[value].field];
+            } else {
+                keywordsValues[value] = this.state[value];
+            }
+        })
+        this.setState({keywordsValues})
+    }
 
     render() {
         const {account, selectedTemplate, reset, selectedLetter} = this.props;
         const {keywords, body, _id: letterId} = selectedTemplate;
-        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
+        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
+
+        const clonedAccount = _.clone(account);
+        const {letterValues} = selectedLetter;
+        Object.assign(clonedAccount, letterValues);
 
         return (
             <div>
                 <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>
                     <div className="left-col">
                         <GenerateLetterTemplateInputs
-                            account={account}
+                            account={clonedAccount}
                             templateKeywords={keywords}
                             onChange={this.updateState}/>
                     </div>
@@ -102,7 +127,8 @@ class LetterEditContainer extends React.Component {
                             parentState={this.state}
                             attachments={attachmentIds}
                             currentComponent='edit'
-                            selectedLetter={selectedLetter}/>
+                            selectedLetter={selectedLetter}
+                            keywordsValues={keywordsValues} />
                     </div>
                 </div>
             </div>

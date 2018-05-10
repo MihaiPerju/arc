@@ -3,13 +3,14 @@ import Notifier from '/imports/client/lib/Notifier';
 
 export default class LetterEdit extends React.Component {
     editLetter = () => {
-        const {letterBody, taskId, reset, attachments, letterTemplateId, selectedLetterId} = this.props;
+        const {letterBody, taskId, reset, attachments, letterTemplateId, selectedLetterId, keywordsValues} = this.props;
 
         const data = {
             body: letterBody,
             taskId,
             attachments,
-            letterTemplateId
+            letterTemplateId,
+            letterValues: keywordsValues
         };
 
         Meteor.call('letter.update', selectedLetterId, data, (err) => {

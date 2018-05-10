@@ -4,6 +4,7 @@ import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
 import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
 import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
 class LetterCreateContainer extends React.Component {
     constructor() {
@@ -14,7 +15,8 @@ class LetterCreateContainer extends React.Component {
             selectedTemplate: {},
             pdfAttachments: [],
             selectedAttachments: [],
-            attachmentIds: []
+            attachmentIds: [],
+            keywordsValues: {}
         };
     }
 
@@ -74,12 +76,28 @@ class LetterCreateContainer extends React.Component {
 
     updateState = (data) => {
         this.setState(data);
+        this.getKeywordsValues();
     };
+
+    getKeywordsValues = () => {
+        const {selectedTemplate} = this.props;
+        const {keywords} = selectedTemplate;
+        const keywordsValues = {};
+
+        _.each(keywords, (value) => {
+            if(variablesEnum[value]) {
+                keywordsValues[variablesEnum[value].field] = this.state[variablesEnum[value].field];
+            } else {
+                keywordsValues[value] = this.state[value];
+            }
+        })
+        this.setState({keywordsValues})
+    }
 
     render() {
         const {account, selectedTemplate, reset} = this.props;
         const {keywords, body, _id: letterId} = selectedTemplate;
-        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
+        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
@@ -101,7 +119,8 @@ class LetterCreateContainer extends React.Component {
                             letterTemplateId={letterId}
                             parentState={this.state}
                             attachments={attachmentIds}
-                            currentComponent='create'/>
+                            currentComponent='create'
+                            keywordsValues={keywordsValues}/>
                     </div>
                 </div>
             </div>

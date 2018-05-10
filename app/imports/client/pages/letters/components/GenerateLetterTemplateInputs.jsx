@@ -45,14 +45,12 @@ export default class GenerateLetterTemplateInputs extends React.Component {
         options.forEach((opt) => {
             if (variablesEnum[opt]) {
                 schema[variablesEnum[opt].field] = {
-                    type: String,
-                    optional: true
+                    type: String
                 };
             }
             else {
                 schema[opt] = {
-                    type: String,
-                    optional: true
+                    type: String
                 };
             }
         });
