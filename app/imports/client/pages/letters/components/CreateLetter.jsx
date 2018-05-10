@@ -12,7 +12,6 @@ export default class CreateLetter extends React.Component {
             letterTemplateId,
             letterValues: keywordsValues
         };
-
         Meteor.call('letter.create', data, (err) => {
             if (err) {
                 Notifier.error('Error while trying to create letter!');
@@ -23,9 +22,26 @@ export default class CreateLetter extends React.Component {
         });
     };
 
+    doCheck = () => {
+        const {keywordsValues} = this.props;
+        for (let key in keywordsValues) {
+            if(!keywordsValues[key]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     render() {
+        const {hasKeywords} = this.props;
+        const isDisabled = hasKeywords || this.doCheck();
         return (
-            <button onClick={this.createLetter} className="btn--green btn-save">Save</button>
+            <button
+                style={isDisabled ? {cursor: 'not-allowed'}: {}}
+                disabled={isDisabled}
+                onClick={this.createLetter}
+                className="btn--green btn-save"> Save
+            </button>
         );
     }
 }

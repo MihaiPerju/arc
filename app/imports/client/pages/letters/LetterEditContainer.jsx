@@ -128,7 +128,8 @@ class LetterEditContainer extends React.Component {
                             attachments={attachmentIds}
                             currentComponent='edit'
                             selectedLetter={selectedLetter}
-                            keywordsValues={keywordsValues} />
+                            keywordsValues={keywordsValues}
+                            keywords={keywords} />
                     </div>
                 </div>
             </div>

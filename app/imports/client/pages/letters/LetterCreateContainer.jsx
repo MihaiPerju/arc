@@ -120,7 +120,8 @@ class LetterCreateContainer extends React.Component {
                             parentState={this.state}
                             attachments={attachmentIds}
                             currentComponent='create'
-                            keywordsValues={keywordsValues}/>
+                            keywordsValues={keywordsValues}
+                            keywords={keywords} />
                     </div>
                 </div>
             </div>

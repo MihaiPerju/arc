@@ -23,9 +23,26 @@ export default class LetterEdit extends React.Component {
         });
     };
 
+    doCheck = () => {
+        const {keywordsValues} = this.props;
+        for (let key in keywordsValues) {
+            if(!keywordsValues[key]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     render() {
+        const {hasKeywords} = this.props;
+        const isDisabled = hasKeywords || this.doCheck();
         return (
-            <button onClick={this.editLetter} className="btn--green btn-save">Update</button>
+            <button
+                style={isDisabled ? {cursor: 'not-allowed'}: {}}
+                disabled={isDisabled}
+                onClick={this.editLetter}
+                className="btn--green btn-save">Update
+            </button>
         );
     }
 }
