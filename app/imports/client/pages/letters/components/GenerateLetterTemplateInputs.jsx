@@ -171,8 +171,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
       return <div />;
     }
 
-    console.log(selectedAttachments);
-
     return (
       <div>
         {schema && (
