@@ -1,4 +1,4 @@
-import Tasks from '/imports/api/accounts/collection';
+import Accounts from '/imports/api/accounts/collection';
 import CsvParseService from '/imports/api/facilities/server/services/CsvParseService';
 
     //WARNING!
@@ -9,7 +9,7 @@ import CsvParseService from '/imports/api/facilities/server/services/CsvParseSer
     //Do not use until ready.
 
 Meteor.startup(function () {
-    if (Tasks.find().count() > 0) {
+    if (Accounts.find().count() > 0) {
         return true;
     }
 
@@ -73,7 +73,7 @@ Meteor.startup(function () {
     input = generateInput();
 
     //generate output based on input and importingRules
-    output = CsvParseService.createTask(input, importingRules);
+    output = CsvParseService.createAccount(input, importingRules);
 
 
     console.log('[ok] client fixtures have been loaded.');

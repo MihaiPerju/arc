@@ -4,7 +4,7 @@ import {roleGroups} from '/imports/api/users/enums/roles';
 import LetterService from '/imports/api/letters/server/letter.service.js';
 import fs from 'fs';
 
-Picker.route('/letters/pdf/:taskId/:letterId/:token',
+Picker.route('/letters/pdf/:accountId/:letterId/:token',
     function(params, req, res, next) {
         const user = getUserByToken(params.token);
 
@@ -15,13 +15,13 @@ Picker.route('/letters/pdf/:taskId/:letterId/:token',
         }
 
         if (!Roles.userIsInRole(user._id, roleGroups.ADMIN_TECH) &&
-            !Security.hasRightsOnTask(user._id, params._id)) {
+            !Security.hasRightsOnAccount(user._id, params._id)) {
             res.writeHead(404);
             res.write('An error occurred');
             return;
         }
 
-        const tmpPdfLocation = LetterService.getLetterTemporalPdfLoc(params.taskId, params.letterId);
+        const tmpPdfLocation = LetterService.getLetterTemporalPdfLoc(params.accountId, params.letterId);
 
         if (!tmpPdfLocation) {
             res.writeHead(404);

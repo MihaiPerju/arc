@@ -1,6 +1,6 @@
-import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
+import AccountService from '/imports/api/facilities/server/services/AccountImportingService';
 import {chai} from 'meteor/practicalmeteor:chai';
-import Tasks from '/imports/api/accounts/collection';
+import Accounts from '/imports/api/accounts/collection';
 import {resetDatabase} from 'meteor/xolvio:cleaner';
 
 describe('Import inventory files', function () {
@@ -45,10 +45,10 @@ describe('Import inventory files', function () {
             insBal3: 19
         };
         const facilityId = 'abcdefghijklmnop';
-        TaskService.upload(input1, importingRules, facilityId);
-        TaskService.update(input2, importingRules, facilityId);
+        AccountService.upload(input1, importingRules, facilityId);
+        AccountService.update(input2, importingRules, facilityId);
 
-        const account = Tasks.findOne();
+        const account = Accounts.findOne();
 
         //Delete date fields + id for easy checking
         delete account.fbDate;

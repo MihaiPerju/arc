@@ -6,7 +6,7 @@ import stateEnum from "../../../accounts/enums/states";
 import Backup from "/imports/api/backup/collection";
 import ActionService from "../../../accounts/server/services/ActionService";
 
-export default class TaskService {
+export default class AccountService {
   //For placement file
   static upload(results, rules, { fileId, facilityId }) {
     const { labels, importRules } = this.standardize(results, rules);

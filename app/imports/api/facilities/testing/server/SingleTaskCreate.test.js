@@ -33,7 +33,7 @@ describe('Create Task from CSV', function () {
         };
         const rules = {importingRules};
         const facilityId = 'abcdefghijklmnop';
-        const output = ParseService.createTask(input, importingRules, true, facilityId, rules);
+        const output = ParseService.createAccount(input, importingRules, true, facilityId, rules);
 
         delete output.dischrgDate;
         delete output.admitDate;

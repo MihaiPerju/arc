@@ -1,12 +1,12 @@
-import Tasks from '/imports/api/accounts/collection';
+import Accounts from '/imports/api/accounts/collection';
 import Facilities from '/imports/api/facilities/collection';
 import Users from '/imports/api/users/collection';
 import Clients from '/imports/api/clients/collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
-import TaskActions from '/imports/api/accountActions/collection';
+import AccountActions from '/imports/api/accountActions/collection';
 import Tags from '/imports/api/tags/collection';
 
-Tasks.addLinks({
+Accounts.addLinks({
     facility: {
         type: 'one',
         collection: Facilities,
@@ -30,7 +30,7 @@ Tasks.addLinks({
 
     actions: {
         type: 'many',
-        collection: TaskActions,
+        collection: AccountActions,
         field: 'actionsLinkData'
     },
     tag: {

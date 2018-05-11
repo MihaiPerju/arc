@@ -80,10 +80,10 @@ route('/letter-template/create', LetterTemplateCreate);
 import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
 import LetterView from '/imports/client/pages/letters/LetterView.jsx';
 
-route('/account/:taskId/create-letter', LetterCreateContainer, {}, {
+route('/account/:accountId/create-letter', LetterCreateContainer, {}, {
     name: 'letter.create'
 });
-route('/account/:taskId/letter/:letterId/view', LetterView, {}, {
+route('/account/:accountId/letter/:letterId/view', LetterView, {}, {
     name: 'letter.view'
 });
 
