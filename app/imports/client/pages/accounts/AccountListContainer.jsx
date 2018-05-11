@@ -126,7 +126,7 @@ class AccountListContainer extends Pager {
     const { currentAccount } = this.state;
     if (currentAccount === newAccount._id) {
       this.setState({
-          Account: null,
+        currentAccount: null,
         showMetaData: false
       });
     } else {
