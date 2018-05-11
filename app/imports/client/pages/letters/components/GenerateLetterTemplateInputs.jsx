@@ -6,7 +6,7 @@ import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum'
-import PdfAttachment from './PdfAttachment';
+import PdfAttachments from './PdfAttachments';
 
 export default class GenerateLetterTemplateInputs extends React.Component {
     constructor(props) {
@@ -140,7 +140,8 @@ export default class GenerateLetterTemplateInputs extends React.Component {
                                      name="attachmentIds"
                                      options={selectPdfOption}
                         />
-                        <PdfAttachment/>
+                        <PdfAttachments/>
+
                         <ErrorField name="attachmentIds"/>
 
                         {fields}

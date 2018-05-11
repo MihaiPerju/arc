@@ -12,7 +12,6 @@ SyncedCron.add({
   }
 });
 
-
 //Job for sending letters
 SyncedCron.add({
   name: "Send Letters",
