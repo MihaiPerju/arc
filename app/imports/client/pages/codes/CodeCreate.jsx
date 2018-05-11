@@ -36,7 +36,6 @@ export default class CodeCreate extends Component {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Add code</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreateCode} className="btn--green">Confirm & save</button>

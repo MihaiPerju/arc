@@ -1,11 +1,12 @@
 import React from 'react';
 import _ from "underscore";
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import {AutoForm, AutoField, SelectField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import accountAttachmentsQuery from '/imports/api/accounts/queries/accountAttachmentsList';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
 import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum'
+import PdfAttachment from './PdfAttachment';
 
 export default class GenerateLetterTemplateInputs extends React.Component {
     constructor(props) {
@@ -58,11 +59,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
         });
 
         schema['attachmentIds'] = {
-            label: 'Pdf attachments:',
-            type: Array,
-            optional: true
-        };
-        schema['attachmentIds.$'] = {
+            label: 'Pdf attachments',
             type: String
         };
 
@@ -123,16 +120,27 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             return <div/>;
         }
 
+        const selectPdfOption = [
+            {value: 0, label: 'Attachment 1'},
+            {value: 1, label: 'Attachment 2'},
+            {value: 2, label: 'Attachment 3'},
+            {value: 3, label: 'Attachment 4'},
+        ]
+
         return (
             <div>
+
                 {
                     schema &&
                     <AutoForm autosave
                               schema={schema}
                               model={account}
                               onSubmit={this.submit}>
-
-                        <SelectMulti name="attachmentIds" options={attachmentOptions}/>
+                        <SelectField className="select-helper"
+                                     name="attachmentIds"
+                                     options={selectPdfOption}
+                        />
+                        <PdfAttachment/>
                         <ErrorField name="attachmentIds"/>
 
                         {fields}

@@ -41,7 +41,6 @@ export default class EditSubstate extends Component {
         return (
             <div className="create-form letter-template-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Edit Substate</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreate} className="btn--green">Confirm & save</button>

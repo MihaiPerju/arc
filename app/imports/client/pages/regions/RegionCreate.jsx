@@ -41,7 +41,6 @@ export default class RegionCreate extends React.Component {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Add region</button>
                     <div className="btn-group">
                         <button
                             onClick={this.onClose} className="btn-cancel">Cancel</button>
