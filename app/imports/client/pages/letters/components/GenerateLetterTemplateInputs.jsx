@@ -116,7 +116,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   };
 
   swapAttachment = (arrSource, arrDest, elementId) => {
-    console.log(arrSource, arrDest, elementId);
     const index = this.getAttachmentIndex(arrSource, elementId);
     const newElement = arrSource[index];
     arrDest.push(newElement);
@@ -138,7 +137,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   };
 
   onRemoveAttachment = attachmentId => {
-    console.log(this.state);
     const { pdfAttachments, selectedAttachments } = this.state;
     const { arrSource, arrDest } = this.swapAttachment(
       selectedAttachments,
@@ -157,6 +155,12 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     });
   };
 
+  onOrderChange = selectedAttachments => {
+    this.setState({
+      selectedAttachments
+    });
+  };
+
   render() {
     const { schema } = this.state;
     const fields = this.generateFields();
@@ -166,6 +170,8 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     if (!templateKeywords || !templateKeywords.length) {
       return <div />;
     }
+
+    console.log(selectedAttachments);
 
     return (
       <div>
@@ -184,6 +190,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             />
             <PdfAttachments
               onRemoveAttachment={this.onRemoveAttachment}
+              onOrderChange={this.onOrderChange}
               attachments={selectedAttachments}
             />
 
