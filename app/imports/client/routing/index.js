@@ -80,10 +80,10 @@ route('/letter-template/create', LetterTemplateCreate);
 import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
 import LetterView from '/imports/client/pages/letters/LetterView.jsx';
 
-route('/task/:taskId/create-letter', LetterCreateContainer, {}, {
+route('/account/:taskId/create-letter', LetterCreateContainer, {}, {
     name: 'letter.create'
 });
-route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
+route('/account/:taskId/letter/:letterId/view', LetterView, {}, {
     name: 'letter.view'
 });
 
@@ -115,14 +115,14 @@ route('/code/list', CodeListContainer);
 route('/code/:id/edit', CodeEdit);
 route('/code/create', CodeCreate);
 
-//Tasks
-import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
-import TaskViewContainer from '/imports/client/pages/tasks/TaskViewContainer';
+//Accounts
+import AccountListContainer from '/imports/client/pages/accounts/AccountListContainer';
+import AccountViewContainer from '/imports/client/pages/accounts/AccountViewContainer';
 
-// route('/accounts', TaskListContainer);
-route('/accounts/:state?', TaskListContainer);
-route('/account/:_id/view', TaskViewContainer, {}, {
-    name: 'task.view'
+// route('/accounts', AccountListContainer);
+route('/accounts/:state?', AccountListContainer);
+route('/account/:_id/view', AccountViewContainer, {}, {
+    name: 'account.view'
 });
 
 //Actions
@@ -151,13 +151,13 @@ route('/client/:id/region/list', RegionListContainer, {}, {
 });
 
 //Reports
-import TaskFilterBuilder from '/imports/client/pages/reports/TaskFilterBuilder';
+import AccountFilterBuilder from '/imports/client/pages/reports/AccountFilterBuilder';
 import ReportListContainer from '/imports/client/pages/reports/ReportListContainer';
 import ReportEdit from '/imports/client/pages/reports/ReportEdit';
 import ReportManage from '/imports/client/pages/reports/ReportManage';
 import ReportCreate from '/imports/client/pages/reports/ReportCreate';
 
-route('/tasks/filter-builder', TaskFilterBuilder);
+route('/accounts/filter-builder', AccountFilterBuilder);
 route('/reports/list', ReportListContainer);
 route('/report/create', ReportCreate);
 route('/report/create/facilityid/:facilityId', ReportCreate, {}, {

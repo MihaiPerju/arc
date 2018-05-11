@@ -22,7 +22,7 @@ export default class LetterRow extends React.Component {
 
     render() {
         const {letter} = this.props;
-        const taskId = FlowRouter.current().params._id;
+        const accountId = FlowRouter.current().params._id;
 
         return (
             <Table.Row>
@@ -35,12 +35,12 @@ export default class LetterRow extends React.Component {
                             primary
                             onClick={() => (
                                 FlowRouter.go('letter.view',
-                                    {taskId, letterId: letter._id})
+                                    {accountId, letterId: letter._id})
                             )}>
                             View
                         </Button>
                         <Button
-                            href={`/letters/pdf/${taskId}/${letter._id}/${getToken()}`}
+                            href={`/letters/pdf/${accountId}/${letter._id}/${getToken()}`}
                             target="_blank">
                             Download PDF
                         </Button>

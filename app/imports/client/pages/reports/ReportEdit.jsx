@@ -2,7 +2,7 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField, SelectField} from '/imports/ui/forms';
 import schema from '/imports/api/reports/schema'
 import RolesEnum from '/imports/api/users/enums/roles';
-import TaskFilterBuilder from './TaskFilterBuilder';
+import AccountFilterBuilder from './AccountFilterBuilder';
 import Notifier from '/imports/client/lib/Notifier';
 import {EJSON} from 'meteor/ejson'
 import ReportsService from '../../../api/reports/services/ReportsService';
@@ -152,7 +152,7 @@ export default class ReportEdit extends React.Component {
                             <div className="header__block">
                                 <div className="title-block text-uppercase">Edit filters for report</div>
                             </div>
-                            <TaskFilterBuilder
+                            <AccountFilterBuilder
                                 onSubmitFilters={this.onSubmitFilters.bind(this)}
                                 filterBuilderData={filterBuilderData}
                                 components={components}

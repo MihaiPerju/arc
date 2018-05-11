@@ -1,6 +1,6 @@
 import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
 import {chai} from 'meteor/practicalmeteor:chai';
-import Tasks from '/imports/api/tasks/collection';
+import Tasks from '/imports/api/accounts/collection';
 import {resetDatabase} from 'meteor/xolvio:cleaner';
 
 describe('Import inventory files', function () {

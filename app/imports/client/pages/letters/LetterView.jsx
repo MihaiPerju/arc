@@ -3,7 +3,7 @@ import {Container, Header} from 'semantic-ui-react';
 import Loading from "/imports/client/lib/ui/Loading.jsx";
 import Notifier from '/imports/client/lib/Notifier';
 import letterQuery from '/imports/api/letters/queries/letterGet';
-import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
 
 export default class LetterView extends React.Component {
     constructor() {
@@ -44,7 +44,7 @@ export default class LetterView extends React.Component {
                 <h3>Attachments</h3>
                 {
                     letter.attachments && _.map(letter.attachments, (letter, idx) => {
-                        return <li>{TaskViewService.getPdfName(letter)}</li>;
+                        return <li>{AccountViewService.getPdfName(letter)}</li>;
                     })
                 }
             </Container>

@@ -4,7 +4,7 @@ import schema from "/imports/api/reports/schema";
 import {AutoForm, AutoField, ErrorField, SelectField} from "/imports/ui/forms";
 import {EJSON} from "meteor/ejson";
 import Notifier from "../../lib/Notifier";
-import TaskFilterBuilder from './TaskFilterBuilder';
+import AccountFilterBuilder from './AccountFilterBuilder';
 
 export default class ReportCreate extends Component {
     constructor() {
@@ -122,7 +122,7 @@ export default class ReportCreate extends Component {
                             </div>
                             {
                                 hasGeneralInformation &&
-                                <TaskFilterBuilder
+                                <AccountFilterBuilder
                                     onSubmitFilters={this.onSubmitFilters.bind(this)}
                                     filterBuilderData={filterBuilderData}
                                     components={components}

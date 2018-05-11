@@ -12,7 +12,7 @@ export default class   Dashboard extends React.Component {
     }
 
     componentWillMount() {
-        Meteor.call('tasks.count', (err, data) => {
+        Meteor.call('accounts.count', (err, data) => {
             if (!err) {
                 this.setState({data});
             } else {

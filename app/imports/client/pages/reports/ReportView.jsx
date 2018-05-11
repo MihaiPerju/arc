@@ -1,15 +1,15 @@
 import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import {EJSON} from 'meteor/ejson'
-import taskQuery from '/imports/api/tasks/queries/taskList';
+import accountQuery from '/imports/api/accounts/queries/accountList';
 import {Divider, Container, Header} from 'semantic-ui-react';
-import TaskData from '/imports/client/pages/tasks/components/TaskData';
+import AccountData from '/imports/client/pages/accounts/components/AccountData';
 
 export default class ReportView extends React.Component {
     constructor() {
         super();
         this.state = {
-            tasks: []
+            accounts: []
         };
     }
 
@@ -19,10 +19,10 @@ export default class ReportView extends React.Component {
         Meteor.call("report.getById", id, (err, report) => {
             if (!err) {
                 const filters = EJSON.parse(report.mongoFilters);
-                taskQuery.clone({filters}).fetch((err, tasks) => {
+                accountQuery.clone({filters}).fetch((err, accounts) => {
                     if (!err) {
                         this.setState({
-                            tasks
+                            accounts
                         })
                     } else {
                         Notifier.error(err.reason);
@@ -35,14 +35,14 @@ export default class ReportView extends React.Component {
     }
 
     render() {
-        const {tasks} = this.state;
+        const {accounts} = this.state;
         return (
             <Container>
                 {
-                    tasks.map((task, index) => {
+                    accounts.map((account, index) => {
                         return <div>
-                            <Header textAlign="center">Task No.{index + 1}</Header>
-                            <TaskData task={task} key={index}/>
+                            <Header textAlign="center">Account No.{index + 1}</Header>
+                            <AccountData account={account} key={index}/>
                             <Divider/>
                         </div>
                     })

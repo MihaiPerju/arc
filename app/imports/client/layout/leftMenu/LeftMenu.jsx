@@ -5,11 +5,11 @@ import { createContainer } from "meteor/react-meteor-data";
 import RolesEnum from "/imports/api/users/enums/roles";
 import Menu from "./Menu";
 import classNames from "classnames";
-import accountListQuery from "/imports/api/tasks/queries/taskList";
+import accountListQuery from "/imports/api/accounts/queries/accountList";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import Loading from "/imports/client/lib/ui/Loading";
 import RoutesService from "./RoutesService";
-import Accounts from "/imports/api/tasks/collection";
+import Accounts from "/imports/api/accounts/collection";
 import { withTracker } from "meteor/react-meteor-data";
 
 class LeftMenu extends Component {

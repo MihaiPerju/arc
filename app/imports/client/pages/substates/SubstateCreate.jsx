@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SubstateSchema from '/imports/api/substates/schemas/schema';
 import { AutoForm, AutoField, ErrorField, SelectField } from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
-import { StateList } from '/imports/api/tasks/enums/states';
+import { StateList } from '/imports/api/accounts/enums/states';
 
 export default class SubstateCreate extends Component {
     constructor() {

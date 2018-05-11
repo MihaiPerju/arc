@@ -6,8 +6,8 @@ import {Button} from 'semantic-ui-react'
 import {Container} from 'semantic-ui-react'
 import {Divider} from 'semantic-ui-react'
 import {Header} from 'semantic-ui-react'
-import {LabelSubstates} from '/imports/api/tasks/enums/substates.js';
-import {StatesSubstates, findStateBySubstate} from '/imports/api/tasks/enums/states.js';
+import {LabelSubstates} from '/imports/api/accounts/enums/substates.js';
+import {StatesSubstates, findStateBySubstate} from '/imports/api/accounts/enums/states.js';
 
 export default class ActionCreate extends React.Component {
     constructor(props) {

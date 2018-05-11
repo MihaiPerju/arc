@@ -3,7 +3,7 @@ import ReportsEnum from '/imports/api/schedules/enums/reports';
 import Schedules from '/imports/api/schedules/collection';
 import Reports from '/imports/api/reports/collection';
 import {EJSON} from 'meteor/ejson'
-import taskQuery from '/imports/api/tasks/queries/taskList';
+import accountQuery from '/imports/api/accounts/queries/accountList';
 import ReactDOMServer from "react-dom/server";
 import React from 'react';
 import {Container, Table} from 'semantic-ui-react';
@@ -11,89 +11,89 @@ import pdf from 'html-pdf';
 import Users from '/imports/api/users/collection';
 import Clients from '/imports/api/clients/collection';
 
-const TaskData = ({task}) => {
+const AccountData = ({account}) => {
     return <Container>
         <Table textAlign="center" celled>
             <Table.Body>
                 <Table.Row>
                     <Table.Cell>AcctNum</Table.Cell>
-                    <Table.Cell>{task && task.acctNum}</Table.Cell>
+                    <Table.Cell>{account && account.acctNum}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>FacCode</Table.Cell>
-                    <Table.Cell>{task && task.facCode}</Table.Cell>
+                    <Table.Cell>{account && account.facCode}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>PtType</Table.Cell>
-                    <Table.Cell>{task && task.ptType}</Table.Cell>
+                    <Table.Cell>{account && account.ptType}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>PtName</Table.Cell>
-                    <Table.Cell>{task && task.ptName}</Table.Cell>
+                    <Table.Cell>{account && account.ptName}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>DischrgDate</Table.Cell>
-                    <Table.Cell>{task && moment(task.dischrgDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
+                    <Table.Cell>{account && moment(account.dischrgDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>FbDate</Table.Cell>
-                    <Table.Cell>{task && moment(task.fbDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
+                    <Table.Cell>{account && moment(account.fbDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>AcctBal</Table.Cell>
-                    <Table.Cell> {task && task.acctBal}</Table.Cell>
+                    <Table.Cell> {account && account.acctBal}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>FinClass</Table.Cell>
-                    <Table.Cell>{task && task.finClass}</Table.Cell>
+                    <Table.Cell>{account && account.finClass}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>AdmitDate</Table.Cell>
-                    <Table.Cell>{task && moment(task.admitDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
+                    <Table.Cell>{account && moment(account.admitDate).format('MM/DD/YYYY hh:mm')}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>MedNo</Table.Cell>
-                    <Table.Cell>{task && task.medNo}</Table.Cell>
+                    <Table.Cell>{account && account.medNo}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsName</Table.Cell>
-                    <Table.Cell>{task && task.insName}</Table.Cell>
+                    <Table.Cell>{account && account.insName}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsName2</Table.Cell>
-                    <Table.Cell>{task && task.insName2}</Table.Cell>
+                    <Table.Cell>{account && account.insName2}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsName3</Table.Cell>
-                    <Table.Cell>{task && task.insName3}</Table.Cell>
+                    <Table.Cell>{account && account.insName3}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsCode</Table.Cell>
-                    <Table.Cell>{task && task.insCode}</Table.Cell>
+                    <Table.Cell>{account && account.insCode}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsCode2</Table.Cell>
-                    <Table.Cell>{task && task.insCode2}</Table.Cell>
+                    <Table.Cell>{account && account.insCode2}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsCode3</Table.Cell>
-                    <Table.Cell>{task && task.insCode3}</Table.Cell>
+                    <Table.Cell>{account && account.insCode3}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsBal</Table.Cell>
-                    <Table.Cell>{task && task.insBal}</Table.Cell>
+                    <Table.Cell>{account && account.insBal}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsBal2</Table.Cell>
-                    <Table.Cell>{task && task.insBal2}</Table.Cell>
+                    <Table.Cell>{account && account.insBal2}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>InsBal3</Table.Cell>
-                    <Table.Cell>{task && task.insBal3}</Table.Cell>
+                    <Table.Cell>{account && account.insBal3}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
                     <Table.Cell>State</Table.Cell>
-                    <Table.Cell>{task && task.state}</Table.Cell>
+                    <Table.Cell>{account && account.state}</Table.Cell>
                 </Table.Row>
             </Table.Body>
         </Table>
@@ -178,17 +178,17 @@ export default class CronjobService {
         const filters = EJSON.parse(report.mongoFilters);
         const userIds = schedule.userIds;
         const clientIds = schedule.clientIds;
-        const tasks = taskQuery.clone({filters}).fetch();
+        const accounts = accountQuery.clone({filters}).fetch();
 
-        CronjobService.createReportPdf(userIds, clientIds, tasks, report);
+        CronjobService.createReportPdf(userIds, clientIds, accounts, report);
     }
 
-    static createReportPdf(userIds, clientIds, tasks, report) {
+    static createReportPdf(userIds, clientIds, accounts, report) {
         let ReportTable = '';
-        for (task of tasks) {
-            const taskSingle = <TaskData task={task}/>;
+        for (account of accounts) {
+            const accountSingle = <AccountData account={account}/>;
 
-            ReportTable += ReactDOMServer.renderToString(taskSingle) + '<br/>';
+            ReportTable += ReactDOMServer.renderToString(accountSingle) + '<br/>';
         }
 
         pdf.create(ReportTable).toStream(Meteor.bindEnvironment((err, attachment) => {

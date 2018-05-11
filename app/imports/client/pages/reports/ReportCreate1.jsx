@@ -3,7 +3,7 @@ import { Container, Header, Divider, Button, Step } from 'semantic-ui-react';
 import { AutoForm, AutoField, ErrorField, SelectField } from 'uniforms-semantic';
 import schema from '/imports/api/reports/schema';
 import Roles from '/imports/api/users/enums/roles';
-import TaskFilterBuilder from './TaskFilterBuilder';
+import TaskFilterBuilder from './AccountFilterBuilder';
 import Notifier from '/imports/client/lib/Notifier';
 import { EJSON } from 'meteor/ejson';
 import ReportStepper from '/imports/client/pages/reports/components/ReportStepper';
@@ -85,7 +85,7 @@ export default class ReportCreate extends React.Component {
                     {hasGeneralInformation
                         ?
                         <div>
-                            <TaskFilterBuilder
+                            <AccountFilterBuilder
                                 filterBuilderData={filterBuilderData}
                                 components={components}
                                 onSubmitFilters={this.onSubmitFilters.bind(this)}/>

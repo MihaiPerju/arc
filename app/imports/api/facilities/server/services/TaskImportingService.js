@@ -1,10 +1,10 @@
-import Accounts from "/imports/api/tasks/collection";
+import Accounts from "/imports/api/accounts/collection";
 import Facilities from "../../collection";
 import moment from "moment/moment";
 import RulesEnum from "../../enums/importingRules";
-import stateEnum from "../../../tasks/enums/states";
+import stateEnum from "../../../accounts/enums/states";
 import Backup from "/imports/api/backup/collection";
-import ActionService from "../../../tasks/server/services/ActionService";
+import ActionService from "../../../accounts/server/services/ActionService";
 
 export default class TaskService {
   //For placement file

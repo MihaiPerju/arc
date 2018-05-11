@@ -1,10 +1,10 @@
-import Tasks from '/imports/api/tasks/collection';
+import Tasks from '/imports/api/accounts/collection';
 import CsvParseService from '/imports/api/facilities/server/services/CsvParseService';
 
     //WARNING!
     //
     //This fixtures are not finished, because of
-    //needed link between the task and client,
+    //needed link between the account and client,
     //facility and importing rules of a facility.
     //Do not use until ready.
 

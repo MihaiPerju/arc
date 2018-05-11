@@ -3,13 +3,13 @@ import CommentsListContainer from '/imports/client/pages/comments/CommentsListCo
 
 export default class LetterList extends Component {
     render() {
-        const {task} = this.props;
+        const {account} = this.props;
         return (
             <div className="action-block">
                 <div className="header__block">
                     <div className="title-block text-uppercase">Comments</div>
                 </div>
-                <CommentsListContainer taskId={task && task._id}/>
+                <CommentsListContainer accountId={account && account._id}/>
             </div>
         )
     }
