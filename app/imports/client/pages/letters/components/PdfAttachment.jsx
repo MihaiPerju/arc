@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import TaskViewService from "/imports/client/pages/tasks/services/TaskViewService";
+import TaskViewService from "/imports/client/pages/accounts/services/AccountViewService";
 
 export default class PdfAttachments extends Component {
     render() {

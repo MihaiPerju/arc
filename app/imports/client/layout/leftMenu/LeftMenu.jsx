@@ -11,7 +11,7 @@ import Loading from "/imports/client/lib/ui/Loading";
 import RoutesService from "./RoutesService";
 import Accounts from "/imports/api/accounts/collection";
 import { withTracker } from "meteor/react-meteor-data";
-import EscalateReason from "../../pages/tasks/components/TaskContent/EscalateReason";
+import EscalateReason from "../../pages/accounts/components/AccountContent/EscalateReason";
 
 class LeftMenu extends Component {
   constructor(props) {

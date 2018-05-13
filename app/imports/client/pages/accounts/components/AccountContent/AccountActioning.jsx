@@ -1,9 +1,6 @@
 import React from "react";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
-import Notifier from '/imports/client/lib/Notifier';
-
-import AccountMetaData from "./AccountMetaData";
 import AccountTickle from "./AccountTickle";
 import AccountEscalation from "./AccountEscalation";
 import AccountAssign from "./AccountAssign";

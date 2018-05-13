@@ -1,4 +1,3 @@
-import React from 'react';
 import SimpleSchema from 'simpl-schema';
 import FieldsType from '../../accounts/config/accounts';
 import stateEnum from '/imports/api/accounts/enums/states';
