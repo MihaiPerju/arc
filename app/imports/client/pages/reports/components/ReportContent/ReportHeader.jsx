@@ -7,6 +7,7 @@ import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import {withQuery} from "meteor/cultofcoders:grapher-react";
 import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
+import {EJSON} from 'meteor/ejson';
 
 class ReportHeader extends Component {
     constructor() {

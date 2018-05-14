@@ -374,7 +374,7 @@ class AccountListContainer extends Pager {
             />
           )}
           <AccountList
-            classes={filter ? "account-list decreased" : "account-list"}
+            classes={filter ? "task-list decreased" : "task-list"}
             accountsSelected={accountsSelected}
             selectAccount={this.selectAccount}
             checkAccount={this.checkAccount}
