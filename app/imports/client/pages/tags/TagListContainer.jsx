@@ -4,7 +4,6 @@ import SearchBar from '/imports/client/lib/SearchBar';
 import PaginationBar from '/imports/client/lib/PaginationBar';
 import TagContent from './TagContent';
 import TagCreate from './TagCreate';
-import FilterBar from '/imports/client/lib/FilterBar';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import clientsQuery from '../../../api/clients/queries/listClients';
 import tagsQuery from '/imports/api/tags/queries/listTags';

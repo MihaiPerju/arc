@@ -7,7 +7,7 @@ export default new SimpleSchema({
     authorId: {
         type: String
     },
-    taskId: {
+    accountId: {
         type: String
     },
     createdAt: {

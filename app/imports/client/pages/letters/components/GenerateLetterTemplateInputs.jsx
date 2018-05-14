@@ -1,11 +1,12 @@
 import React from 'react';
 import _ from "underscore";
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import {AutoForm, AutoField, SelectField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
-import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
+import accountAttachmentsQuery from '/imports/api/accounts/queries/accountAttachmentsList';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
-import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum'
+import PdfAttachment from './PdfAttachment';
 
 export default class GenerateLetterTemplateInputs extends React.Component {
     constructor(props) {
@@ -26,7 +27,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             schema: this.generateSchema(templateKeywords ? templateKeywords : [])
         });
 
-        taskAttachmentsQuery.clone({_id: this.props.taskId}).fetchOne((err, data) => {
+        accountAttachmentsQuery.clone({_id: this.props.accountId}).fetchOne((err, data) => {
             if (!err) {
                 this.setState({
                     pdfAttachments: data.attachments
@@ -58,11 +59,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
         });
 
         schema['attachmentIds'] = {
-            label: 'Pdf attachments:',
-            type: Array,
-            optional: true
-        };
-        schema['attachmentIds.$'] = {
+            label: 'Pdf attachments',
             type: String
         };
 
@@ -109,7 +106,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
     getAttachmentOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            return {value: value._id, label: TaskViewService.getPdfName(value)};
+            return {value: value._id, label: AccountViewService.getPdfName(value)};
         });
     };
 
@@ -123,16 +120,27 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             return <div/>;
         }
 
+        const selectPdfOption = [
+            {value: 0, label: 'Attachment 1'},
+            {value: 1, label: 'Attachment 2'},
+            {value: 2, label: 'Attachment 3'},
+            {value: 3, label: 'Attachment 4'},
+        ]
+
         return (
             <div>
+
                 {
                     schema &&
                     <AutoForm autosave
                               schema={schema}
                               model={account}
                               onSubmit={this.submit}>
-
-                        <SelectMulti name="attachmentIds" options={attachmentOptions}/>
+                        <SelectField className="select-helper"
+                                     name="attachmentIds"
+                                     options={selectPdfOption}
+                        />
+                        <PdfAttachment/>
                         <ErrorField name="attachmentIds"/>
 
                         {fields}

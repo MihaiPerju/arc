@@ -2,8 +2,8 @@ import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
-import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
-import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import accountAttachmentsQuery from '/imports/api/accounts/queries/accountAttachmentsList';
+import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
 class LetterCreateContainer extends React.Component {
@@ -35,7 +35,7 @@ class LetterCreateContainer extends React.Component {
             this.setState({letterTemplates});
         });
 
-        taskAttachmentsQuery.clone({_id: this.props.taskId}).fetchOne((err, data) => {
+        accountAttachmentsQuery.clone({_id: this.props.accountId}).fetchOne((err, data) => {
             if (!err) {
                 this.setState({
                     pdfAttachments: data.attachments
@@ -63,7 +63,7 @@ class LetterCreateContainer extends React.Component {
 
     getAttachmentOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            return {value: value._id, label: TaskViewService.getPdfName(value)};
+            return {value: value._id, label: AccountViewService.getPdfName(value)};
         });
     };
 
@@ -114,7 +114,7 @@ class LetterCreateContainer extends React.Component {
                     <div className="right-col">
                         <LetterTemplatePreview
                             reset={reset}
-                            taskId={account._id}
+                            accountId={account._id}
                             letterTemplateBody={body}
                             letterTemplateId={letterId}
                             parentState={this.state}

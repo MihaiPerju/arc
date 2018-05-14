@@ -1,9 +1,9 @@
 import Files from '/imports/api/files/collection';
 import Facilities from '/imports/api/facilities/collection';
-import Accounts from '/imports/api/tasks/collection';
+import Accounts from '/imports/api/accounts/collection';
 import Backup from '/imports/api/backup/collection';
-import ActionService from "/imports/api/tasks/server/services/ActionService";
-import AccountActions from '/imports/api/taskActions/collection';
+import ActionService from "/imports/api/accounts/server/services/ActionService";
+import AccountActions from '/imports/api/accountActions/collection';
 
 export default class RevertService {
 

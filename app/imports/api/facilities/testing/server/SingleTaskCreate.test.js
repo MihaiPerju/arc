@@ -2,7 +2,7 @@ import ParseService from '/imports/api/facilities/server/services/CsvParseServic
 import {chai} from 'meteor/practicalmeteor:chai';
 
 describe('Create Task from CSV', function () {
-    it("Must create a task from an CSV ", function () {
+    it("Must create a account from an CSV ", function () {
 
         //Given input
         const input = ['AcnxX49kFFBTDxF5m', 'M', 'M', '4',
@@ -33,7 +33,7 @@ describe('Create Task from CSV', function () {
         };
         const rules = {importingRules};
         const facilityId = 'abcdefghijklmnop';
-        const output = ParseService.createTask(input, importingRules, true, facilityId, rules);
+        const output = ParseService.createAccount(input, importingRules, true, facilityId, rules);
 
         delete output.dischrgDate;
         delete output.admitDate;

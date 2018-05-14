@@ -1,27 +1,27 @@
 import Facilities from '/imports/api/facilities/collection';
-import stateEnum from '/imports/api/tasks/enums/states';
-import Tasks from '/imports/api/tasks/collection';
-import {Substates} from '/imports/api/tasks/enums/substates';
+import stateEnum from '/imports/api/accounts/enums/states';
+import Accounts from '/imports/api/accounts/collection';
+import {Substates} from '/imports/api/accounts/enums/substates';
 import RulesEnum from '/imports/api/facilities/enums/importingRules';
 import moment from 'moment';
 
 export default class CsvParseService {
 
-    //Filtering existent tasks and new Tasks
-    static filterTasks(tasks) {
-        let oldTasks = [];
-        let newTasks = [];
+    //Filtering existent accounts and new Accounts
+    static filterAccounts(accounts) {
+        let oldAccounts = [];
+        let newAccounts = [];
 
-        tasks.map((task) => {
-            if (Tasks.findOne({acctNum: task.acctNum})) {
-                oldTasks.push(task);
+        accounts.map((account) => {
+            if (Accounts.findOne({acctNum: account.acctNum})) {
+                oldAccounts.push(account);
             } else {
-                task.state = stateEnum.ARCHIVED;
-                task.substate = Substates.SELF_RETURNED;
-                newTasks.push(task);
+            account.state = stateEnum.ARCHIVED;
+            account.substate = Substates.SELF_RETURNED;
+                newAccounts.push(account);
             }
         });
-        return [oldTasks, newTasks];
+        return [oldAccounts, newAccounts];
     }
 
     static convertToType(rule, value) {
@@ -39,10 +39,10 @@ export default class CsvParseService {
         }
     }
 
-    //Create a single task
-    static createTask(data, importRules, isPlacement, facilityId, rules) {
-        let task = {};
-        task.facilityId = facilityId;
+    //Create a single account
+    static createAccount(data, importRules, isPlacement, facilityId, rules) {
+        let account = {};
+        account.facilityId = facilityId;
         for (key in importRules) {
             //Get the normal fields
             if (key !== 'insurances') {
@@ -52,16 +52,16 @@ export default class CsvParseService {
                 } else {
                     value = CsvParseService.convertToType(key, data[importRules[key] - 1]);
                 }
-                task[key] = value;
+                account[key] = value;
             } else {
                 //Get the insurance fields
-                task[key] = [];
+                account[key] = [];
                 for (index in importRules[key]) {
                     let insuranceFields = importRules[key][index];
                     if (rules.newImportRules) {
                         insuranceFields = rules.newImportRules[key][index];
                     }
-                    task[key].push({
+                    account[key].push({
                         insName: CsvParseService.convertToType('insName', data[insuranceFields.insName - 1]),
                         insCode: CsvParseService.convertToType('insCode', data[insuranceFields.insCode - 1]),
                         insBal: CsvParseService.convertToType('insBal', data[insuranceFields.insBal - 1])
@@ -70,13 +70,13 @@ export default class CsvParseService {
             }
         }
         if (rules.metaRules) {
-            task.metaData = {};
+            account.metaData = {};
             for (key in rules.metaRules) {
                 let metaValue = CsvParseService.convertToType(key, data[rules.metaRules[key] - 1]);
-                task.metaData[key] = metaValue;
+                account.metaData[key] = metaValue;
             }
         }
-        return task;
+        return account;
     }
 
     //Get import rules

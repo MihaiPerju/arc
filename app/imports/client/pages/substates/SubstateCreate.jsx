@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SubstateSchema from '/imports/api/substates/schemas/schema';
 import { AutoForm, AutoField, ErrorField, SelectField } from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
-import { StateList } from '/imports/api/tasks/enums/states';
+import { StateList } from '/imports/api/accounts/enums/states';
 
 export default class SubstateCreate extends Component {
     constructor() {
@@ -41,7 +41,6 @@ export default class SubstateCreate extends Component {
         return (
             <div className="create-form letter-template-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Add Substate</button>
                     <div className="btn-group">
                         <button onClick={this.onClose} className="btn-cancel">Cancel</button>
                         <button onClick={this.onCreate} className="btn--green">Confirm & save</button>

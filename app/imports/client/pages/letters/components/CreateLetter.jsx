@@ -3,11 +3,11 @@ import Notifier from '/imports/client/lib/Notifier';
 
 export default class CreateLetter extends React.Component {
     createLetter = () => {
-        const {letterBody, taskId, reset, attachments, letterTemplateId, keywordsValues} = this.props;
+        const {letterBody, accountId, reset, attachments, letterTemplateId, keywordsValues} = this.props;
 
         const data = {
             body: letterBody,
-            taskId,
+            accountId,
             attachments,
             letterTemplateId,
             letterValues: keywordsValues

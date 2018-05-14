@@ -60,9 +60,7 @@ route('/post/:postId/edit', EditPost);
 import CreateClient from '/imports/client/pages/clients/ClientCreate';
 import EditClient from '/imports/client/pages/clients/ClientEdit';
 import ClientListContainer from '/imports/client/pages/clients/ClientListContainer';
-import ClientView from '/imports/client/pages/clients/ClientView';
 
-route('/client/:clientId/view', ClientView);
 route('/client/create', CreateClient);
 route('/client/:userId/edit', EditClient);
 route('/client/list', ClientListContainer);
@@ -80,10 +78,10 @@ route('/letter-template/create', LetterTemplateCreate);
 import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
 import LetterView from '/imports/client/pages/letters/LetterView.jsx';
 
-route('/task/:taskId/create-letter', LetterCreateContainer, {}, {
+route('/account/:accountId/create-letter', LetterCreateContainer, {}, {
     name: 'letter.create'
 });
-route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
+route('/account/:accountId/letter/:letterId/view', LetterView, {}, {
     name: 'letter.view'
 });
 
@@ -91,7 +89,6 @@ route('/task/:taskId/letter/:letterId/view', LetterView, {}, {
 import FacilityContainer from '/imports/client/pages/clients/facilities/FacilityContainer.jsx';
 import FacilityCreate from '/imports/client/pages/clients/facilities/FacilityCreate.jsx';
 import FacilityEdit from '/imports/client/pages/clients/facilities/FacilityEdit.jsx';
-import FacilityView from '/imports/client/pages/clients/facilities/FacilityView.jsx';
 
 route('/client/:_id/manage-facilities', FacilityContainer, {}, {
     name: 'facility.list'
@@ -101,9 +98,6 @@ route('/client/:_id/manage-facilities/create', FacilityCreate, {}, {
 });
 route('/client/:_id/manage-facilities/:facilityId/edit', FacilityEdit, {}, {
     name: 'facility.edit'
-});
-route('/client/:_id/manage-facilities/:facilityId/view', FacilityView, {}, {
-    name: 'facility.view'
 });
 
 //Codes
@@ -115,55 +109,34 @@ route('/code/list', CodeListContainer);
 route('/code/:id/edit', CodeEdit);
 route('/code/create', CodeCreate);
 
-//Tasks
-import TaskListContainer from '/imports/client/pages/tasks/TaskListContainer';
-import TaskViewContainer from '/imports/client/pages/tasks/TaskViewContainer';
+//Accounts
+import AccountListContainer from '/imports/client/pages/accounts/AccountListContainer';
 
-// route('/accounts', TaskListContainer);
-route('/accounts/:state?', TaskListContainer);
-route('/account/:_id/view', TaskViewContainer, {}, {
-    name: 'task.view'
-});
+// route('/accounts', AccountListContainer);
+route('/accounts/:state?', AccountListContainer);
 
 //Actions
 import ActionListContainer from '/imports/client/pages/actions/ActionListContainer.jsx';
-import CreateAction from '/imports/client/pages/actions/ActionCreate.jsx';
-import EditAction from '/imports/client/pages/actions/ActionEdit.jsx';
 
 route('/action/list', ActionListContainer);
-route('/action/create', CreateAction);
-route('/action/:actionId/edit', EditAction);
 
 //Regions
-import RegionCreate from '/imports/client/pages/regions/RegionCreate';
-import RegionEdit from '/imports/client/pages/regions/RegionEdit';
 import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
 
-
-route('/client/:id/region/create', RegionCreate, {}, {
-    name: 'region.create'
-});
-route('/region/:id/edit', RegionEdit, {}, {
-    name: 'region.edit'
-});
 route('/client/:id/region/list', RegionListContainer, {}, {
     name: 'region.list'
 });
 
 //Reports
-import TaskFilterBuilder from '/imports/client/pages/reports/TaskFilterBuilder';
+import AccountFilterBuilder from '/imports/client/pages/reports/AccountFilterBuilder';
 import ReportListContainer from '/imports/client/pages/reports/ReportListContainer';
-import ReportEdit from '/imports/client/pages/reports/ReportEdit';
-import ReportManage from '/imports/client/pages/reports/ReportManage';
 import ReportCreate from '/imports/client/pages/reports/ReportCreate';
 
-route('/tasks/filter-builder', TaskFilterBuilder);
+route('/accounts/filter-builder', AccountFilterBuilder);
 route('/reports/list', ReportListContainer);
-route('/report/create', ReportCreate);
 route('/report/create/facilityid/:facilityId', ReportCreate, {}, {
     name: 'report.create.facilityid'
 });
-route('/report/:id/edit', ReportManage);
 
 //Insurance Companies
 import InsuranceCompanyCreate from '/imports/client/pages/insuranceCompanies/InsuranceCompanyCreate';
