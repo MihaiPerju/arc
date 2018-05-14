@@ -1,0 +1,98 @@
+{"_id":"jQBcANCQ4G2SEDTG5","reason":"NORT","actionId":"zki452mRr9C4CybdF"}
+{"_id":"5ProrSxJe2RZhKfLQ","reason":"Zero Balance","actionId":"Nu4knk8nom7qz94ru"}
+{"_id":"7HxFGKtw6PCJXbkKj","reason":"Paper (black/white)","actionId":"DqLeYRefGC9ugmeH7"}
+{"_id":"5MQdo7mCvEmKu9AjA","reason":"Paper (red/white","actionId":"DqLeYRefGC9ugmeH7"}
+{"_id":"gQrkXBysxCKguqn9E","reason":"From Client","actionId":"cyty3t5vnYvCMGGoM"}
+{"_id":"KhNHmrAR4vMKvZLGQ","reason":"From Patient","actionId":"cyty3t5vnYvCMGGoM"}
+{"_id":"WZ7htwh5QgKo8usYp","reason":"Pending Refile / Appeal","actionId":"9eYmftQkbaBE7oYn8"}
+{"_id":"sD3aCGkg8AmqzCKHt","reason":"Pending Refile / Appeal","actionId":"LjpmPf2hJxCPM5Skr"}
+{"_id":"oh6p7DGZPart2n7Yn","reason":"Complete Medical Records","actionId":"vmbtpjyFLv3R9kCLf"}
+{"_id":"iA4fc5Jsm5X9C8rLv","reason":"Partial Medical Records","actionId":"vmbtpjyFLv3R9kCLf"}
+{"_id":"PhFA5qdgndZFB7rh7","reason":"Pending Refile / Appeal","actionId":"2wGH9ZLejJPdzq4yE"}
+{"_id":"TedMmSi9tiDMK5B3S","reason":"Pending Refile / Appeal","actionId":"jgvLWA8BydHK5ao3h"}
+{"_id":"cu5NwxN2NCBYs9EuH","reason":"Certified Mail Proof of Timely Filing","actionId":"nvRYd6gBHnH85J8Sv"}
+{"_id":"wKngeR4RNgPompvmF","reason":"Electronic Billing Proof of Timely Filing","actionId":"nvRYd6gBHnH85J8Sv"}
+{"_id":"GfAXkpkmu6HHDYk3F","reason":"TMM Proof of Timely Filing","actionId":"nvRYd6gBHnH85J8Sv"}
+{"_id":"4Z3YHtCMbjnX5thFf","reason":"Paper (black/white)","actionId":"SYd3b5PdqeMgM8k9h"}
+{"_id":"D3TYWcqBGpPEGJhjj","reason":"Paper (red/white","actionId":"SYd3b5PdqeMgM8k9h"}
+{"_id":"ZzAJherZ8AdaW4z4F","reason":"Medicare paid primary","actionId":"bJzbTPmviwcCtYgsm"}
+{"_id":"5bHFHsqYnGRnSkpQn","reason":"Claim in Litigation","actionId":"27rfuAh6n2nq3NAiK"}
+{"_id":"qjGkre4jYzCCrzL5G","reason":"Claim in process with Payer","actionId":"27rfuAh6n2nq3NAiK"}
+{"_id":"6tvh4cS9yaF5nnFFB","reason":"Pending Insurance Status Fax Back","actionId":"iXkk6nAkc4veXf6mv"}
+{"_id":"nhiMWNfZaTzH4P5Rp","reason":"Attachments complete","actionId":"pvBrqKwhSvFW9LxXF"}
+{"_id":"gj4GZQss2tb9P2s4i","reason":"Balance due from Commercial Payer","actionId":"ZPs5xwittvHwCGReA"}
+{"_id":"KStkKvgYEGaMQfkqk","reason":"Correspondence Received","actionId":"ZPs5xwittvHwCGReA"}
+{"_id":"qtx238d52ygbHkFBz","reason":"Correspondence Received","actionId":"j9hg9jaJPLBDEHnyv"}
+{"_id":"PKano9q26NGb6eNvi","reason":"Balance due from Commercial Payer","actionId":"j9hg9jaJPLBDEHnyv"}
+{"_id":"h6yuPreP873jbttPC","reason":"Balance due from Commercial Payer","actionId":"kuBLRw9sM7vtPezL8"}
+{"_id":"JoxbefBcQHJPbLHWx","reason":"Correspondence Received","actionId":"kuBLRw9sM7vtPezL8"}
+{"_id":"qcyoZvjE5TGPpfpAC","reason":"Incorrect/Correct Patient/Insurance Information","actionId":"kyauk4NMnGcfxbokH"}
+{"_id":"L8Mi8uXsJvCTtMies","reason":"Review Balance","actionId":"CkiWAvHbsPbzi6QKL"}
+{"_id":"ngKsJycHK4EouFoyA","reason":"Commercial Claim Billed within 30 days","actionId":"yPMHWDN47WPfbZz7H"}
+{"_id":"ZNcyt5F76sApFqTkb","reason":"Medicaid Claim Billed within 45 days","actionId":"yPMHWDN47WPfbZz7H"}
+{"_id":"s5hkam37WPZtpZgaW","reason":"Medicare Claim Billed within 45 days","actionId":"yPMHWDN47WPfbZz7H"}
+{"_id":"3xKRSc25HeYAiouyi","reason":"Pending Client Response","actionId":"yPMHWDN47WPfbZz7H"}
+{"_id":"eq9MPF2XZxtWQwrLe","reason":"Electronic Billing","actionId":"jpz6dc9fh4MZymjuS"}
+{"_id":"7bhgaXGjd5JYoXYLc","reason":"Electronic Billing","actionId":"NbbZNMiPd5fFBSgAc"}
+{"_id":"pLWNSktvWjFBBhetv","reason":"Client approved 835 adjustment","actionId":"tCXFxdJpgcYKNrg5G"}
+{"_id":"fiWFFLy66L4KKRz4C","reason":"Authorization Denial","actionId":"v6qsbC2XwTaR4botk"}
+{"_id":"SEL2odzHc9dSpjSiK","reason":"Contractual Agreement","actionId":"v6qsbC2XwTaR4botk"}
+{"_id":"FYHeXj5TFLEXGu8ct","reason":"Past the Filing Deadline","actionId":"v6qsbC2XwTaR4botk"}
+{"_id":"Y3wtEnWyuXXBJMSxm","reason":"Small Balance write off","actionId":"v6qsbC2XwTaR4botk"}
+{"_id":"jwP45JodDERfLfTt3","reason":"Authorization Denial","actionId":"PkxjwExeFkMnAHEMy"}
+{"_id":"Ez9Ke3xm7wRii5ZZG","reason":"Contractual Agreement","actionId":"PkxjwExeFkMnAHEMy"}
+{"_id":"K2SbQsEHbPPNtAaFf","reason":"Past the Filing Deadline","actionId":"PkxjwExeFkMnAHEMy"}
+{"_id":"TkntmHhfEwsHSH8EA","reason":"Small Balance write off","actionId":"PkxjwExeFkMnAHEMy"}
+{"_id":"RvRCCmsvbF6CXPJQD","reason":"Client billed Claim","actionId":"hTkDLAZPxGCXeP6u7"}
+{"_id":"vpxDWRWSWsHSQATju","reason":"Maximum Benefits","actionId":"xCudSb38RqG7mxfNx"}
+{"_id":"BMMhon9zXvBkwj9Er","reason":"Medical Necessity","actionId":"xCudSb38RqG7mxfNx"}
+{"_id":"hgtnJpfPibWscZtzq","reason":"No Authorization","actionId":"xCudSb38RqG7mxfNx"}
+{"_id":"zcEPH2ntQqu2uNuhr","reason":"Non-Covered Charges","actionId":"xCudSb38RqG7mxfNx"}
+{"_id":"juYA6Zkhy6WhAfBfn","reason":"Underpayment","actionId":"xCudSb38RqG7mxfNx"}
+{"_id":"Z6JnY8zTTtP5NHAGM","reason":"Corrected Claim","actionId":"cbxfqGQmNuFntFemu"}
+{"_id":"uHfdtdH5w8w7AkgGE","reason":"No record of claim","actionId":"cbxfqGQmNuFntFemu"}
+{"_id":"QyAPiTfhNFiLigTFQ","reason":"Corrected Claim","actionId":"ubd9MauagndWphRP7"}
+{"_id":"WwjbLiLcJksBmGGxD","reason":"No record of claim","actionId":"ubd9MauagndWphRP7"}
+{"_id":"E2A6KCDsnRJJ27aPM","reason":"Appeal","actionId":"WBew3XLKeXGgHtEzw"}
+{"_id":"H6eEY4FAbCkHkFALK","reason":"Corrected Claim","actionId":"WBew3XLKeXGgHtEzw"}
+{"_id":"vn3Zk3zeHNHNdxqpd","reason":"No record of claim","actionId":"WBew3XLKeXGgHtEzw"}
+{"_id":"t9WPJB4SNQgg7Mtsc","reason":"Charges missing from account","actionId":"ciTYvxfGbWsW9YwG5"}
+{"_id":"ChagpwqSwtjQrpPtj","reason":"Duplicate charges posted to account","actionId":"ciTYvxfGbWsW9YwG5"}
+{"_id":"anQWZAoviG5FFENhM","reason":"Condition Code Denial","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"bR6tM8wmapEPSviei","reason":"CPT Denial","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"N8dD2cyCTZY5Notri","reason":"Diagnosis Denial","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"fRqifDCr6ek3oQgPB","reason":"HCPCS Denial","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"yAefG9km8ReGLsvtW","reason":"NDC missing / invalid","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"EHkrNh72c7xe7xdsZ","reason":"Occurrence Code Denial","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"oxsqbdNrJJ35YKXqe","reason":"Other Coding Denial","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"ogWamqrsxAECzhkJW","reason":"Place of Service Denial","actionId":"Gpyv58KMPCWfFiscx"}
+{"_id":"4hCPRjQtMARtbaxhm","reason":"Payment not posted to this account","actionId":"7btrcAcrWwP788Xbo"}
+{"_id":"A8gr2oZ3B9X969PFF","reason":"Payment posted to this account in error","actionId":"7btrcAcrWwP788Xbo"}
+{"_id":"kDqrQmPXKupWqyZNg","reason":"Insurance pending Facility Credentialing","actionId":"sqH6uTXvKqAMLQXHp"}
+{"_id":"vfT95hfcSyQJdfw2S","reason":"Insurance pending Physician Credentialing","actionId":"qtNAdiwL8WK9gZhwp"}
+{"_id":"F8vEeoZ6bGxopnhGD","reason":"Insurance EOB not posted","actionId":"ShDmQSv4vzoyhWfK2"}
+{"_id":"w95A3Kik65xPCzQ5m","reason":"Check Information not available","actionId":"ZcMaQdnjfo7tiZacx"}
+{"_id":"pQLudnRDQ4G6zi95A","reason":"Received Check Information","actionId":"ZcMaQdnjfo7tiZacx"}
+{"_id":"JjQgBzWd3gY7BbjDa","reason":"Correct Adjustment Posted","actionId":"MWcj3vThAvWbm47bJ"}
+{"_id":"ygSHwPHpr4BrBe8ji","reason":"Hospital Review","actionId":"MWcj3vThAvWbm47bJ"}
+{"_id":"ZNEBm99gTAXgqWThj","reason":"Refund to Insurance","actionId":"MWcj3vThAvWbm47bJ"}
+{"_id":"YH5ms9vnjLqmwCBrX","reason":"Refund to Patient","actionId":"MWcj3vThAvWbm47bJ"}
+{"_id":"yCtE232a5TQGiuo27","reason":"Reverse Adjustment Posted","actionId":"MWcj3vThAvWbm47bJ"}
+{"_id":"AuYjh4GSPswFY2jc9","reason":"Balance in Correct Bucket","actionId":"7t3DgEucLPXns5dnT"}
+{"_id":"JbyowgAhEhwvkcKjH","reason":"Balance needs to be moved to Correct Bucket","actionId":"7t3DgEucLPXns5dnT"}
+{"_id":"rNRkXj2Y8uhejxwL5","reason":"Balance in Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"MajsSP2ufWAjJ8aY8","reason":"Balance needs to be moved to Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"pETt6A5df6LqQPmMJ","reason":"Coinsurance Balance in Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"M5zgvxravw7QK97fb","reason":"Coinsurance Balance needs to be moved to Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"kxzihRBZWD7aQviiX","reason":"Copay Balance in Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"koL79zRF8G4nzBQ6G","reason":"Copay Balance needs to be moved to Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"Bgoh49yTTkD87QErs","reason":"Deductible Balance in Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"LEMmtTZ7XLBaLTD2Z","reason":"Deductible Balance needs to be moved to Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"ydXsEH5qkGdPHWJ6A","reason":"Patient Not Insured - Balance in Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"E9gQFM3Y4rwWvMMXx","reason":"Patient Not Insured - Balance needs to be moved to Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"LunY3e6hdL9QxuA3i","reason":"Patient Unresponsive - Balance in Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"mzg6byKLoLngY6bq4","reason":"Patient Unresponsive - Balance needs to be moved to Correct Bucket","actionId":"tXCwK9WSnZ3umK9GJ"}
+{"_id":"DyJwgQN6KYyoDXnRk","reason":"Date of Service is unbillable","actionId":"orywdcsGFx4s9wgZC"}
+{"_id":"xRmX9aSqiJwac4GCr","reason":"Exceeds PMS $ limit","actionId":"J2S7CabpPpYJ93rkk"}
+{"_id":"fsmLepYYd7FDqHjEK","reason":"PMS does not work this payer","actionId":"J2S7CabpPpYJ93rkk"}
+{"_id":"DH9KyejuQDECFYaN5","reason":"Medical Records cannot be located","actionId":"knoiK9ne7GwWsH8um"}

@@ -1,0 +1,44 @@
+{"_id":"zki452mRr9C4CybdF","title":"NORT","substate":"Accounts_Resolved","systemAction":false}
+{"_id":"Nu4knk8nom7qz94ru","title":"Zero","substate":"Accounts_Resolved","systemAction":false}
+{"_id":"DqLeYRefGC9ugmeH7","title":"Request 1500","substate":"Additional","systemAction":false}
+{"_id":"cyty3t5vnYvCMGGoM","title":"Request Correspondence","substate":"Additional","systemAction":false}
+{"_id":"9eYmftQkbaBE7oYn8","title":"Request EOB","substate":"Additional","systemAction":false}
+{"_id":"LjpmPf2hJxCPM5Skr","title":"Request Itemized Statement","substate":"Additional","systemAction":false}
+{"_id":"vmbtpjyFLv3R9kCLf","title":"Request Medical Records","substate":"Additional","systemAction":false}
+{"_id":"2wGH9ZLejJPdzq4yE","title":"Request Medicare RA","substate":"Additional","systemAction":false}
+{"_id":"jgvLWA8BydHK5ao3h","title":"Request Other Attachment","substate":"Additional","systemAction":false}
+{"_id":"nvRYd6gBHnH85J8Sv","title":"Request Proof of Timely Filing","substate":"Additional","systemAction":false}
+{"_id":"SYd3b5PdqeMgM8k9h","title":"Request UB","substate":"Additional","systemAction":false}
+{"_id":"bJzbTPmviwcCtYgsm","title":"Bill Supplement Payer","substate":"Continual_Follow-Up","systemAction":false}
+{"_id":"27rfuAh6n2nq3NAiK","title":"Claim in Process","substate":"Continual_Follow-Up","systemAction":false}
+{"_id":"iXkk6nAkc4veXf6mv","title":"Faxed Insurance Status Request","substate":"Continual_Follow-Up","systemAction":false}
+{"_id":"pvBrqKwhSvFW9LxXF","title":"Forward to Biller","substate":"Continual_Follow-Up","systemAction":false}
+{"_id":"ZPs5xwittvHwCGReA","title":"Forward to Commercial Rep","substate":"Continual_Follow-Up","systemAction":false}
+{"_id":"j9hg9jaJPLBDEHnyv","title":"Forward to Medicaid Rep","substate":"Additional","systemAction":false}
+{"_id":"kuBLRw9sM7vtPezL8","title":"Forward to Medicare Rep","substate":"Additional","systemAction":false}
+{"_id":"CkiWAvHbsPbzi6QKL","title":"Insurance Payment Received","substate":"Additional","systemAction":false}
+{"_id":"yPMHWDN47WPfbZz7H","title":"Too Soon","substate":"Continual_Follow-Up","systemAction":false}
+{"_id":"jpz6dc9fh4MZymjuS","title":"Billing 1500","substate":"Refiles","systemAction":false}
+{"_id":"NbbZNMiPd5fFBSgAc","title":"Billing UB","substate":"Refiles","systemAction":false}
+{"_id":"tCXFxdJpgcYKNrg5G","title":"835 approved adjustment","substate":"Adjustment","systemAction":false}
+{"_id":"v6qsbC2XwTaR4botk","title":"Post Adjustment by Client","substate":"Adjustment","systemAction":false}
+{"_id":"PkxjwExeFkMnAHEMy","title":"Post Adjustment by PMS","substate":"Adjustment","systemAction":false}
+{"_id":"hTkDLAZPxGCXeP6u7","title":"Claim Billed by Client","substate":"Billed","systemAction":false}
+{"_id":"xCudSb38RqG7mxfNx","title":"Claim Billed by PMS - Appeal","substate":"Billed","systemAction":false}
+{"_id":"cbxfqGQmNuFntFemu","title":"Claim Billed by PMS - Electronic","substate":"Billed","systemAction":false}
+{"_id":"ubd9MauagndWphRP7","title":"Claim Billed by PMS - Paper","substate":"Billed","systemAction":false}
+{"_id":"WBew3XLKeXGgHtEzw","title":"Claim Faxed by PMS","substate":"Billed","systemAction":false}
+{"_id":"ciTYvxfGbWsW9YwG5","title":"Audit Charges / Account","substate":"Hospital_Review","systemAction":false}
+{"_id":"Gpyv58KMPCWfFiscx","title":"Coding Review","substate":"Hospital_Review","systemAction":false}
+{"_id":"7btrcAcrWwP788Xbo","title":"Misapplied Payment","substate":"Hospital_Review","systemAction":false}
+{"_id":"sqH6uTXvKqAMLQXHp","title":"Pending Facility Credentialing","substate":"Hospital_Review","systemAction":false}
+{"_id":"qtNAdiwL8WK9gZhwp","title":"Pending Physician Credentialing","substate":"Hospital_Review","systemAction":false}
+{"_id":"ShDmQSv4vzoyhWfK2","title":"Post Payment / EOB","substate":"Hospital_Review","systemAction":false}
+{"_id":"ZcMaQdnjfo7tiZacx","title":"Pending Insurance Payment","substate":"Hospital_Review","systemAction":false}
+{"_id":"MWcj3vThAvWbm47bJ","title":"Credit Balance","substate":"Hospital_Review","systemAction":false}
+{"_id":"7t3DgEucLPXns5dnT","title":"Insurance pending information from Patient","substate":"Returned_to_Facility","systemAction":false}
+{"_id":"tXCwK9WSnZ3umK9GJ","title":"Patient Balance","substate":"Patient_Responsibility","systemAction":false}
+{"_id":"orywdcsGFx4s9wgZC","title":"Aged Account","substate":"Returned_to_Facility","systemAction":false}
+{"_id":"J2S7CabpPpYJ93rkk","title":"Does Not Meet PMS Criteria","substate":"Returned_to_Facility","systemAction":false}
+{"_id":"knoiK9ne7GwWsH8um","title":"Medical Records Unavailable","substate":"Returned_to_Facility","systemAction":false}
+{"_id":"kyauk4NMnGcfxbokH","title":"HIPAA - Misidentification","substate":"Continual_Follow-Up","systemAction":false}
