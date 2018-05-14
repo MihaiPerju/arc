@@ -1,6 +1,15 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ActionSchema from "../../../api/actions/schemas/schema";
-import {AutoForm, AutoField, ErrorField, LongTextField, SelectField} from '/imports/ui/forms';
+import {
+    AutoForm,
+    AutoField,
+    ErrorField,
+    LongTextField,
+    SelectField,
+    ListField,
+    ListItemField,
+    NestField
+} from '/imports/ui/forms';
 import Notifier from "../../lib/Notifier";
 
 export default class ActionCreate extends Component {
@@ -25,31 +34,37 @@ export default class ActionCreate extends Component {
     getOptions = (enums) => {
         return _.map(enums, (value, key) => {
             const label = `${value.stateName}: ${value.name}`;
-            return {value: value.name.replace(/ /g,"_"), label: label};
+            return { value: value.name.replace(/ /g, "_"), label: label };
         })
     };
 
     handleClick = () => {
-        const {checked} = this.state;
+        const { checked } = this.state;
         this.setState({
             checked: !checked
         })
     };
 
     onCreateAction = () => {
-        const {form} = this.refs;
+        const { form } = this.refs;
         form.submit();
     };
 
     onClose = () => {
-        const {close} = this.props;
+        const { close } = this.props;
         close();
     };
 
     render() {
-        const {substates} = this.props;
+        const { substates } = this.props;
         const substatesOptions = this.getOptions(substates);
-        const {checked} = this.state;
+        const { checked } = this.state;
+        const inputTypes = [
+            { value: 'number', label: 'number'},
+            { value: 'date', label: 'date'},
+            { value: 'string', label: 'text'}
+        ];
+
         return (
             <div className="create-form action-create-form">
                 <div className="create-form__bar">
@@ -65,31 +80,53 @@ export default class ActionCreate extends Component {
                             {this.state.error && <div className="error">{this.state.error}</div>}
 
                             <div className="form-wrapper">
-                                <AutoField labelHidden={true} placeholder="Title" name="title"/>
-                                <ErrorField name="title"/>
+                                <AutoField labelHidden={true} placeholder="Title" name="title" />
+                                <ErrorField name="title" />
                             </div>
 
                             <div className="form-wrapper">
-                                <LongTextField labelHidden={true} placeholder="Description" name="description"/>
-                                <ErrorField name="description"/>
+                                <LongTextField labelHidden={true} placeholder="Description" name="description" />
+                                <ErrorField name="description" />
                             </div>
 
                             <div className="check-group">
-                                <input type="checkbox" id="n1" onClick={this.handleClick}/>
+                                <input type="checkbox" id="n1" onClick={this.handleClick} />
                                 <label htmlFor="n1"> Changes the substate of the Account?</label>
                             </div>
 
                             {checked &&
-                            <div className="select-group">
-                                <div className="form-wrapper">
-                                    <SelectField placeholder="Substate"
-                                                 labelHidden={true}
-                                                 options={substatesOptions}
-                                                 name="substate"/>
-                                    <ErrorField name="substate"/>
+                                <div className="select-group">
+                                    <div className="form-wrapper">
+                                        <SelectField placeholder="Substate"
+                                            labelHidden={true}
+                                            options={substatesOptions}
+                                            name="substate" />
+                                        <ErrorField name="substate" />
+                                    </div>
                                 </div>
-                            </div>
                             }
+
+                            <ListField name="inputs" showListField={() => {}}>
+                                <ListItemField name="$">
+                                    <NestField className="upload-item text-center">
+                                        <div className="form-wrapper">
+                                            <SelectField
+                                                placeholder="Select type"
+                                                labelHidden={true}
+                                                options={inputTypes}
+                                                name="type" />
+                                            <ErrorField name="type" />
+                                        </div>
+                                        <div className="form-wrapper">
+                                            <AutoField
+                                                labelHidden={true}
+                                                name="label"
+                                                placeholder="label" />
+                                            <ErrorField name="label" />
+                                        </div>
+                                    </NestField>
+                                </ListItemField>
+                            </ListField>
                         </AutoForm>
                     </div>
                 </div>

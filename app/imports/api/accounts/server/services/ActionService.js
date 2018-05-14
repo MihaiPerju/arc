@@ -13,15 +13,27 @@ export default class ActionService {
 
     //Adding action to account
     static createAction(data) {
-        const {accountId, actionId, reasonId, userId, addedBy} = data;
+        const {accountId, action: actionId, reasonCode: reasonId, userId, addedBy} = data;
         const action = Actions.findOne({_id: actionId});
-        const reason = ReasonCodes.findOne({_id: reasonId});
-        const accountActionId = AccountActions.insert({
+        const {inputs} = action;
+        const accountActionData = {
             userId,
             actionId,
             reasonCode: reason && reason.reason,
             addedBy
-        });
+        }
+        const customFields = {};
+        _.map(inputs, (input) => {
+            customFields[input.label] = data[input.label];
+        })
+
+        if(!_.isEmpty(customFields)) {
+            accountActionData.customFields = customFields;
+        }
+
+        const reason = ReasonCodes.findOne({_id: reasonId});
+
+        const accountActionId = AccountActions.insert(accountActionData);
         Accounts.update({_id: accountId}, {
             $set: {
                 hasLastSysAction: false
