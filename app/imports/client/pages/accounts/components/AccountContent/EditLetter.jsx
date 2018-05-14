@@ -68,7 +68,7 @@ export default class EditLetter extends Component {
     }
 
     render() {
-        const { letterTemplates, task, cancelEdit, selectedLetter } = this.props;
+        const { letterTemplates, account, cancelEdit, selectedLetter } = this.props;
         const { selectedTemplate, model } = this.state;
         const { avatar, profile } = Meteor.user();
         const options = this.getOptions(letterTemplates);
@@ -93,7 +93,7 @@ export default class EditLetter extends Component {
                 </div>
                 <LetterEditContainer
                     selectedTemplate={selectedTemplate}
-                    account={task}
+                    account={account}
                     reset={cancelEdit}
                     data={letterTemplates}
                     selectedLetter={selectedLetter}/>

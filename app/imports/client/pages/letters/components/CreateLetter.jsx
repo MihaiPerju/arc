@@ -24,6 +24,7 @@ export default class CreateLetter extends React.Component {
 
     doCheck = () => {
         const {keywordsValues} = this.props;
+        console.log('keywordsValues', keywordsValues)
         for (let key in keywordsValues) {
             if(!keywordsValues[key]) {
                 return true;
@@ -34,7 +35,8 @@ export default class CreateLetter extends React.Component {
 
     render() {
         const {hasKeywords} = this.props;
-        const isDisabled = hasKeywords || this.doCheck();
+        console.log('hasKeywords', hasKeywords)
+        const isDisabled = hasKeywords ? this.doCheck() : false;
         return (
             <button
                 style={isDisabled ? {cursor: 'not-allowed'}: {}}

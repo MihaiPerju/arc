@@ -3,11 +3,11 @@ import Notifier from '/imports/client/lib/Notifier';
 
 export default class LetterEdit extends React.Component {
     editLetter = () => {
-        const {letterBody, taskId, reset, attachments, letterTemplateId, selectedLetterId, keywordsValues} = this.props;
+        const {letterBody, accountId, reset, attachments, letterTemplateId, selectedLetterId, keywordsValues} = this.props;
 
         const data = {
             body: letterBody,
-            taskId,
+            accountId,
             attachments,
             letterTemplateId,
             letterValues: keywordsValues
@@ -35,7 +35,7 @@ export default class LetterEdit extends React.Component {
 
     render() {
         const {hasKeywords} = this.props;
-        const isDisabled = hasKeywords || this.doCheck();
+        const isDisabled = hasKeywords ? this.doCheck() : false;
         return (
             <button
                 style={isDisabled ? {cursor: 'not-allowed'}: {}}
