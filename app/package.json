@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "start": "MONGO_URL=mongodb://localhost:27017/db meteor run --settings .deploy/local.json",
-    "deploy:qa": "meteor npm i ; cd .deploy/qa && mup deploy"
+    "deploy:qa": "meteor npm i ; cd .deploy/qa && mup deploy",
+    "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc ROOT_URL=http://192.168.2.43:3000 meteor --settings .deploy/pms/local.json"
   },
   "dependencies": {
     "aws-sdk": "^2.35.0",
