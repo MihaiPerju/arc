@@ -1,12 +1,12 @@
 import Letters from "/imports/api/letters/collection.js";
-import Tasks from '/imports/api/tasks/collection';
+import Accounts from '/imports/api/accounts/collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 
 Letters.addLinks({
-    task: {
+    account: {
         type: 'one',
-        collection: Tasks,
-        field: 'taskId'
+        collection: Accounts,
+        field: 'accountId'
     },
     attachments: {
         type: 'many',

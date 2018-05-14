@@ -1,5 +1,5 @@
 import { getUserByToken } from "/imports/api/s3-uploads/server/router";
-import Security from "/imports/api/tasks/security";
+import Security from "/imports/api/accounts/security";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fs from "fs";
 import os from "os";

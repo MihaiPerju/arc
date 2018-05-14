@@ -14,11 +14,11 @@ class CommentsListContainer extends React.Component {
     }
 
     render () {
-        const {taskId} = this.props;
+        const {accountId} = this.props;
 
         return (
             <Container>
-                <CommentList taskId={taskId}/>
+                <CommentList accountId={accountId}/>
             </Container>
         );
     }

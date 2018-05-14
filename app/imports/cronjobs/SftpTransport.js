@@ -1,7 +1,7 @@
 import SftpClient from 'ssh2-sftp-client';
 import sftpData from '/imports/api/business';
 import Papa from 'papaparse';
-import TaskService from "../api/facilities/server/services/TaskImportingService";
+import AccountService from "../api/facilities/server/services/AccountImportingService";
 import toString from 'stream-to-string';
 
 export default class SftpTransport {
@@ -114,7 +114,7 @@ export default class SftpTransport {
         const csvString = parser(stream);
         Papa.parse(csvString, {
                 chunk: (results) => {
-                    TaskService.upload(results.data, importRules, facility._id);
+                    AccountService.upload(results.data, importRules, facility._id);
                 }
             }
         );

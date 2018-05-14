@@ -1,7 +1,7 @@
 import {createRoute} from '/imports/api/s3-uploads/server/router';
 import Papa from 'papaparse';
 import ParseService from '/imports/api/facilities/server/services/CsvParseService';
-import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
+import AccountService from '/imports/api/facilities/server/services/AccountImportingService';
 import Files from "../../files/collection";
 import Facilities from "../../facilities/collection";
 import os from 'os';
@@ -37,7 +37,7 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
     Papa.parse(csvString, {
             chunk: (results) => {
                 // the result needs to be performed here
-                TaskService.update(results.data, importRules, links);
+                AccountService.update(results.data, importRules, links);
             }
         }
     );

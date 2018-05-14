@@ -1,13 +1,13 @@
 import React, {Component} from "react";
 import ScheduleBlock from "./../../ScheduleBlock.jsx";
 import Notifier from "../../../../lib/Notifier";
-import {EJSON} from "meteor/ejson";
-import accountsQuery from "/imports/api/tasks/queries/taskList";
+import accountsQuery from "/imports/api/accounts/queries/accountList";
 import moment from "moment/moment";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import {withQuery} from "meteor/cultofcoders:grapher-react";
 import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
+import {EJSON} from 'meteor/ejson';
 
 class ReportHeader extends Component {
     constructor() {
@@ -19,14 +19,14 @@ class ReportHeader extends Component {
     }
 
     componentWillMount() {
-        this.getTasks(this.props);
+        this.getAccounts(this.props);
     }
 
     componentWillReceiveProps(props) {
-        this.getTasks(props);
+        this.getAccounts(props);
     }
 
-    getTasks(props) {
+    getAccounts(props) {
         const {report} = props;
         const filters = EJSON.parse(report.mongoFilters);
         const options = {limit: 20};

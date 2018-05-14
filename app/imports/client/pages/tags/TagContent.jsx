@@ -4,7 +4,6 @@ import TagContentHeader from './components/TagContent/TagContentHeader';
 import TagEdit from './TagEdit';
 import TagContentDescription from './components/TagContent/TagContentDescription';
 import usersQuery from '/imports/api/users/queries/listUsers';
-import PagerService from "/imports/client/lib/PagerService";
 
 class TagContent extends Component {
     constructor() {

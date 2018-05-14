@@ -22,11 +22,11 @@ export default class CommentList extends Component {
     }
 
     onSubmit ({content}) {
-        const {taskId} = this.props;
+        const {accountId} = this.props;
         if (!content) {
             Notifier.error('Message has no content');
         } else {
-            Meteor.call('comment.create', content, taskId, (err) => {
+            Meteor.call('comment.create', content, accountId, (err) => {
                 if (!err) {
                     Notifier.success('Comment added!');
                     this.refs.comment.reset();

@@ -5,7 +5,7 @@ import fs from "fs";
 import os from "os";
 import FoldersEnum from "/imports/api/business.js";
 import StatusEnum from "/imports/api/jobQueue/enums/jobQueueStatuses";
-import Accounts from "/imports/api/tasks/collection";
+import Accounts from "/imports/api/accounts/collection";
 import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 

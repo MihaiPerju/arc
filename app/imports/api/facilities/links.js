@@ -1,7 +1,7 @@
 import Facilities from './collection.js';
 import Clients from "/imports/api/clients/collection.js";
 import Users from '/imports/api/users/collection';
-import Tasks from '/imports/api/tasks/collection';
+import Accounts from '/imports/api/accounts/collection';
 import Regions from '/imports/api/regions/collection';
 
 Facilities.addLinks({
@@ -16,8 +16,8 @@ Facilities.addLinks({
         collection: Users,
         field: 'allowedUsers'
     },
-    tasks: {
-        collection: Tasks,
+    accounts: {
+        collection: Accounts,
         type: 'many',
         inversedBy: 'facility'
     },

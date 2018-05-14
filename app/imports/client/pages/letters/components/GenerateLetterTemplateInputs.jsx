@@ -2,9 +2,9 @@ import React from 'react';
 import _ from "underscore";
 import {AutoForm, AutoField, SelectField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
-import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
+import accountAttachmentsQuery from '/imports/api/accounts/queries/accountAttachmentsList';
 import SelectMulti from '/imports/client/lib/uniforms/SelectMulti.jsx';
-import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum'
 import PdfAttachment from './PdfAttachment';
 
@@ -27,7 +27,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             schema: this.generateSchema(templateKeywords ? templateKeywords : [])
         });
 
-        taskAttachmentsQuery.clone({_id: this.props.taskId}).fetchOne((err, data) => {
+        accountAttachmentsQuery.clone({_id: this.props.accountId}).fetchOne((err, data) => {
             if (!err) {
                 this.setState({
                     pdfAttachments: data.attachments
@@ -106,7 +106,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
     getAttachmentOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            return {value: value._id, label: TaskViewService.getPdfName(value)};
+            return {value: value._id, label: AccountViewService.getPdfName(value)};
         });
     };
 
