@@ -70,7 +70,7 @@ export default new SimpleSchema({
                         break;
                     }
                 }
-                if(isNull && index) {
+                if(isNull && index != null) {
                     this.value.splice(index, 1);
                 }
             }

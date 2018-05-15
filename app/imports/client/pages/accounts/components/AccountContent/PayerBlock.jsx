@@ -16,7 +16,7 @@ export default class PayerBlock extends Component {
     }
 
     componentWillReceiveProps() {
-        this.refs.slick.innerSlider.onWindowResized()
+        this.refs.slick && this.refs.slick.innerSlider.onWindowResized()
     }
 
     render() {
@@ -37,16 +37,18 @@ export default class PayerBlock extends Component {
                 </div>
                 <div className="main__block">
                     <div className="slide-payers">
-                        <Slider ref="slick" {...settings}>
-                            {
-                                account &&
-                                account.insurances &&
-                                account.insurances.map((insurance, index) => {
-                                    return <div key={index}><PayItem insurance={insurance}/></div>
-                                })
-                            }
+                        {(account && account.insurances && account.insurances.length) ?
+                            <Slider ref="slick" {...settings}>
+                                {
+                                    account &&
+                                    account.insurances &&
+                                    account.insurances.map((insurance, index) => {
+                                        return <div key={index}><PayItem insurance={insurance}/></div>
+                                    })
+                                }
 
-                        </Slider>
+                            </Slider>
+                        : <div style={{margin: '10px'}}>No insurances</div>}
                     </div>
                 </div>
             </div>
