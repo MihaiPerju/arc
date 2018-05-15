@@ -4,6 +4,7 @@ import {
   SortableElement,
   arrayMove
 } from "react-sortable-hoc";
+import AccountViewService from "/imports/client/pages/accounts/services/AccountViewService";
 
 export default class PdfAttachments extends Component {
   render() {
@@ -27,7 +28,7 @@ const SortableItem = SortableElement(({ item, onRemoveAttachment }) => {
 
   return (
     <div className="attachment-item">
-      <span className="text-white truncate">{item.name}</span>
+      <span className="text-white truncate">{AccountViewService.getPdfName(item)}</span>
       <div className="btn-rmv">
         <a className="icon-trash-o" onClick={this.remove.bind(this)} />
       </div>
