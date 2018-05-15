@@ -9,6 +9,10 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
+    state:{
+        type:String,
+        optional:true
+    },
     substate: {
         type: String,
         optional: true
@@ -19,7 +23,8 @@ export default new SimpleSchema({
     },
     inputs: {
         type: Array,
-        optional: true
+        optional: true,
+        defaultValue:[]
     },
     'inputs.$': {
         type: inputSchema,
