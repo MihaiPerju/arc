@@ -7,7 +7,7 @@ import Notifier from '../../../../lib/Notifier';
 import reasonCodesQuery from '/imports/api/reasonCodes/queries/reasonCodesList';
 
 const ActionSchema = new SimpleSchema({
-    action: {
+    actionId: {
         type: String,
         optional: true
     },
@@ -190,8 +190,8 @@ export default class NewAction extends Component {
                               ref="form">
                         <div className="select-row">
                             <div className="select-group">
-                                <AutoField labelHidden={true} name="action" options={actions}/>
-                                <ErrorField name="action"/>
+                                <AutoField labelHidden={true} name="actionId" options={actions}/>
+                                <ErrorField name="actionId"/>
                             </div>
                             {reasonCodes.length > 0 &&
                             <div className="select-group">

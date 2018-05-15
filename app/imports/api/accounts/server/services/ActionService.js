@@ -49,7 +49,7 @@ export default class ActionService {
     );
     Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, { accountId, action });
 
-    this.changeState(accountId, action.substate);
+    this.changeState(accountId, action);
 
     const actionsSubState = _.flatten([
       StatesSubstates["Archived"],
@@ -93,10 +93,9 @@ export default class ActionService {
     });
   }
 
-  //Change account state if action have a state
-  static changeState(accountId, substate) {
+  //Change account state if action has a state
+  static changeState(accountId, {state,substate}) {
     if (substate && substate !== GeneralEnums.NA) {
-      state = findStateBySubstate(StatesSubstates, substate);
       Accounts.update(
         { _id: accountId },
         {
