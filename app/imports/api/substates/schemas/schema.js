@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import { StateList } from '/imports/api/tasks/enums/states';
+import { StateList } from '/imports/api/accounts/enums/states';
 
 export default new SimpleSchema({
     name: {

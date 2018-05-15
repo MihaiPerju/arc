@@ -11,4 +11,5 @@ export default Actions.createNamedQuery('actionList', {
     title: 1,
     description: 1,
     substate: 1,
+    inputs: 1
 });

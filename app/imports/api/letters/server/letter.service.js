@@ -4,10 +4,10 @@ import os from 'os';
 import Future from 'fibers/future';
 
 class LetterService {
-    getLetterTemporalPdfLoc(taskId, letterId) {
+    getLetterTemporalPdfLoc(accountId, letterId) {
         const letter = Letters.findOne({
             _id: letterId,
-            taskId,
+            accountId,
         }, {
             fields: {body: 1},
         });

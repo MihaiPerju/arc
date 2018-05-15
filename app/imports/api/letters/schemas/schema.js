@@ -5,7 +5,7 @@ export default new SimpleSchema({
     body: {
         type: String,
     },
-    taskId: {
+    accountId: {
         type: String,
     },
     status: {
@@ -24,4 +24,13 @@ export default new SimpleSchema({
     'attachmentIds.$': {
         type: String,
     },
+    letterTemplateId: {
+        type: String,
+        optional: true,
+    },
+    letterValues: {
+        type: Object,
+        optional: true,
+        blackbox: true
+    }
 });

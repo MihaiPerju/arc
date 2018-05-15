@@ -9,7 +9,6 @@ export default class UserSingle extends Component {
             fontNormal: false,
             open: false
         }
-        // this.renderContent = this.renderContent.bind(this);
     }
 
     renderContent() {

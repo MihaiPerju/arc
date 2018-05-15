@@ -1,6 +1,6 @@
-import TaskService from '/imports/api/facilities/server/services/TaskImportingService';
+import AccountService from '/imports/api/facilities/server/services/AccountImportingService';
 import {chai} from 'meteor/practicalmeteor:chai';
-import Tasks from '/imports/api/tasks/collection';
+import Accounts from '/imports/api/accounts/collection';
 import {resetDatabase} from 'meteor/xolvio:cleaner';
 
 describe('Import header placement files', function () {
@@ -44,8 +44,8 @@ describe('Import header placement files', function () {
             "insBal3": "Ins Balance 3"
         };
         const facilityId = 'abcdefghijklmnop';
-        TaskService.upload(input, importRules, facilityId);
-        const account = Tasks.findOne();
+        AccountService.upload(input, importRules, facilityId);
+        const account = Accounts.findOne();
 
         //Delete date fields + id for easy checking
         delete account.fbDate;

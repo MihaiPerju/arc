@@ -6,7 +6,7 @@ export default class RepDashboard extends React.Component {
     constructor() {
         super();
         this.state = {
-            tasks: {
+            accounts: {
                 active: 0,
                 hold: 0
             }
@@ -14,9 +14,9 @@ export default class RepDashboard extends React.Component {
     }
 
     componentWillMount() {
-        Meteor.call('tasks.get', (err, tasks) => {
+        Meteor.call('accounts.get', (err, accounts) => {
             if (!err) {
-                this.setState({tasks});
+                this.setState({accounts});
             } else {
                 Notifier.error(err.reason);
             }
@@ -24,7 +24,7 @@ export default class RepDashboard extends React.Component {
     }
 
     render() {
-        const {tasks} = this.state;
+        const {accounts} = this.state;
         return (
             <Container>
                 <Card fluid>
@@ -36,11 +36,11 @@ export default class RepDashboard extends React.Component {
                             <Grid columns={4} stretched>
                                 <Grid.Column>
                                     <h2>Active</h2>
-                                    <p style={{"fontSize": "50"}}> {tasks.active}</p>
+                                    <p style={{"fontSize": "50"}}> {accounts.active}</p>
                                 </Grid.Column>
                                 <Grid.Column>
                                     <h2>Hold</h2>
-                                    <p style={{"fontSize": "50"}}> {tasks.hold}</p>
+                                    <p style={{"fontSize": "50"}}> {accounts.hold}</p>
                                 </Grid.Column>
                             </Grid>
                         </Card.Description>

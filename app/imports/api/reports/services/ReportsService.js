@@ -1,8 +1,7 @@
-import React from 'react';
 import SimpleSchema from 'simpl-schema';
-import FieldsType from '../../../api/tasks/config/tasks';
-import stateEnum from '/imports/api/tasks/enums/states';
-import {Substates} from '/imports/api/tasks/enums/substates';
+import FieldsType from '../../accounts/config/accounts';
+import stateEnum from '/imports/api/accounts/enums/states';
+import {Substates} from '/imports/api/accounts/enums/substates';
 import ReportFields from '/imports/api/reports/enums/ReportFields';
 
 const stringMatchOptions = ['Contains', 'Not Contains', 'Is Exact'];

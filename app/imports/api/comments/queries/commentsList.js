@@ -9,7 +9,7 @@ export default Comments.createNamedQuery('listComments', {
     reactive: true,
     content: 1,
     authorId: 1,
-    taskId: 1,
+    accountId: 1,
     author: {
         profile: {
             firstName: 1,

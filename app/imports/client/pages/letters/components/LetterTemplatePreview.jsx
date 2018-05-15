@@ -1,6 +1,7 @@
 import React from 'react';
 import Parser from 'simple-text-parser';
 import CreateLetter from './CreateLetter';
+import LetterEdit from './LetterEdit';
 import {Divider} from 'semantic-ui-react';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
@@ -12,7 +13,7 @@ export default class LetterTemplatePreview extends React.Component {
         if (!letterTemplateBody) {
             return;
         }
-
+        
         parser.addRule(/{(.*?)}/g, function (tag) {
             const word = tag.substring(1).slice(0, -1);
             if (variablesEnum[word]) {
@@ -21,12 +22,12 @@ export default class LetterTemplatePreview extends React.Component {
                 return `${parentState[word] ? parentState[word] : `{${word}}`}`;
             }
         });
-
+        
         return parser.render(letterTemplateBody);
     };
 
     render() {
-        const {letterTemplateBody, taskId, reset, attachments} = this.props;
+        const {letterTemplateBody, accountId, reset, attachments, letterTemplateId, currentComponent, selectedLetter, keywordsValues, keywords} = this.props;
         const letterBody = this.tagParser();
 
         return (
@@ -35,7 +36,26 @@ export default class LetterTemplatePreview extends React.Component {
                 {letterTemplateBody &&
                 <div>
                     <Divider/>
-                    <CreateLetter reset={reset} taskId={taskId} letterBody={letterBody} attachments={attachments}/>
+                    {
+                        currentComponent === 'create'
+                        ? <CreateLetter
+                            letterTemplateId={letterTemplateId}
+                            reset={reset}
+                            accountId={accountId}
+                            letterBody={letterBody}
+                            attachments={attachments}
+                            keywordsValues={keywordsValues}
+                            hasKeywords={!!keywords.length} />
+                        : <LetterEdit
+                            letterTemplateId={letterTemplateId}
+                            reset={reset}
+                            accountId={accountId}
+                            letterBody={letterBody}
+                            attachments={attachments}
+                            selectedLetterId={selectedLetter._id}
+                            keywordsValues={keywordsValues}
+                            hasKeywords={!!keywords.length} />
+                    }
                 </div>
                 }
             </div>

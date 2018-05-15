@@ -14,7 +14,7 @@ export default class LetterListContainer extends Pager {
             filters: {},
         });
 
-        this.query = LetterListQuery.clone({taskId: props.taskId});
+        this.query = LetterListQuery.clone({accountId: props.accountId});
         this.LetterListWrapper = createQueryContainer(this.query, LetterList, {
                 reactive: false,
             },
@@ -24,7 +24,7 @@ export default class LetterListContainer extends Pager {
     render() {
         const params = _.extend({}, this.getPagerOptions());
         const LetterListWrapper = this.LetterListWrapper;
-        const {taskId} = this.props;
+        const {accountId} = this.props;
 
         return (
             <div>
@@ -34,7 +34,7 @@ export default class LetterListContainer extends Pager {
                 <Divider/>
 
                 <Button primary fluid onClick={() => {
-                    FlowRouter.go('letter.create', {taskId});
+                    FlowRouter.go('letter.create', {accountId});
                 }}>
                     Create
                 </Button>

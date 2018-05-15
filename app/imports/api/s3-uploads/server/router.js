@@ -28,7 +28,7 @@ export function createRoute(path, handler) {
     postRoutes.route(path, function(params, req, res, next) {
         let user;
         let { facilityId } = params;
-        let { taskId } = params;
+        let { accountId } = params;
         let { clientId } = params;
 
         if (params.token) {
@@ -38,7 +38,7 @@ export function createRoute(path, handler) {
         const helper = {
             facilityId,
             user,
-            taskId,
+            accountId,
             clientId,
             req,
             res,

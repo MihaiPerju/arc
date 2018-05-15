@@ -1,5 +1,5 @@
 import moment from 'moment';
-import stateEnum from "/imports/api/tasks/enums/states";
+import stateEnum from "/imports/api/accounts/enums/states";
 
 export default class PagerService {
     static setQuery(query, { page, perPage, state, assign, filters }) {

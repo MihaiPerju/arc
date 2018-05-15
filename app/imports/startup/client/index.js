@@ -6,6 +6,6 @@ import svg4everybody from 'svg4everybody'; //external file svg polyfill
 
 import '/imports/api/comments/links';
 import '/imports/api/facilities/links';
-import '/imports/api/tasks/links';
+import '/imports/api/accounts/links';
 import '/imports/api/users/links';
 import '/imports/api/reasonCodes/links';

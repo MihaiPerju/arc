@@ -2,8 +2,9 @@ import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 import LetterTemplatePreview from './components/LetterTemplatePreview';
 import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInputs';
-import taskAttachmentsQuery from '/imports/api/tasks/queries/taskAttachmentsList';
-import TaskViewService from '/imports/client/pages/tasks/services/TaskViewService';
+import accountAttachmentsQuery from '/imports/api/accounts/queries/accountAttachmentsList';
+import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
+import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
 class LetterCreateContainer extends React.Component {
     constructor() {
@@ -14,7 +15,8 @@ class LetterCreateContainer extends React.Component {
             selectedTemplate: {},
             pdfAttachments: [],
             selectedAttachments: [],
-            attachmentIds: []
+            attachmentIds: [],
+            keywordsValues: {}
         };
     }
 
@@ -33,7 +35,7 @@ class LetterCreateContainer extends React.Component {
             this.setState({letterTemplates});
         });
 
-        taskAttachmentsQuery.clone({_id: this.props.taskId}).fetchOne((err, data) => {
+        accountAttachmentsQuery.clone({_id: this.props.accountId}).fetchOne((err, data) => {
             if (!err) {
                 this.setState({
                     pdfAttachments: data.attachments
@@ -61,7 +63,7 @@ class LetterCreateContainer extends React.Component {
 
     getAttachmentOptions = (enums) => {
         return _.map(enums, (value, key) => {
-            return {value: value._id, label: TaskViewService.getPdfName(value)};
+            return {value: value._id, label: AccountViewService.getPdfName(value)};
         });
     };
 
@@ -74,12 +76,28 @@ class LetterCreateContainer extends React.Component {
 
     updateState = (data) => {
         this.setState(data);
+        this.getKeywordsValues();
     };
+
+    getKeywordsValues = () => {
+        const {selectedTemplate} = this.props;
+        const {keywords} = selectedTemplate;
+        const keywordsValues = {};
+
+        _.each(keywords, (value) => {
+            if(variablesEnum[value]) {
+                keywordsValues[variablesEnum[value].field] = this.state[variablesEnum[value].field];
+            } else {
+                keywordsValues[value] = this.state[value];
+            }
+        })
+        this.setState({keywordsValues})
+    }
 
     render() {
         const {account, selectedTemplate, reset} = this.props;
-        const {keywords, body} = selectedTemplate;
-        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds} = this.state;
+        const {keywords, body, _id: letterId} = selectedTemplate;
+        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
@@ -96,10 +114,14 @@ class LetterCreateContainer extends React.Component {
                     <div className="right-col">
                         <LetterTemplatePreview
                             reset={reset}
-                            taskId={account._id}
+                            accountId={account._id}
                             letterTemplateBody={body}
+                            letterTemplateId={letterId}
                             parentState={this.state}
-                            attachments={attachmentIds}/>
+                            attachments={attachmentIds}
+                            currentComponent='create'
+                            keywordsValues={keywordsValues}
+                            keywords={keywords} />
                     </div>
                 </div>
             </div>

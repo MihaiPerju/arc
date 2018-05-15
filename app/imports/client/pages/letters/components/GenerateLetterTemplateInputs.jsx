@@ -7,9 +7,9 @@ import {
   ErrorField
 } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
-import taskAttachmentsQuery from "/imports/api/tasks/queries/taskAttachmentsList";
+import accountAttachmentsQuery from "/imports/api/accounts/queries/accountAttachmentsList";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import TaskViewService from "/imports/client/pages/tasks/services/TaskViewService";
+import AccountViewService from "/imports/client/pages/accounts/services/AccountViewService";
 import { variablesEnum } from "/imports/api/letterTemplates/enums/variablesEnum";
 import PdfAttachments from "./PdfAttachments";
 
@@ -32,14 +32,14 @@ export default class GenerateLetterTemplateInputs extends React.Component {
       schema: this.generateSchema(templateKeywords ? templateKeywords : [])
     });
 
-    taskAttachmentsQuery
-      .clone({ _id: this.props.taskId })
+    accountAttachmentsQuery
+      .clone({ _id: this.props.accountId })
       .fetchOne((err, data) => {
         if (!err) {
           pdfAttachments = [{ name: "Select Attachment" }];
           pdfAttachments = pdfAttachments.concat(data.attachments);
           this.setState({
-            pdfAttachments
+            pdfAttachments: data.attachments
           });
         } else {
           Notifier.error(err.reason);
@@ -49,6 +49,11 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
   generateSchema(options) {
     let schema = {};
+    schema["attachmentIds"] = {
+      label: "Pdf attachments",
+      type: String
+    };
+
     if (!options || !options.length) {
       return new SimpleSchema(schema);
     }
@@ -66,13 +71,46 @@ export default class GenerateLetterTemplateInputs extends React.Component {
       }
     });
 
-    schema["attachmentIds"] = {
-      label: "Pdf attachments",
-      type: String
-    };
-
     return new SimpleSchema(schema);
   }
+
+  generateFields() {
+    const { templateKeywords } = this.props;
+    if (templateKeywords) {
+      const fields = [];
+
+      templateKeywords.forEach((keyword, index) => {
+        if (variablesEnum[keyword]) {
+          fields.push(
+            <div key={index} className="form-group">
+              <AutoField
+                key={index}
+                name={variablesEnum[keyword].field}
+                placeholder={keyword}
+              />
+            </div>
+          );
+        } else {
+          fields.push(
+            <div key={index} className="form-group">
+              <AutoField key={index} name={keyword} placeholder={keyword} />
+            </div>
+          );
+        }
+      });
+      return fields;
+    }
+  }
+
+  onSubmit = data => {
+    this.props.onChange(data);
+  };
+
+  getAttachmentOptions = enums => {
+    return _.map(enums, (value, key) => {
+      return { value: value._id, label: AccountViewService.getPdfName(value) };
+    });
+  };
 
   generateFields() {
     const { templateKeywords } = this.props;
@@ -151,7 +189,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
   getAttachmentOptions = enums => {
     return _.map(enums, (value, key) => {
-      return { value: value._id, label: TaskViewService.getPdfName(value) };
+      return { value: value._id, label: AccountViewService.getPdfName(value) };
     });
   };
 
