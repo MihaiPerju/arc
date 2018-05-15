@@ -5,7 +5,7 @@ export default new SimpleSchema({
     body: {
         type: String,
     },
-    taskId: {
+    accountId: {
         type: String,
     },
     status: {

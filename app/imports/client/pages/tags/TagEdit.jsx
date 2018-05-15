@@ -47,7 +47,6 @@ export default class TagEdit extends React.Component {
         return (
             <div className="create-form">
                 <div className="create-form__bar">
-                    <button className="btn-add">+ Edit Tag</button>
                     <div className="btn-group">
                         <button onClick={this.onSetEdit} className="btn-cancel">Cancel</button>
                         <button onClick={this.onEditTag} className="btn--green">Confirm & save</button>

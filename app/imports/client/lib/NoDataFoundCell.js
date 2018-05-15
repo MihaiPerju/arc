@@ -3,7 +3,7 @@ import Notifier from '/imports/client/lib/Notifier';
 import autoBind from 'react-autobind';
 import {Table} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'
-import {LabelSubstates} from '/imports/api/tasks/enums/substates'
+import {LabelSubstates} from '/imports/api/accounts/enums/substates'
 
 const NO_TEXT_FOUND = "Not found";
 
