@@ -19,7 +19,8 @@ export default new SimpleSchema({
     },
     inputs: {
         type: Array,
-        optional: true
+        optional: true,
+        defaultValue:[]
     },
     'inputs.$': {
         type: inputSchema,
