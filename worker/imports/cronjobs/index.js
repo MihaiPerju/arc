@@ -1,4 +1,5 @@
-import RunReports from "../services/RunReports";
+import ReportsManagement from "../services/RunReports";
+import LettersManagement from "../services/LettersManagement";
 
 //Job for running reports
 SyncedCron.add({
@@ -8,7 +9,7 @@ SyncedCron.add({
     return parser.text("every 10 seconds");
   },
   job: function() {
-    RunReports.run();
+    ReportsManagement.run();
   }
 });
 
@@ -20,6 +21,6 @@ SyncedCron.add({
     return parser.text("every 10 seconds");
   },
   job: function() {
-    RunReports.run();
+    LettersManagement.run();
   }
 });
