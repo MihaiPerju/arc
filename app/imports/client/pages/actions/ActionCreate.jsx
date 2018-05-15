@@ -23,7 +23,6 @@ export default class ActionCreate extends Component {
   onSubmit(data) {
     data.substateId = data.substate;
     Meteor.call("action.create", data, err => {
-      console.log(data);
       if (!err) {
         Notifier.success("Action created!");
         this.onClose();
