@@ -36,10 +36,10 @@ export default class GenerateLetterTemplateInputs extends React.Component {
       .clone({ _id: this.props.accountId })
       .fetchOne((err, data) => {
         if (!err) {
-          pdfAttachments = [{ name: "Select Attachment" }];
+          pdfAttachments = [{ name:"Select Attachment" }];
           pdfAttachments = pdfAttachments.concat(data.attachments);
           this.setState({
-            pdfAttachments: data.attachments
+            pdfAttachments
           });
         } else {
           Notifier.error(err.reason);
@@ -140,10 +140,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     }
   }
 
-  onSubmit = data => {
-    this.props.onChange(data);
-  };
-
   getAttachmentIndex = (attachments, attachmentId) => {
     for (index in attachments) {
       if (attachments[index]._id === attachmentId) {
@@ -184,12 +180,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     this.setState({
       selectedAttachments: arrSource,
       pdfAttachments: arrDest
-    });
-  };
-
-  getAttachmentOptions = enums => {
-    return _.map(enums, (value, key) => {
-      return { value: value._id, label: AccountViewService.getPdfName(value) };
     });
   };
 

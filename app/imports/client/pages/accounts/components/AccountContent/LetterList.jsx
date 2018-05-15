@@ -8,7 +8,7 @@ import Loading from '/imports/client/lib/ui/Loading';
 import {getToken} from '/imports/api/s3-uploads/utils';
 import letterTemplateQuery from '/imports/api/letterTemplates/queries/listLetterTemplates';
 import Notifier from '/imports/client/lib/Notifier';
-
+import Statuses from '/imports/api/letters/enums/statuses.js';
 class LetterList extends Component {
     constructor() {
         super();
@@ -109,11 +109,11 @@ class LetterList extends Component {
                                 return (
                                     <div key={index} className="block-item">
                                         <div className="info">
-                                            <div className="title">There is no name for letters implemented!</div>
+                                            <div className="title">Letter {index}</div>
                                             <div className="status pending">{letter.status}</div>
                                         </div>
                                         <div className="btn-group">
-                                            {letter.status === 'pending' &&
+                                            {letter.status === Statuses.NEW &&
                                                 (<button
                                                     className="btn-text--blue"
                                                     onClick={() => this.handleEdit(letter)}

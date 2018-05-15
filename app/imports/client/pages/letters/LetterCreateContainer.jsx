@@ -100,7 +100,7 @@ class LetterCreateContainer extends React.Component {
         const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
-        const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
+        const attachmentOptions  = this.getAttachmentOptions(pdfAttachments);
 
         return (
             <div>
