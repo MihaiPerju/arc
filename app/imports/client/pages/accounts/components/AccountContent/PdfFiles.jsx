@@ -38,7 +38,7 @@ export default class ActionBlock extends Component {
         const {account} = this.props;
 
         const componentConfig = {
-            postUrl: `/uploads/account-pdf/` + account._id + '/' + getToken()
+            postUrl: `/uploads/accounts-pdf/` + account._id + '/' + getToken()
         };
         const that = this;
         const djsConfig = {
