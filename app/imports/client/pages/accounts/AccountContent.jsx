@@ -43,7 +43,7 @@ export default class AccountContent extends Component {
         {this.escalateReason()}
         <PayerBlock account={account} />
         <InvoiceMembers />
-        <ActionBlock account={account} />
+        <ActionBlock closeRightPanel={closeRightPanel} account={account} />
         <LetterList account={account} />
         <PdfFiles account={account} />
         <CommentsListContainer account={account._id} />
