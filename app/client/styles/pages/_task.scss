@@ -541,6 +541,16 @@
     .select-action {
       width: 50%;
     }
+
+    .custom-wrapper {
+      .custom-inputs {
+        width: 97%;
+        padding-top: 8px;
+        .react-datepicker-wrapper, .react-datepicker__input-container {
+          width: 100%;
+        }
+      }
+    }
   }
   .new-action {
     background: rgba($color-white, 0.6);

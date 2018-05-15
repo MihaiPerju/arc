@@ -1,4 +1,5 @@
 import SimpleSchema from 'simpl-schema';
+import inputSchema from './inputSchema'
 
 export default new SimpleSchema({
     title: {
@@ -15,5 +16,13 @@ export default new SimpleSchema({
     systemAction: {
         type: Boolean,
         defaultValue: false
+    },
+    inputs: {
+        type: Array,
+        optional: true
+    },
+    'inputs.$': {
+        type: inputSchema,
+        optional: true
     }
 });

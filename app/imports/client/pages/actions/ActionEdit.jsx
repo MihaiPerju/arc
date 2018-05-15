@@ -4,7 +4,10 @@ import {
   AutoField,
   ErrorField,
   LongTextField,
-  SelectField
+  SelectField,
+  ListField,
+  ListItemField,
+  NestField
 } from "/imports/ui/forms";
 import ActionSchema from "/imports/api/actions/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
@@ -78,6 +81,11 @@ export default class ActionEdit extends React.Component {
     const { action, substates } = this.props;
     const { checked } = this.state;
     const substatesOptions = this.getOptions(substates);
+    const inputTypes = [
+      { value: 'number', label: 'number'},
+      { value: 'date', label: 'date'},
+      { value: 'string', label: 'text'}
+    ];
 
     return (
       <div className="create-form">
@@ -128,7 +136,7 @@ export default class ActionEdit extends React.Component {
               </div>
 
               <div className="check-group">
-                <input checked={checked} type="checkbox" />
+                <input defaultChecked={checked} type="checkbox" />
                 <label onClick={this.handleClick}>
                   {" "}
                   Changes the substate of the Account?
@@ -148,6 +156,28 @@ export default class ActionEdit extends React.Component {
                   </div>
                 </div>
               )}
+
+                <ListField name="inputs" showListField={() => {}}>
+                  <ListItemField name="$">
+                    <NestField className="upload-item text-center">
+                      <div className="form-wrapper">
+                        <SelectField
+                          placeholder="Select type"
+                          labelHidden={true}
+                          options={inputTypes}
+                          name="type" />
+                        <ErrorField name="type" />
+                      </div>
+                      <div className="form-wrapper">
+                        <AutoField
+                          labelHidden={true}
+                          name="label"
+                          placeholder="label" />
+                        <ErrorField name="label" />
+                      </div>
+                    </NestField>
+                  </ListItemField>
+                </ListField>
             </AutoForm>
           </div>
 

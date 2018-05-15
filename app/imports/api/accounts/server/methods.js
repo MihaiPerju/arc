@@ -19,19 +19,8 @@ import Actions from "../../actions/collection";
 
 Meteor.methods({
   "account.actions.add"(data) {
-    const accountId = data.accountId,
-      actionId = data.action,
-      reasonId = data.reasonCode,
-      userId = this.userId;
-    addedBy = data.addedBy;
-
-    ActionService.createAction({
-      accountId,
-      actionId,
-      reasonId,
-      userId,
-      addedBy
-    });
+    data.userId = this.userId;
+    ActionService.createAction(data);
   },
 
   "account.assignUser"({ _id, assigneeId }) {

@@ -22,7 +22,7 @@ export default class ActionContentHeader extends React.Component {
                     <div className="info-block">
                         <div className="text-block">
                             <div className="text-light-grey text-label">Substate</div>
-                            <div className="status">{action.substate.replace(/_/g, ' ')}</div>
+                            <div className="status">{action.substate}</div>
                         </div>
                         <div className="text-block">
                             <div className="text-light-grey text-label">Description</div>
