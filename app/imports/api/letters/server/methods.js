@@ -19,4 +19,17 @@ Meteor.methods({
         Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
         Letters.remove(letterId);
     },
+
+    'letter.update'(_id, {body, letterTemplateId, attachments, letterValues }) {
+        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+        Letters.update(
+            {_id},
+            { $set: {
+                body,
+                letterTemplateId,
+                attachmentIds: attachments,
+                letterValues
+            } }
+        )
+    },
 });

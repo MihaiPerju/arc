@@ -74,7 +74,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             templateKeywords.forEach((keyword, index) => {
                 if (variablesEnum[keyword]) {
                     fields.push(
-                        <div className="form-group">
+                        <div key={index} className="form-group">
                             <AutoField
                                 key={index}
                                 name={variablesEnum[keyword].field}
@@ -84,7 +84,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
                     );
                 } else {
                     fields.push(
-                        <div className="form-group">
+                        <div key={index} className="form-group">
                             <AutoField
                                 key={index}
                                 name={keyword}

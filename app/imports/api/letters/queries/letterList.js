@@ -8,5 +8,8 @@ export default Letters.createNamedQuery('letterList', {
     },
     $paginate: true,
     status: 1,
-    createdAt: 1
+    createdAt: 1,
+    letterTemplateId: 1,
+    body: 1,
+    letterValues: 1
 });

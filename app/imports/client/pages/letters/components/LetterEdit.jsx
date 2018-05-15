@@ -1,9 +1,9 @@
 import React from 'react';
 import Notifier from '/imports/client/lib/Notifier';
 
-export default class CreateLetter extends React.Component {
-    createLetter = () => {
-        const {letterBody, accountId, reset, attachments, letterTemplateId, keywordsValues} = this.props;
+export default class LetterEdit extends React.Component {
+    editLetter = () => {
+        const {letterBody, accountId, reset, attachments, letterTemplateId, selectedLetterId, keywordsValues} = this.props;
 
         const data = {
             body: letterBody,
@@ -12,11 +12,12 @@ export default class CreateLetter extends React.Component {
             letterTemplateId,
             letterValues: keywordsValues
         };
-        Meteor.call('letter.create', data, (err) => {
+
+        Meteor.call('letter.update', selectedLetterId, data, (err) => {
             if (err) {
-                Notifier.error('Error while trying to create letter!');
+                Notifier.error('Error while trying to update letter!');
             } else {
-                Notifier.success('Letter successfully created!');
+                Notifier.success('Letter successfully updated !');
                 reset();
             }
         });
@@ -39,8 +40,8 @@ export default class CreateLetter extends React.Component {
             <button
                 style={isDisabled ? {cursor: 'not-allowed'}: {}}
                 disabled={isDisabled}
-                onClick={this.createLetter}
-                className="btn--green btn-save"> Save
+                onClick={this.editLetter}
+                className="btn--green btn-save">Update
             </button>
         );
     }
