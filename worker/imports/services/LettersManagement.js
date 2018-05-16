@@ -40,11 +40,11 @@ export default class LetterManagement {
   static attachPdfsToLetter(letterId, attachmentIds) {
     let files = [letterId];
     for (let _id of attachmentIds) {
-      const { path } = Uploads.findOne({ _id });
+      const { path, } = Uploads.findOne({ _id });
       files.push(os.tmpdir() + "/uploads/" + path);
     }
 
-    PDFMerge(files, os.tmpdir() + letterId)
+    PDFMerge(files, os.tmpdir() + "/"+accountId)
       .then(function(done) {
         console.log(done); // success
       })
