@@ -100,7 +100,7 @@ export default class NewAction extends Component {
     }
 
     onHandleChange = (field, value) => {
-        if (field == 'action') {
+        if (field == 'actionId') {
             const actionId = value;
             if (actionId) {
                 reasonCodesQuery.clone({
@@ -175,7 +175,6 @@ export default class NewAction extends Component {
         const {selectedAction} = this.state;
         const actions = this.getActionOptions(this.state.actions);
         const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
-
         const {inputs} = selectedAction[0] || {};
         const customInputs = _.map(inputs, this.renderInputs)
 

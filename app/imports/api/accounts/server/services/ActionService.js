@@ -11,6 +11,7 @@ import { Dispatcher, Events } from "/imports/api/events";
 import stateEnum from "../..//enums/states";
 import { Substates } from "../..//enums/substates";
 import Accounts from "../../collection";
+import SubstatesCollection from "/imports/api/substates/collection";
 
 export default class ActionService {
   //Adding action to account
@@ -94,14 +95,16 @@ export default class ActionService {
   }
 
   //Change account state if action has a state
-  static changeState(accountId, {state,substate}) {
-    if (substate && substate !== GeneralEnums.NA) {
+  static changeState(accountId, {state,substateId}) {
+    if (substateId && substateId !== GeneralEnums.NA) {
+      const substate = SubstatesCollection.findOne({_id: substateId});
+      const {name} = substate || {};
       Accounts.update(
         { _id: accountId },
         {
           $set: {
             state,
-            substate
+            substate: name
           },
           $unset: {
             tickleDate: null,
