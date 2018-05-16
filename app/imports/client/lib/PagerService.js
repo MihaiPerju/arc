@@ -9,6 +9,8 @@ export default class PagerService {
             this.getAccountFilters(params, state, filters);
             this.getProperAccounts(params, assign);
         }
+        // common method for filtering
+        this.getFilters(params, filters)
         return query.clone(params);
     }
 
@@ -34,7 +36,7 @@ export default class PagerService {
         const perPage = 13;
 
         return {
-            filters: { facilityId, clientId, acctNum, facCode, ptType, acctBal, finClass, substate, dischrgDate, fbDate },
+            filters: { facilityId, clientId, acctNum, facCode, ptType, acctBal, finClass, substate, dischrgDate, fbDate},
             page,
             perPage,
             state,
@@ -45,22 +47,22 @@ export default class PagerService {
     static getProperAccounts(params, assign) {
         if (assign === 'none') {
             _.extend(params.filters, {
-                assigneeId: {$exists: true},
-                workQueue: {$exists: true}
+                assigneeId: { $exists: true },
+                workQueue: { $exists: true }
             });
         } else if (assign) {
             const filterArr = assign.split(",");
-            if (_.contains(filterArr, "assigneeId")){
+            if (_.contains(filterArr, "assigneeId")) {
                 _.extend(params.filters, {
                     $or: [
-                        {workQueue: {$in: filterArr}},
+                        { workQueue: { $in: filterArr } },
                         {
-                            assigneeId: {$exists: true}
+                            assigneeId: { $exists: true }
                         }
                     ]
                 });
             } else {
-                _.extend(params.filters, {workQueue: {$in: filterArr}});
+                _.extend(params.filters, { workQueue: { $in: filterArr } });
             }
         }
     }
@@ -137,6 +139,20 @@ export default class PagerService {
             });
         }
     }
+    static getFilters(params, filters) {
+        let clientName;
+        if (FlowRouter.current().route.path.indexOf('client/list') > -1) {
+            clientName = FlowRouter.getQueryParam("clientName");
+        }
+        
+        if (clientName) {
+            _.extend(params, {
+                filters: { clientName: { $regex: clientName, $options: "i" }}
+            });
+        }
+        
+    }
+
 
     static getRange(page, perPage) {
         const lowest = (page - 1) * perPage + 1;
