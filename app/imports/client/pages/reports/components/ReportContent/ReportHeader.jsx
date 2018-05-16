@@ -8,6 +8,7 @@ import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import {withQuery} from "meteor/cultofcoders:grapher-react";
 import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import {EJSON} from 'meteor/ejson';
+import Loading from "/imports/client/lib/ui/Loading";
 
 class ReportHeader extends Component {
     constructor() {
@@ -33,7 +34,8 @@ class ReportHeader extends Component {
         accountsQuery.clone({filters, options}).fetch((err, accounts) => {
             if (!err) {
                 this.setState({
-                    accounts
+                    accounts,
+                    loading: false
                 });
             } else {
                 Notifier.error("Couldn't get sample accounts");
@@ -110,44 +112,10 @@ class ReportHeader extends Component {
         }
     };
 
-    render() {
-        const {report, data} = this.props;
-        const {schedule, accounts} = this.state;
-        const job = data;
-
-        const tableHeader = [
-            'Account name', 'Account number', 'Discharge date', 'Patient Type', 'Facility Code', 'Patient Name'
-            , "Last Bill Date", "Account Balance", "Financial Class", "Admit Date", "Medical Number"];
-
+    getReportContent = (tableHeader) => {
+        const {accounts} = this.state;
         return (
-            <div className="main-content report-content">
-                {schedule ? (
-                    <ScheduleBlock report={report}/>
-                ) : (
-                    <div className="main-content__header header-block">
-                        <div className="row__header">
-                            <div className="text-light-grey">Report name</div>
-                            <div className="title">{report.name}</div>
-                        </div>
-                        <div className="row__header">
-                            <div className="plasment-block">
-                                <div className="text-light-grey">Placement date</div>
-                                <div className="time">11:20</div>
-                            </div>
-                            <div className="btn-group">
-                                <button className="btn--white" onClick={this.openSchedule}>
-                                    Schedule
-                                </button>
-                                <button onClick={this.onEdit} className="btn--white">
-                                    Edit report
-                                </button>
-                                {this.getRunButton(job && job.status)}
-                            </div>
-                        </div>
-                    </div>
-                )}
-                {!schedule && (
-                    <div className="table-list">
+            <div className="table-list">
                         <div className="table-list__wrapper">
                             <div className="table-container">
                                 <div className="table-row">
@@ -202,7 +170,54 @@ class ReportHeader extends Component {
                             </div>
                         </div>
                     </div>
+        )
+    }
+
+    render() {
+        const {report, data} = this.props;
+        const {schedule, accounts, loading} = this.state;
+        const job = data;
+
+        const tableHeader = [
+            'Account name', 'Account number', 'Discharge date', 'Patient Type', 'Facility Code', 'Patient Name'
+            , "Last Bill Date", "Account Balance", "Financial Class", "Admit Date", "Medical Number"];
+
+        return (
+            <div className="main-content report-content">
+                {schedule ? (
+                    <ScheduleBlock report={report}/>
+                ) : (
+                    <div className="main-content__header header-block">
+                        <div className="row__header">
+                            <div className="text-light-grey">Report name</div>
+                            <div className="title">{report.name}</div>
+                        </div>
+                        <div className="row__header">
+                            <div className="plasment-block">
+                                <div className="text-light-grey">Placement date</div>
+                                <div className="time">11:20</div>
+                            </div>
+                            <div className="btn-group">
+                                <button className="btn--white" onClick={this.openSchedule}>
+                                    Schedule
+                                </button>
+                                <button onClick={this.onEdit} className="btn--white">
+                                    Edit report
+                                </button>
+                                {this.getRunButton(job && job.status)}
+                            </div>
+                        </div>
+                    </div>
                 )}
+                {
+                    !schedule && (
+                        loading ? 
+                        <Loading/>  
+                        :
+                        this.getReportContent(tableHeader)
+                    )
+
+                }
             </div>
         );
     }

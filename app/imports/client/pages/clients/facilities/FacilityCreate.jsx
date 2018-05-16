@@ -4,13 +4,15 @@ import FacilitySchema from '/imports/api/facilities/schema.js'
 import {AutoForm, AutoField, ErrorField, SelectField, LongTextField, ListField, ListItemField, NestField} from '/imports/ui/forms';
 import RegionListQuery from '/imports/api/regions/queries/regionList.js';
 import SelectUsersContainer from '/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx';
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class FacilityCreate extends Component {
     constructor() {
         super();
         this.state = {
             newContact: false,
-            regions: []
+            regions: [],
+            loading: true
         }
     }
     componentWillMount() {
@@ -21,7 +23,8 @@ export default class FacilityCreate extends Component {
         }).fetch((err, regions) => {
             if (!err){
                 this.setState({
-                    regions
+                    regions,
+                    loading: false
                 });
             } else {
                 Notifier.error('Couldn\'t get regions');
@@ -69,9 +72,13 @@ export default class FacilityCreate extends Component {
     };
 
     render() {
-        const { newContact, regions } = this.state;
+        const { newContact, regions, loading } = this.state;
         const regionIds = this.getRegionOptions(regions);
         const schema = FacilitySchema.omit('clientId');
+
+        if (loading) {
+            return <Loading />
+        }
         return (
             <div className="create-form create-facility">
                     <div className="create-form__bar">

@@ -4,6 +4,7 @@ import SimpleSchema from 'simpl-schema';
 import query from '/imports/api/actions/queries/actionList';
 import Notifier from '../../../../lib/Notifier';
 import reasonCodesQuery from '/imports/api/reasonCodes/queries/reasonCodesList';
+import Loading from "/imports/client/lib/ui/Loading";
 
 const ActionSchema = new SimpleSchema({
     action: {
@@ -22,7 +23,8 @@ export default class NewAction extends Component {
         this.state = {
             fade: false,
             actions: [],
-            reasonCodes: []
+            reasonCodes: [],
+            loading: true
         };
     }
 
@@ -37,7 +39,8 @@ export default class NewAction extends Component {
         query.clone().fetch((err, actions) => {
             if (!err) {
                 this.setState({
-                    actions
+                    actions,
+                    loading: false
                 });
             }
         });
@@ -106,9 +109,13 @@ export default class NewAction extends Component {
     };
 
     render() {
+        const {loading} = this.state;
         const actions = this.getActionOptions(this.state.actions);
         const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
 
+        if (loading) {
+            return <Loading />
+        }
         return (
             <div className={this.state.fade ? 'new-action in' : 'new-action'}>
                 <div className="action-info">
