@@ -64,7 +64,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
   getAttachmentOptions = enums => {
     return _.map(enums, (value, key) => {
-      return { value: value._id, label: AccountViewService.getPdfName(value) };
+    return { value: value._id, label: AccountViewService.getPdfName(value) };
     });
   };
 
@@ -151,6 +151,8 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     const fields = this.generateFields();
     const { templateKeywords, account } = this.props;
     const { pdfAttachments, selectedAttachments } = this.props;
+    console.log(selectedAttachments, pdfAttachments);
+
     const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
     if (!templateKeywords || !templateKeywords.length) {
       return <div />;
@@ -171,11 +173,15 @@ export default class GenerateLetterTemplateInputs extends React.Component {
               options={attachmentOptions}
               onChange={this.onSelectAttachment}
             />
-            <PdfAttachments
-              onRemoveAttachment={this.onRemoveAttachment}
-              onOrderChange={this.onOrderChange}
-              attachments={selectedAttachments}
-            />
+            {selectedAttachments.length ? (
+              <PdfAttachments
+                onRemoveAttachment={this.onRemoveAttachment}
+                onOrderChange={this.onOrderChange}
+                attachments={selectedAttachments}
+              />
+            ) : (
+              ""
+            )}
 
             <ErrorField name="attachmentIds" />
 
