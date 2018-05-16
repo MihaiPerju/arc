@@ -19,10 +19,11 @@ export default class ActionService {
     const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
     const action = Actions.findOne({ _id: actionId });
     const { inputs } = action;
+    const { reason } = ReasonCodes.findOne({ _id: reasonId });
     const accountActionData = {
       userId,
       actionId,
-      reasonCode: reason && reason.reason,
+      reasonCode: reasonId && reason,
       addedBy
     };
     const customFields = {};
@@ -33,8 +34,6 @@ export default class ActionService {
     if (!_.isEmpty(customFields)) {
       accountActionData.customFields = customFields;
     }
-
-    const reason = ReasonCodes.findOne({ _id: reasonId });
 
     const accountActionId = AccountActions.insert(accountActionData);
     Accounts.update(
@@ -95,10 +94,10 @@ export default class ActionService {
   }
 
   //Change account state if action has a state
-  static changeState(accountId, {state,substateId}) {
+  static changeState(accountId, { state, substateId }) {
     if (substateId && substateId !== GeneralEnums.NA) {
-      const substate = SubstatesCollection.findOne({_id: substateId});
-      const {name} = substate || {};
+      const substate = SubstatesCollection.findOne({ _id: substateId });
+      const { name } = substate || {};
       Accounts.update(
         { _id: accountId },
         {
