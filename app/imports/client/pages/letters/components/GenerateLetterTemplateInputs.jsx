@@ -18,9 +18,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     super(props);
 
     this.state = {
-      schema: this.generateSchema(),
-      pdfAttachments: [],
-      selectedAttachments: []
+      schema: this.generateSchema()
     };
     this.submit = _.debounce(this.onSubmit, 300);
   }
@@ -31,20 +29,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     this.setState({
       schema: this.generateSchema(templateKeywords ? templateKeywords : [])
     });
-
-    accountAttachmentsQuery
-      .clone({ _id: this.props.accountId })
-      .fetchOne((err, data) => {
-        if (!err) {
-          pdfAttachments = [{ name:"Select Attachment" }];
-          pdfAttachments = pdfAttachments.concat(data.attachments);
-          this.setState({
-            pdfAttachments
-          });
-        } else {
-          Notifier.error(err.reason);
-        }
-      });
   }
 
   generateSchema(options) {
@@ -72,34 +56,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     });
 
     return new SimpleSchema(schema);
-  }
-
-  generateFields() {
-    const { templateKeywords } = this.props;
-    if (templateKeywords) {
-      const fields = [];
-
-      templateKeywords.forEach((keyword, index) => {
-        if (variablesEnum[keyword]) {
-          fields.push(
-            <div key={index} className="form-group">
-              <AutoField
-                key={index}
-                name={variablesEnum[keyword].field}
-                placeholder={keyword}
-              />
-            </div>
-          );
-        } else {
-          fields.push(
-            <div key={index} className="form-group">
-              <AutoField key={index} name={keyword} placeholder={keyword} />
-            </div>
-          );
-        }
-      });
-      return fields;
-    }
   }
 
   onSubmit = data => {
@@ -158,33 +114,34 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   };
 
   onSelectAttachment = attachmentId => {
-    const { selectedAttachments, pdfAttachments } = this.state;
+    const { selectedAttachments, pdfAttachments, onChange } = this.props;
     const { arrSource, arrDest } = this.swapAttachment(
       pdfAttachments,
       selectedAttachments,
       attachmentId
     );
-    this.setState({
+    onChange({
       pdfAttachments: arrSource,
       selectedAttachments: arrDest
     });
   };
 
   onRemoveAttachment = attachmentId => {
-    const { pdfAttachments, selectedAttachments } = this.state;
+    const { pdfAttachments, selectedAttachments, onChange } = this.props;
     const { arrSource, arrDest } = this.swapAttachment(
       selectedAttachments,
       pdfAttachments,
       attachmentId
     );
-    this.setState({
+    onChange({
       selectedAttachments: arrSource,
       pdfAttachments: arrDest
     });
   };
 
   onOrderChange = selectedAttachments => {
-    this.setState({
+    const { onChange } = this.props;
+    onChange({
       selectedAttachments
     });
   };
@@ -193,7 +150,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     const { schema } = this.state;
     const fields = this.generateFields();
     const { templateKeywords, account } = this.props;
-    const { pdfAttachments, selectedAttachments } = this.state;
+    const { pdfAttachments, selectedAttachments } = this.props;
     const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
     if (!templateKeywords || !templateKeywords.length) {
       return <div />;

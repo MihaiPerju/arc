@@ -27,9 +27,9 @@ export default class LetterTemplatePreview extends React.Component {
     };
 
     render() {
-        const {letterTemplateBody, accountId, reset, attachments, letterTemplateId, currentComponent, selectedLetter, keywordsValues, keywords} = this.props;
+        const {letterTemplateBody, accountId, reset, selectedAttachments, letterTemplateId, currentComponent, selectedLetter, keywordsValues, keywords} = this.props;
         const letterBody = this.tagParser();
-
+        
         return (
             <div>
                 {!!letterTemplateBody && <div dangerouslySetInnerHTML={{__html: letterBody}}/>}
@@ -43,7 +43,7 @@ export default class LetterTemplatePreview extends React.Component {
                             reset={reset}
                             accountId={accountId}
                             letterBody={letterBody}
-                            attachments={attachments}
+                            selectedAttachments={selectedAttachments}
                             keywordsValues={keywordsValues}
                             hasKeywords={!!keywords.length} />
                         : <LetterEdit

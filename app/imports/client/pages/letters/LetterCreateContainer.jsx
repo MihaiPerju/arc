@@ -9,7 +9,6 @@ import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 class LetterCreateContainer extends React.Component {
     constructor() {
         super();
-
         this.state = {
             letterTemplates: [],
             selectedTemplate: {},
@@ -61,12 +60,6 @@ class LetterCreateContainer extends React.Component {
         return selectOptions;
     };
 
-    getAttachmentOptions = (enums) => {
-        return _.map(enums, (value, key) => {
-            return {value: value._id, label: AccountViewService.getPdfName(value)};
-        });
-    };
-
     onSubmit = (data) => {
         this.setState({
             selectedTemplate: data.letterTemplate.templateData,
@@ -100,7 +93,8 @@ class LetterCreateContainer extends React.Component {
         const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
-        const attachmentOptions  = this.getAttachmentOptions(pdfAttachments);
+
+        console.log(selectedAttachments);
 
         return (
             <div>
@@ -108,6 +102,8 @@ class LetterCreateContainer extends React.Component {
                     <div className="left-col">
                         <GenerateLetterTemplateInputs
                             account={account}
+                            selectedAttachments={selectedAttachments}
+                            pdfAttachments={pdfAttachments}
                             templateKeywords={keywords}
                             onChange={this.updateState}/>
                     </div>
@@ -118,7 +114,7 @@ class LetterCreateContainer extends React.Component {
                             letterTemplateBody={body}
                             letterTemplateId={letterId}
                             parentState={this.state}
-                            attachments={attachmentIds}
+                            selectedAttachments={selectedAttachments}
                             currentComponent='create'
                             keywordsValues={keywordsValues}
                             keywords={keywords} />
