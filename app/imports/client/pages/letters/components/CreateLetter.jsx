@@ -33,8 +33,8 @@ export default class CreateLetter extends React.Component {
     }
 
     render() {
-        const {hasKeywords} = this.props;
-        const isDisabled = hasKeywords ? this.doCheck() : false;
+        const {hasKeywords, attachments} = this.props;
+        let isDisabled = hasKeywords ? this.doCheck() : false;
         return (
             <button
                 style={isDisabled ? {cursor: 'not-allowed'}: {}}

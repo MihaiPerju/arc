@@ -27,8 +27,9 @@ class LetterEditContainer extends React.Component {
         _.extend(account, profile);
 
         const clonedAccount = _.clone(account);
-        const {letterValues} = selectedLetter;
+        const {letterValues, attachmentIds} = selectedLetter;
         Object.assign(clonedAccount, letterValues);
+        Object.assign(clonedAccount, {attachments: attachmentIds[0]});
         this.updateState(clonedAccount);
 
         Meteor.call('letterTemplates.get', (err, letterTemplates) => {
@@ -48,6 +49,10 @@ class LetterEditContainer extends React.Component {
                 Notifier.error(err.reason);
             }
         });
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.getKeywordsValues();
     }
 
     getSelectOptions = (letterTemplates) => {
@@ -100,15 +105,16 @@ class LetterEditContainer extends React.Component {
     render() {
         const {account, selectedTemplate, reset, selectedLetter} = this.props;
         const {keywords, body, _id: letterId} = selectedTemplate;
-        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues} = this.state;
+        const {letterTemplates, pdfAttachments, selectedAttachments, keywordsValues} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
 
         const clonedAccount = _.clone(account);
-        const {letterValues} = selectedLetter;
+        const {letterValues, attachmentIds} = selectedLetter;
         Object.assign(clonedAccount, letterValues);
-
+        Object.assign(clonedAccount, {attachments: attachmentIds[0]});
+        
         return (
             <div>
                 <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>
@@ -125,7 +131,7 @@ class LetterEditContainer extends React.Component {
                             letterTemplateBody={body}
                             letterTemplateId={letterId}
                             parentState={this.state}
-                            attachments={attachmentIds}
+                            attachments={this.state.attachments}
                             currentComponent='edit'
                             selectedLetter={selectedLetter}
                             keywordsValues={keywordsValues}

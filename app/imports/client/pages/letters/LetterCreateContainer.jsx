@@ -101,7 +101,6 @@ class LetterCreateContainer extends React.Component {
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
-
         return (
             <div>
                 <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>
@@ -118,7 +117,7 @@ class LetterCreateContainer extends React.Component {
                             letterTemplateBody={body}
                             letterTemplateId={letterId}
                             parentState={this.state}
-                            attachments={attachmentIds}
+                            attachments={this.state.attachments}
                             currentComponent='create'
                             keywordsValues={keywordsValues}
                             keywords={keywords} />

@@ -58,7 +58,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             }
         });
 
-        schema['attachmentIds'] = {
+        schema['attachments'] = {
             label: 'Pdf attachments',
             type: String
         };
@@ -126,7 +126,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             {value: 2, label: 'Attachment 3'},
             {value: 3, label: 'Attachment 4'},
         ]
-
+        
         return (
             <div>
 
@@ -137,11 +137,12 @@ export default class GenerateLetterTemplateInputs extends React.Component {
                               model={account}
                               onSubmit={this.submit}>
                         <SelectField className="select-helper"
-                                     name="attachmentIds"
+                                     name="attachments"
+                                     placeholder="Select"
                                      options={selectPdfOption}
                         />
                         <PdfAttachment/>
-                        <ErrorField name="attachmentIds"/>
+                        <ErrorField name="attachments"/>
 
                         {fields}
                     </AutoForm>
