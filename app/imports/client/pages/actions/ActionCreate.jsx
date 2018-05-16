@@ -21,7 +21,6 @@ export default class ActionCreate extends Component {
   }
 
   onSubmit(data) {
-    data.substateId = data.substate;
     Meteor.call("action.create", data, err => {
       if (!err) {
         Notifier.success("Action created!");
@@ -122,9 +121,9 @@ export default class ActionCreate extends Component {
                       placeholder="Substate"
                       labelHidden={true}
                       options={substatesOptions}
-                      name="substate"
+                      name="substateId"
                     />
-                    <ErrorField name="substate" />
+                    <ErrorField name="substateId" />
                   </div>
                 </div>
               )}

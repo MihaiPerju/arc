@@ -9,14 +9,14 @@ Meteor.methods({
     Actions.insert(data);
   },
 
-  "action.edit"(id, { title, description, substate, inputs }) {
+  "action.edit"(id, { title, description, substateId, inputs }) {
     Actions.update(
       { _id: id },
       {
         $set: {
           title,
           description,
-          substate,
+          substateId,
           inputs
         }
       }
