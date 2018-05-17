@@ -4,5 +4,6 @@ export default {
   LOCAL_STORAGE_FOLDER: Meteor.settings.LOCAL_STORAGE_PATH,
   REPORTS_FOLDER: "/reports",
   APP_FOLDER: "/app",
-  MNT:"/mnt"
+  MNT: "/mnt",
+  ACCOUNTS_FOLDER: "/accounts"
 };
