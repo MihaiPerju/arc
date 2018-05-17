@@ -9,7 +9,11 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
-    substate: {
+    state:{
+        type:String,
+        optional:true
+    },
+    substateId: {
         type: String,
         optional: true
     },
@@ -19,7 +23,8 @@ export default new SimpleSchema({
     },
     inputs: {
         type: Array,
-        optional: true
+        optional: true,
+        defaultValue:[]
     },
     'inputs.$': {
         type: inputSchema,

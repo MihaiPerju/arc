@@ -120,7 +120,6 @@ export default class RunReports {
 
     //Catching
     // stringifier.on("error", function(err) {
-    //   console.log(err.message);
     // });
 
     stringifier.on(

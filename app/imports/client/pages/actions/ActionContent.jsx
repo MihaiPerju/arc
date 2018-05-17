@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ActionHeader from './components/ActionContentHeader';
 import ActionEdit from './ActionEdit'
 
-export default class UserContent extends Component {
+export default class ActionContent extends Component {
     constructor() {
         super();
         this.state = {
@@ -28,7 +28,7 @@ export default class UserContent extends Component {
                     edit
                         ? <ActionEdit setEdit={this.setEdit} substates={substates} action={action}/>
                         :
-                        <ActionHeader setEdit={this.setEdit} action={action}/>
+                        <ActionHeader setEdit={this.setEdit} substates={substates} action={action}/>
                 }
             </div>
         )
