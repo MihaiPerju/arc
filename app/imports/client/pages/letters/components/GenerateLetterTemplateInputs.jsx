@@ -165,7 +165,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             autosave
             schema={schema}
             model={account}
-            onSubmit={this.submit}
+            onChange={this.submit}
           >
             <SelectField
               className="select-helper"
