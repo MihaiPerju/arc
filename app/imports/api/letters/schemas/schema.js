@@ -24,4 +24,13 @@ export default new SimpleSchema({
     'attachmentIds.$': {
         type: String,
     },
+    letterTemplateId: {
+        type: String,
+        optional: true,
+    },
+    letterValues: {
+        type: Object,
+        optional: true,
+        blackbox: true
+    }
 });

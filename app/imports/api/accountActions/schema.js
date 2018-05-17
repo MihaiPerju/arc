@@ -27,5 +27,10 @@ export default new SimpleSchema({
     addedBy: {
         type: String,
         optional: true
+    },
+    customFields: {
+        type: Object,
+        optional: true,
+        blackbox: true
     }
 });

@@ -6,7 +6,7 @@ import accountAttachmentsQuery from '/imports/api/accounts/queries/accountAttach
 import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
 
-class LetterCreateContainer extends React.Component {
+class LetterEditContainer extends React.Component {
     constructor() {
         super();
 
@@ -21,11 +21,15 @@ class LetterCreateContainer extends React.Component {
     }
 
     componentWillMount() {
-        const {data, account} = this.props;
+        const {data, account, selectedLetter} = this.props;
         this.setState({letterTemplates: data});
         const {profile} = Meteor.user();
         _.extend(account, profile);
-        this.updateState(account);
+
+        const clonedAccount = _.clone(account);
+        const {letterValues} = selectedLetter;
+        Object.assign(clonedAccount, letterValues);
+        this.updateState(clonedAccount);
 
         Meteor.call('letterTemplates.get', (err, letterTemplates) => {
             if (err) {
@@ -35,7 +39,7 @@ class LetterCreateContainer extends React.Component {
             this.setState({letterTemplates});
         });
 
-        accountAttachmentsQuery.clone({_id: this.props.accountId}).fetchOne((err, data) => {
+        accountAttachmentsQuery.clone({_id: this.props.taskId}).fetchOne((err, data) => {
             if (!err) {
                 this.setState({
                     pdfAttachments: data.attachments
@@ -83,8 +87,7 @@ class LetterCreateContainer extends React.Component {
         const {selectedTemplate} = this.props;
         const {keywords} = selectedTemplate;
         const keywordsValues = {};
-
-        _.each(keywords, (value) => {
+        _.each(keywords, (value, index) => {
             if(variablesEnum[value]) {
                 keywordsValues[variablesEnum[value].field] = this.state[variablesEnum[value].field];
             } else {
@@ -95,31 +98,36 @@ class LetterCreateContainer extends React.Component {
     }
 
     render() {
-        const {account, selectedTemplate, reset} = this.props;
+        const {account, selectedTemplate, reset, selectedLetter} = this.props;
         const {keywords, body, _id: letterId} = selectedTemplate;
         const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
 
+        const clonedAccount = _.clone(account);
+        const {letterValues} = selectedLetter;
+        Object.assign(clonedAccount, letterValues);
+
         return (
             <div>
                 <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>
                     <div className="left-col">
                         <GenerateLetterTemplateInputs
-                            account={account}
+                            account={clonedAccount}
                             templateKeywords={keywords}
                             onChange={this.updateState}/>
                     </div>
                     <div className="right-col">
                         <LetterTemplatePreview
                             reset={reset}
-                            accountId={account._id}
+                            taskId={account._id}
                             letterTemplateBody={body}
                             letterTemplateId={letterId}
                             parentState={this.state}
                             attachments={attachmentIds}
-                            currentComponent='create'
+                            currentComponent='edit'
+                            selectedLetter={selectedLetter}
                             keywordsValues={keywordsValues}
                             keywords={keywords} />
                     </div>
@@ -129,4 +137,4 @@ class LetterCreateContainer extends React.Component {
     }
 }
 
-export default LetterCreateContainer;
+export default LetterEditContainer;

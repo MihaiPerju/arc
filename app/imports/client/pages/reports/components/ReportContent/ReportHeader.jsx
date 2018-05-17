@@ -37,7 +37,6 @@ class ReportHeader extends Component {
                 });
             } else {
                 Notifier.error("Couldn't get sample accounts");
-                console.log(err);
             }
         });
     }

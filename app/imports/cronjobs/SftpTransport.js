@@ -73,7 +73,6 @@ export default class SftpTransport {
                 }
             });
         }).catch(function (err) {
-            // console.log('catch err', err)
             filesList.push({err, path});
             callback(null, filesList)
         });

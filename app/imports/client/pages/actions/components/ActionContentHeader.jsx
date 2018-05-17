@@ -8,7 +8,9 @@ export default class ActionContentHeader extends React.Component {
     };
 
     render() {
-        const {action} = this.props;
+        const {action, substates} = this.props;
+        const substate = substates.filter((substate) => substate._id === action.substateId);
+        const substateName = substate[0] ? substate[0].name : "";
         return (
             <div className="main-content action-content">
                 <div className="main-content__wrapper">
@@ -22,7 +24,7 @@ export default class ActionContentHeader extends React.Component {
                     <div className="info-block">
                         <div className="text-block">
                             <div className="text-light-grey text-label">Substate</div>
-                            <div className="status">{action.substate.replace(/_/g, ' ')}</div>
+                            <div className="status">{substateName}</div>
                         </div>
                         <div className="text-block">
                             <div className="text-light-grey text-label">Description</div>

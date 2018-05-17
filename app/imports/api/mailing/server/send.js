@@ -28,7 +28,6 @@ export default function (mailConfig, Component, props) {
     }, mailConfig);
 
     if (debug) {
-        // console.log(options);
     } else {
         Email.send(options);
     }

@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-import query from '/imports/api/letterTemplates/queries/listLetterTemplates';
-import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
 import {getImagePath} from '/imports/api/utils';
 import {AutoForm, SelectField, ErrorField} from 'uniforms-semantic';
 import SimpleSchema from 'simpl-schema';
 import LetterCreateContainer from '/imports/client/pages/letters/LetterCreateContainer.jsx';
 
-class NewLetter extends Component {
+export default class NewLetter extends Component {
     constructor() {
         super();
         this.state = {
@@ -30,8 +28,8 @@ class NewLetter extends Component {
     };
 
     getLetterTemplate(value) {
-        const {data} = this.props;
-        for (letterTemplate of data) {
+        const {letterTemplates} = this.props;
+        for (letterTemplate of letterTemplates) {
             if (letterTemplate._id === value) {
                 return letterTemplate;
             }
@@ -51,18 +49,10 @@ class NewLetter extends Component {
     }
 
     render() {
-        const {data, isLoading, error, account, cancel} = this.props;
+        const {letterTemplates, account, cancel} = this.props;
         const {selectedTemplate} = this.state;
         const {avatar, profile} = Meteor.user();
-        const options = this.getOptions(data);
-
-        if (isLoading) {
-            return <Loading/>
-        }
-
-        if (error) {
-            return <div>Error: {error.reason}</div>
-        }
+        const options = this.getOptions(letterTemplates);
 
         return (
             <div className={this.state.fade ? "new-letter in" : "new-letter"}>
@@ -85,7 +75,7 @@ class NewLetter extends Component {
                 <LetterCreateContainer selectedTemplate={selectedTemplate}
                                        account={account}
                                        reset={cancel}
-                                       data={data}/>
+                                       data={letterTemplates}/>
             </div>
         )
     }
@@ -97,7 +87,3 @@ const schema = new SimpleSchema({
         label: false
     }
 });
-
-export default withQuery(() => {
-    return query.clone();
-})(NewLetter)
