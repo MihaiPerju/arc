@@ -151,7 +151,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     const fields = this.generateFields();
     const { templateKeywords, account } = this.props;
     const { pdfAttachments, selectedAttachments } = this.props;
-    console.log(selectedAttachments, pdfAttachments);
 
     const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
     if (!templateKeywords || !templateKeywords.length) {

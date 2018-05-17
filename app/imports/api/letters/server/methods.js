@@ -7,7 +7,6 @@ import Statuses from "/imports/api/letters/enums/statuses.js";
 Meteor.methods({
   "letter.create"(data) {
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-    console.log(data);
     Letters.insert(data);
   },
 

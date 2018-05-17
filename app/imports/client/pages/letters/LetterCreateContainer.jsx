@@ -58,10 +58,8 @@ class LetterCreateContainer extends React.Component {
   };
 
   updateState = data => {
-    console.log("Something changed!");
-    console.log(data);
-    // this.setState(data);
-    // this.getKeywordsValues();
+    this.setState(data);
+    this.getKeywordsValues();
   };
 
   componentWillReceiveProps = () => {

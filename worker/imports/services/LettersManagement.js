@@ -62,9 +62,7 @@ export default class LetterManagement {
         fs.unlinkSync(filename);
       })
       .catch(function(error) {
-        console.log("Error");
-        console.log(error);
-        console.error(error.code); // Logs error code if an error occurs
+        //returns error
       });
   }
 }

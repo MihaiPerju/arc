@@ -9,7 +9,6 @@ import AccountViewService from "/imports/client/pages/accounts/services/AccountV
 export default class PdfAttachments extends Component {
   render() {
     const { attachments, onRemoveAttachment, onOrderChange } = this.props;
-    console.log(attachments);
     return (
       <div className="attachment-list">
         <SortableComponent

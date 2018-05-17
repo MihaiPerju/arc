@@ -13,7 +13,6 @@ export default class CreateLetter extends React.Component {
             letterTemplateId,
             letterValues: keywordsValues
         };
-        console.log(data);
         Meteor.call("letter.create", data, err => {
           if (err) {
             Notifier.error("Error while trying to create letter!");
