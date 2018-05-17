@@ -150,9 +150,9 @@ export default class ActionEdit extends React.Component {
                       placeholder="Substate"
                       labelHidden={true}
                       options={substatesOptions}
-                      name="substate"
+                      name="substateId"
                     />
-                    <ErrorField name="substate" />
+                    <ErrorField name="substateId" />
                   </div>
                 </div>
               )}
