@@ -19,16 +19,19 @@
         &:first-child {
           width: 50px;
         }
+        .table-cell a {
+          padding: 3px;
+        }
       }
       &.bg--yellow {
         background: rgba(255, 247, 153, 0.6);
       }
     }
-    
+
     .theader {
       display: table-row;
     }
-    
+
     .table-header {
       display: table-cell;
       border-bottom: #ccc 1px solid;
@@ -38,13 +41,13 @@
       border-right: #ccc 1px solid;
       font-size: 1.6rem;
     }
-    
+
     .table-small {
       display: table-cell;
       border-bottom: 1px #d7d7d7 solid;
       border-right: 1px #d7d7d7 solid;
     }
-    
+
     .check-item {
       top: 5px;
       position: inherit;
