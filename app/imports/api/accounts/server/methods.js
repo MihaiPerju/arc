@@ -19,23 +19,12 @@ import Actions from "../../actions/collection";
 
 Meteor.methods({
   "account.actions.add"(data) {
-    const accountId = data.accountId,
-      actionId = data.action,
-      reasonId = data.reasonCode,
-      userId = this.userId;
-    addedBy = data.addedBy;
-
-    ActionService.createAction({
-      accountId,
-      actionId,
-      reasonId,
-      userId,
-      addedBy
-    });
+    data.userId = this.userId;
+    ActionService.createAction(data);
   },
 
   "account.assignUser"({ _id, assigneeId }) {
-      AccountSecurity.hasRightsOnAccount(this.userId, _id);
+    AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     Accounts.update(
       { _id },
@@ -51,9 +40,9 @@ Meteor.methods({
   },
   "account.assignUser.bulk"({ accountIds, assigneeId }) {
     for (let accountId of accountIds) {
-        AccountSecurity.hasRightsOnAccount(this.userId, accountId);
+      AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-        Accounts.update(
+      Accounts.update(
         { _id: accountId },
         {
           $set: {
@@ -199,7 +188,7 @@ Meteor.methods({
   },
 
   "account.tickle"({ tickleDate, _id }) {
-      Accounts.update(
+    Accounts.update(
       { _id },
       {
         $set: {
@@ -219,7 +208,7 @@ Meteor.methods({
 
   "accounts.getSample"(filters) {
     const AccountsRaw = Accounts.rawCollection();
-      AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
     return AccountsRaw.aggregateSync([
       { $match: filters },
