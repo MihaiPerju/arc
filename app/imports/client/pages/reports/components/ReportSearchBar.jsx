@@ -6,7 +6,7 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 
-export default class SearchBar extends Component {
+export default class ReportSearchBar extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,9 +26,9 @@ export default class SearchBar extends Component {
     this.props.decrease();
   }
 
-  onHandleChange(field, value) {
-    if (field === "name") {
-      FlowRouter.setQueryParams({ name: value });
+  onSubmit(params) {
+    if ("name" in params) {
+      FlowRouter.setQueryParams({ name: params.name });
     }
   }
 
@@ -83,8 +83,10 @@ export default class SearchBar extends Component {
 
     return (
       <AutoForm
+        autosave
+        autosaveDelay={1000}
         ref="filters"
-        onChange={this.onHandleChange.bind(this)}
+        onSubmit={this.onSubmit.bind(this)}
         schema={schema}
       >
         <div className="search-bar">
