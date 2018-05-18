@@ -16,14 +16,18 @@ class LetterList extends Component {
             createLetter: false,
             editLetter: false,
             selectedLetter: null,
-            letterTemplates: []
+            letterTemplates: [],
+            loadingLetterTemplates: true
         };
     }
 
     componentWillMount() {
         letterTemplateQuery.fetch((err, letterTemplates) => {
             if(!err) {
-                this.setState({letterTemplates});
+                this.setState({
+                    letterTemplates,
+                    loadingLetterTemplates: false
+                });
             }
         })
     }
@@ -66,8 +70,8 @@ class LetterList extends Component {
 
     render() {
         const {data, isLoading, error, account} = this.props;
-        const {editLetter, selectedLetter, letterTemplates, createLetter} = this.state;
-        if (isLoading) {
+        const {editLetter, selectedLetter, letterTemplates, createLetter, loadingLetterTemplates} = this.state;
+        if (isLoading || loadingLetterTemplates) {
             return <Loading/>;
         }
 
