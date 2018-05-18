@@ -10,7 +10,6 @@ export default class LetterTemplatePreview extends React.Component {
     const { parentState } = this.props;
     const parser = new Parser();
     const { letterTemplateBody } = this.props;
-    console.log(letterTemplateBody);
     if (!letterTemplateBody) {
       return;
     }
@@ -45,8 +44,6 @@ export default class LetterTemplatePreview extends React.Component {
       parentState
     } = this.props;
     const letterBody = this.tagParser();
-    // console.log(letterTemplateBody);
-    console.log(parentState);
 
     return (
       <div>

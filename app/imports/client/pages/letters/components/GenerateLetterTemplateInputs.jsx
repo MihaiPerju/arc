@@ -35,7 +35,8 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     let schema = {};
     schema["attachmentIds"] = {
       label: "Pdf attachments",
-      type: String
+      type: String,
+      optional: true
     };
 
     if (!options || !options.length) {

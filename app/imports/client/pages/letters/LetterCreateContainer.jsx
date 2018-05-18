@@ -71,9 +71,9 @@ class LetterCreateContainer extends React.Component {
 
   getAttachments() {
     const { account } = this.props;
-    let pdfAttachments = [{ name: "Select Attachment" }];
+    let pdfAttachments = [];
     if (account.attachments) {
-      pdfAttachments = [...pdfAttachments, ...account.attachments];
+      pdfAttachments = [...account.attachments];
     }
     this.setState({
       pdfAttachments,
@@ -93,7 +93,6 @@ class LetterCreateContainer extends React.Component {
         keywordsValues[value] = this.state[value];
       }
     });
-    console.log(keywordsValues);
     this.setState({ keywordsValues });
   };
 
