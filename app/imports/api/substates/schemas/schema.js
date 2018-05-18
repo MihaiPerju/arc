@@ -34,5 +34,9 @@ export default new SimpleSchema({
     'updatedBy.name': {
         type: String,
         optional: true
+    },
+    status: {
+        type: Boolean,
+        defaultValue: true
     }
 });

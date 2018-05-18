@@ -40,6 +40,11 @@
       padding-bottom: 15px;
       border-right: #ccc 1px solid;
       font-size: 1.6rem;
+      .sort-icons span {
+        margin: 7px;
+        font-weight: bold;
+        cursor: pointer;
+      }
     }
 
     .table-small {

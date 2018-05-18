@@ -86,8 +86,12 @@ export default class SubstateSingle extends Component {
         </div>
         <div className="table-small">
           <div className="table-cell">
-            {actions.map(action => (
-              <a className="text-blue" href={"/action/" + action._id + "/edit"}>
+            {actions.map((action, index) => (
+              <a
+                key={index}
+                className="text-blue"
+                href={"/action/" + action._id + "/edit"}
+              >
                 {action.title}
               </a>
             ))}

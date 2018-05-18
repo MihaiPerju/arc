@@ -3,6 +3,8 @@ import Substates from '../collection';
 export default Substates.createNamedQuery('listSubstates', {
     $filter({ filters, options, params }) {
         filters.clientId = params.clientId;
+        // filters.status = true;
+        options.sort = {stateName: -1}
         _.extend(filters, params.filters);
         _.extend(options, params.options);
     },
