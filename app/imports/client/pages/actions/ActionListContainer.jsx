@@ -25,7 +25,8 @@ class ActionListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      substates: []
+      substates: [],
+      loadingSubstates: true
     });
     this.query = query;
   }
@@ -34,7 +35,10 @@ class ActionListContainer extends Pager {
     this.nextPage(0);
     substateQuery.clone().fetch((err, substates) => {
       if (!err) {
-        this.setState({ substates });
+        this.setState({
+          substates,
+          loadingSubstates: false
+        });
       }
     });
     const { id } = FlowRouter.current().params;
@@ -103,10 +107,11 @@ class ActionListContainer extends Pager {
       create,
       total,
       range,
-      substates
+      substates,
+      loadingSubstates
     } = this.state;
     const action = objectFromArray(data, currentAction);
-    if (loading) {
+    if (loading || loadingSubstates) {
       return <Loading />;
     }
 

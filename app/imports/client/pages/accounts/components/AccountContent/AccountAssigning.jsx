@@ -5,6 +5,7 @@ import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
 import WorkQueueService from './../../services/WorkQueueService';
 import workQueueQuery from "/imports/api/tags/queries/listTags";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class AccountActioning extends React.Component {
     constructor() {
@@ -13,7 +14,8 @@ export default class AccountActioning extends React.Component {
             dialogIsActive: true,
             assignToUser: true,
             assignToWorkQueue: false,
-            workQueueOptions: []
+            workQueueOptions: [],
+            loadingWorkQueues: true
         }
     }
 
@@ -21,7 +23,10 @@ export default class AccountActioning extends React.Component {
         workQueueQuery.clone().fetch((err, res) => {
             if (!err) {
                 const workQueueOptions = WorkQueueService.createOptions(res);
-                this.setState({workQueueOptions});
+                this.setState({
+                    workQueueOptions,
+                    loadingWorkQueues: false
+                });
             }
         })
     }
@@ -58,8 +63,11 @@ export default class AccountActioning extends React.Component {
     showDialog = () => {
         const {model, options, assignToUser, title} = this.props;
 
-        const {workQueueOptions, assignToWorkQueue} = this.state;
+        const {workQueueOptions, assignToWorkQueue, loadingWorkQueues} = this.state;
 
+        if (loadingWorkQueues) {
+            return <Loading />
+        }
         return (
             <div className="meta-dialog">
                 <h1>Assign account:</h1>
