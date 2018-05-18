@@ -24,7 +24,8 @@ class TagListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      clients: []
+      clients: [],
+      loadingClients: true
     });
     this.query = tagsQuery;
   }
@@ -33,7 +34,10 @@ class TagListContainer extends Pager {
     this.nextPage(0);
     clientsQuery.fetch((err, clients) => {
       if (!err) {
-        this.setState({ clients });
+        this.setState({
+          clients,
+          loadingClients: false
+        });
       }
     });
   }
@@ -104,11 +108,12 @@ class TagListContainer extends Pager {
       create,
       range,
       total,
-      clients
+      clients,
+      loadingClients
     } = this.state;
     const tag = objectFromArray(data, currentTag);
 
-    if (loading) {
+    if (loading || loadingClients) {
       return <Loading />;
     }
 

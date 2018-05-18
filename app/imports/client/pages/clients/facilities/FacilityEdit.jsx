@@ -13,13 +13,15 @@ import {
 } from '/imports/ui/forms';
 import RegionListQuery from '/imports/api/regions/queries/regionList.js';
 import SelectUsersContainer from '/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx';
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class FacilityCreate extends Component {
     constructor() {
         super();
         this.state = {
             newContact: false,
-            regions: []
+            regions: [],
+            loading: true
         }
     }
 
@@ -31,7 +33,8 @@ export default class FacilityCreate extends Component {
         }).fetch((err, regions) => {
             if (!err) {
                 this.setState({
-                    regions
+                    regions,
+                    loading: false
                 });
             } else {
                 Notifier.error('Couldn\'t get regions');
@@ -66,10 +69,14 @@ export default class FacilityCreate extends Component {
     };
 
     render() {
-        const {regions} = this.state;
+        const {regions, loading} = this.state;
         const regionIds = this.getRegionOptions(regions);
         const schema = FacilitySchema.omit('clientId');
         const {facility} = this.props;
+        
+        if (loading) {
+            return <Loading />
+        }
         return (
             <div className="create-form">
                 <div className="create-form__bar">
