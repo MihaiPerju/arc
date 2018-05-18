@@ -20,7 +20,7 @@ class LetterCreateContainer extends React.Component {
   }
 
   componentWillMount() {
-    const { data, account } = this.props;
+    const { data, account, selectedTemplate } = this.props;
     this.setState({ letterTemplates: data });
     const { profile } = Meteor.user();
     _.extend(account, profile);
@@ -33,6 +33,7 @@ class LetterCreateContainer extends React.Component {
       this.setState({ letterTemplates });
     });
     this.getAttachments();
+    this.getKeywordsValues(selectedTemplate);
   }
 
   getSelectOptions = letterTemplates => {
@@ -62,8 +63,10 @@ class LetterCreateContainer extends React.Component {
     this.getKeywordsValues();
   };
 
-  componentWillReceiveProps = () => {
+  componentWillReceiveProps = props => {
+    const { selectedTemplate } = props;
     this.getAttachments();
+    this.getKeywordsValues(selectedTemplate);
   };
 
   getAttachments() {
@@ -78,11 +81,9 @@ class LetterCreateContainer extends React.Component {
     });
   }
 
-  getKeywordsValues = () => {
-    const { selectedTemplate } = this.props;
+  getKeywordsValues = (selectedTemplate = {}) => {
     const { keywords } = selectedTemplate;
     const keywordsValues = {};
-
     _.each(keywords, value => {
       if (variablesEnum[value]) {
         keywordsValues[variablesEnum[value].field] = this.state[
@@ -92,6 +93,7 @@ class LetterCreateContainer extends React.Component {
         keywordsValues[value] = this.state[value];
       }
     });
+    console.log(keywordsValues);
     this.setState({ keywordsValues });
   };
 

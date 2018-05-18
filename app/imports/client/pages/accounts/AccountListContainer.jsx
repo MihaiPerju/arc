@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import AccountList from "./components/AccountList.jsx";
 import SearchBar from "/imports/client/lib/SearchBar.jsx";

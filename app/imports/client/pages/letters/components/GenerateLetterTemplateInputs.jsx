@@ -58,8 +58,10 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     return new SimpleSchema(schema);
   }
 
-  onSubmit = data => {
-    this.props.onChange(data);
+  onSubmit = (field, value) => {
+    let newState = {};
+    newState[field] = value;
+    this.props.onChange(newState);
   };
 
   getAttachmentOptions = enums => {
