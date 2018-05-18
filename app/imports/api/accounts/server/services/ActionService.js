@@ -19,7 +19,7 @@ export default class ActionService {
     const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
     const action = Actions.findOne({ _id: actionId });
     const { inputs } = action;
-    const { reason } = ReasonCodes.findOne({ _id: reasonId });
+    const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const accountActionData = {
       userId,
       actionId,
