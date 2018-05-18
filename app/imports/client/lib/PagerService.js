@@ -182,62 +182,82 @@ export default class PagerService {
       substateName,
       code,
       tagName;
+
     if (FlowRouter.current().route.path.indexOf("client/list") > -1) {
       clientName = FlowRouter.getQueryParam("clientName");
     }
+
     if (FlowRouter.current().route.path.indexOf("user/list") > -1) {
       email = FlowRouter.getQueryParam("email");
     }
+
     if (FlowRouter.current().route.path.indexOf("action/list") > -1) {
       title = FlowRouter.getQueryParam("title");
     }
+
     if (FlowRouter.current().route.path.indexOf("reports/list") > -1) {
       name = FlowRouter.getQueryParam("name");
     }
+
     if (FlowRouter.current().route.path.indexOf("letter-templates/list") > -1) {
       letterTemplateName = FlowRouter.getQueryParam("letterTemplateName");
     }
+
     if (FlowRouter.current().route.path.indexOf("substate/list") > -1) {
       substateName = FlowRouter.getQueryParam("substateName");
     }
+
     if (FlowRouter.current().route.path.indexOf("code/list") > -1) {
       code = FlowRouter.getQueryParam("code");
     }
+
     if (FlowRouter.current().route.path.indexOf("tag/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
     }
 
+    // client search
     if (clientName) {
       _.extend(params, {
         filters: { clientName: { $regex: clientName, $options: "i" } }
       });
     }
+    // user search
     if (email) {
       _.extend(params, {
         filters: { "emails.address": { $regex: email, $options: "i" } }
       });
     }
+    // action search
     if (title) {
       _.extend(params, {
         filters: { title: { $regex: title, $options: "i" } }
       });
     }
+    // reports search
     if (name) {
       _.extend(params, {
         filters: { name: { $regex: name, $options: "i" } }
       });
     }
+    // letter-templates search
     if (letterTemplateName) {
       _.extend(params, {
         filters: { name: { $regex: letterTemplateName, $options: "i" } }
       });
     }
-
+    // code search
     if (code) {
       _.extend(params, {
         filters: { code: { $regex: code, $options: "i" } }
       });
     }
+    // substate search
+    if (substateName) {
+      _.extend(params, {
+        filters: { name: { $regex: substateName, $options: "i" } }
+      });
+    }
+    // tag search
     if (tagName) {
       _.extend(params, {
         filters: { name: { $regex: tagName, $options: "i" } }
