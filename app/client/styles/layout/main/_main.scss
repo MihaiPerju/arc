@@ -51,7 +51,6 @@
 
 //Badges
 .badge {
-  //yooooo
   position: absolute;
   transform: translate(0);
   right: 15px;
@@ -104,6 +103,7 @@
   width: 100%;
   display: flex;
   overflow: hidden;
+  overflow-x: auto;
   justify-content: space-between;
   > .left__side {
     width: 520px;
@@ -115,6 +115,7 @@
   }
   > .right__side {
     width: calc(100% - 520px);
+    min-width: 510px;
     flex: 1;
     padding: 15px;
     overflow-y: auto;

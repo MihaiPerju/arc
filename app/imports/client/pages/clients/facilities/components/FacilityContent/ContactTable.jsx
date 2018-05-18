@@ -31,7 +31,7 @@ export default class ContactTable extends Component {
                     <div className="title-block text-uppercase">Contacts</div>
                 </div>
                 <div className="main__block">
-                    <div className="table">
+                    <div className="table flex--helper">
                         {
                             columns.map(function (column, index) {
                                 return (

@@ -201,7 +201,7 @@ export default class NewAction extends Component {
             src="/assets/img/user1.svg"
             alt=""
           />
-          <div className="name">Solomon Ben</div>
+          <div className="name truncate">Solomon Ben</div>
         </div>
 
         <div className="action-form">
