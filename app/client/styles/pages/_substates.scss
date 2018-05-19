@@ -45,6 +45,13 @@
         font-weight: bold;
         cursor: pointer;
       }
+      .state-active-asc,
+      .state-active-desc,
+      .substate-active-asc,
+      .substate-active-desc {
+        font-size: 19px;
+        color: #3cb878;
+      }
     }
 
     .table-small {

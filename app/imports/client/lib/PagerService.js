@@ -181,7 +181,9 @@ export default class PagerService {
       letterTemplateName,
       substateName,
       code,
-      tagName;
+      tagName,
+      sortState,
+      sortSubstate;
 
     if (FlowRouter.current().route.path.indexOf("client/list") > -1) {
       clientName = FlowRouter.getQueryParam("clientName");
@@ -204,7 +206,9 @@ export default class PagerService {
     }
 
     if (FlowRouter.current().route.path.indexOf("substate/list") > -1) {
-      substateName = FlowRouter.getQueryParam("substateName");
+      stateName = FlowRouter.getQueryParam("stateName");
+      sortState = FlowRouter.getQueryParam("sortState");
+      sortSubstate = FlowRouter.getQueryParam("sortSubstate");
     }
 
     if (FlowRouter.current().route.path.indexOf("code/list") > -1) {
@@ -252,15 +256,26 @@ export default class PagerService {
       });
     }
     // substate search
-    if (substateName) {
+    if (stateName) {
       _.extend(params, {
-        filters: { name: { $regex: substateName, $options: "i" } }
+        filters: { stateName: { $regex: stateName, $options: "i" } }
       });
     }
     // tag search
     if (tagName) {
       _.extend(params, {
         filters: { name: { $regex: tagName, $options: "i" } }
+      });
+    }
+    // substates sorts
+    if (sortState) {
+      _.extend(params, {
+        options: { sort: { stateName: sortState === "ASC" ? 1 : -1 } }
+      });
+    }
+    if (sortSubstate) {
+      _.extend(params, {
+        options: { sort: { name: sortSubstate === "ASC" ? 1 : -1 } }
       });
     }
   }

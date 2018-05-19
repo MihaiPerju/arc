@@ -27,8 +27,8 @@ export default class SubstateSearchBar extends Component {
   }
 
   onSubmit(params) {
-    if ("substateName" in params) {
-      FlowRouter.setQueryParams({ substateName: params.substateName });
+    if ("stateName" in params) {
+      FlowRouter.setQueryParams({ stateName: params.stateName });
     }
   }
 
@@ -117,8 +117,8 @@ export default class SubstateSearchBar extends Component {
               <div className="form-group">
                 <AutoField
                   labelHidden={true}
-                  name="substateName"
-                  placeholder="Search"
+                  name="stateName"
+                  placeholder="Search by State"
                 />
               </div>
             </div>
@@ -230,9 +230,9 @@ const schema = new SimpleSchema({
     optional: true,
     label: "Filter by assignee"
   },
-  substateName: {
+  stateName: {
     type: String,
     optional: true,
-    label: "Search by substate name"
+    label: "Search by State name"
   }
 });
