@@ -77,7 +77,7 @@ export default class PagerService {
             });
         } else if (state === "tickles") {
             _.extend(params, {
-                filters: { tickleDate: { $exists: true }, escalateReason: null }
+                filters: { tickleDate: { $exists: true }, tickleUserId: Meteor.userId(), escalateReason: null }
             });
         } else if (state === "escalated") {
             _.extend(params, {
