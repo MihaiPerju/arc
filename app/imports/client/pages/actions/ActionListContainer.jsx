@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import FilterBar from "/imports/client/lib/FilterBar.jsx";
-import SearchBar from "/imports/client/lib/SearchBar.jsx";
+import ActionSearchBar from "./components/ActionSearchBar.jsx";
 import ActionList from "./components/ActionList.jsx";
 import ActionContent from "./ActionContent.jsx";
 import ActionCreate from "./ActionCreate.jsx";
@@ -125,7 +125,7 @@ class ActionListContainer extends Pager {
             currentAction || create ? "left__side" : "left__side full__width"
           }
         >
-          <SearchBar
+          <ActionSearchBar
             btnGroup={actionsSelected.length}
             deleteAction={this.deleteAction}
           />
@@ -191,7 +191,7 @@ export default withQuery(
   props => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage });
+    return PagerService.setQuery(query, { page, perPage, filters: {} });
   },
   { reactive: true }
 )(ActionListContainer);
