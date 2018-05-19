@@ -84,7 +84,7 @@ export default class UserSearchBar extends Component {
     return (
       <AutoForm
         autosave
-        autosaveDelay={1000}
+        autosaveDelay={500}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
