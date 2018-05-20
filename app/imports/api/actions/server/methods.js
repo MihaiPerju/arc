@@ -4,8 +4,10 @@ import Substates from "/imports/api/substates/collection";
 Meteor.methods({
   "action.create"(data) {
     const { substateId } = data;
-    const { stateName } = Substates.findOne({ _id: substateId });
-    data.state=stateName;
+    if (substateId) {
+      const { stateName } = Substates.findOne({ _id: substateId });
+      data.state=stateName;
+    }
     Actions.insert(data);
   },
 
