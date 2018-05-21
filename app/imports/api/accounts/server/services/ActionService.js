@@ -24,7 +24,8 @@ export default class ActionService {
       userId,
       actionId,
       reasonCode: reasonId && reason,
-      addedBy
+      addedBy,
+      type: "userAction"
     };
     const customFields = {};
     _.map(inputs, input => {
@@ -73,7 +74,8 @@ export default class ActionService {
       const accountActionId = AccountActions.insert({
         actionId,
         fileId,
-        systemAction: true
+        systemAction: true,
+        type: "systemAction"
       });
 
       Accounts.update(

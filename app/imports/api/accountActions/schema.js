@@ -6,7 +6,8 @@ export default new SimpleSchema({
         optional: true
     },
     actionId: {
-        type: String
+        type: String,
+        optional: true
     },
     reasonCode: {
         type: String,
@@ -32,5 +33,8 @@ export default new SimpleSchema({
         type: Object,
         optional: true,
         blackbox: true
+    },
+    type: {
+        type: String
     }
 });
