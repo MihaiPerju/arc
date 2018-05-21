@@ -66,3 +66,37 @@ a {
 .react-datepicker {
   font-size: 1.1rem !important;
 }
+
+.flex {
+  &--column {
+    flex-direction: column;
+  }
+
+  &--helper {
+    display: flex;
+  }
+
+  &--wrap {
+    flex-wrap: wrap;
+  }
+
+  &-align--start {
+    align-items: flex-start;
+  }
+
+  &-align--end {
+    align-items: flex-end;
+  }
+
+  &-align--center {
+    align-items: center;
+  }
+
+  &-justify--end {
+    justify-content: flex-end;
+  }
+
+  &-justify--space-between {
+    justify-content: space-between;
+  }
+}
