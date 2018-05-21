@@ -2,6 +2,7 @@ import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 
 export default class PagerService {
+  queryParams;
   static setQuery(query, { page, perPage, state, assign, filters }) {
     let params = this.getPagerOptions(page, perPage);
 
@@ -11,7 +12,12 @@ export default class PagerService {
     }
     // common method for filtering
     this.getFilters(params, filters);
+    this.queryParams = params;
     return query.clone(params);
+  }
+
+  static getParams() {
+    return this.queryParams;
   }
 
   static getAccountQueryParams() {
@@ -173,6 +179,7 @@ export default class PagerService {
       });
     }
   }
+
   static getFilters(params, filters) {
     let clientName,
       email,
@@ -214,7 +221,6 @@ export default class PagerService {
     if (FlowRouter.current().route.path.indexOf("tag/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
     }
-
     // client search
     if (clientName) {
       _.extend(params, {

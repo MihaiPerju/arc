@@ -10,17 +10,25 @@ import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "../../lib/PagerService";
+import Pager from "../../lib/Pager";
 
-class LetterTemplateListContainer extends Component {
+class LetterTemplateListContainer extends Pager {
   constructor() {
     super();
-    this.state = {
+    _.extend(this.state, {
       templatesSelected: [],
       currentTemplate: null,
-      filter: false,
-      create: false
-    };
+      create: false,
+      page: 1,
+      perPage: 13,
+      total: 0,
+      range: {}
+    });
     this.query = query;
+  }
+
+  componentWillMount() {
+    this.nextPage(0);
   }
 
   setTemplate = _id => {
@@ -72,9 +80,23 @@ class LetterTemplateListContainer extends Component {
     });
   };
 
+  nextPage = inc => {
+    const { perPage, total, page } = this.state;
+    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
+    const range = PagerService.getRange(nextPage, perPage);
+    FlowRouter.setQueryParams({ page: nextPage });
+    this.setState({ range, page: nextPage, currentTemplate: null });
+  };
+
   render() {
     const { data, loading, error } = this.props;
-    const { templatesSelected, currentTemplate, create } = this.state;
+    const {
+      templatesSelected,
+      currentTemplate,
+      create,
+      range,
+      total
+    } = this.state;
     const template = objectFromArray(data, currentTemplate);
     if (loading) {
       return <Loading />;
@@ -83,6 +105,7 @@ class LetterTemplateListContainer extends Component {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
+
     return (
       <div className="cc-container">
         <div
@@ -102,7 +125,14 @@ class LetterTemplateListContainer extends Component {
             setTemplate={this.setTemplate}
             templates={data}
           />
-          <PaginationBar module="Template" create={this.createForm} />
+          <PaginationBar
+            module="Template"
+            create={this.createForm}
+            closeForm={this.closeForm}
+            nextPage={this.nextPage}
+            range={range}
+            total={total}
+          />
         </div>
         {(currentTemplate || create) && (
           <RightSide
