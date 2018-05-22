@@ -17,7 +17,7 @@ export default class ActionService {
   //Adding action to account
   static createAction(data) {
     const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
-    const action = Actions.findOne({ _id: actionId });
+    const action = Actions.findOne({ _id: actionId.value });
     const { inputs } = action;
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const accountActionData = {
