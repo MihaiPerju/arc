@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx"
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
 import query from "/imports/api/actions/queries/actionList";
 import Notifier from "../../../../lib/Notifier";
 import reasonCodesQuery from "/imports/api/reasonCodes/queries/reasonCodesList";
+import Loading from "/imports/client/lib/ui/Loading";
 
 const ActionSchema = new SimpleSchema({
   actionId: {
@@ -24,6 +26,7 @@ export default class NewAction extends Component {
       fade: false,
       actions: [],
       reasonCodes: [],
+      loading: true,
       selectedAction: {},
       dateLabelKeys: []
     };
@@ -40,11 +43,14 @@ export default class NewAction extends Component {
     query.clone().fetch((err, actions) => {
       if (!err) {
         this.setState({
-          actions
-        });
+          actions,
+          loading: false
+        })
       }
     });
+      
   }
+
 
   componentWillReceiveProps(props) {
     const { actionId } = this.state;
@@ -187,11 +193,15 @@ export default class NewAction extends Component {
   };
 
   render() {
-    const { selectedAction } = this.state;
+    const { selectedAction, loading } = this.state;
     const actions = this.getActionOptions(this.state.actions);
     const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
     const { inputs } = selectedAction[0] || {};
     const customInputs = _.map(inputs, this.renderInputs);
+    
+    if (loading) {
+      return <Loading />
+    }
 
     return (
       <div className={this.state.fade ? "new-action in" : "new-action"}>
@@ -201,7 +211,7 @@ export default class NewAction extends Component {
             src="/assets/img/user1.svg"
             alt=""
           />
-          <div className="name">Solomon Ben</div>
+          <div className="name truncate">Solomon Ben</div>
         </div>
 
         <div className="action-form">
@@ -213,8 +223,8 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <AutoField
-                  labelHidden={true}
+                <SelectSimple
+                  label={false}
                   name="actionId"
                   options={actions}
                 />

@@ -93,14 +93,14 @@ export default class FacilityContentHeader extends Component {
 
         return (
             <div className="main-content__header header-block">
-                <div className="row__header">
-                    <div className="row__wrapper">
+                <div className="row__header flex--helper flex-justify--space-between flex-align--start">
+                    <div className="row__wrapper flex--helper flex-align--center">
                         <img src="/assets/img/user.svg" className="lg-avatar-1 img-circle" alt=""/>
-                        <div className="title">{facility.name}</div>
+                        <div className="title truncate">{facility.name}</div>
                     </div>
                     {
                         Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) &&
-                        <div className="btn-group">
+                        <div className="btn-group flex--helper flex--wrap">
                             <button type="button" onClick={() => this.onEditFacility(facility)} className="btn-edit btn--white">
                                 Edit facility
                             </button>
@@ -110,7 +110,7 @@ export default class FacilityContentHeader extends Component {
                         </div>
                     }
                 </div>
-                <ul className="row__info main-info">
+                <ul className="row__info main-info flex--helper">
                     <li className="text-center">
                         <div className="text-light-grey">Status</div>
                         <div className="info-label">{facility.status ? "Active" : "Inactive"}</div>
@@ -138,7 +138,7 @@ export default class FacilityContentHeader extends Component {
                     </li>
 
                 </ul>
-                <ul className="row__info additionl-info">
+                <ul className="row__info additionl-info flex--helper flex--wrap">
                     <li className="text-center">
                         <div className="text-light-grey">Sftp Path</div>
                         <div className="info-label">{facility.sftpPath ? facility.sftpPath : "None"}</div>

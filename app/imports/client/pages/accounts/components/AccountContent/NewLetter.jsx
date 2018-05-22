@@ -63,7 +63,7 @@ export default class NewLetter extends Component {
               src={avatar ? getImagePath(avatar.path) : "/assets/img/user1.svg"}
               alt=""
             />
-            <div className="name">
+            <div className="name truncate">
               {profile.firstName + " " + profile.lastName}
             </div>
           </div>

@@ -16,9 +16,45 @@ class LetterList extends Component {
       createLetter: false,
       editLetter: false,
       selectedLetter: null,
-      letterTemplates: []
+      letterTemplates: [],
+      loadingLetterTemplates: true
     };
   }
+
+  componentWillMount() {
+    letterTemplateQuery.fetch((err, letterTemplates) => {
+      if (!err) {
+        this.setState({
+          letterTemplates,
+          loadingLetterTemplates: false
+        });
+      }
+    });
+  }
+
+  toggleLetter() {
+    this.setState({
+      createLetter: !this.state.createLetter,
+      editLetter: false
+    });
+  }
+
+  toggleEditLetter() {
+    this.setState({
+      editLetter: !this.state.editLetter,
+      createLetter: false
+    });
+  }
+
+  handleDelete = letterId => {
+    Meteor.call("letter.delete", letterId, err => {
+      if (err) {
+        return Notifier.error("Error while removing letter!");
+      }
+
+      Notifier.success("Letter deleted!");
+    });
+  };
 
   componentWillMount() {
     letterTemplateQuery.fetch((err, letterTemplates) => {
