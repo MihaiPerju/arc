@@ -60,7 +60,7 @@ export default class NewLetter extends Component {
                     <div className="info">
                         <img className="md-avatar img-circle"
                              src={avatar ? getImagePath(avatar.path) : "/assets/img/user1.svg"} alt=""/>
-                        <div className="name">{profile.firstName + " " + profile.lastName}</div>
+                        <div className="name truncate">{profile.firstName + " " + profile.lastName}</div>
                     </div>
                     <div className="form-group">
                         <AutoForm onChange={this.onHandleChange.bind(this)} schema={schema}>

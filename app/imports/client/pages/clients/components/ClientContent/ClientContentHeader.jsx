@@ -11,6 +11,7 @@ export default class ClientContentHeader extends Component {
             dialogIsActive: false
         }
     }
+
     onEdit = () => {
         const {setEdit} = this.props;
         setEdit();
@@ -45,7 +46,7 @@ export default class ClientContentHeader extends Component {
     onToggleClientStatus = () => {
         const {_id, status} = this.state;
         Meteor.call('client.switchStatus', _id, status, (err, res) => {
-            if(!err) {
+            if (!err) {
                 const message = status ? 'Client disabled !' : 'Client enabled !';
                 Notifier.success(message);
                 this.onClose();
@@ -73,21 +74,35 @@ export default class ClientContentHeader extends Component {
                         </div>
                         {
                             Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) &&
-                            <div className="btn-group">
-                                <a href={FlowRouter.url('region.list', {id: client._id})}
-                                className="cc-button btn--white">
-                                    Manage regions
-                                </a>
-                                <a href={"/client/" + client._id + "/manage-facilities"}
-                                className="cc-button btn--white">
-                                    Manage facilities
-                                </a>
-                                <button onClick={this.onEdit} className="btn--white">Edit
-                                    client
-                                </button>
-                                <button type="button" onClick={() => this.disableAction(client._id, client.status)} className="btn--white">
-                                    {client.status ? 'Disable client' : 'Enable client'}
-                                </button>
+                            <div className="btn-group flex--helper flex--wrap flex-justify--end">
+                                <div className="btn-group__row flex--helper flex--wrap">
+                                    <div className="btn-group__item">
+                                        <a href={FlowRouter.url('region.list', {id: client._id})}
+                                           className="cc-button btn--white">
+                                            Manage regions
+                                        </a>
+                                    </div>
+                                    <div className="btn-group__item">
+                                        <a href={"/client/" + client._id + "/manage-facilities"}
+                                           className="cc-button btn--white">
+                                            Manage facilities
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="btn-group__row flex--helper flex--wrap">
+                                    <div className="btn-group__item">
+                                        <button onClick={this.onEdit} className="btn--white">Edit
+                                            client
+                                        </button>
+                                    </div>
+                                    <div className="btn-group__item">
+                                        <button type="button" onClick={() => this.disableAction(client._id, client.status)}
+                                                className="btn--white">
+                                            {client.status ? 'Disable client' : 'Enable client'}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         }
                     </div>
@@ -100,7 +115,8 @@ export default class ClientContentHeader extends Component {
                             </div>
                             <div className="btn-group">
                                 <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                                <button className="btn--light-blue" onClick={this.confirmDisable}>Confirm & {client.status ? 'disable' : 'enable'}
+                                <button className="btn--light-blue" onClick={this.confirmDisable}>Confirm
+                                    & {client.status ? 'disable' : 'enable'}
                                 </button>
                             </div>
                         </Dialog>
