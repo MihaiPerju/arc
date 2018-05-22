@@ -60,7 +60,8 @@ export default Accounts.createNamedQuery('accountList', {
             title: 1
         },
         createdAt: 1,
-        status: 1
+        status: 1,
+        type: 1
     },
     metaData: 1,
     escalateReason: 1,
