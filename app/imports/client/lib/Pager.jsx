@@ -19,8 +19,7 @@ export default class extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    const queryParams = PagerService.getParams();
-    this.updateFilters(queryParams);
+    this.updateFilters();
   }
 
   getQuery() {
@@ -35,7 +34,8 @@ export default class extends React.Component {
     this.recount(queryParams);
   }
 
-  updateFilters(filters) {
+  updateFilters() {
+    const filters = PagerService.getParams();
     this.recount(filters);
     this.setState({
       filters,
