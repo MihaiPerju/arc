@@ -33,7 +33,9 @@ class ActionListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
-    substateQuery.clone().fetch((err, substates) => {
+    substateQuery.clone({
+      filters: {status: true}
+    }).fetch((err, substates) => {
       if (!err) {
         this.setState({
           substates,

@@ -3,7 +3,6 @@ import Substates from "../collection";
 export default Substates.createNamedQuery("listSubstates", {
   $filter({ filters, options, params }) {
     filters.clientId = params.clientId;
-    filters.status = true;
     _.extend(filters, params.filters);
     _.extend(options, params.options);
   },
@@ -12,5 +11,6 @@ export default Substates.createNamedQuery("listSubstates", {
   stateName: 1,
   _id: 1,
   description: 1,
-  actionIds: 1
+  actionIds: 1,
+  status: 1
 });

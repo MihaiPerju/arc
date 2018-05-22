@@ -1,13 +1,16 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
+import Dialog from "/imports/client/lib/ui/Dialog";
 import actionQuery from "/imports/api/actions/queries/actionList";
 
 export default class SubstateSingle extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      actions: []
+      actions: [],
+      dialogIsActive: false,
+      selectedSubstateId: null
     };
   }
 
@@ -46,17 +49,33 @@ export default class SubstateSingle extends Component {
     selectSubstate(substate._id);
   };
 
-  deleteSubstate = _id => {
-    Meteor.call("substate.delete", _id, (err, res) => {
+  deleteSubstate = () => {
+    const { selectedSubstateId } = this.state;
+    Meteor.call("substate.delete", { _id: selectedSubstateId }, (err, res) => {
       if (!err) {
         Notifier.success("Deleted Successfully !");
       }
+      this.closeDialog();
+    });
+  };
+
+  deleteAction = id => {
+    this.setState({
+      dialogIsActive: true,
+      selectedSubstateId: id
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      dialogIsActive: false,
+      selectedSubstateId: null
     });
   };
 
   render() {
     const { substate, substateSelected, currentSubstate } = this.props;
-    const { actions } = this.state;
+    const { actions, dialogIsActive } = this.state;
     const checked = substateSelected.includes(substate._id);
     const classes = classNames({
       table_row: true,
@@ -64,7 +83,6 @@ export default class SubstateSingle extends Component {
       "bg--yellow": checked,
       open: currentSubstate === substate._id
     });
-
     return (
       <div className={classes}>
         <div className="table-small">
@@ -99,17 +117,42 @@ export default class SubstateSingle extends Component {
         </div>
         <div className="table-small">
           <div className="table-cell">
+            {substate.status ? "Active" : "In-Active"}
+          </div>
+        </div>
+        <div className="table-small">
+          <div className="table-cell">
             <button onClick={this.onSetSubstate} className="btn-text--blue">
               edit
             </button>
-            <button
-              onClick={() => this.deleteSubstate(substate._id)}
-              className="btn-text--red"
-            >
-              <i className="icon-trash-o" />
-            </button>
+            {substate.status && (
+              <button
+                onClick={() => this.deleteAction(substate._id)}
+                className="btn-text--red"
+              >
+                <i className="icon-trash-o" />
+              </button>
+            )}
           </div>
         </div>
+        {dialogIsActive && (
+          <Dialog className="account-dialog" closePortal={this.closeDialog}>
+            <div className="form-wrapper">
+              Are you sure you want to delete selected items ?
+            </div>
+            <div className="btn-group">
+              <button className="btn-cancel" onClick={this.closeDialog}>
+                Cancel
+              </button>
+              <button
+                className="btn--light-blue"
+                onClick={() => this.deleteSubstate()}
+              >
+                Confirm & delete
+              </button>
+            </div>
+          </Dialog>
+        )}
       </div>
     );
   }

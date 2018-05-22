@@ -79,6 +79,9 @@ export default class SubstatesList extends Component {
             <div className="table-header text-light-grey">
               Triggering Actions
             </div>
+            <div className="table-header text-light-grey">
+              Status
+            </div>
             <div className="table-header text-light-grey">Actions</div>
           </div>
           {substates.map((substate, index) => (

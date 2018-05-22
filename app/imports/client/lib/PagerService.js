@@ -182,6 +182,7 @@ export default class PagerService {
       substateName,
       code,
       tagName,
+      stateName,
       sortState,
       sortSubstate;
 

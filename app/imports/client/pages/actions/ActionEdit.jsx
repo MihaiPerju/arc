@@ -47,9 +47,11 @@ export default class ActionEdit extends React.Component {
 
   updateProps(props) {
     const { action } = props;
-    this.setState({
-      checked: !!action.substateId
-    });
+    if(action) {
+      this.setState({
+        checked: !!action.substateId
+      });
+    }
   }
 
   componentWillReceiveProps(props) {
@@ -100,7 +102,7 @@ export default class ActionEdit extends React.Component {
           </div>
         </div>
 
-        <div className="create-form__wrapper">
+        {action && <div className="create-form__wrapper">
           <div className="action-block">
             <div className="header__block">
               <div className="title-block text-uppercase">
@@ -187,7 +189,7 @@ export default class ActionEdit extends React.Component {
           {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
             <ReasonCodesBlock isPrivate action={action} />
           )}
-        </div>
+        </div>}
       </div>
     );
   }

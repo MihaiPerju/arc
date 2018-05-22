@@ -47,7 +47,9 @@ export default class AccountSearchBar extends Component {
         this.setState({ clientOptions });
       }
     });
-    substateQuery.clone().fetch((err, res) => {
+    substateQuery.clone({
+      filters: {status: true}
+    }).fetch((err, res) => {
       if (!err) {
         res.map(substate => {
           const label = `${substate.stateName}: ${substate.name}`;
