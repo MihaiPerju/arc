@@ -78,10 +78,13 @@ class AccountListContainer extends Pager {
       this.closeRightPanel();
       this.setState({ currentRouteState: state });
     }
-    this.setState({
-      accountsSelected:[]
-    });
   }
+
+  uncheckAccountList = () => {
+    this.setState({
+      accountsSelected: []
+    });
+  };
 
   getData(accounts) {
     let facilities = [];
@@ -155,7 +158,7 @@ class AccountListContainer extends Pager {
   checkAccount = account => {
     const { accountsSelected } = this.state;
     if (accountsSelected.includes(account._id)) {
-        accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
+      accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
     } else {
       accountsSelected.push(account._id);
     }
@@ -366,6 +369,7 @@ class AccountListContainer extends Pager {
               closeDialog={this.closeAssignUser}
               title={""}
               options={this.state.userOptions}
+              uncheckAccountList={this.uncheckAccountList}
             />
           )}
           {assignWQ && (
@@ -374,6 +378,7 @@ class AccountListContainer extends Pager {
               accountIds={accountsSelected}
               closeDialog={this.closeAssignWQ}
               title={""}
+              uncheckAccountList={this.uncheckAccountList}
             />
           )}
           <AccountList
@@ -394,7 +399,7 @@ class AccountListContainer extends Pager {
         {(currentAccount || accountsSelected.length) &&
           !showMetaData && (
             <RightSide
-                account={account}
+              account={account}
               openMetaData={this.openMetaDataSlider}
               accountsSelected={accountsSelected}
               closeRightPanel={this.closeRightPanel}
