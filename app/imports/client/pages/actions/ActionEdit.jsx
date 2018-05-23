@@ -41,14 +41,14 @@ export default class ActionEdit extends React.Component {
   getOptions = enums => {
     return _.map(enums, (value, key) => {
       const label = `${value.stateName}: ${value.name}`;
-      return { value: value.name.replace(/ /g, "_"), label: label };
+      return { value: value._id, label: label };
     });
   };
 
   updateProps(props) {
     const { action } = props;
     this.setState({
-      checked: !!action.substate
+      checked: !!action.substateId
     });
   }
 
