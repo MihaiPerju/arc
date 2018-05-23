@@ -1,7 +1,6 @@
 import SimpleSchema from "simpl-schema";
 import FieldsType from "../../accounts/config/accounts";
 import { StateList } from "/imports/api/accounts/enums/states";
-import { Substates } from "/imports/api/accounts/enums/substates";
 import ReportFields from "/imports/api/reports/enums/ReportFields";
 
 const stringMatchOptions = ["Contains", "Not Contains", "Is Exact"];
