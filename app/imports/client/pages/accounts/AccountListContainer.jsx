@@ -78,6 +78,9 @@ class AccountListContainer extends Pager {
       this.closeRightPanel();
       this.setState({ currentRouteState: state });
     }
+    this.setState({
+      accountsSelected:[]
+    });
   }
 
   getData(accounts) {
