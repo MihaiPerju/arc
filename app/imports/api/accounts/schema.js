@@ -147,5 +147,12 @@ export default new SimpleSchema({
         type: SimpleSchema.Integer,
         optional: true,
         defaultValue: 0
-    }
+    },
+    actionsLinkData: {
+        type: Array,
+        optional: true
+    },
+    'actionsLinkData.$': {
+        type: String
+    },
 })
