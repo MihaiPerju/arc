@@ -36,10 +36,15 @@ class ActionContentHeader extends React.Component {
               <p>{action.description}</p>
             </div>
             <div className="text-block">
-              <div className="text-light-grey text-label">Reason code</div>
+              <div className="text-light-grey text-label">Reason Codes</div>
 
               <div className="reason">
-                {data.map((reason, index) => <span key={index}>{reason.reason} </span>)}
+                {data.map((reason, index) => (
+                  <span key={index}>
+                    {reason.reason}
+                    {index !== data.length - 1 ? "," : ""}{" "}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
