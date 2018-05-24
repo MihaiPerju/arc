@@ -14,7 +14,7 @@ class ActionContentHeader extends React.Component {
     const substate = substates.filter(
       substate => substate._id === action.substateId
     );
-    const substateName = substate[0] ? substate[0].name : "";
+    const substateName = substate[0] ? substate[0].name : "No substate";
 
     return (
       <div className="main-content action-content">
@@ -33,7 +33,7 @@ class ActionContentHeader extends React.Component {
             </div>
             <div className="text-block">
               <div className="text-light-grey text-label">Description</div>
-              <p>{action.description}</p>
+              <p>{action.description || "No description"}</p>
             </div>
             <div className="text-block">
               <div className="text-light-grey text-label">Reason Codes</div>
@@ -45,6 +45,7 @@ class ActionContentHeader extends React.Component {
                     {index !== data.length - 1 ? "," : ""}{" "}
                   </span>
                 ))}
+                {data.length === 0 && "No Reason codes"}
               </div>
             </div>
           </div>
