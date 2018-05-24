@@ -73,19 +73,26 @@ export default class AccountSearchBar extends Component {
   onSubmit(params) {
     if ("acctNum" in params) {
       FlowRouter.setQueryParams({ acctNum: params.acctNum });
-    } else if ("clientId" in params) {
+    }
+    if ("clientId" in params) {
       FlowRouter.setQueryParams({ clientId: params.clientId });
-    } else if ("facilityId" in params) {
+    }
+    if ("facilityId" in params) {
       FlowRouter.setQueryParams({ facilityId: params.facilityId });
-    } else if ("facCode" in params) {
+    }
+    if ("facCode" in params) {
       FlowRouter.setQueryParams({ facCode: params.facCode });
-    } else if ("ptType" in params) {
+    }
+    if ("ptType" in params) {
       FlowRouter.setQueryParams({ ptType: params.ptType });
-    } else if ("acctBal" in params) {
+    }
+    if ("acctBal" in params) {
       FlowRouter.setQueryParams({ acctBal: params.acctBal });
-    } else if ("finClass" in params) {
+    }
+    if ("finClass" in params) {
       FlowRouter.setQueryParams({ finClass: params.finClass });
-    } else if ("substate" in params) {
+    }
+    if ("substate" in params) {
       FlowRouter.setQueryParams({ substate: params.substate });
     }
   }

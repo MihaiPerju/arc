@@ -2,6 +2,7 @@ import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 
 export default class PagerService {
+  queryParams;
   static setQuery(query, { page, perPage, state, assign, filters }) {
     let params = this.getPagerOptions(page, perPage);
 
@@ -11,7 +12,12 @@ export default class PagerService {
     }
     // common method for filtering
     this.getFilters(params, filters);
+    this.queryParams = params;
     return query.clone(params);
+  }
+
+  static getParams() {
+    return this.queryParams;
   }
 
   static getAccountQueryParams() {
@@ -173,6 +179,7 @@ export default class PagerService {
       });
     }
   }
+
   static getFilters(params, filters) {
     let clientName,
       email,
@@ -181,40 +188,55 @@ export default class PagerService {
       letterTemplateName,
       substateName,
       code,
-      tagName;
+      tagName,
+      facilityName,
+      regionName;
 
-    if (FlowRouter.current().route.path.indexOf("client/list") > -1) {
+    let currentPath = FlowRouter.current().route.path;
+
+    if (currentPath.indexOf("client/list") > -1) {
       clientName = FlowRouter.getQueryParam("clientName");
     }
 
-    if (FlowRouter.current().route.path.indexOf("user/list") > -1) {
+    if (currentPath.indexOf("user/list") > -1) {
       email = FlowRouter.getQueryParam("email");
     }
 
-    if (FlowRouter.current().route.path.indexOf("action/list") > -1) {
+    if (currentPath.indexOf("action/list") > -1) {
       title = FlowRouter.getQueryParam("title");
     }
 
-    if (FlowRouter.current().route.path.indexOf("reports/list") > -1) {
+    if (currentPath.indexOf("reports/list") > -1) {
       name = FlowRouter.getQueryParam("name");
     }
 
-    if (FlowRouter.current().route.path.indexOf("letter-templates/list") > -1) {
+    if (currentPath.indexOf("letter-templates/list") > -1) {
       letterTemplateName = FlowRouter.getQueryParam("letterTemplateName");
     }
 
-    if (FlowRouter.current().route.path.indexOf("substate/list") > -1) {
+    if (currentPath.indexOf("substate/list") > -1) {
       substateName = FlowRouter.getQueryParam("substateName");
     }
 
-    if (FlowRouter.current().route.path.indexOf("code/list") > -1) {
+    if (currentPath.indexOf("code/list") > -1) {
       code = FlowRouter.getQueryParam("code");
     }
 
-    if (FlowRouter.current().route.path.indexOf("tag/list") > -1) {
+    if (currentPath.indexOf("tag/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
     }
-
+    if (currentPath.indexOf("/client/:_id/manage-facilities") > -1) {
+      facilityName = FlowRouter.getQueryParam("facilityName");
+      _.extend(params, {
+        filters: { clientId: FlowRouter.current().params._id }
+      });
+    }
+    if (currentPath.indexOf("/client/:id/region/list") > -1) {
+      regionName = FlowRouter.getQueryParam("regionName");
+      _.extend(params, {
+        filters: { clientId: FlowRouter.current().params.id }
+      });
+    }
     // client search
     if (clientName) {
       _.extend(params, {
@@ -262,6 +284,16 @@ export default class PagerService {
       _.extend(params, {
         filters: { name: { $regex: tagName, $options: "i" } }
       });
+    }
+    // facility search
+    if (facilityName) {
+      _.extend(params.filters, {
+        name: { $regex: facilityName, $options: "i" }
+      });
+    }
+    // region search
+    if (regionName) {
+      _.extend(params.filters, { name: { $regex: regionName, $options: "i" } });
     }
   }
 
