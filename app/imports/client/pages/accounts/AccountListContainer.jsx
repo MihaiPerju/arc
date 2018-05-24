@@ -78,6 +78,7 @@ class AccountListContainer extends Pager {
       this.closeRightPanel();
       this.setState({ currentRouteState: state });
     }
+    super.updateFilters();
   }
 
   getData(accounts) {
@@ -152,7 +153,7 @@ class AccountListContainer extends Pager {
   checkAccount = account => {
     const { accountsSelected } = this.state;
     if (accountsSelected.includes(account._id)) {
-        accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
+      accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
     } else {
       accountsSelected.push(account._id);
     }
@@ -391,7 +392,7 @@ class AccountListContainer extends Pager {
         {(currentAccount || accountsSelected.length) &&
           !showMetaData && (
             <RightSide
-                account={account}
+              account={account}
               openMetaData={this.openMetaDataSlider}
               accountsSelected={accountsSelected}
               closeRightPanel={this.closeRightPanel}

@@ -10,11 +10,12 @@ import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "/imports/client/lib/PagerService";
+import Pager from "../../lib/Pager";
 
-class SubstatesListContainer extends Component {
+class SubstatesListContainer extends Pager {
   constructor() {
     super();
-    this.state = {
+    _.extend(this.state, {
       substateSelected: [],
       currentSubstate: null,
       filter: false,
@@ -23,7 +24,8 @@ class SubstatesListContainer extends Component {
       perPage: 13,
       total: 0,
       range: {}
-    };
+    });
+    this.query = query;
   }
 
   componentWillMount() {
@@ -83,7 +85,7 @@ class SubstatesListContainer extends Component {
     const nextPage = PagerService.setPage({ page, perPage, total }, inc);
     const range = PagerService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
-    this.setState({ range, page: nextPage, currentClient: null });
+    this.setState({ range, page: nextPage, currentSubstate: null });
   };
 
   render() {
@@ -104,6 +106,7 @@ class SubstatesListContainer extends Component {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
+    
     return (
       <div className="cc-container substates-container">
         <div
@@ -127,6 +130,7 @@ class SubstatesListContainer extends Component {
           <PaginationBar
             module="Substate"
             create={this.createForm}
+            closeForm={this.closeForm}
             nextPage={this.nextPage}
             range={range}
             total={total}
