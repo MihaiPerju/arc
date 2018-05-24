@@ -51,7 +51,7 @@ export default class SubstateSingle extends Component {
 
   deleteSubstate = () => {
     const { selectedSubstateId } = this.state;
-    Meteor.call("substate.delete", { _id: selectedSubstateId }, (err, res) => {
+    Meteor.call("substate.delete", selectedSubstateId, (err, res) => {
       if (!err) {
         Notifier.success("Deleted Successfully !");
       }
@@ -113,6 +113,7 @@ export default class SubstateSingle extends Component {
                 {action.title}
               </a>
             ))}
+            {actions.length === 0 && "-"}
           </div>
         </div>
         <div className="table-small">

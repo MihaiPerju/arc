@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar";
 import SubstateSearchBar from "./components/SubstateSearchBar";
 import SubstatesList from "./components/SubstatesList";
-import SubstateContent from "./SubstateContent";
+import SubstateEdit from "./SubstateEdit";
 import SubstateCreate from "./SubstateCreate";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/substates/queries/listSubstates";
@@ -141,6 +141,7 @@ class SubstatesListContainer extends Pager {
             substate={substate}
             create={create}
             close={this.closeForm}
+            setSubstate={this.setSubstate}
           />
         )}
       </div>
@@ -164,13 +165,13 @@ class RightSide extends Component {
 
   render() {
     const { fade } = this.state;
-    const { substate, create, close } = this.props;
+    const { substate, create, close, setSubstate } = this.props;
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         {create ? (
           <SubstateCreate close={close} />
         ) : (
-          <SubstateContent substate={substate} />
+          <SubstateEdit model={substate} close={setSubstate} />
         )}
       </div>
     );
