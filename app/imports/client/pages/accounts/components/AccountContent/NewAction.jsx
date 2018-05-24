@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx"
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
 import query from "/imports/api/actions/queries/actionList";
@@ -44,12 +45,10 @@ export default class NewAction extends Component {
         this.setState({
           actions,
           loading: false
-        })
+        });
       }
     });
-      
   }
-
 
   componentWillReceiveProps(props) {
     const { actionId } = this.state;
@@ -78,26 +77,23 @@ export default class NewAction extends Component {
     } else if (account.workQueue) {
       data.addedBy = account.tag.name;
     }
-
     for (let i = 0; i < dateLabelKeys.length; i++) {
       if (!this.state[dateLabelKeys[i]]) {
         return;
       }
       data[dateLabelKeys[i]] = new Date(this.state[dateLabelKeys[i]]);
     }
-
-    Meteor.call('account.actions.add', data
-        , (err) => {
-            if (!err) {
-                Notifier.success('Data saved');
-                //Clear inputs
-                this.refs.form.reset();
-                hide();
-                closeRightPanel();
-            } else {
-                Notifier.error(err.reason);
-            }
-        });
+    Meteor.call("account.actions.add", data, err => {
+      if (!err) {
+        Notifier.success("Data saved");
+        //Clear inputs
+        this.refs.form.reset();
+        hide();
+        closeRightPanel();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   onHide(e) {
@@ -197,9 +193,9 @@ export default class NewAction extends Component {
     const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
     const { inputs } = selectedAction[0] || {};
     const customInputs = _.map(inputs, this.renderInputs);
-    
+
     if (loading) {
-      return <Loading />
+      return <Loading />;
     }
 
     return (
@@ -210,7 +206,7 @@ export default class NewAction extends Component {
             src="/assets/img/user1.svg"
             alt=""
           />
-          <div className="name">Solomon Ben</div>
+          <div className="name truncate">Solomon Ben</div>
         </div>
 
         <div className="action-form">
@@ -222,8 +218,8 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <AutoField
-                  labelHidden={true}
+                <SelectSimple
+                  label={false}
                   name="actionId"
                   options={actions}
                 />
