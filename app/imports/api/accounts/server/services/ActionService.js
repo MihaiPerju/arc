@@ -18,12 +18,14 @@ export default class ActionService {
     const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
     const action = Actions.findOne({ _id: actionId.value });
     const { inputs } = action;
+    const createdAt = new Date();
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const accountActionData = {
       userId,
       actionId,
       reasonCode: reasonId && reason,
-      addedBy
+      addedBy,
+      createdAt
     };
     const customFields = {};
     _.map(inputs, input => {
