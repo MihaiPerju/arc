@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SubstateSchema from '/imports/api/substates/schemas/schema';
-import { AutoForm, AutoField, ErrorField, SelectField } from '/imports/ui/forms';
+import { AutoForm, AutoField, ErrorField, SelectField, LongTextField } from '/imports/ui/forms';
 import Notifier from '/imports/client/lib/Notifier';
 import { StateList } from '/imports/api/accounts/enums/states';
 
@@ -63,6 +63,10 @@ export default class SubstateCreate extends Component {
                             <div className="form-wrapper">
                                 <AutoField labelHidden={true} type="text" placeholder="Substate name" name="name" />
                                 <ErrorField name="name" />
+                            </div>
+                            <div className="form-wrapper">
+                                <LongTextField labelHidden={true} type="text" placeholder="Description" name="description" />
+                                <ErrorField name="description" />
                             </div>
                         </AutoForm>
                     </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SubstateSchema from '/imports/api/substates/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
-import { AutoForm, AutoField, ErrorField, SelectField } from '/imports/ui/forms';
+import { AutoForm, AutoField, ErrorField, SelectField, LongTextField } from '/imports/ui/forms';
 import { StateList } from '/imports/api/accounts/enums/states';
 
 export default class EditSubstate extends Component {
@@ -14,6 +14,14 @@ export default class EditSubstate extends Component {
     };
 
     onSubmit = (data) => {
+        const {_id, profile} = Meteor.user();
+        const updatedBy = {
+            id: _id,
+            name: `${profile.firstName} ${profile.lastName}`
+        }
+
+        data = Object.assign(data, {updatedBy});
+
         Meteor.call('substate.update', data, (err) => {
             if (!err) {
                 Notifier.success('Substate updated');
@@ -63,6 +71,10 @@ export default class EditSubstate extends Component {
                             <div className="form-wrapper">
                                 <AutoField labelHidden={true} type="text" placeholder="Substate name" name="name"/>
                                 <ErrorField name="name"/>
+                            </div>
+                            <div className="form-wrapper">
+                                <LongTextField labelHidden={true} type="text" placeholder="Description" name="description" />
+                                <ErrorField name="description" />
                             </div>
                         </AutoForm>
                     </div>

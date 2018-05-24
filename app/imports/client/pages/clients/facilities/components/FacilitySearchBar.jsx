@@ -6,7 +6,7 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 
-export default class SubstateSearchBar extends Component {
+export default class FacilitySearchBar extends Component {
   constructor() {
     super();
     this.state = {
@@ -27,8 +27,8 @@ export default class SubstateSearchBar extends Component {
   }
 
   onSubmit(params) {
-    if ("stateName" in params) {
-      FlowRouter.setQueryParams({ stateName: params.stateName });
+    if ("facilityName" in params) {
+      FlowRouter.setQueryParams({ facilityName: params.facilityName });
     }
   }
 
@@ -117,8 +117,8 @@ export default class SubstateSearchBar extends Component {
               <div className="form-group">
                 <AutoField
                   labelHidden={true}
-                  name="stateName"
-                  placeholder="Search by State"
+                  name="facilityName"
+                  placeholder="Search"
                 />
               </div>
             </div>
@@ -230,9 +230,9 @@ const schema = new SimpleSchema({
     optional: true,
     label: "Filter by assignee"
   },
-  stateName: {
+    facilityName: {
     type: String,
     optional: true,
-    label: "Search by State name"
+    label: "Search by facility name"
   }
 });

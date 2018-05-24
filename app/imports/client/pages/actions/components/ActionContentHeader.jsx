@@ -11,10 +11,11 @@ class ActionContentHeader extends React.Component {
 
   render() {
     const { action, substates, data } = this.props;
-    const substate = substates.filter(
-      substate => substate._id === action.substateId
-    );
-    const substateName = substate[0] ? substate[0].name : "No substate";
+    const substate =
+      action &&
+      substates.filter(substate => substate._id === action.substateId);
+    const substateName =
+      substate && substate[0] ? substate[0].name : "No substate";
 
     return (
       <div className="main-content action-content">

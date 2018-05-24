@@ -33,7 +33,9 @@ class ReportListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
-    substatesQuery.fetch((err, substates) => {
+    substatesQuery.clone({
+      filters: {status: true}
+    }).fetch((err, substates) => {
       if (!err) {
         this.setState({ substates });
       }
