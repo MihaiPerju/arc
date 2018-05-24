@@ -28,11 +28,14 @@ export default class PagerService {
     const acctNum = FlowRouter.getQueryParam("acctNum");
     const facCode = FlowRouter.getQueryParam("facCode");
     const ptType = FlowRouter.getQueryParam("ptType");
-    const acctBal = FlowRouter.getQueryParam("acctBal");
+    const acctBalMin = FlowRouter.getQueryParam("acctBalMin");
+    const acctBalMax = FlowRouter.getQueryParam("acctBalMax");
     const finClass = FlowRouter.getQueryParam("finClass");
     const substate = FlowRouter.getQueryParam("substate");
-    const dischrgDate = FlowRouter.getQueryParam("dischrgDate");
-    const fbDate = FlowRouter.getQueryParam("fbDate");
+    const dischrgDateMin = FlowRouter.getQueryParam("dischrgDateMin");
+    const dischrgDateMax = FlowRouter.getQueryParam("dischrgDateMax");
+    const fbDateMin = FlowRouter.getQueryParam("fbDateMin");
+    const fbDateMax = FlowRouter.getQueryParam("fbDateMax");
     let state = FlowRouter.current().params.state;
 
     if (stateEnum.ACTIVE.toLowerCase() === state && acctNum) {
@@ -48,11 +51,14 @@ export default class PagerService {
         acctNum,
         facCode,
         ptType,
-        acctBal,
+        acctBalMin,
+        acctBalMax,
         finClass,
         substate,
-        dischrgDate,
-        fbDate
+        dischrgDateMin,
+        dischrgDateMax,
+        fbDateMin,
+        fbDateMax
       },
       page,
       perPage,
@@ -93,11 +99,14 @@ export default class PagerService {
       clientId,
       facCode,
       ptType,
-      acctBal,
+      acctBalMin,
+      acctBalMax,
       finClass,
       substate,
-      dischrgDate,
-      fbDate
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax
     }
   ) {
     if (state === "unassigned") {
@@ -145,8 +154,10 @@ export default class PagerService {
     if (ptType) {
       _.extend(params.filters, { ptType });
     }
-    if (acctBal) {
-      _.extend(params.filters, { acctBal: +acctBal });
+    if (acctBalMin && acctBalMax) {
+      _.extend(params.filters, {
+        acctBal: { $gte: +acctBalMin, $lte: +acctBalMax }
+      });
     }
     if (finClass) {
       _.extend(params.filters, { finClass });
@@ -154,24 +165,24 @@ export default class PagerService {
     if (substate) {
       _.extend(params.filters, { substate });
     }
-    if (dischrgDate) {
+    if (dischrgDateMin && dischrgDateMax) {
       _.extend(params.filters, {
         dischrgDate: {
-          $gte: new Date(moment(new Date(dischrgDate)).startOf("day")),
+          $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day")),
           $lt: new Date(
-            moment(new Date(dischrgDate))
+            moment(new Date(dischrgDateMax))
               .startOf("day")
               .add(1, "day")
           )
         }
       });
     }
-    if (fbDate) {
+    if (fbDateMin && fbDateMax) {
       _.extend(params.filters, {
         fbDate: {
-          $gte: new Date(moment(new Date(fbDate)).startOf("day")),
+          $gte: new Date(moment(new Date(fbDateMin)).startOf("day")),
           $lt: new Date(
-            moment(new Date(fbDate))
+            moment(new Date(fbDateMax))
               .startOf("day")
               .add(1, "day")
           )
