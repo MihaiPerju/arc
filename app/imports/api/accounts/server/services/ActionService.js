@@ -4,12 +4,11 @@ import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import GeneralEnums from "/imports/api/general/enums";
 import {
-  StatesSubstates,
-  findStateBySubstate
+  StatesSubstates
 } from "/imports/api/accounts/enums/states.js";
 import { Dispatcher, Events } from "/imports/api/events";
-import stateEnum from "../..//enums/states";
-import { Substates } from "../..//enums/substates";
+import stateEnum from "../../enums/states";
+import { Substates } from "../../enums/substates";
 import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
 

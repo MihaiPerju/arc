@@ -20,26 +20,3 @@ export const Substates = {
     SELF_PAY: 'self_pay',
     ESCALATED: 'user_escalated'
 };
-
-export const LabelSubstates = {
-    [Substates.PENDING_PAYMENT]: 'Pending Payment',
-    [Substates.AWAITING_PAYMENT]: 'Awaiting Payment',
-    [Substates.TOO_SOON_FOR_FOLLOW_UP]: 'Too soon for follow up',
-    [Substates.BILLED]: 'Billed',
-    [Substates.APPEALED]: 'Appealed',
-    [Substates.HOSPITAL_REVIEW]: 'Hospital Review',
-    [Substates.SUCCESSFUL_COLLECTION]: 'Successful Collection',
-    [Substates.FAIL]: 'Fail',
-    [Substates.PAID]: 'Paid',
-    [Substates.REPORTED]: 'Reported',
-    [Substates.SELF_RETURNED]: 'Self Returned',
-    [Substates.MERGED]: 'Merged',
-    [Substates.UNKNOWN]: 'Unknown',
-    [Substates.NEW]: 'New',
-    [Substates.FOLLOW_UP]: 'Follow-Up',
-    [Substates.DENIED]: 'Denied (Why?)',
-    [Substates.RETURNED]: 'Returned (to be returned)',
-    [Substates.BILLABLE]: 'Billable',
-    [Substates.SELF_PAY]: 'Self-pay',
-    [Substates.ESCALATED]: 'User escalated'
-};
