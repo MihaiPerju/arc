@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -24,8 +25,7 @@ export default class AccountSearchBar extends Component {
       dischrgDateMax: null,
       fbDateMin: null,
       fbDateMax: null,
-      substates: [],
-      accountBalError: false
+      substates: []
     };
   }
 
@@ -94,9 +94,10 @@ export default class AccountSearchBar extends Component {
     }
     if ("acctBalMax" in params) {
       if (params.acctBalMax < params.acctBalMin) {
-        this.setState({accountBalError: true})
+        Notifier.error(
+          "Maximum value should be greater or equal to minimum value"
+        );
       } else {
-        this.setState({accountBalError: false})
         FlowRouter.setQueryParams({ acctBalMax: params.acctBalMax });
       }
     }
@@ -137,14 +138,28 @@ export default class AccountSearchBar extends Component {
       this.setState({ dischrgDateMin: selectedDate });
       FlowRouter.setQueryParams({ dischrgDateMin: date });
     } else if (field === "dischrgDateMax") {
+      const { dischrgDateMin } = this.state;
+      if (selectedDate < dischrgDateMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      } else {
+        FlowRouter.setQueryParams({ dischrgDateMax: date });
+      }
       this.setState({ dischrgDateMax: selectedDate });
-      FlowRouter.setQueryParams({ dischrgDateMax: date });
     } else if (field === "fbDateMin") {
       this.setState({ fbDateMin: selectedDate });
       FlowRouter.setQueryParams({ fbDateMin: date });
     } else if (field === "fbDateMax") {
+      const { fbDateMin } = this.state;
+      if (selectedDate < fbDateMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      } else {
+        FlowRouter.setQueryParams({ fbDateMax: date });
+      }
       this.setState({ fbDateMax: selectedDate });
-      FlowRouter.setQueryParams({ fbDateMax: date });
     }
   };
 
@@ -160,8 +175,7 @@ export default class AccountSearchBar extends Component {
       dischrgDateMax,
       fbDateMin,
       fbDateMax,
-      substates,
-      accountBalError
+      substates
     } = this.state;
     const {
       options,
@@ -266,18 +280,19 @@ export default class AccountSearchBar extends Component {
                   placeholder="Search by Patient Type"
                 />
               </div>
-              <div className="form-group range-boxes">
-                <AutoField
-                  labelHidden={true}
-                  name="acctBalMin"
-                  placeholder="Minimum Account Balance"
-                />
-                <AutoField
-                  labelHidden={true}
-                  name="acctBalMax"
-                  placeholder="Maximum Account Balance"
-                />
-                {accountBalError && <div className="alert-notice">Value should be greater than minimum value</div>}
+              <div className="form-group">
+                <div className="range-boxes">
+                  <AutoField
+                    labelHidden={true}
+                    name="acctBalMin"
+                    placeholder="Minimum Account Balance"
+                  />
+                  <AutoField
+                    labelHidden={true}
+                    name="acctBalMax"
+                    placeholder="Maximum Account Balance"
+                  />
+                </div>
               </div>
               <div className="form-group range-date-boxes">
                 <DatePicker
