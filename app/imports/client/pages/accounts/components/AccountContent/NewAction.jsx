@@ -83,7 +83,6 @@ export default class NewAction extends Component {
       }
       data[dateLabelKeys[i]] = new Date(this.state[dateLabelKeys[i]]);
     }
-    console.log('data',data)
     Meteor.call("account.actions.add", data, err => {
       if (!err) {
         Notifier.success("Data saved");
