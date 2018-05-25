@@ -16,7 +16,14 @@ import SubstatesCollection from "/imports/api/substates/collection";
 export default class ActionService {
   //Adding action to account
   static createAction(data) {
-    const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
+    const {
+      accountId,
+      actionId,
+      reasonCode: reasonId,
+      userId,
+      addedBy,
+      createdAt
+    } = data;
     const action = Actions.findOne({ _id: actionId });
     const { inputs } = action;
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
@@ -24,7 +31,8 @@ export default class ActionService {
       userId,
       actionId,
       reasonCode: reasonId && reason,
-      addedBy
+      addedBy,
+      createdAt
     };
     const customFields = {};
     _.map(inputs, input => {
