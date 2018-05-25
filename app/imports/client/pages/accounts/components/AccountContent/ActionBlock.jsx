@@ -21,7 +21,6 @@ export default class ActionBlock extends Component {
   render() {
     const { account, closeRightPanel } = this.props;
     const actionsPerformed = account.actions;
-    console.log('actionsPerformed',actionsPerformed)
     return (
       <div className="action-block">
         <div className="header__block">
