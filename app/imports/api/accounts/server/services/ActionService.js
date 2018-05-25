@@ -4,12 +4,11 @@ import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import GeneralEnums from "/imports/api/general/enums";
 import {
-  StatesSubstates,
-  findStateBySubstate
+  StatesSubstates
 } from "/imports/api/accounts/enums/states.js";
 import { Dispatcher, Events } from "/imports/api/events";
-import stateEnum from "../..//enums/states";
-import { Substates } from "../..//enums/substates";
+import stateEnum from "../../enums/states";
+import { Substates } from "../../enums/substates";
 import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
 
@@ -17,15 +16,17 @@ export default class ActionService {
   //Adding action to account
   static createAction(data) {
     const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
-    const action = Actions.findOne({ _id: actionId });
+    const action = Actions.findOne({ _id: actionId.value });
     const { inputs } = action;
+    const createdAt = new Date();
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const accountActionData = {
       userId,
       actionId,
       reasonCode: reasonId && reason,
       addedBy,
-      type: "userAction"
+      type: "userAction",
+      createdAt
     };
     const customFields = {};
     _.map(inputs, input => {

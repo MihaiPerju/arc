@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
-import SearchBar from '/imports/client/lib/SearchBar.jsx';
+import UserSearchBar from './components/UserSearchBar.jsx';
 import UserList from './components/UserList.jsx';
 import UserContent from './UserContent.jsx';
 import CreateUser from './CreateUser.jsx';
@@ -107,7 +107,7 @@ class UserListContainer extends Pager {
         return (
             <div className="cc-container">
                 <div className={(currentUser || create) ? 'left__side' : 'left__side full__width'}>
-                    <SearchBar btnGroup={usersSelected.length} deleteAction={this.deleteAction}/>
+                    <UserSearchBar btnGroup={usersSelected.length} deleteAction={this.deleteAction}/>
                     <UserList
                         class={this.state.filter ? 'task-list decreased' : 'task-list'}
                         selectUser={this.selectUser.bind(this)}
@@ -169,5 +169,5 @@ class RightSide extends Component {
 export default withQuery((props) => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(query, {page, perPage});
+    return PagerService.setQuery(query, { page, perPage, filters: {} });
 }, {reactive: true})(UserListContainer);
