@@ -3,9 +3,7 @@ import Actions from "/imports/api/actions/collection";
 import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import GeneralEnums from "/imports/api/general/enums";
-import {
-  StatesSubstates
-} from "/imports/api/accounts/enums/states.js";
+import { StatesSubstates } from "/imports/api/accounts/enums/states.js";
 import { Dispatcher, Events } from "/imports/api/events";
 import stateEnum from "../../enums/states";
 import { Substates } from "../../enums/substates";
@@ -140,6 +138,24 @@ export default class ActionService {
         $unset: {
           workQueue: null,
           assigneeId: null
+        }
+      }
+    );
+  }
+
+  static createComment({ content, accountId, userId }) {
+    const commentData = {
+      userId,
+      type: "comment",
+      content,
+      createdAt: new Date()
+    };
+    const accountActionId = AccountActions.insert(commentData);
+    Accounts.update(
+      { _id: accountId },
+      {
+        $push: {
+          commentsLinkData: accountActionId
         }
       }
     );

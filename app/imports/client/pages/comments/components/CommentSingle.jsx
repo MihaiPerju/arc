@@ -12,7 +12,7 @@ export default class CommentSingle extends React.Component {
 
   render() {
     const { comment } = this.props;
-    const { author } = comment;
+    const { user } = comment;
 
     return (
       <div className="comment-item">
@@ -20,14 +20,14 @@ export default class CommentSingle extends React.Component {
           <img
             className="md-avatar img-circle"
             src={
-              author && author.avatar
-                ? getImagePath(author.avatar.path)
+              user && user.avatar
+                ? getImagePath(user.avatar.path)
                 : "/assets/img/user.svg"
             }
             alt=""
           />
           <div className="name">
-            {author && `${author.profile.firstName} ${author.profile.lastName}`}
+            {user && `${user.profile.firstName} ${user.profile.lastName}`}
           </div>
           <div className="message text-light-grey">{comment.content}</div>
         </div>

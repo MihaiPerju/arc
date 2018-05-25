@@ -9,7 +9,7 @@ export default class LetterList extends Component {
                 <div className="header__block">
                     <div className="title-block text-uppercase">Comments</div>
                 </div>
-                <CommentsListContainer accountId={account && account._id}/>
+                <CommentsListContainer accountId={account}/>
             </div>
         )
     }

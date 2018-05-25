@@ -71,6 +71,17 @@ export default Accounts.createNamedQuery('accountList', {
     },
     comments: {
         content: 1,
-        createdAt: 1
+        createdAt: 1,
+        user: {
+            profile: {
+                firstName: 1,
+                lastName: 1
+            },
+            avatar: {
+                path: 1,
+                _id: 1
+            }
+        },
+        userId: 1
     }
 });

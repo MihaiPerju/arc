@@ -5,7 +5,6 @@ import Clients from '/imports/api/clients/collection';
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import AccountActions from '/imports/api/accountActions/collection';
 import Tags from '/imports/api/tags/collection';
-import Comments from '/imports/api/comments/collection';
 
 Accounts.addLinks({
     facility: {
@@ -41,7 +40,7 @@ Accounts.addLinks({
     },
     comments: {
         type: 'many',
-        collection: Comments,
+        collection: AccountActions,
         field: 'commentsLinkData'
     }
 });

@@ -23,25 +23,29 @@ export default class CommentList extends Component {
   }
 
   onSubmit({ content }) {
-    const { accountId } = this.props;
+    const { account } = this.props;
     if (!content) {
       Notifier.error("Message has no content");
     } else {
-      Meteor.call("comment.create", content, accountId, err => {
-        if (!err) {
-          Notifier.success("Comment added!");
-          this.refs.comment.reset();
-        } else {
-          Notifier.error(err.reason);
+      Meteor.call(
+        "account.comment.add",
+        { content, accountId: account._id },
+        err => {
+          if (!err) {
+            Notifier.success("Comment added!");
+            this.refs.comment.reset();
+          } else {
+            Notifier.error(err.reason);
+          }
         }
-      });
+      );
     }
   }
 
   render() {
-    const { commentList } = this.props;
+    const { account } = this.props;
+    const { comments } = account;
     const path = Meteor.user().avatar && "/assets/img/user.svg";
-
     return (
       <div className="action-block">
         <div className="header__block">
@@ -67,8 +71,9 @@ export default class CommentList extends Component {
           </AutoForm>
         </div>
         <div className="comment-list">
-          {commentList &&
-            commentList.map((comment, index) => {
+          {comments
+            .sort((a, b) => a.createdAt < b.createdAt)
+            .map((comment, index) => {
               return <CommentSingle comment={comment} key={index} />;
             })}
         </div>

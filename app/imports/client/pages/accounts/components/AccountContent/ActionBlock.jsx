@@ -17,14 +17,9 @@ export default class ActionBlock extends Component {
     });
   };
 
-  getUserActions = actions => {
-    return actions.filter(action => action.type === "userAction");
-  };
-
   render() {
     const { account, closeRightPanel } = this.props;
-    console.log('account', account)
-    const actionsPerformed = this.getUserActions(account.actions);
+    const actionsPerformed = account.actions;
     return (
       <div className="action-block">
         <div className="header__block">

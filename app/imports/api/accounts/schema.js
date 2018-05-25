@@ -148,11 +148,11 @@ export default new SimpleSchema({
         optional: true,
         defaultValue: 0
     },
-    actionsLinkData: {
+    commentsLinkData: {
         type: Array,
         optional: true
     },
-    'actionsLinkData.$': {
+    'commentsLinkData.$': {
         type: String
     },
 })

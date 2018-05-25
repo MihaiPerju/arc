@@ -215,6 +215,11 @@ Meteor.methods({
     ]);
   },
 
+  "account.comment.add"(data) {
+    data.userId = this.userId;
+    ActionService.createComment(data);
+  },
+
   reset() {
     Accounts.remove({});
     AccountActions.remove({});
