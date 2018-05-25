@@ -229,7 +229,14 @@ export default class AccountService {
   static convertToType(rule, value) {
     const { types } = RulesEnum;
     if (types.dates.includes(rule)) {
-      const parsed = moment(value, "MM/DD/YYYY", true);
+      const date = new Date(value);
+      const dateString =
+        ("0" + (date.getMonth() + 1)).slice(-2) +
+        "/" +
+        ("0" + date.getDate()).slice(-2) +
+        "/" +
+        date.getFullYear();
+      const parsed = moment(dateString, "MM/DD/YYYY", true);
       return parsed.isValid() ? parsed.toDate() : null;
     } else if (types.numbers.includes(rule)) {
       const parsed = parseInt(value, 10);

@@ -10,6 +10,6 @@ export default Actions.createNamedQuery('actionList', {
     $paginate: true,
     title: 1,
     description: 1,
-    substate: 1,
+    substateId: 1,
     inputs: 1
 });

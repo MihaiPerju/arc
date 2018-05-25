@@ -21,6 +21,7 @@ export default class ActionBlock extends Component {
   render() {
     const { account, closeRightPanel } = this.props;
     const actionsPerformed = account.actions;
+    console.log('actionsPerformed',actionsPerformed)
     return (
       <div className="action-block">
         <div className="header__block">
@@ -56,7 +57,7 @@ export default class ActionBlock extends Component {
                         <div className="name">
                           {actionPerformed.user.profile.firstName +
                             " " +
-                            actionPerformed.user.profile.firstName}
+                            actionPerformed.user.profile.lastName}
                         </div>
                         <div className="text text-light-grey">
                           <b>{actionPerformed.reasonCode}</b>:
@@ -71,7 +72,7 @@ export default class ActionBlock extends Component {
                     </div>
                     <div className="action-time">
                       {moment(
-                        actionPerformed.action && actionPerformed.createdAt
+                        actionPerformed && actionPerformed.createdAt
                       ).format("hh:mm")}
                     </div>
                   </div>

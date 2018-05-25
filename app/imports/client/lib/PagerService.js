@@ -186,9 +186,11 @@ export default class PagerService {
       title,
       name,
       letterTemplateName,
-      substateName,
       code,
       tagName,
+      stateName,
+      sortState,
+      sortSubstate,
       facilityName,
       regionName;
 
@@ -215,7 +217,9 @@ export default class PagerService {
     }
 
     if (currentPath.indexOf("substate/list") > -1) {
-      substateName = FlowRouter.getQueryParam("substateName");
+      stateName = FlowRouter.getQueryParam("stateName");
+      sortState = FlowRouter.getQueryParam("sortState");
+      sortSubstate = FlowRouter.getQueryParam("sortSubstate");
     }
 
     if (currentPath.indexOf("code/list") > -1) {
@@ -225,72 +229,96 @@ export default class PagerService {
     if (currentPath.indexOf("tag/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
     }
+
     if (currentPath.indexOf("/client/:_id/manage-facilities") > -1) {
       facilityName = FlowRouter.getQueryParam("facilityName");
       _.extend(params, {
         filters: { clientId: FlowRouter.current().params._id }
       });
     }
+
     if (currentPath.indexOf("/client/:id/region/list") > -1) {
       regionName = FlowRouter.getQueryParam("regionName");
       _.extend(params, {
         filters: { clientId: FlowRouter.current().params.id }
       });
     }
+
     // client search
     if (clientName) {
       _.extend(params, {
         filters: { clientName: { $regex: clientName, $options: "i" } }
       });
     }
+
     // user search
     if (email) {
       _.extend(params, {
         filters: { "emails.address": { $regex: email, $options: "i" } }
       });
     }
+
     // action search
     if (title) {
       _.extend(params, {
         filters: { title: { $regex: title, $options: "i" } }
       });
     }
+
     // reports search
     if (name) {
       _.extend(params, {
         filters: { name: { $regex: name, $options: "i" } }
       });
     }
+
     // letter-templates search
     if (letterTemplateName) {
       _.extend(params, {
         filters: { name: { $regex: letterTemplateName, $options: "i" } }
       });
     }
+
     // code search
     if (code) {
       _.extend(params, {
         filters: { code: { $regex: code, $options: "i" } }
       });
     }
+
     // substate search
-    if (substateName) {
+    if (stateName) {
       _.extend(params, {
-        filters: { name: { $regex: substateName, $options: "i" } }
+        filters: { stateName: { $regex: stateName, $options: "i" } }
       });
     }
+
     // tag search
     if (tagName) {
       _.extend(params, {
         filters: { name: { $regex: tagName, $options: "i" } }
       });
     }
+
+    // substates sorts
+    if (sortState) {
+      _.extend(params, {
+        options: { sort: { stateName: sortState === "ASC" ? 1 : -1 } }
+      });
+    }
+    if (sortSubstate) {
+      _.extend(params, {
+        options: { sort: { name: sortSubstate === "ASC" ? 1 : -1 } }
+      });
+    }
+
     // facility search
     if (facilityName) {
       _.extend(params.filters, {
         name: { $regex: facilityName, $options: "i" }
       });
     }
+
     // region search
     if (regionName) {
       _.extend(params.filters, { name: { $regex: regionName, $options: "i" } });

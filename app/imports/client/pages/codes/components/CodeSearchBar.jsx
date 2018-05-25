@@ -27,7 +27,6 @@ export default class CodeSearchBar extends Component {
   }
 
   onSubmit(params) {
-    console.log(params);
     if ("code" in params) {
       FlowRouter.setQueryParams({ code: params.code });
     }
