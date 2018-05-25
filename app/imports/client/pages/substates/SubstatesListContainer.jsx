@@ -32,6 +32,10 @@ class SubstatesListContainer extends Pager {
     this.nextPage(0);
   }
 
+  componentWillReceiveProps(newProps) {
+    this.updatePager();
+  }
+
   setSubstate = _id => {
     const { currentSubstate } = this.state;
 
@@ -64,6 +68,7 @@ class SubstatesListContainer extends Pager {
     this.setState({
       create: false
     });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -86,6 +91,12 @@ class SubstatesListContainer extends Pager {
     const range = PagerService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentSubstate: null });
+  };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
   };
 
   render() {

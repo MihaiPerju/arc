@@ -31,6 +31,10 @@ class FacilityContainer extends Pager {
     this.nextPage(0);
   }
 
+  componentWillReceiveProps(newProps) {
+    this.updatePager();
+  }
+
   setFacility = _id => {
     this.closeForm();
     const { currentFacility } = this.state;
@@ -73,6 +77,7 @@ class FacilityContainer extends Pager {
     this.setState({
       create: false
     });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -99,6 +104,12 @@ class FacilityContainer extends Pager {
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentFacility: null });
   };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
+  }
 
   render() {
     const { data, loading, error } = this.props;
