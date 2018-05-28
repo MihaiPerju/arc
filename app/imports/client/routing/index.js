@@ -119,6 +119,7 @@ route('/accounts/:state?', AccountListContainer);
 import ActionListContainer from '/imports/client/pages/actions/ActionListContainer.jsx';
 
 route('/action/list', ActionListContainer);
+route('/action/:id/edit', ActionListContainer);
 
 //Regions
 import RegionListContainer from '/imports/client/pages/regions/RegionsListContainer';
