@@ -32,6 +32,10 @@ class RegionListContainer extends Pager {
     this.nextPage(0);
   }
 
+  componentWillReceiveProps(newProps) {
+    this.updatePager();
+  }
+
   showBtnGroup() {
     this.setState({
       btnGroup: !this.state.btnGroup
@@ -76,6 +80,7 @@ class RegionListContainer extends Pager {
     this.setState({
       create: false
     });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -101,6 +106,12 @@ class RegionListContainer extends Pager {
     const range = PagerService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentRegion: null });
+  };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
   };
 
   render() {
