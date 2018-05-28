@@ -68,7 +68,6 @@ class LeftMenu extends Component {
       })
       .getCount((err, count) => {
         if (!err) {
-          console.log(count)
           that.setState({ tickles: count });
         }
       });
