@@ -31,6 +31,7 @@ export default class PagerService {
     const acctBal = FlowRouter.getQueryParam("acctBal");
     const finClass = FlowRouter.getQueryParam("finClass");
     const substate = FlowRouter.getQueryParam("substate");
+    const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
     const dischrgDate = FlowRouter.getQueryParam("dischrgDate");
     const fbDate = FlowRouter.getQueryParam("fbDate");
     let state = FlowRouter.current().params.state;
@@ -51,6 +52,7 @@ export default class PagerService {
         acctBal,
         finClass,
         substate,
+        activeInsCode,
         dischrgDate,
         fbDate
       },
@@ -96,6 +98,7 @@ export default class PagerService {
       acctBal,
       finClass,
       substate,
+      activeInsCode,
       dischrgDate,
       fbDate
     }
@@ -153,6 +156,9 @@ export default class PagerService {
     }
     if (substate) {
       _.extend(params.filters, { substate });
+    }
+    if (activeInsCode) {
+      _.extend(params.filters, { activeInsCode });
     }
     if (dischrgDate) {
       _.extend(params.filters, {

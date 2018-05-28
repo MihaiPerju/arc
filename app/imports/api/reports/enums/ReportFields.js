@@ -14,4 +14,5 @@ export default [
     {value: 'facilityId', label: 'Facility Id'},
     {value: 'assigneeId', label: 'Assignee Id'},
     {value: 'clientId', label: 'ClientId'},
+    {value: 'activeInsCode', label: 'Active Insurance Code'}
 ]

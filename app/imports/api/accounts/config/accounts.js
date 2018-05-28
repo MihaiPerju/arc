@@ -12,6 +12,7 @@ export default {
     "finClass",
     "insName",
     "insName2",
-    "insName3"
+    "insName3",
+    "activeInsCode"
   ]
 };

@@ -108,7 +108,7 @@ export default class NewAction extends Component {
         reasonCodesQuery
           .clone({
             filters: {
-              actionId: actionId
+              actionId: actionId.value
             }
           })
           .fetch((err, reasonCodes) => {
@@ -118,7 +118,7 @@ export default class NewAction extends Component {
               });
             }
           });
-        this.getAction(actionId);
+        this.getAction(actionId.value);
       }
     }
   };

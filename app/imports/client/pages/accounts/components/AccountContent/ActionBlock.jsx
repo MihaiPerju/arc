@@ -52,7 +52,11 @@ export default class ActionBlock extends Component {
                         />
                       </div>
                       <div className="info">
-                        <div className="name">Author(TBM)</div>
+                        <div className="name">
+                          {actionPerformed.user.profile.firstName +
+                            " " +
+                            actionPerformed.user.profile.lastName}
+                        </div>
                         <div className="text text-light-grey">
                           <b>{actionPerformed.reasonCode}</b>:
                           {actionPerformed.action &&

@@ -78,7 +78,7 @@ class AccountListContainer extends Pager {
       this.closeRightPanel();
       this.setState({ currentRouteState: state });
     }
-    super.updateFilters();
+    this.updateFilters();
   }
 
   uncheckAccountList = () => {
