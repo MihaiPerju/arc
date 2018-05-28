@@ -186,12 +186,13 @@ Meteor.methods({
     return result;
   },
 
-  "account.tickle"({ tickleDate, _id }) {
+  "account.tickle"({ tickleDate, _id, tickleUserId }) {
     Accounts.update(
       { _id },
       {
         $set: {
-          tickleDate
+          tickleDate,
+          tickleUserId
         }
       }
     );
