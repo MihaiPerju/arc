@@ -31,6 +31,10 @@ class LetterTemplateListContainer extends Pager {
     this.nextPage(0);
   }
 
+  componentWillReceiveProps(newProps) {
+    this.updatePager();
+  }
+
   setTemplate = _id => {
     const { currentTemplate } = this.state;
 
@@ -63,6 +67,7 @@ class LetterTemplateListContainer extends Pager {
     this.setState({
       create: false
     });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -86,6 +91,12 @@ class LetterTemplateListContainer extends Pager {
     const range = PagerService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentTemplate: null });
+  };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
   };
 
   render() {

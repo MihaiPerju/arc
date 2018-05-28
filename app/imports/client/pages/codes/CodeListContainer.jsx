@@ -32,6 +32,10 @@ class CodeListContainer extends Pager {
     this.nextPage(0);
   }
 
+  componentWillReceiveProps(newProps) {
+    this.updatePager();
+  }
+
   showFilterBar() {
     this.setState({
       filter: !this.state.filter
@@ -70,6 +74,7 @@ class CodeListContainer extends Pager {
     this.setState({
       create: false
     });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -96,6 +101,12 @@ class CodeListContainer extends Pager {
       create: false,
       currentCode: null
     });
+  };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
   };
 
   render() {

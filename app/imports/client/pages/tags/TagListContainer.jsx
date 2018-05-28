@@ -42,6 +42,10 @@ class TagListContainer extends Pager {
     });
   }
 
+  componentWillReceiveProps(newProps) {
+    this.updatePager();
+  }
+
   showFilterBar() {
     this.setState({
       filter: !this.state.filter
@@ -80,6 +84,7 @@ class TagListContainer extends Pager {
     this.setState({
       create: false
     });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -98,6 +103,12 @@ class TagListContainer extends Pager {
     const range = PagerService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+  };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
   };
 
   render() {
