@@ -21,6 +21,7 @@ export default class AccountTickle extends React.Component {
         const data = {};
         data._id = accountId;
         data.tickleDate = new Date(tickleDate);
+        data.tickleUserId = Meteor.userId();
         Meteor.call("account.tickle", data, (err) => {
             if (!err) {
                 Notifier.success("Account Tickled!");
