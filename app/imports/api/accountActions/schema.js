@@ -15,7 +15,7 @@ export default new SimpleSchema({
     },
     createdAt: {
         type: Date,
-        defaultValue: new Date()
+        defaultValue: new Date
     },
     systemAction: {
         type: Boolean,
@@ -38,6 +38,10 @@ export default new SimpleSchema({
         type: String
     },
     content: {
+        type: String,
+        optional: true
+    },
+    accountId: {
         type: String,
         optional: true
     }

@@ -43,8 +43,7 @@ export default class CommentList extends Component {
   }
 
   render() {
-    const { account } = this.props;
-    const { comments } = account;
+    const { account, comments } = this.props;
     const path = Meteor.user().avatar && "/assets/img/user.svg";
     return (
       <div className="action-block">
@@ -72,7 +71,6 @@ export default class CommentList extends Component {
         </div>
         <div className="comment-list">
           {comments
-            .sort((a, b) => a.createdAt < b.createdAt)
             .map((comment, index) => {
               return <CommentSingle comment={comment} key={index} />;
             })}

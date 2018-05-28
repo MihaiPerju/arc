@@ -20,6 +20,7 @@ export default class ActionBlock extends Component {
   render() {
     const { account, closeRightPanel } = this.props;
     const actionsPerformed = account.actions;
+
     return (
       <div className="action-block">
         <div className="header__block">
@@ -40,7 +41,6 @@ export default class ActionBlock extends Component {
           <div className="action-list">
             {actionsPerformed &&
               actionsPerformed
-                .sort((a, b) => a.createdAt < b.createdAt)
                 .map((actionPerformed, key) => (
                   <div className="action-item" key={key}>
                     <div className="action-info">
@@ -71,7 +71,7 @@ export default class ActionBlock extends Component {
                     <div className="action-time">
                       {moment(
                         actionPerformed && actionPerformed.createdAt
-                      ).format("hh:mm")}
+                      ).format("hh:mm a")}
                     </div>
                   </div>
                 ))}

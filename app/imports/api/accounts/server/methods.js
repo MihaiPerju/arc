@@ -15,6 +15,7 @@ import Files from "/imports/api/files/collection";
 import Backup from "/imports/api/backup/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import Actions from "../../actions/collection";
+import accountActionEnum from "../enums/accountActions";
 
 Meteor.methods({
   "account.actions.add"(data) {
@@ -216,9 +217,15 @@ Meteor.methods({
     ]);
   },
 
-  "account.comment.add"(data) {
-    data.userId = this.userId;
-    ActionService.createComment(data);
+  "account.comment.add"({ content, accountId }) {
+    const commentData = {
+      userId: this.userId,
+      type: accountActionEnum.COMMENT,
+      content,
+      createdAt: new Date(),
+      accountId
+    };
+    AccountActions.insert(commentData);
   },
 
   reset() {

@@ -1,9 +1,11 @@
 import React from "react";
 import autoBind from "react-autobind";
-import { Container } from "semantic-ui-react";
+import { withQuery } from "meteor/cultofcoders:grapher-react";
+import query from "/imports/api/accountActions/queries/accountActionList";
 import CommentList from "./components/CommentList";
+import Loading from "/imports/client/lib/ui/Loading";
 
-export default class CommentsListContainer extends React.Component {
+class CommentsListContainer extends React.Component {
   constructor() {
     super();
 
@@ -11,11 +13,34 @@ export default class CommentsListContainer extends React.Component {
   }
 
   render() {
-    const { account } = this.props;
-    return (
-      <Container>
-        <CommentList account={account} />
-      </Container>
-    );
+    const { account, data, isLoading, error } = this.props;
+
+    if (isLoading) {
+      return <Loading />;
+    }
+
+    if (error) {
+      return <div>Error: {error.reason}</div>;
+    }
+
+    return <CommentList account={account} comments={data} />;
   }
 }
+
+export default withQuery(
+  props => {
+    const { account } = props;
+    return query.clone({
+      options: {
+        sort: {
+          createdAt: -1
+        }
+      },
+      filters: {
+        type: "comment",
+        accountId: account._id
+      }
+    });
+  },
+  { reactive: true }
+)(CommentsListContainer);

@@ -37,10 +37,5 @@ Accounts.addLinks({
         type: "one",
         collection: Tags,
         field: "workQueue"
-    },
-    comments: {
-        type: 'many',
-        collection: AccountActions,
-        field: 'commentsLinkData'
     }
 });

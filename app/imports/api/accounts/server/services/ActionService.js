@@ -9,6 +9,7 @@ import stateEnum from "../../enums/states";
 import { Substates } from "../../enums/substates";
 import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
+import accountActionEnum from "../../enums/accountActions";
 
 export default class ActionService {
   //Adding action to account
@@ -29,7 +30,7 @@ export default class ActionService {
       actionId:actionId.value,
       reasonCode: reasonId && reason,
       addedBy,
-      type: "userAction",
+      type: accountActionEnum.USER_ACTION,
       createdAt
     };
     const customFields = {};
@@ -80,7 +81,7 @@ export default class ActionService {
         actionId,
         fileId,
         systemAction: true,
-        type: "systemAction"
+        type: accountActionEnum.SYSTEM_ACTION
       });
 
       Accounts.update(
@@ -144,24 +145,6 @@ export default class ActionService {
         $unset: {
           workQueue: null,
           assigneeId: null
-        }
-      }
-    );
-  }
-
-  static createComment({ content, accountId, userId }) {
-    const commentData = {
-      userId,
-      type: "comment",
-      content,
-      createdAt: new Date()
-    };
-    const accountActionId = AccountActions.insert(commentData);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $push: {
-          commentsLinkData: accountActionId
         }
       }
     );
