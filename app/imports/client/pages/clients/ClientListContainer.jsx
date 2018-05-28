@@ -30,6 +30,11 @@ class ClientContainer extends Pager {
     this.nextPage(0);
   }
 
+  componentWillReceiveProps(newProps) {
+    console.log('newProps', newProps)
+    this.updatePager();
+  }
+
   setClient = _id => {
     const { currentClient } = this.state;
 
@@ -73,6 +78,7 @@ class ClientContainer extends Pager {
     this.setState({
       create: false
     });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -95,6 +101,12 @@ class ClientContainer extends Pager {
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
   };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
+  }
 
   render() {
     const { data, loading, error } = this.props;

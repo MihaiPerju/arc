@@ -14,7 +14,6 @@ import Business from "/imports/api/business";
 import Files from "/imports/api/files/collection";
 import Backup from "/imports/api/backup/collection";
 import AccountActions from "/imports/api/accountActions/collection";
-import { Substates } from "../enums/substates";
 import Actions from "../../actions/collection";
 
 Meteor.methods({
@@ -187,12 +186,13 @@ Meteor.methods({
     return result;
   },
 
-  "account.tickle"({ tickleDate, _id }) {
+  "account.tickle"({ tickleDate, _id, tickleUserId }) {
     Accounts.update(
       { _id },
       {
         $set: {
-          tickleDate
+          tickleDate,
+          tickleUserId
         }
       }
     );

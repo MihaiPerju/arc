@@ -33,11 +33,19 @@ class ReportListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
-    substatesQuery.fetch((err, substates) => {
-      if (!err) {
-        this.setState({ substates });
-      }
-    });
+    substatesQuery
+      .clone({
+        filters: { status: true }
+      })
+      .fetch((err, substates) => {
+        if (!err) {
+          this.setState({ substates });
+        }
+      });
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.updatePager();
   }
 
   setReport = _id => {
@@ -72,6 +80,7 @@ class ReportListContainer extends Pager {
 
   closeForm = () => {
     this.setState({ create: false });
+    this.updatePager();
   };
 
   deleteAction = () => {
@@ -98,6 +107,12 @@ class ReportListContainer extends Pager {
       create: false,
       currentReport: null
     });
+  };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
   };
 
   render() {

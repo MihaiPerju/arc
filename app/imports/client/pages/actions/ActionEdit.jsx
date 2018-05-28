@@ -41,15 +41,17 @@ export default class ActionEdit extends React.Component {
   getOptions = enums => {
     return _.map(enums, (value, key) => {
       const label = `${value.stateName}: ${value.name}`;
-      return { value: value.name.replace(/ /g, "_"), label: label };
+      return { value: value._id, label: label };
     });
   };
 
   updateProps(props) {
     const { action } = props;
-    this.setState({
-      checked: !!action.substate
-    });
+    if(action) {
+      this.setState({
+        checked: !!action.substateId
+      });
+    }
   }
 
   componentWillReceiveProps(props) {
@@ -82,9 +84,9 @@ export default class ActionEdit extends React.Component {
     const { checked } = this.state;
     const substatesOptions = this.getOptions(substates);
     const inputTypes = [
-      { value: 'number', label: 'number'},
-      { value: 'date', label: 'date'},
-      { value: 'string', label: 'text'}
+      { value: "number", label: "number" },
+      { value: "date", label: "date" },
+      { value: "string", label: "text" }
     ];
 
     return (
@@ -100,7 +102,7 @@ export default class ActionEdit extends React.Component {
           </div>
         </div>
 
-        <div className="create-form__wrapper">
+        {action && <div className="create-form__wrapper">
           <div className="action-block">
             <div className="header__block">
               <div className="title-block text-uppercase">
@@ -157,27 +159,29 @@ export default class ActionEdit extends React.Component {
                 </div>
               )}
 
-                <ListField name="inputs" showListField={() => {}}>
-                  <ListItemField name="$">
-                    <NestField className="upload-item text-center">
-                      <div className="form-wrapper">
-                        <SelectField
-                          placeholder="Select type"
-                          labelHidden={true}
-                          options={inputTypes}
-                          name="type" />
-                        <ErrorField name="type" />
-                      </div>
-                      <div className="form-wrapper">
-                        <AutoField
-                          labelHidden={true}
-                          name="label"
-                          placeholder="label" />
-                        <ErrorField name="label" />
-                      </div>
-                    </NestField>
-                  </ListItemField>
-                </ListField>
+              <ListField name="inputs" showListField={() => {}}>
+                <ListItemField name="$">
+                  <NestField className="upload-item text-center">
+                    <div className="form-wrapper">
+                      <SelectField
+                        placeholder="Select type"
+                        labelHidden={true}
+                        options={inputTypes}
+                        name="type"
+                      />
+                      <ErrorField name="type" />
+                    </div>
+                    <div className="form-wrapper">
+                      <AutoField
+                        labelHidden={true}
+                        name="label"
+                        placeholder="label"
+                      />
+                      <ErrorField name="label" />
+                    </div>
+                  </NestField>
+                </ListItemField>
+              </ListField>
             </AutoForm>
           </div>
 
@@ -185,7 +189,7 @@ export default class ActionEdit extends React.Component {
           {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
             <ReasonCodesBlock isPrivate action={action} />
           )}
-        </div>
+        </div>}
       </div>
     );
   }

@@ -78,8 +78,14 @@ class AccountListContainer extends Pager {
       this.closeRightPanel();
       this.setState({ currentRouteState: state });
     }
-    super.updateFilters();
+    this.updateFilters();
   }
+
+  uncheckAccountList = () => {
+    this.setState({
+      accountsSelected: []
+    });
+  };
 
   getData(accounts) {
     let facilities = [];
@@ -364,6 +370,7 @@ class AccountListContainer extends Pager {
               closeDialog={this.closeAssignUser}
               title={""}
               options={this.state.userOptions}
+              uncheckAccountList={this.uncheckAccountList}
             />
           )}
           {assignWQ && (
@@ -372,6 +379,7 @@ class AccountListContainer extends Pager {
               accountIds={accountsSelected}
               closeDialog={this.closeAssignWQ}
               title={""}
+              uncheckAccountList={this.uncheckAccountList}
             />
           )}
           <AccountList

@@ -135,6 +135,10 @@ export default new SimpleSchema({
         type: Date,
         optional: true
     },
+    tickleUserId: {
+        type: String,
+        optional: true
+    },
     escalateReason: {
         type: String,
         optional: true

@@ -59,6 +59,9 @@ export default Accounts.createNamedQuery('accountList', {
         action: {
             title: 1
         },
+        user:{
+            profile:1
+        },
         createdAt: 1,
         status: 1
     },

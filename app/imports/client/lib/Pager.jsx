@@ -18,10 +18,6 @@ export default class extends React.Component {
     this.handlePageChange(this.state.page, queryParams);
   }
 
-  componentWillReceiveProps(newProps) {
-    this.updateFilters();
-  }
-
   getQuery() {
     return this.query;
   }
@@ -51,13 +47,6 @@ export default class extends React.Component {
       });
   };
 
-  getPagerOptions() {
-    return {
-      limit: this.state.perPage,
-      skip: this.state.perPage * (this.state.page - 1)
-    };
-  }
-
   getPaginator() {
     return (
       this.state.total > this.state.perPage && (
@@ -70,17 +59,5 @@ export default class extends React.Component {
         />
       )
     );
-  }
-
-  onFilter(ref) {
-    return value => {
-      let filters = this.state.filters;
-
-      _.extend(filters, {
-        [ref]: value
-      });
-
-      this.updateFilters(filters);
-    };
   }
 }

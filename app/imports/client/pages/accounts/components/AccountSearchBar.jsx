@@ -50,7 +50,9 @@ export default class AccountSearchBar extends Component {
         this.setState({ clientOptions });
       }
     });
-    substateQuery.clone().fetch((err, res) => {
+    substateQuery.clone({
+      filters: {status: true}
+    }).fetch((err, res) => {
       if (!err) {
         res.map(substate => {
           const label = `${substate.stateName}: ${substate.name}`;
@@ -106,6 +108,9 @@ export default class AccountSearchBar extends Component {
     }
     if ("substate" in params) {
       FlowRouter.setQueryParams({ substate: params.substate });
+    }
+    if ("activeInsCode" in params) {
+      FlowRouter.setQueryParams({ activeInsCode: params.activeInsCode });
     }
   }
 
@@ -333,6 +338,13 @@ export default class AccountSearchBar extends Component {
                   name="substate"
                 />
               </div>
+              <div className="form-group">
+                <AutoField
+                  labelHidden={true}
+                  name="activeInsCode"
+                  placeholder="Search by active Insurance Code"
+                />
+              </div>
             </div>
           </div>
         )}
@@ -463,5 +475,10 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by Substate"
+  },
+  activeInsCode: {
+    type: String,
+    optional: true,
+    label: "Search by active Insurance Code"
   }
 });
