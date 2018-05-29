@@ -33,7 +33,7 @@ export default withQuery(
     return query.clone({
       options: {
         sort: {
-          createdAt: -1
+          createdAt: 1
         }
       },
       filters: {

@@ -9,7 +9,7 @@ import stateEnum from "../../enums/states";
 import { Substates } from "../../enums/substates";
 import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
-import accountActionEnum from "../../enums/accountActions";
+import actionTypesEnum from "../../enums/actionTypesEnum";
 
 export default class ActionService {
   //Adding action to account
@@ -30,7 +30,7 @@ export default class ActionService {
       actionId:actionId.value,
       reasonCode: reasonId && reason,
       addedBy,
-      type: accountActionEnum.USER_ACTION,
+      type: actionTypesEnum.USER_ACTION,
       createdAt
     };
     const customFields = {};
@@ -81,7 +81,7 @@ export default class ActionService {
         actionId,
         fileId,
         systemAction: true,
-        type: accountActionEnum.SYSTEM_ACTION
+        type: actionTypesEnum.SYSTEM_ACTION
       });
 
       Accounts.update(
