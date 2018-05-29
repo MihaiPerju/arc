@@ -40,41 +40,39 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed
-                .map((actionPerformed, key) => (
-                  <div className="action-item" key={key}>
-                    <div className="action-info">
-                      <div className="avatar">
-                        <img
-                          className="md-avatar img-circle"
-                          src="/assets/img/user.svg"
-                          alt=""
-                        />
-                      </div>
-                      <div className="info">
-                        <div className="name">
-                          {actionPerformed.user.profile.firstName +
+              actionsPerformed.map((actionPerformed, key) => (
+                <div className="action-item" key={key}>
+                  <div className="action-info">
+                    <div className="avatar">
+                      <img
+                        className="md-avatar img-circle"
+                        src="/assets/img/user.svg"
+                        alt=""
+                      />
+                    </div>
+                    <div className="info">
+                      <div className="name">
+                        {actionPerformed.user &&
+                          actionPerformed.user.profile.firstName +
                             " " +
                             actionPerformed.user.profile.lastName}
-                        </div>
-                        <div className="text text-light-grey">
-                          <b>{actionPerformed.reasonCode}</b>:
-                          {actionPerformed.action &&
-                            actionPerformed.action.title}
-                        </div>
                       </div>
-                      <div className="status archived">
-                        {actionPerformed.action &&
-                          actionPerformed.action.status}
+                      <div className="text text-light-grey">
+                        <b>{actionPerformed.reasonCode}</b>:
+                        {actionPerformed.action && actionPerformed.action.title}
                       </div>
                     </div>
-                    <div className="action-time">
-                      {moment(
-                        actionPerformed && actionPerformed.createdAt
-                      ).format("hh:mm a")}
+                    <div className="status archived">
+                      {actionPerformed.action && actionPerformed.action.status}
                     </div>
                   </div>
-                ))}
+                  <div className="action-time">
+                    {moment(
+                      actionPerformed && actionPerformed.createdAt
+                    ).format("hh:mm a")}
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>
