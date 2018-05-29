@@ -1,25 +1,34 @@
-import Accounts from '../collection';
-import {createRoute} from '/imports/api/s3-uploads/server/router';
-import RolesEnum from '/imports/api/users/enums/roles';
-import Security from '/imports/api/accounts/security';
+import Accounts from "../collection";
+import { createRoute } from "/imports/api/s3-uploads/server/router";
+import RolesEnum from "/imports/api/users/enums/roles";
+import Security from "/imports/api/accounts/security";
 
-createRoute('/uploads/accounts-pdf/:accountId/:token', ({user, accountId, error, filenames, success, uploadLocal}) => {
+createRoute(
+  "/uploads/account-pdf/:accountId/:token",
+  ({ user, accountId, error, filenames, success, uploadLocal }) => {
     if (!user) {
-        return error("Not logged in!");
-    } else if (!Roles.userIsInRole(user._id, [RolesEnum.ADMIN, RolesEnum.TECH]) && !Security.hasRightsOnAccount(user._id, accountId)) {
-        return error("Not allowed!");
+      return error("Not logged in!");
+    } else if (
+      !Roles.userIsInRole(user._id, [RolesEnum.ADMIN, RolesEnum.TECH]) &&
+      !Security.hasRightsOnAccount(user._id, accountId)
+    ) {
+      return error("Not allowed!");
     }
 
     if (filenames.length != 1) {
-        return error('Invalid number of files');
+      return error("Invalid number of files");
     }
 
     const [uploadId] = uploadLocal();
 
-    Accounts.update({_id: accountId}, {
+    Accounts.update(
+      { _id: accountId },
+      {
         $push: {
-            attachmentIds: uploadId
+          attachmentIds: uploadId
         }
-    });
+      }
+    );
     success();
-});
+  }
+);

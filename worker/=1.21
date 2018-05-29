@@ -1,0 +1,6 @@
+Collecting PyPDF2
+  Downloading https://files.pythonhosted.org/packages/b4/01/68fcc0d43daf4c6bdbc6b33cc3f77bda531c86b174cac56ef0ffdb96faab/PyPDF2-1.26.0.tar.gz (77kB)
+Installing collected packages: PyPDF2
+  Running setup.py install for PyPDF2: started
+    Running setup.py install for PyPDF2: finished with status 'done'
+Successfully installed PyPDF2-1.26.0

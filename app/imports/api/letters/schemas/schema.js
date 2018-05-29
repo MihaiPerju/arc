@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import statuses, {StatusList} from '../enums/statuses.js';
+import Statuses from '../enums/statuses.js';
 
 export default new SimpleSchema({
     body: {
@@ -10,8 +10,8 @@ export default new SimpleSchema({
     },
     status: {
         type: String,
-        allowedValues: StatusList,
-        defaultValue: statuses.PENDING,
+        allowedValues: Statuses,
+        defaultValue: Statuses.NEW,
     },
     createAt: {
         type: Date,
