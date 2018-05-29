@@ -1,12 +1,7 @@
 const STATUSES = {
-    PENDING: 'pending',
-    SENT: 'sent'
+  NEW: "New",
+  PENDING: "Pending",
+  SENT: "Sent",
+  RECEIVED: "Received"
 };
-
-const StatusList = [
-    STATUSES.PENDING,
-    STATUSES.SENT
-];
-
-export {StatusList};
 export default STATUSES;

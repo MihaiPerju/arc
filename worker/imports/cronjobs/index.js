@@ -1,12 +1,26 @@
-import RunReports from "../services/RunReports";
+import ReportsManagement from "../services/RunReports";
+import LettersManagement from "../services/LettersManagement";
 
+//Job for running reports
 SyncedCron.add({
-  name: "Scan ",
+  name: "Run Report",
   schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
   job: function() {
-    RunReports.run();
+    ReportsManagement.run();
+  }
+});
+
+//Job for sending letters
+SyncedCron.add({
+  name: "Send Letters",
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.text("every 10 seconds");
+  },
+  job: function() {
+    LettersManagement.run();
   }
 });

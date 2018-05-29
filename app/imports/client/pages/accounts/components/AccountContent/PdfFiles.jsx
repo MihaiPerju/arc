@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "../../../../../api/s3-uploads/utils";
 import Notifier from "../../../../lib/Notifier";
-
+import ReactHover from "react-hover";
 export default class ActionBlock extends Component {
   constructor() {
     super();
@@ -77,6 +77,11 @@ export default class ActionBlock extends Component {
       },
       acceptedFiles: ".pdf"
     };
+    const options = {
+      followCursor: true,
+      shiftX: 20,
+      shiftY: 0
+    };
 
     return (
       <div className="action-block drop-file">
@@ -108,29 +113,38 @@ export default class ActionBlock extends Component {
             {account.attachments &&
               account.attachments.map(pdf => {
                 return (
-                  <li style={{ listStyleType: "none" }}>
-                    {pdf && (
-                      <div className="block-item">
-                        <div className="info">
-                          <div className="title">{this.getPdfName(pdf)}</div>
-                        </div>
-                        <div className="btn-group">
-                          <button
-                            onClick={this.redirectToPdf.bind(this, pdf)}
-                            className="btn-text--blue"
-                          >
-                            <i className="icon-download" />
-                          </button>
-                          <button
-                            onClick={this.deletePdf.bind(this, pdf)}
-                            className="btn-text--red"
-                          >
-                            <i className="icon-trash-o" />
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </li>
+                  <ReactHover options={options}>
+                    <ReactHover.Trigger type="trigger">
+                      <li style={{ listStyleType: "none" }}>
+                        {pdf && (
+                          <div className="block-item">
+                            <div className="info">
+                              <div className="title">
+                                {this.getPdfName(pdf)}
+                              </div>
+                            </div>
+                            <div className="btn-group">
+                              <button
+                                onClick={this.redirectToPdf.bind(this, pdf)}
+                                className="btn-text--blue"
+                              >
+                                <i className="icon-download" />
+                              </button>
+                              <button
+                                onClick={this.deletePdf.bind(this, pdf)}
+                                className="btn-text--red"
+                              >
+                                <i className="icon-trash-o" />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </li>
+                    </ReactHover.Trigger>
+                    <ReactHover.Hover type="hover">
+                      {this.getPdfName(pdf)}
+                    </ReactHover.Hover>
+                  </ReactHover>
                 );
               })}
           </div>

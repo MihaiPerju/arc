@@ -1,6 +1,6 @@
 export default {
     AWS: Meteor.settings.private && Meteor.settings.private.AWS,
-    AWS_URL: Meteor.settings.public.AWS.url,
+    // AWS_URL: Meteor.settings.public.AWS.url,
     mimeTypes: {
         "html": "text/html",
         "jpeg": "image/jpeg",
