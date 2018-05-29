@@ -24,6 +24,7 @@ Meteor.startup(function () {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
             email: `client-${i + 1}@app.com`,
+            createdAt: new Date(),
             contacts: [{
                 email: `contact_person-${i + 1}@app.com`,
                 contactType: ContactTypes.TECH,

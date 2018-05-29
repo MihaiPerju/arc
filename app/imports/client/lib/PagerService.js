@@ -9,9 +9,10 @@ export default class PagerService {
     if (state || state === "") {
       this.getAccountFilters(params, state, filters);
       this.getProperAccounts(params, assign);
+    } else {
+      // common method for filtering
+      this.getFilters(params, filters);
     }
-    // common method for filtering
-    this.getFilters(params, filters);
     this.queryParams = params;
     return query.clone(params);
   }
@@ -209,12 +210,20 @@ export default class PagerService {
       sortState,
       sortSubstate,
       facilityName,
-      regionName;
+      regionName,
+      createdAtMin,
+      createdAtMax;
+
+    _.extend(params, {
+      filters: {}
+    });
 
     let currentPath = FlowRouter.current().route.path;
 
     if (currentPath.indexOf("client/list") > -1) {
       clientName = FlowRouter.getQueryParam("clientName");
+      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
+      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
     }
 
     if (currentPath.indexOf("user/list") > -1) {
@@ -249,82 +258,84 @@ export default class PagerService {
 
     if (currentPath.indexOf("/client/:_id/manage-facilities") > -1) {
       facilityName = FlowRouter.getQueryParam("facilityName");
-      _.extend(params, {
-        filters: { clientId: FlowRouter.current().params._id }
+      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
+      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
+      _.extend(params.filters, {
+        clientId: FlowRouter.current().params._id
       });
     }
 
     if (currentPath.indexOf("/client/:id/region/list") > -1) {
       regionName = FlowRouter.getQueryParam("regionName");
-      _.extend(params, {
-        filters: { clientId: FlowRouter.current().params.id }
+      _.extend(params.filters, {
+        clientId: FlowRouter.current().params.id
       });
     }
 
     // client search
     if (clientName) {
-      _.extend(params, {
-        filters: { clientName: { $regex: clientName, $options: "i" } }
+      _.extend(params.filters, {
+        clientName: { $regex: clientName, $options: "i" }
       });
     }
 
     // user search
     if (email) {
-      _.extend(params, {
-        filters: { "emails.address": { $regex: email, $options: "i" } }
+      _.extend(params.filters, {
+        "emails.address": { $regex: email, $options: "i" }
       });
     }
 
     // action search
     if (title) {
-      _.extend(params, {
-        filters: { title: { $regex: title, $options: "i" } }
+      _.extend(params.filters, {
+        title: { $regex: title, $options: "i" }
       });
     }
 
     // reports search
     if (name) {
-      _.extend(params, {
-        filters: { name: { $regex: name, $options: "i" } }
+      _.extend(params.filters, {
+        name: { $regex: name, $options: "i" }
       });
     }
 
     // letter-templates search
     if (letterTemplateName) {
-      _.extend(params, {
-        filters: { name: { $regex: letterTemplateName, $options: "i" } }
+      _.extend(params.filters, {
+        name: { $regex: letterTemplateName, $options: "i" }
       });
     }
 
     // code search
     if (code) {
-      _.extend(params, {
-        filters: { code: { $regex: code, $options: "i" } }
+      _.extend(params.filters, {
+        code: { $regex: code, $options: "i" }
       });
     }
 
     // substate search
     if (stateName) {
-      _.extend(params, {
-        filters: { stateName: { $regex: stateName, $options: "i" } }
+      _.extend(params.filters, {
+        stateName: { $regex: stateName, $options: "i" }
       });
     }
 
     // tag search
     if (tagName) {
-      _.extend(params, {
-        filters: { name: { $regex: tagName, $options: "i" } }
+      _.extend(params.filters, {
+        name: { $regex: tagName, $options: "i" }
       });
     }
 
     // substates sorts
     if (sortState) {
-      _.extend(params, {
+      _.extend(params.filters, {
         options: { sort: { stateName: sortState === "ASC" ? 1 : -1 } }
       });
     }
     if (sortSubstate) {
-      _.extend(params, {
+      _.extend(params.filters, {
         options: { sort: { name: sortSubstate === "ASC" ? 1 : -1 } }
       });
     }
@@ -339,6 +350,16 @@ export default class PagerService {
     // region search
     if (regionName) {
       _.extend(params.filters, { name: { $regex: regionName, $options: "i" } });
+    }
+
+    // created at search
+    if (createdAtMin && createdAtMax) {
+      _.extend(params.filters, {
+        createdAt: {
+          $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
+          $lt: new Date(moment(new Date(createdAtMax)).startOf("day"))
+        }
+      });
     }
   }
 

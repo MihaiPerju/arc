@@ -21,7 +21,8 @@ class ClientContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      filter: false
     });
     this.query = query;
   }
@@ -31,7 +32,6 @@ class ClientContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
-    console.log('newProps', newProps)
     this.updatePager();
   }
 
@@ -108,6 +108,12 @@ class ClientContainer extends Pager {
     this.recount(queryParams);
   }
 
+  decreaseList = () => {
+    this.setState({
+      filter: !this.state.filter
+    });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const { clientsSelected, currentClient, create, range, total } = this.state;
@@ -134,6 +140,7 @@ class ClientContainer extends Pager {
           <ClientSearchBar
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
+            decrease={this.decreaseList}
           />
           <ClientList
             class={this.state.filter ? "task-list decreased" : "task-list"}
