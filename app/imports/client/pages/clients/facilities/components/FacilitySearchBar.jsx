@@ -5,6 +5,8 @@ import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import DatePicker from "react-datepicker";
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class FacilitySearchBar extends Component {
   constructor() {
@@ -13,7 +15,9 @@ export default class FacilitySearchBar extends Component {
       active: false,
       filter: false,
       dropdown: false,
-      selectAll: false
+      selectAll: false,
+      createdAtMin: null,
+      createdAtMax: null
     };
   }
 
@@ -62,8 +66,33 @@ export default class FacilitySearchBar extends Component {
     });
   };
 
+  onDateSelect = (selectedDate, field) => {
+    const date = selectedDate ? new Date(selectedDate).toString() : "";
+    if (field === "createdAtMin") {
+      this.setState({ createdAtMin: selectedDate });
+      FlowRouter.setQueryParams({ createdAtMin: date });
+    } else if (field === "createdAtMax") {
+      const { createdAtMin } = this.state;
+      if (selectedDate < createdAtMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      } else {
+        FlowRouter.setQueryParams({ createdAtMax: date });
+      }
+      this.setState({ createdAtMax: selectedDate });
+    }
+  };
+
   render() {
-    const { filter, active, dropdown, selectAll } = this.state;
+    const {
+      filter,
+      active,
+      dropdown,
+      selectAll,
+      createdAtMin,
+      createdAtMax
+    } = this.state;
     const {
       options,
       btnGroup,
@@ -133,7 +162,24 @@ export default class FacilitySearchBar extends Component {
             </div>
           </div>
         </div>
-        {filter && <FilterBar options={options} />}
+        {filter && (
+          <div className="filter-bar">
+            <div className="select-wrapper">
+              <div className="form-group range-date-boxes">
+                <DatePicker
+                  placeholderText="From created-at date"
+                  selected={createdAtMin}
+                  onChange={date => this.onDateSelect(date, "createdAtMin")}
+                />
+                <DatePicker
+                  placeholderText="To created-at date"
+                  selected={createdAtMax}
+                  onChange={date => this.onDateSelect(date, "createdAtMax")}
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </AutoForm>
     );
   }
@@ -230,7 +276,7 @@ const schema = new SimpleSchema({
     optional: true,
     label: "Filter by assignee"
   },
-    facilityName: {
+  facilityName: {
     type: String,
     optional: true,
     label: "Search by facility name"

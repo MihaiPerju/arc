@@ -9,7 +9,7 @@ import Business from '/imports/api/business';
 Meteor.methods({
     'client.create'(data) {
         Security.isAdminOrTech(this.userId);
-        
+        data.createdAt = new Date();
         return Clients.insert(data);
     },
 

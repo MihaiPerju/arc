@@ -27,5 +27,9 @@ export default new SimpleSchema({
     status: {
         type: Boolean,
         defaultValue: true
+    },
+    createdAt: {
+        type: Date,
+        defaultValue: new Date
     }
 });

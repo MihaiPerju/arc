@@ -129,8 +129,29 @@
   .form-group {
     position: relative;
     margin-bottom: 15px;
-    .react-datepicker-wrapper, .react-datepicker__input-container {
+    .react-datepicker-wrapper {
+      width: 49%;
+      float: left;
+    }
+    .react-datepicker__input-container {
       width: 100%;
+    }
+    &.range-date-boxes {
+      height: 40px;
+    }
+    &.range-date-boxes div:last-of-type > .react-datepicker-wrapper {
+      margin-left: 30px;
+    }
+  }
+  .range-boxes{
+    height: 40px;
+    div {
+      width: 49%;
+      float: left;
+      margin-bottom: 15px;
+      &:first-of-type {
+        margin-right: 30px;
+      }
     }
   }
 }
