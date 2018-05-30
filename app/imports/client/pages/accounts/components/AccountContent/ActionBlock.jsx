@@ -45,16 +45,9 @@ export default class ActionBlock extends Component {
                 .map((actionPerformed, key) => (
                   <div className="action-item" key={key}>
                     <div className="action-info">
-                      <div className="avatar">
-                        <img
-                          className="md-avatar img-circle"
-                          src="/assets/img/user.svg"
-                          alt=""
-                        />
-                      </div>
                       <div className="info">
                         <div className="name">
-                          {actionPerformed.user.profile.firstName +
+                          {actionPerformed.user && actionPerformed.user.profile.firstName +
                             " " +
                             actionPerformed.user.profile.lastName}
                         </div>

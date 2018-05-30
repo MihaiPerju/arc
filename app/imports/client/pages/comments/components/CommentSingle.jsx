@@ -1,7 +1,6 @@
 import React from 'react';
 import autoBind from 'react-autobind';
 import moment from 'moment';
-import {getImagePath} from "../../../../api/utils";
 
 export default class CommentSingle extends React.Component {
     constructor() {
@@ -17,9 +16,6 @@ export default class CommentSingle extends React.Component {
         return (
                 <div className="comment-item">
                     <div className="comment__wrapper">
-                        <img className="md-avatar img-circle"
-                             src={author && author.avatar ? getImagePath(author.avatar.path) : '/assets/img/user.svg'}
-                             alt=""/>
                         <div className="name">
                             {author && author.profile.firstName + ' ' + author.profile.lastName}
                         </div>
