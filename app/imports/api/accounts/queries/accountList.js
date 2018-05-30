@@ -65,7 +65,7 @@ export default Accounts.createNamedQuery('accountList', {
         createdAt: 1,
         status: 1,
         type: 1,
-        $options: { createdAt: -1 }
+        $options: {sort: { createdAt: -1 }}
     },
     metaData: 1,
     escalateReason: 1,

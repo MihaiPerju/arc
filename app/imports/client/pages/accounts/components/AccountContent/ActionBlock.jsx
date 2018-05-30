@@ -69,7 +69,7 @@ export default class ActionBlock extends Component {
                   <div className="action-time">
                     {moment(
                       actionPerformed && actionPerformed.createdAt
-                    ).format("hh:mm a")}
+                    ).format("MMMM Do YYYY, hh:mm a")}
                   </div>
                 </div>
               ))}

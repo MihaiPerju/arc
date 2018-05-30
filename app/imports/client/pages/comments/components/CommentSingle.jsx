@@ -32,7 +32,7 @@ export default class CommentSingle extends React.Component {
           <div className="message text-light-grey">{comment.content}</div>
         </div>
         <div className="time">
-          {comment && moment(comment.createdAt).format("hh:mm a")}
+          {comment && moment(comment.createdAt).format("MMMM Do YYYY, hh:mm a")}
         </div>
       </div>
     );
