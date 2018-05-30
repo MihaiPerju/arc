@@ -57,7 +57,7 @@ export default new SimpleSchema({
         type: Array,
         optional: true,
         autoValue: function() {
-            const arrayLen = this.value ? this.value.length : 0;
+            let arrayLen = this.value ? this.value.length : 0;
             for(let i = 0; i < arrayLen; i++) {
                 let index = i;
                 const objectValues = Object.values(this.value[i]);
@@ -70,8 +70,9 @@ export default new SimpleSchema({
                         break;
                     }
                 }
-                if(isNull && index) {
+                if(isNull && index != null) {
                     this.value.splice(index, 1);
+                    i--; arrayLen--;
                 }
             }
         }
@@ -132,6 +133,10 @@ export default new SimpleSchema({
     },
     tickleDate: {
         type: Date,
+        optional: true
+    },
+    tickleUserId: {
+        type: String,
         optional: true
     },
     escalateReason: {

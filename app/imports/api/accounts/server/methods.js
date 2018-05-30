@@ -14,7 +14,6 @@ import Business from "/imports/api/business";
 import Files from "/imports/api/files/collection";
 import Backup from "/imports/api/backup/collection";
 import AccountActions from "/imports/api/accountActions/collection";
-import { Substates } from "../enums/substates";
 import Actions from "../../actions/collection";
 
 Meteor.methods({
@@ -24,7 +23,7 @@ Meteor.methods({
   },
 
   "account.assignUser"({ _id, assigneeId }) {
-      AccountSecurity.hasRightsOnAccount(this.userId, _id);
+    AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     Accounts.update(
       { _id },
@@ -40,9 +39,9 @@ Meteor.methods({
   },
   "account.assignUser.bulk"({ accountIds, assigneeId }) {
     for (let accountId of accountIds) {
-        AccountSecurity.hasRightsOnAccount(this.userId, accountId);
+      AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-        Accounts.update(
+      Accounts.update(
         { _id: accountId },
         {
           $set: {
@@ -187,12 +186,13 @@ Meteor.methods({
     return result;
   },
 
-  "account.tickle"({ tickleDate, _id }) {
-      Accounts.update(
+  "account.tickle"({ tickleDate, _id, tickleUserId }) {
+    Accounts.update(
       { _id },
       {
         $set: {
-          tickleDate
+          tickleDate,
+          tickleUserId
         }
       }
     );
@@ -208,7 +208,7 @@ Meteor.methods({
 
   "accounts.getSample"(filters) {
     const AccountsRaw = Accounts.rawCollection();
-      AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
     return AccountsRaw.aggregateSync([
       { $match: filters },

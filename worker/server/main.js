@@ -7,12 +7,13 @@ import { Random } from "meteor/random";
 
 Meteor.startup(() => {
   workerId = Random.id();
-  // code to run on server at startup
+  // Checking folder for reports and letters
   const path = os.tmpDir() + FoldersEnum.APP_FOLDER;
   if (!fs.existsSync(path)) {
     // Do something
     fs.mkdirSync(path);
     fs.mkdirSync(path + FoldersEnum.REPORTS_FOLDER);
+    fs.mkdirSync(path + FoldersEnum.ACCOUNTS_FOLDER);
   }
 });
 

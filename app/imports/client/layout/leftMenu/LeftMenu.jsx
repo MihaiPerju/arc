@@ -60,7 +60,10 @@ class LeftMenu extends Component {
     accountListQuery
       .clone({
         filters: {
-          tickleDate: { $lt: new Date(moment(startOfDay).format()) }
+          tickleDate: { 
+            $lt: new Date(moment(startOfDay).format()) 
+          },
+          tickleUserId: Meteor.userId()
         }
       })
       .getCount((err, count) => {

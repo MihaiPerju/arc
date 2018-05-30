@@ -4,6 +4,7 @@ import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import WorkQueueService from "../../services/WorkQueueService";
 import workQueueQuery from "../../../../../api/tags/queries/listTags";
 import Notifier from "../../../../lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class AccountAssign extends React.Component {
     constructor() {
@@ -11,7 +12,8 @@ export default class AccountAssign extends React.Component {
         this.state = {
             assignToUser: true,
             assignToWorkQueue: false,
-            workQueueOptions: []
+            workQueueOptions: [],
+            loadingWorkQueues: true
         }
     }
 
@@ -38,7 +40,10 @@ export default class AccountAssign extends React.Component {
         workQueueQuery.clone().fetch((err, res) => {
             if (!err) {
                 const workQueueOptions = WorkQueueService.createOptions(res);
-                this.setState({workQueueOptions});
+                this.setState({
+                    workQueueOptions,
+                    loadingWorkQueues: false
+                });
             }
         })
     }
@@ -74,8 +79,12 @@ export default class AccountAssign extends React.Component {
     };
 
     render() {
-        const {workQueueOptions, assignToUser} = this.state;
+        const {workQueueOptions, assignToUser, loadingWorkQueues} = this.state;
         const {model, userOptions} = this.props;
+
+        if (loadingWorkQueues) {
+            return <Loading />
+        }
 
         return (
             <div className="meta-dialog">

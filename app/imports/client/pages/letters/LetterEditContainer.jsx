@@ -5,12 +5,14 @@ import GenerateLetterTemplateInputs from './components/GenerateLetterTemplateInp
 import accountAttachmentsQuery from '/imports/api/accounts/queries/accountAttachmentsList';
 import AccountViewService from '/imports/client/pages/accounts/services/AccountViewService';
 import {variablesEnum} from '/imports/api/letterTemplates/enums/variablesEnum';
+import Loading from '/imports/client/lib/ui/Loading';
 
 class LetterEditContainer extends React.Component {
     constructor() {
         super();
 
         this.state = {
+            loading: true,
             letterTemplates: [],
             selectedTemplate: {},
             pdfAttachments: [],
@@ -43,7 +45,8 @@ class LetterEditContainer extends React.Component {
         accountAttachmentsQuery.clone({_id: this.props.taskId}).fetchOne((err, data) => {
             if (!err) {
                 this.setState({
-                    pdfAttachments: data.attachments
+                    pdfAttachments: data.attachments,
+                    loading: false
                 });
             } else {
                 Notifier.error(err.reason);
@@ -105,7 +108,7 @@ class LetterEditContainer extends React.Component {
     render() {
         const {account, selectedTemplate, reset, selectedLetter} = this.props;
         const {keywords, body, _id: letterId} = selectedTemplate;
-        const {letterTemplates, pdfAttachments, selectedAttachments, keywordsValues} = this.state;
+        const {letterTemplates, pdfAttachments, selectedAttachments, attachmentIds, keywordsValues, loading} = this.state;
         const model = {letterTemplate: null};
         const options = this.getSelectOptions(letterTemplates);
         const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
@@ -113,8 +116,11 @@ class LetterEditContainer extends React.Component {
         const clonedAccount = _.clone(account);
         const {letterValues, attachmentIds} = selectedLetter;
         Object.assign(clonedAccount, letterValues);
-        Object.assign(clonedAccount, {attachments: attachmentIds[0]});
         
+        if (loading) {
+            return <Loading />
+        }
+
         return (
             <div>
                 <div className={JSON.stringify(selectedTemplate) !== "{}" && "letter-template"}>

@@ -197,6 +197,21 @@
       color: $extra-light-grey;
     }
   }
+  .input-datetime {
+    padding-bottom: 35px;
+
+    span {
+      padding-bottom: 15px;
+    }
+
+    > div, .react-datepicker-wrapper, .react-datepicker__input-container {
+      display: block;
+    }
+
+    .react-datepicker__input-container > input {
+      cursor: pointer;
+    }
+  }
   .check-block {
     display: flex;
     .check-group {
@@ -645,6 +660,7 @@
     }
     .row-block {
       .form-group {
+        padding-top: 5px;
         width: 70%;
         display: flex;
       }
@@ -779,7 +795,7 @@
       width: 100%;
       word-wrap: break-word;
       overflow: hidden;
-      padding: 17px 15px;
+      padding: 5px 15px 0;
       overflow-y: auto;
       max-height: 200px;
       &[placeholder]:empty:before {
@@ -788,7 +804,7 @@
     }
     .btn-post {
       flex-shrink: 0;
-      margin-top: 15px;
+      margin-top: 4px;
     }
   }
   .comment-list {

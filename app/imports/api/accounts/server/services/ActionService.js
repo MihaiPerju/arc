@@ -4,25 +4,34 @@ import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import GeneralEnums from "/imports/api/general/enums";
 import {
-  StatesSubstates,
-  findStateBySubstate
+  StatesSubstates
 } from "/imports/api/accounts/enums/states.js";
 import { Dispatcher, Events } from "/imports/api/events";
-import stateEnum from "../..//enums/states";
-import { Substates } from "../..//enums/substates";
+import stateEnum from "../../enums/states";
+import { Substates } from "../../enums/substates";
 import Accounts from "../../collection";
+import SubstatesCollection from "/imports/api/substates/collection";
 
 export default class ActionService {
   //Adding action to account
   static createAction(data) {
-    const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
-    const action = Actions.findOne({ _id: actionId });
+    const {
+      accountId,
+      actionId,
+      reasonCode: reasonId,
+      userId,
+      addedBy,
+    } = data;
+    const action = Actions.findOne({ _id: actionId.value });
     const { inputs } = action;
+    const createdAt =new Date()
+    const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const accountActionData = {
       userId,
-      actionId,
-      reasonCode: reason && reason.reason,
-      addedBy
+      actionId:actionId.value,
+      reasonCode: reasonId && reason,
+      addedBy,
+      createdAt
     };
     const customFields = {};
     _.map(inputs, input => {
@@ -32,8 +41,6 @@ export default class ActionService {
     if (!_.isEmpty(customFields)) {
       accountActionData.customFields = customFields;
     }
-
-    const reason = ReasonCodes.findOne({ _id: reasonId });
 
     const accountActionId = AccountActions.insert(accountActionData);
     Accounts.update(
@@ -94,14 +101,16 @@ export default class ActionService {
   }
 
   //Change account state if action has a state
-  static changeState(accountId, {state,substate}) {
-    if (substate && substate !== GeneralEnums.NA) {
+  static changeState(accountId, { state, substateId }) {
+    if (substateId && substateId !== GeneralEnums.NA) {
+      const substate = SubstatesCollection.findOne({ _id: substateId });
+      const { name } = substate || {};
       Accounts.update(
         { _id: accountId },
         {
           $set: {
             state,
-            substate
+            substate: name
           },
           $unset: {
             tickleDate: null,
