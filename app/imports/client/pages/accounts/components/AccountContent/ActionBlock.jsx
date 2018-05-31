@@ -54,7 +54,7 @@ export default class ActionBlock extends Component {
                       </div>
                       <div className="info">
                         <div className="name">
-                          {actionPerformed.user.profile.firstName +
+                          {actionPerformed.user && actionPerformed.user.profile.firstName +
                             " " +
                             actionPerformed.user.profile.lastName}
                         </div>
