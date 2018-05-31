@@ -151,5 +151,12 @@ export default new SimpleSchema({
         type: SimpleSchema.Integer,
         optional: true,
         defaultValue: 0
-    }
+    },
+    commentsLinkData: {
+        type: Array,
+        optional: true
+    },
+    'commentsLinkData.$': {
+        type: String
+    },
 })
