@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import Loading from "/imports/client/lib/ui/Loading";
 import autoBind from "react-autobind";
 import Notifier from "/imports/client/lib/Notifier";
 import {
   AutoForm,
   AutoField,
-  ErrorField
+  ErrorField,
+  SelectField
 } from "uniforms-semantic";
 import SimpleSchema from "simpl-schema";
 import CommentSingle from "./CommentSingle.jsx";
@@ -22,32 +22,27 @@ export default class CommentList extends Component {
   }
 
   onSubmit({ content }) {
-    const { accountId } = this.props;
+    const { account } = this.props;
     if (!content) {
       Notifier.error("Message has no content");
     } else {
-      Meteor.call("comment.create", content, accountId, err => {
-        if (!err) {
-          Notifier.success("Comment added!");
-          this.refs.comment.reset();
-        } else {
-          Notifier.error(err.reason);
+      Meteor.call(
+        "account.comment.add",
+        { content, accountId: account._id },
+        err => {
+          if (!err) {
+            Notifier.success("Comment added!");
+            this.refs.comment.reset();
+          } else {
+            Notifier.error(err.reason);
+          }
         }
-      });
+      );
     }
   }
 
   render() {
-    const { data, loading, error } = this.props;
-    const path = Meteor.user().avatar && "/assets/img/user.svg";
-
-    if (loading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
+    const { account, comments } = this.props;
 
     return (
       <div className="action-block">
@@ -68,8 +63,8 @@ export default class CommentList extends Component {
           </AutoForm>
         </div>
         <div className="comment-list">
-          {data &&
-            data.map((comment, index) => {
+          {comments
+            .map((comment, index) => {
               return <CommentSingle comment={comment} key={index} />;
             })}
         </div>

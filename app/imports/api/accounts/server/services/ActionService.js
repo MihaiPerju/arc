@@ -3,14 +3,13 @@ import Actions from "/imports/api/actions/collection";
 import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import GeneralEnums from "/imports/api/general/enums";
-import {
-  StatesSubstates
-} from "/imports/api/accounts/enums/states.js";
+import { StatesSubstates } from "/imports/api/accounts/enums/states.js";
 import { Dispatcher, Events } from "/imports/api/events";
 import stateEnum from "../../enums/states";
 import { Substates } from "../../enums/substates";
 import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
+import actionTypesEnum from "../../enums/actionTypesEnum";
 
 export default class ActionService {
   //Adding action to account
@@ -31,6 +30,7 @@ export default class ActionService {
       actionId:actionId.value,
       reasonCode: reasonId && reason,
       addedBy,
+      type: actionTypesEnum.USER_ACTION,
       createdAt
     };
     const customFields = {};
@@ -80,7 +80,8 @@ export default class ActionService {
       const accountActionId = AccountActions.insert({
         actionId,
         fileId,
-        systemAction: true
+        systemAction: true,
+        type: actionTypesEnum.SYSTEM_ACTION
       });
 
       Accounts.update(
