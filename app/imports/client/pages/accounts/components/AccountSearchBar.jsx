@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -20,8 +21,10 @@ export default class AccountSearchBar extends Component {
       selectAll: false,
       facilityOptions: [],
       clientOptions: [],
-      dischrgDate: null,
-      fbDate: null,
+      dischrgDateMin: null,
+      dischrgDateMax: null,
+      fbDateMin: null,
+      fbDateMax: null,
       substates: []
     };
   }
@@ -55,7 +58,7 @@ export default class AccountSearchBar extends Component {
           const label = `${substate.stateName}: ${substate.name}`;
           substates.push({
             label: label,
-            value: substate.name.replace(/ /g, "_")
+            value: substate.name
           });
         });
         this.setState({ substates });
@@ -88,8 +91,17 @@ export default class AccountSearchBar extends Component {
     if ("ptType" in params) {
       FlowRouter.setQueryParams({ ptType: params.ptType });
     }
-    if ("acctBal" in params) {
-      FlowRouter.setQueryParams({ acctBal: params.acctBal });
+    if ("acctBalMin" in params) {
+      FlowRouter.setQueryParams({ acctBalMin: params.acctBalMin });
+    }
+    if ("acctBalMax" in params) {
+      if (params.acctBalMax < params.acctBalMin) {
+        Notifier.error(
+          "Maximum value should be greater or equal to minimum value"
+        );
+      } else {
+        FlowRouter.setQueryParams({ acctBalMax: params.acctBalMax });
+      }
     }
     if ("finClass" in params) {
       FlowRouter.setQueryParams({ finClass: params.finClass });
@@ -127,12 +139,32 @@ export default class AccountSearchBar extends Component {
 
   onDateSelect = (selectedDate, field) => {
     const date = selectedDate ? new Date(selectedDate).toString() : "";
-    if (field === "dischrgDate") {
-      this.setState({ dischrgDate: selectedDate });
-      FlowRouter.setQueryParams({ dischrgDate: date });
-    } else if (field === "fbDate") {
-      this.setState({ fbDate: selectedDate });
-      FlowRouter.setQueryParams({ fbDate: date });
+    if (field === "dischrgDateMin") {
+      this.setState({ dischrgDateMin: selectedDate });
+      FlowRouter.setQueryParams({ dischrgDateMin: date });
+    } else if (field === "dischrgDateMax") {
+      const { dischrgDateMin } = this.state;
+      if (selectedDate < dischrgDateMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      } else {
+        FlowRouter.setQueryParams({ dischrgDateMax: date });
+      }
+      this.setState({ dischrgDateMax: selectedDate });
+    } else if (field === "fbDateMin") {
+      this.setState({ fbDateMin: selectedDate });
+      FlowRouter.setQueryParams({ fbDateMin: date });
+    } else if (field === "fbDateMax") {
+      const { fbDateMin } = this.state;
+      if (selectedDate < fbDateMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      } else {
+        FlowRouter.setQueryParams({ fbDateMax: date });
+      }
+      this.setState({ fbDateMax: selectedDate });
     }
   };
 
@@ -144,8 +176,10 @@ export default class AccountSearchBar extends Component {
       selectAll,
       facilityOptions,
       clientOptions,
-      dischrgDate,
-      fbDate,
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
       substates
     } = this.state;
     const {
@@ -252,24 +286,41 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
               <div className="form-group">
-                <AutoField
-                  labelHidden={true}
-                  name="acctBal"
-                  placeholder="Search by Account Balance"
+                <div className="range-boxes">
+                  <AutoField
+                    labelHidden={true}
+                    name="acctBalMin"
+                    placeholder="Minimum Account Balance"
+                  />
+                  <AutoField
+                    labelHidden={true}
+                    name="acctBalMax"
+                    placeholder="Maximum Account Balance"
+                  />
+                </div>
+              </div>
+              <div className="form-group range-date-boxes">
+                <DatePicker
+                  placeholderText="From Discharge Date"
+                  selected={dischrgDateMin}
+                  onChange={date => this.onDateSelect(date, "dischrgDateMin")}
+                />
+                <DatePicker
+                  placeholderText="To Discharge Date"
+                  selected={dischrgDateMax}
+                  onChange={date => this.onDateSelect(date, "dischrgDateMax")}
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group range-date-boxes">
                 <DatePicker
-                  placeholderText="Search by Discharge Date"
-                  selected={dischrgDate}
-                  onChange={date => this.onDateSelect(date, "dischrgDate")}
+                  placeholderText="From Last Bill Date"
+                  selected={fbDateMin}
+                  onChange={date => this.onDateSelect(date, "fbDateMin")}
                 />
-              </div>
-              <div className="form-group">
                 <DatePicker
-                  placeholderText="Search by Last Bill Date"
-                  selected={fbDate}
-                  onChange={date => this.onDateSelect(date, "fbDate")}
+                  placeholderText="To Last Bill Date"
+                  selected={fbDateMax}
+                  onChange={date => this.onDateSelect(date, "fbDateMax")}
                 />
               </div>
               <div className="form-group">
@@ -405,7 +456,12 @@ const schema = new SimpleSchema({
     optional: true,
     label: "Search by Patient Type"
   },
-  acctBal: {
+  acctBalMin: {
+    type: SimpleSchema.Integer,
+    optional: true,
+    label: "Search by Account Balance"
+  },
+  acctBalMax: {
     type: SimpleSchema.Integer,
     optional: true,
     label: "Search by Account Balance"

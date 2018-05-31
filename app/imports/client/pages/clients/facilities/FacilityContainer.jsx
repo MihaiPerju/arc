@@ -22,7 +22,8 @@ class FacilityContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      filter: false
     });
     this.query = query;
   }
@@ -97,6 +98,7 @@ class FacilityContainer extends Pager {
       currentFacility: null
     });
   };
+
   nextPage = inc => {
     const { perPage, total, page } = this.state;
     const nextPage = PagerService.setPage({ page, perPage, total }, inc);
@@ -109,7 +111,13 @@ class FacilityContainer extends Pager {
     // update the pager count
     const queryParams = PagerService.getParams();
     this.recount(queryParams);
-  }
+  };
+
+  decreaseList = () => {
+    this.setState({
+      filter: !this.state.filter
+    });
+  };
 
   render() {
     const { data, loading, error } = this.props;
@@ -140,6 +148,7 @@ class FacilityContainer extends Pager {
           <FacilitySearchBar
             btnGroup={facilitiesSelected.length}
             deleteAction={this.deleteAction}
+            decrease={this.decreaseList}
           />
           <FacilityList
             class={this.state.filter ? "task-list decreased" : "task-list"}

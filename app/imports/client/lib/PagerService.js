@@ -9,9 +9,10 @@ export default class PagerService {
     if (state || state === "") {
       this.getAccountFilters(params, state, filters);
       this.getProperAccounts(params, assign);
+    } else {
+      // common method for filtering
+      this.getFilters(params, filters);
     }
-    // common method for filtering
-    this.getFilters(params, filters);
     this.queryParams = params;
     return query.clone(params);
   }
@@ -28,12 +29,15 @@ export default class PagerService {
     const acctNum = FlowRouter.getQueryParam("acctNum");
     const facCode = FlowRouter.getQueryParam("facCode");
     const ptType = FlowRouter.getQueryParam("ptType");
-    const acctBal = FlowRouter.getQueryParam("acctBal");
+    const acctBalMin = FlowRouter.getQueryParam("acctBalMin");
+    const acctBalMax = FlowRouter.getQueryParam("acctBalMax");
     const finClass = FlowRouter.getQueryParam("finClass");
     const substate = FlowRouter.getQueryParam("substate");
+    const dischrgDateMin = FlowRouter.getQueryParam("dischrgDateMin");
+    const dischrgDateMax = FlowRouter.getQueryParam("dischrgDateMax");
+    const fbDateMin = FlowRouter.getQueryParam("fbDateMin");
+    const fbDateMax = FlowRouter.getQueryParam("fbDateMax");
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
-    const dischrgDate = FlowRouter.getQueryParam("dischrgDate");
-    const fbDate = FlowRouter.getQueryParam("fbDate");
     let state = FlowRouter.current().params.state;
 
     if (stateEnum.ACTIVE.toLowerCase() === state && acctNum) {
@@ -49,12 +53,15 @@ export default class PagerService {
         acctNum,
         facCode,
         ptType,
-        acctBal,
+        acctBalMin,
+        acctBalMax,
         finClass,
         substate,
-        activeInsCode,
-        dischrgDate,
-        fbDate
+        dischrgDateMin,
+        dischrgDateMax,
+        fbDateMin,
+        fbDateMax,
+        activeInsCode
       },
       page,
       perPage,
@@ -95,12 +102,15 @@ export default class PagerService {
       clientId,
       facCode,
       ptType,
-      acctBal,
+      acctBalMin,
+      acctBalMax,
       finClass,
       substate,
-      activeInsCode,
-      dischrgDate,
-      fbDate
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      activeInsCode
     }
   ) {
     if (state === "unassigned") {
@@ -148,8 +158,10 @@ export default class PagerService {
     if (ptType) {
       _.extend(params.filters, { ptType });
     }
-    if (acctBal) {
-      _.extend(params.filters, { acctBal: +acctBal });
+    if (acctBalMin && acctBalMax) {
+      _.extend(params.filters, {
+        acctBal: { $gte: +acctBalMin, $lte: +acctBalMax }
+      });
     }
     if (finClass) {
       _.extend(params.filters, { finClass });
@@ -157,32 +169,32 @@ export default class PagerService {
     if (substate) {
       _.extend(params.filters, { substate });
     }
-    if (activeInsCode) {
-      _.extend(params.filters, { activeInsCode });
-    }
-    if (dischrgDate) {
+    if (dischrgDateMin && dischrgDateMax) {
       _.extend(params.filters, {
         dischrgDate: {
-          $gte: new Date(moment(new Date(dischrgDate)).startOf("day")),
+          $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day")),
           $lt: new Date(
-            moment(new Date(dischrgDate))
+            moment(new Date(dischrgDateMax))
               .startOf("day")
               .add(1, "day")
           )
         }
       });
     }
-    if (fbDate) {
+    if (fbDateMin && fbDateMax) {
       _.extend(params.filters, {
         fbDate: {
-          $gte: new Date(moment(new Date(fbDate)).startOf("day")),
+          $gte: new Date(moment(new Date(fbDateMin)).startOf("day")),
           $lt: new Date(
-            moment(new Date(fbDate))
+            moment(new Date(fbDateMax))
               .startOf("day")
               .add(1, "day")
           )
         }
       });
+    }
+    if (activeInsCode) {
+      _.extend(params.filters, { activeInsCode });
     }
   }
 
@@ -198,12 +210,20 @@ export default class PagerService {
       sortState,
       sortSubstate,
       facilityName,
-      regionName;
+      regionName,
+      createdAtMin,
+      createdAtMax;
+
+    _.extend(params, {
+      filters: {}
+    });
 
     let currentPath = FlowRouter.current().route.path;
 
     if (currentPath.indexOf("client/list") > -1) {
       clientName = FlowRouter.getQueryParam("clientName");
+      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
+      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
     }
 
     if (currentPath.indexOf("user/list") > -1) {
@@ -238,82 +258,84 @@ export default class PagerService {
 
     if (currentPath.indexOf("/client/:_id/manage-facilities") > -1) {
       facilityName = FlowRouter.getQueryParam("facilityName");
-      _.extend(params, {
-        filters: { clientId: FlowRouter.current().params._id }
+      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
+      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
+      _.extend(params.filters, {
+        clientId: FlowRouter.current().params._id
       });
     }
 
     if (currentPath.indexOf("/client/:id/region/list") > -1) {
       regionName = FlowRouter.getQueryParam("regionName");
-      _.extend(params, {
-        filters: { clientId: FlowRouter.current().params.id }
+      _.extend(params.filters, {
+        clientId: FlowRouter.current().params.id
       });
     }
 
     // client search
     if (clientName) {
-      _.extend(params, {
-        filters: { clientName: { $regex: clientName, $options: "i" } }
+      _.extend(params.filters, {
+        clientName: { $regex: clientName, $options: "i" }
       });
     }
 
     // user search
     if (email) {
-      _.extend(params, {
-        filters: { "emails.address": { $regex: email, $options: "i" } }
+      _.extend(params.filters, {
+        "emails.address": { $regex: email, $options: "i" }
       });
     }
 
     // action search
     if (title) {
-      _.extend(params, {
-        filters: { title: { $regex: title, $options: "i" } }
+      _.extend(params.filters, {
+        title: { $regex: title, $options: "i" }
       });
     }
 
     // reports search
     if (name) {
-      _.extend(params, {
-        filters: { name: { $regex: name, $options: "i" } }
+      _.extend(params.filters, {
+        name: { $regex: name, $options: "i" }
       });
     }
 
     // letter-templates search
     if (letterTemplateName) {
-      _.extend(params, {
-        filters: { name: { $regex: letterTemplateName, $options: "i" } }
+      _.extend(params.filters, {
+        name: { $regex: letterTemplateName, $options: "i" }
       });
     }
 
     // code search
     if (code) {
-      _.extend(params, {
-        filters: { code: { $regex: code, $options: "i" } }
+      _.extend(params.filters, {
+        code: { $regex: code, $options: "i" }
       });
     }
 
     // substate search
     if (stateName) {
-      _.extend(params, {
-        filters: { stateName: { $regex: stateName, $options: "i" } }
+      _.extend(params.filters, {
+        stateName: { $regex: stateName, $options: "i" }
       });
     }
 
     // tag search
     if (tagName) {
-      _.extend(params, {
-        filters: { name: { $regex: tagName, $options: "i" } }
+      _.extend(params.filters, {
+        name: { $regex: tagName, $options: "i" }
       });
     }
 
     // substates sorts
     if (sortState) {
-      _.extend(params, {
+      _.extend(params.filters, {
         options: { sort: { stateName: sortState === "ASC" ? 1 : -1 } }
       });
     }
     if (sortSubstate) {
-      _.extend(params, {
+      _.extend(params.filters, {
         options: { sort: { name: sortSubstate === "ASC" ? 1 : -1 } }
       });
     }
@@ -328,6 +350,16 @@ export default class PagerService {
     // region search
     if (regionName) {
       _.extend(params.filters, { name: { $regex: regionName, $options: "i" } });
+    }
+
+    // created at search
+    if (createdAtMin && createdAtMax) {
+      _.extend(params.filters, {
+        createdAt: {
+          $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
+          $lt: new Date(moment(new Date(createdAtMax)).startOf("day"))
+        }
+      });
     }
   }
 
