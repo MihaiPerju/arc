@@ -20,7 +20,7 @@ Meteor.methods({
     Letters.remove(letterId);
   },
 
-  "letter.update"(_id, { body, letterTemplateId, attachments, letterValues }) {
+  "letter.update"(_id, { body, letterTemplateId, attachmentIds, letterValues }) {
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     const { status } = Letters.findOne({ _id });
     if (status !== Statuses.NEW) {
@@ -28,13 +28,14 @@ Meteor.methods({
         reason: "Sorry, the letter is already received"
       });
     }
+
     Letters.update(
       { _id },
       {
         $set: {
           body,
           letterTemplateId,
-          attachmentIds: attachments,
+          attachmentIds,
           letterValues
         }
       }
