@@ -330,12 +330,12 @@ export default class PagerService {
 
     // substates sorts
     if (sortState) {
-      _.extend(params.filters, {
+      _.extend(params, {
         options: { sort: { stateName: sortState === "ASC" ? 1 : -1 } }
       });
     }
     if (sortSubstate) {
-      _.extend(params.filters, {
+      _.extend(params, {
         options: { sort: { name: sortSubstate === "ASC" ? 1 : -1 } }
       });
     }
