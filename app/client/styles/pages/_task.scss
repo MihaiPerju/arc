@@ -734,9 +734,8 @@
         content: '\f0e0';
       }
     }
+
     &.file-list {
-      .info {
-      }
 
       .title {
         padding-top: 13px;
@@ -753,9 +752,8 @@
     background: rgba($color-white, 0.6);
     padding: 15px 15px 15px 30px;
     margin-top: 2px;
-    display: flex;
-    justify-content: space-between;
     border-radius: 3px;
+    
     .btn-group {
       button {
         &:first-of-type, &:nth-of-type(2) {
@@ -769,9 +767,7 @@
         }
       }
     }
-    .info {
-      display: flex;
-    }
+
     .title {
       position: relative;
       width: 280px;

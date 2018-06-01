@@ -117,8 +117,8 @@ export default class ActionBlock extends Component {
                     <ReactHover.Trigger type="trigger">
                       <div style={{ listStyleType: "none" }}>
                         {pdf && (
-                          <div className="block-item">
-                            <div className="info">
+                          <div className="block-item flex--helper flex-justify--space-between">
+                            <div className="info flex--helper">
                               <div className="title truncate">
                                 {this.getPdfName(pdf)}
                               </div>
