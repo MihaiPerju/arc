@@ -115,7 +115,6 @@ export default class ActionBlock extends Component {
                 return (
                   <ReactHover options={options} key={index}>
                     <ReactHover.Trigger type="trigger">
-                      <div style={{ listStyleType: "none" }}>
                         {pdf && (
                           <div className="block-item flex--helper flex-justify--space-between">
                             <div className="info flex--helper">
@@ -139,7 +138,6 @@ export default class ActionBlock extends Component {
                             </div>
                           </div>
                         )}
-                      </div>
                     </ReactHover.Trigger>
                     <ReactHover.Hover type="hover">
                       {this.getPdfName(pdf)}
