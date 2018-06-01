@@ -162,6 +162,7 @@ export default class EditClient extends React.Component {
                         placeholder="First Name"
                         name="firstName"
                       />
+                      <ErrorField name="firstName" />
                     </div>
                     <div className="form-wrapper">
                       <TextField
@@ -169,6 +170,7 @@ export default class EditClient extends React.Component {
                         placeholder="Last Name"
                         name="lastName"
                       />
+                      <ErrorField name="lastName" />
                     </div>
                     <div className="select-group b-b--0 p-b--0">
                       <div className="form-wrapper m-b--0">
@@ -177,6 +179,7 @@ export default class EditClient extends React.Component {
                           placeholder="Contact type"
                           name="contactType"
                         />
+                        <ErrorField name="contactType" />
                       </div>
                     </div>
                     <div className="form-wrapper">
@@ -185,6 +188,7 @@ export default class EditClient extends React.Component {
                         placeholder="Phone"
                         name="phone"
                       />
+                      <ErrorField name="phone" />
                     </div>
                     <div className="form-wrapper">
                       <TextField
@@ -192,6 +196,7 @@ export default class EditClient extends React.Component {
                         placeholder="Email"
                         name="email"
                       />
+                      <ErrorField name="email" />
                     </div>
                     <div className="form-wrapper">
                       <TextField
@@ -199,6 +204,7 @@ export default class EditClient extends React.Component {
                         placeholder="Notes"
                         name="notes"
                       />
+                      <ErrorField name="notes" />
                     </div>
                   </NestField>
                 </ListItemField>
@@ -210,12 +216,3 @@ export default class EditClient extends React.Component {
     );
   }
 }
-//For editing a client
-// <form action="">
-//     <div className="create-form__wrapper">
-//         {
-//             newContact && <NewContact close={this.closeNewContact}/>
-//         }
-//         <div className="add-filter text-center" onClick={this.newContact}>+ Add contact</div>
-//     </div>
-// </form>
