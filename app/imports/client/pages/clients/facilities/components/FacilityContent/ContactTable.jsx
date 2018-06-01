@@ -22,6 +22,10 @@ export default class ContactTable extends Component {
             {
                 header: 'Contact Type',
                 contactProp: 'contactType'
+            },
+            {
+                header: 'Notes',
+                contactProp: 'notes'
             }
         ];
         const {contacts} = this.props;

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
-import CommentSingle from "./CommentSingle.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import {
   AutoForm,
@@ -9,7 +8,7 @@ import {
   SelectField
 } from "uniforms-semantic";
 import SimpleSchema from "simpl-schema";
-import { getImagePath } from "../../../../api/utils";
+import CommentSingle from "./CommentSingle.jsx";
 
 export default class CommentList extends Component {
   constructor() {
@@ -44,7 +43,7 @@ export default class CommentList extends Component {
 
   render() {
     const { account, comments } = this.props;
-    const path = Meteor.user().avatar && "/assets/img/user.svg";
+
     return (
       <div className="action-block">
         <div className="header__block">
@@ -53,14 +52,8 @@ export default class CommentList extends Component {
         <div className="comment-block">
           <AutoForm ref="comment" schema={schema} onSubmit={this.onSubmit}>
             <div className="form-group">
-              <img
-                className="md-avatar img-circle"
-                src={path ? getImagePath(path) : "/assets/img/user.svg"}
-                alt=""
-              />
               <AutoField
                 className="text-area"
-                style={{ width: "80%" }}
                 placeholder="Leave your comment"
                 name="content"
               />
