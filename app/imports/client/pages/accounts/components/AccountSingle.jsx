@@ -30,6 +30,7 @@ export default class AccountSingle extends Component {
             'bg--yellow': active
         });
 
+        console.log('account', account.acctBal, account.tickleDate, account.createdAt, account.dischrgDate, account.fbDate, account.admitDate)
         return (
             <div className={classes}
                  onClick={this.onSelectAccount.bind(this)}

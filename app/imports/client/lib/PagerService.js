@@ -3,11 +3,11 @@ import stateEnum from "/imports/api/accounts/enums/states";
 
 export default class PagerService {
   queryParams;
-  static setQuery(query, { page, perPage, state, assign, filters }) {
+  static setQuery(query, { page, perPage, state, assign, filters, options }) {
     let params = this.getPagerOptions(page, perPage);
 
     if (state || state === "") {
-      this.getAccountFilters(params, state, filters);
+      this.getAccountFilters(params, state, filters, options);
       this.getProperAccounts(params, assign);
     } else {
       // common method for filtering
@@ -38,6 +38,13 @@ export default class PagerService {
     const fbDateMin = FlowRouter.getQueryParam("fbDateMin");
     const fbDateMax = FlowRouter.getQueryParam("fbDateMax");
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
+    // sorting query params
+    const sortAcctBal = FlowRouter.getQueryParam("sortAcctBal");
+    const sortTickleDate = FlowRouter.getQueryParam("sortTickleDate");
+    const sortCreatedAt = FlowRouter.getQueryParam("sortCreatedAt");
+    const sortDischrgDate = FlowRouter.getQueryParam("sortDischrgDate");
+    const sortFbDate = FlowRouter.getQueryParam("sortFbDate");
+    const sortAdmitDate = FlowRouter.getQueryParam("sortAdmitDate");
     let state = FlowRouter.current().params.state;
 
     if (stateEnum.ACTIVE.toLowerCase() === state && acctNum) {
@@ -62,6 +69,14 @@ export default class PagerService {
         fbDateMin,
         fbDateMax,
         activeInsCode
+      },
+      options: {
+        sortAcctBal,
+        sortTickleDate,
+        sortCreatedAt,
+        sortDischrgDate,
+        sortFbDate,
+        sortAdmitDate
       },
       page,
       perPage,
@@ -111,6 +126,14 @@ export default class PagerService {
       fbDateMin,
       fbDateMax,
       activeInsCode
+    },
+    {
+      sortAcctBal,
+      sortTickleDate,
+      sortCreatedAt,
+      sortDischrgDate,
+      sortFbDate,
+      sortAdmitDate
     }
   ) {
     if (state === "unassigned") {
@@ -195,6 +218,46 @@ export default class PagerService {
     }
     if (activeInsCode) {
       _.extend(params.filters, { activeInsCode });
+    }
+
+    _.extend(params, {
+      options: { sort: {} }
+    });
+
+    if (sortCreatedAt) {
+      _.extend(params.options.sort, {
+        createdAt: sortCreatedAt === "ASC" ? 1 : -1
+      });
+    }
+
+    if (sortDischrgDate) {
+      _.extend(params.options.sort, {
+        dischrgDate: sortDischrgDate === "ASC" ? 1 : -1
+      });
+    }
+
+    if (sortFbDate) {
+      _.extend(params.options.sort, {
+        fbDate: sortFbDate === "ASC" ? 1 : -1
+      });
+    }
+
+    if (sortAcctBal) {
+      _.extend(params.options.sort, {
+        acctBal: sortAcctBal === "ASC" ? 1 : -1
+      });
+    }
+
+    if (sortAdmitDate) {
+      _.extend(params.options.sort, {
+        admitDate: sortAdmitDate === "ASC" ? 1 : -1
+      });
+    }
+
+    if (sortTickleDate) {
+      _.extend(params.options.sort, {
+        tickleDate: sortTickleDate === "ASC" ? 1 : -1
+      });
     }
   }
 
