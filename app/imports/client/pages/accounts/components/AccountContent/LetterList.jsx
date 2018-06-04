@@ -171,12 +171,14 @@ class LetterList extends Component {
                       >
                         <i className="icon-download" />
                       </button>
-                      <button
-                        className="btn-text--red"
-                        onClick={() => this.handleDelete(letter._id)}
-                      >
-                        <i className="icon-trash-o" />
-                      </button>
+                      {letter.status === Statuses.NEW && (
+                        <button
+                          className="btn-text--red"
+                          onClick={() => this.handleDelete(letter._id)}
+                        >
+                          <i className="icon-trash-o" />
+                        </button>
+                      )}
                       <LetterPreview id={letter._id} body={letter.body} />
                     </div>
                   </div>
