@@ -50,6 +50,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-tags:before {
+  content: "\f02c";
+}
 .icon-pencil:before {
   content: "\e905";
 }
