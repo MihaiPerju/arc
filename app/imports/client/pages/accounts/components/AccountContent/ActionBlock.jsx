@@ -40,21 +40,13 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed
-                .sort((a, b) => a.createdAt < b.createdAt)
-                .map((actionPerformed, key) => (
-                  <div className="action-item" key={key}>
-                    <div className="action-info">
-                      <div className="avatar">
-                        <img
-                          className="md-avatar img-circle"
-                          src="/assets/img/user.svg"
-                          alt=""
-                        />
-                      </div>
-                      <div className="info">
-                        <div className="name">
-                          {actionPerformed.user && actionPerformed.user.profile.firstName +
+              actionsPerformed.map((actionPerformed, key) => (
+                <div className="action-item" key={key}>
+                  <div className="action-info">
+                    <div className="info">
+                      <div className="name">
+                        {actionPerformed.user &&
+                          actionPerformed.user.profile.firstName +
                             " " +
                             actionPerformed.user.profile.lastName}
                       </div>
