@@ -64,6 +64,10 @@ export default class ActionBlock extends Component {
                       actionPerformed && actionPerformed.createdAt
                     ).format("MMMM Do YYYY, hh:mm a")}
                   </div>
+                  <div className="flag-item">
+                    <input type="checkbox"id={key} className="hidden"/>
+                    <label htmlFor={key}/>
+                  </div>
                 </div>
               ))}
           </div>

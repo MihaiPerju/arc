@@ -50,6 +50,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-flag:before {
+  content: "\f024";
+}
 .icon-pencil:before {
   content: "\e905";
 }
