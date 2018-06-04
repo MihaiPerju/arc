@@ -171,7 +171,6 @@ class LetterList extends Component {
                       >
                         <i className="icon-download" />
                       </button>
-
                       {letter.status === Statuses.NEW && (
                         <button
                           className="btn-text--red"
