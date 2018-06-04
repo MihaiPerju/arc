@@ -69,7 +69,7 @@ export default class LetterTemplatePreview extends React.Component {
                 reset={reset}
                 accountId={accountId}
                 letterBody={letterBody}
-                attachments={attachments}
+                selectedAttachments={selectedAttachments}
                 selectedLetterId={selectedLetter._id}
                 keywordsValues={keywordsValues}
                 hasKeywords={!!keywords.length}

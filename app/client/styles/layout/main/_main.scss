@@ -151,6 +151,40 @@
   }
 }
 
+.sort-bar {
+  background: $color-white;
+  padding: 15px;
+  border-bottom: 1px #e1e1e1 solid;
+  height: 70px;
+  color: #838383;
+  .test {
+    width: 16%;
+    float: left;
+    text-align: center;
+    font-size: 1.6rem;
+    .sort-icons span {
+      margin: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .sortAcctBal-active-asc,
+    .sortAcctBal-active-desc,
+    .sortTickleDate-active-asc,
+    .sortTickleDate-active-desc,
+    .sortCreatedAt-active-asc,
+    .sortCreatedAt-active-desc,
+    .sortDischrgDate-active-asc,
+    .sortDischrgDate-active-desc,
+    .sortFbDate-active-asc,
+    .sortFbDate-active-desc,
+    .sortAdmitDate-active-asc,
+    .sortAdmitDate-active-desc {
+      font-size: 19px;
+      color: #3cb878;
+    }
+  }
+}
+
 // Search Bar
 .search-bar {
   background: $color-white;
@@ -171,6 +205,9 @@
     transition: width $transition300;
     &.full__width {
       width: calc(100% - 91px);
+    }
+    &.sort__width {
+      width: calc(100% - 140px);
     }
   }
   .select-type {

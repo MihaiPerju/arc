@@ -47,7 +47,7 @@ export default class ActionEdit extends React.Component {
 
   updateProps(props) {
     const { action } = props;
-    if(action) {
+    if (action) {
       this.setState({
         checked: !!action.substateId
       });
@@ -79,6 +79,10 @@ export default class ActionEdit extends React.Component {
     setEdit();
   };
 
+  handleBack = () => {
+    FlowRouter.go("/substate/list");
+  };
+
   render() {
     const { action, substates } = this.props;
     const { checked } = this.state;
@@ -89,9 +93,16 @@ export default class ActionEdit extends React.Component {
       { value: "string", label: "text" }
     ];
 
+    const { id } = FlowRouter.current().params;
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
+          {id && (
+            <button onClick={this.handleBack} className="btn-cancel">
+              Back
+            </button>
+          )}
           <div className="btn-group">
             <button onClick={this.onSetEdit} className="btn-cancel">
               Cancel
@@ -102,94 +113,96 @@ export default class ActionEdit extends React.Component {
           </div>
         </div>
 
-        {action && <div className="create-form__wrapper">
-          <div className="action-block">
-            <div className="header__block">
-              <div className="title-block text-uppercase">
-                Action information
-              </div>
-            </div>
-
-            <AutoForm
-              model={action}
-              schema={ActionSchema}
-              onSubmit={this.onSubmit.bind(this)}
-              ref="form"
-            >
-              {this.state.error && (
-                <div className="error">{this.state.error}</div>
-              )}
-              <div className="form-wrapper">
-                <AutoField
-                  labelHidden={true}
-                  placeholder="Title"
-                  name="title"
-                />
-                <ErrorField name="title" />
-              </div>
-
-              <div className="form-wrapper">
-                <LongTextField
-                  labelHidden={true}
-                  placeholder="Description"
-                  name="description"
-                />
-                <ErrorField name="description" />
-              </div>
-
-              <div className="check-group">
-                <input defaultChecked={checked} type="checkbox" />
-                <label onClick={this.handleClick}>
-                  {" "}
-                  Changes the substate of the Account?
-                </label>
-              </div>
-
-              {checked && (
-                <div className="select-group">
-                  <div className="form-wrapper">
-                    <SelectField
-                      placeholder="Substate"
-                      labelHidden={true}
-                      options={substatesOptions}
-                      name="substateId"
-                    />
-                    <ErrorField name="substateId" />
-                  </div>
+        {action && (
+          <div className="create-form__wrapper">
+            <div className="action-block">
+              <div className="header__block">
+                <div className="title-block text-uppercase">
+                  Action information
                 </div>
-              )}
+              </div>
 
-              <ListField name="inputs" showListField={() => {}}>
-                <ListItemField name="$">
-                  <NestField className="upload-item text-center">
+              <AutoForm
+                model={action}
+                schema={ActionSchema}
+                onSubmit={this.onSubmit.bind(this)}
+                ref="form"
+              >
+                {this.state.error && (
+                  <div className="error">{this.state.error}</div>
+                )}
+                <div className="form-wrapper">
+                  <AutoField
+                    labelHidden={true}
+                    placeholder="Title"
+                    name="title"
+                  />
+                  <ErrorField name="title" />
+                </div>
+
+                <div className="form-wrapper">
+                  <LongTextField
+                    labelHidden={true}
+                    placeholder="Description"
+                    name="description"
+                  />
+                  <ErrorField name="description" />
+                </div>
+
+                <div className="check-group">
+                  <input defaultChecked={checked} type="checkbox" />
+                  <label onClick={this.handleClick}>
+                    {" "}
+                    Changes the substate of the Account?
+                  </label>
+                </div>
+
+                {checked && (
+                  <div className="select-group">
                     <div className="form-wrapper">
                       <SelectField
-                        placeholder="Select type"
+                        placeholder="Substate"
                         labelHidden={true}
-                        options={inputTypes}
-                        name="type"
+                        options={substatesOptions}
+                        name="substateId"
                       />
-                      <ErrorField name="type" />
+                      <ErrorField name="substateId" />
                     </div>
-                    <div className="form-wrapper">
-                      <AutoField
-                        labelHidden={true}
-                        name="label"
-                        placeholder="label"
-                      />
-                      <ErrorField name="label" />
-                    </div>
-                  </NestField>
-                </ListItemField>
-              </ListField>
-            </AutoForm>
-          </div>
+                  </div>
+                )}
 
-          <ReasonCodesBlock action={action} />
-          {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
-            <ReasonCodesBlock isPrivate action={action} />
-          )}
-        </div>}
+                <ListField name="inputs" showListField={() => {}}>
+                  <ListItemField name="$">
+                    <NestField className="upload-item text-center">
+                      <div className="form-wrapper">
+                        <SelectField
+                          placeholder="Select type"
+                          labelHidden={true}
+                          options={inputTypes}
+                          name="type"
+                        />
+                        <ErrorField name="type" />
+                      </div>
+                      <div className="form-wrapper">
+                        <AutoField
+                          labelHidden={true}
+                          name="label"
+                          placeholder="label"
+                        />
+                        <ErrorField name="label" />
+                      </div>
+                    </NestField>
+                  </ListItemField>
+                </ListField>
+              </AutoForm>
+            </div>
+
+            <ReasonCodesBlock action={action} />
+            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+              <ReasonCodesBlock isPrivate action={action} />
+            )}
+          </div>
+        )}
       </div>
     );
   }
