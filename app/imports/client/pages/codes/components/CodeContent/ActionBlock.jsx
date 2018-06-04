@@ -32,10 +32,6 @@ export default class ActionBlock extends Component {
                     <div className="action-list">
                         <div className="action-item">
                             <div className="action-info">
-                                <div className="avatar">
-                                    <img className="md-avatar img-circle" src="/assets/img/user.svg"
-                                         alt=""/>
-                                </div>
                                 <div className="info">
                                     <div className="name">Author(TBM)</div>
                                     <div className="text text-light-grey">asdasdasd</div>

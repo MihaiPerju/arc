@@ -520,7 +520,7 @@
   .action-form {
     display: flex;
     justify-content: space-between;
-    width: 70%;
+    width: 100%;
     align-items: flex-start;
     padding-top: 5px;
     > form {
@@ -846,7 +846,6 @@
       }
     }
     .comment__wrapper {
-      padding-left: 65px;
       position: relative;
       min-height: 50px;
       .name {
