@@ -32,6 +32,10 @@ class LetterList extends Component {
     });
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({ editLetter: false, createLetter: false });
+  }
+
   toggleLetter() {
     this.setState({
       createLetter: !this.state.createLetter,
@@ -49,6 +53,13 @@ class LetterList extends Component {
       Notifier.success("Letter deleted!");
     });
   };
+
+  toggleLetter() {
+    this.setState({
+      createLetter: !this.state.createLetter,
+      editLetter: false
+    });
+  }
 
   toggleEditLetter() {
     this.setState({
