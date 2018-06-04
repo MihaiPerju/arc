@@ -17,6 +17,13 @@ Meteor.methods({
 
   "letter.delete"(letterId) {
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+    const { status } = Letters.findOne({ _id: letterId });
+    if (status !== Statuses.NEW) {
+      throw new Meteor.Error(
+        "cannot edit",
+        "Sorry, the letter is already picked up by the system"
+      );
+    }
     Letters.remove(letterId);
   },
 
@@ -24,9 +31,10 @@ Meteor.methods({
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     const { status } = Letters.findOne({ _id });
     if (status !== Statuses.NEW) {
-      throw new Meteor.Error({
-        reason: "Sorry, the letter is already received"
-      });
+      throw new Meteor.Error(
+        "cannot edit",
+        "Sorry, the letter is already picked up by the system"
+      );
     }
 
     Letters.update(
