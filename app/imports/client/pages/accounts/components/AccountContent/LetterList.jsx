@@ -39,37 +39,16 @@ class LetterList extends Component {
     });
   }
 
-  toggleEditLetter() {
-    this.setState({
-      editLetter: !this.state.editLetter,
-      createLetter: false
-    });
-  }
-
   handleDelete = letterId => {
     Meteor.call("letter.delete", letterId, err => {
       if (err) {
-        return Notifier.error("Error while removing letter!");
+        console.log(err);
+        return Notifier.error(err.reason);
       }
 
       Notifier.success("Letter deleted!");
     });
   };
-
-  componentWillMount() {
-    letterTemplateQuery.fetch((err, letterTemplates) => {
-      if (!err) {
-        this.setState({ letterTemplates });
-      }
-    });
-  }
-
-  toggleLetter() {
-    this.setState({
-      createLetter: !this.state.createLetter,
-      editLetter: false
-    });
-  }
 
   toggleEditLetter() {
     this.setState({
@@ -77,16 +56,6 @@ class LetterList extends Component {
       createLetter: false
     });
   }
-
-  handleDelete = letterId => {
-    Meteor.call("letter.delete", letterId, err => {
-      if (err) {
-        return Notifier.error("Error while removing letter!");
-      }
-
-      Notifier.success("Letter deleted!");
-    });
-  };
 
   redirectToPdf(pdf) {
     window.open("/letters/pdf/" + pdf, "_blank");
@@ -171,14 +140,14 @@ class LetterList extends Component {
                       >
                         <i className="icon-download" />
                       </button>
-                      {letter.status === Statuses.NEW && (
-                        <button
-                          className="btn-text--red"
-                          onClick={() => this.handleDelete(letter._id)}
-                        >
-                          <i className="icon-trash-o" />
-                        </button>
-                      )}
+                      {/* {letter.status === Statuses.NEW && ( */}
+                      <button
+                        className="btn-text--red"
+                        onClick={() => this.handleDelete(letter._id)}
+                      >
+                        <i className="icon-trash-o" />
+                      </button>
+                      {/* )} */}
                       <LetterPreview id={letter._id} body={letter.body} />
                     </div>
                   </div>
