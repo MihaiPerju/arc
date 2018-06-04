@@ -208,6 +208,9 @@
     width: calc(100% - 174px);
     transition: width $transition300;
     &.full__width {
+      width: calc(100% - 91px);
+    }
+    &.sort__width {
       width: calc(100% - 140px);
     }
   }

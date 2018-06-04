@@ -10,6 +10,7 @@ import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import Notifier from "/imports/client/lib/Notifier";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -234,6 +235,12 @@ export default class AccountSearchBar extends Component {
       active: selectAll
     });
 
+    const searchBarClasses = classNames({
+      "search-input": true,
+      "full__width": (!btnGroup && !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)),
+      "sort__width": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+    });
+
     return (
       <AutoForm
         autosave
@@ -266,7 +273,7 @@ export default class AccountSearchBar extends Component {
               />
             ) : null}
             <div
-              className={btnGroup ? "search-input" : "search-input full__width"}
+              className={searchBarClasses}
             >
               <div className="form-group">
                 <AutoField
@@ -285,7 +292,7 @@ export default class AccountSearchBar extends Component {
                 <i className="icon-filter" />
               </button>
             </div>
-            <div
+            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (<div
               className={sort ? "filter-block active" : "filter-block"}
               onClick={this.manageSortBar}
             >
@@ -293,7 +300,7 @@ export default class AccountSearchBar extends Component {
                 <i className="icon-angle-up" />{"  "}
                 <i className="icon-angle-down" />
               </button>
-            </div>
+            </div>)}
           </div>
         </div>
         {filter && (
