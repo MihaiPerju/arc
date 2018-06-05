@@ -36,6 +36,16 @@ export default class AccountService {
       const toUpdateAccount = this.getAccount(accounts, toUpdateAccountId);
       Object.assign(toUpdateAccount, { fileId });
 
+      const { invoiceNo } =
+        Accounts.find({ acctNum: toUpdateAccountId, facilityId }).fetch()[0] ||
+        {};
+      
+      if(toUpdateAccount.invoiceNo) {
+        toUpdateAccount.invoiceNo = _.union(invoiceNo, toUpdateAccount.invoiceNo);
+      } else {
+        toUpdateAccount.invoiceNo = [];
+      }
+
       Accounts.update(
         { acctNum: toUpdateAccountId, facilityId },
         {
@@ -300,6 +310,16 @@ export default class AccountService {
     _.map(oldAccountIds, accountId => {
       const toUpdateAccount = this.getAccount(accounts, accountId);
       Object.assign(toUpdateAccount, { fileId });
+
+      const { invoiceNo } =
+        Accounts.find({ acctNum: accountId, facilityId }).fetch()[0] ||
+        {};
+      
+      if(toUpdateAccount.invoiceNo) {
+        toUpdateAccount.invoiceNo = _.union(invoiceNo, toUpdateAccount.invoiceNo);
+      } else {
+        toUpdateAccount.invoiceNo = [];
+      }
 
       Accounts.update(
         { acctNum: accountId, facilityId },

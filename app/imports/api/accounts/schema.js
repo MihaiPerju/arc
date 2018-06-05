@@ -159,4 +159,19 @@ export default new SimpleSchema({
     'commentsLinkData.$': {
         type: String
     },
+    invoiceNo: {
+        type: Array,
+        optional: true,
+        autoValue: function() {
+            let arrayLen = this.value ? this.value.length : 0;
+            for(let i = 0; i < arrayLen; i++) {
+                if(!this.value[i]) {
+                    this.value.splice(i, 1)
+                }
+            }
+        }
+    },
+    'invoiceNo.$': {
+        type: SimpleSchema.Integer
+    }
 })

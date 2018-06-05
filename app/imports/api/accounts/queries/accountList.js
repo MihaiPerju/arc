@@ -72,5 +72,6 @@ export default Accounts.createNamedQuery('accountList', {
     workQueue: 1,
     tag: {
         name: 1
-    }
+    },
+    invoiceNo: 1
 });
