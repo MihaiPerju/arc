@@ -14,20 +14,16 @@ import actionTypesEnum from "../../enums/actionTypesEnum";
 export default class ActionService {
   //Adding action to account
   static createAction(data) {
-    const {
-      accountId,
-      actionId,
-      reasonCode: reasonId,
-      userId,
-      addedBy,
-    } = data;
-    const action = Actions.findOne({ _id: actionId.value });
+    const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
+    const action = Actions.findOne({
+      _id: actionId.value ? actionId.value : actionId
+    });
     const { inputs } = action;
-    const createdAt =new Date()
+    const createdAt = new Date();
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const accountActionData = {
       userId,
-      actionId:actionId.value,
+      actionId: actionId.value,
       reasonCode: reasonId && reason,
       addedBy,
       type: actionTypesEnum.USER_ACTION,

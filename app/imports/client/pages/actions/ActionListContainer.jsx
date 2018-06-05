@@ -52,8 +52,25 @@ class ActionListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const { queryParams } = FlowRouter.current();
+    if (queryParams.title && queryParams.title == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   setAction = _id => {
     const { currentAction } = this.state;
@@ -96,6 +113,9 @@ class ActionListContainer extends Pager {
     Meteor.call("action.deleteMany", actionsSelected, err => {
       if (!err) {
         Notifier.success("Actions deleted !");
+        this.setState({
+          actionsSelected: []
+        });
       }
     });
   };
@@ -141,6 +161,7 @@ class ActionListContainer extends Pager {
           }
         >
           <ActionSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={actionsSelected.length}
             deleteAction={this.deleteAction}
           />

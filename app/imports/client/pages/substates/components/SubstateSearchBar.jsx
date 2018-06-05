@@ -27,6 +27,9 @@ export default class SubstateSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1") {
+      this.props.setPagerInitial();
+    }
     if ("stateName" in params) {
       FlowRouter.setQueryParams({ stateName: params.stateName });
     }

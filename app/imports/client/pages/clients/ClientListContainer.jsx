@@ -32,8 +32,25 @@ class ClientContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const { queryParams } = FlowRouter.current();
+    if (queryParams.clientName && queryParams.clientName == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   setClient = _id => {
     const { currentClient } = this.state;
@@ -106,7 +123,7 @@ class ClientContainer extends Pager {
     // update the pager count
     const queryParams = PagerService.getParams();
     this.recount(queryParams);
-  }
+  };
 
   decreaseList = () => {
     this.setState({
@@ -138,6 +155,7 @@ class ClientContainer extends Pager {
           }
         >
           <ClientSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
             decrease={this.decreaseList}

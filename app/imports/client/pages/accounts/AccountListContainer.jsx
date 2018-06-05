@@ -76,17 +76,10 @@ class AccountListContainer extends Pager {
     const { state } = newProps;
     if (currentRouteState !== state) {
       this.closeRightPanel();
-      this.setState(
-        {
-          currentRouteState: state,
-          page: 1,
-          perPage: 13,
-          total: 0
-        },
-        () => {
-          this.nextPage(0);
-        }
-      );
+      this.setState({
+        currentRouteState: state
+      });
+      this.setPagerInitial();
     }
     this.updatePager();
   }
@@ -95,6 +88,19 @@ class AccountListContainer extends Pager {
     this.setState({
       accountsSelected: []
     });
+  };
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
   };
 
   getData(accounts) {
@@ -369,6 +375,7 @@ class AccountListContainer extends Pager {
           }
         >
           <AccountSearchBar
+            setPagerInitial={this.setPagerInitial}
             options={options}
             icons={icons}
             getProperAccounts={this.getProperAccounts}

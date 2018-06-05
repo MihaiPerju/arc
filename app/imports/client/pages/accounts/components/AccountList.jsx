@@ -14,7 +14,6 @@ export default class AccountList extends Component {
 
     render() {
         const {data, checkAccount, selectAccount, currentAccount, classes} = this.props;
-
         return (
             <div className={classes}>
                 {

@@ -3,14 +3,22 @@ import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "../../../../../api/s3-uploads/utils";
 import Notifier from "../../../../lib/Notifier";
 import ReactHover from "react-hover";
+import { Page } from "react-pdf";
+import { Document } from "react-pdf/dist/entry.noworker";
 export default class ActionBlock extends Component {
   constructor() {
     super();
 
     this.state = {
-      isUploading: false
+      isUploading: false,
+      numPages: null,
+      pageNumber: 1
     };
   }
+
+  onDocumentLoad = ({ numPages }) => {
+    this.setState({ numPages });
+  };
 
   downloadPdfs() {
     const { account } = this.props;
@@ -65,6 +73,7 @@ export default class ActionBlock extends Component {
 
   render() {
     const { account } = this.props;
+    const { pageNumber, numPages } = this.state;
 
     const componentConfig = {
       postUrl: `/uploads/account-pdf/` + account._id + "/" + getToken()
@@ -111,15 +120,14 @@ export default class ActionBlock extends Component {
           </div>
           <div className="block-list file-list">
             {account.attachments &&
-              account.attachments.map(pdf => {
+              account.attachments.map((pdf, index) => {
                 return (
-                  <ReactHover options={options}>
+                  <ReactHover options={options} key={index}>
                     <ReactHover.Trigger type="trigger">
-                      <li style={{ listStyleType: "none" }}>
                         {pdf && (
-                          <div className="block-item">
-                            <div className="info">
-                              <div className="title">
+                          <div className="block-item flex--helper flex-justify--space-between">
+                            <div className="info flex--helper">
+                              <div className="title truncate">
                                 {this.getPdfName(pdf)}
                               </div>
                             </div>
@@ -139,10 +147,17 @@ export default class ActionBlock extends Component {
                             </div>
                           </div>
                         )}
-                      </li>
                     </ReactHover.Trigger>
                     <ReactHover.Hover type="hover">
-                      {this.getPdfName(pdf)}
+                        <Document
+                          file={"/pdf/" + pdf._id + "/" + getToken()}
+                          onLoadSuccess={this.onDocumentLoad}
+                        >
+                          <Page pageNumber={pageNumber} />
+                        </Document>
+                        <p>
+                          Page {pageNumber} of {numPages}
+                        </p>
                     </ReactHover.Hover>
                   </ReactHover>
                 );

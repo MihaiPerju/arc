@@ -18,14 +18,23 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     super(props);
 
     this.state = {
-      schema: this.generateSchema()
+      schema: null
     };
     this.submit = _.debounce(this.onSubmit, 300);
   }
 
+  componentWillMount() {
+    const { account } = this.props;
+    if (account.selectedAttachmentIds) {
+      // update
+      account.selectedAttachmentIds.forEach(id => {
+        this.onSelectAttachment(id);
+      });
+    }
+  }
+
   componentWillReceiveProps(nextProps) {
     const { templateKeywords } = nextProps;
-
     this.setState({
       schema: this.generateSchema(templateKeywords ? templateKeywords : [])
     });
