@@ -1,7 +1,7 @@
 {
     "MAIL_URL":
         "smtp://postmaster%40worklog.cultofcoders.com:203668427b836dd2c41a8ff6fa3ee8ff@smtp.mailgun.org:25",
-    "LOCAL_STORAGE_PATH": "/local/uploads",
+    "LOCAL_STORAGE_PATH": "/mnt/uploads",
     "public": {
         "AWS": {
             "url":
