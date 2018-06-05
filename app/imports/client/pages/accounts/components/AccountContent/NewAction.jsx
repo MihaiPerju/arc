@@ -200,15 +200,6 @@ export default class NewAction extends Component {
 
     return (
       <div className={this.state.fade ? "new-action in" : "new-action"}>
-        <div className="action-info">
-          <img
-            className="md-avatar img-circle"
-            src="/assets/img/user1.svg"
-            alt=""
-          />
-          <div className="name truncate">Solomon Ben</div>
-        </div>
-
         <div className="action-form">
           <AutoForm
             schema={ActionSchema}

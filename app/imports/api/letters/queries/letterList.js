@@ -11,5 +11,6 @@ export default Letters.createNamedQuery('letterList', {
     createdAt: 1,
     letterTemplateId: 1,
     body: 1,
-    letterValues: 1
+    letterValues: 1,
+    attachmentIds: 1
 });

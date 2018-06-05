@@ -73,5 +73,6 @@ export default Accounts.createNamedQuery('accountList', {
     tag: {
         name: 1
     },
-    invoiceNo: 1
+    invoiceNo: 1,
+    createdAt: 1
 });
