@@ -35,7 +35,8 @@ Meteor.methods({
             email,
             logoPath,
             contacts,
-            financialGoals
+            financialGoals,
+            managerIds
         }
     ) {
         Security.isAdminOrTech(this.userId);
@@ -50,7 +51,8 @@ Meteor.methods({
                     email,
                     logoPath,
                     contacts,
-                    financialGoals
+                    financialGoals,
+                    managerIds
                 }
             }
         );

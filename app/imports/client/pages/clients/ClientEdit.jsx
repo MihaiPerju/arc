@@ -10,6 +10,7 @@ import {
   TextField,
   LongTextField
 } from "/imports/ui/forms";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "/imports/api/s3-uploads/utils";
@@ -40,7 +41,7 @@ export default class EditClient extends React.Component {
 
   onSubmit = data => {
     const { client, setEdit } = this.props;
-
+    
     Meteor.call("client.update", client._id, data, err => {
       if (!err) {
         Notifier.success("Data saved");
@@ -63,6 +64,7 @@ export default class EditClient extends React.Component {
 
   render() {
     const { client } = this.props;
+    console.log(client)
 
     const componentConfig = {
       postUrl: "/uploads/logo/" + client._id + "/" + getToken()
@@ -128,6 +130,13 @@ export default class EditClient extends React.Component {
                 />
                 <ErrorField name="financialGoals" />
               </div>
+
+              <div className="select-group">
+                <div className="form-wrapper">
+                  <SelectMulti labelHidden={true} placeholder="Managers" name="managerIds" options={[{label: 'label', value: 'value'}]}/>
+                  <ErrorField name="managerIds"/>
+                </div>
+            </div>
 
               <div className="header__block m-t--20">
                 <div className="title-block text-uppercase">Client Logo</div>

@@ -31,5 +31,12 @@ export default new SimpleSchema({
     createdAt: {
         type: Date,
         defaultValue: new Date
+    },
+    managerIds: {
+        type: Array,
+        optional: true
+    },
+    'managerIds.$': {
+        type: String
     }
 });
