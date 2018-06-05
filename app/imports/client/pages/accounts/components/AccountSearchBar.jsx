@@ -334,8 +334,7 @@ export default class AccountSearchBar extends Component {
                   placeholder="Search by Patient Type"
                 />
               </div>
-              <div className="form-group">
-                <div className="range-boxes">
+              <div className="form-group flex--helper form-group__pseudo">
                   <AutoField
                     labelHidden={true}
                     name="acctBalMin"
@@ -346,9 +345,8 @@ export default class AccountSearchBar extends Component {
                     name="acctBalMax"
                     placeholder="Maximum Account Balance"
                   />
-                </div>
               </div>
-              <div className="form-group range-date-boxes">
+              <div className="form-group flex--helper form-group__pseudo">
                 <DatePicker
                   placeholderText="From Discharge Date"
                   selected={dischrgDateMin}
@@ -360,7 +358,7 @@ export default class AccountSearchBar extends Component {
                   onChange={date => this.onDateSelect(date, "dischrgDateMax")}
                 />
               </div>
-              <div className="form-group range-date-boxes">
+              <div className="form-group flex--helper form-group__pseudo">
                 <DatePicker
                   placeholderText="From Last Bill Date"
                   selected={fbDateMin}

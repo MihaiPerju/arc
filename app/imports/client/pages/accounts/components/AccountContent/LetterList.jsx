@@ -128,18 +128,18 @@ class LetterList extends Component {
             {data &&
               _.map(data, (letter, index) => {
                 return (
-                  <div key={index} className="block-item">
+                  <div key={index} className="block-item flex--helper flex-justify--space-between">
                     <div className="info">
-                      <div className="title">Letter {index}</div>
-                      <div className="status pending">{letter.status}</div>
+                      <div className="title truncate">Letter {index}</div>
                     </div>
-                    <div className="btn-group">
+                    <div className="status pending">{letter.status}</div>
+                    <div className="btn-group flex--helper flex-justify--end">
                       {letter.status === Statuses.NEW && (
                         <button
-                          className="btn-text--blue"
+                          className="btn-text--green"
                           onClick={() => this.handleEdit(letter)}
                         >
-                          edit
+                          <i className="icon-pencil"/>
                         </button>
                       )}
                       <button

@@ -50,6 +50,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-flag:before {
+  content: "\f024";
+}
+.icon-pencil:before {
+  content: "\e905";
+}
 .icon-dashboard:before {
   content: "\f2a1";
 }

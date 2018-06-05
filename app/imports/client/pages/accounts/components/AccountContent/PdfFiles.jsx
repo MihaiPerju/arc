@@ -120,15 +120,14 @@ export default class ActionBlock extends Component {
           </div>
           <div className="block-list file-list">
             {account.attachments &&
-              account.attachments.map(pdf => {
+              account.attachments.map((pdf, index) => {
                 return (
-                  <ReactHover options={options}>
+                  <ReactHover options={options} key={index}>
                     <ReactHover.Trigger type="trigger">
-                      <li style={{ listStyleType: "none" }}>
                         {pdf && (
-                          <div className="block-item">
-                            <div className="info">
-                              <div className="title">
+                          <div className="block-item flex--helper flex-justify--space-between">
+                            <div className="info flex--helper">
+                              <div className="title truncate">
                                 {this.getPdfName(pdf)}
                               </div>
                             </div>
@@ -148,7 +147,6 @@ export default class ActionBlock extends Component {
                             </div>
                           </div>
                         )}
-                      </li>
                     </ReactHover.Trigger>
                     <ReactHover.Hover type="hover">
                         <Document

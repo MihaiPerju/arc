@@ -95,6 +95,9 @@
   background: $color-white;
   padding: 15px;
   border-bottom: 1px #e1e1e1 solid;
+  max-height: 170px;
+  overflow-y: auto;
+
   .select-action {
     &:first-of-type {
       margin-bottom: 15px;
@@ -128,28 +131,21 @@
   .form-group {
     position: relative;
     margin-bottom: 15px;
-    .react-datepicker-wrapper {
-      width: 49%;
-      float: left;
+
+    &:last-of-type {
+      margin-bottom: 0;
     }
-    .react-datepicker__input-container {
-      width: 100%;
-    }
-    &.range-date-boxes {
-      height: 40px;
-    }
-    &.range-date-boxes div:last-of-type > .react-datepicker-wrapper {
-      margin-left: 30px;
-    }
-  }
-  .range-boxes {
-    height: 40px;
-    div {
-      width: 49%;
-      float: left;
-      margin-bottom: 15px;
-      &:first-of-type {
-        margin-right: 30px;
+
+    &__pseudo {
+      margin-left: -15px;
+
+      > div {
+        width: 50%;
+        padding-left: 15px;
+      }
+
+      .react-datepicker-wrapper, .react-datepicker__input-container {
+        display: block;
       }
     }
   }
