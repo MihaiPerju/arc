@@ -6,14 +6,6 @@
 
     .btn-group-1 {
       margin-top: 10px;
-      height: 40px;
-      position: relative;
-      
-      button:last-of-type {
-        position: absolute;
-        right: 0;
-        top: 0;
-      }
     }
   }
 
@@ -34,6 +26,27 @@
       box-shadow: none;
     }
 
+  }
+
+  .select__row {
+    height: 32px;
+    margin-bottom: 10px;
+
+    .check-item {
+      position: relative;
+      top: initial;
+      left: initial;
+
+      label {
+        padding-left: 30px;
+
+        &:before {
+          position: absolute;
+          left: 5px;
+          top: 4px;
+        }
+      }
+    }
   }
 }
 

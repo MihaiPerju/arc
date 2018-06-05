@@ -46,11 +46,20 @@ export default class TagContentDescription extends Component {
                                 <ErrorField name="userId"/>
                             </div>
                         </div>
-                        <div className="btn-group-1 flex--helper">
-                            <button className="btn--red">Remove all</button>
+                        <div className="btn-group-1 flex--helper flex-justify--end">
                             <button className="btn--green">Submit</button>
                         </div>
                     </AutoForm>
+                </div>
+
+                <div className="select__row flex--helper flex-justify--space-between flex-align--center">
+                    <div className="check-item">
+                        <input id="selectAll" type="checkbox" className="hidden"/>
+                        <label htmlFor="selectAll">Select all</label>
+                    </div>
+                    <button className="btn-text--grey">
+                        <i className="icon-trash-o"/>
+                    </button>
                 </div>
 
                 <div className="action-table">

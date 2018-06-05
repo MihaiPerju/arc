@@ -88,6 +88,13 @@ button,
     color: $green;
   }
 
+  &.btn-text--grey {
+    color: $extra-light-grey;
+    padding: 8px 11px;
+    font-size: 1.6rem;
+    line-height: 1.4rem;
+  }
+
   &.btn-text--red {
     color: $red;
   }

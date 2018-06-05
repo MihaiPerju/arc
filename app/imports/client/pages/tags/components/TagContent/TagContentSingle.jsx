@@ -24,8 +24,8 @@ export default class TagContentSingle extends Component {
                     {userName}
                 </div>
                 <div className="action-table__field text-center">
-                    <button onClick={() => this.removeTag(userId, currentTag._id)} className="btn-edit btn--red">
-                        Remove user
+                    <button onClick={() => this.removeTag(userId, currentTag._id)} className="btn-text--grey">
+                        <i className="icon-trash-o"/>
                     </button>
                 </div>
             </div>
