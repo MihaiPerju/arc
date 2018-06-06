@@ -77,8 +77,6 @@ export default class FacilityCreate extends Component {
     const schema = FacilitySchema.omit("clientId");
     const { facility } = this.props;
 
-    let assignedManagerIds = [];
-
     if (loading) {
       return <Loading />;
     }
