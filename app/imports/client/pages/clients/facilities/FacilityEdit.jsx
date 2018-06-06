@@ -14,6 +14,7 @@ import {
 import RegionListQuery from "/imports/api/regions/queries/regionList.js";
 import SelectUsersContainer from "/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx";
 import Loading from "/imports/client/lib/ui/Loading";
+import { frequencyOptions } from "/imports/api/facilities/enums/frequency";
 
 export default class FacilityCreate extends Component {
   constructor() {
@@ -75,6 +76,7 @@ export default class FacilityCreate extends Component {
     const { regions, loading } = this.state;
     const regionIds = this.getRegionOptions(regions);
     const schema = FacilitySchema.omit("clientId");
+
     const { facility } = this.props;
 
     if (loading) {
@@ -98,6 +100,7 @@ export default class FacilityCreate extends Component {
               schema={schema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
+              model={facility}
             >
               {this.state.error && (
                 <div className="error">{this.state.error}</div>
@@ -141,6 +144,35 @@ export default class FacilityCreate extends Component {
                   name="sftpPath"
                 />
                 <ErrorField name="sftpPath" />
+              </div>
+              <div className="form-wrapper">
+                <AutoField labelHidden={true} placeholder="Host" name="host" />
+                <ErrorField name="host" />
+              </div>
+              <div className="form-wrapper">
+                <AutoField labelHidden={true} placeholder="User" name="user" />
+                <ErrorField name="user" />
+              </div>
+              <div className="form-wrapper">
+                <AutoField
+                  type="password"
+                  labelHidden={true}
+                  placeholder="Password"
+                  name="password"
+                />
+                <ErrorField name="password" />
+              </div>
+              <div className="select-group">
+                <div className="form-wrapper">
+                  <div>
+                    <SelectField
+                      labelHidden={true}
+                      name="frequency"
+                      options={frequencyOptions}
+                    />
+                    <ErrorField name="frequency" />
+                  </div>
+                </div>
               </div>
               <div className="form-wrapper">
                 <AutoField
