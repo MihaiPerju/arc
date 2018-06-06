@@ -483,8 +483,14 @@
   .pay-item {
     padding-left: 2px;
     padding-right: 2px;
-    &.active {
-      box-shadow: 0 0 1px 0 #3692d9;
+    &.active:before {
+      content: ' ';
+      background: #3080bddb;
+      width: 4px;
+      top: 0;
+      bottom: 0;
+      left: -1px;
+      position: absolute;
     }
     &__wrapper {
       background: #f6f6f6;
