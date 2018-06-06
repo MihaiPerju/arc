@@ -43,8 +43,25 @@ class TagListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const {queryParams} = FlowRouter.current();
+    if (queryParams.tagName && queryParams.tagName == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   showFilterBar() {
     this.setState({
@@ -93,6 +110,9 @@ class TagListContainer extends Pager {
     Meteor.call("tags.deleteMany", tagsSelected, err => {
       if (!err) {
         Notifier.success("Tags deleted !");
+        this.setState({
+          tagsSelected: []
+        });
       }
     });
   };
@@ -139,6 +159,7 @@ class TagListContainer extends Pager {
           }
         >
           <TagSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={tagsSelected.length}
             deleteAction={this.deleteAction}
           />

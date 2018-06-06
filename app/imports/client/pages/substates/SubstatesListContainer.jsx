@@ -33,8 +33,28 @@ class SubstatesListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const {queryParams} = FlowRouter.current();
+    if (
+      Object.keys(queryParams).length > 1 &&
+      (queryParams.stateName && queryParams.stateName == "")
+    ) {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   setSubstate = _id => {
     const { currentSubstate } = this.state;
@@ -117,7 +137,7 @@ class SubstatesListContainer extends Pager {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
-    
+
     return (
       <div className="cc-container substates-container">
         <div
@@ -126,6 +146,7 @@ class SubstatesListContainer extends Pager {
           }
         >
           <SubstateSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={substateSelected.length}
             deleteAction={this.deleteAction}
           />

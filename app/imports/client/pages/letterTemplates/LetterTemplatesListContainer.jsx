@@ -32,8 +32,28 @@ class LetterTemplateListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const { queryParams } = FlowRouter.current();
+    if (
+      queryParams.letterTemplateName &&
+      queryParams.letterTemplateName == ""
+    ) {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   setTemplate = _id => {
     const { currentTemplate } = this.state;
@@ -125,6 +145,7 @@ class LetterTemplateListContainer extends Pager {
           }
         >
           <LetterSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={templatesSelected.length}
             deleteAction={this.deleteAction}
           />

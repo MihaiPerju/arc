@@ -46,7 +46,6 @@ class LetterList extends Component {
   handleDelete = letterId => {
     Meteor.call("letter.delete", letterId, err => {
       if (err) {
-        console.log(err);
         return Notifier.error(err.reason);
       }
 

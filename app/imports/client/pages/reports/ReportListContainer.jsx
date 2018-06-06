@@ -45,8 +45,25 @@ class ReportListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const { queryParams } = FlowRouter.current();
+    if (queryParams.name && queryParams.name == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   setReport = _id => {
     const { currentReport } = this.state;
@@ -89,6 +106,9 @@ class ReportListContainer extends Pager {
     Meteor.call("report.deleteMany", reportsSelected, err => {
       if (!err) {
         Notifier.success("Reports deleted !");
+        this.setState({
+          reportsSelected: []
+        });
         this.closeRightPanel();
       }
     });
@@ -143,6 +163,7 @@ class ReportListContainer extends Pager {
           }
         >
           <ReportSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={reportsSelected.length}
             deleteAction={this.deleteAction}
           />

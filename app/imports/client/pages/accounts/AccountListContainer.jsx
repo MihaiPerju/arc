@@ -1,4 +1,3 @@
-
 import React, { Component } from "react";
 import AccountList from "./components/AccountList.jsx";
 import SearchBar from "/imports/client/lib/SearchBar.jsx";
@@ -77,15 +76,31 @@ class AccountListContainer extends Pager {
     const { state } = newProps;
     if (currentRouteState !== state) {
       this.closeRightPanel();
-      this.setState({ currentRouteState: state });
+      this.setState({
+        currentRouteState: state
+      });
+      this.setPagerInitial();
     }
-    this.updateFilters();
+    this.updatePager();
   }
 
   uncheckAccountList = () => {
     this.setState({
       accountsSelected: []
     });
+  };
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
   };
 
   getData(accounts) {
@@ -188,6 +203,11 @@ class AccountListContainer extends Pager {
     }
     return [options[0]];
   }
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
+  };
 
   assignToUser = () => {
     const accounts = this.getAccounts(this.state.accountsSelected);
@@ -355,6 +375,7 @@ class AccountListContainer extends Pager {
           }
         >
           <AccountSearchBar
+            setPagerInitial={this.setPagerInitial}
             options={options}
             icons={icons}
             getProperAccounts={this.getProperAccounts}

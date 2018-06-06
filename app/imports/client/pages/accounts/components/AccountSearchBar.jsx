@@ -11,6 +11,7 @@ import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
+import PagerService from "/imports/client/lib/PagerService";
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -27,7 +28,11 @@ export default class AccountSearchBar extends Component {
       fbDateMin: null,
       fbDateMax: null,
       substates: [],
-      sort: false
+      sort: false,
+      page:1,
+      perPage:13,
+      total:0,
+      range:{}
     };
   }
 
@@ -80,6 +85,9 @@ export default class AccountSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if(FlowRouter.current().queryParams.page !='1'){
+      this.props.setPagerInitial()
+    }
     if ("acctNum" in params) {
       FlowRouter.setQueryParams({ acctNum: params.acctNum });
     }
