@@ -51,16 +51,15 @@ export default class FacilityCreate extends Component {
   };
 
   onSubmit(data) {
-    console.log(data);
     data.clientId = FlowRouter.current().params._id;
-    // Meteor.call("facility.update", data, err => {
-    //   if (!err) {
-    //     Notifier.success("Facility updated!");
-    //     this.onClose();
-    //   } else {
-    //     Notifier.error(err.reason);
-    //   }
-    // });
+    Meteor.call("facility.update", data, err => {
+      if (!err) {
+        Notifier.success("Facility updated!");
+        this.onClose();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   onCreateFacility = () => {
@@ -101,6 +100,7 @@ export default class FacilityCreate extends Component {
               schema={schema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
+              model={facility}
             >
               {this.state.error && (
                 <div className="error">{this.state.error}</div>
