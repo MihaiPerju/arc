@@ -27,6 +27,10 @@ export default class CodeSearchBar extends Component {
   }
 
   onSubmit(params) {
+    const {queryParams} = FlowRouter.current();
+    if (queryParams.page != "1" && "code" in params) {
+      this.props.setPagerInitial();
+    }
     if ("code" in params) {
       FlowRouter.setQueryParams({ code: params.code });
     }
