@@ -33,8 +33,25 @@ class FacilityContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const { queryParams } = FlowRouter.current();
+    if (queryParams.facilityName && queryParams.facilityName == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   setFacility = _id => {
     this.closeForm();
@@ -87,6 +104,9 @@ class FacilityContainer extends Pager {
     Meteor.call("facility.removeMany", facilitiesSelected, err => {
       if (!err) {
         Notifier.success("Facilities deleted !");
+        this.setState({
+          facilitiesSelected: []
+        });
         this.closeRightPanel();
       }
     });
@@ -146,6 +166,7 @@ class FacilityContainer extends Pager {
           }
         >
           <FacilitySearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={facilitiesSelected.length}
             deleteAction={this.deleteAction}
             decrease={this.decreaseList}

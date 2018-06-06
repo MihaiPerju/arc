@@ -27,6 +27,9 @@ export default class LetterSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1" && "letterTemplateName" in params) {
+      this.props.setPagerInitial();
+    }
     if ("letterTemplateName" in params) {
       FlowRouter.setQueryParams({
         letterTemplateName: params.letterTemplateName

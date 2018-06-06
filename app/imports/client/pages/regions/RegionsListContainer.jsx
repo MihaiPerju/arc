@@ -33,8 +33,25 @@ class RegionListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const {queryParams} = FlowRouter.current();
+    if (queryParams.regionName && queryParams.regionName == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   showBtnGroup() {
     this.setState({
@@ -89,6 +106,9 @@ class RegionListContainer extends Pager {
     Meteor.call("region.deleteMany", regionsSelected, err => {
       if (!err) {
         Notifier.success("Regions deleted !");
+        this.setState({
+          regionsSelected: []
+        });
         this.closeRightPanel();
       }
     });
@@ -134,6 +154,7 @@ class RegionListContainer extends Pager {
           }
         >
           <RegionSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={regionsSelected.length}
             deleteAction={this.deleteAction}
           />

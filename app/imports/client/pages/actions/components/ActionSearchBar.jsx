@@ -27,6 +27,9 @@ export default class ActionSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1" && "title" in params) {
+      this.props.setPagerInitial();
+    }
     if ("title" in params) {
       FlowRouter.setQueryParams({ title: params.title });
     }

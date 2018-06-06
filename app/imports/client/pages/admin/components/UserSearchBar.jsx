@@ -27,6 +27,9 @@ export default class UserSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1" && "email" in params) {
+      this.props.setPagerInitial();
+    }
     if ("email" in params) {
       FlowRouter.setQueryParams({ email: params.email });
     }

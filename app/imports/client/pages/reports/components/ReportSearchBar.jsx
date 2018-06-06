@@ -27,6 +27,9 @@ export default class ReportSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1" && "name" in params) {
+      this.props.setPagerInitial();
+    }
     if ("name" in params) {
       FlowRouter.setQueryParams({ name: params.name });
     }

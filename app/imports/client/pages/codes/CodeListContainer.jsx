@@ -33,8 +33,25 @@ class CodeListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const {queryParams} = FlowRouter.current();
+    if (queryParams.code && queryParams.code == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   showFilterBar() {
     this.setState({
@@ -83,6 +100,9 @@ class CodeListContainer extends Pager {
     Meteor.call("code.deleteMany", codesSelected, err => {
       if (!err) {
         Notifier.success("Codes deleted !");
+        this.setState({
+          codesSelected: []
+        });
         this.closeRightPanel();
       }
     });
@@ -129,6 +149,7 @@ class CodeListContainer extends Pager {
           }
         >
           <CodeSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
           />

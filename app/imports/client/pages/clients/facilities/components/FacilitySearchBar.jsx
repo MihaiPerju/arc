@@ -31,6 +31,9 @@ export default class FacilitySearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1" && "facilityName" in params) {
+      this.props.setPagerInitial();
+    }
     if ("facilityName" in params) {
       FlowRouter.setQueryParams({ facilityName: params.facilityName });
     }

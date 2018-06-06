@@ -31,6 +31,9 @@ export default class ClientSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1" && "clientName" in params) {
+      this.props.setPagerInitial();
+    }
     if ("clientName" in params) {
       FlowRouter.setQueryParams({ clientName: params.clientName });
     }

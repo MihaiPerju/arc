@@ -27,6 +27,12 @@ export default class TagSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (
+      FlowRouter.current().queryParams.page != "1" &&
+      "tagName" in params
+    ) {
+      this.props.setPagerInitial();
+    }
     if ("tagName" in params) {
       FlowRouter.setQueryParams({ tagName: params.tagName });
     }

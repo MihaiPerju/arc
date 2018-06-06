@@ -33,8 +33,25 @@ class UserListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
+    const { queryParams } = FlowRouter.current();
+    if (queryParams.email && queryParams.email == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
 
   selectUser(objectId) {
     const { usersSelected } = this.state;
@@ -76,6 +93,9 @@ class UserListContainer extends Pager {
     Meteor.call("admin.deleteManyUsers", usersSelected, err => {
       if (!err) {
         Notifier.success("Users deleted!");
+        this.setState({
+          usersSelected: []
+        });
         this.closeRightPanel();
       }
     });
@@ -100,7 +120,7 @@ class UserListContainer extends Pager {
     // update the pager count
     const queryParams = PagerService.getParams();
     this.recount(queryParams);
-  }
+  };
 
   render() {
     const { data, loading, error } = this.props;
@@ -123,6 +143,7 @@ class UserListContainer extends Pager {
           }
         >
           <UserSearchBar
+            setPagerInitial={this.setPagerInitial}
             btnGroup={usersSelected.length}
             deleteAction={this.deleteAction}
           />

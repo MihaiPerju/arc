@@ -27,6 +27,9 @@ export default class RegionSearchBar extends Component {
   }
 
   onSubmit(params) {
+    if (FlowRouter.current().queryParams.page != "1" && "regionName" in params) {
+      this.props.setPagerInitial();
+    }
     if ("regionName" in params) {
       FlowRouter.setQueryParams({ regionName: params.regionName });
     }
