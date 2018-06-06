@@ -1,34 +1,52 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
 
 export default class TagContentSingle extends Component {
+  removeTag = (_id, tagId) => {
+    Meteor.call("user.removeTag", { _id, tagId }, (err, res) => {
+      if (!err) {
+        Notifier.success("removed successfully !");
+      }
+    });
+  };
 
-    removeTag = (_id, tagId) => {
-        Meteor.call('user.removeTag', {_id, tagId}, (err, res) => {
-            if (!err) {
-                Notifier.success('removed successfully !')
-            }
-        })
-    }
+  isSelected = () => {
+    const { selectedUser, userId } = this.props;
+    return selectedUser.indexOf(userId) > -1;
+  };
 
-    render() {
-        const {userName, userId, currentTag} = this.props;
+  onClick = (userId) => {
+    const {toggleUser} = this.props;
+    toggleUser(userId);
+  };
 
-        return (
-            <div className="action-table__row flex--helper">
-                <div className="action-table__field truncate">
-                    <div className="check-item">
-                        <input id={userId} type="checkbox" className="hidden"/>
-                        <label htmlFor={userId}/>
-                    </div>
-                    {userName}
-                </div>
-                <div className="action-table__field text-center">
-                    <button onClick={() => this.removeTag(userId, currentTag._id)} className="btn-text--grey">
-                        <i className="icon-trash-o"/>
-                    </button>
-                </div>
-            </div>
-        )
-    }
+  render() {
+    const { userName, userId, currentTag, selectedUser } = this.props;
+
+    return (
+      <div className="action-table__row flex--helper">
+        <div className="action-table__field truncate">
+          <div className="check-item">
+            <input
+            onClick={() => this.onClick(userId)}
+              checked={this.isSelected()}
+              id={userId}
+              type="checkbox"
+              className="hidden"
+            />
+            <label htmlFor={userId} />
+          </div>
+          {userName}
+        </div>
+        <div className="action-table__field text-center">
+          <button
+            onClick={() => this.removeTag(userId, currentTag._id)}
+            className="btn-text--grey"
+          >
+            <i className="icon-trash-o" />
+          </button>
+        </div>
+      </div>
+    );
+  }
 }
