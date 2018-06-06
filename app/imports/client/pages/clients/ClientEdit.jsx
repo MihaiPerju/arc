@@ -10,6 +10,7 @@ import {
   TextField,
   LongTextField
 } from "/imports/ui/forms";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "/imports/api/s3-uploads/utils";
@@ -128,7 +129,6 @@ export default class EditClient extends React.Component {
                 />
                 <ErrorField name="financialGoals" />
               </div>
-
               <div className="header__block m-t--20">
                 <div className="title-block text-uppercase">Client Logo</div>
               </div>
