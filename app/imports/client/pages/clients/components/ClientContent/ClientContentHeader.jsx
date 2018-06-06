@@ -89,8 +89,10 @@ export default class ClientContentHeader extends Component {
 
   onSubmit = managerIds => {
     const { client } = this.props;
-    const data = { _id: client._id, ...managerIds };
-    Meteor.call("client.assign_managers", data, err => {
+
+    const data = { ...managerIds };
+    const { _id } = client;
+    Meteor.call("client.update", _id, data, err => {
       if (err) {
         Notifier.error(err.reason);
       } else {

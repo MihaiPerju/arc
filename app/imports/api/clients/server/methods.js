@@ -26,7 +26,7 @@ Meteor.methods({
     return existingUpload.path;
   },
 
-  "client.assign_managers"({ _id, managerIds }) {
+  /* "client.assign_managers"({ _id, managerIds }) {
     Security.isAdminOrTech(this.userId);
     Clients.update(
       { _id },
@@ -37,35 +37,14 @@ Meteor.methods({
       }
     );
   },
-
-  "client.update"(
-    clientId,
-    {
-      clientName,
-      firstName,
-      lastName,
-      email,
-      logoPath,
-      contacts,
-      financialGoals,
-      managerIds
-    }
-  ) {
+ */
+  "client.update"(_id, data) {
     Security.isAdminOrTech(this.userId);
 
     Clients.update(
-      { _id: clientId },
+      { _id },
       {
-        $set: {
-          clientName,
-          firstName,
-          lastName,
-          email,
-          logoPath,
-          contacts,
-          financialGoals,
-          managerIds
-        }
+        $set: data
       }
     );
   },
