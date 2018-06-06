@@ -6,16 +6,16 @@ import {roleGroups} from '/imports/api/users/enums/roles';
 
 Facilities.expose({
     firewall(filters, options, userId) {
-        Security.isAllowed(userId, roleGroups.ADMIN_TECH);
+        Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
     },
 });
 FacilityListQuery.expose({
     firewall(userId, params) {
-        Security.isAllowed(userId, roleGroups.ADMIN_TECH);
+        Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
     },
 });
 FacilityListNamesQuery.expose({
     firewall(userId, params) {
-        Security.isAllowed(userId, roleGroups.ADMIN_TECH);
+        Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
     },
 });
