@@ -56,6 +56,11 @@ export default new SimpleSchema({
         optional: true,
         label: 'Medical Number'
     },
+    invoiceNo: {
+        type: String,
+        optional: true,
+        label: 'Invoice Number'
+    },
     insurances: {
         type: Array,
         label: 'Insurances'

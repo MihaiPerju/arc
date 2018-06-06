@@ -65,7 +65,7 @@ export default class CommentList extends Component {
         <div className="comment-list">
           {comments
             .map((comment, index) => {
-              return <CommentSingle comment={comment} key={index} />;
+              return <CommentSingle comment={comment} key={index} commentId={index}/>;
             })}
         </div>
       </div>

@@ -165,7 +165,7 @@ export default class ClientSearchBar extends Component {
         {filter && (
           <div className="filter-bar">
             <div className="select-wrapper">
-              <div className="form-group range-date-boxes">
+              <div className="form-group flex--helper form-group__pseudo">
                 <DatePicker
                   placeholderText="From created-at date"
                   selected={createdAtMin}

@@ -53,7 +53,7 @@ export default class RouteService {
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
                 {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
                 {name: "action/list", label: "Actions", icon: 'thumb-tack'},
-                {name: "tag/list", label: "Tags", icon: 'paperclip'}
+                {name: "tag/list", label: "Tags", icon: 'tags'}
             ];
         } else {
             return [
