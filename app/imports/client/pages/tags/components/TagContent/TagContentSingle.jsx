@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Notifier from "/imports/client/lib/Notifier";
 
 export default class TagContentSingle extends Component {
 
     removeTag = (_id, tagId) => {
-        Meteor.call('user.removeTag', { _id, tagId }, (err, res) => {
+        Meteor.call('user.removeTag', {_id, tagId}, (err, res) => {
             if (!err) {
                 Notifier.success('removed successfully !')
             }
@@ -12,19 +12,21 @@ export default class TagContentSingle extends Component {
     }
 
     render() {
-        const { userName, userId, currentTag } = this.props;
+        const {userName, userId, currentTag} = this.props;
 
         return (
-            <div>
-                <div className="table-row">
-                    <div className="right-side">
-                        <div className="table-field text-center">
-                            {userName}
-                        </div>
-                        <div className="table-field text-center">
-                            <button onClick={() => this.removeTag(userId, currentTag._id)} className="btn-edit btn--white">remove user</button>
-                        </div>
+            <div className="action-table__row flex--helper">
+                <div className="action-table__field truncate">
+                    <div className="check-item">
+                        <input id={userId} type="checkbox" className="hidden"/>
+                        <label htmlFor={userId}/>
                     </div>
+                    {userName}
+                </div>
+                <div className="action-table__field text-center">
+                    <button onClick={() => this.removeTag(userId, currentTag._id)} className="btn-text--grey">
+                        <i className="icon-trash-o"/>
+                    </button>
                 </div>
             </div>
         )
