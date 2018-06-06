@@ -13,12 +13,9 @@ export default new SimpleSchema({
         blackbox: true,
         optional: true
     },
-    allowedRoles: {
-        type: Array,
+    shareReport: {
+        type: Boolean,
         optional: true
-    },
-    'allowedRoles.$': {
-        type: String
     },
     createdBy: {
         type: String,
