@@ -89,16 +89,12 @@ export function createRoute(path, handler) {
 
           let fileName = filePath.replace(os.tmpDir() + "/", "");
           let movePath = Business.LOCAL_STORAGE_FOLDER + "/" + fileName;
-          console.log(movePath);
           movePath = movePath.replace(/\s+/g, "-");
           //If there is no local folder
-          console.log(Business.LOCAL_STORAGE_FOLDER);
           if (!fs.existsSync(Business.LOCAL_STORAGE_FOLDER)) {
-            // console.log(Business.LOCAL_STORAGE_FOLDER);
             fs.mkdirSync(Business.LOCAL_STORAGE_FOLDER);
           }
           //Move file to specified storage folder
-          console.log(filePath, movePath);
           fs.renameSync(filePath, movePath);
 
           filePath = movePath.replace(Business.LOCAL_STORAGE_FOLDER + "/", "");
