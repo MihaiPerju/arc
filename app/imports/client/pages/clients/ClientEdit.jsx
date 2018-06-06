@@ -129,7 +129,6 @@ export default class EditClient extends React.Component {
                 />
                 <ErrorField name="financialGoals" />
               </div>
-
               <div className="header__block m-t--20">
                 <div className="title-block text-uppercase">Client Logo</div>
               </div>
