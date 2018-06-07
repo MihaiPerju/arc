@@ -483,13 +483,14 @@
   .pay-item {
     padding-left: 2px;
     padding-right: 2px;
-    &.active {
-      box-shadow: 0 0 1px 0 #3692d9;
-    }
     &__wrapper {
       background: #f6f6f6;
       padding: 10px 15px;
       border-radius: 0 0 3px 3px;
+    }
+    &.active .brand-block div {
+      color: #3370b5;
+      font-weight: bold;
     }
     .brand-block {
       background: $color-white;
