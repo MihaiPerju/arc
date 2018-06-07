@@ -483,19 +483,14 @@
   .pay-item {
     padding-left: 2px;
     padding-right: 2px;
-    &.active:before {
-      content: ' ';
-      background: #3370b5;
-      width: 4px;
-      top: 0;
-      bottom: 0;
-      left: -1px;
-      position: absolute;
-    }
     &__wrapper {
       background: #f6f6f6;
       padding: 10px 15px;
       border-radius: 0 0 3px 3px;
+    }
+    &.active .brand-block div {
+      color: #3370b5;
+      font-weight: bold;
     }
     .brand-block {
       background: $color-white;
