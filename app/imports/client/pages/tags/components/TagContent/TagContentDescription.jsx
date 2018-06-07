@@ -60,28 +60,30 @@ export default class TagContentDescription extends Component {
     this.setState({ selectedUser });
   };
 
-  removeTags = () => {
+  removeTags = userIds => {
     const { currentTag } = this.props;
-    const { selectedUser } = this.state;
-    Meteor.call(
-      "user.removeTags",
-      { userIds: selectedUser, tagId: currentTag._id },
-      (err, res) => {
-        if (!err) {
-          Notifier.success("removed successfully !");
-          this.setState({ selectAllChkBox: false, selectedUser: [] });
-        } else {
-          Notifier.error(err.reason);
+    this.refs.form.reset();
+    if (userIds.length > 0) {
+      Meteor.call(
+        "user.removeTags",
+        { userIds, tagId: currentTag._id },
+        (err, res) => {
+          if (!err) {
+            Notifier.success("removed successfully !");
+            this.setState({ selectAllChkBox: false, selectedUser: [] });
+          } else {
+            Notifier.error(err.reason);
+          }
         }
-      }
-    );
+      );
+    }
   };
 
   render() {
     const { users, currentTag, untaggedUsers, taggedUsers } = this.props;
     const options = this.getOptions(untaggedUsers);
     const { selectedUser, selectAllChkBox } = this.state;
-    console.log("selectedUser", selectAllChkBox);
+
     return (
       <div className="create-form">
         <div className="action-block i--block">
@@ -124,7 +126,10 @@ export default class TagContentDescription extends Component {
               Select all
             </label>
           </div>
-          <button onClick={this.removeTags} className="btn-text--grey">
+          <button
+            onClick={() => this.removeTags(selectedUser)}
+            className="btn-text--grey"
+          >
             <i className="icon-trash-o" />
           </button>
         </div>
@@ -144,9 +149,9 @@ export default class TagContentDescription extends Component {
                 key={index}
                 userName={`${user.profile.firstName} ${user.profile.lastName}`}
                 userId={user._id}
-                currentTag={currentTag}
                 selectedUser={selectedUser}
                 toggleUser={this.toggleUser}
+                removeTags={this.removeTags}
               />
             ))}
           </div>

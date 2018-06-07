@@ -2,12 +2,9 @@ import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
 
 export default class TagContentSingle extends Component {
-  removeTag = (_id, tagId) => {
-    Meteor.call("user.removeTag", { _id, tagId }, (err, res) => {
-      if (!err) {
-        Notifier.success("removed successfully !");
-      }
-    });
+  removeTag = _id => {
+    const { removeTags } = this.props;
+    removeTags([_id]);
   };
 
   isSelected = () => {
@@ -15,20 +12,20 @@ export default class TagContentSingle extends Component {
     return selectedUser.indexOf(userId) > -1;
   };
 
-  onClick = (userId) => {
-    const {toggleUser} = this.props;
+  onClick = userId => {
+    const { toggleUser } = this.props;
     toggleUser(userId);
   };
 
   render() {
-    const { userName, userId, currentTag, selectedUser } = this.props;
+    const { userName, userId, selectedUser } = this.props;
 
     return (
       <div className="action-table__row flex--helper">
         <div className="action-table__field truncate">
           <div className="check-item">
             <input
-            onClick={() => this.onClick(userId)}
+              onClick={() => this.onClick(userId)}
               checked={this.isSelected()}
               id={userId}
               type="checkbox"
@@ -40,7 +37,7 @@ export default class TagContentSingle extends Component {
         </div>
         <div className="action-table__field text-center">
           <button
-            onClick={() => this.removeTag(userId, currentTag._id)}
+            onClick={() => this.removeTag(userId)}
             className="btn-text--grey"
           >
             <i className="icon-trash-o" />
