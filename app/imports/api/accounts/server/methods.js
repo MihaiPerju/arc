@@ -115,6 +115,18 @@ Meteor.methods({
     );
   },
 
+  "account.insurance.update_activeInsCode"(_id, insCode) {
+    AccountSecurity.hasRightsOnAccount(this.userId, _id);
+    Accounts.update(
+      { _id },
+      {
+        $set: {
+          activeInsCode: insCode
+        }
+      }
+    );
+  },
+
   "accounts.count"() {
     const result = [];
     const facilities = Facilities.find().fetch();

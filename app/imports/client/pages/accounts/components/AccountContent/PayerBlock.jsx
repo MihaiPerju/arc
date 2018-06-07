@@ -62,6 +62,7 @@ export default class PayerBlock extends Component {
                         <PayItem
                           indexActiveInsCode={indexActiveInsCode}
                           index={index}
+                          accountId={account._id}
                           insurance={insurance}
                         />
                       </div>
