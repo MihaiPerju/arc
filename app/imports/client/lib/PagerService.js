@@ -185,6 +185,14 @@ export default class PagerService {
       _.extend(params.filters, {
         acctBal: { $gte: +acctBalMin, $lte: +acctBalMax }
       });
+    } else if (acctBalMin) {
+      _.extend(params.filters, {
+        acctBal: { $gte: +acctBalMin }
+      });
+    } else if (acctBalMax) {
+      _.extend(params.filters, {
+        acctBal: { $lte: +acctBalMax }
+      });
     }
     if (finClass) {
       _.extend(params.filters, { finClass });
@@ -203,11 +211,43 @@ export default class PagerService {
           )
         }
       });
+    } else if (dischrgDateMin) {
+      _.extend(params.filters, {
+        dischrgDate: {
+          $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day"))
+        }
+      });
+    } else if (dischrgDateMax) {
+      _.extend(params.filters, {
+        dischrgDate: {
+          $lt: new Date(
+            moment(new Date(dischrgDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
     }
     if (fbDateMin && fbDateMax) {
       _.extend(params.filters, {
         fbDate: {
           $gte: new Date(moment(new Date(fbDateMin)).startOf("day")),
+          $lt: new Date(
+            moment(new Date(fbDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
+    } else if (fbDateMin) {
+      _.extend(params.filters, {
+        fbDate: {
+          $gte: new Date(moment(new Date(fbDateMin)).startOf("day"))
+        }
+      });
+    } else if (fbDateMax) {
+      _.extend(params.filters, {
+        fbDate: {
           $lt: new Date(
             moment(new Date(fbDateMax))
               .startOf("day")
