@@ -29,10 +29,10 @@ export default class AccountSearchBar extends Component {
       fbDateMax: null,
       substates: [],
       sort: false,
-      page:1,
-      perPage:13,
-      total:0,
-      range:{}
+      page: 1,
+      perPage: 13,
+      total: 0,
+      range: {}
     };
   }
 
@@ -85,8 +85,8 @@ export default class AccountSearchBar extends Component {
   }
 
   onSubmit(params) {
-    if(FlowRouter.current().queryParams.page !='1'){
-      this.props.setPagerInitial()
+    if (FlowRouter.current().queryParams.page != "1") {
+      this.props.setPagerInitial();
     }
     if ("acctNum" in params) {
       FlowRouter.setQueryParams({ acctNum: params.acctNum });
@@ -193,17 +193,17 @@ export default class AccountSearchBar extends Component {
   };
 
   getSortClasses = (key, sortKey) => {
-    const test = FlowRouter.getQueryParam(key);
+    const param = FlowRouter.getQueryParam(key);
     let classes = {};
     if (sortKey === "ASC") {
       classes = {
         "icon-angle-up": true,
-        [`${key}-active-asc`]: test && test === "ASC"
+        [`${key}-active-asc`]: param && param === "ASC"
       };
     } else {
       classes = {
         "icon-angle-down": true,
-        [`${key}-active-desc`]: test && test === "DESC"
+        [`${key}-active-desc`]: param && param === "DESC"
       };
     }
     return classNames(classes);
@@ -245,8 +245,16 @@ export default class AccountSearchBar extends Component {
 
     const searchBarClasses = classNames({
       "search-input": true,
-      "full__width": (!btnGroup && !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)),
-      "sort__width": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+      full__width:
+        !btnGroup && !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
+      sort__width: Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+    });
+
+    const currentStateName = FlowRouter.current().params.state;
+
+    const sortOptionClasses = classNames({
+      "sort-options": true,
+      "tickle__width": currentStateName === "tickles"
     });
 
     return (
@@ -280,9 +288,7 @@ export default class AccountSearchBar extends Component {
                 deleteAction={deleteAction}
               />
             ) : null}
-            <div
-              className={searchBarClasses}
-            >
+            <div className={searchBarClasses}>
               <div className="form-group">
                 <AutoField
                   labelHidden={true}
@@ -300,15 +306,20 @@ export default class AccountSearchBar extends Component {
                 <i className="icon-filter" />
               </button>
             </div>
-            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (<div
-              className={sort ? "filter-block active" : "filter-block"}
-              onClick={this.manageSortBar}
-            >
-              <button>
-                <i className="icon-angle-up" />{"  "}
-                <i className="icon-angle-down" />
-              </button>
-            </div>)}
+            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+              <div
+                className={sort ? "filter-block active" : "filter-block"}
+                onClick={this.manageSortBar}
+              >
+                <button>
+                  {sort ? (
+                    <i className="icon-angle-up" />
+                  ) : (
+                    <i className="icon-angle-down" />
+                  )}
+                </button>
+              </div>
+            )}
           </div>
         </div>
         {filter && (
@@ -343,16 +354,16 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
               <div className="form-group flex--helper form-group__pseudo">
-                  <AutoField
-                    labelHidden={true}
-                    name="acctBalMin"
-                    placeholder="Minimum Account Balance"
-                  />
-                  <AutoField
-                    labelHidden={true}
-                    name="acctBalMax"
-                    placeholder="Maximum Account Balance"
-                  />
+                <AutoField
+                  labelHidden={true}
+                  name="acctBalMin"
+                  placeholder="Minimum Account Balance"
+                />
+                <AutoField
+                  labelHidden={true}
+                  name="acctBalMax"
+                  placeholder="Maximum Account Balance"
+                />
               </div>
               <div className="form-group flex--helper form-group__pseudo">
                 <DatePicker
@@ -405,7 +416,7 @@ export default class AccountSearchBar extends Component {
         )}
         {sort && (
           <div className="sort-bar">
-            <div className="test">
+            <div className={sortOptionClasses}>
               <div>Account Balance</div>
               <div className="sort-icons">
                 <span
@@ -418,21 +429,23 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>tickleDate</div>
-              <div className="sort-icons">
-                <span
-                  onClick={() => this.sortAccounts("sortTickleDate", "ASC")}
-                  className={this.getSortClasses("sortTickleDate", "ASC")}
-                />
-                <span
-                  onClick={() => this.sortAccounts("sortTickleDate", "DESC")}
-                  className={this.getSortClasses("sortTickleDate", "DESC")}
-                />
+            {currentStateName === "tickles" && (
+              <div className={sortOptionClasses}>
+                <div>Tickle Date</div>
+                <div className="sort-icons">
+                  <span
+                    onClick={() => this.sortAccounts("sortTickleDate", "ASC")}
+                    className={this.getSortClasses("sortTickleDate", "ASC")}
+                  />
+                  <span
+                    onClick={() => this.sortAccounts("sortTickleDate", "DESC")}
+                    className={this.getSortClasses("sortTickleDate", "DESC")}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="test">
-              <div>createdAt</div>
+            )}
+            <div className={sortOptionClasses}>
+              <div>Created At</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortCreatedAt", "ASC")}
@@ -444,8 +457,8 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>dischrgDate</div>
+            <div className={sortOptionClasses}>
+              <div>Discharge Date</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortDischrgDate", "ASC")}
@@ -457,8 +470,8 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>fbDate</div>
+            <div className={sortOptionClasses}>
+              <div>Last Bill Date</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortFbDate", "ASC")}
@@ -470,8 +483,8 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>admitDate</div>
+            <div className={sortOptionClasses}>
+              <div>Admit Date</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortAdmitDate", "ASC")}
