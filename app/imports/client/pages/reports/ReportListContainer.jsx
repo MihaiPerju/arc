@@ -110,6 +110,8 @@ class ReportListContainer extends Pager {
           reportsSelected: []
         });
         this.closeRightPanel();
+      } else {
+        Notifier.error(err.reason);
       }
     });
   };
