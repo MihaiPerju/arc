@@ -53,6 +53,10 @@ export default new SimpleSchema({
         type: SimpleSchema.Integer,
         optional: true
     },
+    activeInsCode: {
+        type: String,
+        optional: true
+    },
     insurances: {
         type: Array,
         optional: true,
