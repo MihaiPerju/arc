@@ -25,7 +25,7 @@
   padding: 10px 15px 10px 10px;
   display: block;
   background-color: $color-white;
-  color: $color-text;
+  color: $dark-grey;
   box-shadow: $shadow-dp8;
   transform: translateX(100%);
   opacity: 0;
@@ -44,19 +44,19 @@
   }
 
   &-success {
-    border-left: 4px solid $color-success;
+    border-left: 3px solid $green;
   }
 
   &-error {
-    border-left: 4px solid $color-error;
+    border-left: 3px solid #f5222d;
   }
 
   &-warning {
-    border-left: 4px solid $color-warning;
+    border-left: 3px solid $color-warning;
   }
 
   &-info {
-    border-left: 4px solid $color-info;
+    border-left: 3px solid $color-info;
   }
 
   &-dismiss {
