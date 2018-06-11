@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import NoteView from './NoteView';
 
 export default class ContactBlock extends Component {
   render() {
@@ -40,8 +41,7 @@ export default class ContactBlock extends Component {
                     <div className="l-info">{contact.email}</div>
                   </li>
                   <li className="text-center">
-                    <div className="text-light-grey">Notes</div>
-                    <div className="l-info">{contact.notes}</div>
+                    <NoteView notes={contact.notes}/>
                   </li>
                 </ul>
               );
