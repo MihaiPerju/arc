@@ -23,12 +23,14 @@ export default class PayItem extends Component {
     });
   };
 
-  confirmUpdate(insCode) {
+  confirmUpdate(insurance) {
     const { accountId } = this.props;
+    const { insCode,insName} = insurance;
     Meteor.call(
       "account.insurance.update_activeInsCode",
       accountId,
       insCode,
+      insName,
       err => {
         if (!err) {
           Notifier.success("Active Insurance Updated!");
@@ -72,7 +74,7 @@ export default class PayItem extends Component {
                 </button>
                 <button
                   className="btn--light-blue"
-                  onClick={this.confirmUpdate.bind(this, insurance.insCode)}
+                  onClick={this.confirmUpdate.bind(this, insurance)}
                 >
                   Confirm & Update
                 </button>

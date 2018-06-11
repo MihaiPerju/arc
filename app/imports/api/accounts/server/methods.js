@@ -115,13 +115,14 @@ Meteor.methods({
     );
   },
 
-  "account.insurance.update_activeInsCode"(_id, insCode) {
+  "account.insurance.update_activeInsCode"(_id, insCode,insName) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Accounts.update(
       { _id },
       {
         $set: {
-          activeInsCode: insCode
+          activeInsCode: insCode,
+          activeInsName:insName
         }
       }
     );
