@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import UserSchema from './schema';
 
-const Users = Meteor.users;
+const Users = Meteor.users || new Mongo.Collection('users');;
 
 Users.helpers({
     getEmail() {
