@@ -124,7 +124,7 @@ export default class AccountContentHeader extends Component {
               tickle={true}
               type="Tickle"
               accountId={account._id}
-              title="Tickle an account"
+              title="Confirm"
               closeRightPanel={closeRightPanel}
             />
           </div>

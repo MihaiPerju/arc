@@ -316,6 +316,45 @@
   }
 }
 
+.tickle-dialog {
+  .cc-dialog__card {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .cc-dialog__title {
+    padding: 10px 25px;
+    border-radius: 2px 2px 0 0;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: $color-white;
+    background: $light-grey;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .input-datetime {
+    > span {
+      position: relative;
+      padding-left: 25px;
+      font-size: 1.6rem;
+
+      &:before {
+        content: '\f271';
+        font-family: $font-icon;
+        position: absolute;
+        left: 0;
+        top: -1px;
+        color: $extra-light-grey;
+      }
+    }
+  }
+  
+  .action-block {
+    margin-bottom: 20px;
+  }
+}
+
 //Header Acccount
 .header-account {
   .right__side {
