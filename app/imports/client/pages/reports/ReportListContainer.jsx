@@ -192,6 +192,7 @@ class ReportListContainer extends Pager {
             report={report}
             create={create}
             substates={substates}
+            closeRightPanel={this.closeRightPanel}
           />
         )}
       </div>
@@ -214,7 +215,7 @@ class RightSide extends Component {
   }
 
   render() {
-    const { report, create, close, substates } = this.props;
+    const { report, create, close, substates, closeRightPanel } = this.props;
     const { fade } = this.state;
     const classes = classNames({
       right__side: true,
@@ -225,7 +226,7 @@ class RightSide extends Component {
         {create ? (
           <ReportCreate close={close} substates={substates} />
         ) : (
-          <ReportContent substates={substates} report={report} />
+          <ReportContent closeRightPanel={closeRightPanel} substates={substates} report={report} />
         )}
       </div>
     );

@@ -4,7 +4,7 @@ import Cronjob from "/imports/api/reports/server/services/CronjobService";
 
 Meteor.methods({
   "report.delete"(id) {
-    Security.hasDeleteRightsOnReport(this.userId, id);
+    Security.hasRightsOnReport(this.userId, id);
     Reports.remove({ _id: id });
   },
 
@@ -30,14 +30,27 @@ Meteor.methods({
     // Check if user is allowed to modify report;
     Security.hasRightsOnReport(this.userId, data._id);
 
-    return Reports.update({_id: data._id}, {
+    return Reports.update(
+      { _id: data._id },
+      {
         $set: data.generalInformation
-    });
+      }
+    );
   },
 
   "report.sendNow"(schedule) {
     Security.hasRightsOnReport(this.userId, schedule.reportId);
 
     Cronjob.executeSchedule(schedule);
+  },
+
+  "report.copy"(_id) {
+    let report = Reports.find({ _id }).fetch();
+    if (report) {
+      report = report[0];
+      report.createdBy = this.userId;
+      delete report._id;
+      Reports.insert(report);
+    }
   }
 });
