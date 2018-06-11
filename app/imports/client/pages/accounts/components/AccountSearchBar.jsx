@@ -32,7 +32,9 @@ export default class AccountSearchBar extends Component {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      admitDateMin: null,
+      admitDateMax: null
     };
   }
 
@@ -177,6 +179,19 @@ export default class AccountSearchBar extends Component {
         FlowRouter.setQueryParams({ fbDateMax: date });
       }
       this.setState({ fbDateMax: selectedDate });
+    } else if (field === "admitDateMin") {
+      this.setState({ admitDateMin: selectedDate });
+      FlowRouter.setQueryParams({ admitDateMin: date });
+    } else if (field === "admitDateMax") {
+      const { admitDateMin } = this.state;
+      if (selectedDate < admitDateMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      } else {
+        FlowRouter.setQueryParams({ admitDateMax: date });
+      }
+      this.setState({ admitDateMax: selectedDate });
     }
   };
 
@@ -222,7 +237,9 @@ export default class AccountSearchBar extends Component {
       fbDateMin,
       fbDateMax,
       substates,
-      sort
+      sort,
+      admitDateMin,
+      admitDateMax
     } = this.state;
     const {
       options,
@@ -254,7 +271,7 @@ export default class AccountSearchBar extends Component {
 
     const sortOptionClasses = classNames({
       "sort-options": true,
-      "tickle__width": currentStateName === "tickles"
+      tickle__width: currentStateName === "tickles"
     });
 
     return (
@@ -387,6 +404,18 @@ export default class AccountSearchBar extends Component {
                   placeholderText="To Last Bill Date"
                   selected={fbDateMax}
                   onChange={date => this.onDateSelect(date, "fbDateMax")}
+                />
+              </div>
+              <div className="form-group flex--helper form-group__pseudo">
+                <DatePicker
+                  placeholderText="From Admit Date"
+                  selected={admitDateMin}
+                  onChange={date => this.onDateSelect(date, "admitDateMin")}
+                />
+                <DatePicker
+                  placeholderText="To Admit Date"
+                  selected={admitDateMax}
+                  onChange={date => this.onDateSelect(date, "admitDateMax")}
                 />
               </div>
               <div className="form-group">

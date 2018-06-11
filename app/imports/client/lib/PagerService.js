@@ -38,6 +38,8 @@ export default class PagerService {
     const fbDateMin = FlowRouter.getQueryParam("fbDateMin");
     const fbDateMax = FlowRouter.getQueryParam("fbDateMax");
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
+    const admitDateMin = FlowRouter.getQueryParam("admitDateMin");
+    const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
     // sorting query params
     const sortAcctBal = FlowRouter.getQueryParam("sortAcctBal");
     const sortTickleDate = FlowRouter.getQueryParam("sortTickleDate");
@@ -68,7 +70,9 @@ export default class PagerService {
         dischrgDateMax,
         fbDateMin,
         fbDateMax,
-        activeInsCode
+        activeInsCode,
+        admitDateMin,
+        admitDateMax
       },
       options: {
         sortAcctBal,
@@ -125,7 +129,9 @@ export default class PagerService {
       dischrgDateMax,
       fbDateMin,
       fbDateMax,
-      activeInsCode
+      activeInsCode,
+      admitDateMin,
+      admitDateMax
     },
     {
       sortAcctBal,
@@ -165,7 +171,7 @@ export default class PagerService {
       });
     }
 
-    //adding query options
+    //adding filter query options
     if (acctNum) {
       _.extend(params.filters, { acctNum: { $regex: acctNum, $options: "i" } });
     }
@@ -185,6 +191,14 @@ export default class PagerService {
       _.extend(params.filters, {
         acctBal: { $gte: +acctBalMin, $lte: +acctBalMax }
       });
+    } else if (acctBalMin) {
+      _.extend(params.filters, {
+        acctBal: { $gte: +acctBalMin }
+      });
+    } else if (acctBalMax) {
+      _.extend(params.filters, {
+        acctBal: { $lte: +acctBalMax }
+      });
     }
     if (finClass) {
       _.extend(params.filters, { finClass });
@@ -196,6 +210,22 @@ export default class PagerService {
       _.extend(params.filters, {
         dischrgDate: {
           $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day")),
+          $lt: new Date(
+            moment(new Date(dischrgDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
+    } else if (dischrgDateMin) {
+      _.extend(params.filters, {
+        dischrgDate: {
+          $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day"))
+        }
+      });
+    } else if (dischrgDateMax) {
+      _.extend(params.filters, {
+        dischrgDate: {
           $lt: new Date(
             moment(new Date(dischrgDateMax))
               .startOf("day")
@@ -215,11 +245,57 @@ export default class PagerService {
           )
         }
       });
+    } else if (fbDateMin) {
+      _.extend(params.filters, {
+        fbDate: {
+          $gte: new Date(moment(new Date(fbDateMin)).startOf("day"))
+        }
+      });
+    } else if (fbDateMax) {
+      _.extend(params.filters, {
+        fbDate: {
+          $lt: new Date(
+            moment(new Date(fbDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
     }
     if (activeInsCode) {
       _.extend(params.filters, { activeInsCode });
     }
 
+    if (admitDateMin && admitDateMax) {
+      _.extend(params.filters, {
+        admitDate: {
+          $gte: new Date(moment(new Date(admitDateMin)).startOf("day")),
+          $lt: new Date(
+            moment(new Date(admitDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
+    } else if (admitDateMin) {
+      _.extend(params.filters, {
+        admitDate: {
+          $gte: new Date(moment(new Date(admitDateMin)).startOf("day"))
+        }
+      });
+    } else if (admitDateMax) {
+      _.extend(params.filters, {
+        admitDate: {
+          $lt: new Date(
+            moment(new Date(admitDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
+    }
+
+    //adding sort query options
     _.extend(params, {
       options: { sort: {} }
     });

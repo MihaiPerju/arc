@@ -2,7 +2,8 @@ const States = {
   ACTIVE: "Active",
   ARCHIVED: "Archived",
   HOLD: "Hold",
-  ESCALATED: "Escalated"
+  ESCALATED: "Escalated",
+  REVIEW: "Review"
 };
 
 import { Substates } from "./substates";

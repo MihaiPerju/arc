@@ -43,9 +43,11 @@ Meteor.methods({
         }
     },
 
-    'user.addTag'({_id, tagId}) {
+    'user.addTag'({userIds, tagId}) {
         if(Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
-            return TagService.addTagToUser({_id, tagId});
+            _.each(userIds, (_id) => {
+                return TagService.addTagToUser({_id, tagId});
+            })
         }
         throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
     },
@@ -58,5 +60,17 @@ Meteor.methods({
             )
         }
         throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
+    },
+    'user.removeTags'({userIds, tagId}) {
+        if(Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
+            _.each(userIds,  (_id) => {
+                Users.update(
+                    {_id},
+                    {$pull: {tagIds: tagId}}
+                )
+            })
+        } else {
+            throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!'); 
+        }
     }
 });

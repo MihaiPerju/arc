@@ -9,7 +9,8 @@ let commonRules = [
     {value: 'finClass', label: 'Financial Class', optional: true},
     {value: 'admitDate', label: 'Admit Date', optional: true},
     {value: 'medNo', label: 'Medical Number', optional: false},
-    {value: 'invoiceNo', label: 'Invoice Number', optional: true}
+    {value: 'invoiceNo', label: 'Invoice Number', optional: true},
+    {value: 'activeInsCode', label: 'Active Insurance Code', optional: true}
 ];
 
 export default {
@@ -32,6 +33,6 @@ export default {
     types: {
         dates: ['dischrgDate', 'fbDate', 'admitDate', 'transDate'],
         numbers: ['zip', 'acctBal', 'medNo', 'insBal', 'newAcctBal', 'ptBal', 'transAmount', 'invoiceNo'],
-        strings: ['address1', 'address2', 'insCode', 'city', 'state', 'policy', 'phone', 'transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode'],
+        strings: ['address1', 'address2', 'insCode', 'city', 'state', 'policy', 'phone', 'transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode','activeInsCode'],
     }
 }
