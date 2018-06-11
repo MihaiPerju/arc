@@ -61,6 +61,11 @@ export default new SimpleSchema({
         optional: true,
         label: 'Invoice Number'
     },
+    activeInsCode: {
+        type: String,
+        optional: true,
+        label: 'Active Insurance Code'
+    },
     insurances: {
         type: Array,
         label: 'Insurances'

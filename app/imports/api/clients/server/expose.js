@@ -7,6 +7,11 @@ Clients.expose({});
 
 ClientListQuery.expose({
     firewall(userId, params) {
+        if(!params.filters) {
+            _.extend(params, {
+                filters: {}
+            });
+        }
         if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
             _.extend(params.filters, {
                 managerIds: { $in: [userId] }

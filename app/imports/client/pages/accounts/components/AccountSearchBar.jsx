@@ -29,10 +29,12 @@ export default class AccountSearchBar extends Component {
       fbDateMax: null,
       substates: [],
       sort: false,
-      page:1,
-      perPage:13,
-      total:0,
-      range:{}
+      page: 1,
+      perPage: 13,
+      total: 0,
+      range: {},
+      admitDateMin: null,
+      admitDateMax: null
     };
   }
 
@@ -85,8 +87,8 @@ export default class AccountSearchBar extends Component {
   }
 
   onSubmit(params) {
-    if(FlowRouter.current().queryParams.page !='1'){
-      this.props.setPagerInitial()
+    if (FlowRouter.current().queryParams.page != "1") {
+      this.props.setPagerInitial();
     }
     if ("acctNum" in params) {
       FlowRouter.setQueryParams({ acctNum: params.acctNum });
@@ -177,6 +179,19 @@ export default class AccountSearchBar extends Component {
         FlowRouter.setQueryParams({ fbDateMax: date });
       }
       this.setState({ fbDateMax: selectedDate });
+    } else if (field === "admitDateMin") {
+      this.setState({ admitDateMin: selectedDate });
+      FlowRouter.setQueryParams({ admitDateMin: date });
+    } else if (field === "admitDateMax") {
+      const { admitDateMin } = this.state;
+      if (selectedDate < admitDateMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      } else {
+        FlowRouter.setQueryParams({ admitDateMax: date });
+      }
+      this.setState({ admitDateMax: selectedDate });
     }
   };
 
@@ -222,7 +237,9 @@ export default class AccountSearchBar extends Component {
       fbDateMin,
       fbDateMax,
       substates,
-      sort
+      sort,
+      admitDateMin,
+      admitDateMax
     } = this.state;
     const {
       options,
@@ -245,8 +262,9 @@ export default class AccountSearchBar extends Component {
 
     const searchBarClasses = classNames({
       "search-input": true,
-      "full__width": (!btnGroup && !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)),
-      "sort__width": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+      full__width:
+        !btnGroup && !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
+      sort__width: Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
     });
 
     return (
@@ -280,9 +298,7 @@ export default class AccountSearchBar extends Component {
                 deleteAction={deleteAction}
               />
             ) : null}
-            <div
-              className={searchBarClasses}
-            >
+            <div className={searchBarClasses}>
               <div className="form-group">
                 <AutoField
                   labelHidden={true}
@@ -300,15 +316,18 @@ export default class AccountSearchBar extends Component {
                 <i className="icon-filter" />
               </button>
             </div>
-            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (<div
-              className={sort ? "filter-block active" : "filter-block"}
-              onClick={this.manageSortBar}
-            >
-              <button>
-                <i className="icon-angle-up" />{"  "}
-                <i className="icon-angle-down" />
-              </button>
-            </div>)}
+            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+              <div
+                className={sort ? "filter-block active" : "filter-block"}
+                onClick={this.manageSortBar}
+              >
+                <button>
+                  <i className="icon-angle-up" />
+                  {"  "}
+                  <i className="icon-angle-down" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
         {filter && (
@@ -343,16 +362,16 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
               <div className="form-group flex--helper form-group__pseudo">
-                  <AutoField
-                    labelHidden={true}
-                    name="acctBalMin"
-                    placeholder="Minimum Account Balance"
-                  />
-                  <AutoField
-                    labelHidden={true}
-                    name="acctBalMax"
-                    placeholder="Maximum Account Balance"
-                  />
+                <AutoField
+                  labelHidden={true}
+                  name="acctBalMin"
+                  placeholder="Minimum Account Balance"
+                />
+                <AutoField
+                  labelHidden={true}
+                  name="acctBalMax"
+                  placeholder="Maximum Account Balance"
+                />
               </div>
               <div className="form-group flex--helper form-group__pseudo">
                 <DatePicker
@@ -376,6 +395,18 @@ export default class AccountSearchBar extends Component {
                   placeholderText="To Last Bill Date"
                   selected={fbDateMax}
                   onChange={date => this.onDateSelect(date, "fbDateMax")}
+                />
+              </div>
+              <div className="form-group flex--helper form-group__pseudo">
+                <DatePicker
+                  placeholderText="From Admit Date"
+                  selected={admitDateMin}
+                  onChange={date => this.onDateSelect(date, "admitDateMin")}
+                />
+                <DatePicker
+                  placeholderText="To Admit Date"
+                  selected={admitDateMax}
+                  onChange={date => this.onDateSelect(date, "admitDateMax")}
                 />
               </div>
               <div className="form-group">

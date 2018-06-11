@@ -29,8 +29,8 @@ export default class PaginationBar extends Component {
     render() {
         const {tooltip} = this.state;
         const {create, module, total, range, buttonHidden} = this.props;
-        const min = range && range.lowest ? range.lowest : 0;
-        let max = range && range.highest ? range.highest : 0;
+        const min = range && total ? range.lowest : 0;
+        let max = range && total ? range.highest : 0;
         if (total && total < max) {
             max = total;
         }
