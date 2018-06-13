@@ -120,7 +120,7 @@ export default class EmailManagement {
     const tomorrow = moment().add("1", "days");
 
     //Runs only at 3 AM
-    if (now.hour() == 15) {
+    if (now.hour() == 3) {
       //Check the week day.
       switch (now.day()) {
         case 0:
