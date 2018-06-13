@@ -25,9 +25,9 @@ export default class PayItem extends Component {
 
   confirmUpdate(insurance) {
     const { accountId } = this.props;
-    const { insCode,insName} = insurance;
+    const { insCode, insName } = insurance;
     Meteor.call(
-      "account.insurance.update_activeInsCode",
+      "account.updateActiveInsCode",
       accountId,
       insCode,
       insName,
@@ -66,7 +66,8 @@ export default class PayItem extends Component {
               closePortal={this.closeDialog}
             >
               <div className="form-wrapper">
-                Are you sure you want to make selected item as active insurance ?
+                Are you sure you want to make selected item as active insurance
+                ?
               </div>
               <div className="btn-group">
                 <button className="btn-cancel" onClick={this.closeDialog}>
