@@ -204,7 +204,11 @@ export default class AccountSearchBar extends Component {
   };
 
   sortAccounts = (key, sortKey) => {
-    FlowRouter.setQueryParams({ [key]: sortKey });
+    if(FlowRouter.getQueryParam(key) === sortKey) {
+      FlowRouter.setQueryParams({ [key]: null });
+    } else {
+      FlowRouter.setQueryParams({ [key]: sortKey }); 
+    }
   };
 
   getSortClasses = (key, sortKey) => {
