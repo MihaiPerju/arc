@@ -490,7 +490,12 @@
       background: #f6f6f6;
       padding: 10px 15px;
     }
+
     &.active {
+      .pay-item__wrapper {
+        background: rgba(255,247,153,.6);
+      }
+
       &:before {
         content: ' ';
         position: absolute;
