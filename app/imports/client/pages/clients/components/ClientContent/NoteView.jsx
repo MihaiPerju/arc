@@ -27,7 +27,6 @@ export default class NoteView extends Component {
 
         return (
             <div className="note-view">
-                <div className="text-light-grey">Notes</div>
                 <div className="note-view__wrapper flex--helper">
                     <div className="l-info truncate">{notes}</div>
                     <button className="cc-button" onClick={this.openDialog}>

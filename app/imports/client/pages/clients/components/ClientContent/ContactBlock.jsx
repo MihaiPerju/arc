@@ -41,6 +41,7 @@ export default class ContactBlock extends Component {
                     <div className="l-info">{contact.email}</div>
                   </li>
                   <li className="text-center">
+                    <div className="text-light-grey">Notes</div>
                     <NoteView notes={contact.notes}/>
                   </li>
                 </ul>
