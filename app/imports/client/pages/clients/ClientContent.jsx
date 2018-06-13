@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ClientContentHeader from './components/ClientContent/ClientContentHeader';
 import ContactBlock from './components/ClientContent/ContactBlock';
+import ActionBlock from './components/ClientContent/ActionBlock';
 import NoteBlock from './components/ClientContent/NoteBlock';
 import ClientEdit from './ClientEdit';
 
@@ -32,6 +33,7 @@ export default class ClientContent extends Component {
                         <div>
                             <ClientContentHeader setClient={setClient} setEdit={this.setEdit} client={client}/>
                             <ContactBlock client={client}/>
+                            <ActionBlock client={client} />
                             <NoteBlock/>
                         </div>
                 }

@@ -56,6 +56,21 @@
     }
   }
 
+  .action-block {
+    .header__block {
+      .filter-block {
+        button {
+          color: #b7b7b7;
+        }
+        &.active {
+          button {
+            color: #3cb878;
+          }
+        }
+      }
+    }
+  }
+
   .note-item {
     background: rgba($color-white, 0.6);
     padding: 10px 15px;

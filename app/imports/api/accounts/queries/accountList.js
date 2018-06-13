@@ -55,6 +55,11 @@ export default Accounts.createNamedQuery('accountList', {
         name: 1
     },
     actions: {
+        $filter({filters, params}) {
+            if(!_.isEmpty(params.actionsFilter)) {
+                _.extend(filters, params.actionsFilter)
+            }
+        },
         reasonCode: 1,
         action: {
             title: 1
