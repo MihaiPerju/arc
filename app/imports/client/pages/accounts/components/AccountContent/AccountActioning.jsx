@@ -51,6 +51,7 @@ export default class AccountActioning extends React.Component {
         } else {
             return (
                 <AccountAssign accountId={accountId}
+                               title={title}
                                userOptions={options}
                                close={this.closeDialog}
                                model={model}

@@ -7,14 +7,17 @@
   position: relative;
   height: 55px;
   display: flex;
+
   .pagination-bar__wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
   }
+
   .btn-group {
-    .btn-next, .btn-prev {
+    .btn-next,
+    .btn-prev {
       padding: 4px 9px;
       font-size: 1.4rem;
       background: #f2f1f1;
@@ -31,18 +34,21 @@
 //Drop Files Zone
 .action-block.drop-file {
   .add-content {
-    padding: 0
+    padding: 0;
   }
+
   &__wrapper {
-    min-height: 0
+    min-height: 0;
   }
+
   .dropzone {
     background: transparent;
     border: 0;
     min-height: 100%;
     padding: 27px 15px;
+
     &.dz-clickable .dz-message {
-      margin: 0
+      margin: 0;
     }
   }
 }
@@ -51,10 +57,12 @@
   position: absolute;
   top: 25px;
   right: 10px;
+
   label {
     position: relative;
     cursor: pointer;
     padding: 5px;
+
     &:before {
       font-family: $font-icon;
       font-size: 1.8rem;
@@ -63,13 +71,14 @@
 
   input:not(:checked) + label {
     &:before {
-      content: '\f006';
+      content: "\f006";
       color: $extra-light-grey;
     }
   }
+
   input:checked + label {
     &:before {
-      content: '\f005';
+      content: "\f005";
       color: $yellow;
     }
   }
@@ -79,23 +88,26 @@
   position: absolute;
   left: 10px;
   top: 23px;
+
   label {
     position: relative;
     cursor: pointer;
     padding: 5px;
     display: block;
+
     &:before {
       width: 16px;
       height: 16px;
-      content: ' ';
+      content: " ";
       display: block;
       border-radius: 3px;
       border: 1px $extra-light-grey solid;
     }
+
     &:after {
       width: 16px;
       height: 8px;
-      content: ' ';
+      content: " ";
       display: block;
       border-left: 2px $dark-grey solid;
       border-bottom: 2px $dark-grey solid;
@@ -132,15 +144,19 @@
   border-radius: 3px;
   margin-bottom: 30px;
   padding: 11px 15px 2px;
+
   .left--side {
     width: 30%;
   }
+
   .right--side {
     width: 70%;
+
     .invoice-list {
       list-style: none;
       display: flex;
       flex-wrap: wrap;
+
       li {
         flex-grow: 1;
         text-align: right;
@@ -189,7 +205,7 @@
   }
   .select-item {
     &:before {
-      content: '\f107';
+      content: "\f107";
       font-family: $font-icon;
       position: absolute;
       right: 15px;
@@ -204,7 +220,9 @@
       padding-bottom: 15px;
     }
 
-    > div, .react-datepicker-wrapper, .react-datepicker__input-container {
+    > div,
+    .react-datepicker-wrapper,
+    .react-datepicker__input-container {
       display: block;
     }
 
@@ -219,83 +237,40 @@
       margin-bottom: 20px;
     }
   }
+
   .cc-dialog__title {
-    font-size: 1.4rem;
-    font-weight: 400;
-    padding-left: 40px;
+    padding: 10px 25px;
+    border-radius: 2px 2px 0 0;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: $color-white;
+    background: $light-grey;
+    margin-bottom: 20px;
   }
-  .cc-dialog__card {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
+
   &.cc-dialog--active {
-    background: transparent;
+
     .cc-dialog__card {
       max-width: 500px;
-      box-shadow: 0 0 117px 0 rgba(131, 132, 133, 0.49)
+      //box-shadow: $shadow-header;
     }
   }
-  .btn-cancel {
-    color: $red
-  }
-  .form-wrapper {
-    margin-bottom: 35px;
-    position: relative;
-    &.select-wrapper {
-      label {
-        display: none;
-      }
-      &:before {
-        content: '\f107';
-        font-family: $font-icon;
-        position: absolute;
-        top: 11px;
-        right: 15px;
-        color: $extra-light-grey;
-      }
-    }
-    select, input {
-      background: #ebebeb;
-      border-radius: 3px;
-      border-bottom: 0;
-      color: $light-grey;
-    }
-  }
-  .btn-group {
-    display: flex;
-    justify-content: space-between;
-  }
-}
 
-.meta-dialog {
-  .cc-dialog__title {
-    font-size: 1.4rem;
-    font-weight: 400;
-    padding-left: 40px;
-  }
-  .cc-dialog__card {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  &.cc-dialog--active {
-    background: transparent;
-    .cc-dialog__card {
-      width: 1000px;
-      box-shadow: 0 0 117px 0 rgba(131, 132, 133, 0.49)
-    }
-  }
   .btn-cancel {
-    color: $red
+    color: $red;
   }
+
   .form-wrapper {
     margin-bottom: 35px;
     position: relative;
+
     &.select-wrapper {
       label {
         display: none;
       }
+
       &:before {
-        content: '\f107';
+        content: "\f107";
         font-family: $font-icon;
         position: absolute;
         top: 11px;
@@ -303,7 +278,9 @@
         color: $extra-light-grey;
       }
     }
-    select, input {
+
+    select,
+    input {
       background: #ebebeb;
       border-radius: 3px;
       border-bottom: 0;
@@ -317,30 +294,15 @@
 }
 
 .tickle-dialog {
-  .cc-dialog__card {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  .cc-dialog__title {
-    padding: 10px 25px;
-    border-radius: 2px 2px 0 0;
-    font-weight: 700;
-    font-size: 1.6rem;
-    color: $color-white;
-    background: $light-grey;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
   .input-datetime {
     > span {
       position: relative;
       padding-left: 25px;
       font-size: 1.6rem;
+      padding-bottom: 20px;
 
       &:before {
-        content: '\f271';
+        content: "\f271";
         font-family: $font-icon;
         position: absolute;
         left: 0;
@@ -349,7 +311,7 @@
       }
     }
   }
-  
+
   .action-block {
     margin-bottom: 20px;
   }
@@ -391,7 +353,7 @@
     height: 74px;
     &.open {
       &:before {
-        content: ' ';
+        content: " ";
         background: $green;
         width: 4px;
         top: 0;
@@ -410,7 +372,7 @@
       display: flex;
       justify-content: space-between;
       &:last-of-type {
-        margin-top: 11px;;
+        margin-top: 11px;
       }
     }
     .right__side {
@@ -429,7 +391,7 @@
       position: relative;
       padding-left: 13px;
       &:before {
-        content: '\f155';
+        content: "\f155";
         font-family: $font-icon;
         position: absolute;
         top: 0;
@@ -456,7 +418,7 @@
     position: relative;
     padding-left: 17px;
     &:before {
-      content: ' ';
+      content: " ";
       border-radius: 50%;
       width: 7px;
       height: 7px;
@@ -549,7 +511,7 @@
       .price {
         position: relative;
         &:before {
-          content: '\f155';
+          content: "\f155";
           font-family: $font-icon;
           color: $light-green;
           margin-right: 5px;
@@ -584,7 +546,7 @@
           display: block;
         }
         &:before {
-          content: '\f107';
+          content: "\f107";
           font-family: $font-icon;
           position: absolute;
           top: 21px;
@@ -601,7 +563,8 @@
       .custom-inputs {
         width: 97%;
         padding-top: 8px;
-        .react-datepicker-wrapper, .react-datepicker__input-container {
+        .react-datepicker-wrapper,
+        .react-datepicker__input-container {
           width: 100%;
         }
       }
@@ -718,7 +681,7 @@
         .required {
           position: relative;
           &:before {
-            content: '\f107';
+            content: "\f107";
             font-family: $font-icon;
             position: absolute;
             top: 11px;
@@ -791,7 +754,7 @@
         padding-top: 13px;
 
         &:before {
-          top: 17px
+          top: 17px;
         }
       }
 
@@ -801,19 +764,18 @@
 
       .title {
         &:before {
-          content: '\f0e0';
+          content: "\f0e0";
         }
       }
     }
 
     &.file-list {
-
       .title {
         padding-top: 13px;
 
         &:before {
           top: 10px;
-          content: '\f1c1';
+          content: "\f1c1";
         }
       }
     }
@@ -827,7 +789,8 @@
 
     .btn-group {
       button {
-        &:first-of-type, &:nth-of-type(2) {
+        &:first-of-type,
+        &:nth-of-type(2) {
           padding: 12px;
         }
         i {
@@ -885,7 +848,6 @@
   }
 
   .comment {
-
     &-item {
       margin-top: 2px;
       background: rgba($color-white, 0.6);
@@ -921,7 +883,7 @@
       > img {
         position: absolute;
         top: 0;
-        left: 0
+        left: 0;
       }
     }
   }
@@ -935,7 +897,8 @@
   .slick-list {
     padding: 0 2px;
   }
-  .btn-prev, .btn-next {
+  .btn-prev,
+  .btn-next {
     top: -26px;
     position: absolute;
     cursor: pointer;
@@ -985,7 +948,7 @@
       position: relative;
       color: $light-grey;
       &:before {
-        content: '\f107';
+        content: "\f107";
         font-family: $font-icon;
         position: absolute;
         top: 11px;
@@ -1044,7 +1007,7 @@
   color: $color-white;
   padding: 4px 8px;
   &:before {
-    content: ' ';
+    content: " ";
     width: 4px;
     height: 4px;
     border-radius: 50%;
@@ -1074,14 +1037,14 @@
       }
     }
     &:before {
-      content: '\f106';
+      content: "\f106";
       font-family: $font-icon;
       position: absolute;
       top: 3px;
       right: 5px;
     }
     &:hover {
-      color: $dark-grey
+      color: $dark-grey;
     }
   }
 }
@@ -1162,7 +1125,7 @@
 .select-helper {
   position: relative;
   &:before {
-    content: '\f107';
+    content: "\f107";
     font-family: $font-icon;
     position: absolute;
     top: 26px;
@@ -1186,7 +1149,7 @@
     .select-attachment {
       position: relative;
       &:before {
-        content: '\f107';
+        content: "\f107";
         font-family: $font-icon;
         color: $extra-light-grey;
         position: absolute;
@@ -1241,7 +1204,7 @@
     display: block;
 
     &:after {
-      content: '\f024';
+      content: "\f024";
       font-family: $font-icon;
       display: block;
       color: $extra-light-grey;
@@ -1257,7 +1220,7 @@
 
   input:checked + label {
     &:after {
-      color: #f5222d
+      color: #f5222d;
     }
   }
 }

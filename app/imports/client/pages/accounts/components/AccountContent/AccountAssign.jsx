@@ -88,7 +88,6 @@ export default class AccountAssign extends React.Component {
 
         return (
             <div className="meta-dialog">
-                <h1>Assign account:</h1>
                 <div className="check-block">
                     <div className="check-group" onClick={this.showUserForm}>
                         <input id="a1" type="radio" name="assign" value="user" defaultChecked={assignToUser}/>
