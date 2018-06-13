@@ -18,7 +18,7 @@ export default ({main, routeProps}) => {
                     <LeftMenu/>
                     {React.createElement(main, routeProps)}
                 </main>
-                <NotificationsSystem ref={ref => Notifier.setRef(ref)}/>
+                <NotificationsSystem ref={ref => Notifier.setRef(ref)} style={false} />
             </div>
         );
     return <Login/>
