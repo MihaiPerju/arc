@@ -45,9 +45,8 @@ Meteor.methods({
   },
 
   "report.copy"(_id) {
-    let report = Reports.find({ _id }).fetch();
+    const report = Reports.findOne({ _id });
     if (report) {
-      report = report[0];
       report.createdBy = this.userId;
       delete report._id;
       Reports.insert(report);
