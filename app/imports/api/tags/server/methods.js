@@ -52,15 +52,6 @@ Meteor.methods({
         throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
     },
 
-    'user.removeTag'({_id, tagId}) {
-        if(Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
-            return Users.update(
-                {_id},
-                {$pull: {tagIds: tagId}}
-            )
-        }
-        throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
-    },
     'user.removeTags'({userIds, tagId}) {
         if(Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
             _.each(userIds,  (_id) => {
