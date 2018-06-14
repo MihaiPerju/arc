@@ -1,5 +1,6 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class PagerService {
   queryParams;
@@ -157,7 +158,10 @@ export default class PagerService {
       });
     } else if (state === "escalated") {
       _.extend(params, {
-        filters: { tickleDate: null, escalationId: { $exists: true } }
+        filters: {
+          tickleDate: null,
+          escalationId: { $exists: true }
+        }
       });
     } else if (state && state !== "all") {
       state = stateEnum[state.toUpperCase()];

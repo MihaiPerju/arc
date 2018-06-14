@@ -10,6 +10,7 @@ import { Substates } from "../../enums/substates";
 import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
 import actionTypesEnum from "../../enums/actionTypesEnum";
+import Escalations from "/imports/api/escalations/collection";
 
 export default class ActionService {
   //Adding action to account
@@ -99,6 +100,11 @@ export default class ActionService {
 
   //Change account state if action has a state
   static changeState(accountId, { state, substateId }) {
+    const { escalationId } = Accounts.findOne({ _id: accountId }) || null;
+    if (escalationId) {
+      Escalations.remove({ _id: escalationId });
+      
+    }
     if (substateId && substateId !== GeneralEnums.NA) {
       const substate = SubstatesCollection.findOne({ _id: substateId });
       const { name } = substate || {};
@@ -116,22 +122,6 @@ export default class ActionService {
         }
       );
     }
-  }
-
-  static createEscalation({ reason, _id, userId }) {
-    const actionId = Actions.insert({
-      title: "Escalated",
-      substate: Substates.ESCALATED
-    });
-    ActionService.createAction({ accountId: _id, actionId, userId });
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          escalationId: reason
-        }
-      }
-    );
   }
 
   static removeAssignee(_id) {

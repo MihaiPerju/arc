@@ -33,7 +33,6 @@ class NotificationListContainer extends React.Component {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
-    console.log(data);
     return (
       <div>
         {data.map(notification => (
