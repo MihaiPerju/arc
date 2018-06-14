@@ -80,5 +80,6 @@ export default Accounts.createNamedQuery('accountList', {
     },
     invoiceNo: 1,
     activeInsCode:1,
+    activeInsName:1,
     createdAt: 1
 });

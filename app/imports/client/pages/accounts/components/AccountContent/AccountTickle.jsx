@@ -48,7 +48,7 @@ export default class AccountTickle extends React.Component {
             <div className="action-block">
                 <form onSubmit={this.tickle}>
                     <div className="input-datetime flex--helper flex--column">
-                        <span>Tickle date</span>
+                        <span className="text-light-grey">Tickle date</span>
                         <DatePicker selected={tickleDate} onChange={this.onChange}/>
                         {!tickleDate &&
                         <div className="alert-notice" required="">Tickle date is required</div>}

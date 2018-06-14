@@ -22,9 +22,15 @@ export default class PayerBlock extends Component {
     this.refs.slick && this.refs.slick.innerSlider.onWindowResized();
     const { account } = props;
     if (account.insurances) {
-      const index = account.insurances.findIndex(
-        insurance => insurance.insCode === account.activeInsCode
-      );
+      const index = account.insurances.findIndex(insurance => {
+        if (account.activeInsName) {
+          return (
+            insurance.insCode === account.activeInsCode &&
+            insurance.insName === account.activeInsName
+          );
+        }
+        return insurance.insCode === account.activeInsCode;
+      });
       this.setState({ indexActiveInsCode: index });
     }
   }
@@ -62,6 +68,7 @@ export default class PayerBlock extends Component {
                         <PayItem
                           indexActiveInsCode={indexActiveInsCode}
                           index={index}
+                          accountId={account._id}
                           insurance={insurance}
                         />
                       </div>
