@@ -159,6 +159,7 @@ class ClientContainer extends Pager {
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
             decrease={this.decreaseList}
+            hideSort
           />
           <ClientList
             class={this.state.filter ? "task-list decreased" : "task-list"}

@@ -301,7 +301,7 @@ export default class AccountSearchBar extends Component {
               />
             )}
           </div>
-          <div className="search-bar__wrapper">
+          <div className="search-bar__wrapper flex--helper">
             {btnGroup ? (
               <BtnGroup
                 getProperAccounts={getProperAccounts}

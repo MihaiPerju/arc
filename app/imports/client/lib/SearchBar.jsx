@@ -112,8 +112,12 @@ export default class SearchBar extends Component {
                         }
                     </div>
                     <div className="search-bar__wrapper">
-                        {btnGroup ? <BtnGroup getProperAccounts={getProperAccounts} icons={icons}
-                                              deleteAction={deleteAction}/> : null}
+                        {btnGroup &&
+                            <BtnGroup getProperAccounts={getProperAccounts}
+                                      icons={icons}
+                                      deleteAction={deleteAction}
+                            />
+                        }
                         <div className={btnGroup ? 'search-input' : 'search-input full__width'}>
                             <div className="form-group">
                                 <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
