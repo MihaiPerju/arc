@@ -3,8 +3,6 @@ import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "../../../../../api/s3-uploads/utils";
 import Notifier from "../../../../lib/Notifier";
 import ReactHover from "react-hover";
-import { Page } from "react-pdf";
-import { Document } from "react-pdf/dist/entry.noworker";
 export default class ActionBlock extends Component {
   constructor() {
     super();
@@ -12,7 +10,8 @@ export default class ActionBlock extends Component {
     this.state = {
       isUploading: false,
       numPages: null,
-      pageNumber: 1
+      pageNumber: 1,
+      pdfIndex: null
     };
   }
 
@@ -71,9 +70,22 @@ export default class ActionBlock extends Component {
     );
   };
 
+  reviewPdf(index) {
+    const { pdfIndex } = this.state;
+    if (index === pdfIndex) {
+      this.setState({
+        pdfIndex: null
+      });
+    } else {
+      this.setState({
+        pdfIndex: index
+      });
+    }
+  }
+
   render() {
     const { account } = this.props;
-    const { pageNumber, numPages } = this.state;
+    const { pageNumber, numPages, pdfIndex } = this.state;
 
     const componentConfig = {
       postUrl: `/uploads/account-pdf/` + account._id + "/" + getToken()
@@ -124,41 +136,47 @@ export default class ActionBlock extends Component {
                 return (
                   <ReactHover options={options} key={index}>
                     <ReactHover.Trigger type="trigger">
-                        {pdf && (
-                          <div className="block-item flex--helper flex-justify--space-between">
-                            <div className="info flex--helper">
-                              <div className="title truncate">
-                                {this.getPdfName(pdf)}
-                              </div>
-                            </div>
-                            <div className="btn-group">
-                              <button
-                                onClick={this.redirectToPdf.bind(this, pdf)}
-                                className="btn-text--blue"
-                              >
-                                <i className="icon-download" />
-                              </button>
-                              <button
-                                onClick={this.deletePdf.bind(this, pdf)}
-                                className="btn-text--red"
-                              >
-                                <i className="icon-trash-o" />
-                              </button>
+                      {pdf && (
+                        <div className="block-item flex--helper flex-justify--space-between">
+                          <div className="info flex--helper">
+                            <div className="title truncate">
+                              {this.getPdfName(pdf)}
                             </div>
                           </div>
-                        )}
+                          <div className="btn-group">
+                            <button
+                              onClick={this.redirectToPdf.bind(this, pdf)}
+                              className="btn-text--blue"
+                            >
+                              <i className="icon-download" />
+                            </button>
+                            <button
+                              onClick={this.deletePdf.bind(this, pdf)}
+                              className="btn-text--red"
+                            >
+                              <i className="icon-trash-o" />
+                            </button>
+                            <button
+                              onClick={this.reviewPdf.bind(this, index)}
+                              className="btn-text--blue"
+                            >
+                              preview
+                            </button>
+
+                            {index === pdfIndex && (
+                              <div style={{ marginLeft: -306 + "px" }}>
+                                <iframe
+                                  src={"/pdf/" + pdf._id + "/" + getToken()}
+                                  width={430}
+                                  height={350}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </ReactHover.Trigger>
-                    <ReactHover.Hover type="hover">
-                        <Document
-                          file={"/pdf/" + pdf._id + "/" + getToken()}
-                          onLoadSuccess={this.onDocumentLoad}
-                        >
-                          <Page pageNumber={pageNumber} />
-                        </Document>
-                        <p>
-                          Page {pageNumber} of {numPages}
-                        </p>
-                    </ReactHover.Hover>
+                    <ReactHover.Hover type="hover" />
                   </ReactHover>
                 );
               })}
