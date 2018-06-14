@@ -13,6 +13,7 @@ export default {
     "insName",
     "insName2",
     "insName3",
-    "activeInsCode"
+    "activeInsCode",
+    "activeInsName"
   ]
 };

@@ -204,21 +204,25 @@ export default class AccountSearchBar extends Component {
   };
 
   sortAccounts = (key, sortKey) => {
-    FlowRouter.setQueryParams({ [key]: sortKey });
+    if(FlowRouter.getQueryParam(key) === sortKey) {
+      FlowRouter.setQueryParams({ [key]: null });
+    } else {
+      FlowRouter.setQueryParams({ [key]: sortKey }); 
+    }
   };
 
   getSortClasses = (key, sortKey) => {
-    const test = FlowRouter.getQueryParam(key);
+    const param = FlowRouter.getQueryParam(key);
     let classes = {};
     if (sortKey === "ASC") {
       classes = {
         "icon-angle-up": true,
-        [`${key}-active-asc`]: test && test === "ASC"
+        [`${key}-active-asc`]: param && param === "ASC"
       };
     } else {
       classes = {
         "icon-angle-down": true,
-        [`${key}-active-desc`]: test && test === "DESC"
+        [`${key}-active-desc`]: param && param === "DESC"
       };
     }
     return classNames(classes);
@@ -265,6 +269,13 @@ export default class AccountSearchBar extends Component {
       full__width:
         !btnGroup && !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
       sort__width: Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+    });
+
+    const currentStateName = FlowRouter.current().params.state;
+
+    const sortOptionClasses = classNames({
+      "sort-options": true,
+      tickle__width: currentStateName === "tickles"
     });
 
     return (
@@ -322,9 +333,11 @@ export default class AccountSearchBar extends Component {
                 onClick={this.manageSortBar}
               >
                 <button>
-                  <i className="icon-angle-up" />
-                  {"  "}
-                  <i className="icon-angle-down" />
+                  {sort ? (
+                    <i className="icon-angle-up" />
+                  ) : (
+                    <i className="icon-angle-down" />
+                  )}
                 </button>
               </div>
             )}
@@ -436,7 +449,7 @@ export default class AccountSearchBar extends Component {
         )}
         {sort && (
           <div className="sort-bar">
-            <div className="test">
+            <div className={sortOptionClasses}>
               <div>Account Balance</div>
               <div className="sort-icons">
                 <span
@@ -449,21 +462,23 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>tickleDate</div>
-              <div className="sort-icons">
-                <span
-                  onClick={() => this.sortAccounts("sortTickleDate", "ASC")}
-                  className={this.getSortClasses("sortTickleDate", "ASC")}
-                />
-                <span
-                  onClick={() => this.sortAccounts("sortTickleDate", "DESC")}
-                  className={this.getSortClasses("sortTickleDate", "DESC")}
-                />
+            {currentStateName === "tickles" && (
+              <div className={sortOptionClasses}>
+                <div>Tickle Date</div>
+                <div className="sort-icons">
+                  <span
+                    onClick={() => this.sortAccounts("sortTickleDate", "ASC")}
+                    className={this.getSortClasses("sortTickleDate", "ASC")}
+                  />
+                  <span
+                    onClick={() => this.sortAccounts("sortTickleDate", "DESC")}
+                    className={this.getSortClasses("sortTickleDate", "DESC")}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="test">
-              <div>createdAt</div>
+            )}
+            <div className={sortOptionClasses}>
+              <div>Created At</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortCreatedAt", "ASC")}
@@ -475,8 +490,8 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>dischrgDate</div>
+            <div className={sortOptionClasses}>
+              <div>Discharge Date</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortDischrgDate", "ASC")}
@@ -488,8 +503,8 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>fbDate</div>
+            <div className={sortOptionClasses}>
+              <div>Last Bill Date</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortFbDate", "ASC")}
@@ -501,8 +516,8 @@ export default class AccountSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="test">
-              <div>admitDate</div>
+            <div className={sortOptionClasses}>
+              <div>Admit Date</div>
               <div className="sort-icons">
                 <span
                   onClick={() => this.sortAccounts("sortAdmitDate", "ASC")}

@@ -100,11 +100,11 @@ export default class AccountContentHeader extends Component {
           <div className="btn-group">
             <AccountActioning
               type={"Assign"}
+              title={"Assign account:"}
               model={account}
               accountId={account._id}
               options={userOptions}
               closeRightPanel={closeRightPanel}
-              title=""
             />
             <AccountActioning
               escalate
@@ -124,7 +124,7 @@ export default class AccountContentHeader extends Component {
               tickle={true}
               type="Tickle"
               accountId={account._id}
-              title="Tickle an account"
+              title="Confirm"
               closeRightPanel={closeRightPanel}
             />
           </div>
