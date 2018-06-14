@@ -28,6 +28,9 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}
     Facilities.update({_id: facilityId}, {
         $set: {
             fileId: newFileId
+        },
+        $push: {
+            fileLinkData: newFileId
         }
     });
 

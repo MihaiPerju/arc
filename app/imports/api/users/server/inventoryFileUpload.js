@@ -28,6 +28,9 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
     Facilities.update({_id: facilityId}, {
         $set: {
             fileId: newFileId
+        },
+        $push: {
+            fileLinkData: newFileId
         }
     });
 

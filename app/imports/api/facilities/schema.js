@@ -98,5 +98,13 @@ export default new SimpleSchema({
   password: {
     type: String,
     optional: true
+  },
+  fileLinkData: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  'fileLinkData.$': {
+    type: String
   }
 });
