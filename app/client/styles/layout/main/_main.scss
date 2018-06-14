@@ -157,11 +157,14 @@
   border-bottom: 1px #e1e1e1 solid;
   height: 70px;
   color: #838383;
-  .test {
-    width: 16%;
+  .sort-options {
+    width: 20%;
     float: left;
     text-align: center;
     font-size: 1.6rem;
+    &.tickle__width {
+      width: 16%;
+    }
     .sort-icons span {
       margin: 8px;
       font-weight: 700;

@@ -221,26 +221,34 @@
   padding-top: 15px;
   padding-bottom: 15px;
   border-radius: 3px;
-  .table-header {
-    padding-top: 5px;
-    padding-bottom: 12px;
-  }
-  .table-col {
+
+  &-cell {
+    width: 16.6%;
     min-width: 150px;
     border-right: 1px #d7d7d7 solid;
-    flex-grow: 1;
+    border-top: 1px #d7d7d7 solid;
+    padding: 10px;
+
+    .note-view__wrapper {
+      padding-right: 40px;
+      position: relative;
+
+      button {
+        position: absolute;
+        top: -8px;
+        right: 0;
+      }
+    }
+
     &:last-of-type {
       border-right: 0;
     }
-    .table-row {
-      &:last-of-type {
-        padding-bottom: 0;
-      }
-    }
   }
-  .table-row {
-    border-top: 1px #d7d7d7 solid;
-    padding: 10px;
+
+  &-header {
+    padding-top: 5px;
+    padding-bottom: 12px;
+    border-top: 0;
   }
 }
 

@@ -69,7 +69,7 @@ export default class TagContentDescription extends Component {
         { userIds, tagId: currentTag._id },
         (err, res) => {
           if (!err) {
-            Notifier.success("removed successfully !");
+            Notifier.success("Removed successfully !");
             this.setState({ selectAllChkBox: false, selectedUser: [] });
           } else {
             Notifier.error(err.reason);
