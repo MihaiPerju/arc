@@ -35,7 +35,7 @@ class LeftMenu extends Component {
         filters: {
           assigneeId: { $exists: false },
           workQueue: { $exists: false },
-          escalateReason: { $exists: false },
+          escalationId: { $exists: false },
           tickleDate: { $exists: false }
         }
       })
@@ -46,7 +46,7 @@ class LeftMenu extends Component {
       });
 
     accountListQuery
-      .clone({ filters: { escalateReason: { $exists: true } } })
+      .clone({ filters: { escalationId: { $exists: true } } })
       .getCount((err, count) => {
         if (!err) {
           that.setState({ escalations: count });

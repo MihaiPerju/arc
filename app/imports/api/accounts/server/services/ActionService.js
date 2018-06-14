@@ -111,7 +111,7 @@ export default class ActionService {
           },
           $unset: {
             tickleDate: null,
-            escalateReason: null
+            escalationId: null
           }
         }
       );
@@ -128,7 +128,7 @@ export default class ActionService {
       { _id },
       {
         $set: {
-          escalateReason: reason
+          escalationId: reason
         }
       }
     );
