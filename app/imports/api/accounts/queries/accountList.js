@@ -65,7 +65,13 @@ export default Accounts.createNamedQuery('accountList', {
             title: 1
         },
         user:{
-            profile:1
+            $filter({filters, params}) {
+                if(!_.isEmpty(params.userFilter)) {
+                    _.extend(filters, params.userFilter)
+                }
+            },
+            profile:1,
+            roles:1
         },
         createdAt: 1,
         status: 1,

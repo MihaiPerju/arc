@@ -68,6 +68,19 @@
           }
         }
       }
+      .actions_filter__bar {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        position: relative;
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end;
+        height: 35px;
+        .title-block {
+          width: calc(100% - 80px);
+        }
+      }
     }
   }
 

@@ -4,7 +4,8 @@ export default class ClientService {
   static getActionsQueryParams(clientId) {
     const params = {
       filters: { clientId },
-      actionsFilter: {}
+      actionsFilter: {},
+      userFilter: {}
     };
 
     const type = FlowRouter.getQueryParam("type");
@@ -17,6 +18,7 @@ export default class ClientService {
     const yesterday = FlowRouter.getQueryParam("yesterday");
     const lastWeek = FlowRouter.getQueryParam("lastWeek");
     const lastMonth = FlowRouter.getQueryParam("lastMonth");
+    const role = FlowRouter.getQueryParam("role");
 
     if (type) {
       _.extend(params.actionsFilter, {
@@ -96,12 +98,19 @@ export default class ClientService {
       _.extend(params.actionsFilter, {
         createdAt: {
           $gte: new Date(
-            moment(moment(currentMonthDate).subtract(1, "months")).startOf("day")
+            moment(moment(currentMonthDate).subtract(1, "months")).startOf(
+              "day"
+            )
           )
         }
       });
     }
 
+    if (role) {
+      _.extend(params.userFilter, {
+        roles: { $in: [role] }
+      });
+    }
     return params;
   }
 
