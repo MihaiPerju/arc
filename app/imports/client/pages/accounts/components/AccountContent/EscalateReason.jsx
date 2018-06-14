@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
 import escalationQuery from "/imports/api/escalations/queries/escalationList";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
@@ -40,11 +39,11 @@ export default class EscalateReason extends Component {
   };
 
   onRespond = content => {
-    const { escalationId } = this.props;
+    const { escalationId, closeRightPanel } = this.props;
     Meteor.call("escalation.addMessage", content, escalationId, err => {
       if (!err) {
         Notifier.success("Response sent!");
-        FlowRouter.setParams({ state: "escalated" });
+        closeRightPanel();
       } else {
         Notifier.error(err.reason);
       }
@@ -53,6 +52,8 @@ export default class EscalateReason extends Component {
   };
 
   render() {
+    const { escalation2 } = this.props || null;
+    console.log(escalation2);
     const dialogClasses = classNames("account-dialog");
     const { escalation, accountId, dialogIsActive } = this.state;
     return (

@@ -16,13 +16,14 @@ export default class AccountContent extends Component {
   }
 
   escalateReason() {
-    const { account } = this.props;
+    const { account, closeRightPanel } = this.props;
     const { state } = FlowRouter.current().params;
     if (state === "escalated") {
       return (
         <EscalateReason
           accountId={account._id}
           escalationId={account.escalationId}
+          closeRightPanel={closeRightPanel}
         />
       );
     }
