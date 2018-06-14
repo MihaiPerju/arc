@@ -10,5 +10,5 @@ export default Reports.createNamedQuery('reportList', {
     mongoFilters: 1,
     filterBuilderData: 1,
     shareReport: 1,
-    createdBy: 1
+    authorId: 1
 });

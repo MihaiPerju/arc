@@ -6,7 +6,7 @@ export default {
     const report = Reports.findOne({ _id });
     if (
       !(report.shareReport && Roles.userIsInRole(userId, UserRoles.ADMIN)) &&
-      userId !== report.createdBy
+      userId !== report.authorId
     ) {
       throw new Meteor.Error(
         "not-allowed",

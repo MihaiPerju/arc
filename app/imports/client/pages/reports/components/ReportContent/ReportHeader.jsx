@@ -243,7 +243,7 @@ class ReportHeader extends Component {
                 <div className="time">11:20</div>
               </div>
               <div className="btn-group">
-                {Meteor.userId() !== report.createdBy && (
+                {Meteor.userId() !== report.authorId && (
                   <button className="btn--white" onClick={this.openDialog}>
                     Copy this report
                   </button>

@@ -15,7 +15,7 @@ Meteor.methods({
   },
 
   "report.create"(data) {
-    data.createdBy = this.userId;
+    data.authorId = this.userId;
 
     Reports.insert(data);
   },
@@ -47,7 +47,7 @@ Meteor.methods({
   "report.copy"(_id) {
     const report = Reports.findOne({ _id });
     if (report) {
-      report.createdBy = this.userId;
+      report.authorId = this.userId;
       delete report._id;
       Reports.insert(report);
     }
