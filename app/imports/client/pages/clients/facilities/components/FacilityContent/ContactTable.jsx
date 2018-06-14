@@ -23,7 +23,7 @@ export default class ContactTable extends Component {
                             }
                         </div>
                         {
-                            contacts.map((contact, index) => (
+                            contacts && contacts.map((contact, index) => (
                                 <div className="table-row flex--helper" key={index}>
                                     <div className="table-cell text-center">{contact.firstName}</div>
                                     <div className="table-cell text-center">{contact.lastName}</div>

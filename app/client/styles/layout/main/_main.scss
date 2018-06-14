@@ -204,11 +204,15 @@
   }
 
   .search-input {
-    width: calc(100% - 174px);
+    width: calc(100% - 100px);
     transition: width $transition300;
 
+    &.account-search {
+      width: calc(100% - 140px);
+    }
+
     &.full__width {
-      width: calc(100% - 91px);
+      width: calc(100% - 175px);
 
       &.sort__none {
         width: calc(100% - 124px);
@@ -216,7 +220,7 @@
     }
 
     &.sort__width {
-      width: calc(100% - 140px);
+      width: calc(100% - 210px);
     }
 
     &.sort__none {
