@@ -126,9 +126,7 @@ export default class TagSearchBar extends Component {
                                 deleteAction={deleteAction}
                             />
                         ) : null}
-                        <div
-                            className={searchClasses}
-                        >
+                        <div className={searchClasses}>
                             <div className="form-group">
                                 <AutoField
                                     labelHidden={true}
