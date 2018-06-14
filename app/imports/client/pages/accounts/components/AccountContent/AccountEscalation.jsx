@@ -23,22 +23,19 @@ export default class AccountEscalation extends React.Component {
     };
 
     render() {
-        const {title} = this.props;
         return (
-            <div className="meta-dialog" title={title}>
-                <AutoForm onSubmit={this.escalate} schema={escalateSchema}>
-                    <div className="form-wrapper">
-                        <AutoField labelHidden={true} placeholder="Type Escalation Reason" name="reason"/>
-                        <ErrorField name="reason"/>
-                    </div>
-                    <div className="btn-group">
-                        <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
-                        <button type="submit" className="btn--light-blue">
-                            Confirm & send
-                        </button>
-                    </div>
-                </AutoForm>
-            </div>
+            <AutoForm onSubmit={this.escalate} schema={escalateSchema}>
+                <div className="form-wrapper">
+                    <AutoField labelHidden={true} placeholder="Type Escalation Reason" name="reason"/>
+                    <ErrorField name="reason"/>
+                </div>
+                <div className="btn-group">
+                    <button className="btn-cancel" onClick={this.closeDialog}>Cancel</button>
+                    <button type="submit" className="btn--light-blue">
+                        Confirm & send
+                    </button>
+                </div>
+            </AutoForm>
         )
     }
 }
