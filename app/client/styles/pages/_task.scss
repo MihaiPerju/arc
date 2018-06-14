@@ -492,8 +492,9 @@
     }
 
     &.active {
-      .pay-item__wrapper {
-        background: rgba(255,247,153,.6);
+      .brand-block {
+        color: $green;
+        font-weight: 700;
       }
 
       &:before {
@@ -509,6 +510,7 @@
     }
     .brand-block {
       background: $color-white;
+      color: $light-grey;
       border-radius: 3px 3px 0 0;
       padding-top: 4px;
       padding-bottom: 4px;

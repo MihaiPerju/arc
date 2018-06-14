@@ -4,20 +4,18 @@ import UserRoles from '/imports/api/users/enums/roles';
 import {createContainer} from 'meteor/react-meteor-data';
 import RolesEnum from '/imports/api/users/enums/roles';
 import {getImagePath} from "../../../api/utils";
+import RoutesService from "./../leftMenu/RoutesService";
 
 class Header extends Component {
     constructor() {
         super();
         this.state = {
-            dropdown: false
+            dropdown: false,
         }
-        this.openDropdown = this.openDropdown.bind(this);
-        this.outsideClick = this.outsideClick.bind(this);
-        this.nodeRef = this.nodeRef.bind(this);
     }
 
-    openDropdown() {
-        if(!this.state.dropdown) {
+    openDropdown = () => {
+        if (!this.state.dropdown) {
             document.addEventListener('click', this.outsideClick, false);
         } else {
             document.removeEventListener('click', this.outsideClick, false)
@@ -28,7 +26,7 @@ class Header extends Component {
         })
     }
 
-    outsideClick(e) {
+    outsideClick = (e) => {
         if (this.node.contains(e.target)) {
             return;
         }
@@ -36,16 +34,13 @@ class Header extends Component {
         this.openDropdown();
     };
 
-    nodeRef(node) {
+    nodeRef = (node) => {
         this.node = node;
     }
 
     state = {activeItem: 'Dashboard'};
 
-    handleItemClick = (e, {name}) => this.setState({activeItem: name});
-
     render() {
-        const {activeItem} = this.state;
         const user = this.props.user;
 
         let routes = [
@@ -89,13 +84,17 @@ class Header extends Component {
                 {user &&
                 <header className="header-bar">
                     <div className="header-bar__wrapper">
-                        <div className="left__side">
+                        <div className="left__side flex--helper flex-align--center">
                             <a href="/home">
                                 <i className="icon-home"/>
                                 <img className="header__logo" src="/assets/img/logo.png" alt=""/>
                             </a>
+                            <div className="header-page__title">
+
+                            </div>
                         </div>
-                        <div className={this.state.dropdown ? "right__side open" : "right__side"} onClick={this.openDropdown} ref={this.nodeRef}>
+                        <div className={this.state.dropdown ? "right__side open" : "right__side"}
+                             onClick={this.openDropdown} ref={this.nodeRef}>
                             <div className="owner-menu">
                                 <a href="">
                                     <span>{user.profile.firstName + " " + user.profile.lastName}</span>

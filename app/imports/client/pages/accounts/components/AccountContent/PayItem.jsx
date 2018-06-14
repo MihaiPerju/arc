@@ -11,9 +11,7 @@ export default class PayItem extends Component {
 
     return (
       <div className={classes}>
-        <div className="brand-block">
-          <div className="text-light-grey text-center">{insurance.insName}</div>
-        </div>
+        <div className="brand-block text-center">{insurance.insName}</div>
         <div className="pay-item__wrapper">
           <div className="info-row">
             <div className="text-light-grey">Balance</div>
