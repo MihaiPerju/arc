@@ -152,6 +152,7 @@ class CodeListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
+            hideSort
           />
           <CodeList
             class={this.state.filter ? "task-list decreased" : "task-list"}

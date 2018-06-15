@@ -166,6 +166,7 @@ class ReportListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={reportsSelected.length}
             deleteAction={this.deleteAction}
+            hideSort
           />
           <ReportList
             class={this.state.filter ? "task-list decreased" : "task-list"}

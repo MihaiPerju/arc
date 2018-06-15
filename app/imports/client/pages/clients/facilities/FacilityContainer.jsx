@@ -170,6 +170,7 @@ class FacilityContainer extends Pager {
             btnGroup={facilitiesSelected.length}
             deleteAction={this.deleteAction}
             decrease={this.decreaseList}
+            hideSort
           />
           <FacilityList
             class={this.state.filter ? "task-list decreased" : "task-list"}
