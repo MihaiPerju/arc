@@ -266,9 +266,10 @@ export default class AccountSearchBar extends Component {
 
     const searchBarClasses = classNames({
       "search-input": true,
-      full__width:
-        !btnGroup && !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      sort__width: Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+      'full__width': btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) ||
+                     btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN),
+      'sort__width': btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
+      'account-search': Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
     });
 
     const currentStateName = FlowRouter.current().params.state;
@@ -301,7 +302,7 @@ export default class AccountSearchBar extends Component {
               />
             )}
           </div>
-          <div className="search-bar__wrapper">
+          <div className="search-bar__wrapper flex--helper">
             {btnGroup ? (
               <BtnGroup
                 getProperAccounts={getProperAccounts}

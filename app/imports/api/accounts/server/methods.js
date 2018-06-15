@@ -16,6 +16,7 @@ import Backup from "/imports/api/backup/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import Actions from "../../actions/collection";
 import actionTypesEnum from "../enums/actionTypesEnum";
+import EscalationService from "/imports/api/escalations/server/services/EscalationService";
 
 Meteor.methods({
   "account.actions.add"(data) {
@@ -213,11 +214,18 @@ Meteor.methods({
   },
 
   "account.escalate"({ reason, accountId }) {
-    ActionService.createEscalation({
+    const escalationId = EscalationService.createEscalation(
       reason,
-      _id: accountId,
-      userId: this.userId
-    });
+      this.userId
+    );
+    Accounts.update(
+      { _id: accountId },
+      {
+        $set: {
+          escalationId
+        }
+      }
+    );
   },
 
   "accounts.getSample"(filters) {
