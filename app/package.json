@@ -41,6 +41,7 @@
     "react-js-pagination": "^2.0.2",
     "react-json-pretty": "^1.2.1",
     "react-mounter": "^1.2.0",
+    "react-notification-bar": "^1.0.4",
     "react-notification-system": "^0.2.13",
     "react-pdf": "^3.0.5",
     "react-rte": "^0.15.0",
