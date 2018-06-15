@@ -146,6 +146,7 @@ class UserListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={usersSelected.length}
             deleteAction={this.deleteAction}
+            hideSort
           />
           <UserList
             class={this.state.filter ? "task-list decreased" : "task-list"}
