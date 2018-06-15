@@ -148,6 +148,7 @@ class LetterTemplateListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={templatesSelected.length}
             deleteAction={this.deleteAction}
+            hideSort
           />
           <LetterTemplatesList
             class={this.state.filter ? "task-list decreased" : "task-list"}

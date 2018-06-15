@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
-
-import tagQuery from "/imports/api/tags/queries/listTags";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class AccountContentHeader extends Component {
   constructor() {
@@ -43,11 +42,7 @@ export default class AccountContentHeader extends Component {
     } else if (account.tag) {
       return <div className="label label--grey">{account.tag.name}</div>;
     }
-    return (
-      <div className="label label--red">
-        Unassigned
-      </div>
-    );
+    return <div className="label label--red">Unassigned</div>;
   }
 
   getFirstOption(account, options) {
@@ -64,7 +59,7 @@ export default class AccountContentHeader extends Component {
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
     const options = this.getOptions(
-        account && account.facility && account.facility.users
+      account && account.facility && account.facility.users
     );
     let userOptions = this.getFirstOption(account, options).concat(options);
     return (
@@ -76,7 +71,9 @@ export default class AccountContentHeader extends Component {
               <div className="pacient-id text-blue">{account.acctNum}</div>
               <div className="financial-class">O/D</div>
               <div className="location">
-                {account.facility ? account.facility.name : "No insurance name"} - {account.client ? account.client.clientName:"No client name"}
+                {account.facility ? account.facility.name : "No insurance name"}{" "}
+                -{" "}
+                {account.client ? account.client.clientName : "No client name"}
               </div>
               <div className="label-group">
                 <div className="label label--green">158 points(TBM)</div>
@@ -93,7 +90,9 @@ export default class AccountContentHeader extends Component {
               <div className="text-light-grey">Collected amount</div>
             </div>
             <div className="price-col">
-              <div className="price">{account.acctBal ? account.acctBal : 0}</div>
+              <div className="price">
+                {account.acctBal ? account.acctBal : 0}
+              </div>
               <div className="text-light-grey">Remaining balance</div>
             </div>
           </div>
@@ -106,13 +105,18 @@ export default class AccountContentHeader extends Component {
               options={userOptions}
               closeRightPanel={closeRightPanel}
             />
-            <AccountActioning
-              escalate
-              accountId={account._id}
-              type="Escalate"
-              title="Escalate"
-              closeRightPanel={closeRightPanel}
-            />
+            {Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
+              !account.escalationId && (
+                <AccountActioning
+                  escalate
+                  accountId={account._id}
+                  type="Escalate"
+                  title="Escalate"
+                  escalationId={account.escalationId}
+                  closeRightPanel={closeRightPanel}
+                />
+              )}
+
             <AccountActioning
               metaData={true}
               type="View Meta Data"
