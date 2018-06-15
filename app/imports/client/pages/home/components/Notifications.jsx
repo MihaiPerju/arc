@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import NotificationQuery from "/imports/api/notifications/queries/notificationList";
+import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 
@@ -19,7 +20,13 @@ class NotificationListContainer extends React.Component {
   }
 
   getMessage = notification => {
-    console.log(notification);
+    (notification);
+    if (notification.metaData && notification.metaData.acctNum) {
+      return (
+        "Manager responded to account with Account Number " +
+        notification.metaData.acctNum
+      );
+    }
     return notification.message;
   };
 
@@ -65,7 +72,12 @@ class NotificationListContainer extends React.Component {
 
 export default withQuery(
   props => {
-    return NotificationQuery.clone({ receiverId: Meteor.userId() });
+    return NotificationQuery.clone({
+      filters: {
+        receiverId: Meteor.userId(),
+        type: { $ne: NotificationTypeEnum.GLOBAL }
+      }
+    });
   },
   { reactive: true }
 )(NotificationListContainer);

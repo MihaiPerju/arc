@@ -2,7 +2,6 @@ import Notifications from "../collection";
 
 export default Notifications.createNamedQuery("notificationList", {
   $filter({ filters, options, params }) {
-    console.log(params);
     _.extend(filters, params.filters);
     _.extend(options, params.options);
   },

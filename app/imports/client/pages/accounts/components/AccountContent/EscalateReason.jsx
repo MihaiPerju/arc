@@ -60,7 +60,6 @@ export default class EscalateReason extends Component {
   render() {
     const { escalation2 } = this.props || null;
     const dialogClasses = classNames("account-dialog");
-    console.log(this.props);
     const { escalation, dialogIsActive } = this.state;
     return (
       <div className="action-block">
