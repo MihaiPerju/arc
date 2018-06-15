@@ -18,6 +18,11 @@ class NotificationListContainer extends React.Component {
     });
   }
 
+  getMessage = notification => {
+    console.log(notification);
+    return notification.message;
+  };
+
   render() {
     const { data, loading, error } = this.props;
 
@@ -39,7 +44,9 @@ class NotificationListContainer extends React.Component {
           <div className={classes}>
             <div className="row__block align-center">
               <div className="info">
-                <div className="person-name">{notification.message}</div>
+                <div className="person-name">
+                  {this.getMessage(notification)}
+                </div>
                 <div className="item-name text-blue">{notification.type}</div>
               </div>
               <button

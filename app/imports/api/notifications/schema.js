@@ -6,14 +6,21 @@ export default new SimpleSchema({
     type: String
   },
   seen: {
-    type: Boolean
+    type: Boolean,
+    defaultValue: false
   },
   message: {
-    type: String
+    type: String,
+    optional: true
   },
   type: {
     type: String,
     defaultValue: TypesEnum.SYSTEM,
     allowedValues: TypesEnum
+  },
+  metaData: {
+    type: Object,
+    optional: true,
+    blackbox: true
   }
 });

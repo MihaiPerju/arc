@@ -7,5 +7,13 @@ Meteor.methods({
   },
   "notification.remove"(_id) {
     Notifications.remove({ _id });
+  },
+  "notification.setAsSeen"(_id) {
+    Notifications.update(
+      { _id },
+      {
+        $set: { seen: true }
+      }
+    );
   }
 });

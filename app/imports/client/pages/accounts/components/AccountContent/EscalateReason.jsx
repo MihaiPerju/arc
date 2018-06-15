@@ -39,23 +39,29 @@ export default class EscalateReason extends Component {
   };
 
   onRespond = content => {
-    const { escalationId, closeRightPanel } = this.props;
-    Meteor.call("escalation.addMessage", content, escalationId, err => {
-      if (!err) {
-        Notifier.success("Response sent!");
-        closeRightPanel();
-      } else {
-        Notifier.error(err.reason);
+    const { escalationId, closeRightPanel, accountId } = this.props;
+    Meteor.call(
+      "escalation.addMessage",
+      content,
+      escalationId,
+      accountId,
+      err => {
+        if (!err) {
+          Notifier.success("Response sent!");
+          closeRightPanel();
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
     this.onCloseDialog();
   };
 
   render() {
     const { escalation2 } = this.props || null;
-    console.log(escalation2);
     const dialogClasses = classNames("account-dialog");
-    const { escalation, accountId, dialogIsActive } = this.state;
+    console.log(this.props);
+    const { escalation, dialogIsActive } = this.state;
     return (
       <div className="action-block">
         <div className="header__block">
