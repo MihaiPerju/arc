@@ -5,7 +5,7 @@ import Header from "/imports/client/layout/header/Header";
 import LeftMenu from "/imports/client/layout/leftMenu/LeftMenu";
 import Footer from "/imports/client/layout/footer/Footer";
 import Login from "/imports/client/pages/users/Login";
-import NotificationBar from "/imports/client/pages/home/components/NotificationBar";
+import NotificationGlobal from "/imports/client/pages/home/components/NotificationGlobal";
 
 export default ({ main, routeProps }) => {
   // main represents the component to render passed from the router
@@ -15,7 +15,7 @@ export default ({ main, routeProps }) => {
     return (
       <div id="cc-app">
         <Header />
-        <NotificationBar />
+        <NotificationGlobal />
 
         <main className="main-section">
           <LeftMenu />
