@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import ContactTypes from '../enums/contactTypes';
+import ContactTypes from '/imports/api/facilities/enums/contactTypes';
 
 export default new SimpleSchema({
     email: {
@@ -9,7 +9,7 @@ export default new SimpleSchema({
     contactType: {
         label: 'Contact type',
         type: String,
-        allowedValues: [ContactTypes.ADMIN, ContactTypes.TECH, ContactTypes.REP, ContactTypes.MANAGER],
+        allowedValues: [ContactTypes.TECHNICAL, ContactTypes.MANAGEMENT, ContactTypes.OTHER],
         optional: true
     },
     firstName: {
