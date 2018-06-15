@@ -1,24 +1,16 @@
-import React from 'react';
-import Dashboard from './components/Dashboard';
-import RepDashboard from './components/RepDashboard';
+import React from "react";
 import RoleEnum from "../../../api/users/enums/roles";
-import {createContainer} from 'meteor/react-meteor-data';
+import { createContainer } from "meteor/react-meteor-data";
+import Notifications from "./components/Notifications";
 
-class Home extends React.Component {
-    render() {
-        const {currentUser} = this.props;
-        return (
-            <div className="cc-container home-container">
-                <h1>Dashboard</h1>
-            </div>
-        )
-    }
+export default class Home extends React.Component {
+  render() {
+    return (
+      <div className="cc-container home-container">
+        <div style={{ display: "table", margin: "3rem auto" }}>
+          <Notifications />
+        </div>
+      </div>
+    );
+  }
 }
-
-export default createContainer(({params}) => {
-    const currentUser = Meteor.user();
-
-    return {
-        currentUser,
-    };
-}, Home);
