@@ -30,7 +30,8 @@ export default class NotificationService {
         $set: {
           receiverId,
           type: NotificationTypeEnum.RESPONSE,
-          "metaData.accountId": accountId
+          "metaData.accountId": accountId,
+          "metaData.acctNum": acctNum
         }
       },
       { upsert: true }

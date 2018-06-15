@@ -6,10 +6,8 @@ import Notifications from "./components/Notifications";
 export default class Home extends React.Component {
   render() {
     return (
-      <div className="cc-container home-container">
-        <div style={{ display: "table", margin: "3rem auto" }}>
-          <Notifications />
-        </div>
+      <div className="cc-container home-container flex-align--start">
+        <Notifications />
       </div>
     );
   }

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import escalationQuery from "/imports/api/escalations/queries/escalationList";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import classNames from "classnames";
@@ -60,7 +59,6 @@ export default class EscalateReason extends Component {
   render() {
     const { escalation2 } = this.props || null;
     const dialogClasses = classNames("account-dialog");
-    console.log(this.props);
     const { escalation, dialogIsActive } = this.state;
     return (
       <div className="action-block">

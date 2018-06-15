@@ -4,16 +4,7 @@ import notificationQuery from "/imports/api/notifications/queries/notificationLi
 import Notifier from "/imports/client/lib/Notifier";
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 
-const styles = {
-  width: "100%",
-  color: "white",
-  "background-color": "black",
-  height: "5rem",
-  "text-align": "center",
-  "font-size": "2rem"
-};
-
-class NotificationBarContainer extends React.Component {
+class NotificationGlobalContainer extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -56,4 +47,4 @@ export default withQuery(
     });
   },
   { reactive: true }
-)(NotificationBarContainer);
+)(NotificationGlobalContainer);

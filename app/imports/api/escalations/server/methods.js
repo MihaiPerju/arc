@@ -14,7 +14,7 @@ Meteor.methods({
       { _id: escalationId },
       { $push: { messages: message }, $set: { open } }
     );
-    //If is a respond from messenger, emit global notification for the user.
+    //If is a respond from manager, emit global notification for the user.
     if (!open) {
       NotificationService.createGlobal(authorId);
     }
