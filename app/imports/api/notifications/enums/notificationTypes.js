@@ -3,5 +3,6 @@ export default {
   ESCALATION: "escalation",
   REPORT: "report",
   ACCESS: "access",
-  GLOBAL: "global"
+  GLOBAL: "global",
+  RESPONSE: "response"
 };

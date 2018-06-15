@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import NotificationQuery from "/imports/api/notifications/queries/notificationList";
+import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 
@@ -18,6 +19,17 @@ class NotificationListContainer extends React.Component {
     });
   }
 
+  getMessage = notification => {
+    (notification);
+    if (notification.metaData && notification.metaData.acctNum) {
+      return (
+        "Manager responded to account with Account Number " +
+        notification.metaData.acctNum
+      );
+    }
+    return notification.message;
+  };
+
   render() {
     const { data, loading, error } = this.props;
 
@@ -33,14 +45,15 @@ class NotificationListContainer extends React.Component {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
-    console.log(data);
     return (
       <div>
         {data.map(notification => (
           <div className={classes}>
             <div className="row__block align-center">
               <div className="info">
-                <div className="person-name">{notification.message}</div>
+                <div className="person-name">
+                  {this.getMessage(notification)}
+                </div>
                 <div className="item-name text-blue">{notification.type}</div>
               </div>
               <button
@@ -59,7 +72,12 @@ class NotificationListContainer extends React.Component {
 
 export default withQuery(
   props => {
-    return NotificationQuery.clone({ receiverId: Meteor.userId() });
+    return NotificationQuery.clone({
+      filters: {
+        receiverId: Meteor.userId(),
+        type: { $ne: NotificationTypeEnum.GLOBAL }
+      }
+    });
   },
   { reactive: true }
 )(NotificationListContainer);

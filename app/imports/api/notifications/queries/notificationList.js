@@ -9,5 +9,6 @@ export default Notifications.createNamedQuery("notificationList", {
   seen: 1,
   receiverId: 1,
   message: 1,
-  type: 1
+  type: 1,
+  metaData: 1
 });
