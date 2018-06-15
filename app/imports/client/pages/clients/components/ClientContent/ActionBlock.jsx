@@ -164,7 +164,7 @@ class ActionBlock extends Component {
       <div className="action-block">
         <div className="header__block">
           <div className="actions_filter__bar">
-            <div className="title-block text-uppercase">actions</div>
+            <div className="title-block text-uppercase">Actions timeline</div>
             <div
               className={filter ? "filter-block active" : "filter-block"}
               onClick={this.manageFilterBar}
@@ -186,19 +186,21 @@ class ActionBlock extends Component {
           >
             <div className="filter-bar">
               <div className="select-wrapper">
-                <div className="select-form">
-                  <SelectField
-                    labelHidden={true}
-                    name="type"
-                    options={actionTypes}
-                  />
-                </div>
-                <div className="select-form">
-                  <SelectField
-                    labelHidden={true}
-                    name="substate"
-                    options={substates}
-                  />
+                <div className="flex--helper form-group__pseudo">
+                  <div className="select-form">
+                    <SelectField
+                      labelHidden={true}
+                      name="type"
+                      options={actionTypes}
+                    />
+                  </div>
+                  <div className="select-form">
+                    <SelectField
+                      labelHidden={true}
+                      name="substate"
+                      options={substates}
+                    />
+                  </div>
                 </div>
                 <div className="check-group">
                   <input checked={weekToDate} type="checkbox" />
@@ -265,7 +267,7 @@ class ActionBlock extends Component {
             </div>
           </AutoForm>
         )}
-        <div className="main__block">
+        <div className="actions__timeline">
           {actionsPerformed.length > 0 && (
             <Timeline>
               {actionsPerformed &&
@@ -277,9 +279,10 @@ class ActionBlock extends Component {
                     createdAt={moment(
                       actionPerformed && actionPerformed.createdAt
                     ).format("MMMM Do YYYY, hh:mm a")}
-                    icon={<i />}
+                    icon={<i className="icon-thumb-tack"/>}
+                    iconColor="#3cb878"
                   >
-                    Reason code: {actionPerformed.reasonCode}
+                    Reason code: {actionPerformed.reasonCode || "No reason codes"}
                   </TimelineEvent>
                 ))}
             </Timeline>

@@ -110,6 +110,9 @@ export default class ClientService {
       _.extend(params.userFilter, {
         roles: { $in: [role] }
       });
+      _.extend(params.actionsFilter, {
+        userId: { $exists: true }
+      });
     }
     return params;
   }

@@ -49,7 +49,8 @@
         flex-basis: 50%;
       }
 
-      .cc-button, button {
+      .cc-button,
+      button {
         width: 100%;
         white-space: nowrap;
       }
@@ -81,6 +82,11 @@
           width: calc(100% - 80px);
         }
       }
+    }
+    .actions__timeline {
+      padding: 10px;
+      max-height: 350px;
+      overflow-y: scroll;
     }
   }
 
@@ -119,7 +125,7 @@
       margin-bottom: 15px;
       padding: 0 15px;
       &:before {
-        content: ' ';
+        content: " ";
         position: absolute;
         right: 0;
         height: 26px;

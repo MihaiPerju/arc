@@ -61,6 +61,7 @@ export default Accounts.createNamedQuery('accountList', {
             }
         },
         reasonCode: 1,
+        userId: 1,
         action: {
             title: 1
         },
