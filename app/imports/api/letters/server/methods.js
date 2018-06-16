@@ -3,11 +3,13 @@ import Security from "/imports/api/security/security.js";
 import { roleGroups } from "/imports/api/users/enums/roles";
 import Letters from "../collection.js";
 import Statuses from "/imports/api/letters/enums/statuses.js";
+import ActionService from "../../actions/server/services/ActionService.js";
 
 Meteor.methods({
   "letter.create"(data) {
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-    Letters.insert(data);
+    data.userId = this.userId;
+    ActionService.createLetter(data);
   },
 
   "letter.get"(letterId) {
@@ -27,7 +29,10 @@ Meteor.methods({
     Letters.remove(letterId);
   },
 
-  "letter.update"(_id, { body, letterTemplateId, attachmentIds, letterValues }) {
+  "letter.update"(
+    _id,
+    { body, letterTemplateId, attachmentIds, letterValues }
+  ) {
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     const { status } = Letters.findOne({ _id });
     if (status !== Statuses.NEW) {

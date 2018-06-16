@@ -46,9 +46,10 @@ export default class ActionBlock extends Component {
                     <div className="info">
                       <div className="name">
                         {actionPerformed.user &&
-                          actionPerformed.user.profile.firstName +
-                            " " +
-                            actionPerformed.user.profile.lastName}
+                        <a href={`/${actionPerformed.user._id}/user-profile`}>{actionPerformed.user.profile.firstName +
+                          " " +
+                          actionPerformed.user.profile.lastName}
+                          </a>}
                       </div>
                       <div className="text text-light-grey">
                         <b>{actionPerformed.reasonCode}</b>:

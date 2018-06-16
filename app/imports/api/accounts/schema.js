@@ -181,5 +181,12 @@ export default new SimpleSchema({
     },
     'invoiceNo.$': {
         type: SimpleSchema.Integer
+    },
+    lettersLinkData: {
+        type: Array,
+        optional: true
+    },
+    'lettersLinkData.$': {
+        type: String
     }
 })

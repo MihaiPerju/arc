@@ -31,10 +31,11 @@ export default class UserContentHeader extends React.Component {
           <div className="info">
             <div className="text-light-grey">User name</div>
             <div className="text-blue email">
-              {user.profile &&
-                user.profile.firstName + " " + user.profile.lastName}
-            </div>
+            
+            {user.profile &&
+              <a href={`/${user._id}/user-profile`}>{user.profile.firstName + " " + user.profile.lastName}</a>}
           </div>
+        </div>
         </div>
         <ul className="row__info">
           <li>

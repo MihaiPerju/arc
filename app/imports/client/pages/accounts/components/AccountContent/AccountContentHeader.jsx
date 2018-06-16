@@ -37,7 +37,8 @@ export default class AccountContentHeader extends Component {
       const { profile } = account.assignee;
       return (
         <div className="label label--grey">
-          {profile.firstName + " " + profile.lastName}
+          <a href={`/${account.assigneeId}/user-profile`}>{profile.firstName + " " + profile.lastName}</a>
+          
         </div>
       );
     } else if (account.tag) {
