@@ -147,7 +147,7 @@ export default new SimpleSchema({
         type: String,
         optional: true
     },
-    escalateReason: {
+    escalationId: {
         type: String,
         optional: true
     },

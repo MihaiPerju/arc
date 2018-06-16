@@ -149,6 +149,7 @@ class SubstatesListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={substateSelected.length}
             deleteAction={this.deleteAction}
+            hideSort
           />
 
           <SubstatesList

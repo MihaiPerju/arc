@@ -12,7 +12,6 @@ export default class CommentSingle extends React.Component {
   render() {
     const { comment, commentId } = this.props;
     const { user } = comment;
-    console.log("user", user);
 
     return (
       <div className="comment-item flex--helper flex--column">

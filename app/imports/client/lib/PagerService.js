@@ -1,5 +1,6 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class PagerService {
   queryParams;
@@ -148,21 +149,24 @@ export default class PagerService {
           assigneeId: null,
           workQueue: null,
           tickleDate: null,
-          escalateReason: null
+          escalationId: null
         }
       });
     } else if (state === "tickles") {
       _.extend(params, {
-        filters: { tickleDate: { $exists: true }, escalateReason: null }
+        filters: { tickleDate: { $exists: true }, escalationId: null }
       });
     } else if (state === "escalated") {
       _.extend(params, {
-        filters: { tickleDate: null, escalateReason: { $exists: true } }
+        filters: {
+          tickleDate: null,
+          escalationId: { $exists: true }
+        }
       });
     } else if (state && state !== "all") {
       state = stateEnum[state.toUpperCase()];
       _.extend(params, {
-        filters: { state, tickleDate: null, escalateReason: null }
+        filters: { state, tickleDate: null, escalationId: null }
       });
     } else {
       // state undefined

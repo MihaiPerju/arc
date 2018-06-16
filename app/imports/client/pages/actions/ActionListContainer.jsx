@@ -164,6 +164,7 @@ class ActionListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={actionsSelected.length}
             deleteAction={this.deleteAction}
+            hideSort
           />
           <ActionList
             class={this.state.filter ? "task-list decreased" : "task-list"}
