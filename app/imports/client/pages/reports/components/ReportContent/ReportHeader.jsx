@@ -245,7 +245,7 @@ class ReportHeader extends Component {
               <div className="btn-group">
                 {Meteor.userId() !== report.authorId && (
                   <button className="btn--white" onClick={this.openDialog}>
-                    Copy this report
+                    Copy Report
                   </button>
                 )}
                 <button className="btn--white" onClick={this.openSchedule}>
@@ -258,7 +258,7 @@ class ReportHeader extends Component {
               </div>
             </div>
             {dialogIsActive && (
-              <Dialog className="account-dialog" closePortal={this.closeDialog}>
+              <Dialog className="account-dialog" title="Confirm" closePortal={this.closeDialog}>
                 <div className="form-wrapper">
                   Are you sure you want to copy this report ?
                 </div>
