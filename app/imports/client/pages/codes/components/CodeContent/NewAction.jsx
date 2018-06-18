@@ -31,7 +31,7 @@ export default class NewAction extends Component {
         }, 1);
     }
 
-    onHide(e) {
+    onHide = (e) => {
         const {hide} = this.props;
         hide();
     }
@@ -42,7 +42,7 @@ export default class NewAction extends Component {
             <div className={this.state.fade ? "new-action in" : "new-action"}>
                 <div className="action-info">
                     <img className="md-avatar img-circle" src="/assets/img/user1.svg" alt=""/>
-                    <div className="name">Solomon Ben</div>
+                    <div className="name truncate">Solomon Ben</div>
                 </div>
 
                 <div className="action-form">
@@ -55,7 +55,7 @@ export default class NewAction extends Component {
                         </div>
 
                         <div className="btn-group">
-                            <button type="button" className="btn--red" onClick={this.onHide.bind(this)}>Cancel</button>
+                            <button type="button" className="btn--red" onClick={this.onHide}>Cancel</button>
                             <button type="submit" className="btn--green">Save</button>
                         </div>
                     </AutoForm>
