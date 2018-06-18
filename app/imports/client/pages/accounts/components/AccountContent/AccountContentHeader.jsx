@@ -2,10 +2,16 @@ import React, { Component } from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
 import RolesEnum from "/imports/api/users/enums/roles";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import SimpleSchema from "simpl-schema";
 
 export default class AccountContentHeader extends Component {
   constructor() {
     super();
+    this.state = {
+      editField: null,
+      schema: {}
+    };
   }
 
   getOptions(users) {
@@ -56,8 +62,27 @@ export default class AccountContentHeader extends Component {
     return [{ label: "Unassigned" }];
   }
 
+  onEditField = editField => {
+    this.setState({ editField });
+  };
+
+  getSchema = () => {
+    const { editField } = this.state;
+    return new SimpleSchema({ [editField]: { type: String } });
+  };
+
+  onEdit = data => {
+    const { editField } = this.state;
+    console.log(data);
+  };
+
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
+    const { editField } = this.state;
+
+    const schema = this.getSchema();
+    console.log(schema);
+
     const options = this.getOptions(
       account && account.facility && account.facility.users
     );
@@ -141,16 +166,29 @@ export default class AccountContentHeader extends Component {
                 {account.substate}
               </div>
             </li>
-            <li className="text-center">
+            <li
+              onClick={this.onEditField.bind(this, "finClass")}
+              className="text-center"
+            >
               <div className="text-light-grey">Financial class</div>
+              {editField && (
+                <AutoForm
+                  model={{ finClass: account.finClass }}
+                  schema={schema}
+                  onSubmit={this.onEdit()}
+                >
+                  <div className="form-wrapper select-item">
+                    <AutoField
+                      labelHidden={true}
+                      name="finClass"
+                    />
+                    <ErrorField name="finClass" />
+                  </div>
+                </AutoForm>
+              )}
+
               <div className="text-dark-grey text-uppercase">
                 {account.finClass ? account.finClass : "None"}
-              </div>
-            </li>
-            <li className="text-center">
-              <div className="text-light-grey">Admit date</div>
-              <div className="text-dark-grey">
-                {account && moment(account.admitDate).format("MM/DD/YYYY")}
               </div>
             </li>
             <li className="text-center">
@@ -163,6 +201,34 @@ export default class AccountContentHeader extends Component {
               <div className="text-light-grey">Placement date</div>
               <div className="text-dark-grey">
                 {account && moment(account.createdAt).format("MM/DD/YYYY")}
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div className="additional-info">
+          <ul>
+            <li className="text-center">
+              <div className="text-light-grey">Admit date</div>
+              <div className="text-dark-grey">
+                {account && moment(account.admitDate).format("MM/DD/YYYY")}
+              </div>
+            </li>
+            <li className="text-center">
+              <div className="text-light-grey">Facility Code</div>
+              <div className="text-dark-grey text-uppercase">
+                {account.facCode}
+              </div>
+            </li>
+            <li className="text-center">
+              <div className="text-light-grey">Patient Type</div>
+              <div className="text-dark-grey text-uppercase">
+                {account.ptType}
+              </div>
+            </li>
+            <li className="text-center">
+              <div className="text-light-grey">Last Bill Date</div>
+              <div className="text-dark-grey">
+                {account && moment(account.fbDate).format("MM/DD/YYYY")}
               </div>
             </li>
           </ul>
