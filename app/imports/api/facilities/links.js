@@ -27,9 +27,9 @@ Facilities.addLinks({
         type: 'one',
         field: 'regionId'
     },
-    csvFiles: {
+    files: {
         collection: Files,
         type: 'many',
-        field: 'fileLinkData'
+        inversedBy: 'files'
     }
 });

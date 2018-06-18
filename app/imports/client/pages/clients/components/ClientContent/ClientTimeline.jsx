@@ -10,7 +10,7 @@ class ClientTimeline extends Component {
     const { data } = this.props;
     let csvActions = [];
     data.map(action => {
-      csvActions = csvActions.concat(action.csvFiles);
+      csvActions = csvActions.concat(action.files);
     });
     return csvActions;
   };
