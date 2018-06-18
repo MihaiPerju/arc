@@ -4,6 +4,7 @@ import NotificationQuery from "/imports/api/notifications/queries/notificationLi
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
+import {notificationColors} from "/imports/api/notifications/enums/notificationTypes";
 
 class NotificationListContainer extends React.Component {
   constructor() {
@@ -42,6 +43,7 @@ class NotificationListContainer extends React.Component {
     return (
       <div className="notification-list flex--helper flex-align--start">
         {data.map(notification => (
+          //To apply specific colors using enum from ...path/to/enum.js
           <div className="notification-item">
             <div className="notification-item__wrapper">
               <div className="notification-item__title text-light-grey">
