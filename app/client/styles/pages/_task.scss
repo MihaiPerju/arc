@@ -662,7 +662,7 @@
       align-items: flex-start;
     }
     .info {
-      width: 30%;
+      width: 35%;
       display: flex;
       align-items: center;
       padding-right: 10px;
@@ -673,7 +673,7 @@
     .row-block {
       .form-group {
         padding-top: 5px;
-        width: 70%;
+        width: 65%;
         display: flex;
       }
     }
@@ -719,12 +719,12 @@
       }
     }
     .left-col {
-      width: 30%;
+      width: 35%;
       border-right: 1px #e1e1e1 solid;
       padding-right: 15px;
     }
     .right-col {
-      width: 70%;
+      width: 65%;
       padding-left: 15px;
       padding-bottom: 50px;
       position: relative;
@@ -1131,7 +1131,7 @@
     font-family: $font-icon;
     position: absolute;
     top: 26px;
-    right: 5px;
+    right: 15px;
     color: #b7b7b7;
   }
 
