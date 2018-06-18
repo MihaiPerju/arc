@@ -165,8 +165,8 @@ export default class ActionBlock extends Component {
 
                             {index === pdfIndex && (
                               <div style={{ marginLeft: -306 + "px" }}>
-                                <iframe
-                                  src={"/pdf/" + pdf._id + "/" + getToken()}
+                                <object
+                                  data={"/pdf/" + pdf._id + "/" + getToken()}
                                   width={430}
                                   height={350}
                                 />
