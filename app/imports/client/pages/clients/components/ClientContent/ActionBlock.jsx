@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
-import { AutoForm, AutoField, SelectField } from "/imports/ui/forms";
+import { AutoForm, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import { Timeline, TimelineEvent } from "react-event-timeline";
 import query from "/imports/api/accounts/queries/accountList";
@@ -10,6 +10,7 @@ import { typeList } from "/imports/api/accounts/enums/actionTypesEnum";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import ClientService from "../../services/ClientService";
 import { rolesTypes } from "/imports/api/clients/enums/contactTypes";
+import filterTypeEnums from "../../enums/filterTypes";
 
 class ActionBlock extends Component {
   constructor() {
@@ -70,6 +71,7 @@ class ActionBlock extends Component {
     let actions = [];
     data.map(account => {
       if (account.actions.length > 0) {
+        account.actions.map(action => (action.acctNum = account.acctNum));
         actions = actions.concat(account.actions);
       }
     });
@@ -102,21 +104,21 @@ class ActionBlock extends Component {
 
   handleClick = key => {
     const flag = !this.state[key];
-    if (key === "lastSevenDays") {
+    if (key === filterTypeEnums.LAST_SEVEN_DAYS) {
       FlowRouter.setQueryParams({ "last-n-days": flag ? 7 : null });
       this.setState({
         lastSevenDays: flag,
         lastThirtyDays: false,
         lastTwelveMonths: false
       });
-    } else if (key === "lastThirtyDays") {
+    } else if (key === filterTypeEnums.LAST_THIRTY_DAYS) {
       FlowRouter.setQueryParams({ "last-n-days": flag ? 30 : null });
       this.setState({
         lastSevenDays: false,
         lastThirtyDays: flag,
         lastTwelveMonths: false
       });
-    } else if (key === "lastTwelveMonths") {
+    } else if (key === filterTypeEnums.LAST_TWELVE_MONTHS) {
       FlowRouter.setQueryParams({ "last-n-months": flag ? 12 : null });
       this.setState({
         lastSevenDays: false,
@@ -132,7 +134,7 @@ class ActionBlock extends Component {
   };
 
   render() {
-    const {  isLoading, error } = this.props;
+    const { isLoading, error } = this.props;
     const {
       filter,
       actionTypes,
@@ -204,55 +206,85 @@ class ActionBlock extends Component {
                 </div>
                 <div className="check-group">
                   <input checked={weekToDate} type="checkbox" />
-                  <label onClick={() => this.handleClick("weekToDate")}>
+                  <label
+                    onClick={() =>
+                      this.handleClick(filterTypeEnums.WEEK_TO_DATE)
+                    }
+                  >
                     Week to date
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={monthToDate} type="checkbox" />
-                  <label onClick={() => this.handleClick("monthToDate")}>
+                  <label
+                    onClick={() =>
+                      this.handleClick(filterTypeEnums.MONTH_TO_DATE)
+                    }
+                  >
                     Month to date
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={yearToDate} type="checkbox" />
-                  <label onClick={() => this.handleClick("yearToDate")}>
+                  <label
+                    onClick={() =>
+                      this.handleClick(filterTypeEnums.YEAR_TO_DATE)
+                    }
+                  >
                     Year to date
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={lastSevenDays} type="checkbox" />
-                  <label onClick={() => this.handleClick("lastSevenDays")}>
+                  <label
+                    onClick={() =>
+                      this.handleClick(filterTypeEnums.LAST_SEVEN_DAYS)
+                    }
+                  >
                     Last 7 days
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={lastThirtyDays} type="checkbox" />
-                  <label onClick={() => this.handleClick("lastThirtyDays")}>
+                  <label
+                    onClick={() =>
+                      this.handleClick(filterTypeEnums.LAST_THIRTY_DAYS)
+                    }
+                  >
                     Last 30 days
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={lastTwelveMonths} type="checkbox" />
-                  <label onClick={() => this.handleClick("lastTwelveMonths")}>
+                  <label
+                    onClick={() =>
+                      this.handleClick(filterTypeEnums.LAST_TWELVE_MONTHS)
+                    }
+                  >
                     Last 12 months
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={yesterday} type="checkbox" />
-                  <label onClick={() => this.handleClick("yesterday")}>
+                  <label
+                    onClick={() => this.handleClick(filterTypeEnums.YESTERDAY)}
+                  >
                     Yesterday
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={lastWeek} type="checkbox" />
-                  <label onClick={() => this.handleClick("lastWeek")}>
+                  <label
+                    onClick={() => this.handleClick(filterTypeEnums.LAST_WEEK)}
+                  >
                     Last Week
                   </label>
                 </div>
                 <div className="check-group">
                   <input checked={lastMonth} type="checkbox" />
-                  <label onClick={() => this.handleClick("lastMonth")}>
+                  <label
+                    onClick={() => this.handleClick(filterTypeEnums.LAST_MONTH)}
+                  >
                     Last Month
                   </label>
                 </div>
@@ -271,18 +303,22 @@ class ActionBlock extends Component {
           {actionsPerformed.length > 0 && (
             <Timeline>
               {actionsPerformed &&
-                actionsPerformed.map((actionPerformed, key) => (
+                actionsPerformed.map((actionPerformed, index) => (
                   <TimelineEvent
-                    title={
-                      actionPerformed.action && actionPerformed.action.title
-                    }
+                    title={actionPerformed.acctNum}
                     createdAt={moment(
                       actionPerformed && actionPerformed.createdAt
                     ).format("MMMM Do YYYY, hh:mm a")}
-                    icon={<i className="icon-thumb-tack"/>}
+                    icon={<i className="icon-thumb-tack" />}
                     iconColor="#3cb878"
+                    key={index}
                   >
-                    Reason code: {actionPerformed.reasonCode || "No reason codes"}
+                    <div>
+                      {actionPerformed.action && actionPerformed.action.title}
+                      {actionPerformed.reasonCode && (
+                        <div>Reason code: {actionPerformed.reasonCode}</div>
+                      )}
+                    </div>
                   </TimelineEvent>
                 ))}
             </Timeline>
