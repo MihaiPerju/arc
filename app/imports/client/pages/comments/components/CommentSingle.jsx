@@ -25,7 +25,7 @@ export default class CommentSingle extends React.Component {
                 currentUserId,
                 roleGroups.ADMIN_TECH_MANAGER
               )) ||
-            (isRep && currentUserId === actionPerformed.user._id)
+            (isRep && currentUserId === user._id)
               ? user && (
                   <a href={`/${user._id}/user-profile`}>
                     {user.profile.firstName + " " + user.profile.lastName}
