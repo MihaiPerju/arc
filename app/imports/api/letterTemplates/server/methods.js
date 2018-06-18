@@ -5,7 +5,7 @@ import {roleGroups} from '/imports/api/users/enums/roles';
 
 Meteor.methods({
     'letterTemplates.get'() {
-        Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+        Security.isAllowed(this.userId, roleGroups.ALL);
         return LetterTemplateService.getLetterTemplates();
     },
 

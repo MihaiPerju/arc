@@ -9,7 +9,7 @@ createRoute(
     if (!user) {
       return error("Not logged in!");
     } else if (
-      !Roles.userIsInRole(user._id, [RolesEnum.ADMIN, RolesEnum.TECH]) &&
+      !Roles.userIsInRole(user._id, [RolesEnum.ALL]) &&
       !Security.hasRightsOnAccount(user._id, accountId)
     ) {
       return error("Not allowed!");

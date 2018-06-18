@@ -14,7 +14,7 @@ Picker.route('/letters/pdf/:accountId/:letterId/:token',
             return;
         }
 
-        if (!Roles.userIsInRole(user._id, roleGroups.ADMIN_TECH) &&
+        if (!Roles.userIsInRole(user._id, roleGroups.ALL) &&
             !Security.hasRightsOnAccount(user._id, params._id)) {
             res.writeHead(404);
             res.write('An error occurred');

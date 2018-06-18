@@ -4,7 +4,7 @@ import {roleGroups} from '/imports/api/users/enums/roles';
 
 export default {
     hasRightsOnAccount(userId, accountId) {
-        if (Roles.userIsInRole(userId, roleGroups.ADMIN_TECH)) {
+        if (Roles.userIsInRole(userId, roleGroups.ALL)) {
             return true;
         }
 
