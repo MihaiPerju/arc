@@ -1,48 +1,34 @@
 import React from "react";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/users/queries/singleUser";
 import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { Timeline, TimelineEvent } from "react-event-timeline";
 import Loading from "/imports/client/lib/ui/Loading";
 import MyAvatar from "./components/MyAvatar";
 import moment from "moment";
-import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
-import Security from "/imports/api/security/security.js";
+import RolesEnum from "/imports/api/users/enums/roles";
 
-class UserProfile extends React.Component {
+export default class UserProfile extends React.Component {
   constructor() {
     super();
     this.state = {
-      accountActions: null,
-      errorMessage: null
+      accountActions: null
     };
   }
 
   componentWillMount() {
     const { userId } = FlowRouter.current().params;
-    const currentUserId = Meteor.userId();
-    const isRep = Roles.userIsInRole(userId, RolesEnum.REP);
-    if (
-      (isRep &&
-        Roles.userIsInRole(currentUserId, roleGroups.ADMIN_TECH_MANAGER)) ||
-      (isRep && currentUserId === userId)
-    ) {
-      accountActionsQuery
-        .clone({
-          filters: {
-            userId
-          }
-        })
-        .fetch((err, accountActions) => {
-          if (!err) {
-            this.setState({
-              accountActions
-            });
-          }
-        });
-    } else {
-      this.setState({ errorMessage: "You do not have the correct roles for this!" });
-    }
+    accountActionsQuery
+      .clone({
+        filters: {
+          userId
+        }
+      })
+      .fetch((err, accountActions) => {
+        if (!err) {
+          this.setState({
+            accountActions
+          });
+        }
+      });
   }
 
   getTimelineIcon = type => {
@@ -59,20 +45,9 @@ class UserProfile extends React.Component {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
+    const { userId } = FlowRouter.current().params;
+    const user = Meteor.users.findOne(userId);
     const { accountActions, errorMessage } = this.state;
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>{error.reason}</div>;
-    }
-
-    if (errorMessage) {
-      return <div>{errorMessage}</div>;
-    }
 
     return (
       <div className="cc-container settings-container">
@@ -84,8 +59,8 @@ class UserProfile extends React.Component {
                 <div className="text-light-grey">User name</div>
                 {/* <MyAvatar user={user}/> */}
                 <div className="action-name">
-                  {data.profile
-                    ? data.profile.firstName + " " + data.profile.lastName
+                  {user.profile
+                    ? user.profile.firstName + " " + user.profile.lastName
                     : "No username"}
                 </div>
               </div>
@@ -96,12 +71,14 @@ class UserProfile extends React.Component {
             >
               <div className="text-block">
                 <div className="text-light-grey text-label">Email</div>
-                <div className="status">{data.emails[0].address}</div>
+                <div className="status">
+                  {user.emails && user.emails[0].address}
+                </div>
               </div>
               <div className="text-block">
                 <div className="text-light-grey text-label">Phone number</div>
                 <p>
-                  {data.profile ? data.profile.phoneNumber : "No Phone Number"}
+                  {user.profile ? user.profile.phoneNumber : "No Phone Number"}
                 </p>
               </div>
             </div>
@@ -132,16 +109,3 @@ class UserProfile extends React.Component {
     );
   }
 }
-
-// export default createUserContainer(UserProfile);
-export default withQuery(
-  props => {
-    const { userId } = FlowRouter.current().params;
-    return query.clone({
-      filters: {
-        _id: userId
-      }
-    });
-  },
-  { reactive: true, single: true }
-)(UserProfile);
