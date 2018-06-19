@@ -37,5 +37,10 @@ export default Facilities.createNamedQuery("facilityList", {
   },
   client: {
     clientName: 1
+  },
+  files: {
+    previousFileId: 1,
+    fileName: 1,
+    createdAt: 1
   }
 });

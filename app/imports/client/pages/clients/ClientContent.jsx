@@ -3,7 +3,9 @@ import ClientContentHeader from './components/ClientContent/ClientContentHeader'
 import ContactBlock from './components/ClientContent/ContactBlock';
 import ActionBlock from './components/ClientContent/ActionBlock';
 import NoteBlock from './components/ClientContent/NoteBlock';
+import ClientTimeline from './components/ClientContent/ClientTimeline';
 import ClientEdit from './ClientEdit';
+import {roleGroups} from "/imports/api/users/enums/roles";
 
 export default class ClientContent extends Component {
     constructor() {
@@ -35,6 +37,7 @@ export default class ClientContent extends Component {
                             <ContactBlock client={client}/>
                             <ActionBlock client={client} />
                             <NoteBlock/>
+                            {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH_MANAGER) && <ClientTimeline client={client} />}
                         </div>
                 }
             </div>
