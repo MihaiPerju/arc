@@ -85,13 +85,10 @@ class Header extends Component {
                 <header className="header-bar">
                     <div className="header-bar__wrapper">
                         <div className="left__side flex--helper flex-align--center">
-                            <a href="/home">
+                            <a href="/dashboard">
                                 <i className="icon-home"/>
                                 <img className="header__logo" src="/assets/img/logo.png" alt=""/>
                             </a>
-                            <div className="header-page__title">
-
-                            </div>
                         </div>
                         <div className={this.state.dropdown ? "right__side open" : "right__side"}
                              onClick={this.openDropdown} ref={this.nodeRef}>
