@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import NewAction from "./NewAction";
 import moment from "moment";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class ActionBlock extends Component {
   constructor() {
@@ -20,6 +21,7 @@ export default class ActionBlock extends Component {
   render() {
     const { account, closeRightPanel } = this.props;
     const actionsPerformed = account.actions;
+    const currentUserId = Meteor.userId();
 
     return (
       <div className="action-block">
@@ -40,36 +42,61 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed.map((actionPerformed, key) => (
-                <div className="action-item" key={key}>
-                  <div className="action-info">
-                    <div className="info">
-                      <div className="name">
-                        {actionPerformed.user &&
-                          actionPerformed.user.profile.firstName +
-                            " " +
-                            actionPerformed.user.profile.lastName}
+              actionsPerformed.map((actionPerformed, key) => {
+                const isRep = Roles.userIsInRole(
+                  actionPerformed.user._id,
+                  RolesEnum.REP
+                );
+                return (
+                  <div className="action-item" key={key}>
+                    <div className="action-info">
+                      <div className="info">
+                        <div className="name">
+                          {(isRep &&
+                            Roles.userIsInRole(
+                              currentUserId,
+                              roleGroups.ADMIN_TECH_MANAGER
+                            )) ||
+                          (isRep && currentUserId === actionPerformed.user._id)
+                            ? actionPerformed.user && (
+                                <a
+                                  href={`/${
+                                    actionPerformed.user._id
+                                  }/user-profile`}
+                                >
+                                  {actionPerformed.user.profile.firstName +
+                                    " " +
+                                    actionPerformed.user.profile.lastName}
+                                </a>
+                              )
+                            : actionPerformed.user &&
+                              actionPerformed.user.profile.firstName +
+                                " " +
+                                actionPerformed.user.profile.lastName}
+                        </div>
+                        <div className="text text-light-grey">
+                          <b>{actionPerformed.reasonCode}</b>:
+                          {actionPerformed.action &&
+                            actionPerformed.action.title}
+                        </div>
                       </div>
-                      <div className="text text-light-grey">
-                        <b>{actionPerformed.reasonCode}</b>:
-                        {actionPerformed.action && actionPerformed.action.title}
+                      <div className="status archived">
+                        {actionPerformed.action &&
+                          actionPerformed.action.status}
                       </div>
                     </div>
-                    <div className="status archived">
-                      {actionPerformed.action && actionPerformed.action.status}
+                    <div className="action-time">
+                      {moment(
+                        actionPerformed && actionPerformed.createdAt
+                      ).format("MMMM Do YYYY, hh:mm a")}
+                    </div>
+                    <div className="flag-item">
+                      <input type="checkbox" id={key} className="hidden" />
+                      <label htmlFor={key} />
                     </div>
                   </div>
-                  <div className="action-time">
-                    {moment(
-                      actionPerformed && actionPerformed.createdAt
-                    ).format("MMMM Do YYYY, hh:mm a")}
-                  </div>
-                  <div className="flag-item">
-                    <input type="checkbox"id={key} className="hidden"/>
-                    <label htmlFor={key}/>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </div>

@@ -181,5 +181,5 @@ export default new SimpleSchema({
     },
     'invoiceNo.$': {
         type: SimpleSchema.Integer
-    }
+    },
 })
