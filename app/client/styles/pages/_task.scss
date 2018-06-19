@@ -195,6 +195,16 @@
   }
 }
 
+.filter-dialog {
+  .close-dialog {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.8rem;
+    padding: 9px 25px;
+  }
+}
+
 //Account Dialog
 .account-dialog {
   background: rgba($color-black, 0.1);
