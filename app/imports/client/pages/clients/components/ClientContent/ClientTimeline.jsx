@@ -191,9 +191,9 @@ export default class ClientTimeline extends Component {
       case actionTypesEnum.COMMENT:
         return <div>{content}</div>;
       case actionTypesEnum.LETTER:
-        return <div />;
+        return "";
       case actionTypesEnum.FILE:
-        return <div />;
+        return "";
       default:
         return "";
     }
