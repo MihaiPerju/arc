@@ -246,7 +246,15 @@ Meteor.methods({
       createdAt: new Date(),
       accountId
     };
-    AccountActions.insert(commentData);
+    const accountActionId = AccountActions.insert(commentData);
+    Accounts.update(
+      { _id: accountId },
+      {
+        $push: {
+          commentIds: accountActionId
+        }
+      }
+    );
   },
 
   reset() {

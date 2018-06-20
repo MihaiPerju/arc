@@ -34,68 +34,75 @@ export default class ClientService {
 
     if (weekToDate) {
       const firstDay = this.getWeekToDate();
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: { $gte: new Date(moment(firstDay).startOf("day")) }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (monthToDate) {
       const firstDay = this.getMonthToDate();
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: { $gte: new Date(moment(firstDay).startOf("day")) }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (yearToDate) {
       const year = new Date().getFullYear();
       const firstDay = new Date(year, 0, 1);
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: { $gte: new Date(moment(firstDay).startOf("day")) }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (lastNDays) {
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: {
           $gte: new Date(
             moment(moment().subtract(+lastNDays, "days")).startOf("day")
           )
         }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (lastNMonths) {
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: {
           $gte: new Date(
             moment(moment().subtract(+lastNMonths, "months")).startOf("day")
           )
         }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (yesterday) {
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: {
           $gte: new Date(moment(moment().subtract(1, "days")).startOf("day"))
         }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (lastWeek) {
       const currentWeekDate = this.getWeekToDate();
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: {
           $gte: new Date(
             moment(moment(currentWeekDate).subtract(7, "days")).startOf("day")
           )
         }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (lastMonth) {
       const currentMonthDate = this.getMonthToDate();
-      _.extend(params.actionsFilter, {
+      const filter = {
         createdAt: {
           $gte: new Date(
             moment(moment(currentMonthDate).subtract(1, "months")).startOf(
@@ -103,7 +110,8 @@ export default class ClientService {
             )
           )
         }
-      });
+      };
+      _.extend(params.actionsFilter, filter);
     }
 
     if (role) {

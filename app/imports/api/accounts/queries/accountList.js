@@ -88,5 +88,56 @@ export default Accounts.createNamedQuery("accountList", {
   invoiceNo: 1,
   activeInsCode: 1,
   activeInsName: 1,
-  createdAt: 1
+  createdAt: 1,
+  comments: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.actionsFilter)) {
+        _.extend(filters, params.actionsFilter);
+      }
+    },
+    content: 1,
+    createdAt: 1,
+    type: 1,
+    userId: 1,
+    user: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.userFilter)) {
+          _.extend(filters, params.userFilter);
+        }
+      },
+      profile: 1,
+      roles: 1
+    }
+  },
+  letters: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.actionsFilter)) {
+        _.extend(filters, params.actionsFilter);
+      }
+    },
+    createdAt: 1,
+    type: 1,
+    userId: 1,
+    status: 1,
+    user: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.userFilter)) {
+          _.extend(filters, params.userFilter);
+        }
+      },
+      profile: 1,
+      roles: 1
+    }
+  },
+  files: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.actionsFilter)) {
+        _.extend(filters, params.actionsFilter);
+      }
+    },
+    createdAt: 1,
+    type: 1,
+    userId: 1,
+    status: 1
+  }
 });

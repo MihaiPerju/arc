@@ -160,11 +160,11 @@ export default new SimpleSchema({
         optional: true,
         defaultValue: 0
     },
-    commentsLinkData: {
+    commentIds: {
         type: Array,
         optional: true
     },
-    'commentsLinkData.$': {
+    'commentIds.$': {
         type: String
     },
     invoiceNo: {
@@ -182,4 +182,18 @@ export default new SimpleSchema({
     'invoiceNo.$': {
         type: SimpleSchema.Integer
     },
+    letterIds: {
+        type: Array,
+        optional: true
+    },
+    'letterIds.$': {
+        type: String
+    },
+    fileIds: {
+        type: Array,
+        optional: true
+    },
+    'fileIds.$': {
+        type: String
+    }
 })

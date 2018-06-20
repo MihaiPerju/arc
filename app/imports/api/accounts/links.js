@@ -37,5 +37,20 @@ Accounts.addLinks({
         type: "one",
         collection: Tags,
         field: "workQueue"
+    },
+    comments: {
+        type: 'many',
+        collection: AccountActions,
+        field: 'commentIds'
+    },
+    letters: {
+        type: 'many',
+        collection: AccountActions,
+        field: 'letterIds'
+    },
+    files: {
+        type: 'many',
+        collection: AccountActions,
+        field: 'fileIds'
     }
 });

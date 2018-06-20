@@ -3,6 +3,7 @@ import Substates from "/imports/api/substates/collection";
 import Letter from "/imports/api/letters/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
+import Accounts from "/imports/api/accounts/collection";
 
 export default class ActionService {
   static createAction(data) {
@@ -67,6 +68,15 @@ export default class ActionService {
       accountId
     };
     Letter.insert(data);
-    AccountActions.insert(letterData);
+    const accountActionId = AccountActions.insert(letterData);
+
+    Accounts.update(
+      { _id: accountId },
+      {
+        $push: {
+          letterIds: accountActionId
+        }
+      }
+    );
   }
 }

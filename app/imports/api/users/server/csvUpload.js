@@ -6,6 +6,8 @@ import ParseService from '/imports/api/facilities/server/services/CsvParseServic
 import Files from '/imports/api/files/collection';
 import os from 'os';
 import Facilities from '/imports/api/facilities/collection';
+import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
+import AccountActions from "/imports/api/accountActions/collection";
 
 createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}) => {
 
@@ -31,12 +33,20 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}
         }
     });
 
+    const fileData = {
+        type: actionTypesEnum.FILE,
+        createdAt: new Date(),
+        fileId: newFileId
+    };
+
+    const accountActionId = AccountActions.insert(fileData);
+
     //Pass links to accounts to link them too
     const links = {facilityId, fileId: newFileId};
 
     Papa.parse(csvString, {
             chunk: (results) => {
-                AccountService.upload(results.data, importRules, links);
+                AccountService.upload(results.data, importRules, links, accountActionId);
             }
         }
     );

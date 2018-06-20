@@ -6,6 +6,8 @@ import Files from "../../files/collection";
 import Facilities from "../../facilities/collection";
 import os from 'os';
 import fs from 'fs';
+import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
+import AccountActions from "/imports/api/accountActions/collection";
 
 createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, success}) => {
 
@@ -31,13 +33,21 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
         }
     });
 
+    const fileData = {
+        type: actionTypesEnum.FILE,
+        createdAt: new Date(),
+        fileId: newFileId
+    };
+
+    const accountActionId = AccountActions.insert(fileData);
+
     //Pass links to accounts to link them too
     const links = {facilityId, fileId: newFileId};
 
     Papa.parse(csvString, {
             chunk: (results) => {
                 // the result needs to be performed here
-                AccountService.update(results.data, importRules, links);
+                AccountService.update(results.data, importRules, links, accountActionId);
             }
         }
     );
