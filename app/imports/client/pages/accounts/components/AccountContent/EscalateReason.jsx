@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import escalationQuery from "/imports/api/escalations/queries/escalationList";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import classNames from "classnames";
