@@ -14,8 +14,7 @@ export default class AccountContentHeader extends Component {
     super();
     this.state = {
       editField: null,
-      schema: null,
-      date: null
+      schema: null
     };
   }
 
@@ -69,11 +68,7 @@ export default class AccountContentHeader extends Component {
 
   onEditField = editField => {
     const { account } = this.props;
-    const { date } = this.state;
     this.setState({ editField });
-    if (fieldTypes.dates.includes(editField) && !date) {
-      this.setState({ date: moment(account[editField]) });
-    }
   };
 
   getSchema = editField => {
@@ -82,7 +77,7 @@ export default class AccountContentHeader extends Component {
 
   onSubmit = data => {
     const { account } = this.props;
-    const { editField, date } = this.state;
+    const { editField } = this.state;
 
     Meteor.call("account.update", account._id, data, err => {
       if (!err) {
@@ -116,13 +111,12 @@ export default class AccountContentHeader extends Component {
 
   getEditForm = name => {
     const { account } = this.props;
-    const { date } = this.state;
     const schema = this.getSchema(name);
     if (fieldTypes.dates.includes(name)) {
       return (
         <DatePicker
           autoFocus
-          // selected={moment(date)}
+          placeholderText="Select New Date"
           onChange={this.onDateSelect}
           onClickOutside={this.onClickOutside}
           onBlur={this.onBlur}

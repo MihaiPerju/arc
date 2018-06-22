@@ -250,7 +250,6 @@ Meteor.methods({
   },
 
   "account.update"(_id, data) {
-    console.log(data);
     Accounts.update(
       { _id },
       {
