@@ -7,10 +7,10 @@ import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
 import fieldTypes from "/imports/api/accounts/config/accounts";
 import "react-datepicker/dist/react-datepicker.css";
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class AccountContentHeader extends Component {
   constructor(props) {
-    console.log(props);
     super();
     this.state = {
       editField: null,
@@ -69,9 +69,9 @@ export default class AccountContentHeader extends Component {
 
   onEditField = editField => {
     const { account } = this.props;
+    const { date } = this.state;
     this.setState({ editField });
-    if (fieldTypes.dates.includes(editField)) {
-      console.log("Setting again");
+    if (fieldTypes.dates.includes(editField) && !date) {
       this.setState({ date: moment(account[editField]) });
     }
   };
@@ -81,31 +81,51 @@ export default class AccountContentHeader extends Component {
   };
 
   onSubmit = data => {
-    const { editField } = this.state;
-    console.log(data);
+    const { account } = this.props;
+    const { editField, date } = this.state;
+
+    Meteor.call("account.update", account._id, data, err => {
+      if (!err) {
+        Notifier.success("Account updated!");
+        this.onBlur();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   };
 
-  onBlur = () => {
+  onBlur = e => {
     //Reset
-    this.setState({ schema: null, editField: null });
+    this.setState({ schema: null, editField: null, date: null });
   };
 
   onDateSelect = newDate => {
-    console.log(newDate);
-    this.setState({ date: newDate });
+    const { editField } = this.state;
+    let data = {};
+    data[editField] = newDate.toDate();
+    Meteor.call("account.update", account._id, data, err => {
+      if (!err) {
+        Notifier.success("Account updated!");
+        this.onBlur();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+    this.setState({ date: moment(newDate) });
   };
 
   getEditForm = name => {
     const { account } = this.props;
     const { date } = this.state;
     const schema = this.getSchema(name);
-
     if (fieldTypes.dates.includes(name)) {
       return (
         <DatePicker
-          placeholderText="Date"
-          selected={moment(date)}
+          autoFocus
+          // selected={moment(date)}
           onChange={this.onDateSelect}
+          onClickOutside={this.onClickOutside}
+          onBlur={this.onBlur}
         />
       );
     }
