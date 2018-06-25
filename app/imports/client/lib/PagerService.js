@@ -23,6 +23,7 @@ export default class PagerService {
   }
 
   static getAccountQueryParams() {
+    const tickleUserId = FlowRouter.getQueryParam("tickleUserId");
     const page = FlowRouter.getQueryParam("page");
     const assign = FlowRouter.getQueryParam("assign");
     const facilityId = FlowRouter.getQueryParam("facilityId");
@@ -58,6 +59,7 @@ export default class PagerService {
 
     return {
       filters: {
+        tickleUserId,
         facilityId,
         clientId,
         acctNum,
@@ -132,7 +134,8 @@ export default class PagerService {
       fbDateMax,
       activeInsCode,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
+      tickleUserId
     },
     {
       sortAcctBal,
@@ -143,6 +146,7 @@ export default class PagerService {
       sortAdmitDate
     }
   ) {
+    console.log(tickleUserId);
     params.options = {};
     if (state === "unassigned") {
       _.extend(params, {
@@ -162,7 +166,9 @@ export default class PagerService {
           tickleDate: 1
         }
       });
-      if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      if (tickleUserId) {
+        _.extend(params.filters, { tickleUserId: tickleUserId });
+      } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
         _.extend(params.filters, { tickleUserId: Meteor.userId() });
       }
     } else if (state === "escalated") {
