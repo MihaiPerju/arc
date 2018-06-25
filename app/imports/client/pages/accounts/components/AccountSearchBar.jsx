@@ -431,6 +431,9 @@ export default class AccountSearchBar extends Component {
                               placeholder="Search by active Insurance Code"
                             />
                           </div>
+                          <div className="flex--helper flex-justify--end">
+                            <button className="btn--blue" onClick={this.closeDialog}>Done</button>
+                          </div>
                         </div>
                       </div>
                     </Dialog>

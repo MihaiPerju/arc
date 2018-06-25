@@ -187,6 +187,9 @@ export default class ClientSearchBar extends Component {
                                                         onChange={date => this.onDateSelect(date, "createdAtMax")}
                                                     />
                                                 </div>
+                                                <div className="flex--helper flex-justify--end">
+                                                    <button className="btn--blue" onClick={this.closeDialog}>Done</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </Dialog>
