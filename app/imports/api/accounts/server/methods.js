@@ -257,6 +257,16 @@ Meteor.methods({
     );
   },
 
+  "account.update"(_id, data) {
+    Accounts.update(
+      { _id },
+      {
+        $set: data
+      }
+    );
+  },
+
+  //Testing purpose only, delete in production
   reset() {
     Accounts.remove({});
     AccountActions.remove({});

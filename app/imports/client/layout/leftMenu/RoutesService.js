@@ -61,8 +61,7 @@ export default class RouteService {
                 {name: "accounts/active", label: "Active", icon: 'user'},
                 {name: "accounts/review", label: "Review", icon: 'inbox'},
                 {name: "accounts/escalated", label: "Escalations", icon: 'info', badge: escalations},
-                {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles},
-                {name: "reports/list", label: "Reports", icon: 'file-text-o'},
+                {name: "accounts/tickles", label: "Tickles", icon: 'comments-o', badge: tickles}
             ];
         }
     }
