@@ -44,7 +44,7 @@ class Header extends Component {
         const user = this.props.user;
 
         let routes = [
-            {name: "/home", label: "Home"},
+            {name: "/dashboard", label: "Home"},
             {name: "/accounts", label: "Accounts"},
         ];
         if (user && user.roles && user.roles.includes(RolesEnum.ADMIN)) {
