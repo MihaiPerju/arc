@@ -157,7 +157,12 @@ export default class PagerService {
         console.log("I'm a manager");
       }
       _.extend(params, {
-        filters: { tickleDate: { $exists: true }, escalationId: null }
+        filters: { tickleDate: { $exists: true }, escalationId: null },
+        options: {
+          $sort: {
+            tickleDate: -1
+          }
+        }
       });
     } else if (state === "escalated") {
       _.extend(params, {
