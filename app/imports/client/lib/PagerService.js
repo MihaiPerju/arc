@@ -167,7 +167,7 @@ export default class PagerService {
       });
       if (tickleUserId) {
         _.extend(params.filters, { tickleUserId: tickleUserId });
-      } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      } else if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
         _.extend(params.filters, { tickleUserId: Meteor.userId() });
       }
     } else if (state === "escalated") {
