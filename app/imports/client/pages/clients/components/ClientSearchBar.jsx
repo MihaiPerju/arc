@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {AutoForm, AutoField} from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
-import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
@@ -12,22 +11,12 @@ export default class ClientSearchBar extends Component {
     constructor() {
         super();
         this.state = {
-            active: false,
-            filter: false,
+            dialogIsActive: false,
             dropdown: false,
             selectAll: false,
             createdAtMin: null,
             createdAtMax: null
         };
-    }
-
-    manageFilterBar() {
-        const {active, filter} = this.state;
-        this.setState({
-            active: !active,
-            filter: !filter
-        });
-        this.props.decrease();
     }
 
     onSubmit(params) {
@@ -87,10 +76,21 @@ export default class ClientSearchBar extends Component {
         }
     };
 
+    openDialog = () => {
+        this.setState({
+            dialogIsActive: true
+        });
+    };
+
+    closeDialog = () => {
+        this.setState({
+            dialogIsActive: false
+        });
+    };
+
     render() {
         const {
-            filter,
-            active,
+            dialogIsActive,
             dropdown,
             selectAll,
             createdAtMin,
@@ -162,34 +162,43 @@ export default class ClientSearchBar extends Component {
                             </div>
                         </div>
 
-                        <div
-                            className={active ? "filter-block active" : "filter-block"}
-                            onClick={this.manageFilterBar.bind(this)}
-                        >
-                            <button>
+                        <div className="filter-block">
+                            <button onClick={this.openDialog}>
                                 <i className="icon-filter"/>
+                                {dialogIsActive && (
+                                    <Dialog className="account-dialog filter-dialog"
+                                            closePortal={this.closeDialog}
+                                            title="Filter by:"
+                                    >
+                                        <button className="close-dialog" onClick={this.closeDialog}>
+                                            <i className="icon-close"/>
+                                        </button>
+                                        <div className="filter-bar">
+                                            <div className="select-wrapper">
+                                                <div className="form-group flex--helper form-group__pseudo">
+                                                    <DatePicker
+                                                        placeholderText="From created-at date"
+                                                        selected={createdAtMin}
+                                                        onChange={date => this.onDateSelect(date, "createdAtMin")}
+                                                    />
+                                                    <DatePicker
+                                                        placeholderText="To created-at date"
+                                                        selected={createdAtMax}
+                                                        onChange={date => this.onDateSelect(date, "createdAtMax")}
+                                                    />
+                                                </div>
+                                                <div className="flex--helper flex-justify--end">
+                                                    <button className="btn--blue" onClick={this.closeDialog}>Done</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Dialog>
+                                )}
                             </button>
                         </div>
                     </div>
                 </div>
-                {filter && (
-                    <div className="filter-bar">
-                        <div className="select-wrapper">
-                            <div className="form-group flex--helper form-group__pseudo">
-                                <DatePicker
-                                    placeholderText="From created-at date"
-                                    selected={createdAtMin}
-                                    onChange={date => this.onDateSelect(date, "createdAtMin")}
-                                />
-                                <DatePicker
-                                    placeholderText="To created-at date"
-                                    selected={createdAtMax}
-                                    onChange={date => this.onDateSelect(date, "createdAtMax")}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                )}
+
             </AutoForm>
         );
     }
