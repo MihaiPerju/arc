@@ -143,6 +143,7 @@ export default class PagerService {
       sortAdmitDate
     }
   ) {
+    params.options = {};
     if (state === "unassigned") {
       _.extend(params, {
         filters: {
@@ -157,11 +158,11 @@ export default class PagerService {
         console.log("I'm a manager");
       }
       _.extend(params, {
-        filters: { tickleDate: { $exists: true }, escalationId: null },
-        options: {
-          $sort: {
-            tickleDate: -1
-          }
+        filters: { tickleDate: { $exists: true }, escalationId: null }
+      });
+      _.extend(params.options, {
+        sort: {
+          tickleDate: 1
         }
       });
     } else if (state === "escalated") {
@@ -308,9 +309,6 @@ export default class PagerService {
     }
 
     //adding sort query options
-    _.extend(params, {
-      options: { sort: {} }
-    });
 
     if (sortCreatedAt) {
       _.extend(params.options.sort, {
