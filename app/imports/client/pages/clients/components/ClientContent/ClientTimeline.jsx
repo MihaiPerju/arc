@@ -78,7 +78,7 @@ export default class ClientTimeline extends Component {
     this.getAccounts(_id);
   }
 
-  getAccounts = (id) => {
+  getAccounts = id => {
     const params = ClientService.getActionsQueryParams(id);
     return accountListQuery.clone(params).fetch((err, accounts) => {
       if (!err) {
@@ -95,12 +95,14 @@ export default class ClientTimeline extends Component {
       account.comments.map(comment => (comment.acctNum = account.acctNum));
       account.letters.map(letter => (letter.acctNum = account.acctNum));
       account.files.map(file => (file.acctNum = account.acctNum));
+      account.revertFiles.map(file => (file.acctNum = account.acctNum));
 
       actions = actions.concat(
         account.actions,
         account.comments,
         account.letters,
-        account.files
+        account.files,
+        account.revertFiles
       );
     });
     return actions;
@@ -173,30 +175,91 @@ export default class ClientTimeline extends Component {
         return <i className="icon-inbox" />;
       case actionTypesEnum.FILE:
         return <i className="icon-file-text-o" />;
+      case actionTypesEnum.REVERT:
+        return <i className="icon-file-text-o" />;
     }
   };
 
   getTimelineBody = data => {
-    const { type, action, reasonCode, content } = data;
+    const {
+      type,
+      action,
+      reasonCode,
+      content,
+      acctNum,
+      letterTemplate,
+      fileName
+    } = data;
     switch (type) {
       case actionTypesEnum.USER_ACTION:
         return (
           <div>
-            {action && action.title}
+            {action && (
+              <div>
+                Applied action <b>{action.title}</b> to account with Account
+                Number <b>{acctNum}</b>
+              </div>
+            )}
             {reasonCode && <div>Reason Code: {reasonCode}</div>}
           </div>
         );
       case actionTypesEnum.SYSTEM_ACTION:
-        return <div>{action && action.title}</div>;
+        return (
+          <div>
+            {action && (
+              <div>
+                Applied action <b>{action.title}</b> to account with Account
+                Number <b>{acctNum}</b>
+              </div>
+            )}
+          </div>
+        );
       case actionTypesEnum.COMMENT:
-        return <div>{content}</div>;
+        return (
+          <div>
+            Commented a comment <b>{content}</b> to account with Account Number{" "}
+            <b>{acctNum}</b>
+          </div>
+        );
       case actionTypesEnum.LETTER:
-        return "";
+        return (
+          <div>
+            {letterTemplate && (
+              <div>
+                Send a letter with letter-template name{" "}
+                <b>{letterTemplate.name}</b> to account with account number{" "}
+                <b>{acctNum}</b>
+              </div>
+            )}
+          </div>
+        );
       case actionTypesEnum.FILE:
-        return "";
+        return (
+          <div>
+            {fileName && (
+              <div>
+                Uploaded file <b>{this.getFileName(fileName)}.csv</b>
+              </div>
+            )}
+          </div>
+        );
+      case actionTypesEnum.REVERT:
+        return (
+          <div>
+            {fileName && (
+              <div>
+                Reverted file <b>{this.getFileName(fileName)}.csv</b>
+              </div>
+            )}
+          </div>
+        );
       default:
         return "";
     }
+  };
+
+  getFileName = name => {
+    return name.split(".")[0] || "";
   };
 
   render() {

@@ -195,5 +195,12 @@ export default new SimpleSchema({
     },
     'fileIds.$': {
         type: String
+    },
+    revertFileIds: {
+        type: Array,
+        optional: true
+    },
+    'revertFileIds.$': {
+        type: String
     }
 })

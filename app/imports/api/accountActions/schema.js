@@ -44,5 +44,13 @@ export default new SimpleSchema({
     accountId: {
         type: String,
         optional: true
+    },
+    letterTemplateId: {
+        type: String,
+        optional: true
+    },
+    fileName: {
+        type: String,
+        optional: true
     }
 });

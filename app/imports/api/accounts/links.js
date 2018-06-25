@@ -52,5 +52,10 @@ Accounts.addLinks({
         type: 'many',
         collection: AccountActions,
         field: 'fileIds'
+    },
+    revertFiles: {
+        type: 'many',
+        collection: AccountActions,
+        field: 'revertFileIds'
     }
 });

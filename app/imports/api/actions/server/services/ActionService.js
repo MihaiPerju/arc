@@ -60,12 +60,13 @@ export default class ActionService {
   }
 
   static createLetter(data) {
-    const { userId, accountId } = data;
+    const { userId, accountId, letterTemplateId } = data;
     const letterData = {
       userId,
       type: actionTypesEnum.LETTER,
       createdAt: new Date(),
-      accountId
+      accountId,
+      letterTemplateId
     };
     Letter.insert(data);
     const accountActionId = AccountActions.insert(letterData);

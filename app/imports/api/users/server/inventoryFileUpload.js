@@ -36,7 +36,8 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
     const fileData = {
         type: actionTypesEnum.FILE,
         createdAt: new Date(),
-        fileId: newFileId
+        fileId: newFileId,
+        fileName
     };
 
     const accountActionId = AccountActions.insert(fileData);

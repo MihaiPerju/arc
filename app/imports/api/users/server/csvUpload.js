@@ -36,7 +36,8 @@ createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}
     const fileData = {
         type: actionTypesEnum.FILE,
         createdAt: new Date(),
-        fileId: newFileId
+        fileId: newFileId,
+        fileName
     };
 
     const accountActionId = AccountActions.insert(fileData);

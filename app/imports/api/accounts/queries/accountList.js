@@ -119,6 +119,9 @@ export default Accounts.createNamedQuery("accountList", {
     type: 1,
     userId: 1,
     status: 1,
+    letterTemplate: {
+      name: 1
+    },
     user: {
       $filter({ filters, params }) {
         if (!_.isEmpty(params.userFilter)) {
@@ -137,7 +140,18 @@ export default Accounts.createNamedQuery("accountList", {
     },
     createdAt: 1,
     type: 1,
-    userId: 1,
-    status: 1
+    status: 1,
+    fileName: 1
+  },
+  revertFiles: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.actionsFilter)) {
+        _.extend(filters, params.actionsFilter);
+      }
+    },
+    createdAt: 1,
+    type: 1,
+    status: 1,
+    fileName: 1
   }
 });
