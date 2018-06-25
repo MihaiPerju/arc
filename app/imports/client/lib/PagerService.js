@@ -1,6 +1,6 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
-import RolesEnum from "/imports/api/users/enums/roles";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class PagerService {
   queryParams;
@@ -153,6 +153,9 @@ export default class PagerService {
         }
       });
     } else if (state === "tickles") {
+      if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+        console.log("I'm a manager");
+      }
       _.extend(params, {
         filters: { tickleDate: { $exists: true }, escalationId: null }
       });
