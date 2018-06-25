@@ -189,12 +189,6 @@ class AccountListContainer extends Pager {
     this.updateFilters({ filters });
   }
 
-  decreaseList = () => {
-    this.setState({
-      filter: !this.state.filter
-    });
-  };
-
   getFirstOption(accounts, options) {
     for (let account of accounts) {
       if (!account.assigneeId) {
@@ -380,7 +374,6 @@ class AccountListContainer extends Pager {
             icons={icons}
             getProperAccounts={this.getProperAccounts}
             changeFilters={this.changeFilters}
-            decrease={this.decreaseList}
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
@@ -405,7 +398,7 @@ class AccountListContainer extends Pager {
             />
           )}
           <AccountList
-            classes={filter ? "task-list decreased" : "task-list"}
+            classes={"task-list"}
             accountsSelected={accountsSelected}
             selectAccount={this.selectAccount}
             checkAccount={this.checkAccount}
