@@ -80,7 +80,6 @@ export default class AccountSearchBar extends Component {
       .fetch((err, res) => {
         if (!err) {
           res.map(user => {
-            console.log(user);
             tickleUserIdOptions.push({
               label:
                 user.profile &&
@@ -358,18 +357,24 @@ export default class AccountSearchBar extends Component {
                     </button>
                     <div className="filter-bar">
                       <div className="select-wrapper">
+                        {Roles.userIsInRole(
+                          Meteor.userId(),
+                          RolesEnum.MANAGER
+                        ) && (
+                          <div className="select-form">
+                            <SelectField
+                              labelHidden={true}
+                              name="tickleUserId"
+                              options={tickleUserIdOptions}
+                            />
+                          </div>
+                        )}
+
                         <div className="select-form">
                           <SelectField
                             labelHidden={true}
                             name="clientId"
                             options={clientOptions}
-                          />
-                        </div>
-                        <div className="select-form">
-                          <SelectField
-                            labelHidden={true}
-                            name="tickleUserId"
-                            options={tickleUserIdOptions}
                           />
                         </div>
                         <div className="select-form">

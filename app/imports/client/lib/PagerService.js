@@ -146,7 +146,6 @@ export default class PagerService {
       sortAdmitDate
     }
   ) {
-    console.log(tickleUserId);
     params.options = {};
     if (state === "unassigned") {
       _.extend(params, {
