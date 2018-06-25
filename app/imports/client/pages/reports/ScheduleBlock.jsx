@@ -193,7 +193,7 @@ class CreateSchedule extends Component {
 
         return (
             <div className="new-section">
-                <div className="text-label">Create schedule</div>
+                <div className="text-label text-light-grey">Create schedule</div>
                 <div className="schedule-form">
                     <AutoForm model={model} schema={schema} onSubmit={this.onSubmit.bind(this)}>
                         <div className="form-wrapper">

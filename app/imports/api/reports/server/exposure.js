@@ -7,7 +7,7 @@ reportsQuery.expose({
     if (Roles.userIsInRole(userId, roleGroups.ADMIN_TECH_MANAGER)) {
       _.extend(params, {
         filters: {
-          $or: [{ shareReport: true }, { createdBy: userId }]
+          $or: [{ shareReport: true }, { authorId: userId }]
         }
       });
     } else {
