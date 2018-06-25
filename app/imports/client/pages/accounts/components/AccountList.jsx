@@ -17,7 +17,11 @@ export default class AccountList extends Component {
     const { tickleDate } = account;
     console.log(tickleDate);
     console.log(moment(tickleDate).isBefore(moment()));
-    if (tickleDate && moment(tickleDate).isBefore(moment())) {
+    if (
+      tickleDate &&
+      (moment(tickleDate).isBefore(moment()) ||
+        moment(tickleDate).isSame(moment(), "day"))
+    ) {
       return true;
     }
     return false;
