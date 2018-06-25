@@ -154,9 +154,6 @@ export default class PagerService {
         }
       });
     } else if (state === "tickles") {
-      if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-        console.log("I'm a manager");
-      }
       _.extend(params, {
         filters: { tickleDate: { $exists: true }, escalationId: null }
       });
@@ -165,6 +162,9 @@ export default class PagerService {
           tickleDate: 1
         }
       });
+      if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+        _.extend(params.filters, { tickleUserId: Meteor.userId() });
+      }
     } else if (state === "escalated") {
       _.extend(params, {
         filters: {

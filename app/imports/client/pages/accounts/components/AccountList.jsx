@@ -15,8 +15,6 @@ export default class AccountList extends Component {
 
   isExpiredTickle = account => {
     const { tickleDate } = account;
-    console.log(tickleDate);
-    console.log(moment(tickleDate).isBefore(moment()));
     if (
       tickleDate &&
       (moment(tickleDate).isBefore(moment()) ||
