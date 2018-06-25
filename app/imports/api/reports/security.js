@@ -1,11 +1,17 @@
-import Reports from '/imports/api/reports/collection.js';
-import {roleGroups} from '/imports/api/users/enums/roles';
+import Reports from "/imports/api/reports/collection.js";
+import UserRoles from "/imports/api/users/enums/roles";
 
 export default {
-    hasRightsOnReport(userId, _id) {
-        const report = Reports.findOne({_id});
-        if (!Roles.userIsInRole(userId, roleGroups.ADMIN_TECH) && report.createdBy == userId) {
-            throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
-        }
+  hasRightsOnReport(userId, _id) {
+    const report = Reports.findOne({ _id });
+    if (
+      !(report.shareReport && Roles.userIsInRole(userId, UserRoles.ADMIN)) &&
+      userId !== report.authorId
+    ) {
+      throw new Meteor.Error(
+        "not-allowed",
+        "You do not have the correct roles for this!"
+      );
     }
-}
+  }
+};

@@ -1,10 +1,10 @@
 import React from "react";
-import classNames from "classnames";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
+import {withQuery} from "meteor/cultofcoders:grapher-react";
 import NotificationQuery from "/imports/api/notifications/queries/notificationList";
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
+import {notificationColors} from "/imports/api/notifications/enums/notificationTypes";
 
 class NotificationListContainer extends React.Component {
   constructor() {
@@ -31,36 +31,27 @@ class NotificationListContainer extends React.Component {
   };
 
   render() {
-    const { data, loading, error } = this.props;
-
-    const classes = classNames({
-      "list-item": true,
-      "user-item": true
-    });
+    const {data, loading, error} = this.props;
 
     if (loading) {
-      return <Loading />;
+      return <Loading/>;
     }
 
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
     return (
-      <div>
+      <div className="notification-list flex--helper flex-align--start">
         {data.map(notification => (
-          <div className={classes}>
-            <div className="row__block align-center">
-              <div className="info">
-                <div className="person-name">
-                  {this.getMessage(notification)}
-                </div>
-                <div className="item-name text-blue">{notification.type}</div>
+          //To apply specific colors using enum from ...path/to/enum.js
+          <div className="notification-item">
+            <div className="notification-item__wrapper">
+              <div className="notification-item__title text-light-grey">
+                {this.getMessage(notification)}
               </div>
-              <button
-                style={{ color: "black" }}
-                onClick={this.onRemove.bind(this, notification._id)}
-              >
-                Close
+              <div className="notification-item__type">{notification.type}</div>
+              <button onClick={this.onRemove.bind(this, notification._id)}>
+                <i className="icon-close"/>
               </button>
             </div>
           </div>
@@ -75,9 +66,9 @@ export default withQuery(
     return NotificationQuery.clone({
       filters: {
         receiverId: Meteor.userId(),
-        type: { $ne: NotificationTypeEnum.GLOBAL }
+        type: {$ne: NotificationTypeEnum.GLOBAL}
       }
     });
   },
-  { reactive: true }
+  {reactive: true}
 )(NotificationListContainer);

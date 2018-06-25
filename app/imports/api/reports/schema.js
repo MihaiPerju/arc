@@ -17,7 +17,7 @@ export default new SimpleSchema({
         type: Boolean,
         optional: true
     },
-    createdBy: {
+    authorId: {
         type: String,
         optional: true
     }
