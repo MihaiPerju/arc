@@ -383,6 +383,9 @@ export default class PagerService {
 
     if (currentPath.indexOf("letter-templates/list") > -1) {
       letterTemplateName = FlowRouter.getQueryParam("letterTemplateName");
+      _.extend(params, {
+        expose: true
+      });
     }
 
     if (currentPath.indexOf("substate/list") > -1) {
