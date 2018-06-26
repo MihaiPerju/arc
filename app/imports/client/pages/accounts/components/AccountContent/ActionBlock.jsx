@@ -43,10 +43,9 @@ export default class ActionBlock extends Component {
           <div className="action-list">
             {actionsPerformed &&
               actionsPerformed.map((actionPerformed, key) => {
-                const isRep = Roles.userIsInRole(
-                  actionPerformed.user._id,
-                  RolesEnum.REP
-                );
+                const isRep = actionPerformed.user
+                  ? Roles.userIsInRole(actionPerformed.user._id, RolesEnum.REP)
+                  : false;
                 return (
                   <div className="action-item" key={key}>
                     <div className="action-info">

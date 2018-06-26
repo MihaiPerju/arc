@@ -9,7 +9,9 @@ import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 export default class RevertService {
   //Main core of reverting
   static revert(fileId) {
-    const { previousFileId, facilityId, fileName } = Files.findOne({ _id: fileId });
+    const { previousFileId, facilityId, fileName } = Files.findOne({
+      _id: fileId
+    });
 
     //Delete all system Actions applied after file upload
     this.revertSystemActions(fileId);
@@ -55,22 +57,22 @@ export default class RevertService {
     };
     const accountActionId = AccountActions.insert(revertFile);
 
+    Facilities.update(
+      { _id: facilityId },
+      {
+        $push: {
+          fileIds: accountActionId
+        }
+      }
+    );
+
     _.map(accounts, account => {
-      const { acctNum, _id } = account;
+      const { acctNum } = account;
       const backUpAccount = Backup.findOne({
         acctNum,
         facilityId,
         fileId: previousFileId
       });
-
-      Accounts.update(
-        { _id },
-        {
-          $push: {
-            revertFileIds: accountActionId
-          }
-        }
-      );
 
       //If an account doesn't have previous backup - archive it
       if (!backUpAccount) {

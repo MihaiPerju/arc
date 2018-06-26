@@ -27,7 +27,6 @@ Accounts.addLinks({
         collection: Uploads,
         field: 'attachmentIds'
     },
-
     actions: {
         type: 'many',
         collection: AccountActions,
@@ -47,15 +46,5 @@ Accounts.addLinks({
         type: 'many',
         collection: AccountActions,
         field: 'letterIds'
-    },
-    files: {
-        type: 'many',
-        collection: AccountActions,
-        field: 'fileIds'
-    },
-    revertFiles: {
-        type: 'many',
-        collection: AccountActions,
-        field: 'revertFileIds'
     }
 });

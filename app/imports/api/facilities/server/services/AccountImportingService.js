@@ -8,7 +8,7 @@ import ActionService from "../../../accounts/server/services/ActionService";
 
 export default class AccountService {
   //For placement file
-  static upload(results, rules, { fileId, facilityId }, accountActionId) {
+  static upload(results, rules, { fileId, facilityId }) {
     const { labels, importRules } = this.standardize(results, rules);
 
     const clientId = this.getClientIdByFacilityId(facilityId);
@@ -50,11 +50,6 @@ export default class AccountService {
         { acctNum: toUpdateAccountId, facilityId },
         {
           $set: toUpdateAccount
-        },
-        {
-          $push: {
-            fileIds: accountActionId
-          }
         }
       );
     });
@@ -84,7 +79,7 @@ export default class AccountService {
     );
     _.map(newAccountIds, newAccountId => {
       const newAccount = this.getAccount(accounts, newAccountId);
-      Object.assign(newAccount, { facilityId, clientId, fileId, fileIds: [accountActionId] });
+      Object.assign(newAccount, { facilityId, clientId, fileId });
       Accounts.insert(newAccount);
     });
   }
@@ -300,7 +295,7 @@ export default class AccountService {
     //Creating new accounts
     _.map(newAccountIds, accountId => {
       const newAccount = this.getAccount(accounts, accountId);
-      Object.assign(newAccount, { facilityId, fileId, clientId, fileIds: [accountActionId] });
+      Object.assign(newAccount, { facilityId, fileId, clientId });
 
       Accounts.insert(newAccount);
     });
@@ -330,11 +325,6 @@ export default class AccountService {
         { acctNum: accountId, facilityId },
         {
           $set: toUpdateAccount
-        },
-        {
-          $push: {
-            fileIds: accountActionId
-          }
         }
       );
     });

@@ -188,19 +188,5 @@ export default new SimpleSchema({
     },
     'letterIds.$': {
         type: String
-    },
-    fileIds: {
-        type: Array,
-        optional: true
-    },
-    'fileIds.$': {
-        type: String
-    },
-    revertFileIds: {
-        type: Array,
-        optional: true
-    },
-    'revertFileIds.$': {
-        type: String
     }
 })

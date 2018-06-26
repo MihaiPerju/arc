@@ -94,15 +94,13 @@ export default class ClientTimeline extends Component {
       account.actions.map(action => (action.acctNum = account.acctNum));
       account.comments.map(comment => (comment.acctNum = account.acctNum));
       account.letters.map(letter => (letter.acctNum = account.acctNum));
-      account.files.map(file => (file.acctNum = account.acctNum));
-      account.revertFiles.map(file => (file.acctNum = account.acctNum));
+      account.facility.files.map(file => (file.acctNum = account.acctNum));
 
       actions = actions.concat(
         account.actions,
         account.comments,
         account.letters,
-        account.files,
-        account.revertFiles
+        account.facility.files
       );
     });
     return actions;
@@ -188,15 +186,17 @@ export default class ClientTimeline extends Component {
       content,
       acctNum,
       letterTemplate,
-      fileName
+      fileName,
+      user
     } = data;
+
     switch (type) {
       case actionTypesEnum.USER_ACTION:
         return (
           <div>
             {action && (
               <div>
-                Applied action <b>{action.title}</b> to account with Account
+                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} applied action <b>{action.title}</b> to account with Account
                 Number <b>{acctNum}</b>
               </div>
             )}
@@ -217,7 +217,7 @@ export default class ClientTimeline extends Component {
       case actionTypesEnum.COMMENT:
         return (
           <div>
-            Commented a comment <b>{content}</b> to account with Account Number{" "}
+            {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} commented a comment <b>{content}</b> to account with Account Number{" "}
             <b>{acctNum}</b>
           </div>
         );
@@ -226,7 +226,7 @@ export default class ClientTimeline extends Component {
           <div>
             {letterTemplate && (
               <div>
-                Send a letter with letter-template name{" "}
+                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} send a letter with letter-template name{" "}
                 <b>{letterTemplate.name}</b> to account with account number{" "}
                 <b>{acctNum}</b>
               </div>
@@ -238,7 +238,7 @@ export default class ClientTimeline extends Component {
           <div>
             {fileName && (
               <div>
-                Uploaded file <b>{this.getFileName(fileName)}.csv</b>
+                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} uploaded file <b>{this.getFileName(fileName)}.csv</b>
               </div>
             )}
           </div>
@@ -248,7 +248,7 @@ export default class ClientTimeline extends Component {
           <div>
             {fileName && (
               <div>
-                Reverted file <b>{this.getFileName(fileName)}.csv</b>
+                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} reverted file <b>{this.getFileName(fileName)}.csv</b>
               </div>
             )}
           </div>
@@ -430,7 +430,6 @@ export default class ClientTimeline extends Component {
               {actionsPerformed &&
                 actionsPerformed.map((actionPerformed, index) => {
                   const { createdAt, acctNum, type } = actionPerformed;
-
                   return (
                     <TimelineEvent
                       key={index}

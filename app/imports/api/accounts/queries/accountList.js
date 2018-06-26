@@ -36,6 +36,27 @@ export default Accounts.createNamedQuery("accountList", {
     users: {
       profile: 1,
       roles: 1
+    },
+    files: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.actionsFilter)) {
+          _.extend(filters, params.actionsFilter);
+        }
+      },
+      userId: 1,
+      createdAt: 1,
+      type: 1,
+      status: 1,
+      fileName: 1,
+      user: {
+        $filter({ filters, params }) {
+          if (!_.isEmpty(params.userFilter)) {
+            _.extend(filters, params.userFilter);
+          }
+        },
+        profile: 1,
+        roles: 1
+      }
     }
   },
   assigneeId: 1,
@@ -131,27 +152,5 @@ export default Accounts.createNamedQuery("accountList", {
       profile: 1,
       roles: 1
     }
-  },
-  files: {
-    $filter({ filters, params }) {
-      if (!_.isEmpty(params.actionsFilter)) {
-        _.extend(filters, params.actionsFilter);
-      }
-    },
-    createdAt: 1,
-    type: 1,
-    status: 1,
-    fileName: 1
-  },
-  revertFiles: {
-    $filter({ filters, params }) {
-      if (!_.isEmpty(params.actionsFilter)) {
-        _.extend(filters, params.actionsFilter);
-      }
-    },
-    createdAt: 1,
-    type: 1,
-    status: 1,
-    fileName: 1
   }
 });

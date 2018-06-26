@@ -9,7 +9,7 @@ import fs from 'fs';
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import AccountActions from "/imports/api/accountActions/collection";
 
-createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, success}) => {
+createRoute('/uploads/inventory/:facilityId/:token', ({user, facilityId, error, filenames, success}) => {
 
     if (filenames.length != 1) {
         return error('Invalid number of files');
@@ -25,22 +25,27 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
     //Keep reference to previous file
     const {fileId} = Facilities.findOne({_id: facilityId});
     const newFileId = Files.insert({fileName, facilityId, previousFileId: fileId});
-
-    //Add reference to facility
-    Facilities.update({_id: facilityId}, {
-        $set: {
-            fileId: newFileId
-        }
-    });
-
+    
     const fileData = {
         type: actionTypesEnum.FILE,
         createdAt: new Date(),
         fileId: newFileId,
-        fileName
+        fileName,
+        userId: user._id
     };
 
     const accountActionId = AccountActions.insert(fileData);
+    
+    //Add reference to facility
+    Facilities.update({_id: facilityId}, {
+        $set: {
+            fileId: newFileId
+        },
+        $push: {
+            fileIds: accountActionId
+        }
+    });
+
 
     //Pass links to accounts to link them too
     const links = {facilityId, fileId: newFileId};
@@ -48,7 +53,7 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
     Papa.parse(csvString, {
             chunk: (results) => {
                 // the result needs to be performed here
-                AccountService.update(results.data, importRules, links, accountActionId);
+                AccountService.update(results.data, importRules, links);
             }
         }
     );
