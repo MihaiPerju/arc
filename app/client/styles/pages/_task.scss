@@ -264,7 +264,6 @@
 
     .cc-dialog__card {
       max-width: 500px;
-      //box-shadow: $shadow-header;
     }
   }
 
@@ -367,6 +366,13 @@
     cursor: pointer;
     background: rgba($color-white, 0.5);
     height: 74px;
+
+    &.tickled-item {
+      .person {
+        color: #e87278;
+      }
+    }
+
     &.open {
       &:before {
         content: " ";
