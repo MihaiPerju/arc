@@ -127,7 +127,10 @@ class LetterList extends Component {
             {data &&
               _.map(data, (letter, index) => {
                 return (
-                  <div key={index} className="block-item flex--helper flex-justify--space-between">
+                  <div
+                    key={index}
+                    className="block-item flex--helper flex-justify--space-between"
+                  >
                     <div className="info">
                       <div className="title truncate">Letter {index}</div>
                     </div>
@@ -138,7 +141,7 @@ class LetterList extends Component {
                           className="btn-text--green"
                           onClick={() => this.handleEdit(letter)}
                         >
-                          <i className="icon-pencil"/>
+                          <i className="icon-pencil" />
                         </button>
                       )}
                       <button
@@ -173,7 +176,7 @@ class LetterList extends Component {
 export default withQuery(
   props => {
     const { account } = props;
-    return LetterListQuery.clone({ accountId: account._id });
+    return LetterListQuery.clone({ accountId: account && account._id });
   },
   { reactive: true }
 )(LetterList);

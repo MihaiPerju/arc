@@ -242,16 +242,19 @@ class AccountListContainer extends Pager {
 
   getAccount(currentAccount) {
     const { data } = this.props;
-    for (account of data) {
-      if (account._id == currentAccount) return account;
+    for (let i = 0; i < data.length; i++) {
+      const account = data[i];
+      if (account._id == currentAccount) {
+        return account;
+      }
+      return null;
     }
-    return null;
   }
 
   getAccounts(accountsSelected) {
     const { data } = this.props;
     let accounts = [];
-    for (account of data) {
+    for (let account of data) {
       if (accountsSelected.includes(account._id)) accounts.push(account);
     }
     return accounts;
@@ -259,8 +262,8 @@ class AccountListContainer extends Pager {
 
   getUserOptions(accounts) {
     let userOptions = [];
-    for (account of accounts) {
-      for (user of account.facility.users) {
+    for (let account of accounts) {
+      for (let user of account.facility.users) {
         let item = {
           label:
             user &&

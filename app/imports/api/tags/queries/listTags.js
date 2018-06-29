@@ -1,6 +1,6 @@
 import Tags from '../collection';
 
-export default Tags.createNamedQuery('listTags', {
+export default Tags.createQuery('listTags', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);

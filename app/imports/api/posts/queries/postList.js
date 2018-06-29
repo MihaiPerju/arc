@@ -1,6 +1,6 @@
 import Posts from '../collection';
 
-export default Posts.createNamedQuery('postList', {
+export default Posts.createQuery('postList', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);

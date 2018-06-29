@@ -1,6 +1,6 @@
 import Escalations from "../collection";
 
-export default Escalations.createNamedQuery(
+export default Escalations.createQuery(
   "escalationList",
   {
     $filter({ filters, options, params }) {

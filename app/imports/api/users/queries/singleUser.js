@@ -1,6 +1,6 @@
 import Users from '../collection';
 
-export default Users.createNamedQuery('singleUser', {
+export default Users.createQuery('singleUser', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);
