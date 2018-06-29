@@ -239,13 +239,6 @@ class AccountListContainer extends Pager {
       if (account._id == currentAccount) {
         return account;
       }
-      // data.forEach(account => {
-      //   if (account._id == currentAccount) {
-      //     console.log("Found ");
-      //     console.log(account);
-      //     return account;
-      //   }
-      // });
       return null;
     }
   }
@@ -464,7 +457,6 @@ class RightSide extends Component {
       closeRightPanel,
       accountsSelected
     } = this.props;
-    console.log(account);
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         <AccountContent

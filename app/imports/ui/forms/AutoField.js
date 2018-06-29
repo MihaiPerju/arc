@@ -85,9 +85,6 @@ var AutoField =
           var props = this.getFieldProps(undefined, {
             ensureValue: false
           });
-
-          console.log(props);
-
           if (props.component === undefined) {
             if (props.allowedValues) {
               if (props.checkboxes && props.fieldType !== Array) {
@@ -129,8 +126,6 @@ var AutoField =
               );
             }
           }
-          console.log(props.component);
-          console.log(this.props);
           return (0, _react.createElement)(props.component, this.props);
         }
       }

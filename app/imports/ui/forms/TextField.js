@@ -24,7 +24,6 @@ var _filterDOMProps = _interopRequireDefault(
 );
 
 var Text = function Text(_ref) {
-  console.log(_ref);
   var disabled = _ref.disabled,
     id = _ref.id,
     inputRef = _ref.inputRef,
@@ -46,7 +45,6 @@ var Text = function Text(_ref) {
       "value",
       "labelHidden"
     ]);
-  console.log(props);
   return _react.default.createElement(
     "div",
     (0, _filterDOMProps.default)(props),
