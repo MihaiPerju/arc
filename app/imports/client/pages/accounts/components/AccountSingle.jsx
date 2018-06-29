@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import moment from "moment/moment";
+import commaNumber from "comma-number";
 
 export default class AccountSingle extends Component {
   constructor(props) {
@@ -23,12 +24,18 @@ export default class AccountSingle extends Component {
   }
 
   render() {
-    const { account, active, currentAccount, isExpiredTickle, expiredTickle } = this.props;
+    const {
+      account,
+      active,
+      currentAccount,
+      isExpiredTickle,
+      expiredTickle
+    } = this.props;
 
-    const classes = classNames("list-item task-item",{
+    const classes = classNames("list-item task-item", {
       "bg--yellow": active,
       "tickled-item": expiredTickle == 1,
-      open: account._id === currentAccount,
+      open: account._id === currentAccount
     });
 
     return (
@@ -60,7 +67,7 @@ export default class AccountSingle extends Component {
           </div>
         </div>
         <div className="row__item">
-          <div className="price">{account.acctBal}</div>
+          <div className="price">{commaNumber(account.acctBal)}</div>
           <div className="location">
             {account.facility && account.facility.name}
           </div>
