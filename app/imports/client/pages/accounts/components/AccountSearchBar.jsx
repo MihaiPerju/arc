@@ -373,6 +373,7 @@ export default class AccountSearchBar extends Component {
                         <div className="select-form">
                           <SelectField
                             labelHidden={true}
+                            placeholder="Select Client"
                             name="clientId"
                             options={clientOptions}
                           />
@@ -381,6 +382,7 @@ export default class AccountSearchBar extends Component {
                           <SelectField
                             labelHidden={true}
                             name="facilityId"
+                            placeholder="Select Facility"
                             options={facilityOptions}
                           />
                         </div>
