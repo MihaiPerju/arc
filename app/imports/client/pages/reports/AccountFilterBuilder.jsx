@@ -1,5 +1,5 @@
 import React from 'react';
-import {AutoForm, SelectField} from 'uniforms-semantic';
+import {AutoForm, SelectField} from 'uniforms-unstyled';
 import ReportsService from '../../../api/reports/services/ReportsService';
 import FilterSingle from './components/FilterSingle';
 import Notifier from '/imports/client/lib/Notifier';

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Loading from "/imports/client/lib/ui/Loading";
 import { getImagePath } from "/imports/api/utils";
-import { AutoForm, SelectField, ErrorField } from "uniforms-semantic";
+import { AutoForm, SelectField, ErrorField } from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import LetterCreateContainer from "/imports/client/pages/letters/LetterCreateContainer.jsx";
 

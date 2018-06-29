@@ -6,7 +6,7 @@ import {
   AutoField,
   ErrorField,
   SelectField
-} from "uniforms-semantic";
+} from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import CommentSingle from "./CommentSingle.jsx";
 
