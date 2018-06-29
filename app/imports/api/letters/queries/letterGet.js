@@ -1,6 +1,6 @@
 import Letters from '../collection';
 
-export default Letters.createNamedQuery('letterGet', {
+export default Letters.createQuery('letterGet', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);

@@ -1,6 +1,6 @@
 import React from 'react';
 import InsCompanySchema from '/imports/api/insuranceCompanies/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import Notifier from '/imports/client/lib/Notifier';
 import {Container} from 'semantic-ui-react'
 import {Button} from 'semantic-ui-react'

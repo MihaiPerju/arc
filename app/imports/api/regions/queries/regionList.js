@@ -1,6 +1,6 @@
 import Regions from '../collection';
 
-export default Regions.createNamedQuery('regionList', {
+export default Regions.createQuery('regionList', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);

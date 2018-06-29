@@ -21,7 +21,7 @@ export default class PayerBlock extends Component {
   componentWillReceiveProps(props) {
     this.refs.slick && this.refs.slick.innerSlider.onWindowResized();
     const { account } = props;
-    if (account.insurances) {
+    if (account && account.insurances) {
       const index = account.insurances.findIndex(insurance => {
         if (account.activeInsName) {
           return (
@@ -40,7 +40,7 @@ export default class PayerBlock extends Component {
     const slideLimit =
       account && account.insurances && account.insurances.length > 3
         ? 3
-        : account.insurances.length;
+        : account && account.insurances && account.insurances.length;
     var settings = {
       infinite: false,
       speed: 500,

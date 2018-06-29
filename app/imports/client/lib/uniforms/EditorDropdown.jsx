@@ -1,6 +1,6 @@
 import React from 'react';
 import SimpleSchema from "simpl-schema";
-import {AutoForm, SelectField} from 'uniforms-semantic';
+import {AutoForm, SelectField} from 'uniforms-unstyled';
 import variablesEnum from "/imports/api/letterTemplates/enums/variablesEnum";
 
 const SelectDropDownSchema = new SimpleSchema({

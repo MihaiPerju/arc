@@ -1,6 +1,6 @@
 import Letters from "../collection";
 
-export default Letters.createNamedQuery("letterList", {
+export default Letters.createQuery("letterList", {
   $filter({ filters, options, params }) {
     if (params.accountId) {
       filters.accountId = params.accountId;
