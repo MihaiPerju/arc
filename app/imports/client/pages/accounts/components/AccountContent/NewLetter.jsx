@@ -29,7 +29,7 @@ export default class NewLetter extends Component {
 
   getLetterTemplate(value) {
     const { letterTemplates } = this.props;
-    for (letterTemplate of letterTemplates) {
+    for (let letterTemplate of letterTemplates) {
       if (letterTemplate._id === value) {
         return letterTemplate;
       }

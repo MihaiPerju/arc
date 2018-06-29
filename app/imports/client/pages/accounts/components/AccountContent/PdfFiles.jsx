@@ -26,7 +26,7 @@ export default class ActionBlock extends Component {
     //creating attachmentIds
     let attachmentIds = [];
 
-    for (item of items) {
+    for (let item of items) {
       attachmentIds.push(item._id);
     }
 

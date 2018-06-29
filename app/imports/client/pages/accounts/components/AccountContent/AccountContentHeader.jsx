@@ -20,8 +20,7 @@ export default class AccountContentHeader extends Component {
 
   getOptions(users) {
     let options = [];
-    for (let i = 0; i < users.length; i++) {
-      let user = users[i];
+    for (let user of users) {
       let item = {
         label:
           user &&
@@ -56,7 +55,7 @@ export default class AccountContentHeader extends Component {
 
   getFirstOption(account, options) {
     if (account && account.assigneeId) {
-      for (option of options) {
+      for (let option of options) {
         if (option.value === account.assigneeId) {
           return [option];
         }

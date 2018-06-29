@@ -77,7 +77,7 @@ class ClientContainer extends Pager {
   getClient = () => {
     const { data } = this.props;
     const { currentClient } = this.state;
-    for (client of data) {
+    for (let client of data) {
       if (client._id === currentClient) {
         return client;
       }
