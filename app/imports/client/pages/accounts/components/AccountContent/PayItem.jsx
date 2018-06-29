@@ -52,13 +52,8 @@ export default class PayItem extends Component {
     });
     return (
       <div className={classes}>
-        <div className="brand-block">
-          <div
-            className="text-light-grey text-center"
-            onClick={this.updateActiveInsurance.bind(this)}
-          >
-            {insurance.insName}
-          </div>
+        <div className="brand-block text-center" onClick={this.updateActiveInsurance.bind(this)}>
+          {insurance.insName}
           {dialogIsActive && (
             <Dialog
               title="Confirm"

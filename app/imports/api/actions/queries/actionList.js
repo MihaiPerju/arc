@@ -1,6 +1,6 @@
 import Actions from '../collection';
 
-export default Actions.createNamedQuery('actionList', {
+export default Actions.createQuery('actionList', {
     $filter({filters, options, params}) {
         filters.systemAction = false;
         filters.title = {$ne: "Escalated"};

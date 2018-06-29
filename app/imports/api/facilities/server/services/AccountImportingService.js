@@ -39,9 +39,12 @@ export default class AccountService {
       const { invoiceNo } =
         Accounts.find({ acctNum: toUpdateAccountId, facilityId }).fetch()[0] ||
         {};
-      
-      if(toUpdateAccount.invoiceNo) {
-        toUpdateAccount.invoiceNo = _.union(invoiceNo, toUpdateAccount.invoiceNo);
+
+      if (toUpdateAccount.invoiceNo) {
+        toUpdateAccount.invoiceNo = _.union(
+          invoiceNo,
+          toUpdateAccount.invoiceNo
+        );
       } else {
         toUpdateAccount.invoiceNo = [];
       }
@@ -85,7 +88,7 @@ export default class AccountService {
   }
 
   static backupAccounts(accounts) {
-    for (account of accounts) {
+    for (let account of accounts) {
       delete account._id;
     }
 
@@ -120,18 +123,18 @@ export default class AccountService {
   static standardize(results, rules) {
     //Convert all the rules to lower case to not be case-sensitive
 
-    for (rule in rules) {
+    for (let rule in rules) {
       if (rule !== "insurances" && rule !== "hasHeader") {
         rules[rule] = rules[rule].toLowerCase();
       }
     }
-    for (insurance of rules.insurances) {
-      for (rule in insurance) {
+    for (let insurance of rules.insurances) {
+      for (let rule in insurance) {
         insurance[rule] = insurance[rule].toLowerCase();
       }
     }
 
-    for (rule in results[0]) {
+    for (let rule in results[0]) {
       results[0][rule] = results[0][rule].toLowerCase();
     }
 
@@ -210,7 +213,7 @@ export default class AccountService {
 
     delete importRules.insurances;
 
-    for (rule in importRules) {
+    for (let rule in importRules) {
       mainFields.push(importRules[rule] - 1);
       let value = this.convertToType(rule, data[importRules[rule] - 1]);
       account[rule] = value;
@@ -266,15 +269,15 @@ export default class AccountService {
     header = header.map(x => x.trim());
 
     //Getting first rules in numberFormat
-    for (rule in rules) {
+    for (let rule in rules) {
       newRules[rule] = header.indexOf(rules[rule]) + 1;
     }
 
     //Getting insurance rules in numberFormat
     newRules.insurances = [];
-    for (insurance of rules.insurances) {
+    for (let insurance of rules.insurances) {
       let insuranceRule = {};
-      for (rule in insurance) {
+      for (let rule in insurance) {
         insuranceRule[rule] = header.indexOf(insurance[rule]) + 1;
       }
       newRules.insurances.push(insuranceRule);
@@ -312,11 +315,13 @@ export default class AccountService {
       Object.assign(toUpdateAccount, { fileId });
 
       const { invoiceNo } =
-        Accounts.find({ acctNum: accountId, facilityId }).fetch()[0] ||
-        {};
-      
-      if(toUpdateAccount.invoiceNo) {
-        toUpdateAccount.invoiceNo = _.union(invoiceNo, toUpdateAccount.invoiceNo);
+        Accounts.find({ acctNum: accountId, facilityId }).fetch()[0] || {};
+
+      if (toUpdateAccount.invoiceNo) {
+        toUpdateAccount.invoiceNo = _.union(
+          invoiceNo,
+          toUpdateAccount.invoiceNo
+        );
       } else {
         toUpdateAccount.invoiceNo = [];
       }

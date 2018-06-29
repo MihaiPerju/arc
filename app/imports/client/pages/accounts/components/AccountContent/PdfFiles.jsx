@@ -26,7 +26,7 @@ export default class ActionBlock extends Component {
     //creating attachmentIds
     let attachmentIds = [];
 
-    for (item of items) {
+    for (let item of items) {
       attachmentIds.push(item._id);
     }
 
@@ -86,9 +86,9 @@ export default class ActionBlock extends Component {
   render() {
     const { account } = this.props;
     const { pageNumber, numPages, pdfIndex } = this.state;
-
+    const accountId = account && account._id;
     const componentConfig = {
-      postUrl: `/uploads/account-pdf/` + account._id + "/" + getToken()
+      postUrl: `/uploads/account-pdf/` + accountId + "/" + getToken()
     };
     const that = this;
     const djsConfig = {
@@ -120,7 +120,8 @@ export default class ActionBlock extends Component {
                 />
               </div>
             </div>
-            {account.attachments &&
+            {account &&
+              account.attachments &&
               account.attachments.length > 1 && (
                 <button
                   onClick={this.downloadPdfs.bind(this)}
@@ -131,7 +132,8 @@ export default class ActionBlock extends Component {
               )}
           </div>
           <div className="block-list file-list">
-            {account.attachments &&
+            {account &&
+              account.attachments &&
               account.attachments.map((pdf, index) => {
                 return (
                   <ReactHover options={options} key={index}>

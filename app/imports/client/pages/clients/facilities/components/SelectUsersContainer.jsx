@@ -2,7 +2,7 @@ import React from 'react';
 import usersQuery from '/imports/api/users/queries/listUsersByRole';
 import UserRolesEnum from '/imports/api/users/enums/roles';
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import {ErrorField} from 'uniforms-semantic';
+import {ErrorField} from 'uniforms-unstyled';
 
 export default class SelectUsersContainer extends React.Component {
     constructor() {

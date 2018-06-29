@@ -11,7 +11,8 @@ export default class InvoiceMembers extends Component {
         </div>
         <div className="right--side">
           <ul className="invoice-list">
-            {account.invoiceNo &&
+            {account &&
+              account.invoiceNo &&
               account.invoiceNo.map(function(invoice, index) {
                 return <li key={index}>{invoice}</li>;
               })}
