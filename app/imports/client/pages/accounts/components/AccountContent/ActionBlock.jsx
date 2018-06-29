@@ -19,7 +19,7 @@ export default class ActionBlock extends Component {
 
   render() {
     const { account, closeRightPanel } = this.props;
-    const actionsPerformed = account.actions;
+    const actionsPerformed = account && account.actions;
 
     return (
       <div className="action-block">
@@ -65,8 +65,8 @@ export default class ActionBlock extends Component {
                     ).format("MMMM Do YYYY, hh:mm a")}
                   </div>
                   <div className="flag-item">
-                    <input type="checkbox"id={key} className="hidden"/>
-                    <label htmlFor={key}/>
+                    <input type="checkbox" id={key} className="hidden" />
+                    <label htmlFor={key} />
                   </div>
                 </div>
               ))}

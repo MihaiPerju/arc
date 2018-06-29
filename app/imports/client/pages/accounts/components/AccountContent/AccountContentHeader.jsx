@@ -20,43 +20,42 @@ export default class AccountContentHeader extends Component {
 
   getOptions(users) {
     let options = [];
-    if (users) {
-      for (user of users) {
-        let item = {
-          label:
-            user &&
-            user.profile &&
-            user.profile.firstName +
-              " " +
-              user.profile.lastName +
-              "(" +
-              user.roles[0] +
-              ")",
-          value: user && user._id
-        };
-        options.push(item);
-      }
+    for (let i = 0; i < users.length; i++) {
+      let user = users[i];
+      let item = {
+        label:
+          user &&
+          user.profile &&
+          user.profile.firstName +
+            " " +
+            user.profile.lastName +
+            "(" +
+            user.roles[0] +
+            ")",
+        value: user && user._id
+      };
+      options.push(item);
     }
     return options;
   }
 
   getAssignee() {
     const { account } = this.props;
-    if (account.assignee) {
+    if (account && account.assignee) {
       const { profile } = account.assignee;
       return (
         <div className="label label--grey">
           {profile.firstName + " " + profile.lastName}
         </div>
       );
-    } else if (account.tag) {
+    } else if (account && account.tag) {
       return <div className="label label--grey">{account.tag.name}</div>;
     }
     return <div className="label label--red">Unassigned</div>;
   }
 
   getFirstOption(account, options) {
-    if (account.assigneeId) {
+    if (account && account.assigneeId) {
       for (option of options) {
         if (option.value === account.assigneeId) {
           return [option];
@@ -162,17 +161,23 @@ export default class AccountContentHeader extends Component {
               {editField === "ptName" ? (
                 this.getEditForm("ptName")
               ) : (
-                <div className="name">{account.ptName}</div>
+                <div className="name">{account && account.ptName}</div>
               )}
             </div>
 
             <div className="row__block">
-              <div className="pacient-id text-blue">{account.acctNum}</div>
+              <div className="pacient-id text-blue">
+                {account && account.acctNum}
+              </div>
               <div className="financial-class">O/D</div>
               <div className="location">
-                {account.facility ? account.facility.name : "No insurance name"}{" "}
+                {account && account.facility
+                  ? account.facility.name
+                  : "No insurance name"}{" "}
                 -{" "}
-                {account.client ? account.client.clientName : "No client name"}
+                {account && account.client
+                  ? account.client.clientName
+                  : "No client name"}
               </div>
               <div className="label-group">
                 <div className="label label--green">158 points(TBM)</div>
@@ -185,7 +190,7 @@ export default class AccountContentHeader extends Component {
           </div>
           <div className="right__side">
             <div className="price-col">
-              <div className="price">{account.collectedAmount}</div>
+              <div className="price">{account && account.collectedAmount}</div>
               <div className="text-light-grey">Collected amount</div>
             </div>
             <div
@@ -196,7 +201,7 @@ export default class AccountContentHeader extends Component {
                 this.getEditForm("acctBal")
               ) : (
                 <div className="price">
-                  {account.acctBal ? account.acctBal : 0}
+                  {account && account.acctBal ? account.acctBal : 0}
                 </div>
               )}
               <div className="text-light-grey">Remaining balance</div>
@@ -208,18 +213,19 @@ export default class AccountContentHeader extends Component {
               type={"Assign"}
               title={"Assign account:"}
               model={account}
-              accountId={account._id}
+              accountId={account && account._id}
               options={userOptions}
               closeRightPanel={closeRightPanel}
             />
-            {Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
+            {account &&
+              Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
               !account.escalationId && (
                 <AccountActioning
                   escalate
-                  accountId={account._id}
+                  accountId={account && account._id}
                   type="Escalate"
                   title="Escalate"
-                  escalationId={account.escalationId}
+                  escalationId={account && account.escalationId}
                   closeRightPanel={closeRightPanel}
                 />
               )}
@@ -234,7 +240,7 @@ export default class AccountContentHeader extends Component {
             <AccountActioning
               tickle={true}
               type="Tickle"
-              accountId={account._id}
+              accountId={account && account._id}
               title="Confirm"
               closeRightPanel={closeRightPanel}
             />
@@ -245,7 +251,7 @@ export default class AccountContentHeader extends Component {
             <li className="text-center">
               <div className="text-light-grey">Substate</div>
               <div className="text-dark-grey text-uppercase">
-                {account.substate}
+                {account && account.substate}
               </div>
             </li>
             <li
@@ -258,7 +264,7 @@ export default class AccountContentHeader extends Component {
                 this.getEditForm("finClass")
               ) : (
                 <div className="text-dark-grey text-uppercase">
-                  {account.finClass ? account.finClass : "None"}
+                  {account && account.finClass ? account.finClass : "None"}
                 </div>
               )}
             </li>
@@ -315,7 +321,7 @@ export default class AccountContentHeader extends Component {
                 this.getEditForm("facCode")
               ) : (
                 <div className="text-dark-grey text-uppercase">
-                  {account.facCode}
+                  {account && account.facCode}
                 </div>
               )}
             </li>
@@ -328,7 +334,7 @@ export default class AccountContentHeader extends Component {
                 this.getEditForm("ptType")
               ) : (
                 <div className="text-dark-grey text-uppercase">
-                  {account.ptType}
+                  {account && account.ptType}
                 </div>
               )}
             </li>
