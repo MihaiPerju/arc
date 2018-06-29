@@ -21,7 +21,6 @@ export default class AccountContentHeader extends Component {
 
   getOptions(users = []) {
     let options = [];
-    console.log(users);
     for (let user of users) {
       let item = {
         label:
