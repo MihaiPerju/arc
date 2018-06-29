@@ -8,6 +8,7 @@ import DatePicker from "react-datepicker";
 import fieldTypes from "/imports/api/accounts/config/accounts";
 import "react-datepicker/dist/react-datepicker.css";
 import Notifier from "/imports/client/lib/Notifier";
+import commaNumber from "comma-number";
 
 export default class AccountContentHeader extends Component {
   constructor(props) {
@@ -18,8 +19,9 @@ export default class AccountContentHeader extends Component {
     };
   }
 
-  getOptions(users) {
+  getOptions(users = []) {
     let options = [];
+    console.log(users);
     for (let user of users) {
       let item = {
         label:
@@ -189,7 +191,9 @@ export default class AccountContentHeader extends Component {
           </div>
           <div className="right__side">
             <div className="price-col">
-              <div className="price">{account && account.collectedAmount}</div>
+              <div className="price">
+                {account && commaNumber(account.collectedAmount)}
+              </div>
               <div className="text-light-grey">Collected amount</div>
             </div>
             <div
@@ -200,7 +204,9 @@ export default class AccountContentHeader extends Component {
                 this.getEditForm("acctBal")
               ) : (
                 <div className="price">
-                  {account && account.acctBal ? account.acctBal : 0}
+                  {account && account.acctBal
+                    ? commaNumber(account.acctBal)
+                    : 0}
                 </div>
               )}
               <div className="text-light-grey">Remaining balance</div>

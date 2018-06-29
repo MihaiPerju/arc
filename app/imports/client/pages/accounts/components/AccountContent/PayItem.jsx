@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Notifier from "/imports/client/lib/Notifier";
+import commaNumber from "comma-number";
 
 export default class PayItem extends Component {
   constructor() {
@@ -52,7 +53,10 @@ export default class PayItem extends Component {
     });
     return (
       <div className={classes}>
-        <div className="brand-block text-center" onClick={this.updateActiveInsurance.bind(this)}>
+        <div
+          className="brand-block text-center"
+          onClick={this.updateActiveInsurance.bind(this)}
+        >
           {insurance.insName}
           {dialogIsActive && (
             <Dialog
@@ -82,7 +86,7 @@ export default class PayItem extends Component {
           <div className="info-row">
             <div className="text-light-grey">Balance</div>
             <div className="text-dark-grey price">
-              {insurance.insBal ? insurance.insBal : 0}
+              {insurance.insBal ? commaNumber(insurance.insBal) : 0}
             </div>
           </div>
           <div className="info-row">
