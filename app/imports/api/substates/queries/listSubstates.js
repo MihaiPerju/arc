@@ -1,6 +1,6 @@
 import Substates from "../collection";
 
-export default Substates.createNamedQuery("listSubstates", {
+export default Substates.createQuery("listSubstates", {
   $filter({ filters, options, params }) {
     filters.clientId = params.clientId;
     _.extend(filters, params.filters);

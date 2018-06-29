@@ -52,7 +52,7 @@ class RichTextArea extends React.Component {
         const {
             id,
             label,
-            ...props,
+            ...props
         } = this.props;
         const {value} = this.state;
 

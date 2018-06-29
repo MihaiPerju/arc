@@ -1,6 +1,6 @@
 import AccountActions from "../collection";
 
-export default AccountActions.createNamedQuery("accountActionList", {
+export default AccountActions.createQuery("accountActionList", {
   $filter({ filters, options, params }) {
     _.extend(filters, params.filters);
     _.extend(options, params.options);
