@@ -9,3 +9,5 @@ import './csvUpload';
 import './inventoryFileUpload';
 import './paymentFileUpload';
 import './extensions/imageRoute';
+import './letterSentFileUpload';
+import './letterReceiveFileUpload';

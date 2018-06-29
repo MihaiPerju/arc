@@ -166,3 +166,8 @@ route('/tag/list', TagListContainer);
 import SubstatesListContainer from '/imports/client/pages/substates/SubstatesListContainer';
 
 route('/substate/list', SubstatesListContainer)
+
+//Letter management
+import LetterManagementListContainer from '/imports/client/pages/letterManagement/LetterManagementListContainer.jsx';
+
+route('/letter-management/list', LetterManagementListContainer);

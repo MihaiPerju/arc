@@ -8,7 +8,6 @@ import os from 'os';
 import Facilities from '/imports/api/facilities/collection';
 
 createRoute('/uploads/csv/:facilityId', ({facilityId, error, filenames, success}) => {
-
     if (filenames.length != 1) {
         return error('Invalid number of files');
     }

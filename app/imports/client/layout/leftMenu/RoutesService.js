@@ -18,6 +18,7 @@ export default class RouteService {
                 {name: "code/list", label: "Codes", icon: 'code-fork'},
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
                 {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
+                {name: "/letter-management/list", label: "Letters management", icon: 'thumb-tack'},
                 {name: "action/list", label: "Actions", icon: 'thumb-tack'},
                 {name: "substate/list", label: "Substates", icon: 'thumb-tack'}
             ];
