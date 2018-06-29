@@ -6,8 +6,11 @@ import { withQuery } from "meteor/cultofcoders:grapher-react";
 import classNames from "classnames";
 import Loading from "/imports/client/lib/ui/Loading";
 import SimpleSchema from "simpl-schema";
-import { AutoForm, ErrorField, AutoField } from "/imports/ui/forms";
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti";
+import {
+  AutoForm,
+  ErrorField,
+  LongTextField
+} from "/imports/ui/forms";
 import flagsQuery from "/imports/api/flags/queries/flagList";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
@@ -20,7 +23,8 @@ class ActionBlock extends Component {
       dialogIsActive: false,
       selectedActionId: null,
       flags: [],
-      selectedFlag: {}
+      selectedFlag: {},
+      flagApproved: false
     };
   }
 
@@ -53,14 +57,21 @@ class ActionBlock extends Component {
   };
 
   onFlagAdd = data => {
+    const { account } = this.props;
     const { selectedActionId } = this.state;
-    data.actionId = selectedActionId;
+    const { _id, facilityId } = account;
+
+    Object.assign(data, {
+      actionId: selectedActionId,
+      accountId: _id,
+      facilityId
+    });
 
     Meteor.call("flag.create", data, err => {
       if (!err) {
-        Notifier.success("Flag created");
+        Notifier.success("Flagged successfully");
       } else {
-        Notifier.error(error.reason);
+        Notifier.error(err.error);
       }
       this.onCloseDialog();
     });
@@ -88,36 +99,34 @@ class ActionBlock extends Component {
   };
 
   onUnflag = data => {
-    const { selectedFlag } = this.state;
-    const { message } = data;
+    const { selectedFlag, flagApproved } = this.state;
+    const { flagResponse } = data;
 
-    Meteor.call("flag.remove", { _id: selectedFlag._id, message }, err => {
-      if (!err) {
-        Notifier.success("Flag removed");
-      } else {
-        Notifier.error(error.reason);
+    Meteor.call(
+      "flag.respond",
+      { _id: selectedFlag._id, flagResponse, flagApproved },
+      err => {
+        if (!err) {
+          Notifier.success("Responded");
+        } else {
+          Notifier.error(err.error);
+        }
+        this.onCloseDialog();
       }
-      this.onCloseDialog();
-    });
+    );
+  };
+
+  handleFlagApproval = () => {
+    const { flagApproved } = this.state;
+    this.setState({ flagApproved: !flagApproved });
   };
 
   render() {
     const { account, closeRightPanel, isLoading, error } = this.props;
     const actionsPerformed = account.actions;
-    const { dialogIsActive, selectedFlag } = this.state;
+    const { dialogIsActive, selectedFlag, flagApproved } = this.state;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
-    const fieldOptions = [
-      { value: "field1", label: "field1" },
-      { value: "field2", label: "field2" },
-      { value: "field3", label: "field3" }
-    ];
-
-    const metafieldOptions = [
-      { value: "metafield1", label: "metafield1" },
-      { value: "metafield2", label: "metafield2" },
-      { value: "metafield3", label: "metafield3" }
-    ];
 
     if (isLoading) {
       return <Loading />;
@@ -126,8 +135,6 @@ class ActionBlock extends Component {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
-
-    console.log("selectedFlag", selectedFlag);
 
     return (
       <div className="action-block">
@@ -195,22 +202,12 @@ class ActionBlock extends Component {
               {Roles.userIsInRole(userId, RolesEnum.REP) && (
                 <AutoForm onSubmit={this.onFlagAdd} schema={flagSchema}>
                   <div className="form-wrapper">
-                    <SelectMulti
+                    <LongTextField
                       labelHidden={true}
-                      placeholder="Select fields"
-                      name="fields"
-                      options={fieldOptions}
+                      placeholder="Type flag reason"
+                      name="flagReason"
                     />
-                    <ErrorField name="fields" />
-                  </div>
-                  <div className="form-wrapper">
-                    <SelectMulti
-                      labelHidden={true}
-                      placeholder="Select meta-fields"
-                      name="metafields"
-                      options={metafieldOptions}
-                    />
-                    <ErrorField name="metafields" />
+                    <ErrorField name="flagReason" />
                   </div>
                   <div className="btn-group">
                     <button className="btn-cancel" onClick={this.onCloseDialog}>
@@ -225,23 +222,22 @@ class ActionBlock extends Component {
               {Roles.userIsInRole(userId, RolesEnum.MANAGER) && (
                 <AutoForm onSubmit={this.onUnflag} schema={unFlagSchema}>
                   <div className="form-wrapper">
-                    <b>fields:</b>
-                    {selectedFlag.fields.map((field, index) => (
-                      <span key={index}>{field} </span>
-                    ))}
-
-                    <b>metafields:</b>
-                    {selectedFlag.metafields.map((metafield, index) => (
-                      <span key={index}>{metafield} </span>
-                    ))}
+                    <b>Flagging reason</b>
+                    <div>{selectedFlag.flagReason}</div>
                   </div>
                   <div className="form-wrapper">
-                    <AutoField
+                    <LongTextField
                       labelHidden={true}
-                      placeholder="Type a message"
-                      name="message"
+                      placeholder="Type to respond"
+                      name="flagResponse"
                     />
-                    <ErrorField name="message" />
+                    <ErrorField name="flagResponse" />
+                    <div className="check-group">
+                      <input checked={flagApproved} type="checkbox" />
+                      <label onClick={this.handleFlagApproval}>
+                        Mark flag correct
+                      </label>
+                    </div>
                   </div>
                   <div className="btn-group">
                     <button className="btn-cancel" onClick={this.onCloseDialog}>
@@ -269,22 +265,13 @@ export default withQuery(
 )(ActionBlock);
 
 const flagSchema = new SimpleSchema({
-  fields: {
-    type: Array
-  },
-  "fields.$": {
-    type: String
-  },
-  metafields: {
-    type: Array
-  },
-  "metafields.$": {
+  flagReason: {
     type: String
   }
 });
 
 const unFlagSchema = new SimpleSchema({
-  message: {
+  flagResponse: {
     type: String
   }
 });

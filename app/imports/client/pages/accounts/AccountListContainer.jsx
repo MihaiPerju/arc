@@ -67,6 +67,14 @@ class AccountListContainer extends Pager {
           this.setState({ assignFilterArr, dropdownOptions });
         }
       });
+
+    const accountId = FlowRouter.getQueryParam("accountId");
+    if (accountId) {
+      this.setState({
+        currentAccount: accountId
+      });
+    }
+
     const { state } = this.props;
     this.setState({ currentRouteState: state });
   }
@@ -359,6 +367,7 @@ class AccountListContainer extends Pager {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
+
     return (
       <div className="cc-container">
         <div

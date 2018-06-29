@@ -41,18 +41,22 @@ export default class AccountContent extends Component {
     }
     return (
       <div className="main-content">
-        <AccountContentHeader
-          account={account}
-          openMetaData={openMetaData}
-          closeRightPanel={closeRightPanel}
-        />
-        {this.escalateReason()}
-        <PayerBlock account={account} />
-        <InvoiceMembers account={account} />
-        <ActionBlock closeRightPanel={closeRightPanel} account={account} />
-        <LetterList account={account} />
-        <PdfFiles account={account} />
-        <CommentsListContainer account={account} />
+        {account && (
+          <div>
+            <AccountContentHeader
+              account={account}
+              openMetaData={openMetaData}
+              closeRightPanel={closeRightPanel}
+            />
+            {this.escalateReason()}
+            <PayerBlock account={account} />
+            <InvoiceMembers account={account} />
+            <ActionBlock closeRightPanel={closeRightPanel} account={account} />
+            <LetterList account={account} />
+            <PdfFiles account={account} />
+            <CommentsListContainer account={account} />
+          </div>
+        )}
       </div>
     );
   }

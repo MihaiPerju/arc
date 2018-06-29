@@ -1,21 +1,13 @@
-import Flags from "../collection";
+import FlagService from "./services/FlagService";
 
 Meteor.methods({
   "flag.create"(data) {
     data.authorId = this.userId;
-    Flags.insert(data);
+    FlagService.createFlag(data);
   },
-  
-  "flag.remove"({ _id, message }) {
-    Flags.update(
-      { _id },
-      {
-        $set: {
-          message,
-          managerId: this.userId,
-          open: false
-        }
-      }
-    );
+
+  "flag.respond"(data) {
+    data.managerId = this.userId;
+    FlagService.respondToFlag(data);
   }
 });

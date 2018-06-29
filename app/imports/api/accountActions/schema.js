@@ -44,5 +44,18 @@ export default new SimpleSchema({
     accountId: {
         type: String,
         optional: true
+    },
+    flagId: {
+        type: String,
+        optional: true
+    },
+    metaData: {
+        type: Object,
+        blackbox: true,
+        optional: true
+    },
+    flagApproved: {
+        type: Boolean,
+        optional: true
     }
 });

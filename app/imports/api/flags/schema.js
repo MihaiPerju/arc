@@ -6,24 +6,18 @@ export default new SimpleSchema({
     defaultValue: true
   },
   authorId: {
-    type: String
+    type: String,
+    optional: true
   },
   actionId: {
-    type: String
+    type: String,
+    optional: true
   },
-  fields: {
-    type: Array
+  flagReason: {
+    type: String,
+    optional: true
   },
-  "fields.$": {
-    type: String
-  },
-  metafields: {
-    type: Array
-  },
-  "metafields.$": {
-    type: String
-  },
-  message: {
+  flagResponse: {
     type: String,
     optional: true
   },
