@@ -1,20 +1,22 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
 import RolesEnum from "/imports/api/users/enums/roles";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import {AutoForm, AutoField, ErrorField} from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
 import fieldTypes from "/imports/api/accounts/config/accounts";
 import "react-datepicker/dist/react-datepicker.css";
 import Notifier from "/imports/client/lib/Notifier";
+import Dialog from "/imports/client/lib/ui/Dialog";
 
 export default class AccountContentHeader extends Component {
   constructor(props) {
     super();
     this.state = {
       editField: null,
-      schema: null
+      schema: null,
+      dialogIsActive: false
     };
   }
 
@@ -24,14 +26,14 @@ export default class AccountContentHeader extends Component {
       for (user of users) {
         let item = {
           label:
-            user &&
-            user.profile &&
-            user.profile.firstName +
-              " " +
-              user.profile.lastName +
-              "(" +
-              user.roles[0] +
-              ")",
+          user &&
+          user.profile &&
+          user.profile.firstName +
+          " " +
+          user.profile.lastName +
+          "(" +
+          user.roles[0] +
+          ")",
           value: user && user._id
         };
         options.push(item);
@@ -41,9 +43,9 @@ export default class AccountContentHeader extends Component {
   }
 
   getAssignee() {
-    const { account } = this.props;
+    const {account} = this.props;
     if (account.assignee) {
-      const { profile } = account.assignee;
+      const {profile} = account.assignee;
       return (
         <div className="label label--grey">
           {profile.firstName + " " + profile.lastName}
@@ -63,21 +65,21 @@ export default class AccountContentHeader extends Component {
         }
       }
     }
-    return [{ label: "Unassigned" }];
+    return [{label: "Unassigned"}];
   }
 
   onEditField = editField => {
-    const { account } = this.props;
-    this.setState({ editField });
+    const {account} = this.props;
+    this.setState({editField});
   };
 
   getSchema = editField => {
-    return new SimpleSchema({ [editField]: { type: String } });
+    return new SimpleSchema({[editField]: {type: String}});
   };
 
   onSubmit = data => {
-    const { account } = this.props;
-    const { editField } = this.state;
+    const {account} = this.props;
+    const {editField} = this.state;
 
     Meteor.call("account.update", account._id, data, err => {
       if (!err) {
@@ -91,11 +93,11 @@ export default class AccountContentHeader extends Component {
 
   onBlur = e => {
     //Reset
-    this.setState({ schema: null, editField: null, date: null });
+    this.setState({schema: null, editField: null, date: null});
   };
 
   onDateSelect = newDate => {
-    const { editField } = this.state;
+    const {editField} = this.state;
     let data = {};
     data[editField] = newDate.toDate();
     Meteor.call("account.update", account._id, data, err => {
@@ -106,16 +108,15 @@ export default class AccountContentHeader extends Component {
         Notifier.error(err.reason);
       }
     });
-    this.setState({ date: moment(newDate) });
+    this.setState({date: moment(newDate)});
   };
 
   getEditForm = name => {
-    const { account } = this.props;
+    const {account} = this.props;
     const schema = this.getSchema(name);
     if (fieldTypes.dates.includes(name)) {
       return (
         <DatePicker
-          autoFocus
           placeholderText="Select New Date"
           onChange={this.onDateSelect}
           onClickOutside={this.onClickOutside}
@@ -126,7 +127,7 @@ export default class AccountContentHeader extends Component {
     return (
       <AutoForm
         onBlur={this.onBlur}
-        model={{ [name]: account[name] }}
+        model={{[name]: account[name]}}
         schema={schema}
         onSubmit={this.onSubmit}
       >
@@ -140,15 +141,27 @@ export default class AccountContentHeader extends Component {
               }
             }}
           />
-          <ErrorField name={name} />
+          <ErrorField name={name}/>
         </div>
       </AutoForm>
     );
   };
 
+  openDialog = () => {
+    this.setState({
+      dialogIsActive: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      dialogIsActive: false
+    });
+  };
+
   render() {
-    const { account, openMetaData, closeRightPanel } = this.props;
-    const { editField, startDate } = this.state;
+    const {account, openMetaData, closeRightPanel} = this.props;
+    const {editField, dialogIsActive} = this.state;
 
     const options = this.getOptions(
       account && account.facility && account.facility.users
@@ -213,16 +226,16 @@ export default class AccountContentHeader extends Component {
               closeRightPanel={closeRightPanel}
             />
             {Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
-              !account.escalationId && (
-                <AccountActioning
-                  escalate
-                  accountId={account._id}
-                  type="Escalate"
-                  title="Escalate"
-                  escalationId={account.escalationId}
-                  closeRightPanel={closeRightPanel}
-                />
-              )}
+            !account.escalationId && (
+              <AccountActioning
+                escalate
+                accountId={account._id}
+                type="Escalate"
+                title="Escalate"
+                escalationId={account.escalationId}
+                closeRightPanel={closeRightPanel}
+              />
+            )}
 
             <AccountActioning
               metaData={true}
@@ -241,7 +254,7 @@ export default class AccountContentHeader extends Component {
           </div>
         </div>
         <div className="additional-info">
-          <ul style={{ paddingBottom: "150px" }}>
+          <ul style={{paddingBottom: "150px"}}>
             <li className="text-center">
               <div className="text-light-grey">Substate</div>
               <div className="text-dark-grey text-uppercase">
@@ -252,7 +265,7 @@ export default class AccountContentHeader extends Component {
               onClick={this.onEditField.bind(this, "finClass")}
               className="text-center"
             >
-              <div className="input-datetime flex--helper flex--column" />
+              <div className="input-datetime flex--helper flex--column"/>
               <div className="text-light-grey">Financial class</div>
               {editField === "finClass" ? (
                 this.getEditForm("finClass")
@@ -291,19 +304,38 @@ export default class AccountContentHeader extends Component {
           </ul>
         </div>
         <div className="additional-info">
-          <ul style={{ paddingBottom: "150px" }}>
+          <ul style={{paddingBottom: "150px"}}>
+            <li>
+              <button className="btn-text--green" onClick={this.openDialog}>
+                <i className="icon-pencil"/>
+                {
+                  dialogIsActive && (
+                    <Dialog className="account-dialog"
+                            closePortal={this.closeDialog}
+                            title={"Edit info:"}
+                    >
+                      {/*<AutoForm schema={schema} onSubmit={this.onSubmit}>*/}
+                        {/*<div className="form-wrapper select-item">*/}
+                          {/*<AutoField labelHidden={true} name={name}/>*/}
+                          {/*<ErrorField name={name}/>*/}
+                        {/*</div>*/}
+                      {/*</AutoForm>*/}
+                      {
+                        this.getEditForm("createdAt")
+                      }
+                    </Dialog>
+                  )
+                }
+              </button>
+            </li>
             <li
               onClick={!editField && this.onEditField.bind(this, "admitDate")}
               className="text-center"
             >
               <div className="text-light-grey">Admit date</div>
-              {editField === "admitDate" ? (
-                this.getEditForm("admitDate")
-              ) : (
                 <div className="text-dark-grey">
                   {account && moment(account.admitDate).format("MM/DD/YYYY")}
                 </div>
-              )}
             </li>
 
             <li
@@ -311,39 +343,27 @@ export default class AccountContentHeader extends Component {
               className="text-center"
             >
               <div className="text-light-grey">Facility Code</div>
-              {editField === "facCode" ? (
-                this.getEditForm("facCode")
-              ) : (
                 <div className="text-dark-grey text-uppercase">
                   {account.facCode}
                 </div>
-              )}
             </li>
             <li
               onClick={this.onEditField.bind(this, "ptType")}
               className="text-center"
             >
               <div className="text-light-grey">Patient Type</div>
-              {editField === "ptType" ? (
-                this.getEditForm("ptType")
-              ) : (
                 <div className="text-dark-grey text-uppercase">
                   {account.ptType}
                 </div>
-              )}
             </li>
             <li
               onClick={this.onEditField.bind(this, "fbDate")}
               className="text-center"
             >
               <div className="text-light-grey">Last Bill Date</div>
-              {editField === "fbDate" ? (
-                this.getEditForm("fbDate")
-              ) : (
                 <div className="text-dark-grey">
                   {account && moment(account.fbDate).format("MM/DD/YYYY")}
                 </div>
-              )}
             </li>
           </ul>
         </div>

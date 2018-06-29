@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AccountList from "./components/AccountList.jsx";
-import SearchBar from "/imports/client/lib/SearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import AccountContent from "./AccountContent.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
