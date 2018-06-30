@@ -1,1 +1,0 @@
-import './postList.js';
