@@ -9,6 +9,11 @@ import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import Statuses from "/imports/api/letters/enums/statuses";
 import FoldersEnum from "/imports/api/business";
 import FolderService from "./FolderService";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import QRCode from "qrcode";
+import Accounts from "/imports/api/accounts/collection";
+import Clients from "/imports/api/clients/collection";
 
 export default class LetterManagement {
   static run() {
@@ -25,14 +30,25 @@ export default class LetterManagement {
     var future = new Future();
 
     const fileLocation = os.tmpdir() + "/" + letterId + ".pdf";
+    const { accountId } = Letters.findOne({ _id: letterId });
+    const { clientId } = Accounts.findOne({ _id: accountId });
+    const { clientName } = Clients.findOne({ _id: clientId });
+    
+    QRCode.toDataURL(clientName)
+      .then(url => {
+        html = ReactDOMServer.renderToString(<img src={url} />) + html;
+        pdf.create(html).toFile(fileLocation, (err, res) => {
+          if (err) {
+            future.return(err);
+          } else {
+            future.return(res);
+          }
+        });
+      })
+      .catch(err => {
+        console.error(err);
+      });
 
-    pdf.create(html).toFile(fileLocation, (err, res) => {
-      if (err) {
-        future.return(err);
-      } else {
-        future.return(res);
-      }
-    });
     return future.wait();
   }
 
