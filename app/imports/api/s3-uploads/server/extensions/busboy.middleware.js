@@ -59,7 +59,7 @@ const fileHandler = (req, store) => {
         filename = parts.slice(0, parts.length - 1) + '.' + Random.id() + '.' + extension;
 
         // generating save path and saving
-        let saveTo = path.join(os.tmpDir(), filename);
+        let saveTo = path.join(os.tmpdir(), filename);
         let fstream = fs.createWriteStream(saveTo);
 
         req.filenames.push(saveTo);
