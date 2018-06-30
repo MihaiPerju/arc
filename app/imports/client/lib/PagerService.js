@@ -1,6 +1,6 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
-import RolesEnum from "/imports/api/users/enums/roles";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class PagerService {
   queryParams;
@@ -23,6 +23,7 @@ export default class PagerService {
   }
 
   static getAccountQueryParams() {
+    const tickleUserId = FlowRouter.getQueryParam("tickleUserId");
     const page = FlowRouter.getQueryParam("page");
     const assign = FlowRouter.getQueryParam("assign");
     const facilityId = FlowRouter.getQueryParam("facilityId");
@@ -58,6 +59,7 @@ export default class PagerService {
 
     return {
       filters: {
+        tickleUserId,
         facilityId,
         clientId,
         acctNum,
@@ -132,7 +134,8 @@ export default class PagerService {
       fbDateMax,
       activeInsCode,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
+      tickleUserId
     },
     {
       sortAcctBal,
@@ -143,6 +146,7 @@ export default class PagerService {
       sortAdmitDate
     }
   ) {
+    params.options = {};
     if (state === "unassigned") {
       _.extend(params, {
         filters: {
@@ -156,6 +160,16 @@ export default class PagerService {
       _.extend(params, {
         filters: { tickleDate: { $exists: true }, escalationId: null }
       });
+      _.extend(params.options, {
+        sort: {
+          tickleDate: 1
+        }
+      });
+      if (tickleUserId) {
+        _.extend(params.filters, { tickleUserId: tickleUserId });
+      } else if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
+        _.extend(params.filters, { tickleUserId: Meteor.userId() });
+      }
     } else if (state === "escalated") {
       _.extend(params, {
         filters: {
@@ -300,9 +314,6 @@ export default class PagerService {
     }
 
     //adding sort query options
-    _.extend(params, {
-      options: { sort: {} }
-    });
 
     if (sortCreatedAt) {
       _.extend(params.options.sort, {

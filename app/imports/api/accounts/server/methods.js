@@ -132,7 +132,7 @@ Meteor.methods({
   "accounts.count"() {
     const result = [];
     const facilities = Facilities.find().fetch();
-    for (count in facilities) {
+    for (let count in facilities) {
       let facility = facilities[count];
       //if user has rights on facility or is an admin/tech
 
@@ -157,7 +157,7 @@ Meteor.methods({
         let currentWeek = 0;
         //select accounts this month and week. To be optimized.
         const accounts = Accounts.find({ facilityId: facility._id }).fetch();
-        for (index in accounts) {
+        for (let index in accounts) {
           const account = accounts[index];
 
           if (TimeService.sameMonth(moment(account.createdAt), moment())) {

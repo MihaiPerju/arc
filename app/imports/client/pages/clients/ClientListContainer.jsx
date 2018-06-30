@@ -77,7 +77,7 @@ class ClientContainer extends Pager {
   getClient = () => {
     const { data } = this.props;
     const { currentClient } = this.state;
-    for (client of data) {
+    for (let client of data) {
       if (client._id === currentClient) {
         return client;
       }
@@ -125,12 +125,6 @@ class ClientContainer extends Pager {
     this.recount(queryParams);
   };
 
-  decreaseList = () => {
-    this.setState({
-      filter: !this.state.filter
-    });
-  };
-
   render() {
     const { data, loading, error } = this.props;
     const { clientsSelected, currentClient, create, range, total } = this.state;
@@ -158,7 +152,6 @@ class ClientContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
-            decrease={this.decreaseList}
             hideSort
           />
           <ClientList

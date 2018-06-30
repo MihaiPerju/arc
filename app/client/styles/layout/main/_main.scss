@@ -93,10 +93,6 @@
 // Filter Bar
 .filter-bar {
   background: $color-white;
-  padding: 15px;
-  border-bottom: 1px #e1e1e1 solid;
-  max-height: 170px;
-  overflow-y: auto;
 
   .select-action {
     &:first-of-type {

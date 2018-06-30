@@ -1,6 +1,6 @@
 import Facilities from '../collection';
 
-export default Facilities.createNamedQuery('facilityListNames', {
+export default Facilities.createQuery('facilityListNames', {
     $filter({filters, options, params}) {
         if (params.clientId) {
             filters.clientId = params.clientId;

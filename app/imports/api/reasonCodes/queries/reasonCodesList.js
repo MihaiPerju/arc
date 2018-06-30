@@ -1,6 +1,6 @@
 import ReasonCodes from '../collection';
 
-export default ReasonCodes.createNamedQuery('reasonCodeList', {
+export default ReasonCodes.createQuery('reasonCodeList', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);

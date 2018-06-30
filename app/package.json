@@ -7,12 +7,14 @@
     "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc ROOT_URL=http://192.168.2.43:3000 meteor --settings .deploy/pms/local.json"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.51",
     "aws-sdk": "^2.35.0",
     "babel-runtime": "^6.20.0",
     "bcrypt": "^0.8.7",
     "busboy": "^0.2.14",
     "chart.js": "^1.1.1",
     "classnames": "^2.2.5",
+    "comma-number": "^2.0.0",
     "csv": "^2.0.0",
     "csv-parse": "^2.0.0",
     "draft-js": "^0.10.4",
@@ -23,7 +25,7 @@
     "html-pdf": "^2.2.0",
     "html-to-pdf": "^0.1.11",
     "imagemagick": "^0.1.3",
-    "meteor-node-stubs": "~0.2.4",
+    "meteor-node-stubs": "^0.4.1",
     "moment": "^2.18.1",
     "node-uuid": "^1.4.8",
     "object-sizeof": "^1.1.1",
@@ -57,9 +59,8 @@
     "stream-to-string": "^1.1.0",
     "svg4everybody": "^2.1.9",
     "underscore": "^1.8.3",
-    "uniforms": "^1.22.0",
-    "uniforms-semantic": "^1.22.0",
-    "uniforms-unstyled": "^1.19.1",
+    "uniforms": "^1.25.0-rc.3",
+    "uniforms-unstyled": "^1.25.0-rc.3",
     "uuid": "^3.2.1"
   },
   "devDependencies": {

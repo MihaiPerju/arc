@@ -1,6 +1,6 @@
 import Reports from './../collection';
 
-export default Reports.createNamedQuery('reportList', {
+export default Reports.createQuery('reportList', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);
