@@ -23,8 +23,8 @@ export default class CommentSingle extends React.Component {
                         {comment && moment(comment.createdAt).format("MMMM Do YYYY, hh:mm a")}
                     </div>
                     <div className="flag-item">
-                        <input type="checkbox"id={commentId} className="hidden"/>
-                        <label htmlFor={commentId}/>
+                        <input type="checkbox" id={`flag-comment-${commentId}`} className="hidden"/>
+                        <label htmlFor={`flag-comment-${commentId}`}/>
                     </div>
                 </div>
                 <div className="message text-light-grey">{comment.content}</div>

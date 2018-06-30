@@ -185,10 +185,10 @@ class ActionBlock extends Component {
                         disabled={this.isDisabledForReps(actionPerformed._id)}
                         onChange={() => this.onOpenDialog(actionPerformed._id)}
                         type="checkbox"
-                        id={key}
+                        id={`flag-action-${key}`}
                         className="hidden"
                       />
-                      <label htmlFor={key} />
+                      <label htmlFor={`flag-action-${key}`} />
                     </div>
                   )}
                 </div>
