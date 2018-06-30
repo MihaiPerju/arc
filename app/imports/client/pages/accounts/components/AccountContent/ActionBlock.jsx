@@ -6,14 +6,10 @@ import { withQuery } from "meteor/cultofcoders:grapher-react";
 import classNames from "classnames";
 import Loading from "/imports/client/lib/ui/Loading";
 import SimpleSchema from "simpl-schema";
-import {
-  AutoForm,
-  ErrorField,
-  LongTextField
-} from "/imports/ui/forms";
+import { AutoForm, ErrorField, LongTextField } from "/imports/ui/forms";
 import flagsQuery from "/imports/api/flags/queries/flagList";
 import Notifier from "/imports/client/lib/Notifier";
-import RolesEnum from "/imports/api/users/enums/roles";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 class ActionBlock extends Component {
   constructor() {
@@ -179,17 +175,22 @@ class ActionBlock extends Component {
                       actionPerformed && actionPerformed.createdAt
                     ).format("MMMM Do YYYY, hh:mm a")}
                   </div>
-                  <div className="flag-item">
-                    <input
-                      checked={this.isFlagChecked(actionPerformed._id)}
-                      disabled={this.isDisabledForReps(actionPerformed._id)}
-                      onChange={() => this.onOpenDialog(actionPerformed._id)}
-                      type="checkbox"
-                      id={key}
-                      className="hidden"
-                    />
-                    <label htmlFor={key} />
-                  </div>
+                  {Roles.userIsInRole(
+                    Meteor.userId(),
+                    roleGroups.MANAGER_REP
+                  ) && (
+                    <div className="flag-item">
+                      <input
+                        checked={this.isFlagChecked(actionPerformed._id)}
+                        disabled={this.isDisabledForReps(actionPerformed._id)}
+                        onChange={() => this.onOpenDialog(actionPerformed._id)}
+                        type="checkbox"
+                        id={key}
+                        className="hidden"
+                      />
+                      <label htmlFor={key} />
+                    </div>
+                  )}
                 </div>
               ))}
           </div>

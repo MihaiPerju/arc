@@ -1,6 +1,6 @@
 import Flags from "../collection";
 
-export default Flags.createNamedQuery("flagList", {
+export default Flags.createQuery("flagList", {
   $filter({ filters, options, params }) {
     _.extend(filters, params.filters);
     _.extend(options, params.options);
