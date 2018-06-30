@@ -1,0 +1,121 @@
+.header-bar {
+  width: 100%;
+  height: 80px;
+  box-shadow: $shadow-header;
+  background-color: $color-white;
+  border: 1px #ebebeb solid;
+  padding: 0 30px;
+  position: relative;
+  z-index: 2;
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+  }
+  .profile-img {
+    height: 50px;
+  }
+  .left__side {
+    > a {
+      display: flex;
+      align-items: center;
+      padding: 25px 0;
+      &:hover i {
+        color: $dark-grey;
+      }
+    }
+    i {
+      font-size: 1.8rem;
+      color: $light-grey;
+      margin-right: 18px;
+    }
+  }
+  .right__side {
+    position: absolute;
+    top: 0;
+    right: 30px;
+    min-width: 250px;
+    background: $color-white;
+    &.open {
+      box-shadow: 0px 1px 10px 0px #d6d6d6;
+      border-radius: 3px;
+      .owner-menu {
+        > a:before {
+          transform: rotate(180deg);
+        }
+      }
+    }
+    li {
+      > a {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        color: $light-grey;
+        &:hover {
+          color: $dark-grey;
+        }
+      }
+    }
+    .btn-group {
+      width: 100%;
+      display: flex;
+      border-top: 1px #ebebeb solid;
+      padding: 17px 0;
+      > a {
+        width: 50%;
+        padding: 0 20px;
+        i {
+          margin-right: 5px;
+          font-size: 1.6rem;
+        }
+        &:first-of-type {
+          color: $light-grey;
+        }
+        &:last-of-type {
+          text-align: right;
+          color: #e44545;
+        }
+      }
+    }
+  }
+  .owner-menu {
+    padding-right: 35px;
+    padding-left: 20px;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    > a {
+      display: flex;
+      align-items: center;
+      padding: 14px 0;
+      > span {
+        color: $dark-grey;
+        margin-right: 15px;
+      }
+      &:before {
+        content: '\f107';
+        font-family: $font-icon;
+        position: absolute;
+        right: 20px;
+        top: 32px;
+        color: $light-grey;
+      }
+    }
+    .profile-img {
+      img {
+        position: relative;
+      }
+    }
+  }
+}
+
+.header-page__title {
+  font-weight: 700;
+  font-size: 2rem;
+  padding-left: 15px;
+}
+
+.header__logo {
+  width: 94px;
+  height: 29px;
+}

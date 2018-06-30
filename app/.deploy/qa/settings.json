@@ -1,0 +1,25 @@
+{
+  "MAIL_URL":
+    "smtp://postmaster%40worklog.cultofcoders.com:203668427b836dd2c41a8ff6fa3ee8ff@smtp.mailgun.org:25",
+  "LOCAL_STORAGE_PATH": "/tmp/uploads",
+  "public": {
+    "AWS": {
+      "url": "https://s3-eu-central-1.amazonaws.com/testing.cultofcoders.com"
+    }
+  },
+  "private": {
+    "AWS": {
+      "key": "AKIAIIJ4FYXM2G7KQCRA",
+      "secret": "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",
+      "bucket": "testing.cultofcoders.com",
+      "region": "eu-central-1",
+      "url": "https://s3-eu-central-1.amazonaws.com/testing.cultofcoders.com"
+    },
+    "sftp": {
+      "host": "sftp-tester@45.55.0.237",
+      "port": "22",
+      "username": "sftp-tester",
+      "password": "boomboom44"
+    }
+  }
+}
