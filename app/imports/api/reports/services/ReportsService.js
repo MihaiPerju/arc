@@ -64,7 +64,7 @@ export default class ReportsService {
     let filters = {};
     let filterBuilderData = {};
 
-    for (field of requiredFields) {
+    for (let field of requiredFields) {
       //Field not completed
       if (!data[field]) {
         return { error: "Filters uncomplete!" };
@@ -120,7 +120,7 @@ export default class ReportsService {
   static getFilters(data, components) {
     const requiredFields = [];
 
-    for (component in components) {
+    for (let component in components) {
       if (components[component].isActive) {
         if (ReportsService.isLink(component)) {
           requiredFields.push(component);

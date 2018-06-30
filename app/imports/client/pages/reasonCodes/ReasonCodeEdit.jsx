@@ -1,5 +1,5 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField, LongTextField} from 'uniforms-semantic';
+import {AutoForm, AutoField, ErrorField, LongTextField} from 'uniforms-unstyled';
 import Notifier from '/imports/client/lib/Notifier';
 import reasonCodeSchema from '/imports/api/reasonCodes/schema';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';

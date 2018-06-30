@@ -37,7 +37,7 @@ export default class ReportEdit extends React.Component {
     const { report } = props;
     let components = {};
 
-    for (field in report.filterBuilderData) {
+    for (let field in report.filterBuilderData) {
       field = ReportsService.getInitialField(field);
 
       components[field] = {

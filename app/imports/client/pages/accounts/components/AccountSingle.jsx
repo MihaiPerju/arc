@@ -22,28 +22,17 @@ export default class AccountSingle extends Component {
     selectAccount(account);
   }
 
-  decideBorder() {
-    const { expiredTickle } = this.props;
-    if (expiredTickle == 1) {
-      return { border: "1px solid red" };
-    }
-  }
-
   render() {
-    const { account, active, currentAccount, isExpiredTickle } = this.props;
+    const { account, active, currentAccount, isExpiredTickle, expiredTickle } = this.props;
 
-    const classes = classNames({
-      "list-item task-item": true,
+    const classes = classNames("list-item task-item",{
+      "bg--yellow": active,
+      "tickled-item": expiredTickle == 1,
       open: account._id === currentAccount,
-      "bg--yellow": active
     });
 
     return (
-      <div
-        style={this.decideBorder()}
-        className={classes}
-        onClick={this.onSelectAccount.bind(this)}
-      >
+      <div className={classes} onClick={this.onSelectAccount.bind(this)}>
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
           <label onClick={this.onCheck.bind(this)} />

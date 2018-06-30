@@ -109,7 +109,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   }
 
   getAttachmentIndex = (attachments, attachmentId) => {
-    for (index in attachments) {
+    for (let index in attachments) {
       if (attachments[index]._id === attachmentId) {
         //Got the index of selected attachment
         return index;
