@@ -1,21 +1,17 @@
 import React, { Component } from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-// import LetterSearchBar from "./components/LetterSearchBar.jsx";
 import LetterManagementList from "./components/LetterManagementList.jsx";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/letters/queries/letterList.js";
 import Loading from "/imports/client/lib/ui/Loading";
-// import { objectFromArray } from "/imports/api/utils";
-import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
-import CreateDropZone from './components/CreateDropZone'
-
+import LetterManagementDropzone from "./components/LetterManagementDropzone";
+import LetterManagementSearchBar from "./components/LetterManagementSearchBar";
 
 class LetterManagementListContainer extends Pager {
   constructor() {
     super();
-
     _.extend(this.state, {
       create: false,
       page: 1,
@@ -28,6 +24,14 @@ class LetterManagementListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { queryParams } = FlowRouter.current();
+    if (queryParams.letterName && queryParams.letterName == "") {
+      this.setPagerInitial();
+    }
+    this.updatePager();
   }
 
   createForm = () => {
@@ -50,6 +54,25 @@ class LetterManagementListContainer extends Pager {
     this.setState({ range, page: nextPage });
   };
 
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
+
+  updatePager = () => {
+    // update the pager count
+    const queryParams = PagerService.getParams();
+    this.recount(queryParams);
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const { total, range, create } = this.state;
@@ -64,9 +87,10 @@ class LetterManagementListContainer extends Pager {
     return (
       <div className="cc-container">
         <div className={create ? "left__side" : "left__side full__width"}>
+          <LetterManagementSearchBar setPagerInitial={this.setPagerInitial} />
           <LetterManagementList letters={data} />
           <PaginationBar
-            module="Client"
+            module="Letter Management File"
             create={this.createForm}
             closeForm={this.closeForm}
             nextPage={this.nextPage}
@@ -101,7 +125,7 @@ class RightSide extends Component {
 
     return (
       <div className={fade ? "right__side in" : "right__side"}>
-          <CreateDropZone close={close} />
+        <LetterManagementDropzone close={close} />
       </div>
     );
   }

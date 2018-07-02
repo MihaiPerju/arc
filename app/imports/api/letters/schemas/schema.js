@@ -40,5 +40,10 @@ export default new SimpleSchema({
   inHomeDate: {
     type: Date,
     optional: true
+  },
+  manualMail: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
   }
 });

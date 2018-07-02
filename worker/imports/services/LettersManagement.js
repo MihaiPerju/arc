@@ -17,7 +17,10 @@ import Clients from "/imports/api/clients/collection";
 
 export default class LetterManagement {
   static run() {
-    const letters = Letters.find({ status: Statuses.NEW }).fetch();
+    const letters = Letters.find({
+      status: Statuses.NEW,
+      manualMail: false
+    }).fetch();
     //convert every letter to pdf
     for (let letter of letters) {
       const { _id } = letter;
@@ -28,12 +31,11 @@ export default class LetterManagement {
 
   static createLetterContentPdf(html, letterId) {
     var future = new Future();
-
     const fileLocation = os.tmpdir() + "/" + letterId + ".pdf";
     const { accountId } = Letters.findOne({ _id: letterId });
     const { clientId } = Accounts.findOne({ _id: accountId });
     const { clientName } = Clients.findOne({ _id: clientId });
-    
+
     QRCode.toDataURL(clientName)
       .then(url => {
         html = ReactDOMServer.renderToString(<img src={url} />) + html;
@@ -79,6 +81,7 @@ export default class LetterManagement {
       })
       .catch(function(error) {
         //returns error
+        console.log("error", error);
       });
   }
 }

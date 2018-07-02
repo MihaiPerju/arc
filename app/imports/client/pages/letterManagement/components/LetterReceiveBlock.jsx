@@ -19,22 +19,6 @@ export default class LetterReceiveBlock extends Component {
     };
     return (
       <div>
-        <div className="action-block schedule-block">
-          <div className="header__block">
-            <div className="title-block text-uppercase">Last Uploaded File</div>
-          </div>
-          <div className="main__block">
-            <div className="schedule-list">
-              <div className="schedule-item">
-                <div className="left__side">
-                  <div className="info">
-                    <div className="info-label">No Backup available</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
         <div className="action-block drop-file">
           <div className="header__block">
             <div className="title-block text-uppercase">Home File</div>
