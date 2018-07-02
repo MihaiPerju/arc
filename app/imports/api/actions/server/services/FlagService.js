@@ -1,6 +1,4 @@
-import Flags from "../../collection";
 import AccountActions from "/imports/api/accountActions/collection";
-import Accounts from "/imports/api/accounts/collection";
 import Facilities from "/imports/api/facilities/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import NotificationService from "/imports/api/notifications/server/services/NotificationService";
