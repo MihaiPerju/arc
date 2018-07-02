@@ -7,68 +7,57 @@ import NotificationService from "/imports/api/notifications/server/services/Noti
 import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class FlagService {
-  static createFlag(data) {
-    const { accountId, authorId, flagReason, actionId, facilityId } = data;
-    const flag = Flags.findOne({ actionId });
-    if (flag) {
-      throw new Meteor.Error("Action can't be flagged again");
-    }
-    delete data.facilityId;
-    const flagId = Flags.insert(data);
-    const userActionData = {
-      flagId,
-      userId: authorId,
-      createdAt: new Date(),
-      type: actionTypesEnum.USER_ACTION,
-      metaData: {
-        flagReason
-      }
-    };
-
-    AccountActions.insert(userActionData);
-
-    const flagActionData = {
-      flagId,
-      userId: authorId,
-      createdAt: new Date(),
-      type: actionTypesEnum.FLAG,
-      metaData: {
-        flagReason
-      }
-    };
-
-    AccountActions.insert(flagActionData);
-    this.sendNotification(facilityId, accountId);
-  }
-
-  static respondToFlag({ _id, flagResponse, managerId, flagApproved }) {
-    Flags.update(
-      { _id },
-      {
-        $set: {
-          flagResponse,
-          managerId,
-          open: false
-        }
-      }
-    );
-
+  static createFlag({ accountId, userId, flagReason, actionId, facilityId }) {
     const flagAction = AccountActions.findOne({
-      flagId: _id,
-      type: actionTypesEnum.FLAG
+      actionId,
+      type: actionTypesEnum.USER_ACTION
     });
 
     if (flagAction) {
-      const { flagReason } = flagAction.metaData;
-      const metaData = {
-        flagReason,
-        flagResponse
+      throw new Meteor.Error("Action can't be flagged again");
+    }
+
+    const userActionData = {
+      userId,
+      createdAt: new Date(),
+      type: actionTypesEnum.USER_ACTION,
+      actionId,
+      metaData: {
+        flagReason
+      },
+      open: true
+    };
+
+    AccountActions.insert(userActionData);
+    this.sendNotification(facilityId, accountId);
+  }
+
+  static respondToFlag({ _id, flagResponse, userId, flagApproved }) {
+    const flagAction = AccountActions.findOne({ _id });
+
+    if (flagAction) {
+      AccountActions.update(
+        { _id },
+        {
+          $set: {
+            open: false
+          }
+        }
+      );
+
+      const { metaData } = flagAction;
+      const flagActionData = {
+        userId,
+        createdAt: new Date(),
+        type: actionTypesEnum.FLAG,
+        metaData: {
+          flagReason: metaData.flagReason,
+          flagResponse
+        },
+        flagApproved
       };
 
-      AccountActions.update(
-        { flagId: _id, type: actionTypesEnum.FLAG },
-        { $set: { metaData, flagApproved } }
-      );
+      AccountActions.insert(flagActionData);
     }
   }
 

@@ -7,7 +7,7 @@ import classNames from "classnames";
 import Loading from "/imports/client/lib/ui/Loading";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, ErrorField, LongTextField } from "/imports/ui/forms";
-import flagsQuery from "/imports/api/flags/queries/flagList";
+import query from "/imports/api/accountActions/queries/accountActionList";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
@@ -40,7 +40,8 @@ class ActionBlock extends Component {
     this.setState({
       dialogIsActive: true,
       selectedActionId: id,
-      selectedFlag
+      selectedFlag,
+      flagApproved: false
     });
   };
 
@@ -63,7 +64,7 @@ class ActionBlock extends Component {
       facilityId
     });
 
-    Meteor.call("flag.create", data, err => {
+    Meteor.call("action.flag.create", data, err => {
       if (!err) {
         Notifier.success("Flagged successfully");
       } else {
@@ -99,7 +100,7 @@ class ActionBlock extends Component {
     const { flagResponse } = data;
 
     Meteor.call(
-      "flag.respond",
+      "action.flag.respond",
       { _id: selectedFlag._id, flagResponse, flagApproved },
       err => {
         if (!err) {
@@ -260,7 +261,7 @@ class ActionBlock extends Component {
 
 export default withQuery(
   props => {
-    return flagsQuery.clone({ filters: { open: true } });
+    return query.clone({ filters: { open: true } });
   },
   { reactive: true }
 )(ActionBlock);
