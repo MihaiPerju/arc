@@ -45,11 +45,6 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
-  metaData: {
-    type: Object,
-    blackbox: true,
-    optional: true
-  },
   flagApproved: {
     type: Boolean,
     optional: true
@@ -59,6 +54,18 @@ export default new SimpleSchema({
     optional: true
   },
   managerId: {
+    type: String,
+    optional: true
+  },
+  flagActionId: {
+    type: String,
+    optional: true
+  },
+  flagReason: {
+    type: String,
+    optional: true
+  },
+  flagResponse: {
     type: String,
     optional: true
   }

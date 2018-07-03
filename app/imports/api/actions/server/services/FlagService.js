@@ -8,22 +8,27 @@ export default class FlagService {
   static createFlag({ accountId, userId, flagReason, actionId, facilityId }) {
     const flagAction = AccountActions.findOne({
       actionId,
-      type: actionTypesEnum.USER_ACTION
+      type: actionTypesEnum.FLAG
     });
 
     if (flagAction) {
       throw new Meteor.Error("Action can't be flagged again");
     }
 
-    const userActionData = {
+    const flagActionData = {
       userId,
       createdAt: new Date(),
-      type: actionTypesEnum.USER_ACTION,
+      type: actionTypesEnum.FLAG,
+      flagReason,
       actionId,
-      metaData: {
-        flagReason
-      },
       open: true
+    };
+
+    const flagActionId = AccountActions.insert(flagActionData);
+
+    const userActionData = {
+      type: actionTypesEnum.USER_ACTION,
+      flagActionId
     };
 
     AccountActions.insert(userActionData);
@@ -31,32 +36,17 @@ export default class FlagService {
   }
 
   static respondToFlag({ _id, flagResponse, userId, flagApproved }) {
-    const flagAction = AccountActions.findOne({ _id });
-
-    if (flagAction) {
       AccountActions.update(
         { _id },
         {
           $set: {
-            open: false
+            open: false,
+            managerId: userId,
+            flagResponse,
+            flagApproved
           }
         }
       );
-
-      const { metaData } = flagAction;
-      const flagActionData = {
-        userId,
-        createdAt: new Date(),
-        type: actionTypesEnum.FLAG,
-        metaData: {
-          flagReason: metaData.flagReason,
-          flagResponse
-        },
-        flagApproved
-      };
-
-      AccountActions.insert(flagActionData);
-    }
   }
 
   static sendNotification(facilityId, accountId) {
