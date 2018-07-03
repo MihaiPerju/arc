@@ -22,5 +22,6 @@ export default AccountActions.createQuery("accountActionList", {
   flagApproved: 1,
   open: 1,
   managerId: 1,
-  actionId: 1
+  actionId: 1,
+  commentId: 1
 });

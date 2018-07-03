@@ -38,13 +38,14 @@ export default class NotificationService {
     );
   }
 
-  static createFlagNotification(receiverId, accountId) {
+  static createFlagNotification(receiverId, accountId, flagType) {
     const { acctNum, state } = Accounts.findOne({ _id: accountId });
     Notifications.update(
       {
         type: NotificationTypeEnum.FLAG,
         receiverId,
-        "metaData.accountId": accountId
+        "metaData.accountId": accountId,
+        "metaData.flagType": flagType,
       },
       {
         $set: {

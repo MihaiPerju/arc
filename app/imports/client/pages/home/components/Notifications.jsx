@@ -37,7 +37,7 @@ class NotificationListContainer extends React.Component {
     ) {
       return (
         <div>
-          <span>User flagged an action on account with Account number</span>
+          <span>User flagged an {metaData.flagType} on account with Account number</span>
           <a
             className="text-blue"
             href={`/accounts/${metaData.state.toLowerCase()}?accountId=${

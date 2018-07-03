@@ -68,5 +68,9 @@ export default new SimpleSchema({
   flagResponse: {
     type: String,
     optional: true
+  },
+  commentId: {
+    type: String,
+    optional: true
   }
 });

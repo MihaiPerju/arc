@@ -29,11 +29,21 @@ Meteor.methods({
 
   "action.flag.create"(data) {
     data.userId = this.userId;
-    FlagService.createFlag(data);
+    FlagService.flagAction(data);
   },
 
   "action.flag.respond"(data) {
     data.userId = this.userId;
+    FlagService.respondToFlag(data);
+  },
+
+  "comment.flag.create"(data) {
+    data.userId = this.userId;
+    FlagService.flagComment(data);
+  },
+
+  "comment.flag.respond"(data) {
+    data.managerId = this.userId;
     FlagService.respondToFlag(data);
   }
 });
