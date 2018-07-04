@@ -11,37 +11,22 @@ export default class LetterManagementSingle extends Component {
       dialogIsActive: false
     };
   }
-  manualMail = letterId => {
-    Meteor.call("letter.manualMail", letterId, err => {
+
+  setMailManually = letterId => {
+    Meteor.call("letter.mailManually", letterId, err => {
       if (!err) {
-        Notifier.success("Manual mailing added");
+        Notifier.success("Letter is manually mailed");
       }
     });
+    this.changeStatus(letterId)
   };
-  changeStatus = (letterId, status) => {
-    switch (status) {
-      case "New":
-        Meteor.call("letter.updateStatus", letterId, Statuses.PENDING, err => {
-          if (!err) {
-            Notifier.success("status changed to " + Statuses.PENDING);
-          }
-        });
-        break;
-      case "Pending":
-        Meteor.call("letter.updateStatus", letterId, Statuses.SENT, err => {
-          if (!err) {
-            Notifier.success("status changed to " + Statuses.SENT);
-          }
-        });
-        break;
-      case "Sent":
-        Meteor.call("letter.updateStatus", letterId, Statuses.RECEIVED, err => {
-          if (!err) {
-            Notifier.success("status changed to " + Statuses.RECEIVED);
-          }
-        });
-        break;
-    }
+
+  changeStatus = (letterId) => {
+    Meteor.call("letter.updateStatus", letterId, Statuses.MANUALLY_MAILED, err => {
+      if (!err) {
+        Notifier.success("Status is changed to manually mailed");
+      }
+    });
   };
 
   markedManual = () => {
@@ -54,7 +39,7 @@ export default class LetterManagementSingle extends Component {
     this.setState({
       dialogIsActive: false
     });
-    this.manualMail(letterId);
+    this.setMailManually(letterId);
   };
 
   closeDialog = () => {
@@ -73,7 +58,7 @@ export default class LetterManagementSingle extends Component {
     return (
       <div className={classes}>
         <div className="row__block align-center">
-          {letter.manualMail ? (
+          {letter.isManuallyMailed ? (
             <div className="item-name text-blue">
               {letter.letterTemplate.name && letter.letterTemplate.name}
             </div>
@@ -115,19 +100,6 @@ export default class LetterManagementSingle extends Component {
               </div>
             </Dialog>
           )}
-          {letter.manualMail &&
-            letter.status != Statuses.RECEIVED && (
-              <button
-                className="btn-text--green"
-                onClick={this.changeStatus.bind(
-                  this,
-                  letter._id,
-                  letter.status
-                )}
-              >
-                Proceed
-              </button>
-            )}
         </div>
       </div>
     );

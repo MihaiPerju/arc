@@ -7,6 +7,7 @@ export default class LetterManagementDropzone extends Component {
     const { close } = this.props;
     close();
   };
+
   render() {
     return (
       <div className="create-form">

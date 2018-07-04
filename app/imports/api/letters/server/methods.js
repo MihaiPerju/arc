@@ -52,18 +52,20 @@ Meteor.methods({
       }
     );
   },
-  "letter.manualMail"(_id) {
+
+  "letter.mailManually"(_id) {
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     Letters.update(
       { _id },
       {
         $set: {
-          manualMail: true
+          isManuallyMailed: true
         }
       }
     );
   },
-  "letter.updateStatus"(_id,status) {
+
+  "letter.updateStatus"(_id, status) {
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     Letters.update(
       { _id },

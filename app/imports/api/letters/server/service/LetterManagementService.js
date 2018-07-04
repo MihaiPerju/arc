@@ -5,23 +5,26 @@ import moment from "moment";
 export default class LetterManagementService {
   static getLetterCsvData(results, content) {
     const accountNumberIndex = results[0].indexOf("Account Number");
-    if (content == "sent") {
+    if (content == Statuses.SENT) {
       const firstScanDateIndex = results[0].indexOf("FirstScanDate");
       results.shift();
       results.map(letter => {
         if (letter[accountNumberIndex] && letter[firstScanDateIndex]) {
-          this.processFile(
+          this.updateFirstScanDate(
             letter[accountNumberIndex].trim(),
             letter[firstScanDateIndex]
           );
         }
       });
-    } else if (content == "receive") {
+    } else if (content == Statuses.RECEIVED) {
       const inHomeDateIndex = results[0].indexOf("In Home Date");
       results.shift();
       results.map(letter => {
         if (letter[accountNumberIndex] && letter[inHomeDateIndex]) {
-        this.homeFile(letter[accountNumberIndex].trim(), letter[inHomeDateIndex]);
+          this.updateInHomeDate(
+            letter[accountNumberIndex].trim(),
+            letter[inHomeDateIndex]
+          );
         }
       });
     }
@@ -40,7 +43,8 @@ export default class LetterManagementService {
       return parsed.isValid() ? parsed.toDate() : null;
     }
   }
-  static processFile(letterId, firstScanDate) {
+
+  static updateFirstScanDate(letterId, firstScanDate) {
     firstScanDate = this.convertToDate(firstScanDate);
     Letters.update(
       {
@@ -55,7 +59,7 @@ export default class LetterManagementService {
     );
   }
 
-  static homeFile(letterId, inHomeDate) {
+  static updateInHomeDate(letterId, inHomeDate) {
     inHomeDate = this.convertToDate(inHomeDate);
     Letters.update(
       {

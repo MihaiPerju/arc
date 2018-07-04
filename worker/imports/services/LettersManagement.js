@@ -1,6 +1,5 @@
 import Letters from "/imports/api/letters/collection";
 import pdf from "html-pdf";
-import { Random } from "meteor/random";
 import fs from "fs";
 import os from "os";
 import Future from "fibers/future";
@@ -19,7 +18,7 @@ export default class LetterManagement {
   static run() {
     const letters = Letters.find({
       status: Statuses.NEW,
-      manualMail: false
+      isManuallyMailed: false
     }).fetch();
     //convert every letter to pdf
     for (let letter of letters) {

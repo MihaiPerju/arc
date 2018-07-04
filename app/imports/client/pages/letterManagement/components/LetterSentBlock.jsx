@@ -5,7 +5,6 @@ import DropzoneComponent from "react-dropzone-component";
 
 export default class LetterSentBlock extends Component {
   render() {
-    const { facility } = this.props;
     const componentConfig = {
       postUrl: `/uploads/letter-sent/${getToken()}`
     };

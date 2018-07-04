@@ -41,7 +41,7 @@ export default new SimpleSchema({
     type: Date,
     optional: true
   },
-  manualMail: {
+  isManuallyMailed: {
     type: Boolean,
     optional: true,
     defaultValue: false

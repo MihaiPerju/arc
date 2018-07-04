@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
-import FilterBar from "/imports/client/lib/FilterBar.jsx";
-import Dropdown from "/imports/client/lib/Dropdown";
-import classNames from "classnames";
-import Dialog from "/imports/client/lib/ui/Dialog";
 
 export default class LetterManagementSearchBar extends Component {
   onSubmit(params) {
@@ -20,6 +16,7 @@ export default class LetterManagementSearchBar extends Component {
       });
     }
   }
+
   render() {
     return (
       <AutoForm
