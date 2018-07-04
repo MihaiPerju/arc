@@ -8,6 +8,7 @@ import StatusEnum from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import Accounts from "/imports/api/accounts/collection";
 import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
+import NotificationService from "../api/notifications/server/services/NotificationService";
 
 export default class RunReports {
   static run() {
@@ -125,6 +126,8 @@ export default class RunReports {
     stringifier.on(
       "finish",
       Meteor.bindEnvironment(() => {
+        const { reportId } = JobQueue.findOne({ _id });
+        const { authorId } = Reports.findOne({ _id: reportId });
         JobQueue.update(
           { _id },
           {
@@ -133,6 +136,7 @@ export default class RunReports {
             }
           }
         );
+        NotificationService.createReportNotification(authorId, reportId);
       })
     );
 

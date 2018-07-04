@@ -33,6 +33,12 @@ class ReportListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
+    const reportId = FlowRouter.getQueryParam("reportId");
+    if (reportId) {
+      this.setState({
+        currentReport: reportId
+      });
+    }
     substatesQuery
       .clone({
         filters: { status: true }
@@ -121,7 +127,7 @@ class ReportListContainer extends Pager {
     const nextPage = PagerService.setPage({ page, perPage, total }, inc);
     const range = PagerService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
-    this.setState({ range, page: nextPage, currentClient: null });
+    this.setState({ range, page: nextPage, currentReport: null });
   };
 
   closeRightPanel = () => {
@@ -227,7 +233,11 @@ class RightSide extends Component {
         {create ? (
           <ReportCreate close={close} substates={substates} />
         ) : (
-          <ReportContent closeRightPanel={closeRightPanel} substates={substates} report={report} />
+          <ReportContent
+            closeRightPanel={closeRightPanel}
+            substates={substates}
+            report={report}
+          />
         )}
       </div>
     );
