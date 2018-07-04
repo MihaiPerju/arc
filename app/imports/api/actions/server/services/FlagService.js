@@ -1,5 +1,6 @@
 import AccountActions from "/imports/api/accountActions/collection";
 import Facilities from "/imports/api/facilities/collection";
+import Accounts from "/imports/api/accounts/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import NotificationService from "/imports/api/notifications/server/services/NotificationService";
 import RolesEnum from "/imports/api/users/enums/roles";
@@ -22,9 +23,14 @@ export default class FlagService {
       type: actionTypesEnum.FLAG,
       flagReason,
       actionId,
-      open: true
+      isOpen: true
     };
-    this.createFlag(flagActionData, accountId, facilityId, flagTypesEnum.ACTION);
+    this.createFlag(
+      flagActionData,
+      accountId,
+      facilityId,
+      flagTypesEnum.ACTION
+    );
   }
 
   static flagComment({ accountId, userId, flagReason, commentId, facilityId }) {
@@ -43,9 +49,14 @@ export default class FlagService {
       type: actionTypesEnum.FLAG,
       flagReason,
       commentId,
-      open: true
+      isOpen: true
     };
-    this.createFlag(flagActionData, accountId, facilityId, flagTypesEnum.COMMENT);
+    this.createFlag(
+      flagActionData,
+      accountId,
+      facilityId,
+      flagTypesEnum.COMMENT
+    );
   }
 
   static createFlag(flagActionData, accountId, facilityId, flagType) {
@@ -54,7 +65,18 @@ export default class FlagService {
       type: actionTypesEnum.USER_ACTION,
       flagActionId
     };
-    AccountActions.insert(userActionData);
+
+    const userActionId = AccountActions.insert(userActionData);
+    
+    Accounts.update(
+      { _id: accountId },
+      {
+        $push: {
+          flagIds: userActionId
+        }
+      }
+    );
+
     this.sendNotification(facilityId, accountId, flagType);
   }
 
@@ -63,7 +85,7 @@ export default class FlagService {
       { _id },
       {
         $set: {
-          open: false,
+          isOpen: false,
           managerId,
           flagResponse,
           flagApproved
@@ -78,7 +100,11 @@ export default class FlagService {
       for (let userId of allowedUsers) {
         if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
           NotificationService.createGlobal(userId);
-          NotificationService.createFlagNotification(userId, accountId, flagType);
+          NotificationService.createFlagNotification(
+            userId,
+            accountId,
+            flagType
+          );
         }
       }
     }

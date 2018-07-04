@@ -27,22 +27,22 @@ Meteor.methods({
     });
   },
 
-  "action.flag.create"(data) {
+  "action.createFlag"(data) {
     data.userId = this.userId;
     FlagService.flagAction(data);
   },
 
-  "action.flag.respond"(data) {
-    data.userId = this.userId;
+  "action.respondFlag"(data) {
+    data.managerId = this.userId;
     FlagService.respondToFlag(data);
   },
 
-  "comment.flag.create"(data) {
+  "comment.createFlag"(data) {
     data.userId = this.userId;
     FlagService.flagComment(data);
   },
 
-  "comment.flag.respond"(data) {
+  "comment.respondFlag"(data) {
     data.managerId = this.userId;
     FlagService.respondToFlag(data);
   }

@@ -17,11 +17,5 @@ export default AccountActions.createQuery("accountActionList", {
       path: 1,
       _id: 1
     }
-  },
-  metaData: 1,
-  flagApproved: 1,
-  open: 1,
-  managerId: 1,
-  actionId: 1,
-  commentId: 1
+  }
 });

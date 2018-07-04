@@ -49,7 +49,7 @@ export default new SimpleSchema({
     type: Boolean,
     optional: true
   },
-  open: {
+  isOpen: {
     type: Boolean,
     optional: true
   },

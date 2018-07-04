@@ -2,22 +2,19 @@ import React from "react";
 import autoBind from "react-autobind";
 import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
 import classNames from "classnames";
 import Loading from "/imports/client/lib/ui/Loading";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, ErrorField, LongTextField } from "/imports/ui/forms";
-import query from "/imports/api/accountActions/queries/accountActionList";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
-class CommentSingle extends React.Component {
+export default class CommentSingle extends React.Component {
   constructor() {
     super();
     this.state = {
       dialogIsActive: false,
       selectedCommentId: null,
-      flags: [],
       selectedFlag: {},
       flagApproved: false
     };
@@ -25,32 +22,39 @@ class CommentSingle extends React.Component {
   }
 
   isFlagChecked = commentId => {
-    const { data } = this.props;
-    const index = data.findIndex(flag => flag.commentId === commentId);
+    const { flags } = this.props.account;
+    const index = flags.findIndex(flag => {
+      const { flagAction } = flag;
+      return flagAction.commentId === commentId && flagAction.isOpen;
+    });
     return index > -1 ? true : false;
   };
 
   isDisabledForReps = commentId => {
-    const { data } = this.props;
+    const { flags } = this.props.account;
     const userId = Meteor.userId();
     if (Roles.userIsInRole(userId, RolesEnum.REP)) {
-      const index = data.findIndex(
-        flag => flag.commentId === commentId && flag.open
-      );
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.commentId === commentId && flagAction.isOpen;
+      });
       return index > -1 ? true : false;
     } else if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
-      const index = data.findIndex(
-        flag => flag.commentId === commentId && flag.open
-      );
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.commentId === commentId && flagAction.isOpen;
+      });
       return index === -1 ? true : false;
     }
   };
 
   onOpenDialog = id => {
-    const { data } = this.props;
+    const { flags } = this.props.account;
     let selectedFlag = {};
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      selectedFlag = data.filter(flag => flag.commentId === id)[0] || {};
+      selectedFlag =
+        flags.filter(flag => flag.flagAction.commentId === id)[0].flagAction ||
+        {};
     }
     this.setState({
       dialogIsActive: true,
@@ -79,7 +83,7 @@ class CommentSingle extends React.Component {
       facilityId
     });
 
-    Meteor.call("comment.flag.create", data, err => {
+    Meteor.call("comment.createFlag", data, err => {
       if (!err) {
         Notifier.success("Flagged successfully");
       } else {
@@ -94,7 +98,7 @@ class CommentSingle extends React.Component {
     const { flagResponse } = data;
 
     Meteor.call(
-      "comment.flag.respond",
+      "comment.respondFlag",
       { _id: selectedFlag._id, flagResponse, flagApproved },
       err => {
         if (!err) {
@@ -113,12 +117,12 @@ class CommentSingle extends React.Component {
   };
 
   render() {
-    const { comment, commentId, isLoading, error } = this.props;
+    const { data, comment, commentId, isLoading, error } = this.props;
     const { dialogIsActive, selectedFlag, flagApproved } = this.state;
     const { user } = comment;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
-
+    
     if (isLoading) {
       return <Loading />;
     }
@@ -214,13 +218,6 @@ class CommentSingle extends React.Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    return query.clone({ filters: { open: true } });
-  },
-  { reactive: true }
-)(CommentSingle);
 
 const flagSchema = new SimpleSchema({
   flagReason: {

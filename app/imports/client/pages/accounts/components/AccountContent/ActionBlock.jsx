@@ -2,23 +2,19 @@ import React, { Component } from "react";
 import NewAction from "./NewAction";
 import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
 import classNames from "classnames";
-import Loading from "/imports/client/lib/ui/Loading";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, ErrorField, LongTextField } from "/imports/ui/forms";
-import query from "/imports/api/accountActions/queries/accountActionList";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
-class ActionBlock extends Component {
+export default class ActionBlock extends Component {
   constructor() {
     super();
     this.state = {
       createAction: false,
       dialogIsActive: false,
       selectedActionId: null,
-      flags: [],
       selectedFlag: {},
       flagApproved: false
     };
@@ -32,10 +28,12 @@ class ActionBlock extends Component {
   };
 
   onOpenDialog = id => {
-    const { data } = this.props;
+    const { flags } = this.props.account;
     let selectedFlag = {};
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      selectedFlag = data.filter(flag => flag.actionId === id)[0] || {};
+      selectedFlag =
+        flags.filter(flag => flag.flagAction.actionId === id)[0].flagAction ||
+        {};
     }
     this.setState({
       dialogIsActive: true,
@@ -64,7 +62,7 @@ class ActionBlock extends Component {
       facilityId
     });
 
-    Meteor.call("action.flag.create", data, err => {
+    Meteor.call("action.createFlag", data, err => {
       if (!err) {
         Notifier.success("Flagged successfully");
       } else {
@@ -75,22 +73,27 @@ class ActionBlock extends Component {
   };
 
   isFlagChecked = actionId => {
-    const { data } = this.props;
-    const index = data.findIndex(flag => flag.actionId === actionId);
+    const { flags } = this.props.account;
+    const index = flags.findIndex(flag => {
+      const { flagAction } = flag;
+      return flagAction.actionId === actionId && flagAction.isOpen;
+    });
     return index > -1 ? true : false;
   };
 
   isDisabledForReps = actionId => {
-    const { data } = this.props;
+    const { flags } = this.props.account;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
-      const index = data.findIndex(
-        flag => flag.actionId === actionId && flag.open
-      );
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.actionId === actionId && flagAction.isOpen;
+      });
       return index > -1 ? true : false;
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      const index = data.findIndex(
-        flag => flag.actionId === actionId && flag.open
-      );
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.actionId === actionId && flagAction.isOpen;
+      });
       return index === -1 ? true : false;
     }
   };
@@ -100,7 +103,7 @@ class ActionBlock extends Component {
     const { flagResponse } = data;
 
     Meteor.call(
-      "action.flag.respond",
+      "action.respondFlag",
       { _id: selectedFlag._id, flagResponse, flagApproved },
       err => {
         if (!err) {
@@ -119,19 +122,11 @@ class ActionBlock extends Component {
   };
 
   render() {
-    const { account, closeRightPanel, isLoading, error } = this.props;
+    const { account, closeRightPanel } = this.props;
     const actionsPerformed = account.actions;
     const { dialogIsActive, selectedFlag, flagApproved } = this.state;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
 
     return (
       <div className="action-block">
@@ -258,13 +253,6 @@ class ActionBlock extends Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    return query.clone({ filters: { open: true } });
-  },
-  { reactive: true }
-)(ActionBlock);
 
 const flagSchema = new SimpleSchema({
   flagReason: {
