@@ -8,7 +8,7 @@ import Accounts from "/imports/api/accounts/collection";
 export default class ActionService {
   static createAction(data) {
     const { substateId } = data;
-    const { stateName } = Substates.findOne({ _id: substateId });
+    const { stateName } = Substates.findOne({ _id: substateId }) || {};
     data.state = stateName;
 
     const actionId = Actions.insert(data);
