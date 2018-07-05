@@ -16,7 +16,7 @@ export default class ActionBlock extends Component {
       dialogIsActive: false,
       selectedActionId: null,
       selectedFlag: {},
-      flagApproved: false
+      isFlagApproved: false
     };
   }
 
@@ -39,7 +39,7 @@ export default class ActionBlock extends Component {
       dialogIsActive: true,
       selectedActionId: id,
       selectedFlag,
-      flagApproved: false
+      isFlagApproved: false
     });
   };
 
@@ -99,12 +99,12 @@ export default class ActionBlock extends Component {
   };
 
   onUnflag = data => {
-    const { selectedFlag, flagApproved } = this.state;
+    const { selectedFlag, isFlagApproved } = this.state;
     const { flagResponse } = data;
 
     Meteor.call(
       "action.respondFlag",
-      { _id: selectedFlag._id, flagResponse, flagApproved },
+      { _id: selectedFlag._id, flagResponse, isFlagApproved },
       err => {
         if (!err) {
           Notifier.success("Responded");
@@ -117,14 +117,14 @@ export default class ActionBlock extends Component {
   };
 
   handleFlagApproval = () => {
-    const { flagApproved } = this.state;
-    this.setState({ flagApproved: !flagApproved });
+    const { isFlagApproved } = this.state;
+    this.setState({ isFlagApproved: !isFlagApproved });
   };
 
   render() {
     const { account, closeRightPanel } = this.props;
     const actionsPerformed = account.actions;
-    const { dialogIsActive, selectedFlag, flagApproved } = this.state;
+    const { dialogIsActive, selectedFlag, isFlagApproved } = this.state;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
 
@@ -230,7 +230,7 @@ export default class ActionBlock extends Component {
                     />
                     <ErrorField name="flagResponse" />
                     <div className="check-group">
-                      <input checked={flagApproved} type="checkbox" />
+                      <input checked={isFlagApproved} type="checkbox" />
                       <label onClick={this.handleFlagApproval}>
                         Mark flag correct
                       </label>

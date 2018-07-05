@@ -80,7 +80,7 @@ export default class FlagService {
     this.sendNotification(facilityId, accountId, flagType);
   }
 
-  static respondToFlag({ _id, flagResponse, managerId, flagApproved }) {
+  static respondToFlag({ _id, flagResponse, managerId, isFlagApproved }) {
     AccountActions.update(
       { _id },
       {
@@ -88,7 +88,7 @@ export default class FlagService {
           isOpen: false,
           managerId,
           flagResponse,
-          flagApproved
+          isFlagApproved
         }
       }
     );

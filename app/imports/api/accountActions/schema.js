@@ -45,7 +45,7 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
-  flagApproved: {
+  isFlagApproved: {
     type: Boolean,
     optional: true
   },

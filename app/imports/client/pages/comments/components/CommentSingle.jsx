@@ -16,7 +16,7 @@ export default class CommentSingle extends React.Component {
       dialogIsActive: false,
       selectedCommentId: null,
       selectedFlag: {},
-      flagApproved: false
+      isFlagApproved: false
     };
     autoBind(this);
   }
@@ -60,7 +60,7 @@ export default class CommentSingle extends React.Component {
       dialogIsActive: true,
       selectedCommentId: id,
       selectedFlag,
-      flagApproved: false
+      isFlagApproved: false
     });
   };
 
@@ -94,12 +94,12 @@ export default class CommentSingle extends React.Component {
   };
 
   onFlagRepond = data => {
-    const { selectedFlag, flagApproved } = this.state;
+    const { selectedFlag, isFlagApproved } = this.state;
     const { flagResponse } = data;
 
     Meteor.call(
       "comment.respondFlag",
-      { _id: selectedFlag._id, flagResponse, flagApproved },
+      { _id: selectedFlag._id, flagResponse, isFlagApproved },
       err => {
         if (!err) {
           Notifier.success("Responded");
@@ -112,13 +112,13 @@ export default class CommentSingle extends React.Component {
   };
 
   handleFlagApproval = () => {
-    const { flagApproved } = this.state;
-    this.setState({ flagApproved: !flagApproved });
+    const { isFlagApproved } = this.state;
+    this.setState({ isFlagApproved: !isFlagApproved });
   };
 
   render() {
     const { data, comment, commentId, isLoading, error } = this.props;
-    const { dialogIsActive, selectedFlag, flagApproved } = this.state;
+    const { dialogIsActive, selectedFlag, isFlagApproved } = this.state;
     const { user } = comment;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
@@ -196,7 +196,7 @@ export default class CommentSingle extends React.Component {
                   />
                   <ErrorField name="flagResponse" />
                   <div className="check-group">
-                    <input checked={flagApproved} type="checkbox" />
+                    <input checked={isFlagApproved} type="checkbox" />
                     <label onClick={this.handleFlagApproval}>
                       Mark flag correct
                     </label>
