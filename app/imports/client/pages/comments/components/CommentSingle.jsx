@@ -116,6 +116,20 @@ export default class CommentSingle extends React.Component {
     this.setState({ isFlagApproved: !isFlagApproved });
   };
 
+  showFlags = commentId => {
+    const { flags } = this.props.account;
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      return true;
+    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.commentId === commentId && !flagAction.isOpen;
+      });
+      return index === -1 ? true : false;
+    }
+    return false;
+  };
+
   render() {
     const { data, comment, commentId, isLoading, error } = this.props;
     const { dialogIsActive, selectedFlag, isFlagApproved } = this.state;
@@ -141,7 +155,7 @@ export default class CommentSingle extends React.Component {
             {comment &&
               moment(comment.createdAt).format("MMMM Do YYYY, hh:mm a")}
           </div>
-          {Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP) && (
+          {this.showFlags(comment._id) && (
             <div className="flag-item">
               <input
                 checked={this.isFlagChecked(comment._id)}

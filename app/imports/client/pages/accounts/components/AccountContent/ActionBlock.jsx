@@ -121,6 +121,20 @@ export default class ActionBlock extends Component {
     this.setState({ isFlagApproved: !isFlagApproved });
   };
 
+  showFlags = actionId => {
+    const { flags } = this.props.account;
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      return true;
+    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.actionId === actionId && !flagAction.isOpen;
+      });
+      return index === -1 ? true : false;
+    }
+    return false;
+  };
+
   render() {
     const { account, closeRightPanel } = this.props;
     const actionsPerformed = account.actions;
@@ -171,10 +185,7 @@ export default class ActionBlock extends Component {
                       actionPerformed && actionPerformed.createdAt
                     ).format("MMMM Do YYYY, hh:mm a")}
                   </div>
-                  {Roles.userIsInRole(
-                    Meteor.userId(),
-                    roleGroups.MANAGER_REP
-                  ) && (
+                  {this.showFlags(actionPerformed._id) && (
                     <div className="flag-item">
                       <input
                         checked={this.isFlagChecked(actionPerformed._id)}
