@@ -87,7 +87,7 @@ export function createRoute(path, handler) {
           const stats = fs.statSync(filePath);
           const fileSizeInBytes = stats.size;
 
-          let fileName = filePath.replace(os.tmpDir() + "/", "");
+          let fileName = filePath.replace(os.tmpdir() + "/", "");
           let movePath = Business.LOCAL_STORAGE_FOLDER + "/" + fileName;
           movePath = movePath.replace(/\s+/g, "-");
           //If there is no local folder

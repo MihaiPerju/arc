@@ -92,8 +92,10 @@ export default class AccountService {
       delete account._id;
     }
 
-    const rawBackup = Backup.rawCollection();
-    rawBackup.insert(accounts);
+    if (accounts.length) {
+      const rawBackup = Backup.rawCollection();
+      rawBackup.insert(accounts);
+    }
   }
 
   static getAccount(accounts, acctNum) {
