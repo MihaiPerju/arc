@@ -77,7 +77,7 @@ export default class Uploader {
         const fileSizeInBytes = stats.size;
 
         let stream = fs.readFileSync(filePath);
-        let fileName = filePath.replace(os.tmpDir() + '/', '');
+        let fileName = filePath.replace(os.tmpdir() + '/', '');
 
         if (!fileKey) {
             fileKey = Uploader.generateS3Key(fileName);
@@ -106,7 +106,7 @@ export default class Uploader {
         let fs = Npm.require('fs');
         let os = Npm.require("os");
         let path = Npm.require("path");
-        let fileName = filePath.replace(os.tmpDir() + '/', '');
+        let fileName = filePath.replace(os.tmpdir() + '/', '');
         let fn = Meteor.wrapAsync(im.resize);
 
         let stdout = fn({

@@ -16,7 +16,7 @@ createRoute('/uploads/csv/:facilityId/:token', ({user, facilityId, error, filena
     const importRules = ParseService.getImportRules(facilityId, 'placementRules');
 
     //Parsing and getting the CSV like a string
-    let fileName = filenames[0].replace(os.tmpDir() + '/', '');
+    let fileName = filenames[0].replace(os.tmpdir() + '/', '');
     const stream = fs.readFileSync(filenames[0]);
     const csvString = stream.toString();
 
