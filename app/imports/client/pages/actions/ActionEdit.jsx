@@ -150,7 +150,7 @@ export default class ActionEdit extends React.Component {
                 </div>
 
                 <div className="check-group">
-                  <input defaultChecked={checked} type="checkbox" />
+                  <input checked={checked} type="checkbox" />
                   <label onClick={this.handleClick}>
                     {" "}
                     Changes the substate of the Account?
