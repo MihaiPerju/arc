@@ -29,7 +29,7 @@ class NotificationListContainer extends React.Component {
     } else if (notification.metaData && notification.metaData.name) {
       return (
         <div>
-          Report{" "}
+          Report:{" "}
           <a href={`reports/list?reportId=${notification.metaData.reportId}`}>
             {notification.metaData.name}
           </a>{" "}
@@ -52,7 +52,7 @@ class NotificationListContainer extends React.Component {
     }
     return (
       <div className="notification-list flex--helper flex-align--start">
-        {data.map((notification,index) => (
+        {data.map((notification, index) => (
           //To apply specific colors using enum from ...path/to/enum.js
           <div className="notification-item">
             <div key={index} className="notification-item__wrapper">

@@ -174,6 +174,7 @@ class ReportListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={reportsSelected.length}
             deleteAction={this.deleteAction}
+            closeRightPanel={this.closeRightPanel}
             hideSort
           />
           <ReportList
@@ -186,7 +187,7 @@ class ReportListContainer extends Pager {
           />
           <PaginationBar
             module="Report"
-            close={this.closeForm}
+            closeForm={this.closeForm}
             create={this.createForm}
             nextPage={this.nextPage}
             range={range}
