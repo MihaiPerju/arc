@@ -161,45 +161,71 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed.map((actionPerformed, key) => (
-                <div className="action-item" key={key}>
-                  <div className="action-info">
-                    <div className="info">
-                      <div className="name">
-                        {actionPerformed.user &&
-                          actionPerformed.user.profile.firstName +
-                            " " +
-                            actionPerformed.user.profile.lastName}
+              actionsPerformed.map((actionPerformed, key) => {
+                const isRep = actionPerformed.user
+                  ? Roles.userIsInRole(actionPerformed.user._id, RolesEnum.REP)
+                  : false;
+                return (
+                  <div className="action-item" key={key}>
+                    <div className="action-info">
+                      <div className="info">
+                        <div className="name">
+                          {(isRep &&
+                            Roles.userIsInRole(
+                              userId,
+                              roleGroups.ADMIN_TECH_MANAGER
+                            )) ||
+                          (isRep && userId === actionPerformed.user._id)
+                            ? actionPerformed.user && (
+                                <a
+                                  href={`/${
+                                    actionPerformed.user._id
+                                  }/user-profile`}
+                                >
+                                  {actionPerformed.user.profile.firstName +
+                                    " " +
+                                    actionPerformed.user.profile.lastName}
+                                </a>
+                              )
+                            : actionPerformed.user &&
+                              actionPerformed.user.profile.firstName +
+                                " " +
+                                actionPerformed.user.profile.lastName}
+                        </div>
+                        <div className="text text-light-grey">
+                          <b>{actionPerformed.reasonCode}</b>:
+                          {actionPerformed.action &&
+                            actionPerformed.action.title}
+                        </div>
                       </div>
-                      <div className="text text-light-grey">
-                        <b>{actionPerformed.reasonCode}</b>:
-                        {actionPerformed.action && actionPerformed.action.title}
+                      <div className="status archived">
+                        {actionPerformed.action &&
+                          actionPerformed.action.status}
                       </div>
                     </div>
-                    <div className="status archived">
-                      {actionPerformed.action && actionPerformed.action.status}
+                    <div className="action-time">
+                      {moment(
+                        actionPerformed && actionPerformed.createdAt
+                      ).format("MMMM Do YYYY, hh:mm a")}
                     </div>
+                    {this.showFlags(actionPerformed._id) && (
+                      <div className="flag-item">
+                        <input
+                          checked={this.isFlagChecked(actionPerformed._id)}
+                          disabled={this.isDisabledForReps(actionPerformed._id)}
+                          onChange={() =>
+                            this.onOpenDialog(actionPerformed._id)
+                          }
+                          type="checkbox"
+                          id={`flag-action-${key}`}
+                          className="hidden"
+                        />
+                        <label htmlFor={`flag-action-${key}`} />
+                      </div>
+                    )}
                   </div>
-                  <div className="action-time">
-                    {moment(
-                      actionPerformed && actionPerformed.createdAt
-                    ).format("MMMM Do YYYY, hh:mm a")}
-                  </div>
-                  {this.showFlags(actionPerformed._id) && (
-                    <div className="flag-item">
-                      <input
-                        checked={this.isFlagChecked(actionPerformed._id)}
-                        disabled={this.isDisabledForReps(actionPerformed._id)}
-                        onChange={() => this.onOpenDialog(actionPerformed._id)}
-                        type="checkbox"
-                        id={`flag-action-${key}`}
-                        className="hidden"
-                      />
-                      <label htmlFor={`flag-action-${key}`} />
-                    </div>
-                  )}
-                </div>
-              ))}
+                );
+              })}
           </div>
           {dialogIsActive && (
             <Dialog

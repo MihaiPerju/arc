@@ -98,5 +98,12 @@ export default new SimpleSchema({
   password: {
     type: String,
     optional: true
+  },
+  fileIds: {
+    type: Array,
+    optional: true
+  },
+  "fileIds.$": {
+    type: String
   }
 });

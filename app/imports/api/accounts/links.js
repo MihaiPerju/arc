@@ -42,5 +42,15 @@ Accounts.addLinks({
     type: "many",
     collection: AccountActions,
     field: "flagIds"
+  },
+  comments: {
+    type: "many",
+    collection: AccountActions,
+    field: "commentIds"
+  },
+  letters: {
+    type: "many",
+    collection: AccountActions,
+    field: "letterIds"
   }
 });

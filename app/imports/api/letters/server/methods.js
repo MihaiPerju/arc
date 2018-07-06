@@ -1,10 +1,12 @@
 import { Meteor } from "meteor/meteor";
 import Letters from "../collection.js";
 import Statuses from "/imports/api/letters/enums/statuses.js";
+import ActionService from "../../actions/server/services/ActionService.js";
 
 Meteor.methods({
   "letter.create"(data) {
-    Letters.insert(data);
+    data.userId = this.userId;
+    ActionService.createLetter(data);
   },
 
   "letter.get"(letterId) {
@@ -22,7 +24,10 @@ Meteor.methods({
     Letters.remove(letterId);
   },
 
-  "letter.update"(_id, { body, letterTemplateId, attachmentIds, letterValues }) {
+  "letter.update"(
+    _id,
+    { body, letterTemplateId, attachmentIds, letterValues }
+  ) {
     const { status } = Letters.findOne({ _id });
     if (status !== Statuses.NEW) {
       throw new Meteor.Error(

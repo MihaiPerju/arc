@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
-import RolesEnum from "/imports/api/users/enums/roles";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
@@ -43,11 +43,27 @@ export default class AccountContentHeader extends Component {
     const { account } = this.props;
     if (account && account.assignee) {
       const { profile } = account.assignee;
-      return (
-        <div className="label label--grey">
-          {profile.firstName + " " + profile.lastName}
-        </div>
-      );
+      const currentUserId = Meteor.userId();
+      const isRep = Roles.userIsInRole(account.assigneeId, RolesEnum.REP);
+      if (
+        (isRep &&
+          Roles.userIsInRole(currentUserId, roleGroups.ADMIN_TECH_MANAGER)) ||
+        (isRep && currentUserId === account.assigneeId)
+      ) {
+        return (
+          <div className="label label--grey">
+            <a href={`/${account.assigneeId}/user-profile`}>
+              {profile.firstName + " " + profile.lastName}
+            </a>
+          </div>
+        );
+      } else {
+        return (
+          <div className="label label--grey">
+            {profile.firstName + " " + profile.lastName}
+          </div>
+        );
+      }
     } else if (account && account.tag) {
       return <div className="label label--grey">{account.tag.name}</div>;
     }

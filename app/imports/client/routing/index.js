@@ -7,6 +7,7 @@ import Home from '/imports/client/pages/home/Home';
 
 //User
 import MyProfile from '/imports/client/pages/users/MyProfile';
+import UserProfile from '/imports/client/pages/users/UserProfile';
 import ChangePassword from '/imports/client/pages/users/ChangePassword';
 import ForgotPassword from '/imports/client/pages/users/ForgotPassword';
 import ResetPassword from '/imports/client/pages/users/ResetPassword.jsx';
@@ -24,6 +25,7 @@ route('/', Login, {}, {
 route('/my-profile', MyProfile, {}, {
     name: 'profile',
 });
+route('/:userId/user-profile', UserProfile);
 route('/password/change', ChangePassword, {}, {
     name: 'password.change',
 
