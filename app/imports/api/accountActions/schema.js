@@ -72,5 +72,13 @@ export default new SimpleSchema({
   commentId: {
     type: String,
     optional: true
+  },
+  letterTemplateId: {
+    type: String,
+    optional: true
+  },
+  fileName: {
+    type: String,
+    optional: true
   }
 });

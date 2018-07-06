@@ -64,7 +64,7 @@ export default class AccountContentHeader extends Component {
           </div>
         );
       }
-    } else if (account.tag) {
+    } else if (account && account.tag) {
       return <div className="label label--grey">{account.tag.name}</div>;
     }
     return <div className="label label--red">Unassigned</div>;
