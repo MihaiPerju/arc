@@ -1,25 +1,23 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField } from "/imports/ui/forms";
+import { AutoForm, AutoField, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { SelectField } from "/imports/ui/forms";
 import DatePicker from "react-datepicker";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
-import PagerService from "/imports/client/lib/PagerService";
+import userListQuery from "/imports/api/users/queries/listUsers.js";
 
 export default class AccountSearchBar extends Component {
   constructor() {
     super();
     this.state = {
-      active: false,
-      filter: false,
       dropdown: false,
+      dialogIsActive: false,
       selectAll: false,
       facilityOptions: [],
       clientOptions: [],
@@ -34,14 +32,16 @@ export default class AccountSearchBar extends Component {
       total: 0,
       range: {},
       admitDateMin: null,
-      admitDateMax: null
+      admitDateMax: null,
+      tickleUserIdOptions: []
     };
   }
 
   componentWillMount() {
-    const facilityOptions = [];
-    const clientOptions = [];
-    const substates = [];
+    let facilityOptions = [];
+    let clientOptions = [];
+    let substates = [];
+    let tickleUserIdOptions = [];
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -75,15 +75,21 @@ export default class AccountSearchBar extends Component {
           this.setState({ substates });
         }
       });
-  }
-
-  manageFilterBar() {
-    const { active, filter } = this.state;
-    this.setState({
-      active: !active,
-      filter: !filter
-    });
-    this.props.decrease();
+    userListQuery
+      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
+      .fetch((err, res) => {
+        if (!err) {
+          res.map(user => {
+            tickleUserIdOptions.push({
+              label:
+                user.profile &&
+                user.profile.lastName + " " + user.profile.firstName,
+              value: user._id
+            });
+          });
+        }
+      });
+    this.setState({ tickleUserIdOptions });
   }
 
   onSubmit(params) {
@@ -92,6 +98,9 @@ export default class AccountSearchBar extends Component {
     }
     if ("acctNum" in params) {
       FlowRouter.setQueryParams({ acctNum: params.acctNum });
+    }
+    if ("tickleUserId" in params) {
+      FlowRouter.setQueryParams({ tickleUserId: params.tickleUserId });
     }
     if ("clientId" in params) {
       FlowRouter.setQueryParams({ clientId: params.clientId });
@@ -204,10 +213,10 @@ export default class AccountSearchBar extends Component {
   };
 
   sortAccounts = (key, sortKey) => {
-    if(FlowRouter.getQueryParam(key) === sortKey) {
+    if (FlowRouter.getQueryParam(key) === sortKey) {
       FlowRouter.setQueryParams({ [key]: null });
     } else {
-      FlowRouter.setQueryParams({ [key]: sortKey }); 
+      FlowRouter.setQueryParams({ [key]: sortKey });
     }
   };
 
@@ -228,11 +237,22 @@ export default class AccountSearchBar extends Component {
     return classNames(classes);
   };
 
+  openDialog = () => {
+    this.setState({
+      dialogIsActive: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      dialogIsActive: false
+    });
+  };
+
   render() {
     const {
-      filter,
-      active,
       dropdown,
+      dialogIsActive,
       selectAll,
       facilityOptions,
       clientOptions,
@@ -243,7 +263,8 @@ export default class AccountSearchBar extends Component {
       substates,
       sort,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
+      tickleUserIdOptions
     } = this.state;
     const {
       options,
@@ -266,10 +287,12 @@ export default class AccountSearchBar extends Component {
 
     const searchBarClasses = classNames({
       "search-input": true,
-      'full__width': btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) ||
-                     btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN),
-      'sort__width': btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      'account-search': Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+      full__width:
+        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) ||
+        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)),
+      sort__width:
+        btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
+      "account-search": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
     });
 
     const currentStateName = FlowRouter.current().params.state;
@@ -320,12 +343,157 @@ export default class AccountSearchBar extends Component {
               </div>
             </div>
 
-            <div
-              className={active ? "filter-block active" : "filter-block"}
-              onClick={this.manageFilterBar.bind(this)}
-            >
-              <button>
+            <div className="filter-block">
+              <button onClick={this.openDialog}>
                 <i className="icon-filter" />
+                {dialogIsActive && (
+                  <Dialog
+                    className="account-dialog filter-dialog"
+                    closePortal={this.closeDialog}
+                    title="Filter by:"
+                  >
+                    <button className="close-dialog" onClick={this.closeDialog}>
+                      <i className="icon-close" />
+                    </button>
+                    <div className="filter-bar">
+                      <div className="select-wrapper">
+                        {Roles.userIsInRole(
+                          Meteor.userId(),
+                          RolesEnum.MANAGER
+                        ) && (
+                          <div className="select-form">
+                            <SelectField
+                              labelHidden={true}
+                              name="tickleUserId"
+                              options={tickleUserIdOptions}
+                            />
+                          </div>
+                        )}
+
+                        <div className="select-form">
+                          <SelectField
+                            labelHidden={true}
+                            placeholder="Select Client"
+                            name="clientId"
+                            options={clientOptions}
+                          />
+                        </div>
+                        <div className="select-form">
+                          <SelectField
+                            labelHidden={true}
+                            name="facilityId"
+                            placeholder="Select Facility"
+                            options={facilityOptions}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <AutoField
+                            labelHidden={true}
+                            name="facCode"
+                            placeholder="Search by Facility Code"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <AutoField
+                            labelHidden={true}
+                            name="ptType"
+                            placeholder="Search by Patient Type"
+                          />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo">
+                          <AutoField
+                            labelHidden={true}
+                            name="acctBalMin"
+                            placeholder="Minimum Account Balance"
+                          />
+                          <AutoField
+                            labelHidden={true}
+                            name="acctBalMax"
+                            placeholder="Maximum Account Balance"
+                          />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo">
+                          <DatePicker
+                            placeholderText="From Discharge Date"
+                            selected={dischrgDateMin}
+                            onChange={date =>
+                              this.onDateSelect(date, "dischrgDateMin")
+                            }
+                          />
+                          <DatePicker
+                            placeholderText="To Discharge Date"
+                            selected={dischrgDateMax}
+                            onChange={date =>
+                              this.onDateSelect(date, "dischrgDateMax")
+                            }
+                          />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo">
+                          <DatePicker
+                            placeholderText="From Last Bill Date"
+                            selected={fbDateMin}
+                            onChange={date =>
+                              this.onDateSelect(date, "fbDateMin")
+                            }
+                          />
+                          <DatePicker
+                            placeholderText="To Last Bill Date"
+                            selected={fbDateMax}
+                            onChange={date =>
+                              this.onDateSelect(date, "fbDateMax")
+                            }
+                          />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo">
+                          <DatePicker
+                            placeholderText="From Admit Date"
+                            selected={admitDateMin}
+                            onChange={date =>
+                              this.onDateSelect(date, "admitDateMin")
+                            }
+                          />
+                          <DatePicker
+                            placeholderText="To Admit Date"
+                            selected={admitDateMax}
+                            onChange={date =>
+                              this.onDateSelect(date, "admitDateMax")
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <AutoField
+                            labelHidden={true}
+                            name="finClass"
+                            placeholder="Search by Financial Class"
+                          />
+                        </div>
+                        <div className="select-form">
+                          <SelectField
+                            placeholder="Substate"
+                            labelHidden={true}
+                            options={substates}
+                            name="substate"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <AutoField
+                            labelHidden={true}
+                            name="activeInsCode"
+                            placeholder="Search by active Insurance Code"
+                          />
+                        </div>
+                        <div className="flex--helper flex-justify--end">
+                          <button
+                            className="btn--blue"
+                            onClick={this.closeDialog}
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Dialog>
+                )}
               </button>
             </div>
             {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
@@ -344,110 +512,6 @@ export default class AccountSearchBar extends Component {
             )}
           </div>
         </div>
-        {filter && (
-          <div className="filter-bar">
-            <div className="select-wrapper">
-              <div className="select-form">
-                <SelectField
-                  labelHidden={true}
-                  name="clientId"
-                  options={clientOptions}
-                />
-              </div>
-              <div className="select-form">
-                <SelectField
-                  labelHidden={true}
-                  name="facilityId"
-                  options={facilityOptions}
-                />
-              </div>
-              <div className="form-group">
-                <AutoField
-                  labelHidden={true}
-                  name="facCode"
-                  placeholder="Search by Facility Code"
-                />
-              </div>
-              <div className="form-group">
-                <AutoField
-                  labelHidden={true}
-                  name="ptType"
-                  placeholder="Search by Patient Type"
-                />
-              </div>
-              <div className="form-group flex--helper form-group__pseudo">
-                <AutoField
-                  labelHidden={true}
-                  name="acctBalMin"
-                  placeholder="Minimum Account Balance"
-                />
-                <AutoField
-                  labelHidden={true}
-                  name="acctBalMax"
-                  placeholder="Maximum Account Balance"
-                />
-              </div>
-              <div className="form-group flex--helper form-group__pseudo">
-                <DatePicker
-                  placeholderText="From Discharge Date"
-                  selected={dischrgDateMin}
-                  onChange={date => this.onDateSelect(date, "dischrgDateMin")}
-                />
-                <DatePicker
-                  placeholderText="To Discharge Date"
-                  selected={dischrgDateMax}
-                  onChange={date => this.onDateSelect(date, "dischrgDateMax")}
-                />
-              </div>
-              <div className="form-group flex--helper form-group__pseudo">
-                <DatePicker
-                  placeholderText="From Last Bill Date"
-                  selected={fbDateMin}
-                  onChange={date => this.onDateSelect(date, "fbDateMin")}
-                />
-                <DatePicker
-                  placeholderText="To Last Bill Date"
-                  selected={fbDateMax}
-                  onChange={date => this.onDateSelect(date, "fbDateMax")}
-                />
-              </div>
-              <div className="form-group flex--helper form-group__pseudo">
-                <DatePicker
-                  placeholderText="From Admit Date"
-                  selected={admitDateMin}
-                  onChange={date => this.onDateSelect(date, "admitDateMin")}
-                />
-                <DatePicker
-                  placeholderText="To Admit Date"
-                  selected={admitDateMax}
-                  onChange={date => this.onDateSelect(date, "admitDateMax")}
-                />
-              </div>
-              <div className="form-group">
-                <AutoField
-                  labelHidden={true}
-                  name="finClass"
-                  placeholder="Search by Financial Class"
-                />
-              </div>
-              <div className="select-form">
-                <SelectField
-                  placeholder="Substate"
-                  labelHidden={true}
-                  options={substates}
-                  name="substate"
-                />
-              </div>
-              <div className="form-group">
-                <AutoField
-                  labelHidden={true}
-                  name="activeInsCode"
-                  placeholder="Search by active Insurance Code"
-                />
-              </div>
-            </div>
-          </div>
-        )}
         {sort && (
           <div className="sort-bar">
             <div className={sortOptionClasses}>
@@ -619,6 +683,11 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Filter by Facility"
+  },
+  tickleUserId: {
+    type: String,
+    optional: true,
+    label: "Filter by Tickle Author"
   },
   clientId: {
     type: String,

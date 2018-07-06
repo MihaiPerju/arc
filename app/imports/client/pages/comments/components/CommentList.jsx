@@ -6,7 +6,7 @@ import {
   AutoField,
   ErrorField,
   SelectField
-} from "uniforms-semantic";
+} from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import CommentSingle from "./CommentSingle.jsx";
 
@@ -65,7 +65,7 @@ export default class CommentList extends Component {
         <div className="comment-list">
           {comments
             .map((comment, index) => {
-              return <CommentSingle comment={comment} key={index} commentId={index}/>;
+              return <CommentSingle account={account} comment={comment} key={index} commentId={index}/>;
             })}
         </div>
       </div>

@@ -182,4 +182,11 @@ export default new SimpleSchema({
     'invoiceNo.$': {
         type: SimpleSchema.Integer
     },
+    flagIds: {
+        type: Array,
+        optional: true
+    },
+    "flagIds.$": {
+        type: String
+    }
 })

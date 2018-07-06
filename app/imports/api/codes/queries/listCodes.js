@@ -1,6 +1,6 @@
 import Codes from '../collection';
 
-export default Codes.createNamedQuery('listCodes', {
+export default Codes.createQuery('listCodes', {
     $filter({filters, options, params}) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);

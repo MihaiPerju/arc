@@ -109,7 +109,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   }
 
   getAttachmentIndex = (attachments, attachmentId) => {
-    for (index in attachments) {
+    for (let index in attachments) {
       if (attachments[index]._id === attachmentId) {
         //Got the index of selected attachment
         return index;
@@ -161,13 +161,10 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   render() {
     const { schema } = this.state;
     const fields = this.generateFields();
-    const { templateKeywords, account } = this.props;
+    const { account } = this.props;
     const { pdfAttachments, selectedAttachments } = this.props;
 
     const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
-    if (!templateKeywords || !templateKeywords.length) {
-      return <div />;
-    }
 
     return (
       <div>

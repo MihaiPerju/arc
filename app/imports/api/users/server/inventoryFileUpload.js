@@ -16,7 +16,7 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
     const importRules = ParseService.getImportRules(facilityId, 'inventoryRules');
 
     //Parsing and getting the CSV like a string
-    let fileName = filenames[0].replace(os.tmpDir() + '/', '');
+    let fileName = filenames[0].replace(os.tmpdir() + '/', '');
     const stream = fs.readFileSync(filenames[0]);
     const csvString = stream.toString();
 

@@ -1,69 +1,69 @@
-import React from 'react';
-import {AutoForm, AutoField, ErrorField} from 'uniforms-semantic';
-import SimpleSchema from 'simpl-schema';
-import Notifier from '/imports/client/lib/Notifier';
-import {Container} from 'semantic-ui-react'
-import {Button} from 'semantic-ui-react'
-import {Divider} from 'semantic-ui-react'
+import React from "react";
+import { AutoForm, AutoField, ErrorField } from "uniforms-unstyled";
+import SimpleSchema from "simpl-schema";
+import Notifier from "/imports/client/lib/Notifier";
+import { Container } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
+import { Divider } from "semantic-ui-react";
 
 class ResetPassword extends React.Component {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.state = {
-            error: null
-        }
-    }
-
-    onSubmit = (data) => {
-        const {password} = data;
-        const token = FlowRouter.current().params.token;
-
-        Accounts.resetPassword(token, password, (err) => {
-            if (!err) {
-                Notifier.success('Password reset !');
-                FlowRouter.go('/login');
-            } else {
-                this.setState({error: err.reason});
-            }
-        });
+    this.state = {
+      error: null
     };
+  }
 
-    render() {
-        const {error} = this.state;
+  onSubmit = data => {
+    const { password } = data;
+    const token = FlowRouter.current().params.token;
 
-        return (
-            <Container className="page-container">
-                <AutoForm schema={ResetPasswordSchema} onSubmit={this.onSubmit}>
-                    {error && <div className="error">{error}</div>}
+    Accounts.resetPassword(token, password, err => {
+      if (!err) {
+        Notifier.success("Password reset !");
+        FlowRouter.go("/login");
+      } else {
+        this.setState({ error: err.reason });
+      }
+    });
+  };
 
-                    <AutoField name="password" type="password"/>
-                    <ErrorField name="password"/>
+  render() {
+    const { error } = this.state;
 
-                    <AutoField name="confirm_password" type="password"/>
-                    <ErrorField name="confirm_password"/>
+    return (
+      <Container className="page-container">
+        <AutoForm schema={ResetPasswordSchema} onSubmit={this.onSubmit}>
+          {error && <div className="error">{error}</div>}
 
-                    <Divider/>
+          <AutoField name="password" type="password" />
+          <ErrorField name="password" />
 
-                    <Button fluid primary type="submit">
-                        Reset
-                    </Button>
-                </AutoForm>
-            </Container>
-        )
-    }
+          <AutoField name="confirm_password" type="password" />
+          <ErrorField name="confirm_password" />
+
+          <Divider />
+
+          <Button fluid primary type="submit">
+            Reset
+          </Button>
+        </AutoForm>
+      </Container>
+    );
+  }
 }
 
 const ResetPasswordSchema = new SimpleSchema({
-    password: {type: String},
-    confirm_password: {
-        type: String,
-        custom() {
-            if (this.value != this.field('password').value) {
-                return 'passwordMismatch';
-            }
-        }
+  password: { type: String },
+  confirm_password: {
+    type: String,
+    custom() {
+      if (this.value != this.field("password").value) {
+        return "passwordMismatch";
+      }
     }
+  }
 });
 
 export default ResetPassword;

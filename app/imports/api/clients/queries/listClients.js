@@ -1,6 +1,6 @@
 import Clients from "../collection";
 
-export default Clients.createNamedQuery("listClients", {
+export default Clients.createQuery("listClients", {
   $filter({ filters, options, params }) {
     _.extend(filters, params.filters);
     _.extend(options, params.options);

@@ -1,6 +1,6 @@
 import Accounts from "../collection";
 
-export default Accounts.createNamedQuery("accountList", {
+export default Accounts.createQuery("accountList", {
   $filter({ filters, options, params }) {
     _.extend(filters, params.filters);
     _.extend(options, params.options);
@@ -76,5 +76,21 @@ export default Accounts.createNamedQuery("accountList", {
   invoiceNo: 1,
   activeInsCode: 1,
   activeInsName: 1,
-  createdAt: 1
+  createdAt: 1,
+  flags: {
+    type: 1,
+    flagActionId: 1,
+    flagAction: {
+      type: 1,
+      flagReason: 1,
+      flagResponse: 1,
+      createdAt: 1,
+      userId: 1,
+      managerId: 1,
+      flagApproved: 1,
+      actionId: 1,
+      isOpen: 1,
+      commentId: 1
+    }
+  }
 });

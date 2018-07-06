@@ -38,7 +38,7 @@ export default withQuery(
       },
       filters: {
         type: "comment",
-        accountId: account._id
+        accountId: account && account._id
       }
     });
   },

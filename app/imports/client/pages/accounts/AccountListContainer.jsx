@@ -67,6 +67,14 @@ class AccountListContainer extends Pager {
           this.setState({ assignFilterArr, dropdownOptions });
         }
       });
+
+    const accountId = FlowRouter.getQueryParam("accountId");
+    if (accountId) {
+      this.setState({
+        currentAccount: accountId
+      });
+    }
+
     const { state } = this.props;
     this.setState({ currentRouteState: state });
   }
@@ -189,12 +197,6 @@ class AccountListContainer extends Pager {
     this.updateFilters({ filters });
   }
 
-  decreaseList = () => {
-    this.setState({
-      filter: !this.state.filter
-    });
-  };
-
   getFirstOption(accounts, options) {
     for (let account of accounts) {
       if (!account.assigneeId) {
@@ -240,16 +242,14 @@ class AccountListContainer extends Pager {
 
   getAccount(currentAccount) {
     const { data } = this.props;
-    for (account of data) {
-      if (account._id == currentAccount) return account;
-    }
-    return null;
+    const [account] = data.filter(account => account._id === currentAccount);
+    return account || null;
   }
 
   getAccounts(accountsSelected) {
     const { data } = this.props;
     let accounts = [];
-    for (account of data) {
+    for (let account of data) {
       if (accountsSelected.includes(account._id)) accounts.push(account);
     }
     return accounts;
@@ -257,8 +257,8 @@ class AccountListContainer extends Pager {
 
   getUserOptions(accounts) {
     let userOptions = [];
-    for (account of accounts) {
-      for (user of account.facility.users) {
+    for (let account of accounts) {
+      for (let user of account.facility.users) {
         let item = {
           label:
             user &&
@@ -365,6 +365,7 @@ class AccountListContainer extends Pager {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
+
     return (
       <div className="cc-container">
         <div
@@ -380,7 +381,6 @@ class AccountListContainer extends Pager {
             icons={icons}
             getProperAccounts={this.getProperAccounts}
             changeFilters={this.changeFilters}
-            decrease={this.decreaseList}
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
@@ -405,7 +405,7 @@ class AccountListContainer extends Pager {
             />
           )}
           <AccountList
-            classes={filter ? "task-list decreased" : "task-list"}
+            classes={"task-list"}
             accountsSelected={accountsSelected}
             selectAccount={this.selectAccount}
             checkAccount={this.checkAccount}

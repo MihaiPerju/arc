@@ -77,7 +77,7 @@ class FacilityContainer extends Pager {
   getFacility() {
     const { data } = this.props;
     const { currentFacility } = this.state;
-    for (facility of data) {
+    for (let facility of data) {
       if (facility._id === currentFacility) {
         return facility;
       }

@@ -195,6 +195,16 @@
   }
 }
 
+.filter-dialog {
+  .close-dialog {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.8rem;
+    padding: 9px 25px;
+  }
+}
+
 //Account Dialog
 .account-dialog {
   background: rgba($color-black, 0.1);
@@ -254,7 +264,6 @@
 
     .cc-dialog__card {
       max-width: 500px;
-      //box-shadow: $shadow-header;
     }
   }
 
@@ -357,6 +366,13 @@
     cursor: pointer;
     background: rgba($color-white, 0.5);
     height: 74px;
+
+    &.tickled-item {
+      .person {
+        color: #e87278;
+      }
+    }
+
     &.open {
       &:before {
         content: " ";
@@ -490,20 +506,28 @@
   .pay-item {
     padding-left: 2px;
     padding-right: 2px;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+
     &__wrapper {
       background: #f6f6f6;
       padding: 10px 15px;
-      border-radius: 0 0 3px 3px;
     }
-    &.active .brand-block div {
-      color: #3370b5;
-      font-weight: bold;
+
+    &.active {
+      .brand-block {
+        color: $green;
+        font-weight: 700;
+      }
     }
     .brand-block {
       background: $color-white;
+      color: $light-grey;
       border-radius: 3px 3px 0 0;
       padding-top: 4px;
       padding-bottom: 4px;
+      cursor: pointer;
       img {
         height: 29px;
         width: auto;

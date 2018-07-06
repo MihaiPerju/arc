@@ -10,20 +10,9 @@ export default class ReportSearchBar extends Component {
     constructor() {
         super();
         this.state = {
-            active: false,
-            filter: false,
             dropdown: false,
             selectAll: false
         };
-    }
-
-    manageFilterBar() {
-        const {active, filter} = this.state;
-        this.setState({
-            active: !active,
-            filter: !filter
-        });
-        this.props.decrease();
     }
 
     onSubmit(params) {
@@ -133,10 +122,7 @@ export default class ReportSearchBar extends Component {
                             </div>
                         </div>
 
-                        <div
-                            className={active ? "filter-block active" : "filter-block"}
-                            onClick={this.manageFilterBar.bind(this)}
-                        >
+                        <div className="filter-block">
                             <button>
                                 <i className="icon-filter"/>
                             </button>
