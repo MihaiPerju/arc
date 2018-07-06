@@ -157,16 +157,34 @@ export default Accounts.createQuery("accountList", {
     type: 1,
     flagActionId: 1,
     flagAction: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.actionsFilter)) {
+          _.extend(filters, params.actionsFilter);
+        }
+      },
       type: 1,
       flagReason: 1,
       flagResponse: 1,
       createdAt: 1,
       userId: 1,
       managerId: 1,
-      flagApproved: 1,
+      manager: {
+        profile: 1
+      },
+      isFlagApproved: 1,
       actionId: 1,
       isOpen: 1,
-      commentId: 1
+      commentId: 1,
+      content: 1,
+      user: {
+        $filter({ filters, params }) {
+          if (!_.isEmpty(params.userFilter)) {
+            _.extend(filters, params.userFilter);
+          }
+        },
+        profile: 1,
+        roles: 1
+      }
     }
   }
 });

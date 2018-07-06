@@ -90,17 +90,23 @@ export default class ClientTimeline extends Component {
   getActions = () => {
     const { accounts } = this.state;
     let actions = [];
+    const flags = [];
     accounts.map(account => {
       account.actions.map(action => (action.acctNum = account.acctNum));
       account.comments.map(comment => (comment.acctNum = account.acctNum));
       account.letters.map(letter => (letter.acctNum = account.acctNum));
       account.facility.files.map(file => (file.acctNum = account.acctNum));
+      account.flags.map(flag => {
+        flag.flagAction.acctNum = account.acctNum;
+        flags.push(flag.flagAction);
+      });
 
       actions = actions.concat(
         account.actions,
         account.comments,
         account.letters,
-        account.facility.files
+        account.facility.files,
+        flags
       );
     });
     return actions;
@@ -175,6 +181,8 @@ export default class ClientTimeline extends Component {
         return <i className="icon-file-text-o" />;
       case actionTypesEnum.REVERT:
         return <i className="icon-file-text-o" />;
+      case actionTypesEnum.FLAG:
+        return <i className="icon-flag" />;
     }
   };
 
@@ -187,7 +195,13 @@ export default class ClientTimeline extends Component {
       acctNum,
       letterTemplate,
       fileName,
-      user
+      user,
+      actionId,
+      commentId,
+      isOpen,
+      flagResponse,
+      isFlagApproved,
+      manager
     } = data;
 
     switch (type) {
@@ -196,7 +210,12 @@ export default class ClientTimeline extends Component {
           <div>
             {action && (
               <div>
-                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} applied action <b>{action.title}</b> to account with Account
+                {user && (
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>
+                )}{" "}
+                applied action <b>{action.title}</b> to account with Account
                 Number <b>{acctNum}</b>
               </div>
             )}
@@ -217,7 +236,12 @@ export default class ClientTimeline extends Component {
       case actionTypesEnum.COMMENT:
         return (
           <div>
-            {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} commented a comment <b>{content}</b> to account with Account Number{" "}
+            {user && (
+              <b>
+                {user.profile.firstName} {user.profile.lastName}
+              </b>
+            )}{" "}
+            commented a comment <b>{content}</b> to account with Account Number{" "}
             <b>{acctNum}</b>
           </div>
         );
@@ -226,7 +250,12 @@ export default class ClientTimeline extends Component {
           <div>
             {letterTemplate && (
               <div>
-                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} send a letter with letter-template name{" "}
+                {user && (
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>
+                )}{" "}
+                send a letter with letter-template name{" "}
                 <b>{letterTemplate.name}</b> to account with account number{" "}
                 <b>{acctNum}</b>
               </div>
@@ -238,7 +267,12 @@ export default class ClientTimeline extends Component {
           <div>
             {fileName && (
               <div>
-                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} uploaded file <b>{this.getFileName(fileName)}.csv</b>
+                {user && (
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>
+                )}{" "}
+                uploaded file <b>{this.getFileName(fileName)}.csv</b>
               </div>
             )}
           </div>
@@ -248,7 +282,48 @@ export default class ClientTimeline extends Component {
           <div>
             {fileName && (
               <div>
-                {user && <b>{user.profile.firstName} {user.profile.lastName}</b>} reverted file <b>{this.getFileName(fileName)}.csv</b>
+                {user && (
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>
+                )}{" "}
+                reverted file <b>{this.getFileName(fileName)}.csv</b>
+              </div>
+            )}
+          </div>
+        );
+      case actionTypesEnum.FLAG:
+        return (
+          <div>
+            {actionId ? (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                flagged an action on account <b>{acctNum}</b>.
+                {!isOpen && (
+                  <div>
+                    <br/>
+                    Manager <b>{manager.profile.firstName} {manager.profile.lastName}</b> has responsed to the action and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    flag with reason <b>{flagResponse}</b>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                flagged a comment on account <b>{acctNum}</b>.
+                {!isOpen && (
+                  <div>
+                    <br/>
+                    Manager <b>{manager.profile.firstName} {manager.profile.lastName}</b> has responsed to a comment and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    flag with reason <b>{flagResponse}</b>
+                  </div>
+                )}
               </div>
             )}
           </div>

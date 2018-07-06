@@ -135,6 +135,7 @@ export default class CommentSingle extends React.Component {
     const { user } = comment;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
+    const isRep = Roles.userIsInRole(user._id, RolesEnum.REP);
 
     return (
       <div className="comment-item flex--helper flex--column">

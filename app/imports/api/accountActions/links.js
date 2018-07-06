@@ -23,5 +23,10 @@ AccountActions.addLinks({
     type: "one",
     collection: AccountActions,
     field: "flagActionId"
+  },
+  manager: {
+    type: "one",
+    collection: Users,
+    field: "managerId"
   }
 });
