@@ -152,5 +152,21 @@ export default Accounts.createQuery("accountList", {
       profile: 1,
       roles: 1
     }
+  },
+  flags: {
+    type: 1,
+    flagActionId: 1,
+    flagAction: {
+      type: 1,
+      flagReason: 1,
+      flagResponse: 1,
+      createdAt: 1,
+      userId: 1,
+      managerId: 1,
+      flagApproved: 1,
+      actionId: 1,
+      isOpen: 1,
+      commentId: 1
+    }
   }
 });

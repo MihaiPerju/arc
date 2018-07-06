@@ -37,4 +37,26 @@ export default class NotificationService {
       { upsert: true }
     );
   }
+
+  static createFlagNotification(receiverId, accountId, flagType) {
+    const { acctNum, state } = Accounts.findOne({ _id: accountId });
+    Notifications.update(
+      {
+        type: NotificationTypeEnum.FLAG,
+        receiverId,
+        "metaData.accountId": accountId,
+        "metaData.flagType": flagType,
+      },
+      {
+        $set: {
+          receiverId,
+          type: NotificationTypeEnum.FLAG,
+          "metaData.accountId": accountId,
+          "metaData.acctNum": acctNum,
+          "metaData.state": state
+        }
+      },
+      { upsert: true }
+    );
+  }
 }

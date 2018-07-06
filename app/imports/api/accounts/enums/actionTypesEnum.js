@@ -1,4 +1,12 @@
-const typeList = ["userAction", "systemAction", "comment", "letter", "file", "revert"];
+const typeList = [
+  "userAction",
+  "systemAction",
+  "comment",
+  "letter",
+  "file",
+  "revert",
+  "flag"
+];
 export { typeList };
 
 export default {
@@ -7,5 +15,6 @@ export default {
   COMMENT: "comment",
   LETTER: "letter",
   FILE: "file",
-  REVERT: "revert"
+  REVERT: "revert",
+  FLAG: "flag"
 };
