@@ -28,7 +28,7 @@ class LetterListContainer extends Pager {
 
   componentWillReceiveProps(newProps) {
     const { queryParams } = FlowRouter.current();
-    if (queryParams.letterName && queryParams.letterName == "") {
+    if (queryParams.letterIds && queryParams.letterIds == "") {
       this.setPagerInitial();
     }
     this.updatePager();
@@ -74,10 +74,10 @@ class LetterListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const { total, range, create } = this.state;
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 
