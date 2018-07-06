@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import LetterManagementList from "./components/LetterManagementList.jsx";
+import LetterList from "./components/LetterList";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/letters/queries/letterList.js";
 import Loading from "/imports/client/lib/ui/Loading";
 import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
 import LetterManagementDropzone from "./components/LetterManagementDropzone";
-import LetterManagementSearchBar from "./components/LetterManagementSearchBar";
+import LetterSearchBar from "./components/LetterSearchBar";
 
-class LetterManagementListContainer extends Pager {
+class LetterListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -87,8 +87,8 @@ class LetterManagementListContainer extends Pager {
     return (
       <div className="cc-container">
         <div className={create ? "left__side" : "left__side full__width"}>
-          <LetterManagementSearchBar setPagerInitial={this.setPagerInitial} />
-          <LetterManagementList letters={data} />
+          <LetterSearchBar setPagerInitial={this.setPagerInitial} />
+          <LetterList letters={data} />
           <PaginationBar
             module="Letter Management File"
             create={this.createForm}
@@ -138,4 +138,4 @@ export default withQuery(
     return PagerService.setQuery(query, { page, perPage, filters: {} });
   },
   { reactive: true }
-)(LetterManagementListContainer);
+)(LetterListContainer);

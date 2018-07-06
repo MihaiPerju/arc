@@ -4,7 +4,7 @@ import Statuses from "/imports/api/letters/enums/statuses.js";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Notifier from "/imports/client/lib/Notifier";
 
-export default class LetterManagementSingle extends Component {
+export default class LetterSingle extends Component {
   constructor() {
     super();
     this.state = {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 
-export default class LetterManagementSearchBar extends Component {
+export default class LetterSearchBar extends Component {
   onSubmit(params) {
     if (
       FlowRouter.current().queryParams.page != "1" &&

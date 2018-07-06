@@ -20,7 +20,7 @@ export default class LetterSentBlock extends Component {
       <div>
         <div className="action-block drop-file">
           <div className="header__block">
-            <div className="title-block text-uppercase">Progress File</div>
+            <div className="title-block text-uppercase">Process File</div>
           </div>
           <div className="main__block">
             <div className="add-content">

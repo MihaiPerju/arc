@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import LetterManagementSingle from "./LetterManagementSingle";
+import LetterSingle from "./LetterSingle";
 
 
-export default class LetterManagementList extends Component {
+export default class LetterList extends Component {
   
   render() {
     const { letters } = this.props;
     const letterList = letters.map(function(letter, index) {
-      return <LetterManagementSingle key={letter._id} letter={letter} />;
+      return <LetterSingle key={letter._id} letter={letter} />;
     }, this);
 
     return <div className="task-list">{letterList}</div>;
