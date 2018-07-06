@@ -5,6 +5,7 @@ import NotificationTypeEnum from "/imports/api/notifications/enums/notificationT
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import { notificationColors } from "/imports/api/notifications/enums/notificationTypes";
+import flagTypesEnum from "/imports/api/accounts/enums/flagTypesEnum";
 
 class NotificationListContainer extends React.Component {
   constructor() {
@@ -37,7 +38,11 @@ class NotificationListContainer extends React.Component {
     ) {
       return (
         <div>
-          <span>User flagged an {metaData.flagType} on account with Account number</span>
+          <span>
+            User flagged{" "}
+            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"}{" "}
+            {metaData.flagType} on account with Account number
+          </span>
           <a
             className="text-blue"
             href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
