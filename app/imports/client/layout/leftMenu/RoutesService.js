@@ -115,11 +115,6 @@ export default class RouteService {
         { name: "admin/user/list", label: "Users", icon: "user-circle-o" },
         { name: "reports/list", label: "Reports", icon: "file-text-o" },
         {
-          name: "letter-templates/list",
-          label: "Templates",
-          icon: "window-restore"
-        },
-        {
           name: "/letter-management/list",
           label: "Letters",
           icon: "thumb-tack"

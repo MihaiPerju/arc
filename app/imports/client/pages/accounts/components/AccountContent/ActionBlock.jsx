@@ -1,12 +1,22 @@
 import React, { Component } from "react";
 import NewAction from "./NewAction";
 import moment from "moment";
+import Dialog from "/imports/client/lib/ui/Dialog";
+import classNames from "classnames";
+import SimpleSchema from "simpl-schema";
+import { AutoForm, ErrorField, LongTextField } from "/imports/ui/forms";
+import Notifier from "/imports/client/lib/Notifier";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class ActionBlock extends Component {
   constructor() {
     super();
     this.state = {
-      createAction: false
+      createAction: false,
+      dialogIsActive: false,
+      selectedActionId: null,
+      selectedFlag: {},
+      isFlagApproved: false
     };
   }
 
@@ -17,9 +27,120 @@ export default class ActionBlock extends Component {
     });
   };
 
+  onOpenDialog = id => {
+    const { flags } = this.props.account;
+    let selectedFlag = {};
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      selectedFlag =
+        flags.filter(flag => flag.flagAction.actionId === id)[0].flagAction ||
+        {};
+    }
+    this.setState({
+      dialogIsActive: true,
+      selectedActionId: id,
+      selectedFlag,
+      isFlagApproved: false
+    });
+  };
+
+  onCloseDialog = () => {
+    this.setState({
+      dialogIsActive: false,
+      selectedActionId: null,
+      selectedFlag: {}
+    });
+  };
+
+  onFlagAdd = data => {
+    const { account } = this.props;
+    const { selectedActionId } = this.state;
+    const { _id, facilityId } = account;
+
+    Object.assign(data, {
+      actionId: selectedActionId,
+      accountId: _id,
+      facilityId
+    });
+
+    Meteor.call("action.createFlag", data, err => {
+      if (!err) {
+        Notifier.success("Flagged successfully");
+      } else {
+        Notifier.error(err.error);
+      }
+      this.onCloseDialog();
+    });
+  };
+
+  isFlagChecked = actionId => {
+    const { flags } = this.props.account;
+    const index = flags.findIndex(flag => {
+      const { flagAction } = flag;
+      return flagAction.actionId === actionId && flagAction.isOpen;
+    });
+    return index > -1 ? true : false;
+  };
+
+  isDisabledForReps = actionId => {
+    const { flags } = this.props.account;
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.actionId === actionId && flagAction.isOpen;
+      });
+      return index > -1 ? true : false;
+    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.actionId === actionId && flagAction.isOpen;
+      });
+      return index === -1 ? true : false;
+    }
+  };
+
+  onUnflag = data => {
+    const { selectedFlag, isFlagApproved } = this.state;
+    const { flagResponse } = data;
+
+    Meteor.call(
+      "action.respondFlag",
+      { _id: selectedFlag._id, flagResponse, isFlagApproved },
+      err => {
+        if (!err) {
+          Notifier.success("Responded");
+        } else {
+          Notifier.error(err.error);
+        }
+        this.onCloseDialog();
+      }
+    );
+  };
+
+  handleFlagApproval = () => {
+    const { isFlagApproved } = this.state;
+    this.setState({ isFlagApproved: !isFlagApproved });
+  };
+
+  showFlags = actionId => {
+    const { flags } = this.props.account;
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      return true;
+    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return flagAction.actionId === actionId && !flagAction.isOpen;
+      });
+      return index === -1 ? true : false;
+    }
+    return false;
+  };
+
   render() {
     const { account, closeRightPanel } = this.props;
-    const actionsPerformed = account && account.actions;
+    const actionsPerformed = account.actions;
+    const { dialogIsActive, selectedFlag, isFlagApproved } = this.state;
+    const dialogClasses = classNames("account-dialog");
+    const userId = Meteor.userId();
 
     return (
       <div className="action-block">
@@ -64,15 +185,94 @@ export default class ActionBlock extends Component {
                       actionPerformed && actionPerformed.createdAt
                     ).format("MMMM Do YYYY, hh:mm a")}
                   </div>
-                  <div className="flag-item">
-                    <input type="checkbox" id={key} className="hidden" />
-                    <label htmlFor={key} />
-                  </div>
+                  {this.showFlags(actionPerformed._id) && (
+                    <div className="flag-item">
+                      <input
+                        checked={this.isFlagChecked(actionPerformed._id)}
+                        disabled={this.isDisabledForReps(actionPerformed._id)}
+                        onChange={() => this.onOpenDialog(actionPerformed._id)}
+                        type="checkbox"
+                        id={`flag-action-${key}`}
+                        className="hidden"
+                      />
+                      <label htmlFor={`flag-action-${key}`} />
+                    </div>
+                  )}
                 </div>
               ))}
           </div>
+          {dialogIsActive && (
+            <Dialog
+              className={dialogClasses}
+              closePortal={this.onCloseDialog}
+              title="Flag action"
+            >
+              {Roles.userIsInRole(userId, RolesEnum.REP) && (
+                <AutoForm onSubmit={this.onFlagAdd} schema={flagSchema}>
+                  <div className="form-wrapper">
+                    <LongTextField
+                      labelHidden={true}
+                      placeholder="Type flag reason"
+                      name="flagReason"
+                    />
+                    <ErrorField name="flagReason" />
+                  </div>
+                  <div className="btn-group">
+                    <button className="btn-cancel" onClick={this.onCloseDialog}>
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn--light-blue">
+                      Confirm & send
+                    </button>
+                  </div>
+                </AutoForm>
+              )}
+              {Roles.userIsInRole(userId, RolesEnum.MANAGER) && (
+                <AutoForm onSubmit={this.onUnflag} schema={unFlagSchema}>
+                  <div className="form-wrapper">
+                    <b>Flagging reason</b>
+                    <div>{selectedFlag.flagReason}</div>
+                  </div>
+                  <div className="form-wrapper">
+                    <LongTextField
+                      labelHidden={true}
+                      placeholder="Type to respond"
+                      name="flagResponse"
+                    />
+                    <ErrorField name="flagResponse" />
+                    <div className="check-group">
+                      <input checked={isFlagApproved} type="checkbox" />
+                      <label onClick={this.handleFlagApproval}>
+                        Mark flag correct
+                      </label>
+                    </div>
+                  </div>
+                  <div className="btn-group">
+                    <button className="btn-cancel" onClick={this.onCloseDialog}>
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn--light-blue">
+                      Confirm & send
+                    </button>
+                  </div>
+                </AutoForm>
+              )}
+            </Dialog>
+          )}
         </div>
       </div>
     );
   }
 }
+
+const flagSchema = new SimpleSchema({
+  flagReason: {
+    type: String
+  }
+});
+
+const unFlagSchema = new SimpleSchema({
+  flagResponse: {
+    type: String
+  }
+});
