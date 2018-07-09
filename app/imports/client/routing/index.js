@@ -6,62 +6,39 @@ import "./logoutRoute";
 import Home from "/imports/client/pages/home/Home";
 
 //User
-import MyProfile from "/imports/client/pages/users/MyProfile";
-import ChangePassword from "/imports/client/pages/users/ChangePassword";
-import ForgotPassword from "/imports/client/pages/users/ForgotPassword";
-import ResetPassword from "/imports/client/pages/users/ResetPassword.jsx";
-import Login from "/imports/client/pages/users/Login";
-import Dashboard from "/imports/client/pages/users/Dashboard";
+import MyProfile from '/imports/client/pages/users/MyProfile';
+import UserProfile from '/imports/client/pages/users/UserProfile';
+import ChangePassword from '/imports/client/pages/users/ChangePassword';
+import ForgotPassword from '/imports/client/pages/users/ForgotPassword';
+import ResetPassword from '/imports/client/pages/users/ResetPassword.jsx';
+import Login from '/imports/client/pages/users/Login';
+import Dashboard from '/imports/client/pages/users/Dashboard';
 
-route(
-  "/dashboard",
-  Home,
-  {},
-  {
-    name: "dashboard"
-  }
-);
-route(
-  "/",
-  Login,
-  {},
-  {
-    name: "login"
-  }
-);
-route(
-  "/my-profile",
-  MyProfile,
-  {},
-  {
-    name: "profile"
-  }
-);
-route(
-  "/password/change",
-  ChangePassword,
-  {},
-  {
-    name: "password.change"
-  }
-);
-route(
-  "/password/forgot",
-  ForgotPassword,
-  {},
-  {
-    name: "password.forgot"
-  }
-);
-route(
-  "/reset-password/:token",
-  ResetPassword,
-  {},
-  {
-    name: "password.reset"
-  }
-);
-route("/dashboard", Dashboard);
+route('/dashboard', Home, {}, {
+    name: 'dashboard',
+
+});
+route('/', Login, {}, {
+    name: 'login',
+
+});
+route('/my-profile', MyProfile, {}, {
+    name: 'profile',
+});
+route('/:userId/user-profile', UserProfile);
+route('/password/change', ChangePassword, {}, {
+    name: 'password.change',
+
+});
+route('/password/forgot', ForgotPassword, {}, {
+    name: 'password.forgot',
+
+});
+route('/reset-password/:token', ResetPassword, {}, {
+    name: 'password.reset',
+
+});
+route('/dashboard', Dashboard);
 
 //Admin
 import UserListContainer from "/imports/client/pages/admin/UserListContainer.jsx";

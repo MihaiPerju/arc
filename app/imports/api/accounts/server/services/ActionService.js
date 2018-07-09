@@ -78,7 +78,8 @@ export default class ActionService {
         actionId,
         fileId,
         systemAction: true,
-        type: actionTypesEnum.SYSTEM_ACTION
+        type: actionTypesEnum.SYSTEM_ACTION,
+        createdAt: new Date()
       });
 
       Accounts.update(

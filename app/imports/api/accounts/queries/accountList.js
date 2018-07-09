@@ -36,6 +36,27 @@ export default Accounts.createQuery("accountList", {
     users: {
       profile: 1,
       roles: 1
+    },
+    files: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.actionsFilter)) {
+          _.extend(filters, params.actionsFilter);
+        }
+      },
+      userId: 1,
+      createdAt: 1,
+      type: 1,
+      status: 1,
+      fileName: 1,
+      user: {
+        $filter({ filters, params }) {
+          if (!_.isEmpty(params.userFilter)) {
+            _.extend(filters, params.userFilter);
+          }
+        },
+        profile: 1,
+        roles: 1
+      }
     }
   },
   assigneeId: 1,
@@ -55,12 +76,24 @@ export default Accounts.createQuery("accountList", {
     name: 1
   },
   actions: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.actionsFilter)) {
+        _.extend(filters, params.actionsFilter);
+      }
+    },
     reasonCode: 1,
+    userId: 1,
     action: {
       title: 1
     },
     user: {
-      profile: 1
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.userFilter)) {
+          _.extend(filters, params.userFilter);
+        }
+      },
+      profile: 1,
+      roles: 1
     },
     createdAt: 1,
     status: 1,
@@ -77,20 +110,81 @@ export default Accounts.createQuery("accountList", {
   activeInsCode: 1,
   activeInsName: 1,
   createdAt: 1,
+  comments: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.actionsFilter)) {
+        _.extend(filters, params.actionsFilter);
+      }
+    },
+    content: 1,
+    createdAt: 1,
+    type: 1,
+    userId: 1,
+    user: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.userFilter)) {
+          _.extend(filters, params.userFilter);
+        }
+      },
+      profile: 1,
+      roles: 1
+    }
+  },
+  letters: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.actionsFilter)) {
+        _.extend(filters, params.actionsFilter);
+      }
+    },
+    createdAt: 1,
+    type: 1,
+    userId: 1,
+    status: 1,
+    letterTemplate: {
+      name: 1
+    },
+    user: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.userFilter)) {
+          _.extend(filters, params.userFilter);
+        }
+      },
+      profile: 1,
+      roles: 1
+    }
+  },
   flags: {
     type: 1,
     flagActionId: 1,
     flagAction: {
+      $filter({ filters, params }) {
+        if (!_.isEmpty(params.actionsFilter)) {
+          _.extend(filters, params.actionsFilter);
+        }
+      },
       type: 1,
       flagReason: 1,
       flagResponse: 1,
       createdAt: 1,
       userId: 1,
       managerId: 1,
-      flagApproved: 1,
+      manager: {
+        profile: 1
+      },
+      isFlagApproved: 1,
       actionId: 1,
       isOpen: 1,
-      commentId: 1
+      commentId: 1,
+      content: 1,
+      user: {
+        $filter({ filters, params }) {
+          if (!_.isEmpty(params.userFilter)) {
+            _.extend(filters, params.userFilter);
+          }
+        },
+        profile: 1,
+        roles: 1
+      }
     }
   }
 });

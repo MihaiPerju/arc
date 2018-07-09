@@ -3,6 +3,7 @@ import Clients from "/imports/api/clients/collection.js";
 import Users from '/imports/api/users/collection';
 import Accounts from '/imports/api/accounts/collection';
 import Regions from '/imports/api/regions/collection';
+import AccountActions from '/imports/api/accountActions/collection';
 
 Facilities.addLinks({
     client: {
@@ -25,5 +26,10 @@ Facilities.addLinks({
         collection: Regions,
         type: 'one',
         field: 'regionId'
+    },
+    files: {
+        type: "many",
+        collection: AccountActions,
+        field: "fileIds"
     }
 });
