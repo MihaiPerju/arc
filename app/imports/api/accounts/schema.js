@@ -148,7 +148,7 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
-  escalationId: {
+  employeeToRespond: {
     type: String,
     optional: true
   },
