@@ -103,11 +103,17 @@
   .select-form {
     position: relative;
     margin-bottom: 15px;
+
+    label {
+      display: block;
+      margin-bottom: 7px;;
+    }
+
     &:before {
       content: "\f107";
       font-family: $font-icon;
       position: absolute;
-      top: 9px;
+      top: 33px;
       right: 15px;
       color: $extra-light-grey;
     }
@@ -128,6 +134,11 @@
     position: relative;
     margin-bottom: 15px;
 
+    label {
+      display: block;
+      margin-bottom: 7px;
+    }
+    
     &:last-of-type {
       margin-bottom: 0;
     }
