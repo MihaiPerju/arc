@@ -1,7 +1,7 @@
 import React from "react";
 import { getImagePath } from "../../../../api/utils";
 import { Label } from "semantic-ui-react";
-import RolesEnum from "/imports/api/users/enums/roles";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class UserContentHeader extends React.Component {
   constructor() {
@@ -15,6 +15,8 @@ export default class UserContentHeader extends React.Component {
 
   render() {
     const { user } = this.props;
+    const currentUserId = Meteor.userId();
+    const isRep = Roles.userIsInRole(user._id, RolesEnum.REP);
 
     return (
       <div className="flex-content">
@@ -31,8 +33,19 @@ export default class UserContentHeader extends React.Component {
           <div className="info">
             <div className="text-light-grey">User name</div>
             <div className="text-blue email">
-              {user.profile &&
-                user.profile.firstName + " " + user.profile.lastName}
+              {(isRep &&
+                Roles.userIsInRole(
+                  currentUserId,
+                  roleGroups.ADMIN_TECH_MANAGER
+                )) ||
+              (isRep && currentUserId === actionPerformed.user._id)
+                ? user.profile && (
+                    <a href={`/${user._id}/user-profile`}>
+                      {user.profile.firstName + " " + user.profile.lastName}
+                    </a>
+                  )
+                : user.profile &&
+                  user.profile.firstName + " " + user.profile.lastName}
             </div>
           </div>
         </div>

@@ -3,12 +3,13 @@ import UploadItem from './UploadItem';
 import Notifier from "../../../../../lib/Notifier";
 import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
+import { getToken } from "/imports/api/s3-uploads/utils";
 
 export default class PlacementBlock extends Component {
     render() {
         const {facility, setTempRules} = this.props;
         const componentConfig = {
-            postUrl: `/uploads/csv/${facility._id}`
+            postUrl: `/uploads/csv/${facility._id}/${getToken()}`
         };
 
         const djsConfig = {

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Notifier from "../../../../../lib/Notifier";
 import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
+import { getToken } from "/imports/api/s3-uploads/utils";
 
 export default class InventoryBlock extends Component {
 
@@ -13,7 +14,7 @@ export default class InventoryBlock extends Component {
     render() {
         const {facility, resetImportForm, changeResetStatus} = this.props;
         const componentConfig = {
-            postUrl: `/uploads/inventory/${facility && facility._id}`
+            postUrl: `/uploads/inventory/${facility && facility._id}/${getToken()}`
         };
 
         const djsConfig = {

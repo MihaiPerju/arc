@@ -3,7 +3,6 @@ import autoBind from "react-autobind";
 import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import classNames from "classnames";
-import Loading from "/imports/client/lib/ui/Loading";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, ErrorField, LongTextField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
@@ -131,25 +130,27 @@ export default class CommentSingle extends React.Component {
   };
 
   render() {
-    const { data, comment, commentId, isLoading, error } = this.props;
+    const { comment, commentId } = this.props;
     const { dialogIsActive, selectedFlag, isFlagApproved } = this.state;
     const { user } = comment;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
-    
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
+    const isRep = Roles.userIsInRole(user._id, RolesEnum.REP);
 
     return (
       <div className="comment-item flex--helper flex--column">
         <div className="comment__wrapper flex--helper flex-justify--space-between">
           <div className="name truncate">
-            {user && `${user.profile.firstName} ${user.profile.lastName}`}
+            {(isRep &&
+              Roles.userIsInRole(userId, roleGroups.ADMIN_TECH_MANAGER)) ||
+            (isRep && userId === actionPerformed.user._id)
+              ? user && (
+                  <a href={`/${user._id}/user-profile`}>
+                    {user.profile.firstName + " " + user.profile.lastName}
+                  </a>
+                )
+              : user.profile &&
+                user.profile.firstName + " " + user.profile.lastName}
           </div>
           <div className="time">
             {comment &&
