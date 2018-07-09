@@ -1,10 +1,7 @@
 import Accounts from "/imports/api/accounts/collection";
 import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import { getUserByToken } from "/imports/api/s3-uploads/server/router";
-import Security from "/imports/api/accounts/security";
-import RolesEnum from "/imports/api/users/enums/roles";
 import PDFMerge from "pdf-merge";
-import os from "os";
 import Business from "/imports/api/business";
 
 Picker.route("/pdfs/:_id/:token", function(params, req, res, next) {
@@ -13,13 +10,6 @@ Picker.route("/pdfs/:_id/:token", function(params, req, res, next) {
   if (!user) {
     res.writeHead(404);
     res.write("Not logged in!");
-  }
-  if (
-    !Roles.userIsInRole(user._id, [RolesEnum.ADMIN, RolesEnum.TECH]) &&
-    !Security.hasRightsOnAccount(user._id, params._id)
-  ) {
-    res.writeHead(404);
-    res.write("An error occurred");
   }
 
   //Getting attached PDFs from account

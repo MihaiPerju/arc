@@ -6,8 +6,10 @@ import Files from "../../files/collection";
 import Facilities from "../../facilities/collection";
 import os from 'os';
 import fs from 'fs';
+import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
+import AccountActions from "/imports/api/accountActions/collection";
 
-createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, success}) => {
+createRoute('/uploads/inventory/:facilityId/:token', ({user, facilityId, error, filenames, success}) => {
 
     if (filenames.length != 1) {
         return error('Invalid number of files');
@@ -16,20 +18,34 @@ createRoute('/uploads/inventory/:facilityId', ({facilityId, error, filenames, su
     const importRules = ParseService.getImportRules(facilityId, 'inventoryRules');
 
     //Parsing and getting the CSV like a string
-    let fileName = filenames[0].replace(os.tmpDir() + '/', '');
+    let fileName = filenames[0].replace(os.tmpdir() + '/', '');
     const stream = fs.readFileSync(filenames[0]);
     const csvString = stream.toString();
 
     //Keep reference to previous file
     const {fileId} = Facilities.findOne({_id: facilityId});
     const newFileId = Files.insert({fileName, facilityId, previousFileId: fileId});
+    
+    const fileData = {
+        type: actionTypesEnum.FILE,
+        createdAt: new Date(),
+        fileId: newFileId,
+        fileName,
+        userId: user._id
+    };
 
+    const accountActionId = AccountActions.insert(fileData);
+    
     //Add reference to facility
     Facilities.update({_id: facilityId}, {
         $set: {
             fileId: newFileId
+        },
+        $push: {
+            fileIds: accountActionId
         }
     });
+
 
     //Pass links to accounts to link them too
     const links = {facilityId, fileId: newFileId};

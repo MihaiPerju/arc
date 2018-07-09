@@ -35,9 +35,9 @@ export default class EditInfoDialog extends Component {
                                 title={"Edit info:"}
                         >
                             {children}
-                            <div className="flex--helper flex-justify--end">
-                              <button className="btn--light-blue" onClick={this.closeDialog}>Submit</button>
-                            </div>
+                            {/*<div className="flex--helper flex-justify--end">*/}
+                              {/*<button className="btn--light-blue" onClick={this.closeDialog}>Submit</button>*/}
+                            {/*</div>*/}
                         </Dialog>
                     )
                 }

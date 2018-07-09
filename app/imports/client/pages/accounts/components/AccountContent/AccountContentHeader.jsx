@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
-import RolesEnum from "/imports/api/users/enums/roles";
-import {AutoForm, AutoField, ErrorField} from "/imports/ui/forms";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
 import fieldTypes from "/imports/api/accounts/config/accounts";
@@ -17,7 +17,8 @@ export default class AccountContentHeader extends Component {
     this.state = {
       editField: null,
       schema: null,
-      dialogIsActive: false
+      dialogIsActive: false,
+        dateSelected: ' '
     };
   }
 
@@ -44,12 +45,28 @@ export default class AccountContentHeader extends Component {
   getAssignee() {
     const {account} = this.props;
     if (account && account.assignee) {
-      const {profile} = account.assignee;
-      return (
-        <div className="label label--grey">
-          {profile.firstName + " " + profile.lastName}
-        </div>
-      );
+      const { profile } = account.assignee;
+      const currentUserId = Meteor.userId();
+      const isRep = Roles.userIsInRole(account.assigneeId, RolesEnum.REP);
+      if (
+        (isRep &&
+          Roles.userIsInRole(currentUserId, roleGroups.ADMIN_TECH_MANAGER)) ||
+        (isRep && currentUserId === account.assigneeId)
+      ) {
+        return (
+          <div className="label label--grey">
+            <a href={`/${account.assigneeId}/user-profile`}>
+              {profile.firstName + " " + profile.lastName}
+            </a>
+          </div>
+        );
+      } else {
+        return (
+          <div className="label label--grey">
+            {profile.firstName + " " + profile.lastName}
+          </div>
+        );
+      }
     } else if (account && account.tag) {
       return <div className="label label--grey">{account.tag.name}</div>;
     }
@@ -78,7 +95,6 @@ export default class AccountContentHeader extends Component {
 
   onSubmit = data => {
     const {account} = this.props;
-    const {editField} = this.state;
 
     Meteor.call("account.update", account._id, data, err => {
       if (!err) {
@@ -96,7 +112,9 @@ export default class AccountContentHeader extends Component {
   };
 
   onDateSelect = newDate => {
-    const {editField} = this.state;
+    const {editField, dateSelected} = this.state;
+    const {selectedValue} = this.props;
+
     let data = {};
     data[editField] = newDate.toDate();
     Meteor.call("account.update", account._id, data, err => {
@@ -121,6 +139,7 @@ export default class AccountContentHeader extends Component {
             onChange={this.onDateSelect}
             onClickOutside={this.onClickOutside}
             onBlur={this.onBlur}
+            selectedValue={this.state.dateSelected}
           />
         </div>
       );
@@ -143,6 +162,9 @@ export default class AccountContentHeader extends Component {
             }}
           />
           <ErrorField name={name}/>
+            <div className="flex--helper flex-justify--end">
+                <button type="submit" className="btn--light-blue">Submit</button>
+            </div>
         </div>
       </AutoForm>
     );
