@@ -196,5 +196,13 @@ export default new SimpleSchema({
   },
   "flagIds.$": {
     type: String
+  },
+  other1: {
+    type: SimpleSchema.oneOf(Number, Date, String),
+    optional: true
+  },
+  other2: {
+    type: SimpleSchema.oneOf(Number, Date, String),
+    optional: true
   }
 });
