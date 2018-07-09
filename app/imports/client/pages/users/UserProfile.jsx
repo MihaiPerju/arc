@@ -149,9 +149,11 @@ export default class UserProfile extends React.Component {
                   <div>
                     <br />
                     Manager{" "}
-                    <b>
-                      {manager.profile.firstName} {manager.profile.lastName}
-                    </b>{" "}
+                    {manager && (
+                      <b>
+                        {manager.profile.firstName} {manager.profile.lastName}
+                      </b>
+                    )}{" "}
                     has responsed to the action and{" "}
                     {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
@@ -168,9 +170,11 @@ export default class UserProfile extends React.Component {
                   <div>
                     <br />
                     Manager{" "}
-                    <b>
-                      {manager.profile.firstName} {manager.profile.lastName}
-                    </b>{" "}
+                    {manager && (
+                      <b>
+                        {manager.profile.firstName} {manager.profile.lastName}
+                      </b>
+                    )}{" "}
                     has responsed to a comment and{" "}
                     {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
