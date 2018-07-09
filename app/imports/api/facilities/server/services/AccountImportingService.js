@@ -256,6 +256,22 @@ export default class AccountService {
     } else if (types.numbers.includes(rule)) {
       const parsed = parseInt(value, 10);
       return isNaN(parsed) ? null : parsed;
+    } else if (types.others.includes(rule)) {
+      const date = new Date(value);
+      const dateString =
+        ("0" + (date.getMonth() + 1)).slice(-2) +
+        "/" +
+        ("0" + date.getDate()).slice(-2) +
+        "/" +
+        date.getFullYear();
+      const parsed = moment(dateString, "MM/DD/YYYY", true);
+      if (parsed.isValid()) {
+        return parsed.toDate();
+      } else if (!isNaN(parseInt(value, 10))) {
+        const parsed = parseInt(value, 10);
+        return parsed;
+      }
+      return value;
     } else {
       return value;
     }

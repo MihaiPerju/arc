@@ -15,5 +15,6 @@ export default {
     "insName3",
     "activeInsCode",
     "activeInsName"
-  ]
+  ],
+  others: ["other1", "other2"]
 };
