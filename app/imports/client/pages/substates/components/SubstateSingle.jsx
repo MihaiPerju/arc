@@ -1,8 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import actionQuery from "/imports/api/actions/queries/actionList";
+import SubstateDescription from "./SubstateDescription";
 
 export default class SubstateSingle extends Component {
   constructor(props) {
@@ -15,12 +16,12 @@ export default class SubstateSingle extends Component {
   }
 
   componentWillMount() {
-    const { substate } = this.props;
+    const {substate} = this.props;
     this.getActions(substate.actionIds);
   }
 
   componentWillReceiveProps(newProps) {
-    const { substate } = newProps;
+    const {substate} = newProps;
     this.getActions(substate.actionIds);
   }
 
@@ -28,29 +29,29 @@ export default class SubstateSingle extends Component {
     actionQuery
       .clone({
         filters: {
-          _id: { $in: actionIds }
+          _id: {$in: actionIds}
         }
       })
       .fetch((err, actions) => {
         if (!err) {
-          this.setState({ actions });
+          this.setState({actions});
         }
       });
   };
 
   onSetSubstate = () => {
-    const { substate, setSubstate } = this.props;
+    const {substate, setSubstate} = this.props;
     setSubstate(substate._id);
   };
 
   onSelectSubstate = e => {
     e.stopPropagation();
-    const { substate, selectSubstate } = this.props;
+    const {substate, selectSubstate} = this.props;
     selectSubstate(substate._id);
   };
 
   deleteSubstate = () => {
-    const { selectedSubstateId } = this.state;
+    const {selectedSubstateId} = this.state;
     Meteor.call("substate.delete", selectedSubstateId, (err, res) => {
       if (!err) {
         Notifier.success("Deleted Successfully !");
@@ -74,67 +75,63 @@ export default class SubstateSingle extends Component {
   };
 
   render() {
-    const { substate, substateSelected, currentSubstate } = this.props;
-    const { actions, dialogIsActive } = this.state;
+    const {substate, substateSelected, currentSubstate} = this.props;
+    const {actions, dialogIsActive} = this.state;
     const checked = substateSelected.includes(substate._id);
-    const classes = classNames({
-      table_row: true,
-      "right-side": true,
+    const classes = classNames('substates-table__row flex--helper', {
       "bg--yellow": checked,
       open: currentSubstate === substate._id
     });
+
     return (
       <div className={classes}>
-        <div className="table-small">
-          <div className="table-cell">
-            <div className="check-item">
-              <input checked={checked} type="checkbox" className="hidden" />
-              <label onClick={this.onSelectSubstate} />
-            </div>
+        <div className="substates-field flex--helper flex-justify--center flex-align--center">
+          <div className="check-item">
+            <input checked={checked} type="checkbox" className="hidden"/>
+            <label onClick={this.onSelectSubstate}/>
           </div>
         </div>
-        <div className="table-small">
-          <div className="table-cell">{substate.stateName}</div>
+        <div className="substates-field flex--helper flex-justify--center flex-align--center">
+          {substate.stateName}
         </div>
-        <div className="table-small">
-          <div className="table-cell">{substate.name}</div>
+        <div className="substates-field flex--helper flex-justify--center flex-align--center">
+          {substate.name}
         </div>
-        <div className="table-small">
-          <div className="table-cell">{substate.description}</div>
+        <div className="substates-field flex--helper flex-justify--center flex-align--center">
+          <span className="truncate">
+            {substate.description}
+          </span>
+          <SubstateDescription>
+            {substate.description}
+          </SubstateDescription>
         </div>
-        <div className="table-small">
-          <div className="table-cell">
-            {actions.map((action, index) => (
-              <a
-                key={index}
-                className="text-blue"
-                href={"/action/" + action._id + "/edit"}
-              >
-                {action.title}
-              </a>
-            ))}
-            {actions.length === 0 && "-"}
-          </div>
+        <div className="substates-field flex--helper flex-justify--center flex-align--center">
+          {actions.map((action, index) => (
+            <a
+              key={index}
+              className="text-blue"
+              href={"/action/" + action._id + "/edit"}
+            >
+              {action.title}
+            </a>
+          ))}
+          {actions.length === 0 && "-"}
         </div>
-        <div className="table-small">
-          <div className="table-cell">
-            {substate.status ? "Active" : "In-Active"}
-          </div>
+        <div className="substates-field flex--helper flex-justify--center flex-align--center">
+          {substate.status ? "Active" : "In-Active"}
         </div>
-        <div className="table-small">
-          <div className="table-cell">
-            <button onClick={this.onSetSubstate} className="btn-text--blue">
-              edit
+        <div className="substates-field text-center">
+          <button onClick={this.onSetSubstate} className="btn-text--blue">
+            <i className="icon-pencil"/>
+          </button>
+          {substate.status && (
+            <button
+              onClick={() => this.deleteAction(substate._id)}
+              className="btn-text--red"
+            >
+              <i className="icon-trash-o"/>
             </button>
-            {substate.status && (
-              <button
-                onClick={() => this.deleteAction(substate._id)}
-                className="btn-text--red"
-              >
-                <i className="icon-trash-o" />
-              </button>
-            )}
-          </div>
+          )}
         </div>
         {dialogIsActive && (
           <Dialog className="account-dialog" closePortal={this.closeDialog}>
