@@ -30,11 +30,11 @@ export default class ClientSearchBar extends Component {
     }
 
     FlowRouter.setQueryParams({
-      createdAtMin: FilterService.formatDates(createdAtMin)
+      createdAtMin: FilterService.formatDate(createdAtMin)
     });
 
     FlowRouter.setQueryParams({
-      createdAtMax: FilterService.formatDates(createdAtMax)
+      createdAtMax: FilterService.formatDate(createdAtMax)
     });
   }
 
@@ -103,7 +103,7 @@ export default class ClientSearchBar extends Component {
   };
 
   onChange = (field, value) => {
-    FlowRouter.setQueryParams({ clientName: value });
+    FlowRouter.setQueryParams({ [field]: value });
   };
 
   render() {

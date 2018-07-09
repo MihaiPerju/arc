@@ -1,5 +1,5 @@
 export default class FilterService {
-  static formatDates(date) {
+  static formatDate(date) {
     return date ? new Date(date).toString() : null;
   }
 }

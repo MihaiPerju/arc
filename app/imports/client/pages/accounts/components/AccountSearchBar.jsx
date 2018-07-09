@@ -144,27 +144,27 @@ export default class AccountSearchBar extends Component {
     }
 
     FlowRouter.setQueryParams({
-      dischrgDateMin: FilterService.formatDates(dischrgDateMin)
+      dischrgDateMin: FilterService.formatDate(dischrgDateMin)
     });
 
     FlowRouter.setQueryParams({
-      dischrgDateMax: FilterService.formatDates(dischrgDateMax)
+      dischrgDateMax: FilterService.formatDate(dischrgDateMax)
     });
 
     FlowRouter.setQueryParams({
-      fbDateMin: FilterService.formatDates(fbDateMin)
+      fbDateMin: FilterService.formatDate(fbDateMin)
     });
 
     FlowRouter.setQueryParams({
-      fbDateMax: FilterService.formatDates(fbDateMax)
+      fbDateMax: FilterService.formatDate(fbDateMax)
     });
 
     FlowRouter.setQueryParams({
-      admitDateMin: FilterService.formatDates(admitDateMin)
+      admitDateMin: FilterService.formatDate(admitDateMin)
     });
 
     FlowRouter.setQueryParams({
-      admitDateMax: FilterService.formatDates(admitDateMax)
+      admitDateMax: FilterService.formatDate(admitDateMax)
     });
   }
 
@@ -278,7 +278,7 @@ export default class AccountSearchBar extends Component {
   };
 
   onChange = (field, value) => {
-    FlowRouter.setQueryParams({ acctNum: value });
+    FlowRouter.setQueryParams({ [field]: value });
   }
 
   render() {
