@@ -278,8 +278,10 @@ export default class AccountSearchBar extends Component {
   };
 
   onChange = (field, value) => {
-    FlowRouter.setQueryParams({ [field]: value });
-  }
+    if (field === "acctNum") {
+      FlowRouter.setQueryParams({ acctNum: value });
+    }
+  };
 
   render() {
     const {

@@ -103,7 +103,9 @@ export default class ClientSearchBar extends Component {
   };
 
   onChange = (field, value) => {
-    FlowRouter.setQueryParams({ [field]: value });
+    if (field === "clientName") {
+      FlowRouter.setQueryParams({ clientName: value });
+    }
   };
 
   render() {
