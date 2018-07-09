@@ -413,7 +413,7 @@ export default class AccountSearchBar extends Component {
                         </div>
                         <div className="select-form">
                           <SelectField
-                            label="Facility"
+                            label="Facility:"
                             name="facilityId"
                             placeholder="Select Facility"
                             options={facilityOptions}
