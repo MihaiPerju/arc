@@ -99,6 +99,19 @@ Meteor.methods({
         _.each(userIds, (_id) => {
             Users.remove({_id});
         });
-    }
+    },
 
+    "admin.updateRootFolder"({rootFolder}){
+        Settings.update({rootFolder},{
+            $set:{
+                rootFolder
+            }
+        },{
+            upsert:true
+        })
+    },
+    
+    "admin.getRootFolder"(){
+       return  Settings.findOne({rootFolder:{$exists:true}});
+    }
 });

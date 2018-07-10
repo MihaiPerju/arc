@@ -44,7 +44,9 @@ route('/dashboard', Dashboard);
 import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx';
 import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
 import EditUser from '/imports/client/pages/admin/EditUser.jsx';
+import Settings from "/imports/client/pages/admin/Settings";
 
+route("/admin/settings",Settings);
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
 route('/admin/user/:userId/edit', EditUser);
