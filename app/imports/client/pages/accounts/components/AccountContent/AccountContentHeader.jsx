@@ -17,8 +17,7 @@ export default class AccountContentHeader extends Component {
     this.state = {
       editField: null,
       schema: null,
-      dialogIsActive: false,
-        dateSelected: ' '
+      dateSelected: ' ',
     };
   }
 
@@ -113,7 +112,7 @@ export default class AccountContentHeader extends Component {
 
   onDateSelect = newDate => {
     const {editField, dateSelected} = this.state;
-    const {selectedValue} = this.props;
+    const {selectedValue, account} = this.props;
 
     let data = {};
     data[editField] = newDate.toDate();
@@ -163,7 +162,7 @@ export default class AccountContentHeader extends Component {
           />
           <ErrorField name={name}/>
             <div className="flex--helper flex-justify--end">
-                <button type="submit" className="btn--light-blue">Submit</button>
+              <button type="submit" className="btn--light-blue" onClick={this.closeDialog}>Submit</button>
             </div>
         </div>
       </AutoForm>
