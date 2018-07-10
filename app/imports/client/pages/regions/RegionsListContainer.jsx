@@ -158,6 +158,7 @@ class RegionListContainer extends Pager {
             btnGroup={regionsSelected.length}
             deleteAction={this.deleteAction}
             hideSort
+            hideFilter
           />
           <RegionsList
             class={this.state.filter ? "task-list decreased" : "task-list"}

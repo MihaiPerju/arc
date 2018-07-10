@@ -13,8 +13,13 @@ export default class LetterSearchBar extends Component {
       active: false,
       filter: false,
       dropdown: false,
-      selectAll: false
+      selectAll: false,
+      model: {}
     };
+  }
+
+  componentWillMount() {
+    this.getFilterParams();
   }
 
   manageFilterBar() {
@@ -70,8 +75,19 @@ export default class LetterSearchBar extends Component {
     });
   };
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("letterTemplateName" in queryParams) {
+      model.letterTemplateName = queryParams.letterTemplateName;
+    }
+
+    this.setState({ model });
+  };
+
   render() {
-    const { filter, active, dropdown, selectAll } = this.state;
+    const { filter, active, dropdown, selectAll, model } = this.state;
     const {
       options,
       btnGroup,
@@ -102,6 +118,7 @@ export default class LetterSearchBar extends Component {
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
+        model={model}
       >
         <div className="search-bar">
           {!hideSort && (
