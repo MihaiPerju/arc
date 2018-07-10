@@ -109,7 +109,7 @@ export default class SubstateSingle extends Component {
           {actions.map((action, index) => (
             <a
               key={index}
-              className="text-blue"
+              className="text-blue truncate"
               href={"/action/" + action._id + "/edit"}
             >
               {action.title}

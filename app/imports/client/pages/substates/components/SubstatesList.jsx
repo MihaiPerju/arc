@@ -54,7 +54,7 @@ export default class SubstatesList extends Component {
                 <button className="btn-text--green" onClick={() => this.sortState("ASC")}>
                   <i className={stateAscend}/>
                 </button>
-                <div>State Name</div>
+                <span>State Name</span>
                 <button className="btn-text--green" onClick={() => this.sortState("DESC")}>
                   <i className={stateDescend}/>
                 </button>
@@ -63,7 +63,7 @@ export default class SubstatesList extends Component {
                 <button className="btn-text--green" onClick={() => this.sortSubstate("ASC")}>
                   <i className={substateAscend}/>
                 </button>
-                <div>Substate Name</div>
+                <span>Substate Name</span>
                 <button className="btn-text--green" onClick={() => this.sortSubstate("DESC")}>
                   <i className={substateDescend}/>
                 </button>
