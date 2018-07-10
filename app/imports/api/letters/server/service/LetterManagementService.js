@@ -48,7 +48,8 @@ export default class LetterManagementService {
     firstScanDate = this.convertToDate(firstScanDate);
     Letters.update(
       {
-        _id: letterId
+        _id: letterId,
+        status: Statuses.PENDING
       },
       {
         $set: {
@@ -63,7 +64,8 @@ export default class LetterManagementService {
     inHomeDate = this.convertToDate(inHomeDate);
     Letters.update(
       {
-        _id: letterId
+        _id: letterId,
+        status: Statuses.SENT
       },
       {
         $set: {
