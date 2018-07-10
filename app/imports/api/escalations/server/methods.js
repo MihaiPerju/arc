@@ -1,21 +1,22 @@
 import Escalations from "../collection";
 import RolesEnum from "/imports/api/users/enums/roles";
 import NotificationService from "/imports/api/notifications/server/services/NotificationService";
+import Accounts from "/imports/api/accounts/collection";
 
 Meteor.methods({
-  "escalation.get"(_id) {
-    return Escalations.findOne({ _id });
-  },
-  "escalation.addMessage"(message, escalationId, accountId) {
-    let open = Roles.userIsInRole(this.userId, RolesEnum.REP) ? true : false;
-    const { authorId } = Escalations.findOne({ _id: escalationId });
+  "escalation.addMessage"(message, accountId) {
+    const { authorId } = Escalations.findOne({ accountId });
 
-    Escalations.update(
-      { _id: escalationId },
-      { $push: { messages: message }, $set: { open } }
-    );
+    const employeeToRespond = Roles.userIsInRole(this.userId, RolesEnum.MANAGER)
+      ? authorId
+      : RolesEnum.MANAGER;
+
+    Escalations.update({ accountId }, { $push: { messages: message } });
+
+    Accounts.update({ _id: accountId }, { $set: { employeeToRespond } });
+
     //If is a respond from manager, emit global notification for the user.
-    if (!open) {
+    if (employeeToRespond !== RolesEnum.MANAGER) {
       NotificationService.createGlobal(authorId);
     }
 

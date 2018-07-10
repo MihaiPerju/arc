@@ -153,12 +153,12 @@ export default class PagerService {
           assigneeId: null,
           workQueue: null,
           tickleDate: null,
-          escalationId: null
+          employeeToRespond: null
         }
       });
     } else if (state === "tickles") {
       _.extend(params, {
-        filters: { tickleDate: { $exists: true }, escalationId: null }
+        filters: { tickleDate: { $exists: true }, employeeToRespond: null }
       });
       _.extend(params.options, {
         sort: {
@@ -174,13 +174,13 @@ export default class PagerService {
       _.extend(params, {
         filters: {
           tickleDate: null,
-          escalationId: { $exists: true }
+          employeeToRespond: { $exists: true }
         }
       });
     } else if (state && state !== "all") {
       state = stateEnum[state.toUpperCase()];
       _.extend(params, {
-        filters: { state, tickleDate: null, escalationId: null }
+        filters: { state, tickleDate: null, employeeToRespond: null }
       });
     } else {
       // state undefined
