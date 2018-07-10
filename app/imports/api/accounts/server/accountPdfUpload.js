@@ -12,7 +12,7 @@ createRoute(
       return error("Invalid number of files");
     }
 
-    const [uploadId] = uploadLocal();
+    const [uploadId] = uploadLocal(accountId);
 
     Accounts.update(
       { _id: accountId },
