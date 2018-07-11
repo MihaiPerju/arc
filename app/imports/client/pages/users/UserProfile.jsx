@@ -88,8 +88,7 @@ export default class UserProfile extends React.Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>
-                )}{" "}
-                applied action <b>{action.title}</b> to account with Account
+                )} applied action <b>{action.title}</b> to account with Account
                 Number <b>{acctNum}</b>
               </div>
             )}
@@ -114,9 +113,7 @@ export default class UserProfile extends React.Component {
               <b>
                 {user.profile.firstName} {user.profile.lastName}
               </b>
-            )}{" "}
-            commented a comment <b>{content}</b> to account with Account Number{" "}
-            <b>{acctNum}</b>
+            )} commented a comment <b>{content}</b> to account with Account Number <b>{acctNum}</b>
           </div>
         );
       case actionTypesEnum.LETTER:
@@ -128,10 +125,7 @@ export default class UserProfile extends React.Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>
-                )}{" "}
-                send a letter with letter-template name{" "}
-                <b>{letterTemplate.name}</b> to account with account number{" "}
-                <b>{acctNum}</b>
+                )} send a letter with letter-template name <b>{letterTemplate.name}</b> to account with account number <b>{acctNum}</b>
               </div>
             )}
           </div>
@@ -143,19 +137,15 @@ export default class UserProfile extends React.Component {
               <div>
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
-                </b>{" "}
-                flagged an action on account <b>{acctNum}</b>.
+                </b> flagged an action on account <b>{acctNum}</b>.
                 {!isOpen && (
                   <div>
                     <br />
-                    Manager{" "}
-                    {manager && (
+                    Manager {manager && (
                       <b>
                         {manager.profile.firstName} {manager.profile.lastName}
                       </b>
-                    )}{" "}
-                    has responsed to the action and{" "}
-                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    )} has responsed to the action and {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
@@ -164,19 +154,15 @@ export default class UserProfile extends React.Component {
               <div>
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
-                </b>{" "}
-                flagged a comment on account <b>{acctNum}</b>.
+                </b> flagged a comment on account <b>{acctNum}</b>.
                 {!isOpen && (
                   <div>
                     <br />
-                    Manager{" "}
-                    {manager && (
+                    Manager {manager && (
                       <b>
                         {manager.profile.firstName} {manager.profile.lastName}
                       </b>
-                    )}{" "}
-                    has responsed to a comment and{" "}
-                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    )} has responsed to a comment and {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
