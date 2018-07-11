@@ -42,5 +42,10 @@ export default AccountActions.createQuery("accountActionList", {
   content: 1,
   user: {
     profile: 1
+  },
+  fileName: 1,
+  account: {
+    acctNum: 1,
+    state: 1
   }
 });
