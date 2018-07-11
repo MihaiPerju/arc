@@ -24,13 +24,14 @@ AccountListQuery.expose({
     }
 
     if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
-      const escalations = Escalations.find({ open: true }).fetch();
-      const escalationIds = escalations.map(escalation => escalation._id);
       _.extend(params.filters, {
         facilityId: {
           $in: userFacilitiesArr
         },
-        $or: [{ escalationId: null }, { escalationId: { $in: escalationIds } }]
+        $or: [
+          { employeeToRespond: null },
+          { employeeToRespond: RolesEnum.MANAGER }
+        ]
       });
     }
     if (Roles.userIsInRole(userId, RolesEnum.REP)) {
@@ -38,11 +39,6 @@ AccountListQuery.expose({
       let { tagIds } = Users.findOne({ _id: userId });
 
       //Getting only the escalated accounts that are open and the rep is the author
-      const escalations = Escalations.find({
-        open: false,
-        authorId: userId
-      }).fetch();
-      const escalationIds = escalations.map(escalation => escalation._id);
       if (!tagIds) {
         tagIds = [];
       }
@@ -52,10 +48,7 @@ AccountListQuery.expose({
             $or: [{ assigneeId: userId }, { workQueue: { $in: tagIds } }]
           },
           {
-            $or: [
-              { escalationId: null },
-              { escalationId: { $in: escalationIds } }
-            ]
+            $or: [{ employeeToRespond: null }, { employeeToRespond: userId }]
           }
         ]
       });

@@ -13,7 +13,7 @@ import Accounts from "/imports/api/accounts/collection";
 import { withTracker } from "meteor/react-meteor-data";
 import EscalateReason from "../../pages/accounts/components/AccountContent/EscalateReason";
 
-class LeftMenu extends Component {
+export default class LeftMenu extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -60,8 +60,8 @@ class LeftMenu extends Component {
     accountListQuery
       .clone({
         filters: {
-          tickleDate: { 
-            $lt: new Date(moment(startOfDay).format()) 
+          tickleDate: {
+            $lt: new Date(moment(startOfDay).format())
           },
           tickleUserId: Meteor.userId()
         }
@@ -114,10 +114,3 @@ class LeftMenu extends Component {
     );
   }
 }
-
-export default withTracker(props => {
-  const total = Accounts.find().count();
-  return {
-    total
-  };
-})(LeftMenu);

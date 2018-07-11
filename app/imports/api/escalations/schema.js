@@ -1,10 +1,6 @@
 import SimpleSchema from "simpl-schema";
 
 export default new SimpleSchema({
-  open: {
-    type: Boolean,
-    defaultValue: true
-  },
   authorId: {
     type: String
   },
@@ -15,6 +11,9 @@ export default new SimpleSchema({
     type: Object
   },
   "messages.$.content": {
+    type: String
+  },
+  accountId: {
     type: String
   }
 });
