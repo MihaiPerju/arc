@@ -4,13 +4,15 @@ import { Timeline, TimelineEvent } from "react-event-timeline";
 import Loading from "/imports/client/lib/ui/Loading";
 import MyAvatar from "./components/MyAvatar";
 import moment from "moment";
-import RolesEnum from "/imports/api/users/enums/roles";
+import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
+import userListQuery from "/imports/api/users/queries/listUsers.js";
 
 export default class UserProfile extends React.Component {
   constructor() {
     super();
     this.state = {
-      accountActions: null
+      accountActions: null,
+      user: null
     };
   }
 
@@ -29,25 +31,170 @@ export default class UserProfile extends React.Component {
           });
         }
       });
+
+    userListQuery
+      .clone({
+        filters: {
+          _id: userId
+        }
+      })
+      .fetchOne((err, user) => {
+        if (!err) {
+          this.setState({
+            user
+          });
+        }
+      });
   }
 
   getTimelineIcon = type => {
     switch (type) {
-      case "userAction":
+      case actionTypesEnum.USER_ACTION:
         return <i className="icon-thumb-tack text-blue" />;
-      case "systemAction":
+      case actionTypesEnum.SYSTEM_ACTION:
         return <i className="icon-alert" />;
-      case "comment":
+      case actionTypesEnum.COMMENT:
         return <i className="icon-comments-o text-dark-grey" />;
-      case "letter":
+      case actionTypesEnum.LETTER:
         return <i className="icon-inbox" />;
+      case actionTypesEnum.FLAG:
+        return <i className="icon-flag" />;
+    }
+  };
+
+  getTimelineBody = data => {
+    const {
+      type,
+      action,
+      reasonCode,
+      content,
+      acctNum,
+      letterTemplate,
+      user,
+      actionId,
+      isOpen,
+      flagResponse,
+      isFlagApproved,
+      manager
+    } = data;
+
+    switch (type) {
+      case actionTypesEnum.USER_ACTION:
+        return (
+          <div>
+            {action && (
+              <div>
+                {user && (
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>
+                )}{" "}
+                applied action <b>{action.title}</b> to account with Account
+                Number <b>{acctNum}</b>
+              </div>
+            )}
+            {reasonCode && <div>Reason Code: {reasonCode}</div>}
+          </div>
+        );
+      case actionTypesEnum.SYSTEM_ACTION:
+        return (
+          <div>
+            {action && (
+              <div>
+                Applied action <b>{action.title}</b> to account with Account
+                Number <b>{acctNum}</b>
+              </div>
+            )}
+          </div>
+        );
+      case actionTypesEnum.COMMENT:
+        return (
+          <div>
+            {user && (
+              <b>
+                {user.profile.firstName} {user.profile.lastName}
+              </b>
+            )}{" "}
+            commented a comment <b>{content}</b> to account with Account Number{" "}
+            <b>{acctNum}</b>
+          </div>
+        );
+      case actionTypesEnum.LETTER:
+        return (
+          <div>
+            {letterTemplate && (
+              <div>
+                {user && (
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>
+                )}{" "}
+                send a letter with letter-template name{" "}
+                <b>{letterTemplate.name}</b> to account with account number{" "}
+                <b>{acctNum}</b>
+              </div>
+            )}
+          </div>
+        );
+      case actionTypesEnum.FLAG:
+        return (
+          <div>
+            {actionId ? (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                flagged an action on account <b>{acctNum}</b>.
+                {!isOpen && (
+                  <div>
+                    <br />
+                    Manager{" "}
+                    {manager && (
+                      <b>
+                        {manager.profile.firstName} {manager.profile.lastName}
+                      </b>
+                    )}{" "}
+                    has responsed to the action and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    flag with reason <b>{flagResponse}</b>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                flagged a comment on account <b>{acctNum}</b>.
+                {!isOpen && (
+                  <div>
+                    <br />
+                    Manager{" "}
+                    {manager && (
+                      <b>
+                        {manager.profile.firstName} {manager.profile.lastName}
+                      </b>
+                    )}{" "}
+                    has responsed to a comment and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    flag with reason <b>{flagResponse}</b>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        );
+      default:
+        return "";
     }
   };
 
   render() {
-    const { userId } = FlowRouter.current().params;
-    const user = Meteor.users.findOne(userId);
-    const { accountActions, errorMessage } = this.state;
+    const { accountActions, user } = this.state;
+
+    if (!user) {
+      return <div />;
+    }
 
     return (
       <div className="cc-container settings-container">
@@ -88,18 +235,16 @@ export default class UserProfile extends React.Component {
           <Timeline>
             {accountActions &&
               accountActions.map((actionPerformed, index) => {
-                const { action, content, createdAt, type } = actionPerformed;
+                const { createdAt, type } = actionPerformed;
                 return (
                   <TimelineEvent
                     key={index}
-                    title={action && action.title}
                     createdAt={moment(createdAt).format(
                       "MMMM Do YYYY, hh:mm a"
                     )}
                     icon={this.getTimelineIcon(type)}
                   >
-                    {action && action.description}
-                    {content && content}
+                    {this.getTimelineBody(actionPerformed)}
                   </TimelineEvent>
                 );
               })}
