@@ -98,7 +98,7 @@ export default class ImportingRules extends React.Component {
 
     render() {
         const {schema, loading, collapse} = this.state;
-        const {model, rules} = this.props;
+        const {model, rules, copyRules} = this.props;
         const fields = RulesService.getSchemaFields(rules);
         const options = [{value: true, label: 'True'}, {value: false, label: 'False'}];
         const fieldGroups = this.groupFields(fields);
@@ -119,12 +119,13 @@ export default class ImportingRules extends React.Component {
                                   ref="form">
 
                             <div className="form-wrapper">
-                                <div className="upload-section">
+                                <div className="upload-section flex--helper placement-header">
                                     <div className="radio-group">
                                         <RadioField className="radio-group__wrapper" name="hasHeader"
                                                     options={options}/>
                                         <ErrorField name="hasHeader"/>
                                     </div>
+                                    <button type="button" className="btn--white" onClick={copyRules}>Copy placement file headers</button>
                                 </div>
                             </div>
 
