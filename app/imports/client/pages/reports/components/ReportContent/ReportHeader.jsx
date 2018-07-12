@@ -106,7 +106,6 @@ class ReportHeader extends Component {
         return (
           <button
             onClick={this.downloadReport}
-            style={{ marginLeft: "2rem" }}
             className="btn--white"
           >
             Download report
