@@ -47,5 +47,6 @@ export default AccountActions.createQuery("accountActionList", {
   account: {
     acctNum: 1,
     state: 1
-  }
+  },
+  correctComment: 1
 });

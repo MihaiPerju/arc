@@ -11,6 +11,8 @@ import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
 import actionTypesEnum from "../../enums/actionTypesEnum";
 import Escalations from "/imports/api/escalations/collection";
+import NotificationService from "/imports/api/notifications/server/services/NotificationService";
+import Users from "/imports/api/users/collection";
 
 export default class ActionService {
   //Adding action to account
@@ -105,7 +107,6 @@ export default class ActionService {
     const { escalationId } = Accounts.findOne({ _id: accountId }) || null;
     if (escalationId) {
       Escalations.remove({ _id: escalationId });
-      
     }
     if (substateId && substateId !== GeneralEnums.NA) {
       const substate = SubstatesCollection.findOne({ _id: substateId });
@@ -136,5 +137,44 @@ export default class ActionService {
         }
       }
     );
+  }
+
+  static addComment({ content, accountId, isCorrectNote, userId }) {
+    const commentData = {
+      userId,
+      type: actionTypesEnum.COMMENT,
+      content,
+      createdAt: new Date(),
+      accountId,
+      correctComment: isCorrectNote
+    };
+    const accountActionId = AccountActions.insert(commentData);
+    Accounts.update(
+      { _id: accountId },
+      {
+        $push: {
+          commentIds: accountActionId
+        }
+      }
+    );
+    if (isCorrectNote) {
+      this.sendNotification(accountId);
+    }
+  }
+
+  static sendNotification(accountId) {
+    const { assigneeId, workQueue } = Accounts.findOne({ _id: accountId });
+
+    if (assigneeId && Roles.userIsInRole(assigneeId, RolesEnum.REP)) {
+      NotificationService.createGlobal(assigneeId);
+      NotificationService.createCommentNotification(assigneeId, accountId);
+    } else if (workQueue) {
+      const users = Users.find({ tagIds: workQueue }).fetch();
+      for (let user of users) {
+        const { _id } = user;
+        NotificationService.createGlobal(_id);
+        NotificationService.createCommentNotification(_id, accountId);
+      }
+    }
   }
 }
