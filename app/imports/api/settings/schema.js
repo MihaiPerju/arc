@@ -7,5 +7,9 @@ export default new SimpleSchema({
     },
     'suspendedUserIds.$': {
         type: String
+    },
+    rootFolder:{
+        type:String,
+        optional:true
     }
 });

@@ -84,7 +84,6 @@ Meteor.methods({
 
   "admin.resumeUser"(userId) {
     Security.checkAdmin(this.userId);
-
     if (!userId) {
       throw new Meteor.Error("No user");
     }
@@ -108,6 +107,24 @@ Meteor.methods({
         }
       }
     );
+  },
+
+  "admin.updateRootFolder"({ rootFolder }) {
+    Settings.update(
+      { rootFolder },
+      {
+        $set: {
+          rootFolder
+        }
+      },
+      {
+        upsert: true
+      }
+    );
+  },
+
+  "admin.getRootFolder"() {
+    return Settings.findOne({ rootFolder: { $exists: true } });
   },
 
   "admin.deleteUser"(userId) {
