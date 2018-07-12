@@ -29,7 +29,7 @@ module.exports = {
             PORT: 3000
         },
 
-        dockerImage: 'abernix/meteord',
+        dockerImage: 'abernix/meteord:node-8.11.2-base',
         deployCheckWaitTime: 60,
         enableUploadProgressBar: true
     },

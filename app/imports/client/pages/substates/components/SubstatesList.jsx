@@ -46,54 +46,48 @@ export default class SubstatesList extends Component {
 
     return (
       <div className={this.props.class}>
-        <div className="table">
-          <div className="theader">
-            <div className="table-header text-light-grey" />
-            <div className="table-header text-light-grey">
-              <div>State Name</div>
-              <div className="sort-icons">
-                <span
-                  onClick={() => this.sortState("ASC")}
-                  className={stateAscend}
-                />
-                <span
-                  onClick={() => this.sortState("DESC")}
-                  className={stateDescend}
-                />
+        <div className="substates-table">
+          <div className="substates-table__wrapper">
+            <div className="substates-table__header flex--helper">
+              <div className="substates-field" />
+              <div className="substates-field substates-sort flex--helper flex-justify--center flex-align--center text-light-grey">
+                <button className="btn-text--green" onClick={() => this.sortState("ASC")}>
+                  <i className={stateAscend}/>
+                </button>
+                <span>State Name</span>
+                <button className="btn-text--green" onClick={() => this.sortState("DESC")}>
+                  <i className={stateDescend}/>
+                </button>
               </div>
-            </div>
-            <div className="table-header text-light-grey">
-              <div>Substate Name</div>
-              <div className="sort-icons">
-                <span
-                  onClick={() => this.sortSubstate("ASC")}
-                  className={substateAscend}
-                />
-                <span
-                  onClick={() => this.sortSubstate("DESC")}
-                  className={substateDescend}
-                />
+              <div className="substates-field substates-sort flex--helper flex-justify--center flex-align--center text-light-grey">
+                <button className="btn-text--green" onClick={() => this.sortSubstate("ASC")}>
+                  <i className={substateAscend}/>
+                </button>
+                <span>Substate Name</span>
+                <button className="btn-text--green" onClick={() => this.sortSubstate("DESC")}>
+                  <i className={substateDescend}/>
+                </button>
               </div>
+              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">Description</div>
+              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
+                Triggering Actions
+              </div>
+              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
+                Status
+              </div>
+              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">Actions</div>
             </div>
-            <div className="table-header text-light-grey">Description</div>
-            <div className="table-header text-light-grey">
-              Triggering Actions
-            </div>
-            <div className="table-header text-light-grey">
-              Status
-            </div>
-            <div className="table-header text-light-grey">Actions</div>
+            {substates.map((substate, index) => (
+              <SubstateSingle
+                substateSelected={substateSelected}
+                currentSubstate={currentSubstate}
+                selectSubstate={selectSubstate}
+                setSubstate={setSubstate}
+                substate={substate}
+                key={substate._id}
+              />
+            ))}
           </div>
-          {substates.map((substate, index) => (
-            <SubstateSingle
-              substateSelected={substateSelected}
-              currentSubstate={currentSubstate}
-              selectSubstate={selectSubstate}
-              setSubstate={setSubstate}
-              substate={substate}
-              key={substate._id}
-            />
-          ))}
         </div>
       </div>
     );

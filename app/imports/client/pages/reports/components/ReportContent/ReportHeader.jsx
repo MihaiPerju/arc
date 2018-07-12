@@ -98,7 +98,7 @@ class ReportHeader extends Component {
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
         return (
-          <button style={{ marginLeft: "2rem" }} className="btn--white">
+          <button className="btn--white">
             Loading...
           </button>
         );
@@ -115,7 +115,6 @@ class ReportHeader extends Component {
       default:
         return (
           <button
-            style={{ marginLeft: "2rem" }}
             onClick={this.onRunReport}
             className="btn--white"
           >
@@ -232,7 +231,7 @@ class ReportHeader extends Component {
         {schedule ? (
           <ScheduleBlock report={report} />
         ) : (
-          <div className="main-content__header header-block">
+          <div className="main-content__header header-block header-reports">
             <div className="row__header">
               <div className="text-light-grey">Report name</div>
               <div className="title">{report.name}</div>
