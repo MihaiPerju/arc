@@ -59,4 +59,27 @@ export default class NotificationService {
       { upsert: true }
     );
   }
+
+  static createCommentNotification(receiverId, accountId) {
+    const { acctNum, state } = Accounts.findOne({ _id: accountId });
+    Notifications.update(
+      {
+        type: NotificationTypeEnum.COMMENT,
+        receiverId,
+        "metaData.accountId": accountId,
+        "metaData.state": state,
+        "metaData.acctNum": acctNum
+      },
+      {
+        $set: {
+          receiverId,
+          type: NotificationTypeEnum.COMMENT,
+          "metaData.accountId": accountId,
+          "metaData.acctNum": acctNum,
+          "metaData.state": state
+        }
+      },
+      { upsert: true }
+    );
+  }
 }
