@@ -84,28 +84,6 @@ Meteor.methods({
 
   "admin.resumeUser"(userId) {
     Security.checkAdmin(this.userId);
-
-<<<<<<< HEAD
-        _.each(userIds, (_id) => {
-            Users.remove({_id});
-        });
-    },
-
-    "admin.updateRootFolder"({rootFolder}){
-        Settings.update({rootFolder},{
-            $set:{
-                rootFolder
-            }
-        },{
-            upsert:true
-        })
-    },
-    
-    "admin.getRootFolder"(){
-       return  Settings.findOne({rootFolder:{$exists:true}});
-    }
-});
-=======
     if (!userId) {
       throw new Meteor.Error("No user");
     }
@@ -129,6 +107,24 @@ Meteor.methods({
         }
       }
     );
+  },
+
+  "admin.updateRootFolder"({ rootFolder }) {
+    Settings.update(
+      { rootFolder },
+      {
+        $set: {
+          rootFolder
+        }
+      },
+      {
+        upsert: true
+      }
+    );
+  },
+
+  "admin.getRootFolder"() {
+    return Settings.findOne({ rootFolder: { $exists: true } });
   },
 
   "admin.deleteUser"(userId) {
@@ -169,4 +165,3 @@ Meteor.methods({
     }
   }
 });
->>>>>>> master
