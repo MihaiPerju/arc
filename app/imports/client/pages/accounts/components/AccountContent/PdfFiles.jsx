@@ -131,7 +131,7 @@ export default class ActionBlock extends Component {
                 </button>
               )}
           </div>
-          <div className="block-list file-list">
+          <div className="block-list file-list pdf-container">
             {account &&
               account.attachments &&
               account.attachments.map((pdf, index) => {
@@ -145,7 +145,7 @@ export default class ActionBlock extends Component {
                               {this.getPdfName(pdf)}
                             </div>
                           </div>
-                          <div className="btn-group">
+                          <div className="btn-group flex--helper">
                             <button
                               onClick={this.redirectToPdf.bind(this, pdf)}
                               className="btn-text--blue"
@@ -162,19 +162,23 @@ export default class ActionBlock extends Component {
                               onClick={this.reviewPdf.bind(this, index)}
                               className="btn-text--blue"
                             >
-                              preview
+                              {
+                                index === pdfIndex ? (
+                                  <i className="icon-close"/>
+                                ) : (
+                                  <i className="icon-view"/>
+                                )
+                              }
                             </button>
-
-                            {index === pdfIndex && (
-                              <div style={{ marginLeft: -306 + "px" }}>
-                                <object
-                                  data={"/pdf/" + pdf._id + "/" + getToken()}
-                                  width={430}
-                                  height={350}
-                                />
-                              </div>
-                            )}
                           </div>
+                          {index === pdfIndex && (
+                            <object
+                              className="pdf-preview"
+                              data={"/pdf/" + pdf._id + "/" + getToken()}
+                              width={430}
+                              height={350}
+                            />
+                          )}
                         </div>
                       )}
                     </ReactHover.Trigger>
