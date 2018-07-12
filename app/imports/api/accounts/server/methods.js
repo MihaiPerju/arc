@@ -11,7 +11,6 @@ import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
-import Files from "/imports/api/files/collection";
 import Backup from "/imports/api/backup/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import Actions from "../../actions/collection";
@@ -263,11 +262,4 @@ Meteor.methods({
     );
   },
 
-  //Testing purpose only, delete in production
-  reset() {
-    Accounts.remove({});
-    AccountActions.remove({});
-    Files.remove({});
-    Backup.remove({});
-  }
 });
