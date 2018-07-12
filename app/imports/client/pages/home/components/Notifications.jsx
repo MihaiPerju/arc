@@ -53,6 +53,26 @@ class NotificationListContainer extends React.Component {
           </a>
         </div>
       );
+    } else if (
+      metaData &&
+      metaData.acctNum &&
+      type === NotificationTypeEnum.COMMENT
+    ) {
+      return (
+        <div>
+          <span>
+            Note left by manager on account with Account number
+          </span>
+          <a
+            className="text-blue"
+            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
+              metaData.accountId
+            }`}
+          >
+            {metaData.acctNum}
+          </a>
+        </div>
+      );
     }
     return notification.message;
   };

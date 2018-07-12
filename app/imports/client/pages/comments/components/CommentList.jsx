@@ -9,13 +9,15 @@ import {
 } from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import CommentSingle from "./CommentSingle.jsx";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class CommentList extends Component {
   constructor() {
     super();
 
     this.state = {
-      content: null
+      content: null,
+      correctNote: false
     };
 
     autoBind(this);
@@ -23,12 +25,15 @@ export default class CommentList extends Component {
 
   onSubmit({ content }) {
     const { account } = this.props;
+    let { correctNote } = this.state;
+    correctNote = (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && correctNote) ? true : undefined;
+
     if (!content) {
       Notifier.error("Message has no content");
     } else {
       Meteor.call(
         "account.comment.add",
-        { content, accountId: account._id },
+        { content, accountId: account._id, correctNote },
         err => {
           if (!err) {
             Notifier.success("Comment added!");
@@ -41,8 +46,14 @@ export default class CommentList extends Component {
     }
   }
 
+  isCorrectNote = () => {
+    const { correctNote } = this.state;
+    this.setState({ correctNote: !correctNote });
+  };
+
   render() {
     const { account, comments } = this.props;
+    const { correctNote } = this.state;
 
     return (
       <div className="action-block">
@@ -61,12 +72,24 @@ export default class CommentList extends Component {
               <button className="btn-post">Post</button>
             </div>
           </AutoForm>
+          {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+            <div className="check-group">
+              <input checked={correctNote} type="checkbox" />
+              <label onClick={this.isCorrectNote}>Correct note</label>
+            </div>
+          )}
         </div>
         <div className="comment-list">
-          {comments
-            .map((comment, index) => {
-              return <CommentSingle account={account} comment={comment} key={index} commentId={index}/>;
-            })}
+          {comments.map((comment, index) => {
+            return (
+              <CommentSingle
+                account={account}
+                comment={comment}
+                key={index}
+                commentId={index}
+              />
+            );
+          })}
         </div>
       </div>
     );

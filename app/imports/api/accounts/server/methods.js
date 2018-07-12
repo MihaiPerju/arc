@@ -235,23 +235,9 @@ Meteor.methods({
     ]);
   },
 
-  "account.comment.add"({ content, accountId }) {
-    const commentData = {
-      userId: this.userId,
-      type: actionTypesEnum.COMMENT,
-      content,
-      createdAt: new Date(),
-      accountId
-    };
-    const accountActionId = AccountActions.insert(commentData);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $push: {
-          commentIds: accountActionId
-        }
-      }
-    );
+  "account.comment.add"(data) {
+    data.userId = this.userId
+    ActionService.addComment(data);
   },
 
   "account.update"(_id, data) {
