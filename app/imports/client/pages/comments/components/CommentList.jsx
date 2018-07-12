@@ -4,8 +4,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import {
   AutoForm,
   AutoField,
-  ErrorField,
-  SelectField
+  ErrorField
 } from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import CommentSingle from "./CommentSingle.jsx";
@@ -17,7 +16,7 @@ export default class CommentList extends Component {
 
     this.state = {
       content: null,
-      correctNote: false
+      isCorrectNote: false
     };
 
     autoBind(this);
@@ -25,15 +24,15 @@ export default class CommentList extends Component {
 
   onSubmit({ content }) {
     const { account } = this.props;
-    let { correctNote } = this.state;
-    correctNote = (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && correctNote) ? true : undefined;
+    let { isCorrectNote } = this.state;
+    isCorrectNote = (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && isCorrectNote) ? true : undefined;
 
     if (!content) {
       Notifier.error("Message has no content");
     } else {
       Meteor.call(
         "account.comment.add",
-        { content, accountId: account._id, correctNote },
+        { content, accountId: account._id, isCorrectNote },
         err => {
           if (!err) {
             Notifier.success("Comment added!");
@@ -46,14 +45,14 @@ export default class CommentList extends Component {
     }
   }
 
-  isCorrectNote = () => {
-    const { correctNote } = this.state;
-    this.setState({ correctNote: !correctNote });
+  onSwitchNoteState = () => {
+    const { isCorrectNote } = this.state;
+    this.setState({ isCorrectNote: !isCorrectNote });
   };
 
   render() {
     const { account, comments } = this.props;
-    const { correctNote } = this.state;
+    const { isCorrectNote } = this.state;
 
     return (
       <div className="action-block">
@@ -74,8 +73,8 @@ export default class CommentList extends Component {
           </AutoForm>
           {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
             <div className="check-group">
-              <input checked={correctNote} type="checkbox" />
-              <label onClick={this.isCorrectNote}>Correct note</label>
+              <input checked={isCorrectNote} type="checkbox" />
+              <label onClick={this.onSwitchNoteState}>Correct note</label>
             </div>
           )}
         </div>

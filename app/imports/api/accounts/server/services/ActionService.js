@@ -138,14 +138,14 @@ export default class ActionService {
     );
   }
 
-  static addComment({ content, accountId, correctNote, userId }) {
+  static addComment({ content, accountId, isCorrectNote, userId }) {
     const commentData = {
       userId,
       type: actionTypesEnum.COMMENT,
       content,
       createdAt: new Date(),
       accountId,
-      correctComment: correctNote
+      correctComment: isCorrectNote
     };
     const accountActionId = AccountActions.insert(commentData);
     Accounts.update(
@@ -156,7 +156,7 @@ export default class ActionService {
         }
       }
     );
-    if (correctNote) {
+    if (isCorrectNote) {
       this.sendNotification(accountId);
     }
   }
