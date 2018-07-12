@@ -1,36 +1,33 @@
 import React from "react";
+import SimpleSchema from "simpl-schema";
 import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { Timeline, TimelineEvent } from "react-event-timeline";
-import Loading from "/imports/client/lib/ui/Loading";
-import MyAvatar from "./components/MyAvatar";
 import moment from "moment";
-import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import userListQuery from "/imports/api/users/queries/listUsers.js";
+import UserService from "./services/UserService";
+import { AutoForm, SelectField } from "/imports/ui/forms";
+import actionTypesEnum, {
+  typeList
+} from "/imports/api/accounts/enums/actionTypesEnum";
 
-export default class UserProfile extends React.Component {
+export default class ActivityStream extends React.Component {
   constructor() {
     super();
     this.state = {
-      accountActions: null,
-      user: null
+      accountActions: [],
+      filter: false,
+      model: {},
+      user: {}
     };
   }
 
   componentWillMount() {
     const { userId } = FlowRouter.current().params;
-    accountActionsQuery
-      .clone({
-        filters: {
-          userId
-        }
-      })
-      .fetch((err, accountActions) => {
-        if (!err) {
-          this.setState({
-            accountActions
-          });
-        }
-      });
+    const actionTypes = [];
+    this.getActions();
+    typeList.map(type => {
+      actionTypes.push({ label: type, value: type });
+    });
 
     userListQuery
       .clone({
@@ -45,16 +42,34 @@ export default class UserProfile extends React.Component {
           });
         }
       });
+
+    this.setState({ actionTypes });
   }
+
+  componentWillReceiveProps(props) {
+    this.getActions();
+  }
+
+  getActions = () => {
+    const { userId } = FlowRouter.current().params;
+    const params = UserService.getActionsQueryParams(userId);
+    accountActionsQuery.clone(params).fetch((err, accountActions) => {
+      if (!err) {
+        this.setState({
+          accountActions
+        });
+      }
+    });
+  };
 
   getTimelineIcon = type => {
     switch (type) {
       case actionTypesEnum.USER_ACTION:
-        return <i className="icon-thumb-tack text-blue" />;
+        return <i className="icon-thumb-tack" />;
       case actionTypesEnum.SYSTEM_ACTION:
         return <i className="icon-alert" />;
       case actionTypesEnum.COMMENT:
-        return <i className="icon-comments-o text-dark-grey" />;
+        return <i className="icon-comments-o" />;
       case actionTypesEnum.LETTER:
         return <i className="icon-inbox" />;
       case actionTypesEnum.FLAG:
@@ -75,7 +90,8 @@ export default class UserProfile extends React.Component {
       isOpen,
       flagResponse,
       isFlagApproved,
-      manager
+      manager,
+      account
     } = data;
 
     switch (type) {
@@ -89,8 +105,19 @@ export default class UserProfile extends React.Component {
                     {user.profile.firstName} {user.profile.lastName}
                   </b>
                 )}{" "}
-                applied action <b>{action.title}</b> to account with Account
-                Number <b>{acctNum}</b>
+                applied action <b>{action.title}</b> to account with account
+                number{" "}
+                {account && (
+                  <a
+                    className="text-blue"
+                    href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                      account._id
+                    }`}
+                  >
+                    {" "}
+                    {account.acctNum}
+                  </a>
+                )}
               </div>
             )}
             {reasonCode && <div>Reason Code: {reasonCode}</div>}
@@ -101,8 +128,8 @@ export default class UserProfile extends React.Component {
           <div>
             {action && (
               <div>
-                Applied action <b>{action.title}</b> to account with Account
-                Number <b>{acctNum}</b>
+                Applied action <b>{action.title}</b> to account with account
+                number <b>{acctNum}</b>
               </div>
             )}
           </div>
@@ -115,8 +142,18 @@ export default class UserProfile extends React.Component {
                 {user.profile.firstName} {user.profile.lastName}
               </b>
             )}{" "}
-            commented a comment <b>{content}</b> to account with Account Number{" "}
-            <b>{acctNum}</b>
+            commented a comment <b>{content}</b> to account with account number{" "}
+            {account && (
+              <a
+                className="text-blue"
+                href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                  account._id
+                }`}
+              >
+                {" "}
+                {account.acctNum}
+              </a>
+            )}
           </div>
         );
       case actionTypesEnum.LETTER:
@@ -131,7 +168,17 @@ export default class UserProfile extends React.Component {
                 )}{" "}
                 send a letter with letter-template name{" "}
                 <b>{letterTemplate.name}</b> to account with account number{" "}
-                <b>{acctNum}</b>
+                {account && (
+                  <a
+                    className="text-blue"
+                    href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                      account._id
+                    }`}
+                  >
+                    {" "}
+                    {account.acctNum}
+                  </a>
+                )}
               </div>
             )}
           </div>
@@ -144,7 +191,18 @@ export default class UserProfile extends React.Component {
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
                 </b>{" "}
-                flagged an action on account <b>{acctNum}</b>.
+                flagged an action on account with account number{" "}
+                {account && (
+                  <a
+                    className="text-blue"
+                    href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                      account._id
+                    }`}
+                  >
+                    {" "}
+                    {account.acctNum}
+                  </a>
+                )}
                 {!isOpen && (
                   <div>
                     <br />
@@ -165,7 +223,18 @@ export default class UserProfile extends React.Component {
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
                 </b>{" "}
-                flagged a comment on account <b>{acctNum}</b>.
+                flagged a comment on account with account number{" "}
+                {account && (
+                  <a
+                    className="text-blue"
+                    href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                      account._id
+                    }`}
+                  >
+                    {" "}
+                    {account.acctNum}
+                  </a>
+                )}
                 {!isOpen && (
                   <div>
                     <br />
@@ -189,8 +258,24 @@ export default class UserProfile extends React.Component {
     }
   };
 
+  manageFilterBar = () => {
+    const { filter } = this.state;
+    this.setState({
+      filter: !filter
+    });
+  };
+
+  onSubmit = params => {
+    const { model } = this.state;
+    if ("type" in params) {
+      FlowRouter.setQueryParams({ type: params.type });
+      model.type = params.type;
+    }
+    this.setState({ model });
+  };
+
   render() {
-    const { accountActions, user } = this.state;
+    const { accountActions, user, filter, model, actionTypes } = this.state;
 
     if (!user) {
       return <div />;
@@ -198,40 +283,43 @@ export default class UserProfile extends React.Component {
 
     return (
       <div className="cc-container settings-container">
-        <div style={{ width: "100%" }} className="main-content action-content">
-          <div className="main-content__wrapper">
-            <div className="intro-block text-center">
-              <div className="intro-block__wrapper">
-                <i className="icon-user" />
-                <div className="text-light-grey">User name</div>
-                {/* <MyAvatar user={user}/> */}
-                <div className="action-name">
-                  {user.profile
-                    ? user.profile.firstName + " " + user.profile.lastName
-                    : "No username"}
-                </div>
-              </div>
-            </div>
-            <div
-              style={{ display: "table", margin: "0 auto" }}
-              className="info-block"
-            >
-              <div className="text-block">
-                <div className="text-light-grey text-label">Email</div>
-                <div className="status">
-                  {user.emails && user.emails[0].address}
-                </div>
-              </div>
-              <div className="text-block">
-                <div className="text-light-grey text-label">Phone number</div>
-                <p>
-                  {user.profile ? user.profile.phoneNumber : "No Phone Number"}
-                </p>
+        <div style={{ width: "200%", overflowY: "scroll" }}>
+          <div className="header__block">
+            <div className="actions_filter__bar">
+              <div
+                className={filter ? "filter-block active" : "filter-block"}
+                onClick={this.manageFilterBar}
+              >
+                <button>
+                  <i className="icon-filter" />
+                </button>
               </div>
             </div>
           </div>
-        </div>
-        <div style={{ height: "95%", width: "200%", overflowY: "scroll" }}>
+          {filter && (
+            <AutoForm
+              autosave
+              autosaveDelay={500}
+              ref="filters"
+              onSubmit={this.onSubmit}
+              schema={schema}
+              model={model}
+            >
+              <div className="filter-bar">
+                <div className="select-wrapper">
+                  <div className="flex--helper form-group__pseudo">
+                    <div className="select-form">
+                      <SelectField
+                        labelHidden={true}
+                        name="type"
+                        options={actionTypes}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AutoForm>
+          )}
           <Timeline>
             {accountActions &&
               accountActions.map((actionPerformed, index) => {
@@ -239,6 +327,7 @@ export default class UserProfile extends React.Component {
                 return (
                   <TimelineEvent
                     key={index}
+                    title=""
                     createdAt={moment(createdAt).format(
                       "MMMM Do YYYY, hh:mm a"
                     )}
@@ -254,3 +343,11 @@ export default class UserProfile extends React.Component {
     );
   }
 }
+
+const schema = new SimpleSchema({
+  type: {
+    type: String,
+    optional: true,
+    label: "Search by Action type"
+  }
+});

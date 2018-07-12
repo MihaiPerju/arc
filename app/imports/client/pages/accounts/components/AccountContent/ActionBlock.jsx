@@ -180,7 +180,7 @@ export default class ActionBlock extends Component {
                                 <a
                                   href={`/${
                                     actionPerformed.user._id
-                                  }/user-profile`}
+                                  }/activity`}
                                 >
                                   {actionPerformed.user.profile.firstName +
                                     " " +

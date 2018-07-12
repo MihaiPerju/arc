@@ -150,7 +150,7 @@ export default class CommentSingle extends React.Component {
               Roles.userIsInRole(userId, roleGroups.ADMIN_TECH_MANAGER)) ||
             (isRep && userId === user._id)
               ? user && (
-                  <a href={`/${user._id}/user-profile`}>
+                  <a href={`/${user._id}/activity`}>
                     {user.profile.firstName + " " + user.profile.lastName}
                   </a>
                 )

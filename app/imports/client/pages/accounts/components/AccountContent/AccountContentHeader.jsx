@@ -52,7 +52,7 @@ export default class AccountContentHeader extends Component {
       ) {
         return (
           <div className="label label--grey">
-            <a href={`/${account.assigneeId}/user-profile`}>
+            <a href={`/${account.assigneeId}/activity`}>
               {profile.firstName + " " + profile.lastName}
             </a>
           </div>
