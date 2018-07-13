@@ -40,7 +40,7 @@ class Header extends Component {
   state = { activeItem: "Dashboard" };
 
   render() {
-    const user = this.props.user;
+    const user = Meteor.user();
 
     let routes = [
       { name: "/dashboard", label: "Home" },
@@ -82,8 +82,7 @@ class Header extends Component {
       routes = routes.concat(managerRoutes);
     }
 
-    const currentUserId = Meteor.userId();
-    const isRep = Roles.userIsInRole(user._id, RolesEnum.REP);
+    const isRep = user && Roles.userIsInRole(user._id, RolesEnum.REP);
 
     return (
       <div>
@@ -108,12 +107,7 @@ class Header extends Component {
                 ref={this.nodeRef}
               >
                 <div className="owner-menu">
-                  {(isRep &&
-                    Roles.userIsInRole(
-                      currentUserId,
-                      roleGroups.ADMIN_TECH_MANAGER
-                    )) ||
-                  (isRep && currentUserId === user._id)
+                  {(isRep)
                     ? user.profile && (
                         <a href={`/${user._id}/activity`}>
                           <span>
