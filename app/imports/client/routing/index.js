@@ -7,6 +7,7 @@ import Home from '/imports/client/pages/home/Home';
 
 //User
 import MyProfile from '/imports/client/pages/users/MyProfile';
+import UserProfile from '/imports/client/pages/users/UserProfile';
 import ChangePassword from '/imports/client/pages/users/ChangePassword';
 import ForgotPassword from '/imports/client/pages/users/ForgotPassword';
 import ResetPassword from '/imports/client/pages/users/ResetPassword.jsx';
@@ -24,6 +25,7 @@ route('/', Login, {}, {
 route('/my-profile', MyProfile, {}, {
     name: 'profile',
 });
+route('/:userId/user-profile', UserProfile);
 route('/password/change', ChangePassword, {}, {
     name: 'password.change',
 
@@ -42,7 +44,9 @@ route('/dashboard', Dashboard);
 import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx';
 import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
 import EditUser from '/imports/client/pages/admin/EditUser.jsx';
+import Settings from "/imports/client/pages/admin/Settings";
 
+route("/admin/settings",Settings);
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
 route('/admin/user/:userId/edit', EditUser);

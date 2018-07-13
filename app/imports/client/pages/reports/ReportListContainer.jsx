@@ -176,6 +176,7 @@ class ReportListContainer extends Pager {
             deleteAction={this.deleteAction}
             closeRightPanel={this.closeRightPanel}
             hideSort
+            hideFilter
           />
           <ReportList
             class={this.state.filter ? "task-list decreased" : "task-list"}

@@ -681,6 +681,17 @@
     opacity: 0;
     transition: opacity $transition300;
     border-radius: 3px;
+    .action-form {
+      width: 65%;
+      
+      > form .select-group {
+        padding-top: 0;
+        &:before {
+          top: 13px;
+        }
+      }
+    }
+
     &.in {
       opacity: 1;
     }
@@ -1251,6 +1262,35 @@
   input:checked + label {
     &:after {
       color: #f5222d;
+    }
+  }
+}
+
+.pdf-preview {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.pdf-container {
+  .block-item {
+    flex-wrap: wrap;
+  }
+
+  .info {
+    width: 70%;
+
+    .title {
+      padding-bottom: 12px;
+      width: 100%;
+    }
+  }
+
+  .btn-group {
+    width: 30%;
+    justify-content: flex-end;
+
+    button {
+      padding: 12px;
     }
   }
 }

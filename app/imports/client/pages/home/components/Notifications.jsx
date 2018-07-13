@@ -5,6 +5,7 @@ import NotificationTypeEnum from "/imports/api/notifications/enums/notificationT
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import { notificationColors } from "/imports/api/notifications/enums/notificationTypes";
+import flagTypesEnum from "/imports/api/accounts/enums/flagTypesEnum";
 
 class NotificationListContainer extends React.Component {
   constructor() {
@@ -20,20 +21,69 @@ class NotificationListContainer extends React.Component {
   }
 
   getMessage = notification => {
-    notification;
-    if (notification.metaData && notification.metaData.acctNum) {
+    const { metaData, type } = notification;
+    console.log("metaData", metaData)
+    if (
+      metaData &&
+      metaData.acctNum &&
+      type === NotificationTypeEnum.RESPONSE
+    ) {
       return (
-        "Manager responded to account with Account Number " +
-        notification.metaData.acctNum
+        "Manager responded to account with Account Number " + metaData.acctNum
       );
-    } else if (notification.metaData && notification.metaData.name) {
+    } else if (
+      metaData &&
+      metaData.name &&
+      type === NotificationTypeEnum.REPORT
+    ) {
+      console.log("aditya")
       return (
         <div>
-          Report:{" "}
-          <a href={`reports/list?reportId=${notification.metaData.reportId}`}>
-            {notification.metaData.name}
-          </a>{" "}
+          Report: 
+          <a href={`reports/list?reportId=${metaData.reportId}`}>
+            {metaData.name}
+          </a> 
           has been completed
+        </div>
+      );
+    } else if (
+      metaData &&
+      metaData.acctNum &&
+      type === NotificationTypeEnum.FLAG
+    ) {
+      return (
+        <div>
+          <span>
+            User flagged 
+            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"} 
+            {metaData.flagType} on account with Account number
+          </span>
+          <a
+            className="text-blue"
+            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
+              metaData.accountId
+            }`}
+          >
+            {metaData.acctNum}
+          </a>
+        </div>
+      );
+    } else if (
+      metaData &&
+      metaData.acctNum &&
+      type === NotificationTypeEnum.COMMENT
+    ) {
+      return (
+        <div>
+          <span>Note left by manager on account with Account number</span>
+          <a
+            className="text-blue"
+            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
+              metaData.accountId
+            }`}
+          >
+            {metaData.acctNum}
+          </a>
         </div>
       );
     }
@@ -54,8 +104,8 @@ class NotificationListContainer extends React.Component {
       <div className="notification-list flex--helper flex-align--start">
         {data.map((notification, index) => (
           //To apply specific colors using enum from ...path/to/enum.js
-          <div className="notification-item">
-            <div key={index} className="notification-item__wrapper">
+          <div key={index} className="notification-item">
+            <div className="notification-item__wrapper">
               <div className="notification-item__title text-light-grey">
                 {this.getMessage(notification)}
               </div>

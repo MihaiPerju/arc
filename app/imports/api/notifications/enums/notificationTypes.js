@@ -4,7 +4,9 @@ export default {
   REPORT: "report",
   ACCESS: "access",
   GLOBAL: "global",
-  RESPONSE: "response"
+  RESPONSE: "response",
+  FLAG: "flag",
+  COMMENT: "comment"
 };
 
 
@@ -14,5 +16,7 @@ export const notificationColors = {
   REPORT: "green",
   ACCESS: "yellow",
   GLOBAL: "black",
-  RESPONSE: "purple"
+  RESPONSE: "purple",
+  FLAG: "orange",
+  COMMENT: "grey"
 }

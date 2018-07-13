@@ -8,6 +8,7 @@ export default AccountActions.createQuery("accountActionList", {
   $paginate: true,
   content: 1,
   createdAt: 1,
+  type:1,
   user: {
     profile: {
       firstName: 1,
@@ -17,5 +18,10 @@ export default AccountActions.createQuery("accountActionList", {
       path: 1,
       _id: 1
     }
-  }
+  },
+  action: {
+    title:1,
+    description:1
+  },
+  correctComment: 1
 });

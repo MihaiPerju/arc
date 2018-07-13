@@ -19,7 +19,7 @@ export default class RouteService {
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
                 {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
                 {name: "action/list", label: "Actions", icon: 'thumb-tack'},
-                {name: "substate/list", label: "Substates", icon: 'thumb-tack'}
+                {name: "substate/list", label: "Substates", icon: 'tasks'}
             ];
         } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
             return [
@@ -51,7 +51,6 @@ export default class RouteService {
                 {name: "client/list", label: "Clients", icon: 'users'},
                 {name: "admin/user/list", label: "User management", icon: 'user-circle-o'},
                 {name: "reports/list", label: "Reports", icon: 'file-text-o'},
-                {name: "letter-templates/list", label: "Templates", icon: 'window-restore'},
                 {name: "action/list", label: "Actions", icon: 'thumb-tack'},
                 {name: "tag/list", label: "Tags", icon: 'tags'}
             ];

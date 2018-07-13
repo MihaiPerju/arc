@@ -83,7 +83,8 @@ export default class ReportSearchBar extends Component {
       dropdownOptions,
       icons,
       getProperAccounts,
-      hideSort
+      hideSort,
+      hideFilter
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -140,11 +141,13 @@ export default class ReportSearchBar extends Component {
               </div>
             </div>
 
-            <div className="filter-block">
-              <button>
-                <i className="icon-filter" />
-              </button>
-            </div>
+             {!hideFilter && (
+              <div className="filter-block">
+                <button>
+                  <i className="icon-filter" />
+                </button>
+              </div>
+            )}
             <button
               style={{ background: "orange", padding: "0" }}
               onClick={this.openDialog.bind(this)}

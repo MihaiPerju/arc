@@ -11,6 +11,7 @@ import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
 import userListQuery from "/imports/api/users/queries/listUsers.js";
+import FilterService from "/imports/client/lib/FilterService";
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -93,12 +94,18 @@ export default class AccountSearchBar extends Component {
   }
 
   onSubmit(params) {
+    const {
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      admitDateMin,
+      admitDateMax
+    } = this.state;
     if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
     }
-    if ("acctNum" in params) {
-      FlowRouter.setQueryParams({ acctNum: params.acctNum });
-    }
+
     if ("tickleUserId" in params) {
       FlowRouter.setQueryParams({ tickleUserId: params.tickleUserId });
     }
@@ -135,6 +142,30 @@ export default class AccountSearchBar extends Component {
     if ("activeInsCode" in params) {
       FlowRouter.setQueryParams({ activeInsCode: params.activeInsCode });
     }
+
+    FlowRouter.setQueryParams({
+      dischrgDateMin: FilterService.formatDate(dischrgDateMin)
+    });
+
+    FlowRouter.setQueryParams({
+      dischrgDateMax: FilterService.formatDate(dischrgDateMax)
+    });
+
+    FlowRouter.setQueryParams({
+      fbDateMin: FilterService.formatDate(fbDateMin)
+    });
+
+    FlowRouter.setQueryParams({
+      fbDateMax: FilterService.formatDate(fbDateMax)
+    });
+
+    FlowRouter.setQueryParams({
+      admitDateMin: FilterService.formatDate(admitDateMin)
+    });
+
+    FlowRouter.setQueryParams({
+      admitDateMax: FilterService.formatDate(admitDateMax)
+    });
   }
 
   openDropdown = () => {
@@ -161,44 +192,34 @@ export default class AccountSearchBar extends Component {
   };
 
   onDateSelect = (selectedDate, field) => {
-    const date = selectedDate ? new Date(selectedDate).toString() : "";
     if (field === "dischrgDateMin") {
       this.setState({ dischrgDateMin: selectedDate });
-      FlowRouter.setQueryParams({ dischrgDateMin: date });
     } else if (field === "dischrgDateMax") {
       const { dischrgDateMin } = this.state;
-      if (selectedDate < dischrgDateMin) {
+      if (selectedDate && selectedDate < dischrgDateMin) {
         Notifier.error(
           "Maximum date should be greater or equal to minimum date"
         );
-      } else {
-        FlowRouter.setQueryParams({ dischrgDateMax: date });
       }
       this.setState({ dischrgDateMax: selectedDate });
     } else if (field === "fbDateMin") {
       this.setState({ fbDateMin: selectedDate });
-      FlowRouter.setQueryParams({ fbDateMin: date });
     } else if (field === "fbDateMax") {
       const { fbDateMin } = this.state;
-      if (selectedDate < fbDateMin) {
+      if (selectedDate && selectedDate < fbDateMin) {
         Notifier.error(
           "Maximum date should be greater or equal to minimum date"
         );
-      } else {
-        FlowRouter.setQueryParams({ fbDateMax: date });
       }
       this.setState({ fbDateMax: selectedDate });
     } else if (field === "admitDateMin") {
       this.setState({ admitDateMin: selectedDate });
-      FlowRouter.setQueryParams({ admitDateMin: date });
     } else if (field === "admitDateMax") {
       const { admitDateMin } = this.state;
-      if (selectedDate < admitDateMin) {
+      if (selectedDate && selectedDate < admitDateMin) {
         Notifier.error(
           "Maximum date should be greater or equal to minimum date"
         );
-      } else {
-        FlowRouter.setQueryParams({ admitDateMax: date });
       }
       this.setState({ admitDateMax: selectedDate });
     }
@@ -237,7 +258,8 @@ export default class AccountSearchBar extends Component {
     return classNames(classes);
   };
 
-  openDialog = () => {
+  openDialog = e => {
+    e.preventDefault();
     this.setState({
       dialogIsActive: true
     });
@@ -247,6 +269,18 @@ export default class AccountSearchBar extends Component {
     this.setState({
       dialogIsActive: false
     });
+  };
+
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+
+  onChange = (field, value) => {
+    if (field === "acctNum") {
+      FlowRouter.setQueryParams({ acctNum: value });
+    }
   };
 
   render() {
@@ -304,11 +338,10 @@ export default class AccountSearchBar extends Component {
 
     return (
       <AutoForm
-        autosave
-        autosaveDelay={500}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
+        onChange={this.onChange}
       >
         <div className="search-bar">
           <div className={classes} ref={this.nodeRef}>
@@ -344,13 +377,13 @@ export default class AccountSearchBar extends Component {
             </div>
 
             <div className="filter-block">
-              <button onClick={this.openDialog}>
+              <button onClick={this.openDialog.bind(this)}>
                 <i className="icon-filter" />
                 {dialogIsActive && (
                   <Dialog
                     className="account-dialog filter-dialog"
                     closePortal={this.closeDialog}
-                    title="Filter by:"
+                    title="Filter by"
                   >
                     <button className="close-dialog" onClick={this.closeDialog}>
                       <i className="icon-close" />
@@ -363,7 +396,7 @@ export default class AccountSearchBar extends Component {
                         ) && (
                           <div className="select-form">
                             <SelectField
-                              labelHidden={true}
+                              label="Tickle:"
                               name="tickleUserId"
                               options={tickleUserIdOptions}
                             />
@@ -372,7 +405,7 @@ export default class AccountSearchBar extends Component {
 
                         <div className="select-form">
                           <SelectField
-                            labelHidden={true}
+                            label="Client:"
                             placeholder="Select Client"
                             name="clientId"
                             options={clientOptions}
@@ -380,7 +413,7 @@ export default class AccountSearchBar extends Component {
                         </div>
                         <div className="select-form">
                           <SelectField
-                            labelHidden={true}
+                            label="Facility:"
                             name="facilityId"
                             placeholder="Select Facility"
                             options={facilityOptions}
@@ -388,96 +421,115 @@ export default class AccountSearchBar extends Component {
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Facility code:"
                             name="facCode"
                             placeholder="Search by Facility Code"
                           />
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Patient Type:"
                             name="ptType"
                             placeholder="Search by Patient Type"
                           />
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
-                            labelHidden={true}
+                            label="Minimum Account Balance:"
                             name="acctBalMin"
                             placeholder="Minimum Account Balance"
                           />
                           <AutoField
-                            labelHidden={true}
+                            label="Maximum Account Balance:"
                             name="acctBalMax"
                             placeholder="Maximum Account Balance"
                           />
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
-                          <DatePicker
-                            placeholderText="From Discharge Date"
-                            selected={dischrgDateMin}
-                            onChange={date =>
-                              this.onDateSelect(date, "dischrgDateMin")
-                            }
-                          />
-                          <DatePicker
-                            placeholderText="To Discharge Date"
-                            selected={dischrgDateMax}
-                            onChange={date =>
-                              this.onDateSelect(date, "dischrgDateMax")
-                            }
-                          />
+                          <div>
+                            <label>From Discharge Date:</label>
+                            <DatePicker
+                              placeholderText="From Discharge Date"
+                              selected={dischrgDateMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "dischrgDateMin")
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label>From Discharge Date:</label>
+                            <DatePicker
+                              placeholderText="To Discharge Date"
+                              selected={dischrgDateMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "dischrgDateMax")
+                              }
+                            />
+                          </div>
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
-                          <DatePicker
-                            placeholderText="From Last Bill Date"
-                            selected={fbDateMin}
-                            onChange={date =>
-                              this.onDateSelect(date, "fbDateMin")
-                            }
-                          />
-                          <DatePicker
-                            placeholderText="To Last Bill Date"
-                            selected={fbDateMax}
-                            onChange={date =>
-                              this.onDateSelect(date, "fbDateMax")
-                            }
-                          />
+                          <div>
+                            <label>From Last Bill Date:</label>
+                            <DatePicker
+                              placeholderText="From Last Bill Date"
+                              selected={fbDateMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "fbDateMin")
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label>To Last Bill Date:</label>
+                            <DatePicker
+                              placeholderText="To Last Bill Date"
+                              selected={fbDateMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "fbDateMax")
+                              }
+                            />
+                          </div>
+
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
-                          <DatePicker
-                            placeholderText="From Admit Date"
-                            selected={admitDateMin}
-                            onChange={date =>
-                              this.onDateSelect(date, "admitDateMin")
-                            }
-                          />
-                          <DatePicker
-                            placeholderText="To Admit Date"
-                            selected={admitDateMax}
-                            onChange={date =>
-                              this.onDateSelect(date, "admitDateMax")
-                            }
-                          />
+                          <div>
+                            <label>From Admit Date:</label>
+                            <DatePicker
+                              placeholderText="From Admit Date"
+                              selected={admitDateMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "admitDateMin")
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label>To Admit Date:</label>
+                            <DatePicker
+                              placeholderText="To Admit Date"
+                              selected={admitDateMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "admitDateMax")
+                              }
+                            />
+                          </div>
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Financial Class:"
                             name="finClass"
                             placeholder="Search by Financial Class"
                           />
                         </div>
                         <div className="select-form">
                           <SelectField
+                            label="Substate:"
                             placeholder="Substate"
-                            labelHidden={true}
                             options={substates}
                             name="substate"
                           />
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Active Insurance Code:"
                             name="activeInsCode"
                             placeholder="Search by active Insurance Code"
                           />
@@ -485,7 +537,7 @@ export default class AccountSearchBar extends Component {
                         <div className="flex--helper flex-justify--end">
                           <button
                             className="btn--blue"
-                            onClick={this.closeDialog}
+                            onClick={this.addFilters}
                           >
                             Done
                           </button>

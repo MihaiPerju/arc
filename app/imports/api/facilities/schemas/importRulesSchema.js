@@ -82,5 +82,13 @@ export default new SimpleSchema({
     "insurances.$.zip": {
         type: String,
         optional: true
-    }
+    },
+    other1: {
+        type: SimpleSchema.oneOf(Number, Date, String),
+        optional: true
+      },
+      other2: {
+        type: SimpleSchema.oneOf(Number, Date, String),
+        optional: true
+      }
 });
