@@ -1,62 +1,68 @@
 export default {
   acctNum: {
-    label:"Account Number"
+    label: "Account Number"
   },
   facCode: {
-    label:"Facility Code"
+    label: "Facility Code"
   },
   ptType: {
-    label:"Patient Type"
+    label: "Patient Type"
   },
   ptName: {
-    label:"Patient Name"
+    label: "Patient Name"
   },
   dischrgDate: {
-    label:"Discharge Date"
+    label: "Discharge Date"
   },
   fbDate: {
-    label:"Last Bill Date"
+    label: "Last Bill Date"
   },
   acctBal: {
-    label:"Account Balance"
+    label: "Account Balance"
   },
   finClass: {
-    label:"Financial Class"
+    label: "Financial Class"
   },
   admitDate: {
-    label:"Admit Date"
+    label: "Admit Date"
   },
   medNo: {
-    label:"Medical Number"
+    label: "Medical Number"
   },
   zip: {
-    label:"Zip"
+    label: "Zip"
   },
   insName: {
-    label:"Insurance Name"
+    label: "Insurance Name"
   },
   insCode: {
-    label:"Insurance Code"
+    label: "Insurance Code"
   },
   insBal: {
-    label:"Insurance Balance"
+    label: "Insurance Balance"
   },
   address1: {
-    label:"Address 1"
+    label: "Address 1"
   },
   address2: {
-    label:"Address 2"
+    label: "Address 2"
   },
   city: {
-    label:"City"
+    label: "City"
   },
   state: {
-    label:"State"
+    label: "State"
   },
   policy: {
-    label:"Policy"
+    label: "Policy"
   },
   phone: {
-    label:"Phone"
+    label: "Phone"
+  },
+  substate: {
+    label: "Substates"
+  },
+  activeInsCode: {
+    label: "Active Insurance Code"
   }
 };
