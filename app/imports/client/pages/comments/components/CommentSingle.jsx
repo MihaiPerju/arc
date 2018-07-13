@@ -136,6 +136,11 @@ export default class CommentSingle extends React.Component {
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
     const isRep = Roles.userIsInRole(user._id, RolesEnum.REP);
+    const commentClasses = classNames({
+      "message": true,
+      "text-light-grey": !comment.correctComment,
+      "text-blue": comment.correctComment
+    });
 
     return (
       <div className="comment-item flex--helper flex--column">
@@ -170,7 +175,7 @@ export default class CommentSingle extends React.Component {
             </div>
           )}
         </div>
-        <div className="message text-light-grey">{comment.content}</div>
+        <div className={commentClasses}>{comment.content}</div>
         {dialogIsActive && (
           <Dialog
             className={dialogClasses}

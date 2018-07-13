@@ -11,7 +11,6 @@ import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
-import Files from "/imports/api/files/collection";
 import Backup from "/imports/api/backup/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import Actions from "../../actions/collection";
@@ -235,23 +234,9 @@ Meteor.methods({
     ]);
   },
 
-  "account.comment.add"({ content, accountId }) {
-    const commentData = {
-      userId: this.userId,
-      type: actionTypesEnum.COMMENT,
-      content,
-      createdAt: new Date(),
-      accountId
-    };
-    const accountActionId = AccountActions.insert(commentData);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $push: {
-          commentIds: accountActionId
-        }
-      }
-    );
+  "account.comment.add"(data) {
+    data.userId = this.userId
+    ActionService.addComment(data);
   },
 
   "account.update"(_id, data) {
@@ -263,11 +248,4 @@ Meteor.methods({
     );
   },
 
-  //Testing purpose only, delete in production
-  reset() {
-    Accounts.remove({});
-    AccountActions.remove({});
-    Files.remove({});
-    Backup.remove({});
-  }
 });

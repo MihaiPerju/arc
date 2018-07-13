@@ -42,5 +42,6 @@ export default AccountActions.createQuery("accountActionList", {
   content: 1,
   user: {
     profile: 1
-  }
+  },
+  correctComment: 1
 });

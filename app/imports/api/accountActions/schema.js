@@ -80,5 +80,9 @@ export default new SimpleSchema({
   fileName: {
     type: String,
     optional: true
+  },
+  correctComment: {
+    type: Boolean,
+    defaultValue: false
   }
 });
