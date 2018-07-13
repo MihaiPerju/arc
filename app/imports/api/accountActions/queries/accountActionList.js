@@ -22,5 +22,6 @@ export default AccountActions.createQuery("accountActionList", {
   action: {
     title:1,
     description:1
-  }
+  },
+  correctComment: 1
 });
