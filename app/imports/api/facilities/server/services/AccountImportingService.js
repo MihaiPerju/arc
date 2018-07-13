@@ -272,9 +272,11 @@ export default class AccountService {
         return parsed;
       }
       return value;
-    } else {
-      return value;
     }
+    if (rule === "ptName") {
+      return value ? value.replace(/,/g, ", ") : null;
+    }
+    return value;
   }
 
   static convertImportRules(rules, header) {
