@@ -24,12 +24,14 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   }
 
   componentWillMount() {
-    const { account } = this.props;
+    const { account, onChange } = this.props;
     if (account.selectedAttachmentIds) {
       // update
       account.selectedAttachmentIds.forEach(id => {
         this.onSelectAttachment(id);
       });
+    } else {
+      onChange(account);
     }
   }
 
@@ -88,7 +90,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
       templateKeywords.forEach((keyword, index) => {
         if (variablesEnum[keyword]) {
           fields.push(
-            <div className="form-group">
+            <div key={index} className="form-group">
               <AutoField
                 key={index}
                 name={variablesEnum[keyword].field}
@@ -98,7 +100,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
           );
         } else {
           fields.push(
-            <div className="form-group">
+            <div key={index} className="form-group">
               <AutoField key={index} name={keyword} placeholder={keyword} />
             </div>
           );
