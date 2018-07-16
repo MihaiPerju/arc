@@ -305,6 +305,28 @@
   .btn-group {
     display: flex;
     justify-content: space-between;
+
+    &__footer {
+      margin-top: 20px;
+    }
+  }
+}
+
+.edit-info__dialog {
+  .form-wrapper {
+    margin-bottom: 0;
+  }
+
+  .input-datetime {
+    padding-bottom: 0;
+  }
+
+  .close-dialog {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.8rem;
+    padding: 9px 25px;
   }
 }
 
@@ -681,6 +703,17 @@
     opacity: 0;
     transition: opacity $transition300;
     border-radius: 3px;
+    .action-form {
+      width: 65%;
+      
+      > form .select-group {
+        padding-top: 0;
+        &:before {
+          top: 13px;
+        }
+      }
+    }
+
     &.in {
       opacity: 1;
     }
@@ -1277,5 +1310,34 @@
     color: $color-white;
     padding: 0;
     opacity: 0;
+  }
+}
+
+.pdf-preview {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.pdf-container {
+  .block-item {
+    flex-wrap: wrap;
+  }
+
+  .info {
+    width: 70%;
+
+    .title {
+      padding-bottom: 12px;
+      width: 100%;
+    }
+  }
+
+  .btn-group {
+    width: 30%;
+    justify-content: flex-end;
+
+    button {
+      padding: 12px;
+    }
   }
 }

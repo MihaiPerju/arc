@@ -2,7 +2,7 @@ import ActionService from "./services/ActionService.js";
 import Accounts from "../collection";
 import AccountSecurity from "./../security";
 import Security from "/imports/api/security/security";
-import { roleGroups } from "/imports/api/users/enums/roles";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import StateEnum from "/imports/api/accounts/enums/states";
 import TimeService from "./services/TimeService";
 import moment from "moment";
@@ -11,7 +11,6 @@ import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
-import Files from "/imports/api/files/collection";
 import Backup from "/imports/api/backup/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import Actions from "../../actions/collection";
@@ -214,15 +213,12 @@ Meteor.methods({
   },
 
   "account.escalate"({ reason, accountId }) {
-    const escalationId = EscalationService.createEscalation(
-      reason,
-      this.userId
-    );
+    EscalationService.createEscalation(reason, this.userId, accountId);
     Accounts.update(
       { _id: accountId },
       {
         $set: {
-          escalationId
+          employeeToRespond: RolesEnum.MANAGER
         }
       }
     );
@@ -238,23 +234,9 @@ Meteor.methods({
     ]);
   },
 
-  "account.comment.add"({ content, accountId }) {
-    const commentData = {
-      userId: this.userId,
-      type: actionTypesEnum.COMMENT,
-      content,
-      createdAt: new Date(),
-      accountId
-    };
-    const accountActionId = AccountActions.insert(commentData);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $push: {
-          commentIds: accountActionId
-        }
-      }
-    );
+  "account.comment.add"(data) {
+    data.userId = this.userId
+    ActionService.addComment(data);
   },
 
   "account.update"(_id, data) {
@@ -266,11 +248,4 @@ Meteor.methods({
     );
   },
 
-  //Testing purpose only, delete in production
-  reset() {
-    Accounts.remove({});
-    AccountActions.remove({});
-    Files.remove({});
-    Backup.remove({});
-  }
 });

@@ -4,25 +4,16 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import classNames from "classnames";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import { withQuery } from "meteor/cultofcoders:grapher-react";
+import query from "/imports/api/escalations/queries/escalationList";
 
-export default class EscalateReason extends Component {
+class EscalateReason extends Component {
   constructor() {
     super();
     this.state = {
       escalation: {},
       dialogIsActive: false
     };
-  }
-
-  componentWillMount() {
-    const { escalationId } = this.props;
-    Meteor.call("escalation.get", escalationId, (err, escalation) => {
-      if (!err) {
-        this.setState({ escalation });
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
   }
 
   onOpenDialog = () => {
@@ -38,35 +29,37 @@ export default class EscalateReason extends Component {
   };
 
   onRespond = content => {
-    const { escalationId, closeRightPanel, accountId } = this.props;
-    Meteor.call(
-      "escalation.addMessage",
-      content,
-      escalationId,
-      accountId,
-      err => {
-        if (!err) {
-          Notifier.success("Response sent!");
-          closeRightPanel();
-        } else {
-          Notifier.error(err.reason);
-        }
+    const { closeRightPanel, accountId } = this.props;
+    Meteor.call("escalation.addMessage", content, accountId, err => {
+      if (!err) {
+        Notifier.success("Response sent!");
+        closeRightPanel();
+      } else {
+        Notifier.error(err.reason);
       }
-    );
+    });
     this.onCloseDialog();
   };
 
   render() {
-    const { escalation2 } = this.props || null;
     const dialogClasses = classNames("account-dialog");
-    const { escalation, dialogIsActive } = this.state;
+    const { dialogIsActive } = this.state;
+    const { data, isLoading, error } = this.props;
+
+    if (isLoading) {
+      return <div>Loading</div>;
+    }
+
+    if (error) {
+      return <div>{error.reason}</div>;
+    }
     return (
       <div className="action-block">
         <div className="header__block">
           <div className="title-block text-uppercase">escalate reason</div>
         </div>
-        {escalation.messages &&
-          escalation.messages.map(message => {
+        {data.messages &&
+          data.messages.map(message => {
             return (
               <div className="main__block">
                 <div className="description-block">
@@ -121,3 +114,10 @@ const escalateSchema = new SimpleSchema({
     type: String
   }
 });
+
+export default withQuery(
+  props => {
+    return query.clone();
+  },
+  { reactive: true, single: true }
+)(EscalateReason);

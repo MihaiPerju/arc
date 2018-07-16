@@ -11,5 +11,9 @@ export default new SimpleSchema({
   managerId: {
     type: String,
     optional: true
+  },
+  clientId: {
+    type: String,
+    optional: true
   }
 });

@@ -70,6 +70,7 @@ export default class RegionSearchBar extends Component {
     const {
       options,
       btnGroup,
+      hideSort,
       deleteAction,
       dropdownOptions,
       icons,
@@ -78,6 +79,11 @@ export default class RegionSearchBar extends Component {
     const classes = classNames({
       "select-type": true,
       open: dropdown
+    });
+
+    const searchClasses = classNames("search-input", {
+      full__width: btnGroup,
+      sort__none: hideSort
     });
     const btnSelectClasses = classNames({
       "btn-select": true,
@@ -93,20 +99,22 @@ export default class RegionSearchBar extends Component {
         schema={schema}
       >
         <div className="search-bar">
-          <div className={classes} ref={this.nodeRef}>
-            <div className={btnSelectClasses} onClick={this.selectAll} />
-            <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
-              <i className="icon-angle-down" />
+          {!hideSort && (
+            <div className={classes} ref={this.nodeRef}>
+              <div className={btnSelectClasses} onClick={this.selectAll} />
+              <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
+                <i className="icon-angle-down" />
+              </div>
+              {dropdown && (
+                <Dropdown
+                  toggleDropdown={this.openDropdown}
+                  getProperAccounts={getProperAccounts}
+                  options={dropdownOptions}
+                />
+              )}
             </div>
-            {dropdown && (
-              <Dropdown
-                toggleDropdown={this.openDropdown}
-                getProperAccounts={getProperAccounts}
-                options={dropdownOptions}
-              />
-            )}
-          </div>
-          <div className="search-bar__wrapper">
+          )}
+          <div className="search-bar__wrapper flex--helper">
             {btnGroup ? (
               <BtnGroup
                 getProperAccounts={getProperAccounts}
@@ -114,9 +122,7 @@ export default class RegionSearchBar extends Component {
                 deleteAction={deleteAction}
               />
             ) : null}
-            <div
-              className={btnGroup ? "search-input" : "search-input full__width"}
-            >
+            <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
                   labelHidden={true}
@@ -179,8 +185,12 @@ class BtnGroup extends Component {
   render() {
     const { deleteAction, icons } = this.props;
     const { dialogIsActive } = this.state;
+    const btnClasses = classNames("btn-group flex--helper", {
+      in: this.state.in
+    });
+
     return (
-      <div className={this.state.in ? "btn-group in" : "btn-group"}>
+      <div className={btnClasses}>
         {icons ? (
           icons.map(element => {
             return (

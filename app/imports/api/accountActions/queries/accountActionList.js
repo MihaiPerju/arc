@@ -8,7 +8,7 @@ export default AccountActions.createQuery("accountActionList", {
   $paginate: true,
   content: 1,
   createdAt: 1,
-  type:1,
+  type: 1,
   user: {
     profile: {
       firstName: 1,
@@ -20,7 +20,28 @@ export default AccountActions.createQuery("accountActionList", {
     }
   },
   action: {
-    title:1,
-    description:1
-  }
+    title: 1,
+    description: 1
+  },
+  letterTemplate: {
+    name: 1
+  },
+  type: 1,
+  flagReason: 1,
+  flagResponse: 1,
+  createdAt: 1,
+  userId: 1,
+  managerId: 1,
+  manager: {
+    profile: 1
+  },
+  isFlagApproved: 1,
+  actionId: 1,
+  isOpen: 1,
+  commentId: 1,
+  content: 1,
+  user: {
+    profile: 1
+  },
+  correctComment: 1
 });

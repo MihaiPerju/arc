@@ -153,12 +153,12 @@ export default class PagerService {
           assigneeId: null,
           workQueue: null,
           tickleDate: null,
-          escalationId: null
+          employeeToRespond: null
         }
       });
     } else if (state === "tickles") {
       _.extend(params, {
-        filters: { tickleDate: { $exists: true }, escalationId: null }
+        filters: { tickleDate: { $exists: true }, employeeToRespond: null }
       });
       _.extend(params.options, {
         sort: {
@@ -174,13 +174,13 @@ export default class PagerService {
       _.extend(params, {
         filters: {
           tickleDate: null,
-          escalationId: { $exists: true }
+          employeeToRespond: { $exists: true }
         }
       });
     } else if (state && state !== "all") {
       state = stateEnum[state.toUpperCase()];
       _.extend(params, {
-        filters: { state, tickleDate: null, escalationId: null }
+        filters: { state, tickleDate: null, employeeToRespond: null }
       });
     } else {
       // state undefined
@@ -366,7 +366,8 @@ export default class PagerService {
       facilityName,
       regionName,
       createdAtMin,
-      createdAtMax;
+      createdAtMax,
+      letterIds;
 
     _.extend(params, {
       filters: {}
@@ -427,6 +428,10 @@ export default class PagerService {
       _.extend(params.filters, {
         clientId: FlowRouter.current().params.id
       });
+    }
+
+    if (currentPath.indexOf("letter-management/list") > -1) {
+      letterIds = FlowRouter.getQueryParam("letterIds");
     }
 
     // client search
@@ -514,9 +519,14 @@ export default class PagerService {
       _.extend(params.filters, {
         createdAt: {
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(moment(new Date(createdAtMax)).startOf("day"))
+          $lt: new Date(moment(new Date(createdAtMax)).add(1, "day").startOf("day"))
         }
       });
+    }
+
+    // letter-management search
+    if (letterIds) {
+      _.extend(params.filters, { _id: { $in: letterIds } });
     }
   }
 

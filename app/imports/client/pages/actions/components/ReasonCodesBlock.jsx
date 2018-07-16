@@ -1,9 +1,17 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import { AutoForm, ErrorField, AutoField } from "/imports/ui/forms";
+import {
+  AutoForm,
+  ErrorField,
+  AutoField,
+  SelectField
+} from "/imports/ui/forms";
+import SimpleSchema from "simpl-schema";
 import schema from "/imports/api/reasonCodes/schema";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/reasonCodes/queries/reasonCodesList";
+import clientsQuery from "/imports/api/clients/queries/listClients";
+import RolesEnum from "/imports/api/users/enums/roles.js";
 
 class ReasonCodesBlock extends Component {
   constructor() {
@@ -32,7 +40,9 @@ class ReasonCodesBlock extends Component {
     Meteor.call("reasonCode.delete", _id, err => {
       if (!err) {
         Notifier.success("Reason Code removed!");
-      } else Notifier.error(err.reason);
+      } else {
+        Notifier.error(err.reason);
+      }
     });
   };
 
@@ -56,12 +66,17 @@ class ReasonCodesBlock extends Component {
           </div>
         </div>
         <div className="main__block">
-          <div className="add-content" onClick={this.onAddReasonCode}>
-            <i className="icon-calendar-plus-o" />
-            <div className="text-center">
-              + Add {isPrivate && "Private"} Reason Code
+          {((isPrivate &&
+            Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) ||
+            (!isPrivate &&
+              !Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER))) && (
+            <div className="add-content" onClick={this.onAddReasonCode}>
+              <i className="icon-calendar-plus-o" />
+              <div className="text-center">
+                + Add {isPrivate && "Private"} Reason Code
+              </div>
             </div>
-          </div>
+          )}
           {blankSchedule && (
             <CreateReasonCode
               isPrivate={isPrivate}
@@ -79,18 +94,34 @@ class ReasonCodesBlock extends Component {
                       <div className="text-light-grey">Reason</div>
                       <div className="info-label">{reasonCode.reason}</div>
                     </div>
+                    {isPrivate && (
+                      <div className="info">
+                        <div className="text-light-grey">Client</div>
+                        <div className="info-label">
+                          {reasonCode.client && reasonCode.client.clientName}
+                        </div>
+                      </div>
+                    )} 
                   </div>
-                  <div className="btn-group-1">
-                    <button
-                      onClick={this.onDeleteReasonCode.bind(
-                        this,
-                        reasonCode._id
-                      )}
-                      className="btn-cancel"
-                    >
-                      <i className="icon-trash-o" />
-                    </button>
-                  </div>
+                  {((isPrivate &&
+                    Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) ||
+                    (!isPrivate &&
+                      !Roles.userIsInRole(
+                        Meteor.userId(),
+                        RolesEnum.MANAGER
+                      ))) && (
+                    <div className="btn-group-1">
+                      <button
+                        onClick={this.onDeleteReasonCode.bind(
+                          this,
+                          reasonCode._id
+                        )}
+                        className="btn-cancel"
+                      >
+                        <i className="icon-trash-o" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -104,6 +135,21 @@ class ReasonCodesBlock extends Component {
 class CreateReasonCode extends Component {
   constructor() {
     super();
+    this.state = {
+      clientOptions: []
+    };
+  }
+
+  componentWillMount() {
+    const clientOptions = [];
+    clientsQuery.fetch((err, res) => {
+      if (!err) {
+        res.map(client => {
+          clientOptions.push({ label: client.clientName, value: client._id });
+        });
+        this.setState({ clientOptions });
+      }
+    });
   }
 
   onSubmit = data => {
@@ -123,13 +169,14 @@ class CreateReasonCode extends Component {
 
   render() {
     const { close, isPrivate } = this.props;
+    const { clientOptions } = this.state;
     return (
       <div className="new-section">
         <div className="text-label">
           Create {isPrivate && "Private"} Reason Code
         </div>
         <div className="reason-code-form">
-          <AutoForm schema={schema} onSubmit={this.onSubmit} ref="form">
+          <AutoForm schema={!isPrivate ? schema : privateReasonSchema} onSubmit={this.onSubmit} ref="form">
             <div className="form-wrapper">
               <AutoField
                 labelHidden={true}
@@ -138,6 +185,17 @@ class CreateReasonCode extends Component {
               />
               <ErrorField name="reason" />
             </div>
+            {isPrivate && (
+              <div className="select-form">
+                <SelectField
+                  labelHidden={true}
+                  placeholder="Select Client"
+                  name="clientId"
+                  options={clientOptions}
+                />
+                <ErrorField name="clientId" />
+              </div>
+            )}
 
             <div className="btn-group">
               <button type="button" className="btn-cancel" onClick={close}>
@@ -164,3 +222,12 @@ export default withQuery(
   },
   { reactive: true }
 )(ReasonCodesBlock);
+
+const privateReasonSchema = new SimpleSchema({
+  reason: {
+    type: String
+  },
+  clientId: {
+    type: String
+  }
+});

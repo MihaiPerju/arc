@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
-import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import RolesEnum, {roleGroups} from "/imports/api/users/enums/roles";
+import {AutoForm, AutoField, ErrorField} from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
 import fieldTypes from "/imports/api/accounts/config/accounts";
@@ -44,7 +44,7 @@ export default class AccountContentHeader extends Component {
   getAssignee() {
     const {account} = this.props;
     if (account && account.assignee) {
-      const { profile } = account.assignee;
+      const {profile} = account.assignee;
       const currentUserId = Meteor.userId();
       const isRep = Roles.userIsInRole(account.assigneeId, RolesEnum.REP);
       if (
@@ -132,14 +132,19 @@ export default class AccountContentHeader extends Component {
     const schema = this.getSchema(name);
     if (fieldTypes.dates.includes(name)) {
       return (
-        <div className="input-datetime">
-          <DatePicker
-            placeholderText="Select New Date"
-            onChange={this.onDateSelect}
-            onClickOutside={this.onClickOutside}
-            onBlur={this.onBlur}
-            selectedValue={this.state.dateSelected}
-          />
+        <div className="edit-info__dialog-wrapper">
+          <div className="input-datetime">
+            <DatePicker
+              placeholderText="Select New Date"
+              onChange={this.onDateSelect}
+              onClickOutside={this.onClickOutside}
+              onBlur={this.onBlur}
+              selectedValue={this.state.dateSelected}
+            />
+          </div>
+          <div className="btn-group__footer flex--helper flex-justify--end">
+            <button type="submit" className="btn--light-blue">Submit</button>
+          </div>
         </div>
       );
     }
@@ -161,9 +166,9 @@ export default class AccountContentHeader extends Component {
             }}
           />
           <ErrorField name={name}/>
-            <div className="flex--helper flex-justify--end">
-              <button type="submit" className="btn--light-blue" onClick={this.closeDialog}>Submit</button>
-            </div>
+          <div className="btn-group__footer flex--helper flex-justify--end">
+            <button type="submit" className="btn--light-blue">Submit</button>
+          </div>
         </div>
       </AutoForm>
     );
