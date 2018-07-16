@@ -8,67 +8,75 @@ export default class InsuranceRules extends React.Component {
         return (
             <ListField name="insurances" collapse={collapse} showListField={showListField}>
                 <ListItemField name="$">
-                    <NestField className="upload-item text-center">
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="insName"
-                            />
-                            <ErrorField name="insName"/>
+                    <NestField>
+                        <div className="upload-item">
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="insName"
+                                />
+                                <ErrorField name="insName"/>
+                            </div>
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="insCode"/>
+                                <ErrorField name="insCode"/>
+                            </div>
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="insBal"/>
+                                <ErrorField name="insBal"/>
+                            </div>
                         </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="insCode"/>
-                            <ErrorField name="insCode"/>
+                        <div className="upload-item">
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="address1"/>
+                                <ErrorField name="address1"/>
+                            </div>
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="address2"/>
+                                <ErrorField name="address2"/>
+                            </div>
                         </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="insBal"/>
-                            <ErrorField name="insBal"/>
+                        <div className="upload-item">
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="city"/>
+                                <ErrorField name="city"/>
+                            </div>
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="state"/>
+                                <ErrorField name="state"/>
+                            </div>
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="zip"/>
+                                <ErrorField name="zip"/>
+                            </div>
                         </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="address1"/>
-                            <ErrorField name="address1"/>
-                        </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="address2"/>
-                            <ErrorField name="address2"/>
-                        </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="city"/>
-                            <ErrorField name="city"/>
-                        </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="state"/>
-                            <ErrorField name="state"/>
-                        </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="zip"/>
-                            <ErrorField name="zip"/>
-                        </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="policy"/>
-                            <ErrorField name="policy"/>
-                        </div>
-                        <div className="insurance-item__wrapper">
-                            <AutoField
-                                className="text-light-grey"
-                                name="phone"/>
-                            <ErrorField name="phone"/>
+                        <div className="upload-item">
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="policy"/>
+                                <ErrorField name="policy"/>
+                            </div>
+                            <div className="text-center">
+                                <AutoField
+                                    className="text-light-grey"
+                                    name="phone"/>
+                                <ErrorField name="phone"/>
+                            </div>
                         </div>
                     </NestField>
                 </ListItemField>

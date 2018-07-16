@@ -40,7 +40,7 @@ export default class UserContentHeader extends React.Component {
                 )) ||
               (isRep && currentUserId === user._id)
                 ? user.profile && (
-                    <a href={`/${user._id}/user-profile`}>
+                    <a href={`/${user._id}/activity`}>
                       {user.profile.firstName + " " + user.profile.lastName}
                     </a>
                   )

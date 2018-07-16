@@ -28,8 +28,21 @@ class NotificationListContainer extends React.Component {
       type === NotificationTypeEnum.RESPONSE
     ) {
       return (
-        "Manager responded to account with Account Number " +
-        notification.metaData.acctNum
+        "Manager responded to account with Account Number " + metaData.acctNum
+      );
+    } else if (
+      metaData &&
+      metaData.name &&
+      type === NotificationTypeEnum.REPORT
+    ) {
+      return (
+        <div>
+          Report: 
+          <a href={`reports/list?reportId=${metaData.reportId}`}>
+            {metaData.name}
+          </a> 
+          has been completed
+        </div>
       );
     } else if (
       metaData &&
@@ -39,8 +52,8 @@ class NotificationListContainer extends React.Component {
       return (
         <div>
           <span>
-            User flagged{" "}
-            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"}{" "}
+            User flagged 
+            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"} 
             {metaData.flagType} on account with Account number
           </span>
           <a
@@ -60,9 +73,7 @@ class NotificationListContainer extends React.Component {
     ) {
       return (
         <div>
-          <span>
-            Note left by manager on account with Account number
-          </span>
+          <span>Note left by manager on account with Account number</span>
           <a
             className="text-blue"
             href={`/accounts/${metaData.state.toLowerCase()}?accountId=${

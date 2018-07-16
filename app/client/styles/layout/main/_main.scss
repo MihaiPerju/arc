@@ -494,6 +494,22 @@
   }
   .additional-info {
     margin-top: 20px;
+
+    &.account-info > ul {
+      padding-bottom: 20px;
+
+      li{
+        padding-left: 45px;
+        padding-right: 45px;
+        flex-basis: 25%;
+
+        &:hover {
+          .edit-info__btn {
+            opacity: 1;
+          }
+        }
+      }
+    }
     > ul {
       list-style: none;
       display: flex;

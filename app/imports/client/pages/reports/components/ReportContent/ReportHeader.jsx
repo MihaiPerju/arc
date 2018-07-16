@@ -1,8 +1,8 @@
 import React, { Component } from "react";
+import moment from "moment/moment";
 import ScheduleBlock from "./../../ScheduleBlock.jsx";
 import Notifier from "../../../../lib/Notifier";
 import accountsQuery from "/imports/api/accounts/queries/accountList";
-import moment from "moment/moment";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
@@ -10,6 +10,7 @@ import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import { EJSON } from "meteor/ejson";
 import Loading from "/imports/client/lib/ui/Loading";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
 
 class ReportHeader extends Component {
   constructor() {
@@ -17,12 +18,30 @@ class ReportHeader extends Component {
     this.state = {
       schedule: false,
       accounts: [],
-      dialogIsActive: false
+      dialogIsActive: false,
+      selectedReportColumns: []
     };
   }
 
   componentWillMount() {
     this.getAccounts(this.props);
+    reportColumnListQuery.fetchOne((err, selectedReportColumns) => {
+      if (!err) {
+        const cols = [];
+        for (var key in selectedReportColumns) {
+          if (selectedReportColumns[key]) {
+            if (typeof selectedReportColumns[key] === "object") {
+              cols.push(selectedReportColumns[key]);
+            } else if (key !== "_id") {
+              cols.push(key);
+            }
+          }
+        }
+        this.setState({
+          selectedReportColumns: cols
+        });
+      }
+    });
   }
 
   componentWillReceiveProps(props) {
@@ -90,7 +109,7 @@ class ReportHeader extends Component {
 
   downloadReport = () => {
     const { data } = this.props;
-    const { reportId, _id } = data[0];
+    const { reportId, _id } = data; 
     window.open("/report/" + reportId);
   };
 
@@ -135,6 +154,29 @@ class ReportHeader extends Component {
                   <div className="table-header truncate text-left table-field table-field--fixed text-light-grey">
                     {header}
                   </div>
+                ) : typeof header == "object" ? (
+                  <div
+                    key={index}
+                    className="table-header text-center table-field text-light-grey"
+                  >
+                    {header.map(insurances => {
+                      return _.map(insurances, (value, key) => {
+                        if (value) {
+                          return (
+                            <div
+                              style={{
+                                width: "32%",
+                                float: "left",
+                                borderRight: "1px #d7d7d7 solid"
+                              }}
+                            >
+                              {key}
+                            </div>
+                          );
+                        }
+                      });
+                    })}
+                  </div>
                 ) : (
                   <div
                     key={index}
@@ -152,37 +194,40 @@ class ReportHeader extends Component {
                   <div className="table-field table-field--fixed truncate text-center">
                     {"Account No." + (index + 1)}
                   </div>
-
-                  <div className="table-field table-field--grey text-center">
-                    {account.acctNum}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {moment(account.dischrgDate).format("MM/DD/YYYY hh:mm")}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {account.ptType}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {account.facCode}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {account.ptName}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {moment(account.fbDate).format("MM/DD/YYYY hh:mm")}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {account.acctBal}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {account.finClass}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {moment(account.admitDate).format("MM/DD/YYYY hh:mm")}
-                  </div>
-                  <div className="table-field table-field--grey text-center">
-                    {account.medNo}
-                  </div>
+                  {tableHeader.map((content, index) => {
+                    if (index > 0) {
+                      return typeof content == "object" ? (
+                        <div className="table-field table-field--grey text-center">
+                          {content.map((insurances, i) => {
+                            return _.map(insurances, (value, key) => {
+                              if (value) {
+                                return (
+                                  <div
+                                    style={{
+                                      width: "32%",
+                                      float: "left",
+                                      borderRight: "1px #d7d7d7 solid"
+                                    }}
+                                  >
+                                    {account.insurances[i] &&
+                                      account.insurances[i][key]}
+                                  </div>
+                                );
+                              }
+                            });
+                          })}
+                        </div>
+                      ) : (
+                        <div className="table-field table-field--grey text-center">
+                          {typeof account[content] === "object"
+                            ? moment(account[content]).format(
+                                "MM/DD/YYYY, hh:mm"
+                              )
+                            : account[content]}
+                        </div>
+                      );
+                    }
+                  })}
                 </div>
               );
             })}
@@ -208,22 +253,15 @@ class ReportHeader extends Component {
 
   render() {
     const { report, data } = this.props;
-    const { schedule, accounts, loading, dialogIsActive } = this.state;
+    const {
+      schedule,
+      accounts,
+      loading,
+      dialogIsActive,
+      selectedReportColumns
+    } = this.state;
     const job = data;
-
-    const tableHeader = [
-      "Account name",
-      "Account number",
-      "Discharge date",
-      "Patient Type",
-      "Facility Code",
-      "Patient Name",
-      "Last Bill Date",
-      "Account Balance",
-      "Financial Class",
-      "Admit Date",
-      "Medical Number"
-    ];
+    const tableHeader = ["Account name", ...selectedReportColumns];
 
     return (
       <div className="main-content report-content">
@@ -256,7 +294,11 @@ class ReportHeader extends Component {
               </div>
             </div>
             {dialogIsActive && (
-              <Dialog className="account-dialog" title="Confirm" closePortal={this.closeDialog}>
+              <Dialog
+                className="account-dialog"
+                title="Confirm"
+                closePortal={this.closeDialog}
+              >
                 <div className="form-wrapper">
                   Are you sure you want to copy this report ?
                 </div>
