@@ -45,6 +45,7 @@ export default class AccountSearchBar extends Component {
     let clientOptions = [];
     let substates = [];
     let tickleUserIdOptions = [];
+    let model = {};
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -93,7 +94,8 @@ export default class AccountSearchBar extends Component {
         }
       });
     this.setState({ tickleUserIdOptions });
-    this.getFilterParams();
+    model = FilterService.getFilterParams();
+    this.setState({ model });
   }
 
   onSubmit(params) {
@@ -283,72 +285,6 @@ export default class AccountSearchBar extends Component {
     if (field === "acctNum") {
       FlowRouter.setQueryParams({ acctNum: value });
     }
-  };
-
-  getFilterParams = () => {
-    const queryParams = FlowRouter.current().queryParams;
-    const model = {};
-
-    if ("acctNum" in queryParams) {
-      model.acctNum = queryParams.acctNum;
-    }
-    if ("tickleUserId" in queryParams) {
-      model.tickleUserId = queryParams.tickleUserId;
-    }
-    if ("clientId" in queryParams) {
-      model.clientId = queryParams.clientId;
-    }
-    if ("facilityId" in queryParams) {
-      model.facilityId = queryParams.facilityId;
-    }
-    if ("facCode" in queryParams) {
-      model.facCode = queryParams.facCode;
-    }
-    if ("ptType" in queryParams) {
-      model.ptType = queryParams.ptType;
-    }
-    if ("acctBalMin" in queryParams) {
-      model.acctBalMin = queryParams.acctBalMin;
-    }
-    if ("acctBalMax" in queryParams) {
-      model.acctBalMax = queryParams.acctBalMax;
-    }
-    if ("finClass" in queryParams) {
-      model.finClass = queryParams.finClass;
-    }
-    if ("substate" in queryParams) {
-      model.substate = queryParams.substate;
-    }
-    if ("activeInsCode" in queryParams) {
-      model.activeInsCode = queryParams.activeInsCode;
-    }
-    if ("dischrgDateMin" in queryParams) {
-      this.setState({
-        dischrgDateMin: moment(new Date(queryParams.dischrgDateMin))
-      });
-    }
-    if ("dischrgDateMax" in queryParams) {
-      this.setState({
-        dischrgDateMax: moment(new Date(queryParams.dischrgDateMax))
-      });
-    }
-    if ("fbDateMin" in queryParams) {
-      this.setState({ fbDateMin: moment(new Date(queryParams.fbDateMin)) });
-    }
-    if ("fbDateMax" in queryParams) {
-      this.setState({ fbDateMax: moment(new Date(queryParams.fbDateMax)) });
-    }
-    if ("admitDateMin" in queryParams) {
-      this.setState({
-        admitDateMin: moment(new Date(queryParams.admitDateMin))
-      });
-    }
-    if ("admitDateMax" in queryParams) {
-      this.setState({
-        admitDateMax: moment(new Date(queryParams.admitDateMax))
-      });
-    }
-    this.setState({ model });
   };
 
   render() {
@@ -558,7 +494,6 @@ export default class AccountSearchBar extends Component {
                               }
                             />
                           </div>
-
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
                           <div>
