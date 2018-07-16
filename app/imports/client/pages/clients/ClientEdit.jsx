@@ -199,7 +199,7 @@ export default class EditClient extends React.Component {
                       <ErrorField name="email" />
                     </div>
                     <div className="form-wrapper">
-                      <TextField
+                      <LongTextField
                         labelHidden={true}
                         placeholder="Notes"
                         name="notes"
