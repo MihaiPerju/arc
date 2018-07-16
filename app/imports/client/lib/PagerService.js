@@ -519,7 +519,7 @@ export default class PagerService {
       _.extend(params.filters, {
         createdAt: {
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(moment(new Date(createdAtMax)).startOf("day"))
+          $lt: new Date(moment(new Date(createdAtMax)).add(1, "day").startOf("day"))
         }
       });
     }
