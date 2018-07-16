@@ -1,13 +1,17 @@
 import Actions from "/imports/api/actions/collection.js";
 import ActionService from "./services/ActionService";
 import FlagService from "./services/FlagService";
+import Security from "/imports/api/security/security";
+import { roleGroups } from "/imports/api/users/enums/roles";
 
 Meteor.methods({
   "action.create"(data) {
+    Security.isAdminOrTech(this.userId);
     ActionService.createAction(data);
   },
 
   "action.edit"(id, { title, description, substateId, inputs }) {
+    Security.isAdminOrTech(this.userId);
     ActionService.editAction({
       _id: id,
       title,
@@ -18,10 +22,12 @@ Meteor.methods({
   },
 
   "action.delete"(actionId) {
+    Security.isAdminOrTech(this.userId);
     Actions.remove({ _id: actionId });
   },
 
   "action.deleteMany"(Ids) {
+    Security.isAdminOrTech(this.userId);
     _.each(Ids, _id => {
       Actions.remove({ _id });
     });
