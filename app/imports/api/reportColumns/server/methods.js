@@ -1,10 +1,10 @@
-import ReportColumn from "./../collection.js";
+import ReportColumns from "./../collection.js";
 import schema from "../schema";
 
 Meteor.methods({
   "reportColumn.create"(data) {
     const reportData = schema.clean(data);
-    ReportColumn.update(
+    ReportColumns.update(
       { userId: this.userId },
       {
         $set: reportData

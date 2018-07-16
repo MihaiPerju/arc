@@ -22,7 +22,6 @@ class NotificationListContainer extends React.Component {
 
   getMessage = notification => {
     const { metaData, type } = notification;
-    console.log("metaData", metaData)
     if (
       metaData &&
       metaData.acctNum &&
@@ -36,7 +35,6 @@ class NotificationListContainer extends React.Component {
       metaData.name &&
       type === NotificationTypeEnum.REPORT
     ) {
-      console.log("aditya")
       return (
         <div>
           Report: 

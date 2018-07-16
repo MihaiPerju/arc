@@ -9,7 +9,7 @@ import Accounts from "/imports/api/accounts/collection";
 import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
-import ReportColumn from "/imports/api/reportColumn/collection.js";
+import ReportColumns from "/imports/api/reportColumns/collection.js";
 
 export default class RunReports {
   static run() {
@@ -43,7 +43,7 @@ export default class RunReports {
 
   static getColumns(reportId) {
     const {authorId} =Reports.findOne({_id: reportId})
-    const data = ReportColumn.findOne({userId:authorId});
+    const data = ReportColumns.findOne({userId:authorId});
     const columns = {};
 
     _.map(data, (value, key) => {

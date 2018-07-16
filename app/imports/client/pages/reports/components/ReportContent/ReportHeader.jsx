@@ -10,7 +10,7 @@ import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import { EJSON } from "meteor/ejson";
 import Loading from "/imports/client/lib/ui/Loading";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import reportColumnListQuery from "/imports/api/reportColumn/queries/reportColumnList";
+import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
 
 class ReportHeader extends Component {
   constructor() {

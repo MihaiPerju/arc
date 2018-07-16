@@ -1,6 +1,6 @@
-import ReportColumn from "../collection";
+import ReportColumns from "../collection";
 
-export default ReportColumn.createQuery("reportColumnList", {
+export default ReportColumns.createQuery("reportColumnList", {
   $filter({ filters, options, params }) {
     _.extend(filters, params.filters);
     _.extend(options, params.options);

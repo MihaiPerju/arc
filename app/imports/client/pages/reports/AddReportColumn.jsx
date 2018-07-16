@@ -3,8 +3,8 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import accountsQuery from "/imports/api/accounts/queries/accountList";
 import reportColumnEnum, {
   insuranceColumnEnum
-} from "../../../api/reportColumn/enum/reportColumn";
-import schema from "/imports/api/reportColumn/schema";
+} from "../../../api/reportColumns/enum/reportColumn";
+import schema from "/imports/api/reportColumns/schema";
 import {
   AutoForm,
   ListField,
@@ -12,7 +12,8 @@ import {
   NestField,
   BoolField
 } from "/imports/ui/forms";
-import reportColumnListQuery from "/imports/api/reportColumn/queries/reportColumnList";
+import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
+import Notifier from '/imports/client/lib/Notifier';
 
 export default class AddReportColumn extends Component {
   constructor() {
@@ -58,7 +59,7 @@ export default class AddReportColumn extends Component {
       if (!err) {
         closeDialog();
       } else {
-        console.log("err", err);
+        Notifier.error(err)
       }
     });
   };

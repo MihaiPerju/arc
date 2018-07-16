@@ -1,5 +1,5 @@
-import ReportColumn from '../collection.js';
+import ReportColumns from '../collection.js';
 import reportColumnList from '../queries/reportColumnList.js';
 
 reportColumnList.expose({});
-ReportColumn.expose({});
+ReportColumns.expose({});
