@@ -210,3 +210,8 @@ route("/substate/list", SubstatesListContainer);
 import LetterListContainer from "/imports/client/pages/letterManagement/LetterListContainer.jsx";
 
 route("/letter-management/list", LetterListContainer);
+
+//Module tagging
+import ModuleTagsListContainer from "/imports/client/pages/moduleTags/ModuleTagsListContainer.jsx";
+
+route("/module-tags/list", ModuleTagsListContainer);

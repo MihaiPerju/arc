@@ -43,7 +43,8 @@ export default class RouteService {
           icon: "thumb-tack"
         },
         { name: "action/list", label: "Actions", icon: "thumb-tack" },
-        { name: "substate/list", label: "Substates", icon: "thumb-tack" }
+        { name: "substate/list", label: "Substates", icon: "thumb-tack" },
+        { name: "module-tags/list", label: "Module Tags", icon: "tags" }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
       return [
@@ -84,7 +85,8 @@ export default class RouteService {
           label: "Letters",
           icon: "thumb-tack"
         },
-        { name: "action/list", label: "Actions", icon: "thumb-tack" }
+        { name: "action/list", label: "Actions", icon: "thumb-tack" },
+        { name: "module-tags/list", label: "Module Tags", icon: "tags" }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return [

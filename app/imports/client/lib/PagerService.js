@@ -434,6 +434,14 @@ export default class PagerService {
       letterIds = FlowRouter.getQueryParam("letterIds");
     }
 
+    if (currentPath.indexOf("letter-management/list") > -1) {
+      letterIds = FlowRouter.getQueryParam("letterIds");
+    }
+
+    if (currentPath.indexOf("module-tags/list") > -1) {
+      tagName = FlowRouter.getQueryParam("tagName");
+    }
+
     // client search
     if (clientName) {
       _.extend(params.filters, {
@@ -483,7 +491,7 @@ export default class PagerService {
       });
     }
 
-    // tag search
+    // tag search && module-tag
     if (tagName) {
       _.extend(params.filters, {
         name: { $regex: tagName, $options: "i" }
