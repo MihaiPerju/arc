@@ -80,13 +80,15 @@ export default class AccountContentHeader extends Component {
       <div className="header-block header-account">
         <div className="main-info">
           <div className="left__side">
-            <div>
-              <EditInfoDialog
-                accountId={account._id}
-                editValue={account.ptName}
-                editField="ptName"
-              />
-              <div className="name">{account && account.ptName}</div>
+            <div className="name">
+              <span>
+                {account && account.ptName}
+                <EditInfoDialog
+                  accountId={account._id}
+                  editValue={account.ptName}
+                  editField="ptName"
+                />
+              </span>
             </div>
 
             <div className="row__block">
@@ -119,7 +121,7 @@ export default class AccountContentHeader extends Component {
               </div>
               <div className="text-light-grey">Collected amount</div>
             </div>
-            <div className="price-col">
+            <div className="price-col account-balance">
               <EditInfoDialog
                 accountId={account._id}
                 editValue={account.acctBal}

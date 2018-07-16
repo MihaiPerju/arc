@@ -359,11 +359,49 @@
   .right__side {
     padding-right: 15px;
   }
+  
+  .left__side {
+    .name {
+      span {
+        position: relative;
+        padding-right: 45px;
+
+        &:hover {
+          .edit-info__btn {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .edit-info__btn {
+      top: 1px;
+      right: 0;
+    }
+  }
+  
   .btn-group {
     flex-grow: 1;
+    
     button {
       width: 100%;
       margin-bottom: 7px;
+    }
+  }
+
+  .account-balance {
+    position: relative;
+
+    &:hover {
+      .edit-info__btn {
+        opacity: 1;
+      }
+    }
+
+    .edit-info__btn {
+      left: 0;
+      top: 0;
+      right: inherit;
     }
   }
 }

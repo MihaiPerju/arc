@@ -123,12 +123,10 @@ export default class EditInfoDialog extends Component {
               closePortal={this.closeDialog}
               title={"Edit info"}
             >
-              {this.getEditForm(editField)}
               <button className="close-dialog" onClick={this.closeDialog}>
                 <i className="icon-close" />
               </button>
-
-              <div className="flex--helper flex-justify--end" />
+              {this.getEditForm(editField)}
             </Dialog>
           )}
       </button>
