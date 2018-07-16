@@ -4,7 +4,9 @@ import Security from '/imports/api/security/security.js';
 Meteor.methods({
     'reasonCode.create'(data) {
         Security.checkLoggedIn(this.userId);
-
+        if(!data.managerId) {
+            Security.isAdminOrTech(this.userId);
+        }
         return ReasonCodes.insert(data);
     },
 

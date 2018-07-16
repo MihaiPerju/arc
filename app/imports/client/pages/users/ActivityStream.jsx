@@ -104,18 +104,15 @@ export default class ActivityStream extends React.Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>
-                )}{" "}
-                applied action <b>{action.title}</b> to account with account
-                number{" "}
-                {account && (
+                )} applied action <b>{action.title}</b> to account with account
+                number {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                    {" "}
-                    {account.acctNum}
+                     {account.acctNum}
                   </a>
                 )}
               </div>
@@ -141,17 +138,14 @@ export default class ActivityStream extends React.Component {
               <b>
                 {user.profile.firstName} {user.profile.lastName}
               </b>
-            )}{" "}
-            commented a comment <b>{content}</b> to account with account number{" "}
-            {account && (
+            )} commented a comment <b>{content}</b> to account with account number {account && (
               <a
                 className="text-blue"
                 href={`/accounts/${account.state.toLowerCase()}?accountId=${
                   account._id
                 }`}
               >
-                {" "}
-                {account.acctNum}
+                 {account.acctNum}
               </a>
             )}
           </div>
@@ -165,18 +159,14 @@ export default class ActivityStream extends React.Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>
-                )}{" "}
-                send a letter with letter-template name{" "}
-                <b>{letterTemplate.name}</b> to account with account number{" "}
-                {account && (
+                )} send a letter with letter-template name <b>{letterTemplate.name}</b> to account with account number {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                    {" "}
-                    {account.acctNum}
+                     {account.acctNum}
                   </a>
                 )}
               </div>
@@ -190,30 +180,24 @@ export default class ActivityStream extends React.Component {
               <div>
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
-                </b>{" "}
-                flagged an action on account with account number{" "}
-                {account && (
+                </b> flagged an action on account with account number {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                    {" "}
-                    {account.acctNum}
+                     {account.acctNum}
                   </a>
                 )}
                 {!isOpen && (
                   <div>
                     <br />
-                    Manager{" "}
-                    {manager && (
+                    Manager {manager && (
                       <b>
                         {manager.profile.firstName} {manager.profile.lastName}
                       </b>
-                    )}{" "}
-                    has responsed to the action and{" "}
-                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    )} has responsed to the action and {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
@@ -222,30 +206,24 @@ export default class ActivityStream extends React.Component {
               <div>
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
-                </b>{" "}
-                flagged a comment on account with account number{" "}
-                {account && (
+                </b> flagged a comment on account with account number {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                    {" "}
-                    {account.acctNum}
+                     {account.acctNum}
                   </a>
                 )}
                 {!isOpen && (
                   <div>
                     <br />
-                    Manager{" "}
-                    {manager && (
+                    Manager {manager && (
                       <b>
                         {manager.profile.firstName} {manager.profile.lastName}
                       </b>
-                    )}{" "}
-                    has responsed to a comment and{" "}
-                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    )} has responsed to a comment and {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
