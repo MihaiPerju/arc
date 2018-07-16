@@ -453,7 +453,7 @@ export default class AccountSearchBar extends Component {
                   <Dialog
                     className="account-dialog filter-dialog"
                     closePortal={this.closeDialog}
-                    title="Filter by:"
+                    title="Filter by"
                   >
                     <button className="close-dialog" onClick={this.closeDialog}>
                       <i className="icon-close" />
@@ -466,7 +466,7 @@ export default class AccountSearchBar extends Component {
                         ) && (
                           <div className="select-form">
                             <SelectField
-                              labelHidden={true}
+                              label="Tickle:"
                               name="tickleUserId"
                               options={tickleUserIdOptions}
                             />
@@ -475,7 +475,7 @@ export default class AccountSearchBar extends Component {
 
                         <div className="select-form">
                           <SelectField
-                            labelHidden={true}
+                            label="Client:"
                             placeholder="Select Client"
                             name="clientId"
                             options={clientOptions}
@@ -483,7 +483,7 @@ export default class AccountSearchBar extends Component {
                         </div>
                         <div className="select-form">
                           <SelectField
-                            labelHidden={true}
+                            label="Facility:"
                             name="facilityId"
                             placeholder="Select Facility"
                             options={facilityOptions}
@@ -491,96 +491,115 @@ export default class AccountSearchBar extends Component {
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Facility code:"
                             name="facCode"
                             placeholder="Search by Facility Code"
                           />
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Patient Type:"
                             name="ptType"
                             placeholder="Search by Patient Type"
                           />
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
-                            labelHidden={true}
+                            label="Minimum Account Balance:"
                             name="acctBalMin"
                             placeholder="Minimum Account Balance"
                           />
                           <AutoField
-                            labelHidden={true}
+                            label="Maximum Account Balance:"
                             name="acctBalMax"
                             placeholder="Maximum Account Balance"
                           />
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
-                          <DatePicker
-                            placeholderText="From Discharge Date"
-                            selected={dischrgDateMin}
-                            onChange={date =>
-                              this.onDateSelect(date, "dischrgDateMin")
-                            }
-                          />
-                          <DatePicker
-                            placeholderText="To Discharge Date"
-                            selected={dischrgDateMax}
-                            onChange={date =>
-                              this.onDateSelect(date, "dischrgDateMax")
-                            }
-                          />
+                          <div>
+                            <label>From Discharge Date:</label>
+                            <DatePicker
+                              placeholderText="From Discharge Date"
+                              selected={dischrgDateMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "dischrgDateMin")
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label>From Discharge Date:</label>
+                            <DatePicker
+                              placeholderText="To Discharge Date"
+                              selected={dischrgDateMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "dischrgDateMax")
+                              }
+                            />
+                          </div>
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
-                          <DatePicker
-                            placeholderText="From Last Bill Date"
-                            selected={fbDateMin}
-                            onChange={date =>
-                              this.onDateSelect(date, "fbDateMin")
-                            }
-                          />
-                          <DatePicker
-                            placeholderText="To Last Bill Date"
-                            selected={fbDateMax}
-                            onChange={date =>
-                              this.onDateSelect(date, "fbDateMax")
-                            }
-                          />
+                          <div>
+                            <label>From Last Bill Date:</label>
+                            <DatePicker
+                              placeholderText="From Last Bill Date"
+                              selected={fbDateMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "fbDateMin")
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label>To Last Bill Date:</label>
+                            <DatePicker
+                              placeholderText="To Last Bill Date"
+                              selected={fbDateMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "fbDateMax")
+                              }
+                            />
+                          </div>
+
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
-                          <DatePicker
-                            placeholderText="From Admit Date"
-                            selected={admitDateMin}
-                            onChange={date =>
-                              this.onDateSelect(date, "admitDateMin")
-                            }
-                          />
-                          <DatePicker
-                            placeholderText="To Admit Date"
-                            selected={admitDateMax}
-                            onChange={date =>
-                              this.onDateSelect(date, "admitDateMax")
-                            }
-                          />
+                          <div>
+                            <label>From Admit Date:</label>
+                            <DatePicker
+                              placeholderText="From Admit Date"
+                              selected={admitDateMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "admitDateMin")
+                              }
+                            />
+                          </div>
+                          <div>
+                            <label>To Admit Date:</label>
+                            <DatePicker
+                              placeholderText="To Admit Date"
+                              selected={admitDateMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "admitDateMax")
+                              }
+                            />
+                          </div>
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Financial Class:"
                             name="finClass"
                             placeholder="Search by Financial Class"
                           />
                         </div>
                         <div className="select-form">
                           <SelectField
+                            label="Substate:"
                             placeholder="Substate"
-                            labelHidden={true}
                             options={substates}
                             name="substate"
                           />
                         </div>
                         <div className="form-group">
                           <AutoField
-                            labelHidden={true}
+                            label="Active Insurance Code:"
                             name="activeInsCode"
                             placeholder="Search by active Insurance Code"
                           />

@@ -370,7 +370,8 @@ export default class PagerService {
       facilityName,
       regionName,
       createdAtMin,
-      createdAtMax;
+      createdAtMax,
+      letterIds;
 
     _.extend(params, {
       filters: {}
@@ -431,6 +432,10 @@ export default class PagerService {
       _.extend(params.filters, {
         clientId: FlowRouter.current().params.id
       });
+    }
+
+    if (currentPath.indexOf("letter-management/list") > -1) {
+      letterIds = FlowRouter.getQueryParam("letterIds");
     }
 
     // client search
@@ -518,9 +523,14 @@ export default class PagerService {
       _.extend(params.filters, {
         createdAt: {
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(moment(new Date(createdAtMax)).startOf("day"))
+          $lt: new Date(moment(new Date(createdAtMax)).add(1, "day").startOf("day"))
         }
       });
+    }
+
+    // letter-management search
+    if (letterIds) {
+      _.extend(params.filters, { _id: { $in: letterIds } });
     }
   }
 

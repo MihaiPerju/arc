@@ -5,6 +5,8 @@ import fs from "fs";
 import Uploader from "/imports/api/s3-uploads/server/s3";
 import UploadedFile from "/imports/api/s3-uploads/server/UploadedFile";
 import Business from "/imports/api/business";
+import Uploads from "../uploads/collection";
+import AccountsCollection from "/imports/api/accounts/collection";
 
 let postRoutes = Picker.filter(function(req, res) {
   return req.method == "POST";
@@ -77,7 +79,7 @@ export function createRoute(path, handler) {
           });
         });
       },
-      uploadLocal() {
+      uploadLocal(accountId) {
         return _.map(req.filenames, function(filePath) {
           const { resourceType, resourceId } = req.postData;
 
@@ -87,7 +89,24 @@ export function createRoute(path, handler) {
           const stats = fs.statSync(filePath);
           const fileSizeInBytes = stats.size;
 
+          const { attachmentIds } = AccountsCollection.findOne({
+            _id: accountId
+          });
           let fileName = filePath.replace(os.tmpdir() + "/", "");
+          const count = Uploads.find({
+            name: { $regex: fileName.slice(0, fileName.indexOf(".")) },
+            _id: { $in: attachmentIds }
+          }).count();
+
+          if (count >= 1) {
+            fileName =
+              fileName.slice(0, fileName.indexOf(".")) +
+              "(" +
+              count +
+              ")" +
+              fileName.slice(fileName.indexOf("."));
+          }
+
           let movePath = Business.LOCAL_STORAGE_FOLDER + "/" + fileName;
           movePath = movePath.replace(/\s+/g, "-");
           //If there is no local folder

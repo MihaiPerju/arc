@@ -116,6 +116,8 @@ class ActionListContainer extends Pager {
         this.setState({
           actionsSelected: []
         });
+      } else {
+        Notifier.error(err.reason);
       }
     });
   };

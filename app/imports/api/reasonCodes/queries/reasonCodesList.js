@@ -10,5 +10,8 @@ export default ReasonCodes.createQuery('reasonCodeList', {
     actionId: 1,
     action: {
         title: 1
+    },
+    client: {
+        clientName: 1
     }
 });
