@@ -62,7 +62,9 @@ class EscalateReason extends Component {
             return (
               <div className="comment-item flex--helper flex--column">
                 <div className="comment__wrapper flex--helper flex-justify--space-between">
+                  {/*Add name from db*/}
                   <div className="name truncate">Katlyn Greenholt</div>
+                  {/*Add time from db*/}
                   <div className="time">July 12th 2018, 02:08 pm</div>
                 </div>
                 <div className="message text-light-grey">{message.content}</div>
