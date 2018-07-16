@@ -1,39 +1,25 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
-import RolesEnum, {roleGroups} from "/imports/api/users/enums/roles";
-import {AutoForm, AutoField, ErrorField} from "/imports/ui/forms";
-import SimpleSchema from "simpl-schema";
-import DatePicker from "react-datepicker";
-import fieldTypes from "/imports/api/accounts/config/accounts";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import "react-datepicker/dist/react-datepicker.css";
-import Notifier from "/imports/client/lib/Notifier";
 import EditInfoDialog from "./EditInfoDialog";
 import commaNumber from "comma-number";
 
 export default class AccountContentHeader extends Component {
-  constructor(props) {
-    super();
-    this.state = {
-      editField: null,
-      schema: null,
-      dateSelected: ' ',
-    };
-  }
-
   getOptions(users = []) {
     let options = [];
     for (let user of users) {
       let item = {
         label:
-        user &&
-        user.profile &&
-        user.profile.firstName +
-        " " +
-        user.profile.lastName +
-        "(" +
-        user.roles[0] +
-        ")",
+          user &&
+          user.profile &&
+          user.profile.firstName +
+            " " +
+            user.profile.lastName +
+            "(" +
+            user.roles[0] +
+            ")",
         value: user && user._id
       };
       options.push(item);
@@ -42,9 +28,9 @@ export default class AccountContentHeader extends Component {
   }
 
   getAssignee() {
-    const {account} = this.props;
+    const { account } = this.props;
     if (account && account.assignee) {
-      const {profile} = account.assignee;
+      const { profile } = account.assignee;
       const currentUserId = Meteor.userId();
       const isRep = Roles.userIsInRole(account.assigneeId, RolesEnum.REP);
       if (
@@ -80,103 +66,11 @@ export default class AccountContentHeader extends Component {
         }
       }
     }
-    return [{label: "Unassigned"}];
+    return [{ label: "Unassigned" }];
   }
 
-  onEditField = editField => {
-    const {account} = this.props;
-    this.setState({editField});
-  };
-
-  getSchema = editField => {
-    return new SimpleSchema({[editField]: {type: String}});
-  };
-
-  onSubmit = data => {
-    const {account} = this.props;
-
-    Meteor.call("account.update", account._id, data, err => {
-      if (!err) {
-        Notifier.success("Account updated!");
-        this.onBlur();
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
-  };
-
-  onBlur = e => {
-    //Reset
-    this.setState({schema: null, editField: null, date: null});
-  };
-
-  onDateSelect = newDate => {
-    const {editField, dateSelected} = this.state;
-    const {selectedValue, account} = this.props;
-
-    let data = {};
-    data[editField] = newDate.toDate();
-    Meteor.call("account.update", account._id, data, err => {
-      if (!err) {
-        Notifier.success("Account updated!");
-        this.onBlur();
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
-    this.setState({date: moment(newDate)});
-  };
-
-  getEditForm = name => {
-    const {account} = this.props;
-    const schema = this.getSchema(name);
-    if (fieldTypes.dates.includes(name)) {
-      return (
-        <div className="edit-info__dialog-wrapper">
-          <div className="input-datetime">
-            <DatePicker
-              placeholderText="Select New Date"
-              onChange={this.onDateSelect}
-              onClickOutside={this.onClickOutside}
-              onBlur={this.onBlur}
-              selectedValue={this.state.dateSelected}
-            />
-          </div>
-          <div className="btn-group__footer flex--helper flex-justify--end">
-            <button type="submit" className="btn--light-blue">Submit</button>
-          </div>
-        </div>
-      );
-    }
-    return (
-      <AutoForm
-        onBlur={this.onBlur}
-        model={{[name]: account[name]}}
-        schema={schema}
-        onSubmit={this.onSubmit}
-      >
-        <div className="form-wrapper">
-          <AutoField
-            labelHidden={true}
-            name={name}
-            inputRef={x => {
-              if (x) {
-                x.focus();
-              }
-            }}
-          />
-          <ErrorField name={name}/>
-          <div className="btn-group__footer flex--helper flex-justify--end">
-            <button type="submit" className="btn--light-blue">Submit</button>
-          </div>
-        </div>
-      </AutoForm>
-    );
-  };
-
   render() {
-    const {account, openMetaData, closeRightPanel} = this.props;
-    const {editField} = this.state;
+    const { account, openMetaData, closeRightPanel } = this.props;
 
     const options = this.getOptions(
       account && account.facility && account.facility.users
@@ -186,12 +80,13 @@ export default class AccountContentHeader extends Component {
       <div className="header-block header-account">
         <div className="main-info">
           <div className="left__side">
-            <div onClick={this.onEditField.bind(this, "ptName")}>
-              {editField === "ptName" ? (
-                this.getEditForm("ptName")
-              ) : (
-                <div className="name">{account && account.ptName}</div>
-              )}
+            <div>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.ptName}
+                editField="ptName"
+              />
+              <div className="name">{account && account.ptName}</div>
             </div>
 
             <div className="row__block">
@@ -202,7 +97,7 @@ export default class AccountContentHeader extends Component {
               <div className="location">
                 {account && account.facility
                   ? account.facility.name
-                  : "No insurance name"}{" "}
+                  : "No facility name"}{" "}
                 -{" "}
                 {account && account.client
                   ? account.client.clientName
@@ -224,19 +119,16 @@ export default class AccountContentHeader extends Component {
               </div>
               <div className="text-light-grey">Collected amount</div>
             </div>
-            <div
-              onClick={this.onEditField.bind(this, "acctBal")}
-              className="price-col"
-            >
-              {editField === "acctBal" ? (
-                this.getEditForm("acctBal")
-              ) : (
-                <div className="price">
-                  {account && account.acctBal
-                    ? commaNumber(account.acctBal)
-                    : 0}
-                </div>
-              )}
+            <div className="price-col">
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.acctBal}
+                editField="acctBals"
+              />
+              <div className="price">
+                {account && account.acctBal ? commaNumber(account.acctBal) : 0}
+              </div>
+
               <div className="text-light-grey">Remaining balance</div>
             </div>
           </div>
@@ -251,17 +143,17 @@ export default class AccountContentHeader extends Component {
               closeRightPanel={closeRightPanel}
             />
             {account &&
-            Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
-            !account.escalationId && (
-              <AccountActioning
-                escalate
-                accountId={account && account._id}
-                type="Escalate"
-                title="Escalate"
-                escalationId={account && account.escalationId}
-                closeRightPanel={closeRightPanel}
-              />
-            )}
+              Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
+              !account.escalationId && (
+                <AccountActioning
+                  escalate
+                  accountId={account && account._id}
+                  type="Escalate"
+                  title="Escalate"
+                  escalationId={account && account.escalationId}
+                  closeRightPanel={closeRightPanel}
+                />
+              )}
             <AccountActioning
               metaData={true}
               type="View Meta Data"
@@ -286,38 +178,37 @@ export default class AccountContentHeader extends Component {
                 {account && account.substate}
               </div>
             </li>
-            <li
-              onClick={this.onEditField.bind(this, "finClass")}
-              className="text-center"
-            >
+            <li className="text-center">
               <div className="text-light-grey">Financial class</div>
-              <EditInfoDialog>
-                {this.getEditForm("finClass")}
-              </EditInfoDialog>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.finClass}
+                editField="finClass"
+              />
+
               <div className="text-dark-grey text-uppercase">
                 {account && account.finClass ? account.finClass : "None"}
               </div>
             </li>
-            <li
-              onClick={this.onEditField.bind(this, "dischrgDate")}
-              className="text-center"
-            >
+            <li className="text-center">
               <div className="text-light-grey">Discharge date</div>
-              <EditInfoDialog>
-                {this.getEditForm("dischrgDate")}
-              </EditInfoDialog>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.dischrgDate}
+                editField="dischrgDate"
+              />
               <div className="text-dark-grey">
                 {account && moment(account.dischrgDate).format("MM/DD/YYYY")}
               </div>
             </li>
-            <li
-              onClick={this.onEditField.bind(this, "createdAt")}
-              className="text-center"
-            >
+            <li className="text-center">
               <div className="text-light-grey">Placement date</div>
-              <EditInfoDialog>
-                {this.getEditForm("createdAt")}
-              </EditInfoDialog>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.createdAt}
+                editField="createdAt"
+              />
+
               <div className="text-dark-grey">
                 {account && moment(account.createdAt).format("MM/DD/YYYY")}
               </div>
@@ -326,51 +217,50 @@ export default class AccountContentHeader extends Component {
         </div>
         <div className="additional-info account-info">
           <ul>
-            <li
-              onClick={!editField && this.onEditField.bind(this, "admitDate")}
-              className="text-center"
-            >
+            <li className="text-center">
               <div className="text-light-grey">Admit date</div>
-              <EditInfoDialog>
-                {this.getEditForm("admitDate")}
-              </EditInfoDialog>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.admitDate}
+                editField="admitDate"
+              />
+
               <div className="text-dark-grey">
                 {account && moment(account.admitDate).format("MM/DD/YYYY")}
               </div>
             </li>
 
-            <li
-              onClick={this.onEditField.bind(this, "facCode")}
-              className="text-center"
-            >
+            <li className="text-center">
               <div className="text-light-grey">Facility Code</div>
-              <EditInfoDialog>
-                {this.getEditForm("facCode")}
-              </EditInfoDialog>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.facCode}
+                editField="facCode"
+              />
+
               <div className="text-dark-grey text-uppercase">
                 {account && account.facCode}
               </div>
             </li>
-            <li
-              onClick={this.onEditField.bind(this, "ptType")}
-              className="text-center"
-            >
+            <li className="text-center">
               <div className="text-light-grey">Patient Type</div>
-              <EditInfoDialog>
-                {this.getEditForm("ptType")}
-              </EditInfoDialog>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.ptType}
+                editField="ptType"
+              />
+
               <div className="text-dark-grey text-uppercase">
                 {account && account.ptType}
               </div>
             </li>
-            <li
-              onClick={this.onEditField.bind(this, "fbDate")}
-              className="text-center"
-            >
+            <li className="text-center">
               <div className="text-light-grey">Last Bill Date</div>
-              <EditInfoDialog>
-                {this.getEditForm("fbDate")}
-              </EditInfoDialog>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.fbDate}
+                editField="fbDate"
+              />
               <div className="text-dark-grey">
                 {account && moment(account.fbDate).format("MM/DD/YYYY")}
               </div>
