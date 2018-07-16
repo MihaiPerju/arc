@@ -55,7 +55,7 @@ var List = function List(_ref) {
       "value"
     ]);
   return _react.default.createElement(
-    "ul",
+    "div",
     (0, _filterDOMProps.default)(props),
     label &&
       _react.default.createElement(

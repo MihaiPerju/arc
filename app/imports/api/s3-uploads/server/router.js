@@ -93,18 +93,20 @@ export function createRoute(path, handler) {
             _id: accountId
           });
           let fileName = filePath.replace(os.tmpdir() + "/", "");
-          const count = Uploads.find({
-            name: { $regex: fileName.slice(0, fileName.indexOf(".")) },
-            _id: { $in: attachmentIds }
-          }).count();
+          if (attachmentIds) {
+            const count = Uploads.find({
+              name: { $regex: fileName.slice(0, fileName.indexOf(".")) },
+              _id: { $in: attachmentIds }
+            }).count();
 
-          if (count >= 1) {
-            fileName =
-              fileName.slice(0, fileName.indexOf(".")) +
-              "(" +
-              count +
-              ")" +
-              fileName.slice(fileName.indexOf("."));
+            if (count >= 1) {
+              fileName =
+                fileName.slice(0, fileName.indexOf(".")) +
+                "(" +
+                count +
+                ")" +
+                fileName.slice(fileName.indexOf("."));
+            }
           }
 
           let movePath = Business.LOCAL_STORAGE_FOLDER + "/" + fileName;

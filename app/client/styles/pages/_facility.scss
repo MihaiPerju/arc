@@ -142,6 +142,17 @@
     background: $color-white;
     border-radius: 3px;
     padding: 15px;
+
+    &.placement-header {
+      width: 100%;
+      flex-wrap: wrap;
+
+      .radio-group {
+        > label {
+          margin-right: 10px;
+        }
+      }
+    }
     .form-wrapper {
       display: flex;
       justify-content: space-between;
@@ -155,6 +166,10 @@
     .radio-group {
       &__wrapper {
         display: flex;
+
+        > label, > div {
+          margin-right: 10px;
+        }
       }
     }
     .btn-group {

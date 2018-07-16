@@ -30,7 +30,8 @@ export default class ActionService {
       reasonCode: reasonId && reason,
       addedBy,
       type: actionTypesEnum.USER_ACTION,
-      createdAt
+      createdAt,
+      accountId
     };
     const customFields = {};
     _.map(inputs, input => {

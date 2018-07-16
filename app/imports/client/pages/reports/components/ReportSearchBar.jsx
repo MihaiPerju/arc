@@ -5,14 +5,15 @@ import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
-
+import AddReportColumn from "../AddReportColumn";
 export default class ReportSearchBar extends Component {
   constructor() {
     super();
     this.state = {
       dropdown: false,
       selectAll: false,
-      model: {}
+      model: {},
+      isReportColumn: false
     };
   }
 
@@ -21,11 +22,18 @@ export default class ReportSearchBar extends Component {
   }
 
   onSubmit(params) {
+    const reportIdQueryParams = FlowRouter.getQueryParam("reportId");
+
     if (FlowRouter.current().queryParams.page != "1" && "name" in params) {
       this.props.setPagerInitial();
     }
     if ("name" in params) {
       FlowRouter.setQueryParams({ name: params.name });
+    }
+    if (reportIdQueryParams) {
+      const { closeRightPanel } = this.props;
+      FlowRouter.setQueryParams({ reportId: null });
+      closeRightPanel();
     }
   }
 
@@ -59,6 +67,18 @@ export default class ReportSearchBar extends Component {
     });
   };
 
+  openDialog = () => {
+    this.setState({
+      isReportColumn: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      isReportColumn: false
+    });
+  };
+
   getFilterParams = () => {
     const queryParams = FlowRouter.current().queryParams;
     const model = {};
@@ -71,7 +91,7 @@ export default class ReportSearchBar extends Component {
   };
 
   render() {
-    const { filter, active, dropdown, selectAll, model } = this.state;
+    const { filter, active, dropdown, selectAll, isReportColumn, model } = this.state;
     const {
       options,
       btnGroup,
@@ -138,14 +158,21 @@ export default class ReportSearchBar extends Component {
               </div>
             </div>
 
-            {!hideFilter && (
+             {!hideFilter && (
               <div className="filter-block">
                 <button>
                   <i className="icon-filter" />
                 </button>
               </div>
             )}
+            <button
+              style={{ background: "orange", padding: "0" }}
+              onClick={this.openDialog.bind(this)}
+            >
+              Add Column
+            </button>
           </div>
+          {isReportColumn && <AddReportColumn closeDialog={this.closeDialog} />}
         </div>
         {filter && <FilterBar options={options} />}
       </AutoForm>

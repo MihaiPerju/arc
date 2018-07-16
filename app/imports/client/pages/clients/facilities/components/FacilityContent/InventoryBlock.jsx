@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Notifier from "../../../../../lib/Notifier";
 import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
-import { getToken } from "/imports/api/s3-uploads/utils";
+import {getToken} from "/imports/api/s3-uploads/utils";
 
 export default class InventoryBlock extends Component {
 
@@ -36,10 +36,12 @@ export default class InventoryBlock extends Component {
                         <DropzoneComponent config={componentConfig} djsConfig={djsConfig}/>
                     </div>
                     <div className="upload-section">
-                        <div>
-                            <button style={{float: 'right'}} type="button" className="btn--white" onClick={this.copyRules}>Copy placement file headers</button>
-                        </div>
-                        <ImportingRules rules={"inventoryRules"} model={facility} resetImportForm={resetImportForm} changeResetStatus={changeResetStatus}/>
+                        <ImportingRules rules={"inventoryRules"}
+                                        model={facility}
+                                        resetImportForm={resetImportForm}
+                                        changeResetStatus={changeResetStatus}
+                                        copyRules={this.copyRules}
+                        />
                     </div>
                 </div>
             </div>
