@@ -6,7 +6,6 @@ import ActionBlock from "./components/AccountContent/ActionBlock";
 import LetterList from "./components/AccountContent/LetterList";
 import PdfFiles from "./components/AccountContent/PdfFiles";
 import EscalateReason from "./components/AccountContent/EscalateReason";
-import CommentBlock from "./components/AccountContent/CommentBlock";
 import CommentsListContainer from "/imports/client/pages/comments/CommentsListContainer.jsx";
 import Statistics from "/imports/client/pages/accounts/components/Statistics";
 
