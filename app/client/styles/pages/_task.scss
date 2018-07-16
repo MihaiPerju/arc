@@ -913,7 +913,6 @@
 
     &__wrapper {
       position: relative;
-      padding-right: 35px;
       margin-bottom: 10px;
       padding-top: 6px;
 
@@ -1172,6 +1171,7 @@
     top: 26px;
     right: 15px;
     color: #b7b7b7;
+    pointer-events: none;
   }
 
   select {
@@ -1196,6 +1196,7 @@
         position: absolute;
         top: 12px;
         right: 15px;
+        pointer-events: none;
       }
       select {
         border: 0;

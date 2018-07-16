@@ -141,10 +141,13 @@ export default class CommentSingle extends React.Component {
       "text-light-grey": !comment.correctComment,
       "text-blue": comment.correctComment
     });
+    const commentItemClasses = classNames('comment__wrapper flex--helper flex-justify--space-between', {
+      'p-r--35': this.showFlags(comment._id)
+    });
 
     return (
       <div className="comment-item flex--helper flex--column">
-        <div className="comment__wrapper flex--helper flex-justify--space-between">
+        <div className={commentItemClasses}>
           <div className="name truncate">
             {(isRep &&
               Roles.userIsInRole(userId, roleGroups.ADMIN_TECH_MANAGER)) ||
