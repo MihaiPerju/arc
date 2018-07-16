@@ -47,5 +47,29 @@ Meteor.methods({
         }
       }
     );
+  },
+
+  "letter.mailManually"(_id) {
+    Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+    Letters.update(
+      { _id },
+      {
+        $set: {
+          isManuallyMailed: true
+        }
+      }
+    );
+  },
+
+  "letter.updateStatus"(_id, status) {
+    Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+    Letters.update(
+      { _id },
+      {
+        $set: {
+          status
+        }
+      }
+    );
   }
 });
