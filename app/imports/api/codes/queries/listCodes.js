@@ -11,5 +11,6 @@ export default Codes.createQuery('listCodes', {
     type: 1,
     description: 1,
     description_short: 1,
-    denial_action: 1
+    denial_action: 1,
+    tagIds: 1
 });

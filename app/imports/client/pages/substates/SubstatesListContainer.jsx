@@ -11,6 +11,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "/imports/client/lib/PagerService";
 import Pager from "../../lib/Pager";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class SubstatesListContainer extends Pager {
   constructor() {
@@ -23,17 +25,19 @@ class SubstatesListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      moduleTags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
-    const {queryParams} = FlowRouter.current();
+    const { queryParams } = FlowRouter.current();
     if (
       Object.keys(queryParams).length > 1 &&
       (queryParams.stateName && queryParams.stateName == "")
@@ -119,6 +123,18 @@ class SubstatesListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.SUBSTATES] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -127,7 +143,8 @@ class SubstatesListContainer extends Pager {
       create,
       filter,
       range,
-      total
+      total,
+      moduleTags
     } = this.state;
     const substate = objectFromArray(data, currentSubstate);
     if (loading) {
@@ -151,6 +168,7 @@ class SubstatesListContainer extends Pager {
             deleteAction={this.deleteAction}
             hideSort
             hideFilter
+            moduleTags={moduleTags}
           />
 
           <SubstatesList
@@ -160,6 +178,7 @@ class SubstatesListContainer extends Pager {
             currentSubstate={currentSubstate}
             setSubstate={this.setSubstate}
             substates={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             module="Substate"

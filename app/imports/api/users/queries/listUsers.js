@@ -14,5 +14,6 @@ export default Users.createQuery('listUsers', {
     tagIds: 1,
     tags: {
         name: 1
-    }
+    },
+    markerIds: 1
 });

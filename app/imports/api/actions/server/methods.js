@@ -51,5 +51,16 @@ Meteor.methods({
   "comment.respondFlag"(data) {
     data.managerId = this.userId;
     FlagService.respondToFlag(data);
+  },
+
+  "action.tag"({ _id, tagIds }) {
+    Actions.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
   }
 });

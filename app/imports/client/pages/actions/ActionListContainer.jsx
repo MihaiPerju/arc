@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import ActionSearchBar from "./components/ActionSearchBar.jsx";
 import ActionList from "./components/ActionList.jsx";
 import ActionContent from "./ActionContent.jsx";
@@ -13,6 +12,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class ActionListContainer extends Pager {
   constructor() {
@@ -26,7 +27,8 @@ class ActionListContainer extends Pager {
       total: 0,
       range: {},
       substates: [],
-      loadingSubstates: true
+      loadingSubstates: true,
+      moduleTags: []
     });
     this.query = query;
   }
@@ -49,6 +51,7 @@ class ActionListContainer extends Pager {
     if (id) {
       this.setAction(id);
     }
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -136,6 +139,18 @@ class ActionListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.ACTIONS] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -145,7 +160,8 @@ class ActionListContainer extends Pager {
       total,
       range,
       substates,
-      loadingSubstates
+      loadingSubstates,
+      moduleTags
     } = this.state;
     const action = objectFromArray(data, currentAction);
     if (loading || loadingSubstates) {
@@ -168,6 +184,7 @@ class ActionListContainer extends Pager {
             deleteAction={this.deleteAction}
             hideSort
             hideFilter
+            moduleTags={moduleTags}
           />
           <ActionList
             class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -176,6 +193,7 @@ class ActionListContainer extends Pager {
             currentAction={currentAction}
             setAction={this.setAction}
             actions={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             module="Action"

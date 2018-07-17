@@ -95,10 +95,6 @@ export default class AccountSingle extends Component {
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
           <label onClick={this.onCheck.bind(this)} />
-        </div>
-        <div className="mark-task">
-          <input type="checkbox" className="hidden" />
-          <label />
           <a onClick={this.onhandleTag.bind(this)}>
             <img
               style={{ width: "16px", margin: "8px" }}
@@ -106,6 +102,10 @@ export default class AccountSingle extends Component {
               alt=""
             />
           </a>
+        </div>
+        <div className="mark-task">
+          <input type="checkbox" className="hidden" />
+          <label />
         </div>
         <div className="row__item">
           <div className="left__side">

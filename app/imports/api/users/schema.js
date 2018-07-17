@@ -47,5 +47,12 @@ export default new SimpleSchema({
         type: String
     },
     'profile.suspended': {type: Boolean, optional: true},
-    avatar: {type: AvatarSchema, optional: true}
+    avatar: {type: AvatarSchema, optional: true},
+    markerIds: {
+        type: Array,
+        optional: true
+    },
+    'markerIds.$': {
+        type: String
+    }
 });

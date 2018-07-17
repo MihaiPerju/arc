@@ -7,13 +7,13 @@ export default class ActionList extends Component {
   }
 
   render() {
-    //        const {data, loading, error, handleHeaderClick, sortBy, isSortAscend, reasonCodesManage} = this.props;
     const {
       actions,
       setAction,
       selectAction,
       actionsSelected,
-      currentAction
+      currentAction,
+      moduleTags
     } = this.props;
     const actionList = actions.map(function(action, index) {
       return (
@@ -24,6 +24,7 @@ export default class ActionList extends Component {
           setAction={setAction}
           action={action}
           key={action._id}
+          moduleTags={moduleTags}
         />
       );
     }, this);

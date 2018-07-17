@@ -27,5 +27,16 @@ Meteor.methods({
     _.each(Ids, _id => {
         Substates.update({ _id }, { $set: { status: false } });
     });
+  },
+
+  "substate.tag"({ _id, tagIds }) {
+    Substates.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
   }
 });
