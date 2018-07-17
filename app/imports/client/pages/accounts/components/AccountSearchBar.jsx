@@ -5,7 +5,6 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
-import moment from "moment";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
@@ -96,7 +95,23 @@ export default class AccountSearchBar extends Component {
       });
     this.setState({ tickleUserIdOptions });
     model = FilterService.getFilterParams();
-    this.setState({ model });
+    const {
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      admitDateMin,
+      admitDateMax
+    } = model;
+    this.setState({
+      model,
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      admitDateMin,
+      admitDateMax
+    });
   }
 
   onSubmit(params) {
