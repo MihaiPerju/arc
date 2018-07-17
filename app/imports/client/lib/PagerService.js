@@ -322,6 +322,10 @@ export default class PagerService {
 
     //adding sort query options
 
+    _.extend(params, {
+      options: { sort: {} }
+    });
+
     if (sortCreatedAt) {
       _.extend(params.options.sort, {
         createdAt: sortCreatedAt === "ASC" ? 1 : -1

@@ -359,11 +359,49 @@
   .right__side {
     padding-right: 15px;
   }
+  
+  .left__side {
+    .name {
+      span {
+        position: relative;
+        padding-right: 45px;
+
+        &:hover {
+          .edit-info__btn {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .edit-info__btn {
+      top: 1px;
+      right: 0;
+    }
+  }
+  
   .btn-group {
     flex-grow: 1;
+
     button {
       width: 100%;
       margin-bottom: 7px;
+    }
+  }
+
+  .account-balance {
+    position: relative;
+
+    &:hover {
+      .edit-info__btn {
+        opacity: 1;
+      }
+    }
+
+    .edit-info__btn {
+      left: 0;
+      top: 0;
+      right: inherit;
     }
   }
 }
@@ -935,7 +973,6 @@
 
     &__wrapper {
       position: relative;
-      padding-right: 35px;
       margin-bottom: 10px;
       padding-top: 6px;
 
@@ -1195,6 +1232,7 @@
     top: 26px;
     right: 15px;
     color: #b7b7b7;
+    pointer-events: none;
   }
 
   select {
@@ -1219,6 +1257,7 @@
         position: absolute;
         top: 12px;
         right: 15px;
+        pointer-events: none;
       }
       select {
         border: 0;

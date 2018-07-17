@@ -3,6 +3,7 @@ import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
+import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
 import Notifier from "/imports/client/lib/Notifier";
@@ -16,8 +17,13 @@ export default class ClientSearchBar extends Component {
       dropdown: false,
       selectAll: false,
       createdAtMin: null,
-      createdAtMax: null
+      createdAtMax: null,
+      model: {}
     };
+  }
+
+  componentWillMount() {
+    this.getFilterParams();
   }
 
   onSubmit(params) {
@@ -108,13 +114,37 @@ export default class ClientSearchBar extends Component {
     }
   };
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("clientName" in queryParams) {
+      model.clientName = queryParams.clientName;
+    }
+
+    if ("createdAtMin" in queryParams) {
+      this.setState({
+        createdAtMin: moment(new Date(queryParams.createdAtMin))
+      });
+    }
+
+    if ("createdAtMax" in queryParams) {
+      this.setState({
+        createdAtMax: moment(new Date(queryParams.createdAtMax))
+      });
+    }
+
+    this.setState({ model });
+  };
+
   render() {
     const {
       dialogIsActive,
       dropdown,
       selectAll,
       createdAtMin,
-      createdAtMax
+      createdAtMax,
+      model
     } = this.state;
     const {
       options,
@@ -144,6 +174,7 @@ export default class ClientSearchBar extends Component {
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
         onChange={this.onChange}
+        model={model}
       >
         <div className="search-bar">
           {!hideSort && (
