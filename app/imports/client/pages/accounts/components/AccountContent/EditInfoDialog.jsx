@@ -17,8 +17,10 @@ export default class EditInfoDialog extends Component {
   }
 
   onSubmit = data => {
-    console.log(data);
     const { accountId } = this.props;
+    if ("ptName" in data) {
+      data.ptName = data.ptName.replace(/,/g, ", ");
+    }
 
     Meteor.call("account.update", accountId, data, err => {
       if (!err) {
