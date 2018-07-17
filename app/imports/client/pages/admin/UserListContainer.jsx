@@ -11,8 +11,6 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class UserListContainer extends Pager {
   constructor() {
@@ -33,7 +31,6 @@ class UserListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -126,18 +123,6 @@ class UserListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
-    moduleTagsQuery
-      .clone({
-        filters: { moduleNames: { $in: [moduleNames.USERS] } }
-      })
-      .fetch((err, moduleTags) => {
-        if (!err) {
-          this.setState({ moduleTags });
-        }
-      });
-  };
-
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -145,8 +130,7 @@ class UserListContainer extends Pager {
       currentUser,
       create,
       total,
-      range,
-      moduleTags
+      range
     } = this.state;
     const user = objectFromArray(data, currentUser);
 
@@ -171,7 +155,6 @@ class UserListContainer extends Pager {
             deleteAction={this.deleteAction}
             hideSort
             hideFilter
-            moduleTags={moduleTags}
           />
           <UserList
             class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -181,7 +164,6 @@ class UserListContainer extends Pager {
             usersSelected={usersSelected}
             currentUser={currentUser}
             users={data}
-            moduleTags={moduleTags}
           />
           <PaginationBar
             closeForm={this.closeForm}

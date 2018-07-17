@@ -30,16 +30,5 @@ Meteor.methods({
     const { tagIds } = Users.findOne({ _id: userId });
 
     return tagIds;
-  },
-
-  "user.tag"({ _id, markerIds }) {
-    Users.update(
-      { _id },
-      {
-        $set: {
-            markerIds
-        }
-      }
-    );
   }
 });

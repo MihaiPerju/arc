@@ -3,7 +3,7 @@ import UserSingle from "./UserSingle";
 
 export default class UserList extends Component {
   render() {
-    const { users, moduleTags } = this.props;
+    const { users } = this.props;
     const userList = users.map(function(user, index) {
       const { currentUser, setUser, selectUser, usersSelected } = this.props;
       return (
@@ -15,7 +15,6 @@ export default class UserList extends Component {
           setUser={setUser}
           key={user._id}
           user={user}
-          moduleTags={moduleTags}
         />
       );
     }, this);

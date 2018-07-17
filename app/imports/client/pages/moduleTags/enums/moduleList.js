@@ -1,6 +1,5 @@
 const moduleList = [
   "Clients",
-  "Users",
   "Codes",
   "Reports",
   "Templates",
@@ -12,7 +11,6 @@ const moduleList = [
 
 const moduleNames = {
   CLIENTS: "Clients",
-  USERS: "Users",
   CODES: "Codes",
   REPORTS: "Reports",
   TEMPLATES: "Templates",
