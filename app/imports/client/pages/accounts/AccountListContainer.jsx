@@ -3,7 +3,6 @@ import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import AccountContent from "./AccountContent.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
-import { createQueryContainer } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/accounts/queries/accountList";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import Loading from "/imports/client/lib/ui/Loading";
@@ -13,6 +12,8 @@ import AccountSearchBar from "./components/AccountSearchBar";
 import userTagsQuery from "/imports/api/users/queries/userTags.js";
 import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class AccountListContainer extends Pager {
   constructor() {
@@ -31,7 +32,8 @@ class AccountListContainer extends Pager {
       assignFilterArr: ["assigneeId"],
       tags: [],
       dropdownOptions: [],
-      currentRouteState: null
+      currentRouteState: null,
+      moduleTags: []
     });
     this.query = query;
   }
@@ -76,6 +78,7 @@ class AccountListContainer extends Pager {
 
     const { state } = this.props;
     this.setState({ currentRouteState: state });
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -336,6 +339,18 @@ class AccountListContainer extends Pager {
     });
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.ACCOUNT] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -348,7 +363,8 @@ class AccountListContainer extends Pager {
       assignWQ,
       showMetaData,
       assignFilterArr,
-      dropdownOptions
+      dropdownOptions,
+      moduleTags
     } = this.state;
     const options = this.getData(data);
     const account = this.getAccount(currentAccount);
@@ -383,6 +399,7 @@ class AccountListContainer extends Pager {
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
+            moduleTags={moduleTags}
           />
           {assignUser && (
             <AccountAssigning
@@ -410,6 +427,7 @@ class AccountListContainer extends Pager {
             checkAccount={this.checkAccount}
             currentAccount={currentAccount}
             data={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             nextPage={this.nextPage}

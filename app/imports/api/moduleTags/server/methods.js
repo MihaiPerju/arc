@@ -4,7 +4,6 @@ import Security from "/imports/api/security/security.js";
 Meteor.methods({
   "moduleTag.create"(data) {
     Security.isAdminOrTech(this.userId);
-    console.log("data", data);
     ModuleTags.insert(data);
   },
 

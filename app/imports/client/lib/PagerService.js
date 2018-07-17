@@ -42,6 +42,7 @@ export default class PagerService {
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
     const admitDateMin = FlowRouter.getQueryParam("admitDateMin");
     const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
+    const tagIds = FlowRouter.getQueryParam("tagIds");
     // sorting query params
     const sortAcctBal = FlowRouter.getQueryParam("sortAcctBal");
     const sortTickleDate = FlowRouter.getQueryParam("sortTickleDate");
@@ -75,7 +76,8 @@ export default class PagerService {
         fbDateMax,
         activeInsCode,
         admitDateMin,
-        admitDateMax
+        admitDateMax,
+        tagIds
       },
       options: {
         sortAcctBal,
@@ -135,7 +137,8 @@ export default class PagerService {
       activeInsCode,
       admitDateMin,
       admitDateMax,
-      tickleUserId
+      tickleUserId,
+      tagIds
     },
     {
       sortAcctBal,
@@ -311,6 +314,10 @@ export default class PagerService {
           )
         }
       });
+    }
+
+    if (tagIds) {
+      _.extend(params.filters, { tagIds: { $in: tagIds } });
     }
 
     //adding sort query options
@@ -527,7 +534,11 @@ export default class PagerService {
       _.extend(params.filters, {
         createdAt: {
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(moment(new Date(createdAtMax)).add(1, "day").startOf("day"))
+          $lt: new Date(
+            moment(new Date(createdAtMax))
+              .add(1, "day")
+              .startOf("day")
+          )
         }
       });
     }

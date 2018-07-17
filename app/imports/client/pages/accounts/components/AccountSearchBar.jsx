@@ -12,6 +12,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
 import userListQuery from "/imports/api/users/queries/listUsers.js";
 import FilterService from "/imports/client/lib/FilterService";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class AccountSearchBar extends Component {
   constructor() {
@@ -166,6 +167,10 @@ export default class AccountSearchBar extends Component {
     FlowRouter.setQueryParams({
       admitDateMax: FilterService.formatDate(admitDateMax)
     });
+
+    if ("tagIds" in params) {
+      FlowRouter.setQueryParams({ tagIds: params.tagIds });
+    }
   }
 
   openDropdown = () => {
@@ -283,6 +288,13 @@ export default class AccountSearchBar extends Component {
     }
   };
 
+  getOptions = tags => {
+    return _.map(tags, tag => ({
+      value: tag._id,
+      label: tag.name
+    }));
+  };
+
   render() {
     const {
       dropdown,
@@ -307,7 +319,8 @@ export default class AccountSearchBar extends Component {
       dropdownOptions,
       icons,
       getProperAccounts,
-      assignFilterArr
+      assignFilterArr,
+      moduleTags
     } = this.props;
 
     const classes = classNames({
@@ -335,6 +348,8 @@ export default class AccountSearchBar extends Component {
       "sort-options": true,
       tickle__width: currentStateName === "tickles"
     });
+
+    const tagOptions = this.getOptions(moduleTags);
 
     return (
       <AutoForm
@@ -488,7 +503,6 @@ export default class AccountSearchBar extends Component {
                               }
                             />
                           </div>
-
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
                           <div>
@@ -532,6 +546,15 @@ export default class AccountSearchBar extends Component {
                             label="Active Insurance Code:"
                             name="activeInsCode"
                             placeholder="Search by active Insurance Code"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <SelectMulti
+                            className="form-select__multi"
+                            placeholder="Select modules"
+                            labelHidden={true}
+                            name="tagIds"
+                            options={tagOptions}
                           />
                         </div>
                         <div className="flex--helper flex-justify--end">
@@ -785,5 +808,13 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by active Insurance Code"
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
+    type: String
   }
 });

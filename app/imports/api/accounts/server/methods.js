@@ -248,4 +248,15 @@ Meteor.methods({
     );
   },
 
+  "account.tag" ({_id, tagIds}) {
+    Accounts.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
+  }
+
 });
