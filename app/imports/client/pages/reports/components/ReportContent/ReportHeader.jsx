@@ -109,33 +109,23 @@ class ReportHeader extends Component {
 
   downloadReport = () => {
     const { data } = this.props;
-    const { reportId, _id } = data; 
+    const { reportId, _id } = data;
     window.open("/report/" + reportId);
   };
 
   getRunButton = status => {
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
-        return (
-          <button className="btn--white">
-            Loading...
-          </button>
-        );
+        return <button className="btn--white">Loading...</button>;
       case JobQueueStatuses.FINISHED:
         return (
-          <button
-            onClick={this.downloadReport}
-            className="btn--white"
-          >
+          <button onClick={this.downloadReport} className="btn--white">
             Download report
           </button>
         );
       default:
         return (
-          <button
-            onClick={this.onRunReport}
-            className="btn--white"
-          >
+          <button onClick={this.onRunReport} className="btn--white">
             Run report
           </button>
         );
@@ -251,6 +241,11 @@ class ReportHeader extends Component {
     });
   };
 
+  onSetGraph = () => {
+    const { setGraph } = this.props;
+    setGraph()
+  };
+
   render() {
     const { report, data } = this.props;
     const {
@@ -258,7 +253,7 @@ class ReportHeader extends Component {
       accounts,
       loading,
       dialogIsActive,
-      selectedReportColumns
+      selectedReportColumns,
     } = this.state;
     const job = data;
     const tableHeader = ["Account name", ...selectedReportColumns];
@@ -269,6 +264,12 @@ class ReportHeader extends Component {
           <ScheduleBlock report={report} />
         ) : (
           <div className="main-content__header header-block header-reports">
+            <button
+              style={{ background: "orange", float: "right" }}
+              onClick={this.onSetGraph.bind(this)}
+            >
+              Graph
+            </button>
             <div className="row__header">
               <div className="text-light-grey">Report name</div>
               <div className="title">{report.name}</div>
