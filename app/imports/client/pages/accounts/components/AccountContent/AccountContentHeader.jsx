@@ -125,7 +125,7 @@ export default class AccountContentHeader extends Component {
               <EditInfoDialog
                 accountId={account._id}
                 editValue={account.acctBal}
-                editField="acctBals"
+                editField="acctBal"
               />
               <div className="price">
                 {account && account.acctBal ? commaNumber(account.acctBal) : 0}
