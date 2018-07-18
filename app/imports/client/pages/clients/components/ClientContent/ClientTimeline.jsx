@@ -3,7 +3,6 @@ import moment from "moment";
 import { AutoForm, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import { Timeline, TimelineEvent } from "react-event-timeline";
-import accountListQuery from "/imports/api/accounts/queries/accountList";
 import Loading from "/imports/client/lib/ui/Loading";
 import actionTypesEnum, {
   typeList
@@ -12,6 +11,7 @@ import substateQuery from "/imports/api/substates/queries/listSubstates";
 import ClientService from "../../services/ClientService";
 import { rolesTypes } from "/imports/api/clients/enums/contactTypes";
 import filterTypeEnums from "../../enums/filterTypes";
+import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 
 export default class ClientTimeline extends Component {
   constructor() {
@@ -33,7 +33,8 @@ export default class ClientTimeline extends Component {
       lastMonth: false,
       userRoles: [],
       accounts: [],
-      isLoading: true
+      isLoading: true,
+      accountActions: []
     };
   }
 
@@ -69,47 +70,22 @@ export default class ClientTimeline extends Component {
       });
 
     const { _id } = this.props.client;
-    this.getAccounts(_id);
+    this.getActions(_id);
   }
 
   componentWillReceiveProps(props) {
     const { _id } = props.client;
     this.setState({ isLoading: true });
-    this.getAccounts(_id);
+    this.getActions(_id);
   }
 
-  getAccounts = id => {
+  getActions = id => {
     const params = ClientService.getActionsQueryParams(id);
-    return accountListQuery.clone(params).fetch((err, accounts) => {
+    return accountActionsQuery.clone(params).fetch((err, accountActions) => {
       if (!err) {
-        this.setState({ accounts, isLoading: false });
+        this.setState({ accountActions, isLoading: false });
       }
     });
-  };
-
-  getActions = () => {
-    const { accounts } = this.state;
-    let actions = [];
-    const flags = [];
-    accounts.map(account => {
-      account.actions.map(action => (action.acctNum = account.acctNum));
-      account.comments.map(comment => (comment.acctNum = account.acctNum));
-      account.letters.map(letter => (letter.acctNum = account.acctNum));
-      account.facility.files.map(file => (file.acctNum = account.acctNum));
-      account.flags.map(flag => {
-        flag.flagAction.acctNum = account.acctNum;
-        flags.push(flag.flagAction);
-      });
-
-      actions = actions.concat(
-        account.actions,
-        account.comments,
-        account.letters,
-        account.facility.files,
-        flags
-      );
-    });
-    return actions;
   };
 
   manageFilterBar = () => {
@@ -192,16 +168,15 @@ export default class ClientTimeline extends Component {
       action,
       reasonCode,
       content,
-      acctNum,
       letterTemplate,
       fileName,
       user,
       actionId,
-      commentId,
       isOpen,
       flagResponse,
       isFlagApproved,
-      manager
+      manager,
+      account
     } = data;
 
     switch (type) {
@@ -216,7 +191,7 @@ export default class ClientTimeline extends Component {
                   </b>
                 )}{" "}
                 applied action <b>{action.title}</b> to account with Account
-                Number <b>{acctNum}</b>
+                Number <b>{account && account.acctNum}</b>
               </div>
             )}
             {reasonCode && <div>Reason Code: {reasonCode}</div>}
@@ -227,8 +202,7 @@ export default class ClientTimeline extends Component {
           <div>
             {action && (
               <div>
-                Applied action <b>{action.title}</b> to account with Account
-                Number <b>{acctNum}</b>
+                Applied system action <b>{action.title}</b> to account.
               </div>
             )}
           </div>
@@ -242,7 +216,7 @@ export default class ClientTimeline extends Component {
               </b>
             )}{" "}
             commented a comment <b>{content}</b> to account with Account Number{" "}
-            <b>{acctNum}</b>
+            <b>{account && account.acctNum}</b>
           </div>
         );
       case actionTypesEnum.LETTER:
@@ -257,7 +231,7 @@ export default class ClientTimeline extends Component {
                 )}{" "}
                 send a letter with letter-template name{" "}
                 <b>{letterTemplate.name}</b> to account with account number{" "}
-                <b>{acctNum}</b>
+                <b>{account && account.acctNum}</b>
               </div>
             )}
           </div>
@@ -300,11 +274,15 @@ export default class ClientTimeline extends Component {
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
                 </b>{" "}
-                flagged an action on account <b>{acctNum}</b>.
+                flagged an action on account <b>{account && account.acctNum}</b>.
                 {!isOpen && (
                   <div>
-                    <br/>
-                    Manager <b>{manager.profile.firstName} {manager.profile.lastName}</b> has responsed to the action and{" "}
+                    <br />
+                    Manager{" "}
+                    <b>
+                      {manager.profile.firstName} {manager.profile.lastName}
+                    </b>{" "}
+                    has responsed to the action and{" "}
                     {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
@@ -315,11 +293,15 @@ export default class ClientTimeline extends Component {
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
                 </b>{" "}
-                flagged a comment on account <b>{acctNum}</b>.
+                flagged a comment on account <b>{account && account.acctNum}</b>.
                 {!isOpen && (
                   <div>
-                    <br/>
-                    Manager <b>{manager.profile.firstName} {manager.profile.lastName}</b> has responsed to a comment and{" "}
+                    <br />
+                    Manager{" "}
+                    <b>
+                      {manager.profile.firstName} {manager.profile.lastName}
+                    </b>{" "}
+                    has responsed to a comment and{" "}
                     {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
@@ -353,14 +335,13 @@ export default class ClientTimeline extends Component {
       lastWeek,
       lastMonth,
       userRoles,
-      isLoading
+      isLoading,
+      accountActions
     } = this.state;
 
     if (isLoading) {
       return <Loading />;
     }
-
-    const actionsPerformed = this.getActions();
 
     return (
       <div className="action-block">
@@ -500,22 +481,27 @@ export default class ClientTimeline extends Component {
           </AutoForm>
         )}
         <div className="actions__timeline">
-          {actionsPerformed.length > 0 && (
+          {accountActions.length > 0 && (
             <Timeline>
-              {actionsPerformed &&
-                actionsPerformed.map((actionPerformed, index) => {
-                  const { createdAt, acctNum, type } = actionPerformed;
+              {accountActions &&
+                accountActions.map((action, index) => {
+                  const { createdAt, type, user, account } = action;
+                  
+                  if (!user || (FlowRouter.getQueryParam("substate") && !account)) {
+                    return <div key={index} />;
+                  }
+
                   return (
                     <TimelineEvent
                       key={index}
-                      title={acctNum}
+                      title=""
                       createdAt={moment(createdAt).format(
                         "MMMM Do YYYY, hh:mm a"
                       )}
                       icon={this.getTimelineIcon(type)}
                       iconColor="#3370b5"
                     >
-                      {this.getTimelineBody(actionPerformed)}
+                      {this.getTimelineBody(action)}
                     </TimelineEvent>
                   );
                 })}

@@ -84,5 +84,9 @@ export default new SimpleSchema({
   correctComment: {
     type: Boolean,
     defaultValue: false
+  },
+  clientId: {
+    type: String,
+    optional: true
   }
 });

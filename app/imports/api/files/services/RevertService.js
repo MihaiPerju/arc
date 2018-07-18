@@ -48,12 +48,13 @@ export default class RevertService {
 
   static revertAccounts(fileId, previousFileId, facilityId, fileName) {
     const accounts = Accounts.find({ facilityId, fileId }).fetch();
-
+    const { clientId } = Facilities.findOne({ _id: facilityId });
     const revertFile = {
       type: actionTypesEnum.REVERT,
       createdAt: new Date(),
       fileId,
-      fileName
+      fileName,
+      clientId
     };
     const accountActionId = AccountActions.insert(revertFile);
 
