@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
+import actionQuery from "/imports/api/actions/queries/actionList";
+import SubstateDescription from "./SubstateDescription";
 
 export default class SubstateSingle extends Component {
   constructor(props) {

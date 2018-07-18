@@ -183,7 +183,6 @@ class ActionListContainer extends Pager {
             btnGroup={actionsSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            hideFilter
             moduleTags={moduleTags}
           />
           <ActionList

@@ -5,6 +5,7 @@ import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class CodeSearchBar extends Component {
   constructor() {
@@ -14,7 +15,8 @@ export default class CodeSearchBar extends Component {
       filter: false,
       dropdown: false,
       selectAll: false,
-      model: {}
+      model: {},
+      dialogIsActive: false
     };
   }
 
@@ -36,8 +38,9 @@ export default class CodeSearchBar extends Component {
     if (queryParams.page != "1" && "code" in params) {
       this.props.setPagerInitial();
     }
-    if ("code" in params) {
-      FlowRouter.setQueryParams({ code: params.code });
+
+    if ("tagIds" in params) {
+      FlowRouter.setQueryParams({ tagIds: params.tagIds });
     }
   }
 
@@ -79,11 +82,54 @@ export default class CodeSearchBar extends Component {
       model.code = queryParams.code;
     }
 
+    if ("tagIds" in queryParams) {
+      model.tagIds = queryParams.tagIds;
+    }
+
     this.setState({ model });
   };
 
+  getOptions = tags => {
+    return _.map(tags, tag => ({
+      value: tag._id,
+      label: tag.name
+    }));
+  };
+
+  onChange = (field, value) => {
+    if (field === "code") {
+      FlowRouter.setQueryParams({ code: value });
+    }
+  };
+
+  openDialog = e => {
+    e.preventDefault();
+    this.setState({
+      dialogIsActive: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      dialogIsActive: false
+    });
+  };
+
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+
   render() {
-    const { filter, active, dropdown, selectAll, model } = this.state;
+    const {
+      filter,
+      active,
+      dropdown,
+      selectAll,
+      model,
+      dialogIsActive
+    } = this.state;
     const {
       options,
       btnGroup,
@@ -92,7 +138,7 @@ export default class CodeSearchBar extends Component {
       icons,
       getProperAccounts,
       hideSort,
-      hideFilter
+      moduleTags
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -106,15 +152,15 @@ export default class CodeSearchBar extends Component {
       full__width: btnGroup,
       sort__none: hideSort
     });
+    const tagOptions = this.getOptions(moduleTags);
 
     return (
       <AutoForm
-        autosave
-        autosaveDelay={500}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
         model={model}
+        onChange={this.onChange}
       >
         <div className="search-bar">
           {!hideSort && (
@@ -150,16 +196,43 @@ export default class CodeSearchBar extends Component {
               </div>
             </div>
 
-            {!hideFilter && (
-              <div
-                className={active ? "filter-block active" : "filter-block"}
-                onClick={this.manageFilterBar.bind(this)}
-              >
-                <button>
-                  <i className="icon-filter" />
-                </button>
-              </div>
-            )}
+            <div className="filter-block">
+              <button onClick={this.openDialog.bind(this)}>
+                <i className="icon-filter" />
+                {dialogIsActive && (
+                  <Dialog
+                    className="account-dialog filter-dialog"
+                    closePortal={this.closeDialog}
+                    title="Filter by:"
+                  >
+                    <button className="close-dialog" onClick={this.closeDialog}>
+                      <i className="icon-close" />
+                    </button>
+                    <div className="filter-bar">
+                      <div className="select-wrapper">
+                        <div className="form-group">
+                          <SelectMulti
+                            className="form-select__multi"
+                            placeholder="Select modules"
+                            labelHidden={true}
+                            name="tagIds"
+                            options={tagOptions}
+                          />
+                        </div>
+                        <div className="flex--helper flex-justify--end">
+                          <button
+                            className="btn--blue"
+                            onClick={this.addFilters}
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Dialog>
+                )}
+              </button>
+            </div>
           </div>
         </div>
         {filter && <FilterBar options={options} />}
@@ -254,18 +327,17 @@ class BtnGroup extends Component {
 }
 
 const schema = new SimpleSchema({
-  facilityId: {
-    type: String,
-    optional: true
-  },
-  assigneeId: {
-    type: String,
-    optional: true,
-    label: "Filter by assignee"
-  },
   code: {
     type: String,
     optional: true,
     label: "Search by code name"
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
+    type: String
   }
 });

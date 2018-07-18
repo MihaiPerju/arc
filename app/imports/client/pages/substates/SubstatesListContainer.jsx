@@ -167,7 +167,6 @@ class SubstatesListContainer extends Pager {
             btnGroup={substateSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            hideFilter
             moduleTags={moduleTags}
           />
 

@@ -3,12 +3,14 @@ import { AutoForm, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import query from "/imports/api/letters/queries/letterList.js";
-
+import Dialog from "/imports/client/lib/ui/Dialog";
 export default class LetterSearchBar extends Component {
   constructor() {
     super();
     this.state = {
-      letters: []
+      letters: [],
+      dialogIsActive: false,
+      model: {}
     };
   }
 
@@ -20,16 +22,16 @@ export default class LetterSearchBar extends Component {
         });
       }
     });
+    this.getFilterParams();
   }
 
   onSubmit(params) {
     if (FlowRouter.current().queryParams.page != "1" && "letterIds" in params) {
       this.props.setPagerInitial();
     }
-    if ("letterIds" in params) {
-      FlowRouter.setQueryParams({
-        letterIds: params.letterIds
-      });
+
+    if ("tagIds" in params) {
+      FlowRouter.setQueryParams({ tagIds: params.tagIds });
     }
   }
 
@@ -40,21 +42,67 @@ export default class LetterSearchBar extends Component {
     }));
   };
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("tagIds" in queryParams) {
+      model.tagIds = queryParams.tagIds;
+    }
+
+    if ("letterIds" in queryParams) {
+      model.letterIds = queryParams.letterIds;
+    }
+
+    this.setState({ model });
+  };
+
+  openDialog = e => {
+    e.preventDefault();
+    this.setState({
+      dialogIsActive: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      dialogIsActive: false
+    });
+  };
+
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+
+  onChange = (field, value) => {
+    if (field === "letterIds") {
+      FlowRouter.setQueryParams({ letterIds: value });
+    }
+  };
+
+  getTagOptions = tags => {
+    return _.map(tags, tag => ({
+      value: tag._id,
+      label: tag.name
+    }));
+  };
+
   render() {
-    const { letters } = this.state;
+    const { letters, model, dialogIsActive } = this.state;
+    const { moduleTags } = this.props;
     const options = this.getOptions(letters);
-    const model = { letterIds: FlowRouter.getQueryParam("letterIds") } || {
-      letterIds: []
-    };
+
+    const tagOptions = this.getTagOptions(moduleTags);
 
     return (
       <AutoForm
-        autosave
-        autosaveDelay={500}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
         model={model}
+        onChange={this.onChange}
       >
         <div className="search-bar">
           <div className="search-bar__wrapper flex--helper">
@@ -71,6 +119,40 @@ export default class LetterSearchBar extends Component {
               </div>
             </div>
           </div>
+          <div className="filter-block">
+            <button onClick={this.openDialog.bind(this)}>
+              <i className="icon-filter" />
+              {dialogIsActive && (
+                <Dialog
+                  className="account-dialog filter-dialog"
+                  closePortal={this.closeDialog}
+                  title="Filter by:"
+                >
+                  <button className="close-dialog" onClick={this.closeDialog}>
+                    <i className="icon-close" />
+                  </button>
+                  <div className="filter-bar">
+                    <div className="select-wrapper">
+                      <div className="form-group">
+                        <SelectMulti
+                          className="form-select__multi"
+                          placeholder="Select modules"
+                          labelHidden={true}
+                          name="tagIds"
+                          options={tagOptions}
+                        />
+                      </div>
+                      <div className="flex--helper flex-justify--end">
+                        <button className="btn--blue" onClick={this.addFilters}>
+                          Done
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog>
+              )}
+            </button>
+          </div>
         </div>
       </AutoForm>
     );
@@ -83,6 +165,14 @@ const schema = new SimpleSchema({
     optional: true
   },
   "letterIds.$": {
+    type: String
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
     type: String
   }
 });

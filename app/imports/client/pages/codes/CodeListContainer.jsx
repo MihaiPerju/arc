@@ -168,7 +168,6 @@ class CodeListContainer extends Pager {
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            hideFilter
             moduleTags={moduleTags}
           />
           <CodeList

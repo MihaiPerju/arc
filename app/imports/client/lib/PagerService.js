@@ -378,7 +378,8 @@ export default class PagerService {
       regionName,
       createdAtMin,
       createdAtMax,
-      letterIds;
+      letterIds,
+      tagIds;
 
     _.extend(params, {
       filters: {}
@@ -453,6 +454,8 @@ export default class PagerService {
       tagName = FlowRouter.getQueryParam("tagName");
     }
 
+    tagIds = FlowRouter.getQueryParam("tagIds");
+
     // client search
     if (clientName) {
       _.extend(params.filters, {
@@ -507,6 +510,11 @@ export default class PagerService {
       _.extend(params.filters, {
         name: { $regex: tagName, $options: "i" }
       });
+    }
+
+    // common filter query for tags filtering
+    if (tagIds) {
+      _.extend(params.filters, { tagIds: { $in: tagIds } });
     }
 
     // substates sorts
