@@ -31,14 +31,13 @@ export default class LetterManagement {
   static createLetterContentPdf(html, letterId) {
     var future = new Future();
     const fileLocation = os.tmpdir() + "/" + letterId + ".pdf";
-    let { accountId, body } = Letters.findOne({ _id: letterId });
+    const { accountId } = Letters.findOne({ _id: letterId });
     const { clientId } = Accounts.findOne({ _id: accountId });
     const { clientName } = Clients.findOne({ _id: clientId });
 
     QRCode.toDataURL(clientName)
       .then(url => {
         html = ReactDOMServer.renderToString(<img src={url} />) + html;
-        body = ReactDOMServer.renderToString(<img src={url} />) + body;
         pdf.create(html).toFile(fileLocation, (err, res) => {
           if (err) {
             future.return(err);
@@ -46,14 +45,6 @@ export default class LetterManagement {
             future.return(res);
           }
         });
-        Letters.update(
-          { _id: letterId },
-          {
-            $set: {
-              body
-            }
-          }
-        );
       })
       .catch(err => {
         console.error(err);
