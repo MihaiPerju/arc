@@ -39,3 +39,5 @@ percolate:synced-cron
 react-meteor-data
 cultofcoders:grapher@1.3.6
 underscore
+tmeasday:publish-counts
+natestrauser:publish-performant-counts
