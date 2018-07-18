@@ -4,7 +4,11 @@ import { withTracker } from "meteor/react-meteor-data";
 class Badge extends Component {
   render() {
     const { counter } = this.props;
-    return <div className="badge text-center">{counter}</div>;
+    return (
+      <div>
+        {counter > 0 && <div className="badge text-center">{counter}</div>}
+      </div>
+    );
   }
 }
 
