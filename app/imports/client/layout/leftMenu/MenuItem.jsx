@@ -4,7 +4,7 @@ import Badge from "/imports/client/lib/Badge";
 export default class MenuItem extends Component {
   render() {
     const { className, href, icon, label, badge, active } = this.props;
-    console.log(label);
+ 
     return (
       <li className={className}>
         {
