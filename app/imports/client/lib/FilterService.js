@@ -1,3 +1,4 @@
+import moment from "moment";
 export default class FilterService {
   static formatDate(date) {
     return date ? new Date(date).toString() : null;
@@ -5,7 +6,14 @@ export default class FilterService {
 
   static getFilterParams() {
     const queryParams = FlowRouter.current().queryParams;
-    const model = {};
+    const model = {
+      dischrgDateMin: null,
+      dischrgDateMax: null,
+      fbDateMin: null,
+      fbDateMax: null,
+      admitDateMin: null,
+      admitDateMax: null
+    };
 
     if ("acctNum" in queryParams) {
       model.acctNum = queryParams.acctNum;
@@ -41,30 +49,22 @@ export default class FilterService {
       model.activeInsCode = queryParams.activeInsCode;
     }
     if ("dischrgDateMin" in queryParams) {
-      this.setState({
-        dischrgDateMin: moment(new Date(queryParams.dischrgDateMin))
-      });
+      model.dischrgDateMin = moment(new Date(queryParams.dischrgDateMin));
     }
     if ("dischrgDateMax" in queryParams) {
-      this.setState({
-        dischrgDateMax: moment(new Date(queryParams.dischrgDateMax))
-      });
+      model.dischrgDateMax = moment(new Date(queryParams.dischrgDateMax));
     }
     if ("fbDateMin" in queryParams) {
-      this.setState({ fbDateMin: moment(new Date(queryParams.fbDateMin)) });
+      model.fbDateMin = moment(new Date(queryParams.fbDateMin));
     }
     if ("fbDateMax" in queryParams) {
-      this.setState({ fbDateMax: moment(new Date(queryParams.fbDateMax)) });
+      model.fbDateMax = moment(new Date(queryParams.fbDateMax));
     }
     if ("admitDateMin" in queryParams) {
-      this.setState({
-        admitDateMin: moment(new Date(queryParams.admitDateMin))
-      });
+      model.admitDateMin = moment(new Date(queryParams.admitDateMin));
     }
     if ("admitDateMax" in queryParams) {
-      this.setState({
-        admitDateMax: moment(new Date(queryParams.admitDateMax))
-      });
+      model.admitDateMax = moment(new Date(queryParams.admitDateMax));
     }
 
     return model;

@@ -95,7 +95,25 @@ export default class AccountSearchBar extends Component {
       });
     this.setState({ tickleUserIdOptions });
     model = FilterService.getFilterParams();
-    this.setState({ model });
+
+    const {
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      admitDateMin,
+      admitDateMax
+    } = model;
+
+    this.setState({
+      model,
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      admitDateMin,
+      admitDateMax
+    });
   }
 
   onSubmit(params) {
