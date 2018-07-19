@@ -37,8 +37,77 @@ export default class Notitfications extends Component {
     this.node = node;
   };
 
+  getMessage = notification => {
+    const { metaData, type } = notification;
+    if (
+      metaData &&
+      metaData.acctNum &&
+      type === NotificationTypeEnum.RESPONSE
+    ) {
+      return (
+        "Manager responded to account with Account Number " + metaData.acctNum
+      );
+    } else if (
+      metaData &&
+      metaData.name &&
+      type === NotificationTypeEnum.REPORT
+    ) {
+      return (
+        <div>
+          Report:
+          <a href={`reports/list?reportId=${metaData.reportId}`}>
+            {metaData.name}
+          </a>
+          has been completed
+        </div>
+      );
+    } else if (
+      metaData &&
+      metaData.acctNum &&
+      type === NotificationTypeEnum.FLAG
+    ) {
+      return (
+        <div>
+          <span>
+            User flagged
+            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"}
+            {metaData.flagType} on account with Account number
+          </span>
+          <a
+            className="text-blue"
+            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
+              metaData.accountId
+              }`}
+          >
+            {metaData.acctNum}
+          </a>
+        </div>
+      );
+    } else if (
+      metaData &&
+      metaData.acctNum &&
+      type === NotificationTypeEnum.COMMENT
+    ) {
+      return (
+        <div>
+          <span>Note left by manager on account with Account number</span>
+          <a
+            className="text-blue"
+            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
+              metaData.accountId
+              }`}
+          >
+            {metaData.acctNum}
+          </a>
+        </div>
+      );
+    }
+    return notification.message;
+  };
+
   render() {
     const {dropdownIsActive, badge} = this.state;
+    const {data} = this.props;
     const notificationBtnClasses = classNames('notification-btn', {
       'active': dropdownIsActive
     });
@@ -73,7 +142,7 @@ export default class Notitfications extends Component {
               </div>
               <div className="notification-dropdown__wrapper">
                 {
-                  notifications.map((notification, index) => (
+                  data.map((notification, index) => (
                     <NotificationItem key={index}
                                       content={notification.content}
                                       time={notification.time}
