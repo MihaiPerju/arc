@@ -42,7 +42,7 @@ export default class Notitfications extends Component {
     const notificationBtnClasses = classNames('notification-btn', {
       'active': dropdownIsActive
     });
-    
+
     //My Notifications
     const notifications = [
       {content: 'Manager responded to account with Account Number acnx1', time: '11:22'},
@@ -59,7 +59,7 @@ export default class Notitfications extends Component {
         <a href="javascript:;" className={notificationBtnClasses} onClick={this.openDropdown} ref={this.nodeRef}>
           <i className="icon-bell-o"/>
           {
-            badge && (
+            badge && notifications.length > 1 && (
               <div className="badge text-center">{notifications.length}</div>
             )
           }
@@ -79,6 +79,11 @@ export default class Notitfications extends Component {
                                       time={notification.time}
                     />
                   ))
+                }
+                {
+                  notifications.length === 0 && (
+                    <div className="notification-none text-center text-light-grey">No notifications!</div>
+                  )
                 }
               </div>
             </div>

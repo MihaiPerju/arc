@@ -142,6 +142,11 @@
 }
 
 .notification {
+  &-none {
+    font-weight: 700;
+    padding: 10px;
+  }
+
   &-btn {
     font-size: 1.8rem;
     padding: 8px;
