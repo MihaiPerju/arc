@@ -28,10 +28,8 @@ Meteor.methods({
     Codes.remove({ _id: id });
   },
 
-  "code.deleteMany"(Ids) {
-    _.each(Ids, _id => {
-      Codes.remove({ _id });
-    });
+  "code.deleteMany"(ids) {
+    Codes.remove({ _id: { $in: ids } });
   },
 
   "code.tag"({ _id, tagIds }) {

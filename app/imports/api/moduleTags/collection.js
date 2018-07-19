@@ -1,7 +1,7 @@
 import ModuleTagsSchema from "./schema.js";
 
-const ModuleTags = new Mongo.Collection("module_tags");
+const moduleTags = new Mongo.Collection("module_tags");
 
-ModuleTags.attachSchema(ModuleTagsSchema);
+moduleTags.attachSchema(ModuleTagsSchema);
 
-export default ModuleTags;
+export default moduleTags;

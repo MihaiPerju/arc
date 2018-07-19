@@ -28,12 +28,10 @@ Meteor.methods({
     LetterTemplates.remove({ _id: id });
   },
 
-  "letterTemplate.deleteMany"(Ids) {
+  "letterTemplate.deleteMany"(ids) {
     Security.isAdminOrTech(this.userId);
 
-    _.each(Ids, _id => {
-      LetterTemplates.remove({ _id });
-    });
+    LetterTemplates.remove({ _id: { $in: ids } });
   },
 
   "letterTemplate.tag"({ _id, tagIds }) {

@@ -21,12 +21,14 @@ Meteor.methods({
     Security.checkAdmin(this.userId);
     Substates.update({ _id }, { $set: { status: false } });
   },
-  "substate.deleteMany"(Ids) {
+  "substate.deleteMany"(ids) {
     Security.checkAdmin(this.userId);
 
-    _.each(Ids, _id => {
-        Substates.update({ _id }, { $set: { status: false } });
-    });
+    Substates.update(
+      { _id: { $in: ids } },
+      { $set: { status: false } },
+      { multi: true }
+    );
   },
 
   "substate.tag"({ _id, tagIds }) {

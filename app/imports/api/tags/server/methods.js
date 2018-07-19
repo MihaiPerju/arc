@@ -44,11 +44,9 @@ Meteor.methods({
     );
   },
 
-  "tags.deleteMany"(Ids) {
+  "tags.deleteMany"(ids) {
     if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
-      _.each(Ids, _id => {
-        Tags.remove({ _id });
-      });
+      Tags.remove({ _id: { $in: ids } });
     } else {
       throw new Meteor.Error(
         "not-allowed",
@@ -71,9 +69,7 @@ Meteor.methods({
 
   "user.removeTags"({ userIds, tagId }) {
     if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
-      _.each(userIds, _id => {
-        Users.update({ _id }, { $pull: { tagIds: tagId } });
-      });
+      Users.update({ _id: { $in: userIds } }, { $pull: { tagIds: tagId } });
     } else {
       throw new Meteor.Error(
         "not-allowed",

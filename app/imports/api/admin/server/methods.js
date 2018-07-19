@@ -135,10 +135,7 @@ Meteor.methods({
 
   "admin.deleteManyUsers"(userIds) {
     Security.checkAdmin(this.userId);
-
-    _.each(userIds, _id => {
-      Users.remove({ _id });
-    });
+    Users.remove({ _id: { $in: userIds } });
   },
 
   //Testing purpose only, delete in production

@@ -20,10 +20,8 @@ Meteor.methods({
     );
   },
 
-  "moduleTag.deleteMany"(Ids) {
+  "moduleTag.deleteMany"(ids) {
     Security.isAdminOrTech(this.userId);
-    _.each(Ids, _id => {
-      ModuleTags.remove({ _id });
-    });
+    ModuleTags.remove({ _id: { $in: ids } });
   }
 });
