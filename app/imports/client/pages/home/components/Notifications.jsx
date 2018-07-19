@@ -53,7 +53,7 @@ class NotificationListContainer extends React.Component {
         <div>
           <span>
             User flagged 
-            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"} 
+            {metaData.flagType === flagTypesEnum.ACTION ? " an " : " a "}
             {metaData.flagType} on account with Account number
           </span>
           <a

@@ -17,64 +17,9 @@ export default class LeftMenu extends Component {
   constructor(props) {
     super();
     this.state = {
-      collapse: false,
-      unassigned: 0,
-      escalations: 0,
-      tickles: 0
+      collapse: false
     };
   }
-
-  componentWillReceiveProps = () => {
-    this.countBadges();
-  };
-
-  countBadges = () => {
-    const that = this;
-    accountListQuery
-      .clone({
-        filters: {
-          assigneeId: { $exists: false },
-          workQueue: { $exists: false },
-          escalationId: { $exists: false },
-          tickleDate: { $exists: false }
-        }
-      })
-      .getCount((err, count) => {
-        if (!err) {
-          that.setState({ unassigned: count });
-        }
-      });
-
-    accountListQuery
-      .clone({ filters: { escalationId: { $exists: true } } })
-      .getCount((err, count) => {
-        if (!err) {
-          that.setState({ escalations: count });
-        }
-      });
-
-    const today = moment();
-    let startOfDay = moment(today).startOf("day");
-    startOfDay = startOfDay.add(1, "day");
-
-    accountListQuery
-      .clone({
-        filters: {
-          tickleDate: {
-            $lt: new Date(moment(startOfDay).format())
-          },
-          tickleUserId: Meteor.userId()
-        }
-      })
-      .getCount((err, count) => {
-        if (!err) {
-          that.setState({ tickles: count });
-        }
-      });
-  };
-  componentWillMount = () => {
-    this.countBadges();
-  };
 
   collapseMenu = () => {
     const { collapse } = this.state;
@@ -84,18 +29,14 @@ export default class LeftMenu extends Component {
   };
 
   render() {
-    const { collapse, unassigned, escalations, tickles } = this.state;
+    const { collapse } = this.state;
 
     const menuClasses = classNames({
       "left-menu": true,
       collapsed: collapse
     });
 
-    let routes = RoutesService.getRoutesByRole({
-      unassigned,
-      escalations,
-      tickles
-    });
+    let routes = RoutesService.getRoutesByRole();
 
     return (
       <div>
