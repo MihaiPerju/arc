@@ -23,7 +23,6 @@ export default class ImportingRules extends React.Component {
   }
 
   componentWillMount() {
-    console.log("will mount");
     const { model, rules } = this.props;
     const schema = RulesService.createSchema(
       rules,
@@ -91,7 +90,6 @@ export default class ImportingRules extends React.Component {
   // }
 
   toggleInsurances = () => {
-    console.log("toggle insurances");
     const { collapse } = this.state;
 
     this.setState({ collapse: !collapse });
@@ -121,6 +119,7 @@ export default class ImportingRules extends React.Component {
 
     console.log("Rendered");
     console.log(collapse);
+    console.log(schema);
 
     return (
       <div>
@@ -164,12 +163,16 @@ export default class ImportingRules extends React.Component {
                 })}
             </div> */}
 
-            <span
-              className={btnCollapseClasses}
-              onClick={this.toggleInsurances}
-            >
-              {collapse ? "show" : "hide"}
-            </span>
+            <div className="add-insurance__section">
+              <span
+                className={btnCollapseClasses}
+                onClick={this.toggleInsurances}
+              >
+                {collapse ? "show" : "hide"}
+              </span>
+              <InsuranceRules collapse={collapse} />
+            </div>
+
             {/* <div className="upload-list">
               {schema._schemaKeys.includes("insurances") ? (
                 <div className="add-insurance__section">

@@ -10,10 +10,13 @@ import {
 export default class InsuranceRules extends React.Component {
   render() {
     const { collapse } = this.props;
+    console.log(collapse);
     return (
       <ListField name="insurances">
-        <ListItemField name="$">
-          {!collapse && (
+        {/* {collapse ? "Collapsed" : "Not collapsed"} */}
+
+        {!collapse && (
+          <ListItemField name="$">
             <NestField>
               <div className="upload-item">
                 <div className="text-center">
@@ -64,8 +67,8 @@ export default class InsuranceRules extends React.Component {
                 </div>
               </div>
             </NestField>
-          )}
-        </ListItemField>
+          </ListItemField>
+        )}
       </ListField>
     );
   }
