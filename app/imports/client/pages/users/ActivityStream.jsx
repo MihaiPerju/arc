@@ -81,7 +81,6 @@ export default class ActivityStream extends React.Component {
     });
 
     accountActionsQuery.clone(params).fetch((err, actions) => {
-      console.log("actions",actions)
       if (!err) {
         let { accountActions } = this.state;
         accountActions = accountActions.concat(actions);
@@ -353,7 +352,6 @@ export default class ActivityStream extends React.Component {
             {accountActions &&
               accountActions.map((actionPerformed, index) => {
                 const { createdAt, type } = actionPerformed;
-                console.log("actionPerformed", actionPerformed)
                 return (
                   <TimelineEvent
                     key={index}
