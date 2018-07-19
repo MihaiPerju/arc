@@ -103,8 +103,10 @@ class NotificationItem extends Component {
         <div className="notification-icon">
           <i className="icon-response"/>
         </div>
-        <div className="notification-content text-light-grey">{content}</div>
-        <div className="notification-time">{time}</div>
+        <div className="notification-info__content">
+          <div className="notification-content text-light-grey">{content}</div>
+          <div className="notification-time">{time}</div>
+        </div>
       </div>
     )
   }
