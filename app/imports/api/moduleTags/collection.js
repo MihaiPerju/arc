@@ -1,6 +1,6 @@
 import ModuleTagsSchema from "./schema.js";
 
-const moduleTags = new Mongo.Collection("module_tags");
+const moduleTags = new Mongo.Collection("moduleTags");
 
 moduleTags.attachSchema(ModuleTagsSchema);
 
