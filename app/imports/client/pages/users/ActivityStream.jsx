@@ -3,12 +3,12 @@ import SimpleSchema from "simpl-schema";
 import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { Timeline, TimelineEvent } from "react-event-timeline";
 import moment from "moment";
-import userListQuery from "/imports/api/users/queries/listUsers.js";
 import UserService from "./services/UserService";
 import { AutoForm, SelectField } from "/imports/ui/forms";
 import actionTypesEnum, {
   typeList
 } from "/imports/api/accounts/enums/actionTypesEnum";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ActivityStream extends React.Component {
   constructor() {
@@ -17,46 +17,77 @@ export default class ActivityStream extends React.Component {
       accountActions: [],
       filter: false,
       model: {},
-      user: {}
+      limit: 20,
+      skip: 0,
+      isScrollLoading: false
     };
   }
 
   componentWillMount() {
-    const { userId } = FlowRouter.current().params;
     const actionTypes = [];
-    this.getActions();
+    const { userId } = FlowRouter.current().params;
+    const { limit, skip } = this.state;
+
     typeList.map(type => {
       actionTypes.push({ label: type, value: type });
     });
-
-    userListQuery
-      .clone({
-        filters: {
-          _id: userId
-        }
-      })
-      .fetchOne((err, user) => {
-        if (!err) {
-          this.setState({
-            user
-          });
-        }
-      });
-
+    this.getActions(userId, limit, skip);
     this.setState({ actionTypes });
   }
 
-  componentWillReceiveProps(props) {
-    this.getActions();
+  componentDidMount() {
+    const { isScroll } = this.refs;
+    if (isScroll) {
+      isScroll.addEventListener("scroll", this.onHandleScroll);
+    }
   }
 
-  getActions = () => {
+  onHandleScroll = () => {
+    const { skip, accountActions } = this.state;
+    const { isScroll } = this.refs;
+    const { scrollTop, scrollHeight, clientHeight } = isScroll;
+    const scrolledToBottom =
+      Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+    if (scrolledToBottom && skip <= accountActions.length) {
+      this.setState({ isScrollLoading: true });
+      this.loadMoreItems();
+    }
+  };
+
+  loadMoreItems = () => {
+    let { limit, skip } = this.state;
     const { userId } = FlowRouter.current().params;
-    const params = UserService.getActionsQueryParams(userId);
-    accountActionsQuery.clone(params).fetch((err, accountActions) => {
+    skip = skip + limit;
+    this.setState({ limit, skip });
+    this.getActions(userId, limit, skip);
+  };
+
+  componentWillReceiveProps(props) {
+    // set the limit to initial value
+    this.setState({ limit: 20 });
+    const { userId } = FlowRouter.current().params;
+    const { limit, skip } = this.state;
+
+    this.getActions(userId, limit, skip);
+  }
+
+  getActions = (id, limit, skip) => {
+    const params = UserService.getActionsQueryParams(id);
+    _.extend(params, {
+      options: { limit, skip }
+    });
+    _.extend(params.filters, {
+      type: {$nin: ["file", "revert"]}
+    });
+
+    accountActionsQuery.clone(params).fetch((err, actions) => {
+      console.log("actions",actions)
       if (!err) {
+        let { accountActions } = this.state;
+        accountActions = accountActions.concat(actions);
         this.setState({
-          accountActions
+          accountActions,
+          isScrollLoading: false
         });
       }
     });
@@ -104,15 +135,17 @@ export default class ActivityStream extends React.Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>
-                )} applied action <b>{action.title}</b> to account with account
-                number {account && (
+                )}{" "}
+                applied action <b>{action.title}</b> to account with account
+                number{" "}
+                {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                     {account.acctNum}
+                    {account.acctNum}
                   </a>
                 )}
               </div>
@@ -138,14 +171,16 @@ export default class ActivityStream extends React.Component {
               <b>
                 {user.profile.firstName} {user.profile.lastName}
               </b>
-            )} commented a comment <b>{content}</b> to account with account number {account && (
+            )}{" "}
+            commented a comment <b>{content}</b> to account with account number{" "}
+            {account && (
               <a
                 className="text-blue"
                 href={`/accounts/${account.state.toLowerCase()}?accountId=${
                   account._id
                 }`}
               >
-                 {account.acctNum}
+                {account.acctNum}
               </a>
             )}
           </div>
@@ -159,14 +194,17 @@ export default class ActivityStream extends React.Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>
-                )} send a letter with letter-template name <b>{letterTemplate.name}</b> to account with account number {account && (
+                )}{" "}
+                send a letter with letter-template name{" "}
+                <b>{letterTemplate.name}</b> to account with account number{" "}
+                {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                     {account.acctNum}
+                    {account.acctNum}
                   </a>
                 )}
               </div>
@@ -180,24 +218,29 @@ export default class ActivityStream extends React.Component {
               <div>
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
-                </b> flagged an action on account with account number {account && (
+                </b>{" "}
+                flagged an action on account with account number{" "}
+                {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                     {account.acctNum}
+                    {account.acctNum}
                   </a>
                 )}
                 {!isOpen && (
                   <div>
                     <br />
-                    Manager {manager && (
+                    Manager{" "}
+                    {manager && (
                       <b>
                         {manager.profile.firstName} {manager.profile.lastName}
                       </b>
-                    )} has responsed to the action and {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    )}{" "}
+                    has responsed to the action and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
@@ -206,24 +249,29 @@ export default class ActivityStream extends React.Component {
               <div>
                 <b>
                   {user.profile.firstName} {user.profile.lastName}
-                </b> flagged a comment on account with account number {account && (
+                </b>{" "}
+                flagged a comment on account with account number{" "}
+                {account && (
                   <a
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
                     }`}
                   >
-                     {account.acctNum}
+                    {account.acctNum}
                   </a>
                 )}
                 {!isOpen && (
                   <div>
                     <br />
-                    Manager {manager && (
+                    Manager{" "}
+                    {manager && (
                       <b>
                         {manager.profile.firstName} {manager.profile.lastName}
                       </b>
-                    )} has responsed to a comment and {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    )}{" "}
+                    has responsed to a comment and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
@@ -253,15 +301,17 @@ export default class ActivityStream extends React.Component {
   };
 
   render() {
-    const { accountActions, user, filter, model, actionTypes } = this.state;
-
-    if (!user) {
-      return <div />;
-    }
+    const {
+      accountActions,
+      filter,
+      model,
+      actionTypes,
+      isScrollLoading
+    } = this.state;
 
     return (
       <div className="cc-container settings-container">
-        <div style={{ width: "200%", overflowY: "scroll" }}>
+        <div ref="isScroll" style={{ width: "200%", overflowY: "scroll" }}>
           <div className="header__block">
             <div className="actions_filter__bar">
               <div
@@ -298,10 +348,12 @@ export default class ActivityStream extends React.Component {
               </div>
             </AutoForm>
           )}
+
           <Timeline>
             {accountActions &&
               accountActions.map((actionPerformed, index) => {
                 const { createdAt, type } = actionPerformed;
+                console.log("actionPerformed", actionPerformed)
                 return (
                   <TimelineEvent
                     key={index}
@@ -317,6 +369,7 @@ export default class ActivityStream extends React.Component {
               })}
           </Timeline>
         </div>
+        {isScrollLoading && <Loading />}
       </div>
     );
   }

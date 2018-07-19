@@ -17,7 +17,6 @@ export default class ClientTimeline extends Component {
   constructor() {
     super();
     this.state = {
-      actions: [],
       filter: false,
       actionTypes: [],
       substates: [],
@@ -33,8 +32,10 @@ export default class ClientTimeline extends Component {
       lastMonth: false,
       userRoles: [],
       accounts: [],
-      isLoading: true,
-      accountActions: []
+      accountActions: [],
+      limit: 10,
+      skip: 0,
+      isScrollLoading: false
     };
   }
 
@@ -68,22 +69,57 @@ export default class ClientTimeline extends Component {
           this.setState({ substates });
         }
       });
-
-    const { _id } = this.props.client;
-    this.getActions(_id);
   }
+
+  componentDidMount() {
+    const { isScroll } = this.refs;
+    if (isScroll) {
+      isScroll.addEventListener("scroll", this.onHandleScroll);
+    }
+  }
+
+  onHandleScroll = () => {
+    const { skip, accountActions } = this.state;
+    const { isScroll } = this.refs;
+    const { scrollTop, scrollHeight, clientHeight } = isScroll;
+    const scrolledToBottom =
+      Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+    if (scrolledToBottom && skip <= accountActions.length) {
+      this.setState({ isScrollLoading: true });
+      this.loadMoreItems();
+    }
+  };
+
+  loadMoreItems = () => {
+    let { limit, skip } = this.state;
+    const { _id } = this.props.client;
+    skip = skip + limit;
+    this.setState({ limit, skip });
+    this.getActions(_id, limit, skip);
+  };
 
   componentWillReceiveProps(props) {
+    // set the limit to initial value
+    this.setState({ limit: 10 });
     const { _id } = props.client;
-    this.setState({ isLoading: true });
-    this.getActions(_id);
+    const { limit, skip } = this.state;
+    this.getActions(_id, limit, skip);
   }
 
-  getActions = id => {
+  getActions = (id, limit, skip) => {
     const params = ClientService.getActionsQueryParams(id);
-    return accountActionsQuery.clone(params).fetch((err, accountActions) => {
+    _.extend(params, {
+      options: { limit, skip }
+    });
+    
+    accountActionsQuery.clone(params).fetch((err, actions) => {
       if (!err) {
-        this.setState({ accountActions, isLoading: false });
+        let { accountActions } = this.state;
+        accountActions = accountActions.concat(actions);
+        this.setState({
+          accountActions,
+          isScrollLoading: false
+        });
       }
     });
   };
@@ -335,13 +371,9 @@ export default class ClientTimeline extends Component {
       lastWeek,
       lastMonth,
       userRoles,
-      isLoading,
-      accountActions
+      accountActions,
+      isScrollLoading
     } = this.state;
-
-    if (isLoading) {
-      return <Loading />;
-    }
 
     return (
       <div className="action-block">
@@ -480,34 +512,36 @@ export default class ClientTimeline extends Component {
             </div>
           </AutoForm>
         )}
-        <div className="actions__timeline">
+        <div ref="isScroll" className="actions__timeline">
           {accountActions.length > 0 && (
             <Timeline>
-              {accountActions &&
-                accountActions.map((action, index) => {
-                  const { createdAt, type, user, account } = action;
-                  
-                  if (!user || (FlowRouter.getQueryParam("substate") && !account)) {
-                    return <div key={index} />;
-                  }
+              {accountActions.map((action, index) => {
+                const { createdAt, type, user, account } = action;
+                if (
+                  (FlowRouter.getQueryParam("role") && !user) ||
+                  (FlowRouter.getQueryParam("substate") && !account)
+                ) {
+                  return <div key={index} />;
+                }
 
-                  return (
-                    <TimelineEvent
-                      key={index}
-                      title=""
-                      createdAt={moment(createdAt).format(
-                        "MMMM Do YYYY, hh:mm a"
-                      )}
-                      icon={this.getTimelineIcon(type)}
-                      iconColor="#3370b5"
-                    >
-                      {this.getTimelineBody(action)}
-                    </TimelineEvent>
-                  );
-                })}
+                return (
+                  <TimelineEvent
+                    key={index}
+                    title=""
+                    createdAt={moment(createdAt).format(
+                      "MMMM Do YYYY, hh:mm a"
+                    )}
+                    icon={this.getTimelineIcon(type)}
+                    iconColor="#3370b5"
+                  >
+                    {this.getTimelineBody(action)}
+                  </TimelineEvent>
+                );
+              })}
             </Timeline>
           )}
         </div>
+        {isScrollLoading && <Loading />}
       </div>
     );
   }

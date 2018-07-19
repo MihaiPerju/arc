@@ -54,7 +54,8 @@ export default class RevertService {
       createdAt: new Date(),
       fileId,
       fileName,
-      clientId
+      clientId,
+      userId: clientId
     };
     const accountActionId = AccountActions.insert(revertFile);
 
