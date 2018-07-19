@@ -12,8 +12,13 @@ export default class ReportSearchBar extends Component {
     this.state = {
       dropdown: false,
       selectAll: false,
+      model: {},
       isReportColumn: false
     };
+  }
+
+  componentWillMount() {
+    this.getFilterParams();
   }
 
   onSubmit(params) {
@@ -74,8 +79,19 @@ export default class ReportSearchBar extends Component {
     });
   };
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("name" in queryParams) {
+      model.name = queryParams.name;
+    }
+
+    this.setState({ model });
+  };
+
   render() {
-    const { filter, active, dropdown, selectAll, isReportColumn } = this.state;
+    const { filter, active, dropdown, selectAll, isReportColumn, model } = this.state;
     const {
       options,
       btnGroup,
@@ -106,6 +122,7 @@ export default class ReportSearchBar extends Component {
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
+        model={model}
       >
         <div className="search-bar">
           {!hideSort && (

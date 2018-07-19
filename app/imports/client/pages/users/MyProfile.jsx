@@ -1,30 +1,18 @@
 import React from "react";
-import { Meteor } from "meteor/meteor";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
-import MyProfileSchema from "/imports/api/users/schemas/MyProfileSchema";
-import { Notifier, Loading } from "/imports/client/utils";
+import { Loading } from "/imports/client/utils";
 import createUserContainer from "/imports/client/lib/createUserContainer";
-import MyAvatar from "./components/MyAvatar";
 
 class MyProfile extends React.Component {
   constructor() {
     super();
-
-    this.state = {};
   }
 
   render() {
     const { user } = this.props;
-    const { error } = this.state;
 
     if (!user) {
       return <Loading />;
     }
-
-    const model = {
-      profile: user.profile,
-      email: user.getEmail()
-    };
 
     return (
       <div className="cc-container settings-container">
@@ -34,7 +22,6 @@ class MyProfile extends React.Component {
               <div className="intro-block__wrapper">
                 <i className="icon-user" />
                 <div className="text-light-grey">User name</div>
-                {/* <MyAvatar user={user}/> */}
                 <div className="action-name">
                   {user.profile
                     ? user.profile.firstName + " " + user.profile.lastName

@@ -117,9 +117,7 @@ export default class CommentSingle extends React.Component {
 
   showFlags = commentId => {
     const { flags } = this.props.account;
-    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      return true;
-    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+    if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
       const index = flags.findIndex(flag => {
         const { flagAction } = flag;
         return flagAction.commentId === commentId && !flagAction.isOpen;
@@ -141,16 +139,19 @@ export default class CommentSingle extends React.Component {
       "text-light-grey": !comment.correctComment,
       "text-blue": comment.correctComment
     });
+    const commentItemClasses = classNames('comment__wrapper flex--helper flex-justify--space-between', {
+      'p-r--35': this.showFlags(comment._id)
+    });
 
     return (
       <div className="comment-item flex--helper flex--column">
-        <div className="comment__wrapper flex--helper flex-justify--space-between">
+        <div className={commentItemClasses}>
           <div className="name truncate">
             {(isRep &&
               Roles.userIsInRole(userId, roleGroups.ADMIN_TECH_MANAGER)) ||
             (isRep && userId === user._id)
               ? user && (
-                  <a href={`/${user._id}/user-profile`}>
+                  <a href={`/${user._id}/activity`}>
                     {user.profile.firstName + " " + user.profile.lastName}
                   </a>
                 )

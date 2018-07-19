@@ -1,7 +1,7 @@
 import faker from 'faker';
 import Clients from '/imports/api/clients/collection';
 import Counter from './config';
-import ContactTypes from '/imports/api/clients/enums/contactTypes';
+import ContactTypes from '/imports/api/facilities/enums/contactTypes';
 
 const createClient = ({clientName, firstName, lastName, email, contacts}) => {
     Clients.insert({
@@ -27,7 +27,7 @@ Meteor.startup(function () {
             createdAt: new Date(),
             contacts: [{
                 email: `contact_person-${i + 1}@app.com`,
-                contactType: ContactTypes.TECH,
+                contactType: ContactTypes.TECHNICAL,
                 firstName: faker.name.firstName(),
                 lastName: faker.name.lastName(),
                 phone: faker.phone.phoneNumber(),

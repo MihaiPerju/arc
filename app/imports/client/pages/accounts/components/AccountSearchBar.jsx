@@ -5,6 +5,7 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
+import moment from "moment";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
@@ -34,7 +35,8 @@ export default class AccountSearchBar extends Component {
       range: {},
       admitDateMin: null,
       admitDateMax: null,
-      tickleUserIdOptions: []
+      tickleUserIdOptions: [],
+      model: {}
     };
   }
 
@@ -43,6 +45,7 @@ export default class AccountSearchBar extends Component {
     let clientOptions = [];
     let substates = [];
     let tickleUserIdOptions = [];
+    let model = {};
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -91,6 +94,26 @@ export default class AccountSearchBar extends Component {
         }
       });
     this.setState({ tickleUserIdOptions });
+    model = FilterService.getFilterParams();
+
+    const {
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      admitDateMin,
+      admitDateMax
+    } = model;
+
+    this.setState({
+      model,
+      dischrgDateMin,
+      dischrgDateMax,
+      fbDateMin,
+      fbDateMax,
+      admitDateMin,
+      admitDateMax
+    });
   }
 
   onSubmit(params) {
@@ -230,7 +253,6 @@ export default class AccountSearchBar extends Component {
     this.setState({
       sort: !sort
     });
-    this.props.decrease();
   };
 
   sortAccounts = (key, sortKey) => {
@@ -298,7 +320,8 @@ export default class AccountSearchBar extends Component {
       sort,
       admitDateMin,
       admitDateMax,
-      tickleUserIdOptions
+      tickleUserIdOptions,
+      model
     } = this.state;
     const {
       options,
@@ -342,6 +365,7 @@ export default class AccountSearchBar extends Component {
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
         onChange={this.onChange}
+        model={model}
       >
         <div className="search-bar">
           <div className={classes} ref={this.nodeRef}>
@@ -488,7 +512,6 @@ export default class AccountSearchBar extends Component {
                               }
                             />
                           </div>
-
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
                           <div>

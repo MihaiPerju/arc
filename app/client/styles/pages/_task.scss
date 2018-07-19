@@ -305,6 +305,28 @@
   .btn-group {
     display: flex;
     justify-content: space-between;
+
+    &__footer {
+      margin-top: 20px;
+    }
+  }
+}
+
+.edit-info__dialog {
+  .form-wrapper {
+    margin-bottom: 0;
+  }
+
+  .input-datetime {
+    padding-bottom: 0;
+  }
+
+  .close-dialog {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 1.8rem;
+    padding: 9px 25px;
   }
 }
 
@@ -337,11 +359,49 @@
   .right__side {
     padding-right: 15px;
   }
+  
+  .left__side {
+    .name {
+      span {
+        position: relative;
+        padding-right: 45px;
+
+        &:hover {
+          .edit-info__btn {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .edit-info__btn {
+      top: 1px;
+      right: 0;
+    }
+  }
+  
   .btn-group {
     flex-grow: 1;
+
     button {
       width: 100%;
       margin-bottom: 7px;
+    }
+  }
+
+  .account-balance {
+    position: relative;
+
+    &:hover {
+      .edit-info__btn {
+        opacity: 1;
+      }
+    }
+
+    .edit-info__btn {
+      left: 0;
+      top: 0;
+      right: inherit;
     }
   }
 }
@@ -913,7 +973,6 @@
 
     &__wrapper {
       position: relative;
-      padding-right: 35px;
       margin-bottom: 10px;
       padding-top: 6px;
 
@@ -1144,6 +1203,7 @@
         li {
           flex-basis: 100%;
           border-bottom: 1px #ebebeb solid;
+          position: relative;
           &:last-of-type {
             border-bottom: 0;
           }
@@ -1172,6 +1232,7 @@
     top: 26px;
     right: 15px;
     color: #b7b7b7;
+    pointer-events: none;
   }
 
   select {
@@ -1196,6 +1257,7 @@
         position: absolute;
         top: 12px;
         right: 15px;
+        pointer-events: none;
       }
       select {
         border: 0;
@@ -1205,10 +1267,12 @@
       }
     }
   }
+
   &-list {
     padding-top: 7px;
     padding-bottom: 7px;
   }
+
   &-item {
     background: $green;
     border-radius: 3px;
@@ -1263,6 +1327,30 @@
     &:after {
       color: #f5222d;
     }
+  }
+}
+
+.edit-info {
+  &__wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  &__btn {
+    position: absolute;
+    top: 6px;
+    right: 7px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    text-align: center;
+    background: $green;
+    color: $color-white;
+    padding: 0;
+    opacity: 0;
   }
 }
 

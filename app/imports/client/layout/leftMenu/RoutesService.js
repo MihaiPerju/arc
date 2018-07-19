@@ -2,7 +2,7 @@ import RolesEnum from "../../../api/users/enums/roles";
 import moment from "moment";
 
 export default class RouteService {
-  static getRoutesByRole({ unassigned, escalations, tickles }) {
+  static getRoutesByRole() {
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
       return [
         { name: "dashboard", label: "Dashboard", icon: "dashboard" },
@@ -10,23 +10,11 @@ export default class RouteService {
         { name: "accounts/review", label: "Review", icon: "inbox" },
         { name: "accounts/hold", label: "On Hold", icon: "hand-paper-o" },
         { name: "accounts/archived", label: "Archived", icon: "archive" },
-        {
-          name: "accounts/escalated",
-          label: "Escalations",
-          icon: "info",
-          badge: escalations
-        },
-        {
-          name: "accounts/tickles",
-          label: "Tickles",
-          icon: "comments-o",
-          badge: tickles
-        },
+        { name: "accounts/tickles", label: "Tickles", icon: "comments-o" },
         {
           name: "accounts/unassigned",
           label: "Unassigned",
-          icon: "question-circle-o",
-          badge: unassigned
+          icon: "question-circle-o"
         },
         { name: "client/list", label: "Clients", icon: "users" },
         { name: "admin/user/list", label: "Users", icon: "user-circle-o" },
@@ -55,20 +43,17 @@ export default class RouteService {
         {
           name: "accounts/escalated",
           label: "Escalations",
-          icon: "info",
-          badge: escalations
+          icon: "info"
         },
         {
           name: "accounts/tickles",
           label: "Tickles",
-          icon: "comments-o",
-          badge: tickles
+          icon: "comments-o"
         },
         {
           name: "accounts/unassigned",
           label: "Unassigned",
-          icon: "question-circle-o",
-          badge: unassigned
+          icon: "question-circle-o"
         },
         { name: "client/list", label: "Clients", icon: "users" },
         { name: "admin/user/list", label: "Users", icon: "user-circle-o" },
@@ -96,20 +81,17 @@ export default class RouteService {
         {
           name: "accounts/escalated",
           label: "Escalations",
-          icon: "info",
-          badge: escalations
+          icon: "info"
         },
         {
           name: "accounts/tickles",
           label: "Tickles",
-          icon: "comments-o",
-          badge: tickles
+          icon: "comments-o"
         },
         {
           name: "accounts/unassigned",
           label: "Unassigned",
-          icon: "question-circle-o",
-          badge: unassigned
+          icon: "question-circle-o"
         },
         { name: "client/list", label: "Clients", icon: "users" },
         { name: "admin/user/list", label: "Users", icon: "user-circle-o" },
@@ -130,14 +112,12 @@ export default class RouteService {
         {
           name: "accounts/escalated",
           label: "Escalations",
-          icon: "info",
-          badge: escalations
+          icon: "info"
         },
         {
           name: "accounts/tickles",
           label: "Tickles",
-          icon: "comments-o",
-          badge: tickles
+          icon: "comments-o"
         }
       ];
     }

@@ -13,8 +13,13 @@ export default class RegionSearchBar extends Component {
       active: false,
       filter: false,
       dropdown: false,
-      selectAll: false
+      selectAll: false,
+      model: {}
     };
+  }
+
+  componentWillMount() {
+    this.getFilterParams();
   }
 
   manageFilterBar() {
@@ -27,7 +32,10 @@ export default class RegionSearchBar extends Component {
   }
 
   onSubmit(params) {
-    if (FlowRouter.current().queryParams.page != "1" && "regionName" in params) {
+    if (
+      FlowRouter.current().queryParams.page != "1" &&
+      "regionName" in params
+    ) {
       this.props.setPagerInitial();
     }
     if ("regionName" in params) {
@@ -65,8 +73,19 @@ export default class RegionSearchBar extends Component {
     });
   };
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("regionName" in queryParams) {
+      model.regionName = queryParams.regionName;
+    }
+
+    this.setState({ model });
+  };
+
   render() {
-    const { filter, active, dropdown, selectAll } = this.state;
+    const { filter, active, dropdown, selectAll, model } = this.state;
     const {
       options,
       btnGroup,
@@ -74,7 +93,8 @@ export default class RegionSearchBar extends Component {
       deleteAction,
       dropdownOptions,
       icons,
-      getProperAccounts
+      getProperAccounts,
+      hideFilter
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -97,6 +117,7 @@ export default class RegionSearchBar extends Component {
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
+        model={model}
       >
         <div className="search-bar">
           {!hideSort && (
@@ -132,14 +153,16 @@ export default class RegionSearchBar extends Component {
               </div>
             </div>
 
-            <div
-              className={active ? "filter-block active" : "filter-block"}
-              onClick={this.manageFilterBar.bind(this)}
-            >
-              <button>
-                <i className="icon-filter" />
-              </button>
-            </div>
+            {!hideFilter && (
+              <div
+                className={active ? "filter-block active" : "filter-block"}
+                onClick={this.manageFilterBar.bind(this)}
+              >
+                <button>
+                  <i className="icon-filter" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
         {filter && <FilterBar options={options} />}

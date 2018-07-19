@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import UserRoles from "/imports/api/users/enums/roles";
 import { createContainer } from "meteor/react-meteor-data";
-import RolesEnum from "/imports/api/users/enums/roles";
 import { getImagePath } from "../../../api/utils";
 import RoutesService from "./../leftMenu/RoutesService";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 class Header extends Component {
   constructor() {
@@ -41,7 +40,7 @@ class Header extends Component {
   state = { activeItem: "Dashboard" };
 
   render() {
-    const user = this.props.user;
+    const user = Meteor.user();
 
     let routes = [
       { name: "/dashboard", label: "Home" },
@@ -75,13 +74,15 @@ class Header extends Component {
 
     if (
       user &&
-      Roles.userIsInRole(user._id, [UserRoles.ADMIN, UserRoles.TECH])
+      Roles.userIsInRole(user._id, [RolesEnum.ADMIN, RolesEnum.TECH])
     ) {
       routes = routes.concat(adminAndTechRoutes);
     }
-    if (user && Roles.userIsInRole(user._id, [UserRoles.MANAGER])) {
+    if (user && Roles.userIsInRole(user._id, [RolesEnum.MANAGER])) {
       routes = routes.concat(managerRoutes);
     }
+
+    const isRep = user && Roles.userIsInRole(user._id, RolesEnum.REP);
 
     return (
       <div>
@@ -106,12 +107,27 @@ class Header extends Component {
                 ref={this.nodeRef}
               >
                 <div className="owner-menu">
-                  <a href="">
-                    <span>
-                      {user.profile.firstName + " " + user.profile.lastName}
-                    </span>
-                    <div className="profile-img" />
-                  </a>
+                  {(isRep)
+                    ? user.profile && (
+                        <a href={`/${user._id}/activity`}>
+                          <span>
+                            {user.profile.firstName +
+                              " " +
+                              user.profile.lastName}
+                          </span>
+                          <div className="profile-img" />
+                        </a>
+                      )
+                    : user.profile && (
+                        <a href="">
+                          <span>
+                            {user.profile.firstName +
+                              " " +
+                              user.profile.lastName}
+                          </span>
+                          <div className="profile-img" />
+                        </a>
+                      )}
                 </div>
                 {this.state.dropdown ? <BtnGroup /> : null}
               </div>

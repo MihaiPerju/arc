@@ -23,7 +23,8 @@ export default class FlagService {
       type: actionTypesEnum.FLAG,
       flagReason,
       actionId,
-      isOpen: true
+      isOpen: true,
+      accountId
     };
     this.createFlag(
       flagActionData,
@@ -49,7 +50,8 @@ export default class FlagService {
       type: actionTypesEnum.FLAG,
       flagReason,
       commentId,
-      isOpen: true
+      isOpen: true,
+      accountId
     };
     this.createFlag(
       flagActionData,
