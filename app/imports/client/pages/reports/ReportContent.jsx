@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import ReportEdit from "./ReportEdit";
 import ReportHeader from "./components/ReportContent/ReportHeader";
+import ReportGraph from "./components/ReportContent/ReportGraph";
 
 export default class ReportContent extends Component {
   constructor() {
     super();
     this.state = {
-      edit: false
+      edit: false,
+      isGraph: false
     };
   }
 
@@ -19,8 +21,15 @@ export default class ReportContent extends Component {
     this.setState({ edit: !edit });
   };
 
+  setGraph = () => {
+    const { isGraph } = this.state;
+    this.setState({
+      isGraph: !isGraph
+    });
+  };
+
   render() {
-    const { edit } = this.state;
+    const { edit, isGraph } = this.state;
     const { report, substates, closeRightPanel } = this.props;
 
     if (!report) {
@@ -34,12 +43,16 @@ export default class ReportContent extends Component {
             substates={substates}
             setEdit={this.setEdit}
             report={report}
+            setGraph={this.setGraph}
           />
+        ) : isGraph ? (
+          <ReportGraph setGraph={this.setGraph} report={report} />
         ) : (
           <ReportHeader
             closeRightPanel={closeRightPanel}
             setEdit={this.setEdit}
             report={report}
+            setGraph={this.setGraph}
           />
         )}
       </div>
