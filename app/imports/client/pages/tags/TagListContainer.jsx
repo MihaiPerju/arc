@@ -12,6 +12,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class TagListContainer extends Pager {
   constructor() {
@@ -25,7 +27,8 @@ class TagListContainer extends Pager {
       total: 0,
       range: {},
       clients: [],
-      loadingClients: true
+      loadingClients: true,
+      moduleTags: []
     });
     this.query = tagsQuery;
   }
@@ -40,6 +43,7 @@ class TagListContainer extends Pager {
         });
       }
     });
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -131,6 +135,18 @@ class TagListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.TAGS] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -140,7 +156,8 @@ class TagListContainer extends Pager {
       range,
       total,
       clients,
-      loadingClients
+      loadingClients,
+      moduleTags
     } = this.state;
     const tag = objectFromArray(data, currentTag);
 
@@ -163,7 +180,7 @@ class TagListContainer extends Pager {
             btnGroup={tagsSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            hideFilter
+            moduleTags={moduleTags}
           />
           <TagList
             class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -172,6 +189,7 @@ class TagListContainer extends Pager {
             currentTag={currentTag}
             setTag={this.setTag}
             tags={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             create={this.createForm}

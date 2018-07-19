@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import Statuses from "/imports/api/letters/enums/statuses.js";
-import Dialog from "/imports/client/lib/ui/Dialog";
 import Notifier from "/imports/client/lib/Notifier";
+import TagItem from "/imports/client/lib/TagItem";
 
 export default class LetterSingle extends Component {
   constructor() {
@@ -18,15 +18,20 @@ export default class LetterSingle extends Component {
         Notifier.success("Letter is manually mailed");
       }
     });
-    this.changeStatus(letterId)
+    this.changeStatus(letterId);
   };
 
-  changeStatus = (letterId) => {
-    Meteor.call("letter.updateStatus", letterId, Statuses.MANUALLY_MAILED, err => {
-      if (!err) {
-        Notifier.success("Status is changed to manually mailed");
+  changeStatus = letterId => {
+    Meteor.call(
+      "letter.updateStatus",
+      letterId,
+      Statuses.MANUALLY_MAILED,
+      err => {
+        if (!err) {
+          Notifier.success("Status is changed to manually mailed");
+        }
       }
-    });
+    );
   };
 
   markedManual = () => {
@@ -48,15 +53,37 @@ export default class LetterSingle extends Component {
     });
   };
 
+  onSubmitTags = data => {
+    const { _id } = this.props.letter;
+    Object.assign(data, { _id });
+
+    Meteor.call("letter.tag", data, err => {
+      if (!err) {
+        Notifier.success("Tagged successfully");
+      } else {
+        Notifier.error(err.error);
+      }
+    });
+  };
+
   render() {
     const classes = classNames({
       "list-item": true,
       "user-item": true
     });
-    const { letter } = this.props;
+    const { letter, moduleTags } = this.props;
     const { dialogIsActive } = this.state;
+
     return (
       <div className={classes}>
+        <div className="check-item">
+          <TagItem
+            title="Tag Letter"
+            tagIds={letter.tagIds}
+            moduleTags={moduleTags}
+            onSubmitTags={this.onSubmitTags.bind(this)}
+          />
+        </div>
         <div className="row__block align-center">
           {letter.isManuallyMailed ? (
             <div className="item-name text-blue">

@@ -66,6 +66,9 @@ export default class FilterService {
     if ("admitDateMax" in queryParams) {
       model.admitDateMax = moment(new Date(queryParams.admitDateMax));
     }
+    if ("tagIds" in queryParams) {
+      model.tagIds = queryParams.tagIds;
+    }
 
     return model;
   }

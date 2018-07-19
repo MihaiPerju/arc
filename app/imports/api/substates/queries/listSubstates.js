@@ -12,5 +12,6 @@ export default Substates.createQuery("listSubstates", {
   _id: 1,
   description: 1,
   actionIds: 1,
-  status: 1
+  status: 1,
+  tagIds: 1
 });

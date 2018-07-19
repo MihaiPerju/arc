@@ -40,9 +40,7 @@ Meteor.methods({
   "facility.removeMany"(facilityIds) {
     Security.isAdminOrTech(this.userId);
 
-    _.each(facilityIds, facilityId => {
-      Facilities.remove(facilityId);
-    });
+    Facilities.remove({ _id: { $in: facilityIds } });
   },
 
   "facility.getRegions"(regionIds) {

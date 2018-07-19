@@ -10,5 +10,6 @@ export default Reports.createQuery('reportList', {
     mongoFilters: 1,
     filterBuilderData: 1,
     shareReport: 1,
-    authorId: 1
+    authorId: 1,
+    tagIds: 1
 });

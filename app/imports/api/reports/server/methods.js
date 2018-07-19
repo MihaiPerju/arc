@@ -51,5 +51,16 @@ Meteor.methods({
       delete report._id;
       Reports.insert(report);
     }
+  },
+
+  "report.tag"({ _id, tagIds }) {
+    Reports.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
   }
 });
