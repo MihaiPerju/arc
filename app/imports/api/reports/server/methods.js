@@ -1,6 +1,7 @@
 import Reports from "./../collection.js";
 import Security from "/imports/api/reports/security.js";
 import Cronjob from "/imports/api/reports/server/services/CronjobService";
+import reportColumnSchema from "../schemas/reportColumnSchema";
 
 Meteor.methods({
   "report.delete"(id) {
@@ -17,6 +18,10 @@ Meteor.methods({
   "report.create"(data) {
     data.authorId = this.userId;
 
+    const reportColumns = reportColumnSchema.clean({});
+    _.extend(data, {
+      reportColumns
+    });
     Reports.insert(data);
   },
 
@@ -51,5 +56,16 @@ Meteor.methods({
       delete report._id;
       Reports.insert(report);
     }
+  },
+
+  "report.updateColumns"(_id, name, data) {
+    Security.hasRightsOnReport(this.userId, _id);
+    const reportColumns = reportColumnSchema.clean(data);
+    Reports.update(
+      { _id, name },
+      {
+        $set: { reportColumns }
+      }
+    );
   }
 });

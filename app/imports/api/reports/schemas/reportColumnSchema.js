@@ -1,11 +1,7 @@
 import SimpleSchema from "simpl-schema";
-import insuranceColumnSchema from "./insuranceColumnSchema.js";
+import insuranceColumnSchema from "./insuranceColumnSchema";
 
 export default new SimpleSchema({
-  userId: {
-    type: String,
-    optional: true
-  },
   acctNum: {
     type: Boolean,
     optional: true,
@@ -79,5 +75,10 @@ export default new SimpleSchema({
   "insurances.$": {
     type: insuranceColumnSchema,
     optional: true
+  },
+  metaData:{
+    type: Boolean,
+    optional: true,
+    defaultValue: false
   }
 });

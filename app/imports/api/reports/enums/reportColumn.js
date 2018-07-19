@@ -11,7 +11,8 @@ export default [
   { value: "medNo", label: "Medical Number" },
   { value: "state", label: "State" },
   { value: "substate", label: "Substate" },
-  { value: "activeInsCode", label: "Active Insurance Code" }
+  { value: "activeInsCode", label: "Active Insurance Code" },
+  { value: "metaData", label: "Meta Data" }
 ];
 
 const insuranceColumnEnum = [
@@ -26,4 +27,10 @@ const insuranceColumnEnum = [
   { value: "phone", label: "Phone" }
 ];
 
+const types = {
+  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt"],
+  metaData: ["metaData"]
+};
+
 export { insuranceColumnEnum };
+export { types };

@@ -3,8 +3,8 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import accountsQuery from "/imports/api/accounts/queries/accountList";
 import reportColumnEnum, {
   insuranceColumnEnum
-} from "../../../api/reportColumns/enum/reportColumn";
-import schema from "/imports/api/reportColumns/schema";
+} from "../../../api/reports/enums/reportColumn";
+import schema from "/imports/api/reports/schemas/reportColumnSchema";
 import {
   AutoForm,
   ListField,
@@ -12,8 +12,7 @@ import {
   NestField,
   BoolField
 } from "/imports/ui/forms";
-import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
-import Notifier from '/imports/client/lib/Notifier';
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class AddReportColumn extends Component {
   constructor() {
@@ -21,8 +20,7 @@ export default class AddReportColumn extends Component {
     this.state = {
       accountColumns: null,
       accountSimpleColumn: [],
-      insuranceColumn: [],
-      reportColumn: {}
+      insuranceColumn: []
     };
   }
 
@@ -34,14 +32,6 @@ export default class AddReportColumn extends Component {
         });
       }
     });
-
-    reportColumnListQuery
-      .clone({ userId: Meteor.userId() })
-      .fetchOne((err, reportColumn) => {
-        if (!err) {
-          this.setState({ reportColumn });
-        }
-      });
   }
 
   closeDialog = () => {
@@ -54,18 +44,19 @@ export default class AddReportColumn extends Component {
   };
 
   onSubmit = data => {
-    const { closeDialog } = this.props;
-    Meteor.call("reportColumn.create", data, err => {
+    const { closeDialog, report } = this.props;
+    const { _id, name } = report;
+    Meteor.call("report.updateColumns", _id, name, data, err => {
       if (!err) {
         closeDialog();
       } else {
-        Notifier.error(err)
+        Notifier.error(err);
       }
     });
   };
 
   render() {
-    const { reportColumn } = this.state;
+    const { report } = this.props;
     return (
       <div>
         <Dialog
@@ -78,7 +69,7 @@ export default class AddReportColumn extends Component {
               schema={schema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
-              model={reportColumn}
+              model={report.reportColumns}
             >
               {reportColumnEnum.map(cols => {
                 const { value, label } = cols;

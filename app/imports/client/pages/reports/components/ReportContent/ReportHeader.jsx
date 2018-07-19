@@ -10,7 +10,7 @@ import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import { EJSON } from "meteor/ejson";
 import Loading from "/imports/client/lib/ui/Loading";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
+import { types } from "/imports/api/reports/enums/reportColumn";
 
 class ReportHeader extends Component {
   constructor() {
@@ -25,27 +25,26 @@ class ReportHeader extends Component {
 
   componentWillMount() {
     this.getAccounts(this.props);
-    reportColumnListQuery.fetchOne((err, selectedReportColumns) => {
-      if (!err) {
-        const cols = [];
-        for (var key in selectedReportColumns) {
-          if (selectedReportColumns[key]) {
-            if (typeof selectedReportColumns[key] === "object") {
-              cols.push(selectedReportColumns[key]);
-            } else if (key !== "_id") {
-              cols.push(key);
-            }
-          }
-        }
-        this.setState({
-          selectedReportColumns: cols
-        });
-      }
-    });
   }
 
   componentWillReceiveProps(props) {
     this.getAccounts(props);
+    const { report } = props;
+    const { reportColumns } = report;
+
+    const cols = [];
+    for (var key in reportColumns) {
+      if (reportColumns[key]) {
+        if (typeof reportColumns[key] === "object") {
+          cols.push(reportColumns[key]);
+        } else if (key !== "_id") {
+          cols.push(key);
+        }
+      }
+    }
+    this.setState({
+      selectedReportColumns: cols
+    });
   }
 
   openDialog = () => {
@@ -179,12 +178,14 @@ class ReportHeader extends Component {
             </div>
 
             {accounts.map((account, index) => {
+              console.log("account====", account);
               return (
                 <div className="table-row" key={index}>
                   <div className="table-field table-field--fixed truncate text-center">
                     {"Account No." + (index + 1)}
                   </div>
                   {tableHeader.map((content, index) => {
+                    console.log("content====", account[content]);
                     if (index > 0) {
                       return typeof content == "object" ? (
                         <div className="table-field table-field--grey text-center">
@@ -209,11 +210,15 @@ class ReportHeader extends Component {
                         </div>
                       ) : (
                         <div className="table-field table-field--grey text-center">
-                          {typeof account[content] === "object"
+                          {types.dates.includes(content)
                             ? moment(account[content]).format(
                                 "MM/DD/YYYY, hh:mm"
                               )
-                            : account[content]}
+                            : types.metaData.includes(content)
+                              ? _.map(account[content], (value, key) => {
+                                  return <div>{key + ":" + value}</div>;
+                                })
+                              : account[content]}
                         </div>
                       );
                     }
@@ -243,7 +248,7 @@ class ReportHeader extends Component {
 
   onSetGraph = () => {
     const { setGraph } = this.props;
-    setGraph()
+    setGraph();
   };
 
   render() {
@@ -253,7 +258,7 @@ class ReportHeader extends Component {
       accounts,
       loading,
       dialogIsActive,
-      selectedReportColumns,
+      selectedReportColumns
     } = this.state;
     const job = data;
     const tableHeader = ["Account name", ...selectedReportColumns];

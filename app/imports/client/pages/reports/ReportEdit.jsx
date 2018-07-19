@@ -11,6 +11,7 @@ import AccountFilterBuilder from "./AccountFilterBuilder";
 import Notifier from "/imports/client/lib/Notifier";
 import { EJSON } from "meteor/ejson";
 import ReportsService from "../../../api/reports/services/ReportsService";
+import AddReportColumn from "./AddReportColumn";
 
 export default class ReportEdit extends React.Component {
   constructor() {
@@ -21,7 +22,8 @@ export default class ReportEdit extends React.Component {
       filterBuilderData: {},
       components: {},
       filter: false,
-      shareReport: false
+      shareReport: false,
+      isReportColumn: false
     };
   }
 
@@ -121,15 +123,28 @@ export default class ReportEdit extends React.Component {
     this.setState({ shareReport: !shareReport });
   };
 
+  openDialog = () => {
+    this.setState({
+      isReportColumn: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      isReportColumn: false
+    });
+  };
+
   render() {
     const {
       hasGeneralInformation,
       shareReport,
       generalInformation,
       components,
-      filterBuilderData
+      filterBuilderData,
+      isReportColumn
     } = this.state;
-    const { substates } = this.props;
+    const { substates, report } = this.props;
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -185,6 +200,32 @@ export default class ReportEdit extends React.Component {
               />
             </div>
           )}
+          <div className="action-block">
+            <div className="header__block">
+              <div className="title-block text-uppercase">
+                Add report column
+              </div>
+            </div>
+            <div className="form-wrapper">
+              <button
+                style={{
+                  background: "#fff",
+                  padding: "17px 15px",
+                  color: "#333",
+                  width: "100%",
+                  lineHeight: "1.6rem",
+                  borderRadius: "3px",
+                  borderBottom: "0"
+                }}
+                onClick={this.openDialog.bind(this)}
+              >
+                Add Column
+              </button>
+            </div>
+            {isReportColumn && (
+              <AddReportColumn closeDialog={this.closeDialog} report={report}/>
+            )}
+          </div>
         </div>
       </div>
     );

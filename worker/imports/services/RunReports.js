@@ -9,7 +9,6 @@ import Accounts from "/imports/api/accounts/collection";
 import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
-import ReportColumns from "/imports/api/reportColumns/collection.js";
 
 export default class RunReports {
   static run() {
@@ -25,7 +24,7 @@ export default class RunReports {
         }
       );
 
-    //   //Create & Save .csv file
+      //   //Create & Save .csv file
       this.saveReport(job);
     }
   }
@@ -42,17 +41,16 @@ export default class RunReports {
   }
 
   static getColumns(reportId) {
-    const {authorId} =Reports.findOne({_id: reportId})
-    const data = ReportColumns.findOne({userId:authorId});
+    const { reportColumns } = Reports.findOne({ _id: reportId });
     const columns = {};
 
-    _.map(data, (value, key) => {
-      if (value && key !== "insurances" && key !== "_id" && key !== "userId") {
+    _.map(reportColumns, (value, key) => {
+      if (value && key !== "insurances") {
         columns[key] = Headers[key] ? Headers[key].label : "";
       }
     });
 
-    data.insurances.map((ins, i) => {
+    reportColumns.insurances.map((ins, i) => {
       _.map(ins, (value, key) => {
         if (value) {
           columns[`insurances[${i}].${key}`] = Headers[key]
@@ -61,6 +59,7 @@ export default class RunReports {
         }
       });
     });
+
     return columns;
   }
 
@@ -105,7 +104,7 @@ export default class RunReports {
           }
         );
         NotificationService.createReportNotification(authorId, reportId);
-        NotificationService.createGlobal(authorId)
+        NotificationService.createGlobal(authorId);
       })
     );
 
