@@ -9,9 +9,9 @@ import {
 
 export default class InsuranceRules extends React.Component {
   render() {
-    const { collapse } = this.props;
+    const { collapse, showListField } = this.props;
     return (
-      <ListField collapse={collapse} name="insurances">
+      <ListField collapse={collapse} showListField={showListField} name="insurances">
         <ListItemField name="$">
           <NestField>
             <div className="upload-item">

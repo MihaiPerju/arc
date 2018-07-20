@@ -41,6 +41,7 @@ var _ListItemField = _interopRequireDefault(require("./ListItemField"));
 
 var List = function List(_ref) {
   var children = _ref.children,
+    showListField = _ref.showListField,
     initialCount = _ref.initialCount,
     itemProps = _ref.itemProps,
     label = _ref.label,
@@ -55,6 +56,7 @@ var List = function List(_ref) {
       "name",
       "value"
     ]);
+
   return _react.default.createElement(
     "div",
     (0, _filterDOMProps.default)(props),
@@ -65,7 +67,8 @@ var List = function List(_ref) {
         label,
         _react.default.createElement(_ListAddField.default, {
           name: "".concat(name, ".$"),
-          initialCount: initialCount
+          initialCount: initialCount,
+          showListField: showListField
         })
       ),
     children

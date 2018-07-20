@@ -30,13 +30,11 @@ export default class ImportingRules extends React.Component {
     );
     this.setState({
       loading: false,
-      // collapse: false,
       schema
     });
   }
 
   componentWillReceiveProps(newProps) {
-    console.log("Will receive props");
     if (newProps.resetImportForm) {
       const { form } = this.refs;
       const { changeResetStatus } = this.props;
@@ -61,10 +59,6 @@ export default class ImportingRules extends React.Component {
   };
 
   onChange(field, value) {
-    console.log("on change");
-    console.log(field);
-    console.log(value);
-
     const { rules } = this.props;
     if (field === "hasHeader") {
       //Change schema
@@ -75,8 +69,6 @@ export default class ImportingRules extends React.Component {
   }
 
   groupFields(fields) {
-    console.log("group fields");
-
     const numInRow = 4;
     const numGroups = Math.round(fields.length / numInRow);
     let result = [];
@@ -95,6 +87,10 @@ export default class ImportingRules extends React.Component {
     this.setState({collapse: !collapse});
   };
 
+  showListField = () => {
+    this.setState({collapse: false});
+  }
+
   onChangeModel = model => {
     const {rules, setTempRules} = this.props;
     if (rules === "placementRules") {
@@ -103,7 +99,7 @@ export default class ImportingRules extends React.Component {
   };
 
   render() {
-    const {schema, loading, collapse} = this.state;
+    const {schema, loading, collapse, showListField} = this.state;
     const {model, rules, copyRules} = this.props;
     const fields = RulesService.getSchemaFields(rules);
     const options = [
@@ -116,10 +112,6 @@ export default class ImportingRules extends React.Component {
       "btn-collapse": true,
       rotate: collapse
     });
-
-    console.log("Rendered");
-    console.log(collapse);
-    console.log(schema);
 
     return (
       <div>
@@ -164,16 +156,6 @@ export default class ImportingRules extends React.Component {
               })}
             </div>
 
-            <div className="add-insurance__section">
-              <span
-                className={btnCollapseClasses}
-                onClick={this.toggleInsurances}
-              >
-                {collapse ? "show" : "hide"}
-              </span>
-              <InsuranceRules collapse={collapse}/>
-            </div>
-
             <div className="upload-list">
               {schema._schemaKeys.includes("insurances") ? (
                 <div className="add-insurance__section">
@@ -183,10 +165,10 @@ export default class ImportingRules extends React.Component {
                   >
                     {collapse ? "show" : "hide"}
                   </span>
-                  <InsuranceRules collapse={collapse}/>
+                  <InsuranceRules collapse={collapse} showListField={this.showListField}/>
                 </div>
               ) : (
-                <ListField name="newInsBal">
+                <ListField name="newInsBal" showListField={this.showListField}>
                   <ListItemField name="$">
                     <NestField className="upload-item text-center">
                       <div>

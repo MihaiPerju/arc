@@ -23,14 +23,17 @@ var _filterDOMProps = _interopRequireDefault(require("uniforms/filterDOMProps"))
 
 var ListAdd = function ListAdd(_ref) {
   var disabled = _ref.disabled,
+      showListField = _ref.showListField,
       parent = _ref.parent,
       value = _ref.value,
       props = (0, _objectWithoutProperties2.default)(_ref, ["disabled", "parent", "value"]);
   var limitNotReached = !disabled && !(parent.maxCount <= value.length);
   return _react.default.createElement("span", (0, _extends2.default)({}, (0, _filterDOMProps.default)(props), {
     onClick: function onClick() {
+      showListField();
       return limitNotReached && parent.onChange(parent.value.concat([(0, _cloneDeep.default)(value)]));
-    }
+    },
+    className: 'insurance-btn insurance-btn__add'
   }), "+");
 };
 

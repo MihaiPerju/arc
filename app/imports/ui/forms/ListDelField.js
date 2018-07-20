@@ -33,7 +33,8 @@ var ListDel = function ListDel(_ref) {
   return _react.default.createElement("span", (0, _extends2.default)({}, (0, _filterDOMProps.default)(props), {
     onClick: function onClick() {
       return limitNotReached && parent.onChange([].concat(parent.value.slice(0, fieldIndex)).concat(parent.value.slice(1 + fieldIndex)));
-    }
+    },
+    className: 'insurance-btn insurance-btn__del'
   }), "-");
 };
 

@@ -88,12 +88,12 @@ export default class FacilityContent extends Component {
               facility={facility}
               setTempRules={this.setTempRules}
             />
-            {/*<InventoryBlock*/}
-              {/*facility={inventoryFacility}*/}
-              {/*copyPlacementRules={this.copyPlacementRules}*/}
-              {/*resetImportForm={resetImportForm}*/}
-              {/*changeResetStatus={this.changeResetStatus}/>*/}
-            {/*<PaymentBlock facility={facility}/>*/}
+            <InventoryBlock
+              facility={inventoryFacility}
+              copyPlacementRules={this.copyPlacementRules}
+              resetImportForm={resetImportForm}
+              changeResetStatus={this.changeResetStatus}/>
+            <PaymentBlock facility={facility}/>
           </div>
         )}
       </div>
