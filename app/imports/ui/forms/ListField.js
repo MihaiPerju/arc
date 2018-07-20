@@ -46,6 +46,7 @@ var List = function List(_ref) {
     label = _ref.label,
     name = _ref.name,
     value = _ref.value,
+    collapse = _ref.collapse,
     props = (0, _objectWithoutProperties2.default)(_ref, [
       "children",
       "initialCount",
@@ -68,7 +69,8 @@ var List = function List(_ref) {
         })
       ),
     children
-      ? value.map(function(item, index) {
+      ? !collapse &&
+        value.map(function(item, index) {
           return _react.Children.map(children, function(child) {
             return _react.default.cloneElement(child, {
               key: index,
@@ -80,7 +82,8 @@ var List = function List(_ref) {
             });
           });
         })
-      : value.map(function(item, index) {
+      : !collapse &&
+        value.map(function(item, index) {
           return _react.default.createElement(
             _ListItemField.default,
             (0, _extends2.default)(
