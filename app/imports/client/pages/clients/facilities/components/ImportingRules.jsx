@@ -19,11 +19,11 @@ import classNames from "classnames";
 export default class ImportingRules extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, collapse: false };
+    this.state = {loading: true, collapse: false};
   }
 
   componentWillMount() {
-    const { model, rules } = this.props;
+    const {model, rules} = this.props;
     const schema = RulesService.createSchema(
       rules,
       model && model[rules] && model[rules].hasHeader
@@ -35,20 +35,20 @@ export default class ImportingRules extends React.Component {
     });
   }
 
-  // componentWillReceiveProps(newProps) {
-  //   console.log("Will receive props");
-  //   if (newProps.resetImportForm) {
-  //     const { form } = this.refs;
-  //     const { changeResetStatus } = this.props;
-  //     form.reset();
-  //     changeResetStatus();
-  //   }
-  // }
+  componentWillReceiveProps(newProps) {
+    console.log("Will receive props");
+    if (newProps.resetImportForm) {
+      const { form } = this.refs;
+      const { changeResetStatus } = this.props;
+      form.reset();
+      changeResetStatus();
+    }
+  }
 
   onSubmitImportingRules = importRules => {
     const facilityId = this.props.model._id;
-    const { rules } = this.props;
-    const newFacility = { _id: facilityId };
+    const {rules} = this.props;
+    const newFacility = {_id: facilityId};
     newFacility[rules] = importRules;
     Meteor.call("facility.update", newFacility, err => {
       if (!err) {
@@ -60,58 +60,58 @@ export default class ImportingRules extends React.Component {
     });
   };
 
-  // onChange(field, value) {
-  //   console.log("on change");
-  //   console.log(field);
-  //   console.log(value);
+  onChange(field, value) {
+    console.log("on change");
+    console.log(field);
+    console.log(value);
 
-  //   const { rules } = this.props;
-  //   if (field === "hasHeader") {
-  //     //Change schema
-  //     const newSchema = RulesService.createSchema(rules, value);
+    const { rules } = this.props;
+    if (field === "hasHeader") {
+      //Change schema
+      const newSchema = RulesService.createSchema(rules, value);
 
-  //     this.setState({ schema: newSchema });
-  //   }
-  // }
+      this.setState({ schema: newSchema });
+    }
+  }
 
-  // groupFields(fields) {
-  //   console.log("group fields");
+  groupFields(fields) {
+    console.log("group fields");
 
-  //   const numInRow = 4;
-  //   const numGroups = Math.round(fields.length / numInRow);
-  //   let result = [];
-  //   for (let i = 0; i < numGroups; i++) {
-  //     const startIndex = i * numInRow;
-  //     const finishIndex = Math.min((i + 1) * numInRow, fields.length);
-  //     const groupOfFields = fields.slice(startIndex, finishIndex);
-  //     result.push(groupOfFields);
-  //   }
-  //   return result;
-  // }
+    const numInRow = 4;
+    const numGroups = Math.round(fields.length / numInRow);
+    let result = [];
+    for (let i = 0; i < numGroups; i++) {
+      const startIndex = i * numInRow;
+      const finishIndex = Math.min((i + 1) * numInRow, fields.length);
+      const groupOfFields = fields.slice(startIndex, finishIndex);
+      result.push(groupOfFields);
+    }
+    return result;
+  }
 
   toggleInsurances = () => {
-    const { collapse } = this.state;
+    const {collapse} = this.state;
 
-    this.setState({ collapse: !collapse });
+    this.setState({collapse: !collapse});
   };
 
   onChangeModel = model => {
-    const { rules, setTempRules } = this.props;
+    const {rules, setTempRules} = this.props;
     if (rules === "placementRules") {
       setTempRules(model);
     }
   };
 
   render() {
-    const { schema, loading, collapse } = this.state;
-    const { model, rules, copyRules } = this.props;
+    const {schema, loading, collapse} = this.state;
+    const {model, rules, copyRules} = this.props;
     const fields = RulesService.getSchemaFields(rules);
     const options = [
-      { value: true, label: "True" },
-      { value: false, label: "False" }
+      {value: true, label: "True"},
+      {value: false, label: "False"}
     ];
 
-    // const fieldGroups = this.groupFields(fields);
+    const fieldGroups = this.groupFields(fields);
     const btnCollapseClasses = classNames({
       "btn-collapse": true,
       rotate: collapse
@@ -124,18 +124,19 @@ export default class ImportingRules extends React.Component {
     return (
       <div>
         {loading ? (
-          <Loading />
+          <Loading/>
         ) : (
           <AutoForm
             model={model[rules]}
             schema={schema}
-            // onChange={this.onChange.bind(this)}
+            onChange={this.onChange.bind(this)}
             onSubmit={this.onSubmitImportingRules}
             onChangeModel={this.onChangeModel}
             ref="form"
           >
-            {/* <div className="form-wrapper">
-              <div className="upload-section placement-header flex--helper flex-justify--space-between flex-align--center">
+            <div className="form-wrapper">
+              <div
+                className="upload-section placement-header flex--helper flex-justify--space-between flex-align--center">
                 <div className="radio-group flex--helper">
                   <label>File with header:</label>
                   <RadioField
@@ -144,7 +145,7 @@ export default class ImportingRules extends React.Component {
                     options={options}
                     labelHidden={true}
                   />
-                  <ErrorField name="hasHeader" />
+                  <ErrorField name="hasHeader"/>
                 </div>
                 <button
                   type="button"
@@ -154,14 +155,14 @@ export default class ImportingRules extends React.Component {
                   Copy file headers
                 </button>
               </div>
-            </div> */}
+            </div>
 
-            {/* <div className="upload-list">
+            <div className="upload-list">
               {fieldGroups &&
-                fieldGroups.map(fields => {
-                  return <UploadItem fields={fields} />;
-                })}
-            </div> */}
+              fieldGroups.map(fields => {
+                return <UploadItem fields={fields}/>;
+              })}
+            </div>
 
             <div className="add-insurance__section">
               <span
@@ -170,10 +171,10 @@ export default class ImportingRules extends React.Component {
               >
                 {collapse ? "show" : "hide"}
               </span>
-              <InsuranceRules collapse={collapse} />
+              <InsuranceRules collapse={collapse}/>
             </div>
 
-            {/* <div className="upload-list">
+            <div className="upload-list">
               {schema._schemaKeys.includes("insurances") ? (
                 <div className="add-insurance__section">
                   <span
@@ -182,21 +183,21 @@ export default class ImportingRules extends React.Component {
                   >
                     {collapse ? "show" : "hide"}
                   </span>
-                  <InsuranceRules collapse={collapse} />
+                  <InsuranceRules collapse={collapse}/>
                 </div>
               ) : (
                 <ListField name="newInsBal">
                   <ListItemField name="$">
                     <NestField className="upload-item text-center">
                       <div>
-                        <AutoField className="text-light-grey" name="insBal" />
-                        <ErrorField name="insBal" />
+                        <AutoField className="text-light-grey" name="insBal"/>
+                        <ErrorField name="insBal"/>
                       </div>
                     </NestField>
                   </ListItemField>
                 </ListField>
               )}
-            </div> */}
+            </div>
 
             <div className="btn-group">
               {/*<button className="btn--red">Cancel</button>*/}
