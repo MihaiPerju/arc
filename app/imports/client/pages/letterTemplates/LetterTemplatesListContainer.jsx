@@ -13,6 +13,7 @@ import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import Tags from "/imports/client/lib/Tags";
 
 class LetterTemplateListContainer extends Pager {
   constructor() {
@@ -166,8 +167,9 @@ class LetterTemplateListContainer extends Pager {
             btnGroup={templatesSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            moduleTags={moduleTags}
+            hideFilter
           />
+          <Tags moduleTags={moduleTags} />
           <LetterTemplatesList
             class={this.state.filter ? "task-list decreased" : "task-list"}
             templatesSelected={templatesSelected}

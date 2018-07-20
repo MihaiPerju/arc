@@ -13,6 +13,7 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import Tags from "/imports/client/lib/Tags";
 
 class CodeListContainer extends Pager {
   constructor() {
@@ -36,7 +37,7 @@ class CodeListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
-    const {queryParams} = FlowRouter.current();
+    const { queryParams } = FlowRouter.current();
     if (queryParams.code && queryParams.code == "") {
       this.setPagerInitial();
     }
@@ -146,7 +147,14 @@ class CodeListContainer extends Pager {
 
   render() {
     const { data, loading, error } = this.props;
-    const { codesSelected, currentCode, create, range, total, moduleTags } = this.state;
+    const {
+      codesSelected,
+      currentCode,
+      create,
+      range,
+      total,
+      moduleTags
+    } = this.state;
     const code = objectFromArray(data, currentCode);
 
     if (loading) {
@@ -168,8 +176,9 @@ class CodeListContainer extends Pager {
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            moduleTags={moduleTags}
+            hideFilter
           />
+          <Tags moduleTags={moduleTags} />
           <CodeList
             class={this.state.filter ? "task-list decreased" : "task-list"}
             codesSelected={codesSelected}
