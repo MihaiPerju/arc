@@ -67,5 +67,16 @@ Meteor.methods({
         $set: { reportColumns }
       }
     );
+  },
+
+  "report.tag"({ _id, tagIds }) {
+    Reports.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
   }
 });

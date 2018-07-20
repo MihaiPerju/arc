@@ -115,5 +115,16 @@ Meteor.methods({
         }
       }
     );
+  },
+
+  "client.tag"({ _id, tagIds }) {
+    Clients.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
   }
 });

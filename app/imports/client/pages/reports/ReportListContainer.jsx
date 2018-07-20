@@ -3,7 +3,6 @@ import ReportList from "./components/ReportList.jsx";
 import ReportSearchBar from "./components/ReportSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import ReportContent from "./ReportContent.jsx";
-import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import ReportCreate from "./ReportCreate.jsx";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/reports/queries/reportsList";
@@ -14,6 +13,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substatesQuery from "/imports/api/substates/queries/listSubstates";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class ReportListContainer extends Pager {
   constructor() {
@@ -26,7 +27,8 @@ class ReportListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      substates: []
+      substates: [],
+      moduleTags: []
     });
     this.query = query;
   }
@@ -48,6 +50,7 @@ class ReportListContainer extends Pager {
           this.setState({ substates });
         }
       });
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -143,6 +146,18 @@ class ReportListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.REPORTS] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -151,7 +166,8 @@ class ReportListContainer extends Pager {
       create,
       total,
       range,
-      substates
+      substates,
+      moduleTags
     } = this.state;
     const report = objectFromArray(data, currentReport);
 
@@ -177,6 +193,7 @@ class ReportListContainer extends Pager {
             closeRightPanel={this.closeRightPanel}
             hideSort
             hideFilter
+            moduleTags={moduleTags}
           />
           <ReportList
             class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -185,6 +202,7 @@ class ReportListContainer extends Pager {
             currentReport={currentReport}
             setReport={this.setReport}
             reports={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             module="Report"

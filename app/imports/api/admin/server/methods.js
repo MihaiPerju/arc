@@ -7,6 +7,7 @@ import Backup from "/imports/api/backup/collection";
 import Files from "/imports/api/files/collection";
 import Letters from "/imports/api/letters/collection.js";
 import Accounts from "/imports/api/accounts/collection";
+import Escalations from "/imports/api/escalations/collection";
 
 Meteor.methods({
   "admin.createUser"({ firstName, lastName, email, phoneNumber, password }) {
@@ -135,10 +136,7 @@ Meteor.methods({
 
   "admin.deleteManyUsers"(userIds) {
     Security.checkAdmin(this.userId);
-
-    _.each(userIds, _id => {
-      Users.remove({ _id });
-    });
+    Users.remove({ _id: { $in: userIds } });
   },
 
   //Testing purpose only, delete in production
@@ -147,6 +145,7 @@ Meteor.methods({
       case "accounts":
         Accounts.remove({});
         Backup.remove({});
+        Escalations.remove({});
         break;
       case "accountActions":
         AccountActions.remove({});
@@ -160,6 +159,7 @@ Meteor.methods({
       default:
         Accounts.remove({});
         Backup.remove({});
+        Escalations.remove({});
         AccountActions.remove({});
         Files.remove({});
     }

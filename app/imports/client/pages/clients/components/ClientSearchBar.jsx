@@ -8,6 +8,7 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
 import Notifier from "/imports/client/lib/Notifier";
 import FilterService from "/imports/client/lib/FilterService";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class ClientSearchBar extends Component {
   constructor() {
@@ -42,6 +43,10 @@ export default class ClientSearchBar extends Component {
     FlowRouter.setQueryParams({
       createdAtMax: FilterService.formatDate(createdAtMax)
     });
+
+    if ("tagIds" in params) {
+      FlowRouter.setQueryParams({ tagIds: params.tagIds });
+    }
   }
 
   openDropdown = () => {
@@ -75,7 +80,6 @@ export default class ClientSearchBar extends Component {
   };
 
   onDateSelect = (selectedDate, field) => {
-    const date = selectedDate ? new Date(selectedDate).toString() : "";
     if (field === "createdAtMin") {
       this.setState({ createdAtMin: selectedDate });
     } else if (field === "createdAtMax") {
@@ -134,7 +138,18 @@ export default class ClientSearchBar extends Component {
       });
     }
 
+    if ("tagIds" in queryParams) {
+      model.tagIds = queryParams.tagIds;
+    }
+
     this.setState({ model });
+  };
+
+  getOptions = tags => {
+    return _.map(tags, tag => ({
+      value: tag._id,
+      label: tag.name
+    }));
   };
 
   render() {
@@ -153,7 +168,8 @@ export default class ClientSearchBar extends Component {
       dropdownOptions,
       icons,
       getProperAccounts,
-      hideSort
+      hideSort,
+      moduleTags
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -167,6 +183,7 @@ export default class ClientSearchBar extends Component {
       full__width: btnGroup,
       sort__none: hideSort
     });
+    const tagOptions = this.getOptions(moduleTags);
 
     return (
       <AutoForm
@@ -238,6 +255,15 @@ export default class ClientSearchBar extends Component {
                             onChange={date =>
                               this.onDateSelect(date, "createdAtMax")
                             }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <SelectMulti
+                            className="form-select__multi"
+                            placeholder="Select modules"
+                            labelHidden={true}
+                            name="tagIds"
+                            options={tagOptions}
                           />
                         </div>
                         <div className="flex--helper flex-justify--end">
@@ -360,5 +386,13 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by client name"
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
+    type: String
   }
 });

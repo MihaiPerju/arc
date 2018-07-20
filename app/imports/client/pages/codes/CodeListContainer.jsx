@@ -4,7 +4,6 @@ import CodeSearchBar from "./components/CodeSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import CodeContent from "./CodeContent.jsx";
 import CodeCreate from "./CodeCreate.jsx";
-import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/codes/queries/listCodes";
 import Loading from "/imports/client/lib/ui/Loading";
@@ -12,6 +11,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class CodeListContainer extends Pager {
   constructor() {
@@ -23,13 +24,15 @@ class CodeListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      moduleTags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -129,9 +132,21 @@ class CodeListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.CODES] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
-    const { codesSelected, currentCode, create, range, total } = this.state;
+    const { codesSelected, currentCode, create, range, total, moduleTags } = this.state;
     const code = objectFromArray(data, currentCode);
 
     if (loading) {
@@ -153,7 +168,7 @@ class CodeListContainer extends Pager {
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            hideFilter
+            moduleTags={moduleTags}
           />
           <CodeList
             class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -162,6 +177,7 @@ class CodeListContainer extends Pager {
             currentCode={currentCode}
             setCode={this.setCode}
             codes={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             create={this.createForm}
