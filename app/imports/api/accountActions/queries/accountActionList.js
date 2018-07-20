@@ -9,16 +9,6 @@ export default AccountActions.createQuery("accountActionList", {
   content: 1,
   createdAt: 1,
   type: 1,
-  user: {
-    profile: {
-      firstName: 1,
-      lastName: 1
-    },
-    avatar: {
-      path: 1,
-      _id: 1
-    }
-  },
   action: {
     title: 1,
     description: 1
@@ -41,12 +31,25 @@ export default AccountActions.createQuery("accountActionList", {
   commentId: 1,
   content: 1,
   user: {
-    profile: 1
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.userFilter)) {
+        _.extend(filters, params.userFilter);
+      }
+    },
+    profile: 1,
+    roles: 1
   },
   fileName: 1,
+  accountId: 1,
   account: {
+    $filter({ filters, params }) {
+      if (!_.isEmpty(params.accountFilter)) {
+        _.extend(filters, params.accountFilter);
+      }
+    },
     acctNum: 1,
-    state: 1
+    state: 1,
+    substate: 1
   },
   correctComment: 1
 });

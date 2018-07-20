@@ -17,6 +17,7 @@ export default class FlagService {
       throw new Meteor.Error("Action can't be flagged again");
     }
 
+    const { clientId } = Accounts.findOne({ _id: accountId });
     const flagActionData = {
       userId,
       createdAt: new Date(),
@@ -24,7 +25,8 @@ export default class FlagService {
       flagReason,
       actionId,
       isOpen: true,
-      accountId
+      accountId,
+      clientId
     };
     this.createFlag(
       flagActionData,
@@ -44,6 +46,7 @@ export default class FlagService {
       throw new Meteor.Error("Comment can't be flagged again");
     }
 
+    const { clientId } = Accounts.findOne({ _id: accountId });
     const flagActionData = {
       userId,
       createdAt: new Date(),
@@ -51,7 +54,8 @@ export default class FlagService {
       flagReason,
       commentId,
       isOpen: true,
-      accountId
+      accountId,
+      clientId
     };
     this.createFlag(
       flagActionData,
