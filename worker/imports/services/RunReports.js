@@ -9,12 +9,13 @@ import Accounts from "/imports/api/accounts/collection";
 import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
+import { fields } from "/imports/api/reports/enums/reportColumn";
 
 export default class RunReports {
   static run() {
     const job = JobQueue.findOne({ workerId: null });
     if (job) {
-      //Mark job as taken
+      // Mark job as taken
       JobQueue.update(
         { _id: job._id },
         {
@@ -24,7 +25,7 @@ export default class RunReports {
         }
       );
 
-      //   //Create & Save .csv file
+      //Create & Save .csv file
       this.saveReport(job);
     }
   }
@@ -45,8 +46,16 @@ export default class RunReports {
     const columns = {};
 
     _.map(reportColumns, (value, key) => {
-      if (value && key !== "insurances") {
-        columns[key] = Headers[key] ? Headers[key].label : "";
+      if (value && key !== fields.INSURANCES) {
+        if (key === fields.METADATA) {
+          _.map(reportColumns['metaData'], (value, key) => {
+            if (value) {
+              columns[`metaData[${key}]`] = `meta column: ${key}`;
+            }
+          });
+        } else {
+          columns[key] = Headers[key] ? Headers[key].label : "";
+        }
       }
     });
 

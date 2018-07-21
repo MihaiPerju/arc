@@ -77,8 +77,7 @@ export default new SimpleSchema({
     optional: true
   },
   metaData:{
-    type: Boolean,
-    optional: true,
-    defaultValue: false
+    type: Object,
+    optional: true
   }
 });
