@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import classNames from 'classnames';
+import { withQuery } from "meteor/cultofcoders:grapher-react";
+import NotificationQuery from "/imports/api/notifications/queries/notificationList";
+import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
+import Loading from "/imports/client/lib/ui/Loading";
 
-export default class Notitfications extends Component {
+class Notitfications extends Component {
   constructor() {
     super();
     this.state = {
@@ -107,29 +111,28 @@ export default class Notitfications extends Component {
 
   render() {
     const {dropdownIsActive, badge} = this.state;
-    const {data} = this.props;
+    const { data, loading, error } = this.props;
     const notificationBtnClasses = classNames('notification-btn', {
       'active': dropdownIsActive
     });
 
-    //My Notifications
-    const notifications = [
-      {content: 'Manager responded to account with Account Number acnx1', time: '11:22'},
-      {content: 'Manager responded to account with Account Number acnx1', time: '11:22'},
-      {content: 'Manager responded to account with Account Number acnx1', time: '11:22'},
-      {content: 'Manager responded to account with Account Number acnx1', time: '11:22'},
-      {content: 'Manager responded to account with Account Number acnx1', time: '11:22'},
-      {content: 'Manager responded to account with Account Number acnx1', time: '11:22'},
-      {content: 'Manager responded to account with Account Number acnx1', time: '11:22'}
-    ];
+    if (loading) {
+      return <Loading />;
+    }
+
+    if (error) {
+      return <div>Error: {error.reason}</div>;
+    }
+
+    console.log(data);
 
     return (
       <div className="notification-dropdown">
         <a href="javascript:;" className={notificationBtnClasses} onClick={this.openDropdown} ref={this.nodeRef}>
           <i className="icon-bell-o"/>
           {
-            badge && notifications.length > 1 && (
-              <div className="badge text-center">{notifications.length}</div>
+            badge && data.length > 1 && (
+              <div className="badge text-center">{data.length}</div>
             )
           }
         </a>
@@ -145,12 +148,14 @@ export default class Notitfications extends Component {
                   data.map((notification, index) => (
                     <NotificationItem key={index}
                                       content={notification.content}
-                                      time={notification.time}
-                    />
+                                      time={'11.22.63'}
+                    >
+                      {this.getMessage(notification)}
+                    </NotificationItem>
                   ))
                 }
                 {
-                  notifications.length === 0 && (
+                  data.length === 0 && (
                     <div className="notification-none text-center text-light-grey">No notifications!</div>
                   )
                 }
@@ -165,7 +170,7 @@ export default class Notitfications extends Component {
 
 class NotificationItem extends Component {
   render() {
-    const {content, time} = this.props;
+    const {time, children} = this.props;
 
     return (
       <div className="notification-row">
@@ -173,10 +178,22 @@ class NotificationItem extends Component {
           <i className="icon-response"/>
         </div>
         <div className="notification-info__content">
-          <div className="notification-content text-light-grey">{content}</div>
+          <div className="notification-content text-light-grey">{children}</div>
           <div className="notification-time">{time}</div>
         </div>
       </div>
     )
   }
 }
+
+export default withQuery(
+  props => {
+    return NotificationQuery.clone({
+      filters: {
+        receiverId: Meteor.userId(),
+        type: { $ne: NotificationTypeEnum.GLOBAL }
+      }
+    });
+  },
+  { reactive: true }
+)(Notitfications);
