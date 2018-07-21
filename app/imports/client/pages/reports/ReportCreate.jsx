@@ -10,6 +10,10 @@ import {
 import { EJSON } from "meteor/ejson";
 import Notifier from "../../lib/Notifier";
 import AccountFilterBuilder from "./AccountFilterBuilder";
+import AccountActionFilterBuilder from "./AccountActionFilterBuilder";
+import ReportTypeOptionsEnum, {
+  reportTypes
+} from "/imports/client/pages/reports/enums/reportType";
 
 export default class ReportCreate extends Component {
   constructor() {
@@ -23,28 +27,6 @@ export default class ReportCreate extends Component {
       shareReport: false
     };
   }
-
-  //When changing name or role of the filter
-  onChange = (field, value) => {
-    let { generalInformation } = this.state;
-
-    //Not allowing to pick up filters if we don't have a name
-    if (field === "name") {
-      if (value) {
-        this.setState({
-          hasGeneralInformation: true
-        });
-      } else {
-        this.setState({
-          hasGeneralInformation: false
-        });
-      }
-    }
-    const newInformation = {};
-    newInformation[field] = value;
-    _.extend(generalInformation, generalInformation, newInformation);
-    this.setState({ generalInformation });
-  };
 
   onSubmitFilters = (filters, components, filterBuilderData) => {
     //Setting state and creating/editing report
@@ -60,13 +42,13 @@ export default class ReportCreate extends Component {
       shareReport
     });
 
-    Meteor.call('report.create', generalInformation, (err) => {
-        if (!err) {
-            Notifier.success('Report created');
-            this.onClose();
-        } else {
-            Notifier.error(err.reason);
-        }
+    Meteor.call("report.create", generalInformation, err => {
+      if (!err) {
+        Notifier.success("Report created");
+        this.onClose();
+      } else {
+        Notifier.error(err.reason);
+      }
     });
   };
 
@@ -86,9 +68,53 @@ export default class ReportCreate extends Component {
     this.setState({ shareReport: !shareReport });
   };
 
+  getOptions = () => {
+    return ReportTypeOptionsEnum.map(type => ({
+      value: type.value,
+      label: type.label
+    }));
+  };
+
+  onChangeModel = model => {
+    //Not allowing to pick up filters if we don't have a name & report type
+    let { generalInformation } = this.state;
+    const newInformation = {};
+
+    if (model.name && model.type) {
+      this.setState({
+        hasGeneralInformation: true
+      });
+    } else {
+      this.setState({
+        hasGeneralInformation: false
+      });
+    }
+
+    if ("name" in model) {
+      newInformation["name"] = model.name;
+    }
+
+    if ("type" in model) {
+      newInformation["type"] = model.type;
+
+      generalInformation = _.omit(generalInformation, "mongoFilters", "filterBuilderData");
+      this.setState({ components: {}, filterBuilderData: {} });
+    }
+
+    _.extend(generalInformation, generalInformation, newInformation);
+    this.setState({ generalInformation });
+  };
+
   render() {
-    const { hasGeneralInformation, components, filterBuilderData, shareReport } = this.state;
+    const {
+      hasGeneralInformation,
+      components,
+      filterBuilderData,
+      shareReport,
+      generalInformation
+    } = this.state;
     const { substates } = this.props;
+    const options = this.getOptions();
 
     return (
       <div className="create-form">
@@ -114,9 +140,9 @@ export default class ReportCreate extends Component {
               <div className="title-block text-uppercase">general data</div>
             </div>
             <AutoForm
-              onChange={this.onChange}
               ref="generalDataForm"
               schema={schema}
+              onChangeModel={this.onChangeModel}
             >
               <div className="form-wrapper">
                 <AutoField
@@ -125,6 +151,15 @@ export default class ReportCreate extends Component {
                   name="name"
                 />
                 <ErrorField name="name" />
+              </div>
+              <div className="form-wrapper">
+                <SelectField
+                  labelHidden={true}
+                  placeholder="Select type"
+                  name="type"
+                  options={options}
+                />
+                <ErrorField name="type" />
               </div>
               <div className="check-group">
                 <input checked={shareReport} type="checkbox" />
@@ -137,18 +172,29 @@ export default class ReportCreate extends Component {
             <div className="action-block">
               <div className="header__block">
                 <div className="title-block text-uppercase">
-                  Create fillters for report
+                  Create fillters for report for{" "}
+                  {generalInformation.type === reportTypes.ACCOUNTS
+                    ? "Accounts"
+                    : "Account Actions"}
                 </div>
               </div>
-              {hasGeneralInformation && (
-                <AccountFilterBuilder
-                  onSubmitFilters={this.onSubmitFilters.bind(this)}
-                  filterBuilderData={filterBuilderData}
-                  components={components}
-                  substates={substates}
-                  ref="filterBuilder"
-                />
-              )}
+              {hasGeneralInformation &&
+                (generalInformation.type === reportTypes.ACCOUNTS ? (
+                  <AccountFilterBuilder
+                    onSubmitFilters={this.onSubmitFilters.bind(this)}
+                    filterBuilderData={filterBuilderData}
+                    components={components}
+                    substates={substates}
+                    ref="filterBuilder"
+                  />
+                ) : (
+                  <AccountActionFilterBuilder
+                    onSubmitFilters={this.onSubmitFilters.bind(this)}
+                    filterBuilderData={filterBuilderData}
+                    components={components}
+                    ref="filterBuilder"
+                  />
+                ))}
             </div>
           )}
         </div>

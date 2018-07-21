@@ -1,15 +1,11 @@
 import SimpleSchema from "simpl-schema";
-import FieldsType from "../../accounts/config/accounts";
 import accountActionsFieldsType from "../../accounts/config/accountActions";
-import { StateList } from "/imports/api/accounts/enums/states";
-import ReportFields, {
-  accountActionsFields
-} from "/imports/api/reports/enums/ReportFields";
+import { accountActionsFields } from "/imports/api/reports/enums/ReportFields";
 import { typeList } from "/imports/api/accounts/enums/actionTypesEnum";
 
 const stringMatchOptions = ["Contains", "Not Contains", "Is Exact"];
 
-export default class ReportsService {
+export default class AccountActionReportsService {
   static getInitialField(field) {
     if (field.endsWith("Match")) {
       field = field.substring(0, field.indexOf("Match"));
@@ -23,7 +19,7 @@ export default class ReportsService {
 
   static getOptions() {
     let schemaOptions = [{ label: "+ Add Filter" }];
-    ReportFields.map(rule => {
+    accountActionsFields.map(rule => {
       const { value, label } = rule;
       schemaOptions.push({ label, value });
     });
@@ -33,7 +29,7 @@ export default class ReportsService {
   static getComponents() {
     let components = {};
 
-    ReportFields.map(key => {
+    accountActionsFields.map(key => {
       components[key] = {
         isActive: false,
         name: key
@@ -44,23 +40,19 @@ export default class ReportsService {
   }
 
   static isEnum(name) {
-    return FieldsType.enums.indexOf(name) !== -1;
+    return accountActionsFieldsType.enums.indexOf(name) !== -1;
   }
 
   static isDate(name) {
-    return FieldsType.dates.indexOf(name) !== -1;
-  }
-
-  static isNumber(name) {
-    return FieldsType.numbers.indexOf(name) !== -1;
+    return accountActionsFieldsType.dates.indexOf(name) !== -1;
   }
 
   static isLink(name) {
-    return FieldsType.links.indexOf(name) !== -1;
+    return accountActionsFieldsType.links.indexOf(name) !== -1;
   }
 
   static isString(name) {
-    return FieldsType.strings.indexOf(name) !== -1;
+    return accountActionsFieldsType.strings.indexOf(name) !== -1;
   }
 
   static _createFilters(requiredFields, data) {
@@ -84,25 +76,18 @@ export default class ReportsService {
       }
 
       //Check type and create filter based on specific type information
-      if (ReportsService.isEnum(field)) {
+      if (AccountActionReportsService.isEnum(field)) {
         //If is Enum
         filters[field] = data[field];
       }
-      if (ReportsService.isNumber(field)) {
-        //If is Number
-        filters[field] = {
-          $gte: data[field + "Start"],
-          $lt: data[field + "End"]
-        };
-      }
-      if (ReportsService.isDate(field)) {
+      if (AccountActionReportsService.isDate(field)) {
         //If is Date
         filters[field] = {
           $gte: data[field + "Start"],
           $lt: data[field + "End"]
         };
       }
-      if (ReportsService.isString(field)) {
+      if (AccountActionReportsService.isString(field)) {
         //If is a string
         if (data[field + "Match"] === stringMatchOptions[0]) {
           filters[field] = { $regex: data[field], $options: "i" };
@@ -114,7 +99,7 @@ export default class ReportsService {
         } else {
           filters[field] = data[field];
         }
-      } else if (ReportsService.isLink(field)) {
+      } else if (AccountActionReportsService.isLink(field)) {
         filters[field] = { $in: data[field] };
       }
     }
@@ -126,15 +111,13 @@ export default class ReportsService {
 
     for (let component in components) {
       if (components[component].isActive) {
-        if (ReportsService.isLink(component)) {
+        if (AccountActionReportsService.isLink(component)) {
           requiredFields.push(component);
-        } else if (ReportsService.isDate(component)) {
+        } else if (AccountActionReportsService.isDate(component)) {
           requiredFields.push(`${component}Start`, `${component}End`);
-        } else if (ReportsService.isNumber(component)) {
-          requiredFields.push(`${component}Start`, `${component}End`);
-        } else if (ReportsService.isEnum(component)) {
+        } else if (AccountActionReportsService.isEnum(component)) {
           requiredFields.push(component);
-        } else if (ReportsService.isString(component)) {
+        } else if (AccountActionReportsService.isString(component)) {
           requiredFields.push(component, `${component}Match`);
         }
       }
@@ -145,10 +128,11 @@ export default class ReportsService {
       return { result: "", error: "Select at least one filter!" };
     }
 
-    const { result, filterBuilderData, error } = ReportsService._createFilters(
-      requiredFields,
-      data
-    );
+    const {
+      result,
+      filterBuilderData,
+      error
+    } = AccountActionReportsService._createFilters(requiredFields, data);
 
     if (error) {
       return { error };
@@ -157,12 +141,14 @@ export default class ReportsService {
     return { result, filterBuilderData };
   }
 
-  static createSchema(substates) {
+  static createSchema() {
     const fields = {};
-    ReportFields.map(rule => {
+    accountActionsFields.map(rule => {
       const { value, label } = rule;
 
-      if (ReportsService.isString(value, FieldsType)) {
+      if (
+        AccountActionReportsService.isString(value, accountActionsFieldsType)
+      ) {
         fields[value] = {
           type: String,
           optional: true,
@@ -173,7 +159,9 @@ export default class ReportsService {
           allowedValues: stringMatchOptions,
           optional: true
         };
-      } else if (ReportsService.isLink(value, FieldsType)) {
+      } else if (
+        AccountActionReportsService.isLink(value, accountActionsFieldsType)
+      ) {
         fields[value] = {
           type: Array,
           optional: true,
@@ -182,7 +170,9 @@ export default class ReportsService {
         fields[`${value}.$`] = {
           type: String
         };
-      } else if (ReportsService.isDate(value, FieldsType)) {
+      } else if (
+        AccountActionReportsService.isDate(value, accountActionsFieldsType)
+      ) {
         fields[`${value}Start`] = {
           type: Date,
           optional: true,
@@ -192,24 +182,10 @@ export default class ReportsService {
           type: Date,
           optional: true
         };
-      } else if (ReportsService.isNumber(value, FieldsType)) {
-        fields[`${value}Start`] = {
-          type: SimpleSchema.Integer,
-          optional: true,
-          label
-        };
-        fields[`${value}End`] = {
-          type: SimpleSchema.Integer,
-          optional: true
-        };
-      } else if (ReportsService.isEnum(value, FieldsType)) {
-        let allowedValues;
-
-        if (value === "state") {
-          allowedValues = _.map(StateList, value => value);
-        } else {
-          allowedValues = _.map(substates, value => value.name);
-        }
+      } else if (
+        AccountActionReportsService.isEnum(value, accountActionsFieldsType)
+      ) {
+        const allowedValues = _.map(typeList, value => value);
 
         fields[value] = {
           type: String,
@@ -220,78 +196,5 @@ export default class ReportsService {
       }
     });
     return new SimpleSchema(fields);
-  }
-
-  static createAccountActionSchema() {
-    const fields = {};
-    accountActionsFields.map(rule => {
-      const { value, label } = rule;
-
-      if (ReportsService.isString(value, accountActionsFieldsType)) {
-        fields[value] = {
-          type: String,
-          optional: true,
-          label
-        };
-        fields[`${value}Match`] = {
-          type: String,
-          allowedValues: stringMatchOptions,
-          optional: true
-        };
-      } else if (ReportsService.isLink(value, accountActionsFieldsType)) {
-        fields[value] = {
-          type: Array,
-          optional: true,
-          label
-        };
-        fields[`${value}.$`] = {
-          type: String
-        };
-      } else if (ReportsService.isDate(value, accountActionsFieldsType)) {
-        fields[`${value}Start`] = {
-          type: Date,
-          optional: true,
-          label
-        };
-        fields[`${value}End`] = {
-          type: Date,
-          optional: true
-        };
-      } else if (ReportsService.isEnum(value, accountActionsFieldsType)) {
-        let allowedValues;
-
-        allowedValues = _.map(typeList, value => value);
-
-        fields[value] = {
-          type: String,
-          allowedValues,
-          optional: true,
-          label
-        };
-      }
-    });
-    return new SimpleSchema(fields);
-  }
-
-  static getAccountActionOptions() {
-    const schemaOptions = [{ label: "+ Add Filter" }];
-    accountActionsFields.map(rule => {
-      const { value, label } = rule;
-      schemaOptions.push({ label, value });
-    });
-    return schemaOptions;
-  }
-
-  static getAccountActionComponents() {
-    const components = {};
-
-    accountActionsFields.map(key => {
-      components[key] = {
-        isActive: false,
-        name: key
-      };
-    });
-
-    return components;
   }
 }

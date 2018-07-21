@@ -11,6 +11,8 @@ import { EJSON } from "meteor/ejson";
 import Loading from "/imports/client/lib/ui/Loading";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
+import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
+import { reportTypes } from "/imports/client/pages/reports/enums/reportType";
 
 class ReportHeader extends Component {
   constructor() {
@@ -64,16 +66,32 @@ class ReportHeader extends Component {
     const { report } = props;
     const filters = EJSON.parse(report.mongoFilters);
     const options = { limit: 20 };
-    accountsQuery.clone({ filters, options }).fetch((err, accounts) => {
-      if (!err) {
-        this.setState({
-          accounts,
-          loading: false
+    if (report.type === reportTypes.ACCOUNT_ACTIONS) {
+      accountActionsQuery
+        .clone({ filters, options })
+        .fetch((err, accountActions) => {
+          if (!err) {
+            console.log("accountActions", accountActions);
+            // this.setState({
+            //   accounts,
+            //   loading: false
+            // });
+          } else {
+            Notifier.error("Couldn't get sample account actions");
+          }
         });
-      } else {
-        Notifier.error("Couldn't get sample accounts");
-      }
-    });
+    } else {
+      accountsQuery.clone({ filters, options }).fetch((err, accounts) => {
+        if (!err) {
+          this.setState({
+            accounts,
+            loading: false
+          });
+        } else {
+          Notifier.error("Couldn't get sample accounts");
+        }
+      });
+    }
   }
 
   openSchedule = () => {
@@ -243,7 +261,7 @@ class ReportHeader extends Component {
 
   onSetGraph = () => {
     const { setGraph } = this.props;
-    setGraph()
+    setGraph();
   };
 
   render() {
@@ -253,7 +271,7 @@ class ReportHeader extends Component {
       accounts,
       loading,
       dialogIsActive,
-      selectedReportColumns,
+      selectedReportColumns
     } = this.state;
     const job = data;
     const tableHeader = ["Account name", ...selectedReportColumns];
