@@ -124,8 +124,6 @@ class Notitfications extends Component {
       return <div>Error: {error.reason}</div>;
     }
 
-    console.log(data);
-
     return (
       <div className="notification-dropdown">
         <a href="javascript:;" className={notificationBtnClasses} onClick={this.openDropdown} ref={this.nodeRef}>
