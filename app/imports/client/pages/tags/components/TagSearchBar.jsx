@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
-import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class TagSearchBar extends Component {
   constructor() {
@@ -13,25 +13,22 @@ export default class TagSearchBar extends Component {
       active: false,
       filter: false,
       dropdown: false,
-      selectAll: false
+      selectAll: false,
+      model: {},
+      dialogIsActive: false
     };
   }
 
-  manageFilterBar() {
-    const { active, filter } = this.state;
-    this.setState({
-      active: !active,
-      filter: !filter
-    });
-    this.props.decrease();
+  componentWillMount() {
+    this.getFilterParams();
   }
 
   onSubmit(params) {
-    if (FlowRouter.current().queryParams.page != "1" && "tagName" in params) {
+    if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
     }
-    if ("tagName" in params) {
-      FlowRouter.setQueryParams({ tagName: params.tagName });
+    if ("tagIds" in params) {
+      FlowRouter.setQueryParams({ tagIds: params.tagIds });
     }
   }
 
@@ -65,8 +62,55 @@ export default class TagSearchBar extends Component {
     });
   };
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("tagName" in queryParams) {
+      model.tagName = queryParams.tagName;
+    }
+
+    if ("tagIds" in queryParams) {
+      model.tagIds = queryParams.tagIds;
+    }
+
+    this.setState({ model });
+  };
+
+  openDialog = e => {
+    e.preventDefault();
+    this.setState({
+      dialogIsActive: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      dialogIsActive: false
+    });
+  };
+
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+
+  onChange = (field, value) => {
+    if (field === "tagName") {
+      FlowRouter.setQueryParams({ tagName: value });
+    }
+  };
+
+  getOptions = tags => {
+    return _.map(tags, tag => ({
+      value: tag._id,
+      label: tag.name
+    }));
+  };
+
   render() {
-    const { filter, active, dropdown, selectAll } = this.state;
+    const { filter, active, dropdown, selectAll, model, dialogIsActive } = this.state;
     const {
       options,
       btnGroup,
@@ -75,7 +119,7 @@ export default class TagSearchBar extends Component {
       icons,
       getProperAccounts,
       hideSort,
-      hideFilter
+      moduleTags
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -89,14 +133,15 @@ export default class TagSearchBar extends Component {
       full__width: btnGroup,
       sort__none: hideSort
     });
+    const tagOptions = this.getOptions(moduleTags);
 
     return (
       <AutoForm
-        autosave
-        autosaveDelay={500}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
+        model={model}
+        onChange={this.onChange}
       >
         <div className="search-bar">
           {!hideSort && (
@@ -132,19 +177,45 @@ export default class TagSearchBar extends Component {
               </div>
             </div>
 
-            {!hideFilter && (
-              <div
-                className={active ? "filter-block active" : "filter-block"}
-                onClick={this.manageFilterBar.bind(this)}
-              >
-                <button>
-                  <i className="icon-filter" />
-                </button>
-              </div>
-            )}
+            <div className="filter-block">
+              <button onClick={this.openDialog.bind(this)}>
+                <i className="icon-filter" />
+                {dialogIsActive && (
+                  <Dialog
+                    className="account-dialog filter-dialog"
+                    closePortal={this.closeDialog}
+                    title="Filter by:"
+                  >
+                    <button className="close-dialog" onClick={this.closeDialog}>
+                      <i className="icon-close" />
+                    </button>
+                    <div className="filter-bar">
+                      <div className="select-wrapper">
+                        <div className="form-group">
+                          <SelectMulti
+                            className="form-select__multi"
+                            placeholder="Select modules"
+                            labelHidden={true}
+                            name="tagIds"
+                            options={tagOptions}
+                          />
+                        </div>
+                        <div className="flex--helper flex-justify--end">
+                          <button
+                            className="btn--blue"
+                            onClick={this.addFilters}
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Dialog>
+                )}
+              </button>
+            </div>
           </div>
         </div>
-        {filter && <FilterBar options={options} />}
       </AutoForm>
     );
   }
@@ -236,18 +307,17 @@ class BtnGroup extends Component {
 }
 
 const schema = new SimpleSchema({
-  facilityId: {
-    type: String,
-    optional: true
-  },
-  assigneeId: {
-    type: String,
-    optional: true,
-    label: "Filter by assignee"
-  },
   tagName: {
     type: String,
     optional: true,
     label: "Search by tag name"
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
+    type: String
   }
 });

@@ -3,10 +3,12 @@ import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
+import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
 import Notifier from "/imports/client/lib/Notifier";
 import FilterService from "/imports/client/lib/FilterService";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
 export default class ClientSearchBar extends Component {
   constructor() {
@@ -16,8 +18,13 @@ export default class ClientSearchBar extends Component {
       dropdown: false,
       selectAll: false,
       createdAtMin: null,
-      createdAtMax: null
+      createdAtMax: null,
+      model: {}
     };
+  }
+
+  componentWillMount() {
+    this.getFilterParams();
   }
 
   onSubmit(params) {
@@ -36,6 +43,10 @@ export default class ClientSearchBar extends Component {
     FlowRouter.setQueryParams({
       createdAtMax: FilterService.formatDate(createdAtMax)
     });
+
+    if ("tagIds" in params) {
+      FlowRouter.setQueryParams({ tagIds: params.tagIds });
+    }
   }
 
   openDropdown = () => {
@@ -69,7 +80,6 @@ export default class ClientSearchBar extends Component {
   };
 
   onDateSelect = (selectedDate, field) => {
-    const date = selectedDate ? new Date(selectedDate).toString() : "";
     if (field === "createdAtMin") {
       this.setState({ createdAtMin: selectedDate });
     } else if (field === "createdAtMax") {
@@ -108,13 +118,48 @@ export default class ClientSearchBar extends Component {
     }
   };
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("clientName" in queryParams) {
+      model.clientName = queryParams.clientName;
+    }
+
+    if ("createdAtMin" in queryParams) {
+      this.setState({
+        createdAtMin: moment(new Date(queryParams.createdAtMin))
+      });
+    }
+
+    if ("createdAtMax" in queryParams) {
+      this.setState({
+        createdAtMax: moment(new Date(queryParams.createdAtMax))
+      });
+    }
+
+    if ("tagIds" in queryParams) {
+      model.tagIds = queryParams.tagIds;
+    }
+
+    this.setState({ model });
+  };
+
+  getOptions = tags => {
+    return _.map(tags, tag => ({
+      value: tag._id,
+      label: tag.name
+    }));
+  };
+
   render() {
     const {
       dialogIsActive,
       dropdown,
       selectAll,
       createdAtMin,
-      createdAtMax
+      createdAtMax,
+      model
     } = this.state;
     const {
       options,
@@ -123,7 +168,8 @@ export default class ClientSearchBar extends Component {
       dropdownOptions,
       icons,
       getProperAccounts,
-      hideSort
+      hideSort,
+      moduleTags
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -137,6 +183,7 @@ export default class ClientSearchBar extends Component {
       full__width: btnGroup,
       sort__none: hideSort
     });
+    const tagOptions = this.getOptions(moduleTags);
 
     return (
       <AutoForm
@@ -144,6 +191,7 @@ export default class ClientSearchBar extends Component {
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
         onChange={this.onChange}
+        model={model}
       >
         <div className="search-bar">
           {!hideSort && (
@@ -207,6 +255,15 @@ export default class ClientSearchBar extends Component {
                             onChange={date =>
                               this.onDateSelect(date, "createdAtMax")
                             }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <SelectMulti
+                            className="form-select__multi"
+                            placeholder="Select modules"
+                            labelHidden={true}
+                            name="tagIds"
+                            options={tagOptions}
                           />
                         </div>
                         <div className="flex--helper flex-justify--end">
@@ -329,5 +386,13 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by client name"
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
+    type: String
   }
 });

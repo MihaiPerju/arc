@@ -117,9 +117,7 @@ export default class CommentSingle extends React.Component {
 
   showFlags = commentId => {
     const { flags } = this.props.account;
-    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      return true;
-    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+    if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
       const index = flags.findIndex(flag => {
         const { flagAction } = flag;
         return flagAction.commentId === commentId && !flagAction.isOpen;

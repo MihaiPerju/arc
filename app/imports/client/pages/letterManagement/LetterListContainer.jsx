@@ -8,6 +8,8 @@ import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
 import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class LetterListContainer extends Pager {
   constructor() {
@@ -17,13 +19,15 @@ class LetterListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      moduleTags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -73,9 +77,21 @@ class LetterListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.LETTERS] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, isLoading, error } = this.props;
-    const { total, range, create } = this.state;
+    const { total, range, create, moduleTags } = this.state;
 
     if (isLoading) {
       return <Loading />;
@@ -87,8 +103,11 @@ class LetterListContainer extends Pager {
     return (
       <div className="cc-container">
         <div className={create ? "left__side" : "left__side full__width"}>
-          <LetterSearchBar setPagerInitial={this.setPagerInitial} />
-          <LetterList letters={data} />
+          <LetterSearchBar
+            setPagerInitial={this.setPagerInitial}
+            moduleTags={moduleTags}
+          />
+          <LetterList letters={data} moduleTags={moduleTags} />
           <PaginationBar
             module="Letter Management File"
             create={this.createForm}

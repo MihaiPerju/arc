@@ -5,3 +5,4 @@ import './accountPdfUpload';
 import './extensions/pdfRoute';
 import './extensions/pdfSingleRoute';
 import './methods.js';
+import "./publication";

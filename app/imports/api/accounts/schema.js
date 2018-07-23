@@ -204,5 +204,13 @@ export default new SimpleSchema({
   other2: {
     type: SimpleSchema.oneOf(Number, Date, String),
     optional: true
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
+    type: String
   }
 });

@@ -18,5 +18,6 @@ export default Letters.createQuery("letterList", {
   body: 1,
   letterValues: 1,
   attachmentIds: 1,
-  isManuallyMailed: 1
+  isManuallyMailed: 1,
+  tagIds: 1
 });

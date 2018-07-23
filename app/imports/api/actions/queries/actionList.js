@@ -11,5 +11,6 @@ export default Actions.createQuery('actionList', {
     title: 1,
     description: 1,
     substateId: 1,
-    inputs: 1
+    inputs: 1,
+    tagIds: 1
 });

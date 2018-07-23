@@ -12,5 +12,6 @@ export default Clients.createQuery("listClients", {
   logoPath: 1,
   contacts: 1,
   status: 1,
-  managerIds: 1
+  managerIds: 1,
+  tagIds: 1
 });

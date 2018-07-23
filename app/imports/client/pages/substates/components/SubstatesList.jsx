@@ -18,7 +18,8 @@ export default class SubstatesList extends Component {
       setSubstate,
       selectSubstate,
       substateSelected,
-      currentSubstate
+      currentSubstate,
+      moduleTags
     } = this.props;
 
     const state = FlowRouter.getQueryParam("sortState");
@@ -51,31 +52,47 @@ export default class SubstatesList extends Component {
             <div className="substates-table__header flex--helper">
               <div className="substates-field" />
               <div className="substates-field substates-sort flex--helper flex-justify--center flex-align--center text-light-grey">
-                <button className="btn-text--green" onClick={() => this.sortState("ASC")}>
-                  <i className={stateAscend}/>
+                <button
+                  className="btn-text--green"
+                  onClick={() => this.sortState("ASC")}
+                >
+                  <i className={stateAscend} />
                 </button>
                 <span>State Name</span>
-                <button className="btn-text--green" onClick={() => this.sortState("DESC")}>
-                  <i className={stateDescend}/>
+                <button
+                  className="btn-text--green"
+                  onClick={() => this.sortState("DESC")}
+                >
+                  <i className={stateDescend} />
                 </button>
               </div>
               <div className="substates-field substates-sort flex--helper flex-justify--center flex-align--center text-light-grey">
-                <button className="btn-text--green" onClick={() => this.sortSubstate("ASC")}>
-                  <i className={substateAscend}/>
+                <button
+                  className="btn-text--green"
+                  onClick={() => this.sortSubstate("ASC")}
+                >
+                  <i className={substateAscend} />
                 </button>
                 <span>Substate Name</span>
-                <button className="btn-text--green" onClick={() => this.sortSubstate("DESC")}>
-                  <i className={substateDescend}/>
+                <button
+                  className="btn-text--green"
+                  onClick={() => this.sortSubstate("DESC")}
+                >
+                  <i className={substateDescend} />
                 </button>
               </div>
-              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">Description</div>
+              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
+                Description
+              </div>
               <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
                 Triggering Actions
               </div>
               <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
                 Status
               </div>
-              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">Actions</div>
+              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
+                Actions
+              </div>
             </div>
             {substates.map((substate, index) => (
               <SubstateSingle
@@ -85,6 +102,7 @@ export default class SubstatesList extends Component {
                 setSubstate={setSubstate}
                 substate={substate}
                 key={substate._id}
+                moduleTags={moduleTags}
               />
             ))}
           </div>

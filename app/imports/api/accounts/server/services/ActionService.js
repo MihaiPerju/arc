@@ -13,6 +13,7 @@ import actionTypesEnum from "../../enums/actionTypesEnum";
 import Escalations from "/imports/api/escalations/collection";
 import NotificationService from "/imports/api/notifications/server/services/NotificationService";
 import Users from "/imports/api/users/collection";
+import Facilities from "/imports/api/facilities/collection";
 
 export default class ActionService {
   //Adding action to account
@@ -24,6 +25,7 @@ export default class ActionService {
     const { inputs } = action;
     const createdAt = new Date();
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
+    const { clientId } = Accounts.findOne({ _id: accountId });
     const accountActionData = {
       userId,
       actionId: actionId.value,
@@ -31,7 +33,8 @@ export default class ActionService {
       addedBy,
       type: actionTypesEnum.USER_ACTION,
       createdAt,
-      accountId
+      accountId,
+      clientId
     };
     const customFields = {};
     _.map(inputs, input => {
@@ -76,13 +79,17 @@ export default class ActionService {
         substate: Substates.SELF_RETURNED,
         systemAction: true
       };
+
+      const { clientId } = Facilities.findOne({ _id: facilityId });
+
       const actionId = Actions.insert(action);
       const accountActionId = AccountActions.insert({
         actionId,
         fileId,
         systemAction: true,
         type: actionTypesEnum.SYSTEM_ACTION,
-        createdAt: new Date()
+        createdAt: new Date(),
+        clientId
       });
 
       Accounts.update(
@@ -140,13 +147,15 @@ export default class ActionService {
   }
 
   static addComment({ content, accountId, isCorrectNote, userId }) {
+    const { clientId } = Accounts.findOne({ _id: accountId });
     const commentData = {
       userId,
       type: actionTypesEnum.COMMENT,
       content,
       createdAt: new Date(),
       accountId,
-      correctComment: isCorrectNote
+      correctComment: isCorrectNote,
+      clientId
     };
     const accountActionId = AccountActions.insert(commentData);
     Accounts.update(

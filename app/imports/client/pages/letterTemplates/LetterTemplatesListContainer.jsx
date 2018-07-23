@@ -11,6 +11,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class LetterTemplateListContainer extends Pager {
   constructor() {
@@ -22,13 +24,15 @@ class LetterTemplateListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      moduleTags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -119,6 +123,18 @@ class LetterTemplateListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.TEMPLATES] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -126,7 +142,8 @@ class LetterTemplateListContainer extends Pager {
       currentTemplate,
       create,
       range,
-      total
+      total,
+      moduleTags
     } = this.state;
     const template = objectFromArray(data, currentTemplate);
     if (loading) {
@@ -149,7 +166,7 @@ class LetterTemplateListContainer extends Pager {
             btnGroup={templatesSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            hideFilter
+            moduleTags={moduleTags}
           />
           <LetterTemplatesList
             class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -158,6 +175,7 @@ class LetterTemplateListContainer extends Pager {
             currentTemplate={currentTemplate}
             setTemplate={this.setTemplate}
             templates={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             module="Template"

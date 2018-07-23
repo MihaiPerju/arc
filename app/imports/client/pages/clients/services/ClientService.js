@@ -4,7 +4,7 @@ export default class ClientService {
   static getActionsQueryParams(clientId) {
     const params = {
       filters: { clientId },
-      actionsFilter: {},
+      accountFilter: {},
       userFilter: {}
     };
 
@@ -21,13 +21,13 @@ export default class ClientService {
     const role = FlowRouter.getQueryParam("role");
 
     if (type) {
-      _.extend(params.actionsFilter, {
+      _.extend(params.filters, {
         type
       });
     }
 
     if (substate) {
-      _.extend(params.filters, {
+      _.extend(params.accountFilter, {
         substate
       });
     }
@@ -37,7 +37,7 @@ export default class ClientService {
       const filter = {
         createdAt: { $gte: new Date(moment(firstDay).startOf("day")) }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (monthToDate) {
@@ -45,7 +45,7 @@ export default class ClientService {
       const filter = {
         createdAt: { $gte: new Date(moment(firstDay).startOf("day")) }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (yearToDate) {
@@ -54,7 +54,7 @@ export default class ClientService {
       const filter = {
         createdAt: { $gte: new Date(moment(firstDay).startOf("day")) }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (lastNDays) {
@@ -65,7 +65,7 @@ export default class ClientService {
           )
         }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (lastNMonths) {
@@ -76,7 +76,7 @@ export default class ClientService {
           )
         }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (yesterday) {
@@ -85,7 +85,7 @@ export default class ClientService {
           $gte: new Date(moment(moment().subtract(1, "days")).startOf("day"))
         }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (lastWeek) {
@@ -97,7 +97,7 @@ export default class ClientService {
           )
         }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (lastMonth) {
@@ -111,15 +111,12 @@ export default class ClientService {
           )
         }
       };
-      _.extend(params.actionsFilter, filter);
+      _.extend(params.filters, filter);
     }
 
     if (role) {
       _.extend(params.userFilter, {
         roles: { $in: [role] }
-      });
-      _.extend(params.actionsFilter, {
-        userId: { $exists: true }
       });
     }
     return params;

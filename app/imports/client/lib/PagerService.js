@@ -42,6 +42,7 @@ export default class PagerService {
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
     const admitDateMin = FlowRouter.getQueryParam("admitDateMin");
     const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
+    const tagIds = FlowRouter.getQueryParam("tagIds");
     // sorting query params
     const sortAcctBal = FlowRouter.getQueryParam("sortAcctBal");
     const sortTickleDate = FlowRouter.getQueryParam("sortTickleDate");
@@ -75,7 +76,8 @@ export default class PagerService {
         fbDateMax,
         activeInsCode,
         admitDateMin,
-        admitDateMax
+        admitDateMax,
+        tagIds
       },
       options: {
         sortAcctBal,
@@ -135,7 +137,8 @@ export default class PagerService {
       activeInsCode,
       admitDateMin,
       admitDateMax,
-      tickleUserId
+      tickleUserId,
+      tagIds
     },
     {
       sortAcctBal,
@@ -313,7 +316,15 @@ export default class PagerService {
       });
     }
 
+    if (tagIds) {
+      _.extend(params.filters, { tagIds: { $in: tagIds } });
+    }
+
     //adding sort query options
+
+    _.extend(params, {
+      options: { sort: {} }
+    });
 
     if (sortCreatedAt) {
       _.extend(params.options.sort, {
@@ -367,7 +378,8 @@ export default class PagerService {
       regionName,
       createdAtMin,
       createdAtMax,
-      letterIds;
+      letterIds,
+      tagIds;
 
     _.extend(params, {
       filters: {}
@@ -434,6 +446,16 @@ export default class PagerService {
       letterIds = FlowRouter.getQueryParam("letterIds");
     }
 
+    if (currentPath.indexOf("letter-management/list") > -1) {
+      letterIds = FlowRouter.getQueryParam("letterIds");
+    }
+
+    if (currentPath.indexOf("module-tags/list") > -1) {
+      tagName = FlowRouter.getQueryParam("tagName");
+    }
+
+    tagIds = FlowRouter.getQueryParam("tagIds");
+
     // client search
     if (clientName) {
       _.extend(params.filters, {
@@ -483,11 +505,16 @@ export default class PagerService {
       });
     }
 
-    // tag search
+    // tag search && module-tag
     if (tagName) {
       _.extend(params.filters, {
         name: { $regex: tagName, $options: "i" }
       });
+    }
+
+    // common filter query for tags filtering
+    if (tagIds) {
+      _.extend(params.filters, { tagIds: { $in: tagIds } });
     }
 
     // substates sorts
@@ -519,7 +546,11 @@ export default class PagerService {
       _.extend(params.filters, {
         createdAt: {
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(moment(new Date(createdAtMax)).add(1, "day").startOf("day"))
+          $lt: new Date(
+            moment(new Date(createdAtMax))
+              .add(1, "day")
+              .startOf("day")
+          )
         }
       });
     }
