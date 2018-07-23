@@ -97,7 +97,11 @@ export default class ReportCreate extends Component {
     if ("type" in model) {
       newInformation["type"] = model.type;
 
-      generalInformation = _.omit(generalInformation, "mongoFilters", "filterBuilderData");
+      generalInformation = _.omit(
+        generalInformation,
+        "mongoFilters",
+        "filterBuilderData"
+      );
       this.setState({ components: {}, filterBuilderData: {} });
     }
 
@@ -178,23 +182,22 @@ export default class ReportCreate extends Component {
                     : "Account Actions"}
                 </div>
               </div>
-              {hasGeneralInformation &&
-                (generalInformation.type === reportTypes.ACCOUNTS ? (
-                  <AccountFilterBuilder
-                    onSubmitFilters={this.onSubmitFilters.bind(this)}
-                    filterBuilderData={filterBuilderData}
-                    components={components}
-                    substates={substates}
-                    ref="filterBuilder"
-                  />
-                ) : (
-                  <AccountActionFilterBuilder
-                    onSubmitFilters={this.onSubmitFilters.bind(this)}
-                    filterBuilderData={filterBuilderData}
-                    components={components}
-                    ref="filterBuilder"
-                  />
-                ))}
+              {generalInformation.type === reportTypes.ACCOUNTS ? (
+                <AccountFilterBuilder
+                  onSubmitFilters={this.onSubmitFilters.bind(this)}
+                  filterBuilderData={filterBuilderData}
+                  components={components}
+                  substates={substates}
+                  ref="filterBuilder"
+                />
+              ) : (
+                <AccountActionFilterBuilder
+                  onSubmitFilters={this.onSubmitFilters.bind(this)}
+                  filterBuilderData={filterBuilderData}
+                  components={components}
+                  ref="filterBuilder"
+                />
+              )}
             </div>
           )}
         </div>

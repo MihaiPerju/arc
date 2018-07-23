@@ -1,11 +1,7 @@
 import SimpleSchema from "simpl-schema";
 import FieldsType from "../../accounts/config/accounts";
-import accountActionsFieldsType from "../../accounts/config/accountActions";
 import { StateList } from "/imports/api/accounts/enums/states";
-import ReportFields, {
-  accountActionsFields
-} from "/imports/api/reports/enums/ReportFields";
-import { typeList } from "/imports/api/accounts/enums/actionTypesEnum";
+import ReportFields from "/imports/api/reports/enums/ReportFields";
 
 const stringMatchOptions = ["Contains", "Not Contains", "Is Exact"];
 
@@ -220,78 +216,5 @@ export default class ReportsService {
       }
     });
     return new SimpleSchema(fields);
-  }
-
-  static createAccountActionSchema() {
-    const fields = {};
-    accountActionsFields.map(rule => {
-      const { value, label } = rule;
-
-      if (ReportsService.isString(value, accountActionsFieldsType)) {
-        fields[value] = {
-          type: String,
-          optional: true,
-          label
-        };
-        fields[`${value}Match`] = {
-          type: String,
-          allowedValues: stringMatchOptions,
-          optional: true
-        };
-      } else if (ReportsService.isLink(value, accountActionsFieldsType)) {
-        fields[value] = {
-          type: Array,
-          optional: true,
-          label
-        };
-        fields[`${value}.$`] = {
-          type: String
-        };
-      } else if (ReportsService.isDate(value, accountActionsFieldsType)) {
-        fields[`${value}Start`] = {
-          type: Date,
-          optional: true,
-          label
-        };
-        fields[`${value}End`] = {
-          type: Date,
-          optional: true
-        };
-      } else if (ReportsService.isEnum(value, accountActionsFieldsType)) {
-        let allowedValues;
-
-        allowedValues = _.map(typeList, value => value);
-
-        fields[value] = {
-          type: String,
-          allowedValues,
-          optional: true,
-          label
-        };
-      }
-    });
-    return new SimpleSchema(fields);
-  }
-
-  static getAccountActionOptions() {
-    const schemaOptions = [{ label: "+ Add Filter" }];
-    accountActionsFields.map(rule => {
-      const { value, label } = rule;
-      schemaOptions.push({ label, value });
-    });
-    return schemaOptions;
-  }
-
-  static getAccountActionComponents() {
-    const components = {};
-
-    accountActionsFields.map(key => {
-      components[key] = {
-        isActive: false,
-        name: key
-      };
-    });
-
-    return components;
   }
 }

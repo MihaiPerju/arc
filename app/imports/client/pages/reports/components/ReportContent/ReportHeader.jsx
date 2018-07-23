@@ -13,6 +13,7 @@ import Dialog from "/imports/client/lib/ui/Dialog";
 import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
 import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { reportTypes } from "/imports/client/pages/reports/enums/reportType";
+import AccountActionContent from "./AccountActionContent";
 
 class ReportHeader extends Component {
   constructor() {
@@ -21,7 +22,8 @@ class ReportHeader extends Component {
       schedule: false,
       accounts: [],
       dialogIsActive: false,
-      selectedReportColumns: []
+      selectedReportColumns: [],
+      accountActions: []
     };
   }
 
@@ -71,11 +73,10 @@ class ReportHeader extends Component {
         .clone({ filters, options })
         .fetch((err, accountActions) => {
           if (!err) {
-            console.log("accountActions", accountActions);
-            // this.setState({
-            //   accounts,
-            //   loading: false
-            // });
+            this.setState({
+              accountActions,
+              loading: false
+            });
           } else {
             Notifier.error("Couldn't get sample account actions");
           }
@@ -151,95 +152,103 @@ class ReportHeader extends Component {
   };
 
   getReportContent = tableHeader => {
-    const { accounts } = this.state;
+    const { accounts, accountActions } = this.state;
+    const { report } = this.props;
     return (
       <div className="table-list">
         <div className="table-list__wrapper">
-          <div className="table-container">
-            <div className="table-row">
-              {tableHeader.map(function(header, index) {
-                return index == 0 ? (
-                  <div className="table-header truncate text-left table-field table-field--fixed text-light-grey">
-                    {header}
-                  </div>
-                ) : typeof header == "object" ? (
-                  <div
-                    key={index}
-                    className="table-header text-center table-field text-light-grey"
-                  >
-                    {header.map(insurances => {
-                      return _.map(insurances, (value, key) => {
-                        if (value) {
-                          return (
-                            <div
-                              style={{
-                                width: "32%",
-                                float: "left",
-                                borderRight: "1px #d7d7d7 solid"
-                              }}
-                            >
-                              {key}
-                            </div>
-                          );
-                        }
-                      });
+          {report.type === reportTypes.ACCOUNTS ? (
+            <div className="table-container">
+              <div className="table-row">
+                {tableHeader.map(function(header, index) {
+                  return index == 0 ? (
+                    <div className="table-header truncate text-left table-field table-field--fixed text-light-grey">
+                      {header}
+                    </div>
+                  ) : typeof header == "object" ? (
+                    <div
+                      key={index}
+                      className="table-header text-center table-field text-light-grey"
+                    >
+                      {header.map(insurances => {
+                        return _.map(insurances, (value, key) => {
+                          if (value) {
+                            return (
+                              <div
+                                style={{
+                                  width: "32%",
+                                  float: "left",
+                                  borderRight: "1px #d7d7d7 solid"
+                                }}
+                              >
+                                {key}
+                              </div>
+                            );
+                          }
+                        });
+                      })}
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className="table-header text-center table-field text-light-grey"
+                    >
+                      {header}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {accounts.map((account, index) => {
+                return (
+                  <div className="table-row" key={index}>
+                    <div className="table-field table-field--fixed truncate text-center">
+                      {"Account No." + (index + 1)}
+                    </div>
+                    {tableHeader.map((content, index) => {
+                      if (index > 0) {
+                        return typeof content == "object" ? (
+                          <div className="table-field table-field--grey text-center">
+                            {content.map((insurances, i) => {
+                              return _.map(insurances, (value, key) => {
+                                if (value) {
+                                  return (
+                                    <div
+                                      style={{
+                                        width: "32%",
+                                        float: "left",
+                                        borderRight: "1px #d7d7d7 solid"
+                                      }}
+                                    >
+                                      {account.insurances[i] &&
+                                        account.insurances[i][key]}
+                                    </div>
+                                  );
+                                }
+                              });
+                            })}
+                          </div>
+                        ) : (
+                          <div className="table-field table-field--grey text-center">
+                            {typeof account[content] === "object"
+                              ? moment(account[content]).format(
+                                  "MM/DD/YYYY, hh:mm"
+                                )
+                              : account[content]}
+                          </div>
+                        );
+                      }
                     })}
-                  </div>
-                ) : (
-                  <div
-                    key={index}
-                    className="table-header text-center table-field text-light-grey"
-                  >
-                    {header}
                   </div>
                 );
               })}
             </div>
-
-            {accounts.map((account, index) => {
-              return (
-                <div className="table-row" key={index}>
-                  <div className="table-field table-field--fixed truncate text-center">
-                    {"Account No." + (index + 1)}
-                  </div>
-                  {tableHeader.map((content, index) => {
-                    if (index > 0) {
-                      return typeof content == "object" ? (
-                        <div className="table-field table-field--grey text-center">
-                          {content.map((insurances, i) => {
-                            return _.map(insurances, (value, key) => {
-                              if (value) {
-                                return (
-                                  <div
-                                    style={{
-                                      width: "32%",
-                                      float: "left",
-                                      borderRight: "1px #d7d7d7 solid"
-                                    }}
-                                  >
-                                    {account.insurances[i] &&
-                                      account.insurances[i][key]}
-                                  </div>
-                                );
-                              }
-                            });
-                          })}
-                        </div>
-                      ) : (
-                        <div className="table-field table-field--grey text-center">
-                          {typeof account[content] === "object"
-                            ? moment(account[content]).format(
-                                "MM/DD/YYYY, hh:mm"
-                              )
-                            : account[content]}
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              );
-            })}
-          </div>
+          ) : (
+            <AccountActionContent
+              tableHeader={tableHeader}
+              accountActions={accountActions}
+            />
+          )}
         </div>
       </div>
     );
@@ -274,7 +283,19 @@ class ReportHeader extends Component {
       selectedReportColumns
     } = this.state;
     const job = data;
-    const tableHeader = ["Account name", ...selectedReportColumns];
+    let tableHeader = [];
+    if (report.type === reportTypes.ACCOUNT_ACTIONS) {
+      tableHeader = [
+        "S.No.",
+        "type",
+        "userId",
+        "createdAt",
+        "actionId",
+        "reasonCode"
+      ];
+    } else {
+      tableHeader = ["Account name", ...selectedReportColumns];
+    }
 
     return (
       <div className="main-content report-content">

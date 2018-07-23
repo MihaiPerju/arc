@@ -5,7 +5,6 @@ import AccountActionFilterSingle from "./components/AccountActionFilterSingle";
 import Notifier from "/imports/client/lib/Notifier";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
-import facilityNames from "/imports/api/facilities/queries/facilityListNames";
 import userQuery from "/imports/api/users/queries/listUsers";
 import actionNames from "/imports/api/actions/queries/actionList";
 
@@ -51,12 +50,11 @@ export default class AccountFilterBuilder extends React.Component {
       components = AccountActionReportService.getComponents();
     }
 
-    //Getting assignee and facility options
+    //Getting actions and user options
     const actionOptions = [],
       userOptions = [];
-    const { filterBuilderData } = this.props;
 
-    // Getting client options
+    // Getting actions options
     actionNames.fetch((err, actions) => {
       if (!err) {
         actions.map(action => {
@@ -148,42 +146,43 @@ export default class AccountFilterBuilder extends React.Component {
     } = this.state;
     const { filterBuilderData } = this.props;
     const schemaOptions = this.clearSchemaOptions();
+
+    if (loading) {
+      return <Loading />;
+    }
+
     return (
       <main className="cc-main">
-        {loading ? (
-          <Loading />
-        ) : (
-          <div>
+        <div>
+          <AutoForm
+            model={filterBuilderData}
+            schema={schema}
+            onSubmit={this.onSubmit}
+            ref="filters"
+          >
+            {_.map(components, item => {
+              return (
+                item.isActive && (
+                  <AccountActionFilterSingle
+                    deleteFilter={this.deleteFilter}
+                    name={item.name}
+                    actionOptions={actionOptions}
+                    userOptions={userOptions}
+                  />
+                )
+              );
+            })}
+          </AutoForm>
+          <div className="add-report-filter">
             <AutoForm
-              model={filterBuilderData}
-              schema={schema}
-              onSubmit={this.onSubmit}
-              ref="filters"
+              ref="filterSelect"
+              onChange={this.createFilter}
+              schema={filterSchema}
             >
-              {_.map(components, item => {
-                return (
-                  item.isActive && (
-                    <AccountActionFilterSingle
-                      deleteFilter={this.deleteFilter}
-                      name={item.name}
-                      actionOptions={actionOptions}
-                      userOptions={userOptions}
-                    />
-                  )
-                );
-              })}
+              <SelectField options={schemaOptions} name="filter" />
             </AutoForm>
-            <div className="add-report-filter">
-              <AutoForm
-                ref="filterSelect"
-                onChange={this.createFilter}
-                schema={filterSchema}
-              >
-                <SelectField options={schemaOptions} name="filter" />
-              </AutoForm>
-            </div>
           </div>
-        )}
+        </div>
       </main>
     );
   }
