@@ -43,7 +43,7 @@ export default class RouteService {
           icon: "thumb-tack"
         },
         { name: "action/list", label: "Actions", icon: "thumb-tack" },
-        { name: "substate/list", label: "Substates", icon: "thumb-tack" }
+        { name: "substate/list", label: "Substates", icon: "tasks" }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
       return [
