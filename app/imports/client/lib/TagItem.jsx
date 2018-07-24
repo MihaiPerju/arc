@@ -71,7 +71,7 @@ export default class TagItem extends Component {
                 <div className="form-wrapper">
                   <SelectMulti
                     className="form-select__multi"
-                    placeholder="Select modules"
+                    placeholder="Select tags"
                     labelHidden={true}
                     name="tagIds"
                     options={options}
