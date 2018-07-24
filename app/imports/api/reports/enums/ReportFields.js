@@ -23,7 +23,7 @@ const accountActionsFields = [
   { value: "createdAt", label: "Created At" },
   { value: "reasonCode", label: "Reason Code" },
   { value: "actionId", label: "Action Name" },
-//   { value: "custom", label: "Custom fields" }
+  { value: "inputs", label: "Custom fields" }
 ];
 
 export { accountActionsFields };

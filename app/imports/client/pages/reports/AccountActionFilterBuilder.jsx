@@ -6,7 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
 import userQuery from "/imports/api/users/queries/listUsers";
-import actionNames from "/imports/api/actions/queries/actionList";
+import actionQuery from "/imports/api/actions/queries/actionList";
 
 export default class AccountFilterBuilder extends React.Component {
   constructor() {
@@ -18,7 +18,8 @@ export default class AccountFilterBuilder extends React.Component {
       filters: {},
       schema: {},
       actionOptions: [],
-      userOptions: []
+      userOptions: [],
+      filteredActions: []
     };
   }
 
@@ -55,15 +56,15 @@ export default class AccountFilterBuilder extends React.Component {
       userOptions = [];
 
     // Getting actions options
-    actionNames.fetch((err, actions) => {
+    actionQuery.fetch((err, actions) => {
       if (!err) {
         actions.map(action => {
           actionOptions.push({
             value: action._id,
             label: action.title
           });
-          this.setState({ actionOptions });
         });
+        this.setState({ actionOptions });
       } else {
         Notifier.error(err.reason);
       }
@@ -78,8 +79,8 @@ export default class AccountFilterBuilder extends React.Component {
             value: _id,
             label: `${profile.firstName} ${profile.lastName}`
           });
-          this.setState({ userOptions });
         });
+        this.setState({ userOptions });
       } else {
         Notifier.error(err.reason);
       }
@@ -104,13 +105,14 @@ export default class AccountFilterBuilder extends React.Component {
   };
 
   onSubmit = data => {
-    const { components } = this.state;
+    const { components, filteredActions } = this.state;
     const { onSubmitFilters } = this.props;
+
     const {
       result,
       filterBuilderData,
       error
-    } = AccountActionReportService.getFilters(data, components);
+    } = AccountActionReportService.getFilters(data, components, filteredActions);
 
     if (error) {
       Notifier.error(error);
@@ -136,6 +138,25 @@ export default class AccountFilterBuilder extends React.Component {
     this.refs.filterSelect.reset();
   };
 
+  onChange = (field, value) => {
+    if (field === "inputs") {
+      this.getFilteredActions(value);
+    }
+  };
+
+  getFilteredActions = inputs => {
+    actionQuery
+      .clone({ filters: { "inputs.type": { $in: inputs } } })
+      .fetch((err, actions) => {
+        if (!err) {
+          const filteredActions = actions.map(action => action._id);
+          this.setState({ filteredActions });
+        } else {
+          Notifier.error(err.reason);
+        }
+      });
+  };
+
   render() {
     const {
       loading,
@@ -150,7 +171,6 @@ export default class AccountFilterBuilder extends React.Component {
     if (loading) {
       return <Loading />;
     }
-
     return (
       <main className="cc-main">
         <div>
@@ -159,6 +179,7 @@ export default class AccountFilterBuilder extends React.Component {
             schema={schema}
             onSubmit={this.onSubmit}
             ref="filters"
+            onChange={this.onChange}
           >
             {_.map(components, item => {
               return (

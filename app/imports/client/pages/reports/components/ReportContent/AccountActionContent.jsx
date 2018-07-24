@@ -23,9 +23,8 @@ export default class AccountActionContent extends Component {
                 key={index}
                 className="table-header text-center table-field text-light-grey"
               >
-                {accountActionHeader[header]
-                  ? accountActionHeader[header]["label"]
-                  : header}
+                {accountActionHeader[header] &&
+                  accountActionHeader[header]["label"]}
               </div>
             );
           })}
@@ -58,6 +57,28 @@ export default class AccountActionContent extends Component {
                       >
                         {actionPerformed["action"] &&
                           actionPerformed["action"].title}
+                      </div>
+                    );
+                  } else if (columnKey === "customFields") {
+                    return (
+                      <div
+                        key={idx}
+                        className="table-field table-field--grey text-center"
+                      >
+                        {_.map(actionPerformed[columnKey], (value, key) => {
+                          if (value) {
+                            return (
+                              <div>
+                                <b>{key}: </b>
+                                <span>
+                                  {typeof value === "object"
+                                    ? moment(value).format("MM/DD/YYYY, hh:mm")
+                                    : value}
+                                </span>
+                              </div>
+                            );
+                          }
+                        })}
                       </div>
                     );
                   }

@@ -55,7 +55,11 @@ export default class AccountActionReportsService {
     return accountActionsFieldsType.strings.indexOf(name) !== -1;
   }
 
-  static _createFilters(requiredFields, data) {
+  static isCustom(name) {
+    return accountActionsFieldsType.custom.indexOf(name) !== -1;
+  }
+
+  static _createFilters(requiredFields, data, filteredActions) {
     //Creating filters
     let filters = {};
     let filterBuilderData = {};
@@ -102,11 +106,15 @@ export default class AccountActionReportsService {
       } else if (AccountActionReportsService.isLink(field)) {
         filters[field] = { $in: data[field] };
       }
+
+      if (AccountActionReportsService.isCustom(field)) {
+        filters["actionId"] = { $in: filteredActions };
+      }
     }
     return { result: filters, filterBuilderData };
   }
 
-  static getFilters(data, components) {
+  static getFilters(data, components, filteredActions) {
     const requiredFields = [];
 
     for (let component in components) {
@@ -119,6 +127,8 @@ export default class AccountActionReportsService {
           requiredFields.push(component);
         } else if (AccountActionReportsService.isString(component)) {
           requiredFields.push(component, `${component}Match`);
+        } else if (AccountActionReportsService.isCustom(component)) {
+          requiredFields.push(component);
         }
       }
     }
@@ -132,7 +142,7 @@ export default class AccountActionReportsService {
       result,
       filterBuilderData,
       error
-    } = AccountActionReportsService._createFilters(requiredFields, data);
+    } = AccountActionReportsService._createFilters(requiredFields, data, filteredActions);
 
     if (error) {
       return { error };
@@ -192,6 +202,16 @@ export default class AccountActionReportsService {
           allowedValues,
           optional: true,
           label
+        };
+      } else if (
+        AccountActionReportsService.isCustom(value, accountActionsFieldsType)
+      ) {
+        fields[value] = {
+          type: Array,
+          optional: true
+        };
+        fields[`${value}.$`] = {
+          type: String
         };
       }
     });

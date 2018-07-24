@@ -4,5 +4,6 @@ export default {
   links: ["userId", "actionId"],
   strings: [
     "reasonCode"
-  ]
+  ],
+  custom: ["inputs"]
 };

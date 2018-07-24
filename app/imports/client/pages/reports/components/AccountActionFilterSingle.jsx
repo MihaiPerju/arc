@@ -1,6 +1,12 @@
 import React from "react";
 import AccountActionReportService from "../../../../api/reports/services/AccountActionReportService";
-import { AutoField, ErrorField, SelectField } from "/imports/ui/forms";
+import {
+  AutoField,
+  ErrorField,
+  SelectField
+} from "/imports/ui/forms";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import inputTypesEnum from "/imports/api/actions/enums/inputTypeEnum";
 
 export default class FiltersSingle extends React.Component {
   deleteFilter = name => {
@@ -59,6 +65,20 @@ export default class FiltersSingle extends React.Component {
             labelHidden={true}
             name={name}
             options={this.getOptions(name)}
+          />
+        </div>
+      );
+    }
+
+    if (AccountActionReportService.isCustom(name)) {
+      return (
+        <div className="select-wrapper">
+          <SelectMulti
+            className="form-select__multi"
+            placeholder="Select types"
+            labelHidden={true}
+            name={name}
+            options={inputTypesEnum}
           />
         </div>
       );

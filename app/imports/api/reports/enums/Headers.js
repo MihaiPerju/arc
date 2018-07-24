@@ -82,6 +82,9 @@ const accountActionHeader = {
   },
   actionId: {
     label: "Action Name"
+  },
+  customFields: {
+    label: "Custom Inputs"
   }
 };
 
