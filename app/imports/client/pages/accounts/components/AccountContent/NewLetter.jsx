@@ -1,7 +1,7 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import Loading from "/imports/client/lib/ui/Loading";
-import {getImagePath} from "/imports/api/utils";
-import {AutoForm, SelectField, ErrorField} from "uniforms-unstyled";
+import { getImagePath } from "/imports/api/utils";
+import { AutoForm, SelectField, ErrorField } from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import LetterCreateContainer from "/imports/client/pages/letters/LetterCreateContainer.jsx";
 
@@ -16,7 +16,7 @@ export default class NewLetter extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({fade: true});
+      this.setState({ fade: true });
     }, 1);
   }
 
@@ -28,7 +28,7 @@ export default class NewLetter extends Component {
   };
 
   getLetterTemplate(value) {
-    const {letterTemplates} = this.props;
+    const { letterTemplates } = this.props;
     for (let letterTemplate of letterTemplates) {
       if (letterTemplate._id === value) {
         return letterTemplate;
@@ -44,14 +44,14 @@ export default class NewLetter extends Component {
   }
 
   cancel() {
-    const {cancel} = this.props;
+    const { cancel } = this.props;
     cancel();
   }
 
   render() {
-    const {letterTemplates, account, cancel} = this.props;
-    const {selectedTemplate} = this.state;
-    const {avatar, profile} = Meteor.user();
+    const { letterTemplates, account, cancel } = this.props;
+    const { selectedTemplate } = this.state;
+    const { avatar, profile } = Meteor.user();
     const options = this.getOptions(letterTemplates);
 
     return (
@@ -86,12 +86,14 @@ export default class NewLetter extends Component {
             </AutoForm>
           </div>
         </div>
-        <LetterCreateContainer
-          selectedTemplate={selectedTemplate}
-          account={account}
-          reset={cancel}
-          data={letterTemplates}
-        />
+        {!_.isEmpty(selectedTemplate) && (
+          <LetterCreateContainer
+            selectedTemplate={selectedTemplate}
+            account={account}
+            reset={cancel}
+            data={letterTemplates}
+          />
+        )}
       </div>
     );
   }

@@ -21,6 +21,11 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
+  reportColumns: {
+    type: Object,
+    optional: true,
+    blackbox: true
+  },
   tagIds: {
     type: Array,
     optional: true,

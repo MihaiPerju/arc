@@ -41,11 +41,13 @@ var _ListItemField = _interopRequireDefault(require("./ListItemField"));
 
 var List = function List(_ref) {
   var children = _ref.children,
+    showListField = _ref.showListField,
     initialCount = _ref.initialCount,
     itemProps = _ref.itemProps,
     label = _ref.label,
     name = _ref.name,
     value = _ref.value,
+    collapse = _ref.collapse,
     props = (0, _objectWithoutProperties2.default)(_ref, [
       "children",
       "initialCount",
@@ -54,6 +56,7 @@ var List = function List(_ref) {
       "name",
       "value"
     ]);
+
   return _react.default.createElement(
     "div",
     (0, _filterDOMProps.default)(props),
@@ -64,11 +67,13 @@ var List = function List(_ref) {
         label,
         _react.default.createElement(_ListAddField.default, {
           name: "".concat(name, ".$"),
-          initialCount: initialCount
+          initialCount: initialCount,
+          showListField: showListField
         })
       ),
     children
-      ? value.map(function(item, index) {
+      ? !collapse &&
+        value.map(function(item, index) {
           return _react.Children.map(children, function(child) {
             return _react.default.cloneElement(child, {
               key: index,
@@ -80,7 +85,8 @@ var List = function List(_ref) {
             });
           });
         })
-      : value.map(function(item, index) {
+      : !collapse &&
+        value.map(function(item, index) {
           return _react.default.createElement(
             _ListItemField.default,
             (0, _extends2.default)(
