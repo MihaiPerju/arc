@@ -116,6 +116,7 @@
       top: 33px;
       right: 15px;
       color: $extra-light-grey;
+      pointer-events: none;
     }
     select {
       background: #f2f1f1;
@@ -124,6 +125,7 @@
       color: $light-grey;
       padding: 9px 15px 10px;
       line-height: 1.6rem;
+
       option {
         padding-top: 4px;
         padding-bottom: 5px;
