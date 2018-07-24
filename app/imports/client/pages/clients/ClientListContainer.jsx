@@ -12,6 +12,7 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import Tags from "/imports/client/lib/Tags";
 
 class ClientContainer extends Pager {
   constructor() {
@@ -143,7 +144,14 @@ class ClientContainer extends Pager {
 
   render() {
     const { data, loading, error } = this.props;
-    const { clientsSelected, currentClient, create, range, total, moduleTags } = this.state;
+    const {
+      clientsSelected,
+      currentClient,
+      create,
+      range,
+      total,
+      moduleTags
+    } = this.state;
     const client = this.getClient();
 
     if (loading) {
@@ -169,8 +177,8 @@ class ClientContainer extends Pager {
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
             hideSort
-            moduleTags={moduleTags}
           />
+          <Tags moduleTags={moduleTags} />
           <ClientList
             class={this.state.filter ? "task-list decreased" : "task-list"}
             setClient={this.setClient.bind(this)}

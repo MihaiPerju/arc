@@ -15,6 +15,7 @@ import AccountActionReportService from "../../../api/reports/services/AccountAct
 import ReportTypeOptionsEnum, {
   reportTypes
 } from "/imports/client/pages/reports/enums/reportType";
+import AddReportColumn from "./AddReportColumn";
 
 export default class ReportEdit extends React.Component {
   constructor() {
@@ -25,7 +26,8 @@ export default class ReportEdit extends React.Component {
       filterBuilderData: {},
       components: {},
       filter: false,
-      shareReport: false
+      shareReport: false,
+      isReportColumn: false
     };
   }
 
@@ -153,15 +155,28 @@ export default class ReportEdit extends React.Component {
     }));
   };
 
+  openDialog = () => {
+    this.setState({
+      isReportColumn: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      isReportColumn: false
+    });
+  };
+
   render() {
     const {
       hasGeneralInformation,
       shareReport,
       generalInformation,
       components,
-      filterBuilderData
+      filterBuilderData,
+      isReportColumn
     } = this.state;
-    const { substates } = this.props;
+    const { substates, report } = this.props;
     const options = this.getOptions();
 
     return (
@@ -240,6 +255,32 @@ export default class ReportEdit extends React.Component {
               )}
             </div>
           )}
+          <div className="action-block">
+            <div className="header__block">
+              <div className="title-block text-uppercase">
+                Add report column
+              </div>
+            </div>
+            <div className="form-wrapper">
+              <button
+                style={{
+                  background: "#fff",
+                  padding: "17px 15px",
+                  color: "#333",
+                  width: "100%",
+                  lineHeight: "1.6rem",
+                  borderRadius: "3px",
+                  borderBottom: "0"
+                }}
+                onClick={this.openDialog.bind(this)}
+              >
+                Add Column
+              </button>
+            </div>
+            {isReportColumn && (
+              <AddReportColumn closeDialog={this.closeDialog} report={report} />
+            )}
+          </div>
         </div>
       </div>
     );

@@ -9,13 +9,13 @@ import Accounts from "/imports/api/accounts/collection";
 import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
-import ReportColumns from "/imports/api/reportColumns/collection.js";
+import { fields } from "/imports/api/reports/enums/reportColumn";
 
 export default class RunReports {
   static run() {
     const job = JobQueue.findOne({ workerId: null });
     if (job) {
-      //Mark job as taken
+      // Mark job as taken
       JobQueue.update(
         { _id: job._id },
         {
@@ -25,7 +25,7 @@ export default class RunReports {
         }
       );
 
-    //   //Create & Save .csv file
+      //Create & Save .csv file
       this.saveReport(job);
     }
   }
@@ -42,17 +42,24 @@ export default class RunReports {
   }
 
   static getColumns(reportId) {
-    const {authorId} =Reports.findOne({_id: reportId})
-    const data = ReportColumns.findOne({userId:authorId});
+    const { reportColumns } = Reports.findOne({ _id: reportId });
     const columns = {};
 
-    _.map(data, (value, key) => {
-      if (value && key !== "insurances" && key !== "_id" && key !== "userId") {
-        columns[key] = Headers[key] ? Headers[key].label : "";
+    _.map(reportColumns, (value, key) => {
+      if (value && key !== fields.INSURANCES) {
+        if (key === fields.METADATA) {
+          _.map(reportColumns['metaData'], (value, key) => {
+            if (value) {
+              columns[`metaData[${key}]`] = `meta column: ${key}`;
+            }
+          });
+        } else {
+          columns[key] = Headers[key] ? Headers[key].label : "";
+        }
       }
     });
 
-    data.insurances.map((ins, i) => {
+    reportColumns.insurances.map((ins, i) => {
       _.map(ins, (value, key) => {
         if (value) {
           columns[`insurances[${i}].${key}`] = Headers[key]
@@ -61,6 +68,7 @@ export default class RunReports {
         }
       });
     });
+
     return columns;
   }
 
@@ -105,7 +113,7 @@ export default class RunReports {
           }
         );
         NotificationService.createReportNotification(authorId, reportId);
-        NotificationService.createGlobal(authorId)
+        NotificationService.createGlobal(authorId);
       })
     );
 

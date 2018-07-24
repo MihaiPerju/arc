@@ -26,4 +26,14 @@ const insuranceColumnEnum = [
   { value: "phone", label: "Phone" }
 ];
 
+const types = {
+  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt"]
+};
+
+const fields = {
+  INSURANCES: "insurances",
+  METADATA: "metaData"
+};
 export { insuranceColumnEnum };
+export { types };
+export { fields };

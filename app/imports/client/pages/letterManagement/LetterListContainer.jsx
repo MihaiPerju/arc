@@ -10,6 +10,7 @@ import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import Tags from "/imports/client/lib/Tags";
 
 class LetterListContainer extends Pager {
   constructor() {
@@ -103,10 +104,8 @@ class LetterListContainer extends Pager {
     return (
       <div className="cc-container">
         <div className={create ? "left__side" : "left__side full__width"}>
-          <LetterSearchBar
-            setPagerInitial={this.setPagerInitial}
-            moduleTags={moduleTags}
-          />
+          <LetterSearchBar setPagerInitial={this.setPagerInitial} hideFilter />
+          <Tags moduleTags={moduleTags} />
           <LetterList letters={data} moduleTags={moduleTags} />
           <PaginationBar
             module="Letter Management File"

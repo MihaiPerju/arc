@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import accountsQuery from "/imports/api/accounts/queries/accountList";
 import reportColumnEnum, {
   insuranceColumnEnum
-} from "../../../api/reportColumns/enum/reportColumn";
-import schema from "/imports/api/reportColumns/schema";
+} from "../../../api/reports/enums/reportColumn";
+import schema from "/imports/api/reports/schemas/reportColumnSchema";
 import {
   AutoForm,
   ListField,
@@ -12,36 +11,34 @@ import {
   NestField,
   BoolField
 } from "/imports/ui/forms";
-import reportColumnListQuery from "/imports/api/reportColumns/queries/reportColumnList";
-import Notifier from '/imports/client/lib/Notifier';
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class AddReportColumn extends Component {
   constructor() {
     super();
     this.state = {
-      accountColumns: null,
       accountSimpleColumn: [],
       insuranceColumn: [],
-      reportColumn: {}
+      metaDataColumn: {},
+      reportColumnSchema: null
     };
   }
 
   componentWillMount() {
-    accountsQuery.clone().fetch((err, accountColumns) => {
-      if (!err) {
-        this.setState({
-          accountColumns
-        });
-      }
-    });
+    const { mongoFilters } = this.props.report;
 
-    reportColumnListQuery
-      .clone({ userId: Meteor.userId() })
-      .fetchOne((err, reportColumn) => {
+    Meteor.call(
+      "report.getMetaDataColumns",
+      mongoFilters,
+      (err, metaDataColumn) => {
         if (!err) {
-          this.setState({ reportColumn });
+          this.setState({
+            metaDataColumn
+          });
+          this.extendSchema();
         }
-      });
+      }
+    );
   }
 
   closeDialog = () => {
@@ -54,18 +51,56 @@ export default class AddReportColumn extends Component {
   };
 
   onSubmit = data => {
-    const { closeDialog } = this.props;
-    Meteor.call("reportColumn.create", data, err => {
+    const { closeDialog, report } = this.props;
+    const { _id, name } = report;
+
+    Meteor.call("report.updateColumns", _id, name, data, err => {
       if (!err) {
         closeDialog();
       } else {
-        Notifier.error(err)
+        Notifier.error(err);
       }
     });
   };
 
+  extendSchema = () => {
+    const { metaDataColumn } = this.state;
+    const { hasHeader, noHeader } = metaDataColumn;
+
+    noHeader.map(value => {
+      schema.extend({
+        [`metaData.${value}`]: {
+          type: Boolean,
+          optional: true,
+          defaultValue: false
+        }
+      });
+    });
+
+    hasHeader.map(value => {
+      schema.extend({
+        [`metaData.${value}`]: {
+          type: Boolean,
+          optional: true,
+          defaultValue: false
+        }
+      });
+    });
+
+    this.setState({
+      reportColumnSchema: schema
+    });
+  };
+
   render() {
-    const { reportColumn } = this.state;
+    const { report } = this.props;
+    const { metaDataColumn, reportColumnSchema } = this.state;
+    const { hasHeader, noHeader } = metaDataColumn;
+
+    if (!reportColumnSchema) {
+      return <div />;
+    }
+
     return (
       <div>
         <Dialog
@@ -73,27 +108,66 @@ export default class AddReportColumn extends Component {
           className="account-dialog"
           closePortal={this.closeDialog}
         >
-          <div className="form-wrapper">
+          <div
+            style={{ height: "350px", overflowY: "scroll" }}
+            className="form-wrapper"
+          >
             <AutoForm
-              schema={schema}
+              schema={reportColumnSchema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
-              model={reportColumn}
+              model={report.reportColumns}
             >
-              {reportColumnEnum.map(cols => {
+              {reportColumnEnum.map((cols, index) => {
                 const { value, label } = cols;
-                return <BoolField name={value} label={label} />;
+                return (
+                  <BoolField
+                    key={`normal-${index}`}
+                    name={value}
+                    label={label}
+                  />
+                );
               })}
               <ListField name="insurances" showListField={() => {}}>
                 <ListItemField name="$">
                   <NestField className="upload-item text-center">
                     {insuranceColumnEnum.map((data, index) => {
                       const { value, label } = data;
-                      return <BoolField name={value} label={label} />;
+                      return (
+                        <BoolField
+                          key={`insurance-${index}`}
+                          name={value}
+                          label={label}
+                        />
+                      );
                     })}
                   </NestField>
                 </ListItemField>
               </ListField>
+              <div style={{ width: "50%", float: "left" }}>
+                <div>Columns without Header:</div>
+                {noHeader.map((col, index) => {
+                  return (
+                    <BoolField
+                      key={`meta-no-heads-${index}`}
+                      name={`metaData.${col}`}
+                      label={col}
+                    />
+                  );
+                })}
+              </div>
+              <div style={{ width: "50%", float: "left" }}>
+                <div>Columns with Header:</div>
+                {hasHeader.map((col, index) => {
+                  return (
+                    <BoolField
+                      key={`meta-heads-${index}`}
+                      name={`metaData.${col}`}
+                      label={col}
+                    />
+                  );
+                })}
+              </div>
             </AutoForm>
           </div>
           <div className="btn-group">
