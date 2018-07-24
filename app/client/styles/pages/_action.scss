@@ -75,9 +75,10 @@
 .action {
   &-dropdown {
     position: relative;
+    padding-top: 16px;
 
     &__btn {
-      background: #ebe9e9;
+      background: #f3f3f2;
       width: 25px;
       height: 25px;
       border-radius: 3px;
@@ -86,17 +87,21 @@
       color: $light-grey;
       line-height: 2.5rem;
       cursor: pointer;
+
+      &:hover {
+        background: #ebe9e9;
+      }
     }
 
     &__container {
       position: absolute;
       right: -5px;
-      top: 38px;
+      top: 55px;
       background: $color-white;
       border-radius: 3px;
       box-shadow: 0 1px 4px rgba(0,0,0,0.25);
       white-space: nowrap;
-      z-index: 1;
+      z-index: 2;
     }
   }
 
@@ -121,6 +126,7 @@
 
     > a {
       padding: 10px 15px;
+      user-select: none;
 
       &:hover {
         background: $light-grey;

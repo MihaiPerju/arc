@@ -137,16 +137,14 @@ export default class ClientContentHeader extends Component {
               <span className="text text-blue">{client.email}</span>
             </div>
             {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
-              <div className="btn-group flex--helper flex--wrap flex-justify--end">
-                <ActionDropdown
-                  facilityHref={"/client/" + client._id + "/manage-facilities"}
-                  regionHref={FlowRouter.url("region.list", { id: client._id })}
-                  onEdit={this.onEdit}
-                  disableAction={() => this.disableAction(client._id, client.status)}
-                  onOpenAssignDialog={this.onOpenAssignDialog}
-                  status={client.status}
-                />
-              </div>
+              <ActionDropdown
+                facilityHref={"/client/" + client._id + "/manage-facilities"}
+                regionHref={FlowRouter.url("region.list", { id: client._id })}
+                onEdit={this.onEdit}
+                disableAction={() => this.disableAction(client._id, client.status)}
+                onOpenAssignDialog={this.onOpenAssignDialog}
+                status={client.status}
+              />
             )}
           </div>
         </div>
