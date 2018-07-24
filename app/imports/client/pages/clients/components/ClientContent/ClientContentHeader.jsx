@@ -4,6 +4,7 @@ import { roleGroups } from "/imports/api/users/enums/roles";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import ActionDropdown from './ActionDropdown';
 import {
   AutoForm,
   AutoField,
@@ -14,7 +15,6 @@ import {
   TextField,
   LongTextField
 } from "/imports/ui/forms";
-import Auto from "../../../../../ui/forms/AutoForm";
 import SimpleSchema from "simpl-schema";
 import managersListQuery from "/imports/api/users/queries/listUsers";
 import RolesEnum from "/imports/api/users/enums/roles";
@@ -137,54 +137,14 @@ export default class ClientContentHeader extends Component {
               <span className="text text-blue">{client.email}</span>
             </div>
             {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
-              <div className="btn-group flex--helper flex--wrap flex-justify--end">
-                <div className="btn-group__row flex--helper flex--wrap">
-                  <div className="btn-group__item">
-                    <a
-                      href={FlowRouter.url("region.list", { id: client._id })}
-                      className="cc-button btn--white"
-                    >
-                      Manage regions
-                    </a>
-                  </div>
-                  <div className="btn-group__item">
-                    <a
-                      href={"/client/" + client._id + "/manage-facilities"}
-                      className="cc-button btn--white"
-                    >
-                      Manage facilities
-                    </a>
-                  </div>
-                </div>
-
-                <div className="btn-group__row flex--helper flex--wrap">
-                  <div className="btn-group__item">
-                    <button onClick={this.onEdit} className="btn--white">
-                      Edit client
-                    </button>
-                  </div>
-                  <div className="btn-group__item">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        this.disableAction(client._id, client.status)
-                      }
-                      className="btn--white"
-                    >
-                      {client.status ? "Disable client" : "Enable client"}
-                    </button>
-                  </div>
-                  <div className="btn-group__item">
-                    <button
-                      type="button"
-                      onClick={() => this.onOpenAssignDialog()}
-                      className="btn--white"
-                    >
-                      Assign Manager
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <ActionDropdown
+                facilityHref={"/client/" + client._id + "/manage-facilities"}
+                regionHref={FlowRouter.url("region.list", { id: client._id })}
+                onEdit={this.onEdit}
+                disableAction={() => this.disableAction(client._id, client.status)}
+                onOpenAssignDialog={this.onOpenAssignDialog}
+                status={client.status}
+              />
             )}
           </div>
         </div>

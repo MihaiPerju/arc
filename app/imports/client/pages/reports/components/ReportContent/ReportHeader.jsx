@@ -10,6 +10,7 @@ import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import { EJSON } from "meteor/ejson";
 import Loading from "/imports/client/lib/ui/Loading";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import ActionDropdown from './ActionDropdown';
 import { types,fields } from "/imports/api/reports/enums/reportColumn";
 
 class ReportHeader extends Component {
@@ -112,18 +113,18 @@ class ReportHeader extends Component {
   getRunButton = status => {
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
-        return <button className="btn--white">Loading...</button>;
+        return <li className="action-item"><a href="javascript:;">Runing...</a></li>;
       case JobQueueStatuses.FINISHED:
         return (
-          <button onClick={this.downloadReport} className="btn--white">
-            Download report
-          </button>
+          <li className="action-item">
+            <a href="javascript:;" onClick={this.downloadReport}>Download report</a>
+          </li>
         );
       default:
         return (
-          <button onClick={this.onRunReport} className="btn--white">
-            Run report
-          </button>
+          <li className="action-item">
+            <a href="javascript:;" onClick={this.onRunReport}>Run report</a>
+          </li>
         );
     }
   };
@@ -318,12 +319,6 @@ class ReportHeader extends Component {
           <ScheduleBlock report={report} />
         ) : (
           <div className="main-content__header header-block header-reports">
-            <button
-              style={{ background: "orange", float: "right" }}
-              onClick={this.onSetGraph.bind(this)}
-            >
-              Graph
-            </button>
             <div className="row__header">
               <div className="text-light-grey">Report name</div>
               <div className="title">{report.name}</div>
@@ -333,20 +328,18 @@ class ReportHeader extends Component {
                 <div className="text-light-grey">Placement date</div>
                 <div className="time">11:20</div>
               </div>
-              <div className="btn-group">
+              <ActionDropdown openDialog={this.openDialog}
+                              openSchedule={this.openSchedule}
+                              onEdit={this.onEdit}
+                              onSetGraph={this.onSetGraph.bind(this)}
+              >
                 {Meteor.userId() !== report.authorId && (
-                  <button className="btn--white" onClick={this.openDialog}>
-                    Copy Report
-                  </button>
+                  <li className="action-item">
+                    <a href="javascript:;" onClick={this.openDialog}>Copy Report</a>
+                  </li>
                 )}
-                <button className="btn--white" onClick={this.openSchedule}>
-                  Schedule
-                </button>
-                <button onClick={this.onEdit} className="btn--white">
-                  Edit report
-                </button>
                 {this.getRunButton(job && job.status)}
-              </div>
+              </ActionDropdown>
             </div>
             {dialogIsActive && (
               <Dialog
