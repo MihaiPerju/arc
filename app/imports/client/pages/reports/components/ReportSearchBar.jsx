@@ -5,15 +5,13 @@ import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import AddReportColumn from "../AddReportColumn";
 export default class ReportSearchBar extends Component {
   constructor() {
     super();
     this.state = {
       dropdown: false,
       selectAll: false,
-      model: {},
-      isReportColumn: false
+      model: {}
     };
   }
 
@@ -67,18 +65,6 @@ export default class ReportSearchBar extends Component {
     });
   };
 
-  openDialog = () => {
-    this.setState({
-      isReportColumn: true
-    });
-  };
-
-  closeDialog = () => {
-    this.setState({
-      isReportColumn: false
-    });
-  };
-
   getFilterParams = () => {
     const queryParams = FlowRouter.current().queryParams;
     const model = {};
@@ -91,7 +77,7 @@ export default class ReportSearchBar extends Component {
   };
 
   render() {
-    const { filter, active, dropdown, selectAll, isReportColumn, model } = this.state;
+    const { filter, active, dropdown, selectAll, model } = this.state;
     const {
       options,
       btnGroup,
@@ -165,14 +151,7 @@ export default class ReportSearchBar extends Component {
                 </button>
               </div>
             )}
-            <button
-              style={{ background: "orange", padding: "0" }}
-              onClick={this.openDialog.bind(this)}
-            >
-              Add Column
-            </button>
           </div>
-          {isReportColumn && <AddReportColumn closeDialog={this.closeDialog} />}
         </div>
         {filter && <FilterBar options={options} />}
       </AutoForm>
