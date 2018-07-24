@@ -61,12 +61,14 @@ export default class ActionService {
 
   static createLetter(data) {
     const { userId, accountId, letterTemplateId } = data;
+    const { clientId } = Accounts.findOne({ _id: accountId });
     const letterData = {
       userId,
       type: actionTypesEnum.LETTER,
       createdAt: new Date(),
       accountId,
-      letterTemplateId
+      letterTemplateId,
+      clientId
     };
     Letter.insert(data);
     const accountActionId = AccountActions.insert(letterData);

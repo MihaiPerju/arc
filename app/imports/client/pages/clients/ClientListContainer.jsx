@@ -10,6 +10,8 @@ import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
+import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class ClientContainer extends Pager {
   constructor() {
@@ -22,13 +24,15 @@ class ClientContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      filter: false
+      filter: false,
+      moduleTags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
+    this.getModuleTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -125,9 +129,21 @@ class ClientContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getModuleTags = () => {
+    moduleTagsQuery
+      .clone({
+        filters: { moduleNames: { $in: [moduleNames.CLIENTS] } }
+      })
+      .fetch((err, moduleTags) => {
+        if (!err) {
+          this.setState({ moduleTags });
+        }
+      });
+  };
+
   render() {
     const { data, loading, error } = this.props;
-    const { clientsSelected, currentClient, create, range, total } = this.state;
+    const { clientsSelected, currentClient, create, range, total, moduleTags } = this.state;
     const client = this.getClient();
 
     if (loading) {
@@ -153,6 +169,7 @@ class ClientContainer extends Pager {
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
             hideSort
+            moduleTags={moduleTags}
           />
           <ClientList
             class={this.state.filter ? "task-list decreased" : "task-list"}
@@ -160,6 +177,7 @@ class ClientContainer extends Pager {
             selectClient={this.selectClient}
             currentClient={currentClient}
             clients={data}
+            moduleTags={moduleTags}
           />
           <PaginationBar
             module="Client"

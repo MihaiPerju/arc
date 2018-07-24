@@ -23,7 +23,8 @@ class UserListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      moduleTags: []
     });
     this.query = query;
   }
@@ -124,7 +125,13 @@ class UserListContainer extends Pager {
 
   render() {
     const { data, loading, error } = this.props;
-    const { usersSelected, currentUser, create, total, range } = this.state;
+    const {
+      usersSelected,
+      currentUser,
+      create,
+      total,
+      range
+    } = this.state;
     const user = objectFromArray(data, currentUser);
 
     if (loading) {

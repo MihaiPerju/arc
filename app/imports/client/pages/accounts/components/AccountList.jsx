@@ -31,7 +31,8 @@ export default class AccountList extends Component {
       checkAccount,
       selectAccount,
       currentAccount,
-      classes
+      classes,
+      moduleTags
     } = this.props;
     return (
       <div className={classes}>
@@ -47,6 +48,7 @@ export default class AccountList extends Component {
                 update={this.update}
                 key={account._id}
                 account={account}
+                moduleTags={moduleTags}
               />
             );
           })}

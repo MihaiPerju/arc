@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import moment from "moment/moment";
 import commaNumber from "comma-number";
+import Notifier from "/imports/client/lib/Notifier";
+import TagItem from "/imports/client/lib/TagItem";
 
 export default class AccountSingle extends Component {
   constructor(props) {
@@ -23,13 +25,26 @@ export default class AccountSingle extends Component {
     selectAccount(account);
   }
 
+  onSubmitTags = data => {
+    const { _id } = this.props.account;
+    Object.assign(data, { _id });
+
+    Meteor.call("account.tag", data, err => {
+      if (!err) {
+        Notifier.success("Tagged successfully");
+      } else {
+        Notifier.error(err.error);
+      }
+    });
+  };
+
   render() {
     const {
       account,
       active,
       currentAccount,
-      isExpiredTickle,
-      expiredTickle
+      expiredTickle,
+      moduleTags
     } = this.props;
 
     const classes = classNames("list-item task-item", {
@@ -43,6 +58,12 @@ export default class AccountSingle extends Component {
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
           <label onClick={this.onCheck.bind(this)} />
+          <TagItem
+            title="Tag Account"
+            tagIds={account.tagIds}
+            moduleTags={moduleTags}
+            onSubmitTags={this.onSubmitTags.bind(this)}
+          />
         </div>
         <div className="mark-task">
           <input type="checkbox" className="hidden" />

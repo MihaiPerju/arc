@@ -98,3 +98,26 @@
     }
   }
 }
+
+.reason-code-form {
+  .select-form {
+    margin-top: 10px;
+    position: relative;
+
+    select {
+      border-bottom: 0;
+      background: #f2f1f1;
+      border-radius: 3px;
+    }
+
+    &:before {
+      content: '\f107';
+      font-family: $font-icon;
+      position: absolute;
+      top: 12px;
+      right: 15px;
+      color: #b7b7b7;
+      pointer-events: none;
+    }
+  }
+}

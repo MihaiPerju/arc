@@ -28,10 +28,11 @@ export default class RouteService {
         {
           name: "/letter-management/list",
           label: "Letters",
-          icon: "thumb-tack"
+          icon: "copy"
         },
         { name: "action/list", label: "Actions", icon: "thumb-tack" },
-        { name: "substate/list", label: "Substates", icon: "thumb-tack" }
+        { name: "substate/list", label: "Substates", icon: "tasks" },
+        { name: "module-tags/list", label: "Module Tags", icon: "tags" }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
       return [
@@ -67,9 +68,10 @@ export default class RouteService {
         {
           name: "/letter-management/list",
           label: "Letters",
-          icon: "thumb-tack"
+          icon: "copy"
         },
-        { name: "action/list", label: "Actions", icon: "thumb-tack" }
+        { name: "action/list", label: "Actions", icon: "thumb-tack" },
+        { name: "module-tags/list", label: "Module Tags", icon: "tags" }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return [
@@ -99,7 +101,7 @@ export default class RouteService {
         {
           name: "/letter-management/list",
           label: "Letters",
-          icon: "thumb-tack"
+          icon: "copy"
         },
         { name: "action/list", label: "Actions", icon: "thumb-tack" },
         { name: "tag/list", label: "Tags", icon: "tags" }

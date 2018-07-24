@@ -1,6 +1,9 @@
 import Reports from "./../collection.js";
 import Security from "/imports/api/reports/security.js";
 import Cronjob from "/imports/api/reports/server/services/CronjobService";
+import reportColumnSchema from "../schemas/reportColumnSchema";
+import Accounts from "/imports/api/accounts/collection";
+import { EJSON } from "meteor/ejson";
 
 Meteor.methods({
   "report.delete"(id) {
@@ -17,6 +20,10 @@ Meteor.methods({
   "report.create"(data) {
     data.authorId = this.userId;
 
+    const reportColumns = reportColumnSchema.clean({});
+    _.extend(data, {
+      reportColumns
+    });
     Reports.insert(data);
   },
 
@@ -51,5 +58,56 @@ Meteor.methods({
       delete report._id;
       Reports.insert(report);
     }
+  },
+
+  "report.updateColumns"(_id, name, data) {
+    Security.hasRightsOnReport(this.userId, _id);
+    const { metaData } = data;
+    const reportColumns = reportColumnSchema.clean(data);
+    Object.assign(reportColumns, { metaData });
+
+    Reports.update(
+      { _id, name },
+      {
+        $set: { reportColumns }
+      }
+    );
+  },
+
+  "report.tag"({ _id, tagIds }) {
+    Reports.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
+  },
+
+  "report.getMetaDataColumns"(mongoFilters) {
+    const filters = EJSON.parse(mongoFilters);
+    const metaDataArr = Accounts.find(filters, {
+      fields: { metaData: 1, _id: 0 }
+    }).fetch();
+
+    const metaDataColumn = { hasHeader: [], noHeader: [] };
+    metaDataArr.map(accountMetaData => {
+      _.map(accountMetaData["metaData"], (value, key) => {
+        if (key.indexOf("Column#") === -1) {
+          metaDataColumn["hasHeader"].push(key);
+        } else {
+          metaDataColumn["noHeader"].push(key);
+        }
+      });
+    });
+
+    metaDataColumn["hasHeader"] = Array.from(
+      new Set(metaDataColumn["hasHeader"])
+    );
+    metaDataColumn["noHeader"] = Array.from(
+      new Set(metaDataColumn["noHeader"])
+    );
+    return metaDataColumn;
   }
 });

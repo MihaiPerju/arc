@@ -45,5 +45,13 @@ export default new SimpleSchema({
     type: Boolean,
     optional: true,
     defaultValue: false
-  }
+  },
+  tagIds: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "tagIds.$": {
+    type: String
+  },
 });

@@ -1,7 +1,7 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
-import Dialog from "/imports/client/lib/ui/Dialog";
+import TagItem from "/imports/client/lib/TagItem";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
 
@@ -16,12 +16,12 @@ export default class SubstateSingle extends Component {
   }
 
   componentWillMount() {
-    const {substate} = this.props;
+    const { substate } = this.props;
     this.getActions(substate.actionIds);
   }
 
   componentWillReceiveProps(newProps) {
-    const {substate} = newProps;
+    const { substate } = newProps;
     this.getActions(substate.actionIds);
   }
 
@@ -29,29 +29,29 @@ export default class SubstateSingle extends Component {
     actionQuery
       .clone({
         filters: {
-          _id: {$in: actionIds}
+          _id: { $in: actionIds }
         }
       })
       .fetch((err, actions) => {
         if (!err) {
-          this.setState({actions});
+          this.setState({ actions });
         }
       });
   };
 
   onSetSubstate = () => {
-    const {substate, setSubstate} = this.props;
+    const { substate, setSubstate } = this.props;
     setSubstate(substate._id);
   };
 
   onSelectSubstate = e => {
     e.stopPropagation();
-    const {substate, selectSubstate} = this.props;
+    const { substate, selectSubstate } = this.props;
     selectSubstate(substate._id);
   };
 
   deleteSubstate = () => {
-    const {selectedSubstateId} = this.state;
+    const { selectedSubstateId } = this.state;
     Meteor.call("substate.delete", selectedSubstateId, (err, res) => {
       if (!err) {
         Notifier.success("Deleted Successfully !");
@@ -74,11 +74,29 @@ export default class SubstateSingle extends Component {
     });
   };
 
+  onSubmitTags = data => {
+    const { _id } = this.props.substate;
+    Object.assign(data, { _id });
+
+    Meteor.call("substate.tag", data, err => {
+      if (!err) {
+        Notifier.success("Tagged successfully");
+      } else {
+        Notifier.error(err.error);
+      }
+    });
+  };
+
   render() {
-    const {substate, substateSelected, currentSubstate} = this.props;
-    const {actions, dialogIsActive} = this.state;
+    const {
+      substate,
+      substateSelected,
+      currentSubstate,
+      moduleTags
+    } = this.props;
+    const { actions, dialogIsActive } = this.state;
     const checked = substateSelected.includes(substate._id);
-    const classes = classNames('substates-table__row flex--helper', {
+    const classes = classNames("substates-table__row flex--helper", {
       "bg--yellow": checked,
       open: currentSubstate === substate._id
     });
@@ -87,8 +105,8 @@ export default class SubstateSingle extends Component {
       <div className={classes}>
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
           <div className="check-item">
-            <input checked={checked} type="checkbox" className="hidden"/>
-            <label onClick={this.onSelectSubstate}/>
+            <input checked={checked} type="checkbox" className="hidden" />
+            <label onClick={this.onSelectSubstate} />
           </div>
         </div>
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
@@ -98,12 +116,8 @@ export default class SubstateSingle extends Component {
           {substate.name}
         </div>
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
-          <span className="truncate">
-            {substate.description}
-          </span>
-          <SubstateDescription>
-            {substate.description}
-          </SubstateDescription>
+          <span className="truncate">{substate.description}</span>
+          <SubstateDescription>{substate.description}</SubstateDescription>
         </div>
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
           {actions.map((action, index) => (
@@ -121,15 +135,21 @@ export default class SubstateSingle extends Component {
           {substate.status ? "Active" : "In-Active"}
         </div>
         <div className="substates-field text-center">
+          <TagItem
+            title="Tag Substate"
+            tagIds={substate.tagIds}
+            moduleTags={moduleTags}
+            onSubmitTags={this.onSubmitTags.bind(this)}
+          />
           <button onClick={this.onSetSubstate} className="btn-text--blue">
-            <i className="icon-pencil"/>
+            <i className="icon-pencil" />
           </button>
           {substate.status && (
             <button
               onClick={() => this.deleteAction(substate._id)}
               className="btn-text--red"
             >
-              <i className="icon-trash-o"/>
+              <i className="icon-trash-o" />
             </button>
           )}
         </div>

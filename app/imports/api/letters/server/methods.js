@@ -71,5 +71,16 @@ Meteor.methods({
         }
       }
     );
+  },
+
+  "letter.tag"({ _id, tagIds }) {
+    Letters.update(
+      { _id },
+      {
+        $set: {
+          tagIds
+        }
+      }
+    );
   }
 });

@@ -10,6 +10,7 @@ import {
 export default class InsuranceRules extends React.Component {
   render() {
     const { collapse, showListField } = this.props;
+    
     return (
       <ListField collapse={collapse} showListField={showListField} name="insurances">
         <ListItemField name="$">

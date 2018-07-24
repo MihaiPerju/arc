@@ -4,6 +4,7 @@ import { createContainer } from "meteor/react-meteor-data";
 import { getImagePath } from "../../../api/utils";
 import RoutesService from "./../leftMenu/RoutesService";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import Notifications from "./components/Notifications";
 
 class Header extends Component {
   constructor() {
@@ -99,17 +100,12 @@ class Header extends Component {
                   />
                 </a>
               </div>
-              <div
-                className={
-                  this.state.dropdown ? "right__side open" : "right__side"
-                }
-                onClick={this.openDropdown}
-                ref={this.nodeRef}
-              >
+              <div className={this.state.dropdown ? "right__side open" : "right__side"}>
                 <div className="owner-menu">
+                  <Notifications/>
                   {(isRep)
                     ? user.profile && (
-                        <a href={`/${user._id}/activity`}>
+                        <a href={`/${user._id}/activity`} className="toggle-dropdown">
                           <span>
                             {user.profile.firstName +
                               " " +
@@ -119,7 +115,7 @@ class Header extends Component {
                         </a>
                       )
                     : user.profile && (
-                        <a href="">
+                        <a href="" className="toggle-dropdown" onClick={this.openDropdown} ref={this.nodeRef}>
                           <span>
                             {user.profile.firstName +
                               " " +
@@ -129,7 +125,7 @@ class Header extends Component {
                         </a>
                       )}
                 </div>
-                {this.state.dropdown ? <BtnGroup /> : null}
+                {this.state.dropdown && <BtnGroup />}
               </div>
             </div>
           </header>
