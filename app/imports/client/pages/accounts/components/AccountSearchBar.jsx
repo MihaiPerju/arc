@@ -496,6 +496,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="From Discharge Date"
                               selected={dischrgDateMin}
                               onChange={date =>
@@ -506,6 +510,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="To Discharge Date"
                               selected={dischrgDateMax}
                               onChange={date =>
@@ -518,6 +526,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Last Bill Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="From Last Bill Date"
                               selected={fbDateMin}
                               onChange={date =>
@@ -528,6 +540,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>To Last Bill Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="To Last Bill Date"
                               selected={fbDateMax}
                               onChange={date =>
@@ -540,6 +556,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Admit Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="From Admit Date"
                               selected={admitDateMin}
                               onChange={date =>
@@ -550,6 +570,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>To Admit Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="To Admit Date"
                               selected={admitDateMax}
                               onChange={date =>

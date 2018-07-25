@@ -238,6 +238,10 @@ export default class ClientSearchBar extends Component {
                       <div className="select-wrapper">
                         <div className="form-group flex--helper form-group__pseudo">
                           <DatePicker
+                            showMonthDropdown
+                            showYearDropdown
+                            yearDropdownItemNumber={4}
+                            todayButton={"Today"}
                             placeholderText="From created-at date"
                             selected={createdAtMin}
                             onChange={date =>
@@ -245,6 +249,10 @@ export default class ClientSearchBar extends Component {
                             }
                           />
                           <DatePicker
+                            showMonthDropdown
+                            showYearDropdown
+                            yearDropdownItemNumber={4}
+                            todayButton={"Today"}
                             placeholderText="To created-at date"
                             selected={createdAtMax}
                             onChange={date =>

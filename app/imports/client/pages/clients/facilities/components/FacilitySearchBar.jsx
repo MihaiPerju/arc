@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
-import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
 import Notifier from "/imports/client/lib/Notifier";
+import FilterService from "/imports/client/lib/FilterService";
 
 export default class FacilitySearchBar extends Component {
   constructor() {
@@ -19,7 +19,8 @@ export default class FacilitySearchBar extends Component {
       selectAll: false,
       createdAtMin: null,
       createdAtMax: null,
-      model: {}
+      model: {},
+      dialogIsActive: false
     };
   }
 
@@ -27,25 +28,18 @@ export default class FacilitySearchBar extends Component {
     this.getFilterParams();
   }
 
-  manageFilterBar() {
-    const { active, filter } = this.state;
-    this.setState({
-      active: !active,
-      filter: !filter
-    });
-    this.props.decrease();
-  }
-
   onSubmit(params) {
-    if (
-      FlowRouter.current().queryParams.page != "1" &&
-      "facilityName" in params
-    ) {
+    const { createdAtMin, createdAtMax } = this.state;
+    if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
     }
-    if ("facilityName" in params) {
-      FlowRouter.setQueryParams({ facilityName: params.facilityName });
-    }
+    FlowRouter.setQueryParams({
+      createdAtMin: FilterService.formatDate(createdAtMin)
+    });
+
+    FlowRouter.setQueryParams({
+      createdAtMax: FilterService.formatDate(createdAtMax)
+    });
   }
 
   openDropdown = () => {
@@ -79,18 +73,14 @@ export default class FacilitySearchBar extends Component {
   };
 
   onDateSelect = (selectedDate, field) => {
-    const date = selectedDate ? new Date(selectedDate).toString() : "";
     if (field === "createdAtMin") {
       this.setState({ createdAtMin: selectedDate });
-      FlowRouter.setQueryParams({ createdAtMin: date });
     } else if (field === "createdAtMax") {
       const { createdAtMin } = this.state;
       if (selectedDate < createdAtMin) {
         Notifier.error(
           "Maximum date should be greater or equal to minimum date"
         );
-      } else {
-        FlowRouter.setQueryParams({ createdAtMax: date });
       }
       this.setState({ createdAtMax: selectedDate });
     }
@@ -119,18 +109,41 @@ export default class FacilitySearchBar extends Component {
     this.setState({ model });
   };
 
+  onChange = (field, value) => {
+    if (field === "facilityName") {
+      FlowRouter.setQueryParams({ facilityName: value });
+    }
+  };
+
+  openDialog = e => {
+    e.preventDefault();
+    this.setState({
+      dialogIsActive: true
+    });
+  };
+
+  closeDialog = () => {
+    this.setState({
+      dialogIsActive: false
+    });
+  };
+
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+
   render() {
     const {
-      filter,
-      active,
       dropdown,
       selectAll,
       createdAtMin,
       createdAtMax,
-      model                                                                                                                                                                                                                                 
+      model,
+      dialogIsActive
     } = this.state;
     const {
-      options,
       btnGroup,
       deleteAction,
       dropdownOptions,
@@ -153,12 +166,11 @@ export default class FacilitySearchBar extends Component {
 
     return (
       <AutoForm
-        autosave
-        autosaveDelay={500}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
         model={model}
+        onChange={this.onChange}
       >
         <div className="search-bar">
           {!hideSort && (
@@ -194,34 +206,60 @@ export default class FacilitySearchBar extends Component {
               </div>
             </div>
 
-            <div
-              className={active ? "filter-block active" : "filter-block"}
-              onClick={this.manageFilterBar.bind(this)}
-            >
-              <button>
+            <div className="filter-block">
+              <button onClick={this.openDialog.bind(this)}>
                 <i className="icon-filter" />
+                {dialogIsActive && (
+                  <Dialog
+                    className="account-dialog filter-dialog"
+                    closePortal={this.closeDialog}
+                    title="Filter by:"
+                  >
+                    <button className="close-dialog" onClick={this.closeDialog}>
+                      <i className="icon-close" />
+                    </button>
+                    <div className="filter-bar">
+                      <div className="select-wrapper">
+                        <div className="form-group flex--helper form-group__pseudo">
+                          <DatePicker
+                            showMonthDropdown
+                            showYearDropdown
+                            yearDropdownItemNumber={4}
+                            todayButton={"Today"}
+                            placeholderText="From created-at date"
+                            selected={createdAtMin}
+                            onChange={date =>
+                              this.onDateSelect(date, "createdAtMin")
+                            }
+                          />
+                          <DatePicker
+                            showMonthDropdown
+                            showYearDropdown
+                            yearDropdownItemNumber={4}
+                            todayButton={"Today"}
+                            placeholderText="To created-at date"
+                            selected={createdAtMax}
+                            onChange={date =>
+                              this.onDateSelect(date, "createdAtMax")
+                            }
+                          />
+                        </div>
+                        <div className="flex--helper flex-justify--end">
+                          <button
+                            className="btn--blue"
+                            onClick={this.addFilters}
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Dialog>
+                )}
               </button>
             </div>
           </div>
         </div>
-        {filter && (
-          <div className="filter-bar">
-            <div className="select-wrapper">
-              <div className="form-group range-date-boxes">
-                <DatePicker
-                  placeholderText="From created-at date"
-                  selected={createdAtMin}
-                  onChange={date => this.onDateSelect(date, "createdAtMin")}
-                />
-                <DatePicker
-                  placeholderText="To created-at date"
-                  selected={createdAtMax}
-                  onChange={date => this.onDateSelect(date, "createdAtMax")}
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </AutoForm>
     );
   }
