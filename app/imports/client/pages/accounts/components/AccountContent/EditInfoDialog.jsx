@@ -61,6 +61,10 @@ export default class EditInfoDialog extends Component {
         <div className="edit-info__dialog-wrapper">
           <div className="input-datetime">
             <DatePicker
+              showMonthDropdown
+              showYearDropdown
+              yearDropdownItemNumber={4}
+              todayButton={"Today"}
               placeholderText="Select New Date"
               onChange={this.onDateSelect}
               selected={selectedDate ? selectedDate : moment(editValue)}

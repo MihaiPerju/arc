@@ -163,6 +163,10 @@ export default class NewAction extends Component {
       return (
         <div className="custom-inputs" key={index}>
           <DatePicker
+            showMonthDropdown
+            showYearDropdown
+            yearDropdownItemNumber={4}
+            todayButton={"Today"}
             placeholderText={input.label}
             selected={this.state[input.label]}
             onChange={date => {
