@@ -37,7 +37,6 @@ class RichTextArea extends React.Component {
   };
 
   setEditorValue = (newValue, editorState) => {
-    console.log(newValue);
     const contentState = Modifier.insertText(
       editorState.getCurrentContent(),
       editorState.getSelection(),
@@ -65,7 +64,6 @@ class RichTextArea extends React.Component {
     ];
     const { id, label, ...props } = this.props;
     const { value } = this.state;
-    console.log(value);
     return (
       <div {...filterDOMProps(props)}>
         {label && <label htmlFor={id}>{label}</label>}
