@@ -69,6 +69,14 @@ export default class AccountContentHeader extends Component {
     return [{ label: "Unassigned" }];
   }
 
+  getOthersData = data => {
+    if (typeof data === "object") {
+      return moment(data).format("MM/DD/YYYY");
+    } else {
+      return data;
+    }
+  };
+
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
 
@@ -265,6 +273,34 @@ export default class AccountContentHeader extends Component {
               />
               <div className="text-dark-grey">
                 {account && moment(account.fbDate).format("MM/DD/YYYY")}
+              </div>
+            </li>
+            <li className="text-center">
+              <div className="text-light-grey">Medical Number</div>
+              <div className="text-dark-grey">
+                {account && account.medNo}
+              </div>
+            </li>
+            <li className="text-center">
+              <div className="text-light-grey">Other 1</div>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.other1}
+                editField="other1"
+              />
+              <div className="text-dark-grey">
+                {account && this.getOthersData(account.other1)}
+              </div>
+            </li>
+            <li className="text-center">
+              <div className="text-light-grey">Other 2</div>
+              <EditInfoDialog
+                accountId={account._id}
+                editValue={account.other2}
+                editField="other2"
+              />
+              <div className="text-dark-grey">
+                {account && this.getOthersData(account.other2)}
               </div>
             </li>
           </ul>
