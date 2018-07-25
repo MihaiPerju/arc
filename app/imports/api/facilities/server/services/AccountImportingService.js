@@ -124,9 +124,13 @@ export default class AccountService {
 
   static standardize(results, rules) {
     //Convert all the rules to lower case to not be case-sensitive
+    const { types } = RulesEnum;
 
     for (let rule in rules) {
       if (rule !== "insurances" && rule !== "hasHeader") {
+        if (types.others.includes(rule)) {
+          rules[rule] = rules[rule].toString();
+        }
         rules[rule] = rules[rule].toLowerCase();
       }
     }
