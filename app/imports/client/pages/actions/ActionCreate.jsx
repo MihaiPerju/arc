@@ -11,6 +11,7 @@ import {
   NestField
 } from "/imports/ui/forms";
 import Notifier from "../../lib/Notifier";
+import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 
 export default class ActionCreate extends Component {
   constructor() {
@@ -21,6 +22,8 @@ export default class ActionCreate extends Component {
   }
 
   onSubmit(data) {
+    const { value } = data.substateId || {};
+    data.substateId = value;
     Meteor.call("action.create", data, err => {
       if (!err) {
         Notifier.success("Action created!");
@@ -117,11 +120,11 @@ export default class ActionCreate extends Component {
               {checked && (
                 <div className="select-group">
                   <div className="form-wrapper">
-                    <SelectField
+                    <SelectSimple
                       placeholder="Substate"
                       labelHidden={true}
-                      options={substatesOptions}
                       name="substateId"
+                      options={substatesOptions}
                     />
                     <ErrorField name="substateId" />
                   </div>

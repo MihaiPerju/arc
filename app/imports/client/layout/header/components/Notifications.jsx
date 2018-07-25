@@ -4,6 +4,7 @@ import { withQuery } from "meteor/cultofcoders:grapher-react";
 import NotificationQuery from "/imports/api/notifications/queries/notificationList";
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
+import flagTypesEnum from "/imports/api/accounts/enums/flagTypesEnum";
 
 class Notitfications extends Component {
   constructor() {
