@@ -4,6 +4,7 @@ import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import moment from "moment";
+import _ from "underscore";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
 import Notifier from "/imports/client/lib/Notifier";
@@ -137,6 +138,17 @@ export default class ClientSearchBar extends Component {
     this.setState({ model });
   };
 
+  resetFilters = () => {
+    FlowRouter.setQueryParams({ clientName: null });
+    const { filters } = this.refs;
+    filters.reset();
+    this.setState({
+      createdAtMin: null,
+      createdAtMax: null
+    });
+    this.closeDialog();
+  };
+
   render() {
     const {
       dialogIsActive,
@@ -241,6 +253,12 @@ export default class ClientSearchBar extends Component {
                           />
                         </div>
                         <div className="flex--helper flex-justify--end">
+                          <button
+                            className="btn--red"
+                            onClick={this.resetFilters}
+                          >
+                            Reset
+                          </button>
                           <button
                             className="btn--blue"
                             onClick={this.addFilters}
