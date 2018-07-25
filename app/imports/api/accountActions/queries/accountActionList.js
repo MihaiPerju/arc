@@ -51,5 +51,6 @@ export default AccountActions.createQuery("accountActionList", {
     state: 1,
     substate: 1
   },
-  correctComment: 1
+  correctComment: 1,
+  customFields: 1
 });

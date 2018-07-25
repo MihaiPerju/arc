@@ -66,3 +66,26 @@ export default {
     label: "Active Insurance Code"
   }
 };
+
+const accountActionHeader = {
+  createdAt: {
+    label: "Created At"
+  },
+  userId: {
+    label: "User"
+  },
+  reasonCode: {
+    label: "Reason Code"
+  },
+  type: {
+    label: "Action Type"
+  },
+  actionId: {
+    label: "Action Name"
+  },
+  customFields: {
+    label: "Custom Inputs"
+  }
+};
+
+export { accountActionHeader };

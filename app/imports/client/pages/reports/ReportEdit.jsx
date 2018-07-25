@@ -6,11 +6,15 @@ import {
   SelectField
 } from "/imports/ui/forms";
 import schema from "/imports/api/reports/schema";
-import RolesEnum from "/imports/api/users/enums/roles";
 import AccountFilterBuilder from "./AccountFilterBuilder";
+import AccountActionFilterBuilder from "./AccountActionFilterBuilder";
 import Notifier from "/imports/client/lib/Notifier";
 import { EJSON } from "meteor/ejson";
 import ReportsService from "../../../api/reports/services/ReportsService";
+import AccountActionReportService from "../../../api/reports/services/AccountActionReportService";
+import ReportTypeOptionsEnum, {
+  reportTypes
+} from "/imports/client/pages/reports/enums/reportType";
 import AddReportColumn from "./AddReportColumn";
 
 export default class ReportEdit extends React.Component {
@@ -38,21 +42,25 @@ export default class ReportEdit extends React.Component {
   initializeData = props => {
     const { report } = props;
     let components = {};
+    const service =
+      report.type === reportTypes.ACCOUNT_ACTIONS
+        ? AccountActionReportService
+        : ReportsService;
 
     for (let field in report.filterBuilderData) {
-      field = ReportsService.getInitialField(field);
-
+      field = service.getInitialField(field);
       components[field] = {
         isActive: true,
         name: field
       };
     }
 
-    const { name, shareReport, filterBuilderData } = report;
+    const { name, shareReport, filterBuilderData, type } = report;
 
     this.setState({
       generalInformation: {
-        name
+        name,
+        type
       },
       components,
       filterBuilderData,
@@ -60,23 +68,40 @@ export default class ReportEdit extends React.Component {
     });
   };
 
-  onChange = (field, value) => {
+  onChangeModel = model => {
+    //Not allowing to pick up filters if we don't have a name & report type
     let { generalInformation } = this.state;
+    const newInformation = {};
+    const { report } = this.props;
 
-    //Not allowing to pick up filters if we don't have a name
-    if (field === "name") {
-      if (value) {
-        this.setState({
-          hasGeneralInformation: true
-        });
+    if (model.name && model.type) {
+      this.setState({
+        hasGeneralInformation: true
+      });
+    } else {
+      this.setState({
+        hasGeneralInformation: false
+      });
+    }
+
+    if ("name" in model) {
+      newInformation["name"] = model.name;
+    }
+
+    if ("type" in model) {
+      newInformation["type"] = model.type;
+      if (model.type === report.type) {
+        this.initializeData(this.props);
       } else {
-        this.setState({
-          hasGeneralInformation: false
-        });
+        generalInformation = _.omit(
+          generalInformation,
+          "mongoFilters",
+          "filterBuilderData"
+        );
+        this.setState({ components: {}, filterBuilderData: {} });
       }
     }
-    const newInformation = {};
-    newInformation[field] = value;
+
     _.extend(generalInformation, generalInformation, newInformation);
     this.setState({ generalInformation });
   };
@@ -123,6 +148,13 @@ export default class ReportEdit extends React.Component {
     this.setState({ shareReport: !shareReport });
   };
 
+  getOptions = () => {
+    return ReportTypeOptionsEnum.map(type => ({
+      value: type.value,
+      label: type.label
+    }));
+  };
+
   openDialog = () => {
     this.setState({
       isReportColumn: true
@@ -145,6 +177,8 @@ export default class ReportEdit extends React.Component {
       isReportColumn
     } = this.state;
     const { substates, report } = this.props;
+    const options = this.getOptions();
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -165,10 +199,10 @@ export default class ReportEdit extends React.Component {
               <div className="title-block text-uppercase">general data</div>
             </div>
             <AutoForm
-              onChange={this.onChange}
               ref="generalDataForm"
               schema={schema}
               model={generalInformation}
+              onChangeModel={this.onChangeModel}
             >
               <div className="form-wrapper">
                 <AutoField
@@ -177,6 +211,15 @@ export default class ReportEdit extends React.Component {
                   name="name"
                 />
                 <ErrorField name="name" />
+              </div>
+              <div className="form-wrapper">
+                <SelectField
+                  labelHidden={true}
+                  placeholder="Select type"
+                  name="type"
+                  options={options}
+                />
+                <ErrorField name="type" />
               </div>
               <div className="check-group">
                 <input checked={shareReport} type="checkbox" />
@@ -188,16 +231,28 @@ export default class ReportEdit extends React.Component {
             <div className="action-block">
               <div className="header__block">
                 <div className="title-block text-uppercase">
-                  Edit filters for report
+                  Edit filters for report{" "}
+                  {generalInformation.type === reportTypes.ACCOUNTS
+                    ? "Accounts"
+                    : "Account Actions"}
                 </div>
               </div>
-              <AccountFilterBuilder
-                onSubmitFilters={this.onSubmitFilters.bind(this)}
-                filterBuilderData={filterBuilderData}
-                components={components}
-                substates={substates}
-                ref="filterBuilder"
-              />
+              {generalInformation.type === reportTypes.ACCOUNTS ? (
+                <AccountFilterBuilder
+                  onSubmitFilters={this.onSubmitFilters.bind(this)}
+                  filterBuilderData={filterBuilderData}
+                  components={components}
+                  substates={substates}
+                  ref="filterBuilder"
+                />
+              ) : (
+                <AccountActionFilterBuilder
+                  onSubmitFilters={this.onSubmitFilters.bind(this)}
+                  filterBuilderData={filterBuilderData}
+                  components={components}
+                  ref="filterBuilder"
+                />
+              )}
             </div>
           )}
           <div className="action-block">
@@ -223,7 +278,7 @@ export default class ReportEdit extends React.Component {
               </button>
             </div>
             {isReportColumn && (
-              <AddReportColumn closeDialog={this.closeDialog} report={report}/>
+              <AddReportColumn closeDialog={this.closeDialog} report={report} />
             )}
           </div>
         </div>
