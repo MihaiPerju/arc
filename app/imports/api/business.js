@@ -5,5 +5,6 @@ export default {
   REPORTS_FOLDER: "reports",
   APP_FOLDER: "app",
   MNT: "mnt",
-  ACCOUNTS_FOLDER: "accounts"
+  ACCOUNTS_FOLDER: "accounts",
+  CLIENTS_FOLDER: "clients"
 };
