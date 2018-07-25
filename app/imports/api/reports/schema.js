@@ -33,5 +33,8 @@ export default new SimpleSchema({
   },
   "tagIds.$": {
     type: String
+  },
+  type: {
+    type: String
   }
 });

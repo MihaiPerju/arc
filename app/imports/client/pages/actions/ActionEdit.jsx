@@ -14,6 +14,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import ReasonCodesBlock from "./components/ReasonCodesBlock";
 import RolesEnum from "/imports/api/users/enums/roles.js";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
+import inputTypesEnum from "/imports/api/actions/enums/inputTypeEnum";
 
 export default class ActionEdit extends React.Component {
   constructor(props) {
@@ -90,11 +91,6 @@ export default class ActionEdit extends React.Component {
     const { action, substates } = this.props;
     const { checked } = this.state;
     const substatesOptions = this.getOptions(substates);
-    const inputTypes = [
-      { value: "number", label: "number" },
-      { value: "date", label: "date" },
-      { value: "string", label: "text" }
-    ];
 
     const { id } = FlowRouter.current().params;
 
@@ -181,7 +177,7 @@ export default class ActionEdit extends React.Component {
                         <SelectField
                           placeholder="Select type"
                           labelHidden={true}
-                          options={inputTypes}
+                          options={inputTypesEnum}
                           name="type"
                         />
                         <ErrorField name="type" />

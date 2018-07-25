@@ -12,5 +12,6 @@ export default Reports.createQuery("reportList", {
   shareReport: 1,
   authorId: 1,
   reportColumns: 1,
-  tagIds: 1
+  tagIds: 1,
+  type: 1
 });
