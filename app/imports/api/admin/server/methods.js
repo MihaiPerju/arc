@@ -111,8 +111,14 @@ Meteor.methods({
   },
 
   "admin.updateRootFolder"({ rootFolder }) {
+    if (rootFolder[0] !== "/") {
+      rootFolder = "/" + rootFolder;
+    }
+    if (rootFolder[rootFolder.length - 1] !== "/") {
+      rootFolder += "/";
+    }
     Settings.update(
-      { rootFolder },
+      { rootFolder: { $ne: null } },
       {
         $set: {
           rootFolder

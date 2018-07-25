@@ -2,7 +2,7 @@ import Accounts from "/imports/api/accounts/collection";
 import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import { getUserByToken } from "/imports/api/s3-uploads/server/router";
 import PDFMerge from "pdf-merge";
-import Business from "/imports/api/business";
+import Settings from "/imports/api/settings/collection.js";
 
 Picker.route("/pdfs/:_id/:token", function(params, req, res, next) {
   //Checking user rights
@@ -16,10 +16,14 @@ Picker.route("/pdfs/:_id/:token", function(params, req, res, next) {
   const account = Accounts.findOne({ _id: params._id });
   const { attachmentIds } = account;
 
+  const { rootFolder } = Settings.findOne({
+    rootFolder: { $ne: null }
+  });
+
   const files = [];
   for (let _id of attachmentIds) {
     const { path } = Uploads.findOne({ _id });
-    files.push(Business.LOCAL_STORAGE_FOLDER + "/" + path);
+    files.push(rootFolder + path);
   }
 
   //Merge PDFs

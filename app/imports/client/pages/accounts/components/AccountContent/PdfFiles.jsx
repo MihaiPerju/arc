@@ -21,8 +21,7 @@ export default class ActionBlock extends Component {
 
   downloadPdfs() {
     const { account } = this.props;
-    const { items } = this.child.state;
-
+    console.log(account);
     //creating attachmentIds
     let attachmentIds = [];
 
@@ -162,13 +161,11 @@ export default class ActionBlock extends Component {
                               onClick={this.reviewPdf.bind(this, index)}
                               className="btn-text--blue"
                             >
-                              {
-                                index === pdfIndex ? (
-                                  <i className="icon-close"/>
-                                ) : (
-                                  <i className="icon-view"/>
-                                )
-                              }
+                              {index === pdfIndex ? (
+                                <i className="icon-close" />
+                              ) : (
+                                <i className="icon-view" />
+                              )}
                             </button>
                           </div>
                           {index === pdfIndex && (

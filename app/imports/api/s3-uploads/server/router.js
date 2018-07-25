@@ -4,9 +4,9 @@ import { Accounts } from "meteor/accounts-base";
 import fs from "fs";
 import Uploader from "/imports/api/s3-uploads/server/s3";
 import UploadedFile from "/imports/api/s3-uploads/server/UploadedFile";
-import Business from "/imports/api/business";
 import Uploads from "../uploads/collection";
 import AccountsCollection from "/imports/api/accounts/collection";
+import Settings from "/imports/api/settings/collection.js";
 
 let postRoutes = Picker.filter(function(req, res) {
   return req.method == "POST";
@@ -109,16 +109,18 @@ export function createRoute(path, handler) {
             }
           }
 
-          let movePath = Business.LOCAL_STORAGE_FOLDER + "/" + fileName;
+          const { rootFolder } = Settings.findOne({
+            rootFolder: { $ne: null }
+          });
+          let movePath = rootFolder + fileName;
           movePath = movePath.replace(/\s+/g, "-");
           //If there is no local folder
-          if (!fs.existsSync(Business.LOCAL_STORAGE_FOLDER)) {
-            fs.mkdirSync(Business.LOCAL_STORAGE_FOLDER);
+          if (!fs.existsSync(rootFolder)) {
+            fs.mkdirSync(rootFolder);
           }
           //Move file to specified storage folder
           fs.renameSync(filePath, movePath);
-
-          filePath = movePath.replace(Business.LOCAL_STORAGE_FOLDER + "/", "");
+          filePath = movePath.replace(rootFolder, "");
 
           const mimeType = Uploader.guessMimeType(fileName);
           const uploadFile = new UploadedFile(
