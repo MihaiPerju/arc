@@ -152,7 +152,7 @@ export default class ActionSearchBar extends Component {
                 </button>
               )}
               {
-                moduleTags.length > 0 && <Tags moduleTags={moduleTags}/>
+                moduleTags.length && <Tags moduleTags={moduleTags}/>
               }
             </div>
           </div>
