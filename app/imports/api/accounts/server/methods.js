@@ -98,18 +98,6 @@ Meteor.methods({
     fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + "/" + path);
   },
 
-  "account.attachment.update_order"(_id, attachmentIds) {
-    AccountSecurity.hasRightsOnAccount(this.userId, _id);
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          attachmentIds
-        }
-      }
-    );
-  },
-
   "account.updateActiveInsCode"(_id, insCode, insName) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Accounts.update(
