@@ -77,6 +77,13 @@ export default class AccountContentHeader extends Component {
     }
   };
 
+  getValue = (value) =>{
+    if (value) {
+      FlowRouter.setQueryParams({ medNo: value });
+    }
+    
+  }
+
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
 
@@ -278,7 +285,7 @@ export default class AccountContentHeader extends Component {
             <li className="text-center">
               <div className="text-light-grey">Medical Number</div>
               <div className="text-dark-grey">
-                {account && account.medNo}
+                <a href='' onClick={this.getValue.bind(this,account.medNo)}>{account && account.medNo}</a>
               </div>
             </li>
             <li className="text-center">

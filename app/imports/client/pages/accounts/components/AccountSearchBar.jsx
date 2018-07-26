@@ -114,6 +114,16 @@ export default class AccountSearchBar extends Component {
     });
   }
 
+  componentWillReceiveProps(props) {
+    const { query } = FlowRouter.current().params;
+    if (query.medNo) {
+      let model = FilterService.getFilterParams();
+      this.setState({
+        model
+      });
+    }
+  }
+
   onSubmit(params) {
     const {
       dischrgDateMin,
@@ -162,6 +172,9 @@ export default class AccountSearchBar extends Component {
     }
     if ("activeInsCode" in params) {
       FlowRouter.setQueryParams({ activeInsCode: params.activeInsCode });
+    }
+    if ("medNo" in params) {
+      FlowRouter.setQueryParams({ medNo: params.medNo });
     }
 
     FlowRouter.setQueryParams({
@@ -323,7 +336,8 @@ export default class AccountSearchBar extends Component {
       fbDateMin: null,
       fbDateMax: null,
       admitDateMin: null,
-      admitDateMax: null
+      admitDateMax: null,
+      model: {}
     });
     this.closeDialog();
   };
@@ -478,6 +492,13 @@ export default class AccountSearchBar extends Component {
                             label="Patient Type:"
                             name="ptType"
                             placeholder="Search by Patient Type"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <AutoField
+                            label="Medical Number:"
+                            name="medNo"
+                            placeholder="Search by Medical Number"
                           />
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
@@ -836,6 +857,11 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by Patient Type"
+  },
+  medNo: {
+    type: String,
+    optional: true,
+    label: "Search by Medical Number"
   },
   acctBalMin: {
     type: SimpleSchema.Integer,
