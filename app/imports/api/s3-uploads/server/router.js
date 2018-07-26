@@ -89,11 +89,13 @@ export function createRoute(path, handler) {
           const stats = fs.statSync(filePath);
           const fileSizeInBytes = stats.size;
 
+          if(accountId)
           const { attachmentIds } =
             AccountsCollection.findOne({
               _id: accountId
             }) || [];
           let fileName = filePath.replace(os.tmpdir() + "/", "");
+          
           if (attachmentIds) {
             const count = Uploads.find({
               name: { $regex: fileName.slice(0, fileName.indexOf(".")) },
