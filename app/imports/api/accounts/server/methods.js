@@ -202,6 +202,9 @@ Meteor.methods({
         $set: {
           tickleDate,
           tickleUserId
+        },
+        $unset: {
+          employeeToRespond: null
         }
       }
     );
@@ -214,6 +217,10 @@ Meteor.methods({
       {
         $set: {
           employeeToRespond: RolesEnum.MANAGER
+        },
+        $unset: {
+          tickleDate: null,
+          tickleUserId: null
         }
       }
     );
@@ -230,7 +237,7 @@ Meteor.methods({
   },
 
   "account.comment.add"(data) {
-    data.userId = this.userId
+    data.userId = this.userId;
     ActionService.addComment(data);
   },
 
@@ -243,7 +250,7 @@ Meteor.methods({
     );
   },
 
-  "account.tag" ({_id, tagIds}) {
+  "account.tag"({ _id, tagIds }) {
     Accounts.update(
       { _id },
       {
@@ -253,5 +260,4 @@ Meteor.methods({
       }
     );
   }
-
 });
