@@ -4,6 +4,7 @@ import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import Tags from "/imports/client/lib/Tags";
 import DatePicker from "react-datepicker";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
@@ -334,7 +335,8 @@ export default class AccountSearchBar extends Component {
       dropdownOptions,
       icons,
       getProperAccounts,
-      assignFilterArr
+      assignFilterArr,
+      moduleTags
     } = this.props;
 
     const classes = classNames({
@@ -404,7 +406,7 @@ export default class AccountSearchBar extends Component {
               </div>
             </div>
 
-            <div className="filter-block">
+            <div className="filter-block flex--helper">
               <button onClick={this.openDialog.bind(this)}>
                 <i className="icon-filter" />
                 {dialogIsActive && (
@@ -574,6 +576,7 @@ export default class AccountSearchBar extends Component {
                   </Dialog>
                 )}
               </button>
+              <Tags moduleTags={moduleTags}/>
             </div>
             {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
               <div

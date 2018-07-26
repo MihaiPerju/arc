@@ -400,6 +400,7 @@ class AccountListContainer extends Pager {
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
+            moduleTags={moduleTags}
           />
           {assignUser && (
             <AccountAssigning
@@ -420,7 +421,7 @@ class AccountListContainer extends Pager {
               uncheckAccountList={this.uncheckAccountList}
             />
           )}
-          <Tags moduleTags={moduleTags} />
+          {/*<Tags moduleTags={moduleTags} />*/}
           <AccountList
             classes={"task-list"}
             accountsSelected={accountsSelected}
