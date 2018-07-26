@@ -14,7 +14,6 @@ import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
-import Tags from "/imports/client/lib/Tags";
 
 class AccountListContainer extends Pager {
   constructor() {

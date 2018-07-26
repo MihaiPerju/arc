@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
+import Tags from "/imports/client/lib/Tags";
 import classNames from "classnames";
 import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
@@ -153,7 +154,8 @@ export default class ClientSearchBar extends Component {
       dropdownOptions,
       icons,
       getProperAccounts,
-      hideSort
+      hideSort,
+      moduleTags
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -164,8 +166,8 @@ export default class ClientSearchBar extends Component {
       active: selectAll
     });
     const searchClasses = classNames("search-input", {
-      full__width: btnGroup,
-      sort__none: hideSort
+      'full__width': btnGroup,
+      'sort__none': hideSort
     });
 
     return (
@@ -210,7 +212,7 @@ export default class ClientSearchBar extends Component {
               </div>
             </div>
 
-            <div className="filter-block">
+            <div className="filter-block flex--helper">
               <button onClick={this.openDialog.bind(this)}>
                 <i className="icon-filter" />
                 {dialogIsActive && (
@@ -253,6 +255,9 @@ export default class ClientSearchBar extends Component {
                   </Dialog>
                 )}
               </button>
+              {
+                moduleTags.length > 0 && <Tags moduleTags={moduleTags}/>
+              }
             </div>
           </div>
         </div>

@@ -1,8 +1,10 @@
-import React, { Component } from "react";
-import { AutoForm, ErrorField } from "/imports/ui/forms";
+import React, {Component} from "react";
+import {AutoForm, ErrorField} from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import query from "/imports/api/letters/queries/letterList.js";
+import Tags from "/imports/client/lib/Tags";
+
 export default class LetterSearchBar extends Component {
   constructor() {
     super();
@@ -29,7 +31,7 @@ export default class LetterSearchBar extends Component {
     }
 
     if ("letterIds" in params) {
-      FlowRouter.setQueryParams({ letterIds: params.letterIds });
+      FlowRouter.setQueryParams({letterIds: params.letterIds});
     }
   }
 
@@ -48,12 +50,12 @@ export default class LetterSearchBar extends Component {
       model.letterIds = queryParams.letterIds;
     }
 
-    this.setState({ model });
+    this.setState({model});
   };
 
   render() {
-    const { letters, model } = this.state;
-    const { hideFilter } = this.props;
+    const {letters, model} = this.state;
+    const {hideFilter, moduleTags} = this.props;
     const options = this.getOptions(letters);
 
     return (
@@ -67,7 +69,7 @@ export default class LetterSearchBar extends Component {
       >
         <div className="search-bar">
           <div className="search-bar__wrapper flex--helper">
-            <div style={{ width: "100%" }} className="select-group">
+            <div style={{width: "100%"}} className="select-group">
               <div className="form-wrapper">
                 <SelectMulti
                   className="form-select__multi"
@@ -76,17 +78,20 @@ export default class LetterSearchBar extends Component {
                   name="letterIds"
                   options={options}
                 />
-                <ErrorField name="letterIds" />
+                <ErrorField name="letterIds"/>
               </div>
             </div>
-          </div>
-          {!hideFilter && (
             <div className="filter-block">
-              <button>
-                <i className="icon-filter" />
-              </button>
+              {!hideFilter && (
+                <button>
+                  <i className="icon-filter"/>
+                </button>
+              )}
+              {
+                moduleTags.length > 0 && <Tags moduleTags={moduleTags}/>
+              }
             </div>
-          )}
+          </div>
         </div>
       </AutoForm>
     );

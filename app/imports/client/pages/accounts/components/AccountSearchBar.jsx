@@ -355,7 +355,8 @@ export default class AccountSearchBar extends Component {
         (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)),
       sort__width:
         btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      "account-search": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+      "account-search": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
+      'tag--none': moduleTags.length === 0,
     });
 
     const currentStateName = FlowRouter.current().params.state;
@@ -576,7 +577,9 @@ export default class AccountSearchBar extends Component {
                   </Dialog>
                 )}
               </button>
-              <Tags moduleTags={moduleTags}/>
+              {
+                moduleTags.length > 0 && <Tags moduleTags={moduleTags}/>
+              }
             </div>
             {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
               <div
