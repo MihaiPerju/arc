@@ -5,6 +5,7 @@ import Facilities from "/imports/api/facilities/collection.js";
 import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
+import Settings from "/imports/api/settings/collection.js";
 
 Meteor.methods({
   "client.create"(data) {
@@ -44,7 +45,9 @@ Meteor.methods({
 
     if (client) {
       const { logoPath } = client;
-
+      const { rootFolder } = Settings.findOne({
+        rootFolder: { $ne: null }
+      });
       //Delete from local storage
       Uploads.remove({ path: logoPath });
 
@@ -57,7 +60,7 @@ Meteor.methods({
         }
       );
       if (logoPath)
-        fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + "/" + logoPath);
+        fs.unlinkSync(rootFolder + Business.CLIENTS_FOLDER + logoPath);
     }
   },
 

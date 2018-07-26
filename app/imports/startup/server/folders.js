@@ -18,7 +18,7 @@ Meteor.startup(function() {
   }
 
   //Create folder for client logos
-  const clientLogoFolder = rootFolder + Business.CLIENTS_FOLDER + "/";
+  const clientLogoFolder = rootFolder + Business.CLIENTS_FOLDER;
   if (!fs.existsSync(clientLogoFolder)) {
     fs.mkdirSync(clientLogoFolder);
   }

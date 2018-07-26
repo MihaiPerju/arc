@@ -79,7 +79,7 @@ export function createRoute(path, handler) {
           });
         });
       },
-      uploadLocal({ accountId, clientId }) {
+      uploadLocal({ accountId }) {
         return _.map(req.filenames, function(filePath) {
           const { resourceType, resourceId } = req.postData;
 
@@ -89,11 +89,11 @@ export function createRoute(path, handler) {
           const stats = fs.statSync(filePath);
           const fileSizeInBytes = stats.size;
 
-          if(accountId)
           const { attachmentIds } =
             AccountsCollection.findOne({
               _id: accountId
             }) || [];
+            
           let fileName = filePath.replace(os.tmpdir() + "/", "");
           
           if (attachmentIds) {
@@ -115,8 +115,13 @@ export function createRoute(path, handler) {
           const { rootFolder } = Settings.findOne({
             rootFolder: { $ne: null }
           });
+
           let movePath = rootFolder + fileName;
           movePath = movePath.replace(/\s+/g, "-");
+          //If there is no local folder
+          if (!fs.existsSync(rootFolder)) {
+            fs.mkdirSync(rootFolder);
+          }
           //Move file to specified storage folder
           fs.renameSync(filePath, movePath);
           filePath = movePath.replace(rootFolder, "");
