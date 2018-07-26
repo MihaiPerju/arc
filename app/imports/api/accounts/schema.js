@@ -156,6 +156,10 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
+  escalationId: {
+    type: String,
+    optional: true
+  },
   workQueue: {
     type: String,
     optional: true

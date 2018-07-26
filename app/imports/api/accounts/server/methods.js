@@ -214,12 +214,13 @@ Meteor.methods({
   },
 
   "account.escalate"({ reason, accountId }) {
-    EscalationService.createEscalation(reason, this.userId, accountId);
+    const escalationId = EscalationService.createEscalation(reason, this.userId, accountId);
     Accounts.update(
       { _id: accountId },
       {
         $set: {
-          employeeToRespond: RolesEnum.MANAGER
+          employeeToRespond: RolesEnum.MANAGER,
+          escalationId
         },
         $unset: {
           tickleDate: null,
