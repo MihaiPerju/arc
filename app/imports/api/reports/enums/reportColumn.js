@@ -11,7 +11,9 @@ export default [
   { value: "medNo", label: "Medical Number" },
   { value: "state", label: "State" },
   { value: "substate", label: "Substate" },
-  { value: "activeInsCode", label: "Active Insurance Code" }
+  { value: "activeInsCode", label: "Active Insurance Code" },
+  { value: "tickleDate", label: "Tickle Date" },
+  { value: "tickleReason", label: "Tickle Reason" }
 ];
 
 const insuranceColumnEnum = [
@@ -27,7 +29,7 @@ const insuranceColumnEnum = [
 ];
 
 const types = {
-  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt"]
+  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt", "tickleDate"]
 };
 
 const fields = {

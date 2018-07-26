@@ -89,7 +89,8 @@ export default class AccountActionContent extends Component {
                       className="table-field table-field--grey text-center"
                     >
                       {typeof actionPerformed[columnKey] === "object"
-                        ? moment(actionPerformed[columnKey]).format(
+                        ? actionPerformed[columnKey] &&
+                          moment(actionPerformed[columnKey]).format(
                             "MM/DD/YYYY, hh:mm"
                           )
                         : actionPerformed[columnKey]}

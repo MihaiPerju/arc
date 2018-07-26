@@ -3,6 +3,8 @@ import Notifier from "../../../../lib/Notifier";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import SimpleSchema from "simpl-schema";
 
 export default class AccountTickle extends React.Component {
   constructor() {
@@ -12,14 +14,15 @@ export default class AccountTickle extends React.Component {
     };
   }
 
-  tickle = e => {
-    e.preventDefault();
+  tickle = data => {
     const { accountId, closeRightPanel } = this.props;
     const { tickleDate } = this.state;
-    const data = {};
-    data._id = accountId;
-    data.tickleDate = new Date(tickleDate);
-    data.tickleUserId = Meteor.userId();
+    Object.assign(data, {
+      _id: accountId,
+      tickleDate: new Date(tickleDate),
+      tickleUserId: Meteor.userId()
+    });
+
     Meteor.call("account.tickle", data, err => {
       if (!err) {
         Notifier.success("Account Tickled!");
@@ -44,9 +47,9 @@ export default class AccountTickle extends React.Component {
     const { tickleDate } = this.state;
     return (
       <div className="action-block">
-        <form onSubmit={this.tickle}>
-          <div className="input-datetime flex--helper flex--column">
-            <span className="text-light-grey">Tickle date</span>
+        <div className="input-datetime flex--helper flex--column">
+          <span className="text-light-grey">Tickle date</span>
+          <AutoForm onSubmit={this.tickle} schema={schema}>
             <DatePicker
               showMonthDropdown
               showYearDropdown
@@ -60,17 +63,34 @@ export default class AccountTickle extends React.Component {
                 Tickle date is required
               </div>
             )}
-          </div>
-          <div className="btn-group">
-            <button className="btn-cancel" onClick={this.closeDialog}>
-              Cancel
-            </button>
-            <button type="submit" className="btn--light-blue">
-              Confirm & send
-            </button>
-          </div>
-        </form>
+            <br />
+            <div className="form-group">
+              <AutoField
+                className="text-area"
+                labelHidden={true}
+                placeholder="Type tickle reason..."
+                name="tickleReason"
+              />
+              <ErrorField name="tickleReason" />
+              <br />
+              <div className="btn-group">
+                <button className="btn-cancel" onClick={this.closeDialog}>
+                  Cancel
+                </button>
+                <button type="submit" className="btn--light-blue">
+                  Confirm & send
+                </button>
+              </div>
+            </div>
+          </AutoForm>
+        </div>
       </div>
     );
   }
 }
+
+const schema = new SimpleSchema({
+  tickleReason: {
+    type: String
+  }
+});

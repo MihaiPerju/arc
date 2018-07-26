@@ -64,6 +64,12 @@ export default {
   },
   activeInsCode: {
     label: "Active Insurance Code"
+  },
+  tickleDate: {
+    label: "Tickle Date"
+  },
+  tickleReason: {
+    label: "Tickle Reason"
   }
 };
 

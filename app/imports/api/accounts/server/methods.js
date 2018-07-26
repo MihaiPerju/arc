@@ -11,6 +11,7 @@ import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import fs from "fs";
 import Business from "/imports/api/business";
 import EscalationService from "/imports/api/escalations/server/services/EscalationService";
+import TickleService from "/imports/api/tickles/server/services/TickleService";
 
 Meteor.methods({
   "account.actions.add"(data) {
@@ -195,13 +196,15 @@ Meteor.methods({
     return result;
   },
 
-  "account.tickle"({ tickleDate, _id, tickleUserId }) {
+  "account.tickle"({ tickleDate, _id, tickleUserId, tickleReason }) {
+    TickleService.addMessage({ tickleDate, _id, tickleUserId, tickleReason });
     Accounts.update(
       { _id },
       {
         $set: {
           tickleDate,
-          tickleUserId
+          tickleUserId,
+          tickleReason
         },
         $unset: {
           employeeToRespond: null
@@ -220,7 +223,8 @@ Meteor.methods({
         },
         $unset: {
           tickleDate: null,
-          tickleUserId: null
+          tickleUserId: null,
+          tickleReason: null
         }
       }
     );

@@ -115,6 +115,7 @@ export default class ActionService {
     if (escalationId) {
       Escalations.remove({ _id: escalationId });
     }
+    // when substateId is present
     if (substateId && substateId !== GeneralEnums.NA) {
       const substate = SubstatesCollection.findOne({ _id: substateId });
       const { name } = substate || {};
@@ -122,16 +123,24 @@ export default class ActionService {
         { _id: accountId },
         {
           $set: {
-            state,
             substate: name
-          },
-          $unset: {
-            tickleDate: null,
-            escalationId: null
           }
         }
       );
     }
+
+    Accounts.update(
+      { _id: accountId },
+      {
+        $set: {
+          state
+        },
+        $unset: {
+          tickleDate: null,
+          employeeToRespond: null
+        }
+      }
+    );
   }
 
   static removeAssignee(_id) {
