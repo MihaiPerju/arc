@@ -116,7 +116,7 @@ export default class AccountSearchBar extends Component {
 
   componentWillReceiveProps(props) {
     const { query } = FlowRouter.current().params;
-    if (query.medNo) {
+    if (query && query.medNo) {
       let model = FilterService.getFilterParams();
       this.setState({
         model
