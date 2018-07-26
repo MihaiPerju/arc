@@ -79,7 +79,7 @@ export function createRoute(path, handler) {
           });
         });
       },
-      uploadLocal(accountId) {
+      uploadLocal({ accountId, clientId }) {
         return _.map(req.filenames, function(filePath) {
           const { resourceType, resourceId } = req.postData;
 
@@ -115,10 +115,6 @@ export function createRoute(path, handler) {
           });
           let movePath = rootFolder + fileName;
           movePath = movePath.replace(/\s+/g, "-");
-          //If there is no local folder
-          if (!fs.existsSync(rootFolder)) {
-            fs.mkdirSync(rootFolder);
-          }
           //Move file to specified storage folder
           fs.renameSync(filePath, movePath);
           filePath = movePath.replace(rootFolder, "");
