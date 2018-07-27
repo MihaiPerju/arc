@@ -21,24 +21,11 @@ export default class MetaDataSlider extends React.Component {
     closeMetaData();
   };
 
-  groupFields(fields) {
-    const numInRow = 5;
-    const numGroups = Math.ceil(fields.length / numInRow);
-    let result = [];
-    for (let i = 0; i < numGroups; i++) {
-      const startIndex = i * numInRow;
-      const finishIndex = Math.min((i + 1) * numInRow, fields.length);
-      const groupOfFields = fields.slice(startIndex, finishIndex);
-      result.push(groupOfFields);
-    }
-    return result;
-  }
-
   render() {
     const { fade } = this.state;
     const { account } = this.props;
     const { metaData } = account;
-    const metaDataGroups = this.groupFields(Object.keys(metaData));
+
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         <div className="create-form__bar">
@@ -51,8 +38,7 @@ export default class MetaDataSlider extends React.Component {
         {account && (
           <AccountMetaData
             close={this.closeSlider}
-            metaData={account.metaData}
-            metaDataGroups={metaDataGroups}
+            metaData={metaData}
           />
         )}
       </div>
