@@ -61,6 +61,10 @@ export default class EditInfoDialog extends Component {
         <div className="edit-info__dialog-wrapper">
           <div className="input-datetime">
             <DatePicker
+              showMonthDropdown
+              showYearDropdown
+              yearDropdownItemNumber={4}
+              todayButton={"Today"}
               placeholderText="Select New Date"
               onChange={this.onDateSelect}
               selected={selectedDate ? selectedDate : moment(editValue)}
@@ -79,6 +83,31 @@ export default class EditInfoDialog extends Component {
           </div>
         </div>
       );
+    } else if (fieldTypes.others.includes(name)) {
+      if (typeof editValue === "object") {
+        return (
+          <div className="edit-info__dialog-wrapper">
+            <div className="input-datetime">
+              <DatePicker
+                placeholderText="Select New Date"
+                onChange={this.onDateSelect}
+                selected={selectedDate ? selectedDate : moment(editValue)}
+              />
+            </div>
+            <div className="btn-group__footer flex--helper flex-justify--end">
+              <button
+                onClick={this.onSubmit.bind(this, {
+                  [editField]: selectedDate && selectedDate.toDate()
+                })}
+                type="submit"
+                className="btn--light-blue"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        );
+      }
     }
     return (
       <AutoForm

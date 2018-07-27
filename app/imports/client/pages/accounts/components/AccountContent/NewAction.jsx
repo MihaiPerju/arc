@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
-import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx"
+import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
 import query from "/imports/api/actions/queries/actionList";
@@ -163,6 +163,10 @@ export default class NewAction extends Component {
       return (
         <div className="custom-inputs" key={index}>
           <DatePicker
+            showMonthDropdown
+            showYearDropdown
+            yearDropdownItemNumber={4}
+            todayButton={"Today"}
             placeholderText={input.label}
             selected={this.state[input.label]}
             onChange={date => {
@@ -209,16 +213,12 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectSimple
-                  label={false}
-                  name="actionId"
-                  options={actions}
-                />
+                <SelectSimple label={false} name="actionId" options={actions} />
                 <ErrorField name="actionId" />
               </div>
               {reasonCodes.length > 0 && (
                 <div className="select-group">
-                  <AutoField
+                  <SelectSimple
                     labelHidden={true}
                     name="reasonCode"
                     options={reasonCodes}

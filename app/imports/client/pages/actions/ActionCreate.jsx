@@ -11,6 +11,8 @@ import {
   NestField
 } from "/imports/ui/forms";
 import Notifier from "../../lib/Notifier";
+import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
+import inputTypesEnum from "/imports/api/actions/enums/inputTypeEnum";
 
 export default class ActionCreate extends Component {
   constructor() {
@@ -21,6 +23,8 @@ export default class ActionCreate extends Component {
   }
 
   onSubmit(data) {
+    const { value } = data.substateId || {};
+    data.substateId = value;
     Meteor.call("action.create", data, err => {
       if (!err) {
         Notifier.success("Action created!");
@@ -59,11 +63,6 @@ export default class ActionCreate extends Component {
     const { substates } = this.props;
     const substatesOptions = this.getOptions(substates);
     const { checked } = this.state;
-    const inputTypes = [
-      { value: "number", label: "number" },
-      { value: "date", label: "date" },
-      { value: "string", label: "text" }
-    ];
 
     return (
       <div className="create-form action-create-form">
@@ -117,11 +116,11 @@ export default class ActionCreate extends Component {
               {checked && (
                 <div className="select-group">
                   <div className="form-wrapper">
-                    <SelectField
+                    <SelectSimple
                       placeholder="Substate"
                       labelHidden={true}
-                      options={substatesOptions}
                       name="substateId"
+                      options={substatesOptions}
                     />
                     <ErrorField name="substateId" />
                   </div>
@@ -135,7 +134,7 @@ export default class ActionCreate extends Component {
                       <SelectField
                         placeholder="Select type"
                         labelHidden={true}
-                        options={inputTypes}
+                        options={inputTypesEnum}
                         name="type"
                       />
                       <ErrorField name="type" />

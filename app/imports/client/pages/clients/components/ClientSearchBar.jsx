@@ -5,6 +5,7 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import Tags from "/imports/client/lib/Tags";
 import classNames from "classnames";
 import moment from "moment";
+import _ from "underscore";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import DatePicker from "react-datepicker";
 import Notifier from "/imports/client/lib/Notifier";
@@ -138,6 +139,17 @@ export default class ClientSearchBar extends Component {
     this.setState({ model });
   };
 
+  resetFilters = () => {
+    FlowRouter.setQueryParams({ clientName: null });
+    const { filters } = this.refs;
+    filters.reset();
+    this.setState({
+      createdAtMin: null,
+      createdAtMax: null
+    });
+    this.closeDialog();
+  };
+
   render() {
     const {
       dialogIsActive,
@@ -228,6 +240,10 @@ export default class ClientSearchBar extends Component {
                       <div className="select-wrapper">
                         <div className="form-group flex--helper form-group__pseudo">
                           <DatePicker
+                            showMonthDropdown
+                            showYearDropdown
+                            yearDropdownItemNumber={4}
+                            todayButton={"Today"}
                             placeholderText="From created-at date"
                             selected={createdAtMin}
                             onChange={date =>
@@ -235,6 +251,10 @@ export default class ClientSearchBar extends Component {
                             }
                           />
                           <DatePicker
+                            showMonthDropdown
+                            showYearDropdown
+                            yearDropdownItemNumber={4}
+                            todayButton={"Today"}
                             placeholderText="To created-at date"
                             selected={createdAtMax}
                             onChange={date =>
@@ -243,6 +263,12 @@ export default class ClientSearchBar extends Component {
                           />
                         </div>
                         <div className="flex--helper flex-justify--end">
+                          <button
+                            className="btn--red"
+                            onClick={this.resetFilters}
+                          >
+                            Reset
+                          </button>
                           <button
                             className="btn--blue"
                             onClick={this.addFilters}

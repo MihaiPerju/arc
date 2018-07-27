@@ -3,6 +3,7 @@ import { AutoForm, AutoField, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
+import _ from "underscore";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Tags from "/imports/client/lib/Tags";
 import DatePicker from "react-datepicker";
@@ -310,6 +311,24 @@ export default class AccountSearchBar extends Component {
     }));
   };
 
+  resetFilters = () => {
+    let appliedFilters = FlowRouter.current().queryParams;
+    appliedFilters = _.omit(appliedFilters, "page", "tagIds");
+    appliedFilters = _.mapObject(appliedFilters, () => null);
+    FlowRouter.setQueryParams(appliedFilters);
+    const { filters } = this.refs;
+    filters.reset();
+    this.setState({
+      dischrgDateMin: null,
+      dischrgDateMax: null,
+      fbDateMin: null,
+      fbDateMax: null,
+      admitDateMin: null,
+      admitDateMax: null
+    });
+    this.closeDialog();
+  };
+
   render() {
     const {
       dropdown,
@@ -480,6 +499,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="From Discharge Date"
                               selected={dischrgDateMin}
                               onChange={date =>
@@ -490,6 +513,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="To Discharge Date"
                               selected={dischrgDateMax}
                               onChange={date =>
@@ -502,6 +529,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Last Bill Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="From Last Bill Date"
                               selected={fbDateMin}
                               onChange={date =>
@@ -512,6 +543,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>To Last Bill Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="To Last Bill Date"
                               selected={fbDateMax}
                               onChange={date =>
@@ -524,6 +559,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Admit Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="From Admit Date"
                               selected={admitDateMin}
                               onChange={date =>
@@ -534,6 +573,10 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>To Admit Date:</label>
                             <DatePicker
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
                               placeholderText="To Admit Date"
                               selected={admitDateMax}
                               onChange={date =>
@@ -565,6 +608,12 @@ export default class AccountSearchBar extends Component {
                           />
                         </div>
                         <div className="flex--helper flex-justify--end">
+                          <button
+                            className="btn--red"
+                            onClick={this.resetFilters}
+                          >
+                            Reset
+                          </button>
                           <button
                             className="btn--blue"
                             onClick={this.addFilters}

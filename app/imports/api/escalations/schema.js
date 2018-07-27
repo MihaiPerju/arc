@@ -13,6 +13,13 @@ export default new SimpleSchema({
   "messages.$.content": {
     type: String
   },
+  "messages.$.userName": {
+    type: String
+  },
+  "messages.$.createdAt": {
+    type: Date,
+    defaultValue: new Date()
+  },
   accountId: {
     type: String
   }

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
+import moment from "moment/moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import classNames from "classnames";
 import SimpleSchema from "simpl-schema";
@@ -59,15 +60,19 @@ class EscalateReason extends Component {
           </AutoForm>
         </div>
         <div className="comment-list">
-          {data.messages &&
+          {data &&
             data.messages.map(message => {
               return (
                 <div className="comment-item flex--helper flex--column">
                   <div className="comment__wrapper flex--helper flex-justify--space-between">
                     {/*Add name from db*/}
-                    <div className="name truncate">Katlyn Greenholt</div>
+                    <div className="name truncate">{message.userName}</div>
                     {/*Add time from db*/}
-                    <div className="time">July 12th 2018, 02:08 pm</div>
+                    <div className="time">
+                      {moment(message.createdAt).format(
+                        "MMMM Do YYYY, hh:mm a"
+                      )}
+                    </div>
                   </div>
                   <div className="message text-light-grey">
                     {message.content}
@@ -89,7 +94,8 @@ const escalateSchema = new SimpleSchema({
 
 export default withQuery(
   props => {
-    return query.clone();
+    const { accountId } = props;
+    return query.clone({ filters: { accountId } });
   },
   { reactive: true, single: true }
 )(EscalateReason);

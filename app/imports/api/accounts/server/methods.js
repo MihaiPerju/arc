@@ -98,18 +98,6 @@ Meteor.methods({
     fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + "/" + path);
   },
 
-  "account.attachment.update_order"(_id, attachmentIds) {
-    AccountSecurity.hasRightsOnAccount(this.userId, _id);
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          attachmentIds
-        }
-      }
-    );
-  },
-
   "account.updateActiveInsCode"(_id, insCode, insName) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Accounts.update(
@@ -230,20 +218,15 @@ Meteor.methods({
   },
 
   "account.comment.add"(data) {
-    data.userId = this.userId
+    data.userId = this.userId;
     ActionService.addComment(data);
   },
 
   "account.update"(_id, data) {
-    Accounts.update(
-      { _id },
-      {
-        $set: data
-      }
-    );
+    ActionService.updateAccount(_id, data, this.userId);
   },
 
-  "account.tag" ({_id, tagIds}) {
+  "account.tag"({ _id, tagIds }) {
     Accounts.update(
       { _id },
       {
@@ -253,5 +236,4 @@ Meteor.methods({
       }
     );
   }
-
 });
