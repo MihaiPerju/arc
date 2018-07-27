@@ -19,12 +19,14 @@ import Tickles from "/imports/api/tickles/collection";
 export default class ActionService {
   //Adding action to account
   static createAction(data) {
-    const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
+    const { accountId, actionId, reasonCode, userId, addedBy } = data;
     const action = Actions.findOne({
       _id: actionId.value ? actionId.value : actionId
     });
     const { inputs } = action;
     const createdAt = new Date();
+    const { value: reasonId } = reasonCode || {};
+
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const { clientId } = Accounts.findOne({ _id: accountId });
     const accountActionData = {
