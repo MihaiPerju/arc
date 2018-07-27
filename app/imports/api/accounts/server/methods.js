@@ -230,20 +230,15 @@ Meteor.methods({
   },
 
   "account.comment.add"(data) {
-    data.userId = this.userId
+    data.userId = this.userId;
     ActionService.addComment(data);
   },
 
   "account.update"(_id, data) {
-    Accounts.update(
-      { _id },
-      {
-        $set: data
-      }
-    );
+    ActionService.updateAccount(_id, data, this.userId);
   },
 
-  "account.tag" ({_id, tagIds}) {
+  "account.tag"({ _id, tagIds }) {
     Accounts.update(
       { _id },
       {
@@ -253,5 +248,4 @@ Meteor.methods({
       }
     );
   }
-
 });
