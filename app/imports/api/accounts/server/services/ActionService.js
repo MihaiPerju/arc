@@ -14,6 +14,7 @@ import Escalations from "/imports/api/escalations/collection";
 import NotificationService from "/imports/api/notifications/server/services/NotificationService";
 import Users from "/imports/api/users/collection";
 import Facilities from "/imports/api/facilities/collection";
+import Tickles from "/imports/api/tickles/collection";
 
 export default class ActionService {
   //Adding action to account
@@ -113,8 +114,14 @@ export default class ActionService {
   static changeState(accountId, { state, substateId }) {
     const { escalationId } = Accounts.findOne({ _id: accountId }) || null;
     if (escalationId) {
+      // remove previous escalated comments
       Escalations.remove({ _id: escalationId });
     }
+    
+    // remove previous tickles history
+    Tickles.remove({ accountId });
+
+    // when substateId is present
     if (substateId && substateId !== GeneralEnums.NA) {
       const substate = SubstatesCollection.findOne({ _id: substateId });
       const { name } = substate || {};
@@ -122,16 +129,26 @@ export default class ActionService {
         { _id: accountId },
         {
           $set: {
-            state,
             substate: name
-          },
-          $unset: {
-            tickleDate: null,
-            escalationId: null
           }
         }
       );
     }
+
+    Accounts.update(
+      { _id: accountId },
+      {
+        $set: {
+          state
+        },
+        $unset: {
+          tickleDate: null,
+          employeeToRespond: null,
+          tickleUserId: null,
+          tickleReason: null
+        }
+      }
+    );
   }
 
   static removeAssignee(_id) {
