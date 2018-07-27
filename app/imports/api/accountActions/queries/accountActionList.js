@@ -2,6 +2,7 @@ import AccountActions from "../collection";
 
 export default AccountActions.createQuery("accountActionList", {
   $filter({ filters, options, params }) {
+    console.log("params", params)
     _.extend(filters, params.filters);
     _.extend(options, params.options);
   },
@@ -52,5 +53,8 @@ export default AccountActions.createQuery("accountActionList", {
     substate: 1
   },
   correctComment: 1,
-  customFields: 1
+  customFields: 1,
+  accountField: 1,
+  fieldPreviousValue: 1,
+  fieldUpdatedValue: 1
 });

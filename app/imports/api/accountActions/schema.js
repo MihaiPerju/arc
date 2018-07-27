@@ -88,5 +88,17 @@ export default new SimpleSchema({
   clientId: {
     type: String,
     optional: true
+  },
+  accountField: {
+    type: String,
+    optional: true
+  },
+  fieldPreviousValue: {
+    type: String,
+    optional: true
+  },
+  fieldUpdatedValue: {
+    type: String,
+    optional: true
   }
 });
