@@ -25,7 +25,6 @@ export default Facilities.createQuery("facilityList", {
   allowedUsers: 1,
   contacts: 1,
   host: 1,
-  password: 1,
   frequency: 1,
   user: 1,
   region: {

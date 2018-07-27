@@ -157,7 +157,7 @@ export default class FacilityCreate extends Component {
                 <AutoField
                   type="password"
                   labelHidden={true}
-                  placeholder="Password"
+                  placeholder="********"
                   name="password"
                 />
                 <ErrorField name="password" />
