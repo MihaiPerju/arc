@@ -11,6 +11,7 @@ Picker.route("/pdf/:_id/:token", function(params, req, res, next) {
     res.write("Not logged in!");
   }
 
+  
   const { rootFolder } = Settings.findOne({
     rootFolder: { $ne: null }
   });

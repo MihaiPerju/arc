@@ -1,5 +1,9 @@
 import Accounts from "../collection";
 import { createRoute } from "/imports/api/s3-uploads/server/router";
+import Settings from "/imports/api/settings/collection.js";
+import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Business from "/imports/api/business";
+import fs from "fs";
 
 createRoute(
   "/uploads/account-pdf/:accountId/:token",
@@ -12,7 +16,14 @@ createRoute(
       return error("Invalid number of files");
     }
 
-    const [uploadId] = uploadLocal({accountId});
+    const { rootFolder } = Settings.findOne({
+      rootFolder: { $ne: null }
+    });
+
+    const [uploadId] = uploadLocal({ accountId });
+    const { path } = Uploads.findOne({ _id: uploadId });
+    const movePath = rootFolder + Business.ACCOUNTS_FOLDER + path;
+    fs.renameSync(rootFolder + path, movePath);
 
     Accounts.update(
       { _id: accountId },
