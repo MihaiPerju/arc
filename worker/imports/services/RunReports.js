@@ -79,7 +79,6 @@ export default class RunReports {
     });
     //Path to new file
     const pathToSave = rootFolder + FoldersEnum.REPORTS_FOLDER;
-    console.log(pathToSave);
     //Check and see if folder for saving is missing
     this.checkFolder(pathToSave);
 

@@ -2,13 +2,24 @@ import Settings from "/imports/api/settings/collection.js";
 import Business from "/imports/api/business";
 import fs from "fs";
 
-export default function() {
-  let { rootFolder } = Settings.findOne({
-    rootFolder: { $ne: null }
+
+Meteor.startup(function () {
+  createFolderStructure();
+});
+
+const createFolderStructure = function () {
+  let {
+    rootFolder
+  } = Settings.findOne({
+    rootFolder: {
+      $ne: null
+    }
   });
 
   if (!rootFolder) {
-    Settings.insert({ rootFolder: "/tmp/arcc/" });
+    Settings.insert({
+      rootFolder: "/tmp/arcc/"
+    });
     rootFolder = "/tmp/arcc/";
   }
 
@@ -29,8 +40,13 @@ export default function() {
     fs.mkdirSync(attachmentsFolder);
   }
 
+  //Create folder for reports
   const reportsFolder = rootFolder + Business.REPORTS_FOLDER;
   if (!fs.existsSync(reportsFolder)) {
     fs.mkdirSync(reportsFolder);
   }
 }
+
+export {
+  createFolderStructure
+};

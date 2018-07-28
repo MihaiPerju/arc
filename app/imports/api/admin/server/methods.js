@@ -8,19 +8,36 @@ import Files from "/imports/api/files/collection";
 import Letters from "/imports/api/letters/collection.js";
 import Accounts from "/imports/api/accounts/collection";
 import Escalations from "/imports/api/escalations/collection";
+import {
+  createFolderStructure
+} from "/imports/startup/server/folders";
 
 Meteor.methods({
-  "admin.createUser"({ firstName, lastName, email, phoneNumber, password }) {
+  "admin.createUser" ({
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    password
+  }) {
     Security.checkAdmin(this.userId);
 
     return Accounts.createUser({
       email,
       password,
-      profile: { firstName, lastName, phoneNumber }
+      profile: {
+        firstName,
+        lastName,
+        phoneNumber
+      }
     });
   },
 
-  "admin.editUser"(userId, { email, profile, tagIds }) {
+  "admin.editUser" (userId, {
+    email,
+    profile,
+    tagIds
+  }) {
     Security.checkAdmin(this.userId);
 
     if (!userId) {
@@ -38,24 +55,21 @@ Meteor.methods({
       throw new Meteor.Error("Email already in use!");
     }
 
-    Users.update(
-      { _id: userId },
-      {
-        $set: {
-          emails: [
-            {
-              address: email,
-              verified: false
-            }
-          ],
-          profile,
-          tagIds
-        }
+    Users.update({
+      _id: userId
+    }, {
+      $set: {
+        emails: [{
+          address: email,
+          verified: false
+        }],
+        profile,
+        tagIds
       }
-    );
+    });
   },
 
-  "admin.suspendUser"(userId) {
+  "admin.suspendUser" (userId) {
     Security.checkAdmin(this.userId);
 
     if (!userId) {
@@ -64,26 +78,24 @@ Meteor.methods({
 
     const settings = Settings.findOne();
 
-    Settings.update(
-      { _id: settings._id },
-      {
-        $addToSet: {
-          suspendedUserIds: userId
-        }
+    Settings.update({
+      _id: settings._id
+    }, {
+      $addToSet: {
+        suspendedUserIds: userId
       }
-    );
+    });
 
-    Users.update(
-      { _id: userId },
-      {
-        $set: {
-          "profile.suspended": true
-        }
+    Users.update({
+      _id: userId
+    }, {
+      $set: {
+        "profile.suspended": true
       }
-    );
+    });
   },
 
-  "admin.resumeUser"(userId) {
+  "admin.resumeUser" (userId) {
     Security.checkAdmin(this.userId);
     if (!userId) {
       throw new Meteor.Error("No user");
@@ -91,58 +103,70 @@ Meteor.methods({
 
     const settings = Settings.findOne();
 
-    Settings.update(
-      { _id: settings._id },
-      {
-        $pull: {
-          suspendedUserIds: userId
-        }
+    Settings.update({
+      _id: settings._id
+    }, {
+      $pull: {
+        suspendedUserIds: userId
       }
-    );
+    });
 
-    Users.update(
-      { _id: userId },
-      {
-        $set: {
-          "profile.suspended": false
-        }
+    Users.update({
+      _id: userId
+    }, {
+      $set: {
+        "profile.suspended": false
       }
-    );
+    });
   },
 
-  "admin.updateRootFolder"({ rootFolder }) {
+  "admin.updateRootFolder" ({
+    rootFolder
+  }) {
     if (rootFolder[0] !== "/") {
       rootFolder = "/" + rootFolder;
     }
     if (rootFolder[rootFolder.length - 1] !== "/") {
       rootFolder += "/";
     }
-    Settings.update(
-      { rootFolder: { $ne: null } },
-      {
-        $set: {
-          rootFolder
-        }
-      },
-      {
-        upsert: true
+    Settings.update({
+      rootFolder: {
+        $ne: null
       }
-    );
+    }, {
+      $set: {
+        rootFolder
+      }
+    }, {
+      upsert: true
+    });
+
+    createFolderStructure();
   },
 
-  "admin.getRootFolder"() {
-    return Settings.findOne({ rootFolder: { $exists: true } });
+  "admin.getRootFolder" () {
+    return Settings.findOne({
+      rootFolder: {
+        $exists: true
+      }
+    });
   },
 
-  "admin.deleteUser"(userId) {
+  "admin.deleteUser" (userId) {
     Security.checkAdmin(this.userId);
 
-    Users.remove({ _id: userId });
+    Users.remove({
+      _id: userId
+    });
   },
 
-  "admin.deleteManyUsers"(userIds) {
+  "admin.deleteManyUsers" (userIds) {
     Security.checkAdmin(this.userId);
-    Users.remove({ _id: { $in: userIds } });
+    Users.remove({
+      _id: {
+        $in: userIds
+      }
+    });
   },
 
   //Testing purpose only, delete in production
