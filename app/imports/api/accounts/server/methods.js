@@ -14,6 +14,7 @@ import fs from "fs";
 import Business from "/imports/api/business";
 import EscalationService from "/imports/api/escalations/server/services/EscalationService";
 import Settings from "/imports/api/settings/collection.js";
+import TickleService from "/imports/api/tickles/server/services/TickleService";
 
 Meteor.methods({
   "account.actions.add" (data) {
@@ -121,17 +122,6 @@ Meteor.methods({
     fs.unlinkSync(rootFolder + Business.ACCOUNTS_FOLDER + path);
   },
 
-  "account.attachment.update_order" (_id, attachmentIds) {
-    AccountSecurity.hasRightsOnAccount(this.userId, _id);
-    Accounts.update({
-      _id
-    }, {
-      $set: {
-        attachmentIds
-      }
-    });
-  },
-
   "account.updateActiveInsCode" (_id, insCode, insName) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Accounts.update({
@@ -227,14 +217,25 @@ Meteor.methods({
   "account.tickle" ({
     tickleDate,
     _id,
-    tickleUserId
+    tickleUserId,
+    tickleReason
   }) {
+    TickleService.addMessage({
+      tickleDate,
+      _id,
+      tickleUserId,
+      tickleReason
+    });
     Accounts.update({
       _id
     }, {
       $set: {
         tickleDate,
-        tickleUserId
+        tickleUserId,
+        tickleReason
+      },
+      $unset: {
+        employeeToRespond: null
       }
     });
   },
@@ -243,12 +244,18 @@ Meteor.methods({
     reason,
     accountId
   }) {
-    EscalationService.createEscalation(reason, this.userId, accountId);
+    const escalationId = EscalationService.createEscalation(reason, this.userId, accountId);
     Accounts.update({
       _id: accountId
     }, {
       $set: {
-        employeeToRespond: RolesEnum.MANAGER
+        employeeToRespond: RolesEnum.MANAGER,
+        escalationId
+      },
+      $unset: {
+        tickleDate: null,
+        tickleUserId: null,
+        tickleReason: null
       }
     });
   },
@@ -269,16 +276,12 @@ Meteor.methods({
   },
 
   "account.comment.add" (data) {
-    data.userId = this.userId
+    data.userId = this.userId;
     ActionService.addComment(data);
   },
 
   "account.update" (_id, data) {
-    Accounts.update({
-      _id
-    }, {
-      $set: data
-    });
+    ActionService.updateAccount(_id, data, this.userId);
   },
 
   "account.tag" ({
@@ -293,5 +296,4 @@ Meteor.methods({
       }
     });
   }
-
 });

@@ -8,6 +8,7 @@ import PdfFiles from "./components/AccountContent/PdfFiles";
 import EscalateReason from "./components/AccountContent/EscalateReason";
 import CommentsListContainer from "/imports/client/pages/comments/CommentsListContainer.jsx";
 import Statistics from "/imports/client/pages/accounts/components/Statistics";
+import TickleBlock from "./components/AccountContent/TickleBlock";
 
 export default class AccountContent extends Component {
   constructor() {
@@ -27,6 +28,19 @@ export default class AccountContent extends Component {
       );
     }
   }
+
+  tickleBlock = () => {
+    const { account, closeRightPanel } = this.props;
+    const { state } = FlowRouter.current().params;
+    if (state === "tickles") {
+      return (
+        <TickleBlock
+          accountId={account._id}
+          closeRightPanel={closeRightPanel}
+        />
+      );
+    }
+  };
 
   render() {
     const {
@@ -48,6 +62,7 @@ export default class AccountContent extends Component {
               closeRightPanel={closeRightPanel}
             />
             {this.escalateReason()}
+            {this.tickleBlock()}
             <PayerBlock account={account} />
             <InvoiceMembers account={account} />
             <ActionBlock closeRightPanel={closeRightPanel} account={account} />
