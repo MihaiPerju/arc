@@ -21,7 +21,6 @@ export default class ActionBlock extends Component {
 
   downloadPdfs() {
     const { account } = this.props;
-    console.log(account);
     //creating attachmentIds
     let attachmentIds = [];
 

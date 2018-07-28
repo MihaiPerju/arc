@@ -36,7 +36,7 @@ Picker.route('/letters/pdf/:accountId/:letterId/:token',
         if (!existsSync(letterLocation)) {
             res.writeHead(404);
             res.write('File Not Found');
-            return;
+            res.end();
         }
         data = fs.readFileSync(letterLocation);
 

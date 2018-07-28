@@ -31,6 +31,13 @@ Picker.route("/pdf/:_id/:token", function (params, req, res, next) {
   } = Uploads.findOne({
     _id
   });
+  if (!fs.existsSync(rootFolder + Business.ACCOUNTS_FOLDER + path)) {
+
+    res.writeHead(404);
+    res.write('File Not Found');
+    res.end();
+  }
+
   let data = fs.readFileSync(rootFolder + Business.ACCOUNTS_FOLDER + path);
 
   res.end(data);

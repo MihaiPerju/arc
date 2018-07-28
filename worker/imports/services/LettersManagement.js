@@ -84,7 +84,6 @@ export default class LetterManagement {
       }
 
     static attachPdfsToLetter(filename, letterId, attachmentIds) {
-      console.log(attachmentIds);
       let files = [filename];
 
       for (let _id of attachmentIds) {
@@ -101,7 +100,6 @@ export default class LetterManagement {
       while (fs.existsSync(newFilename)) {
         newFilename = rootFolder + Business.ACCOUNTS_FOLDER + Random.id() + ".pdf";
       }
-      console.log(files);
 
       PDFMerge(files, newFilename)
         .then(function () {
@@ -116,7 +114,9 @@ export default class LetterManagement {
         })
         .catch(function (error) {
           //returns error
-          console.log("error", error);
+          res.writeHead(403);
+          res.write('Something wrong happened');
+
         });
 
     }

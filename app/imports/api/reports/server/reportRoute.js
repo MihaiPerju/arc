@@ -30,6 +30,12 @@ Picker.route("/report/:reportId", function (params, req, res, next) {
   } = params;
   const reportPath =
     rootFolder + FoldersEnum.REPORTS_FOLDER + reportId + ".csv";
+  if (!fs.existsSync(reportPath)) {
+
+    res.writeHead(404);
+    res.write('File Not Found');
+    res.end();
+  }
   let data = fs.readFileSync(reportPath);
   res.writeHead(200, {
     "Content-Type": "data:text/csv",
