@@ -114,9 +114,6 @@ export default class LetterManagement {
         })
         .catch(function (error) {
           //returns error
-          res.writeHead(403);
-          res.write('Something wrong happened');
-
         });
 
     }
