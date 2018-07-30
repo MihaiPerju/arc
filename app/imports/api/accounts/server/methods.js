@@ -2,7 +2,9 @@ import ActionService from "./services/ActionService.js";
 import Accounts from "../collection";
 import AccountSecurity from "./../security";
 import Security from "/imports/api/security/security";
-import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import RolesEnum, {
+  roleGroups
+} from "/imports/api/users/enums/roles";
 import StateEnum from "/imports/api/accounts/enums/states";
 import TimeService from "./services/TimeService";
 import moment from "moment";
@@ -11,108 +13,128 @@ import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import fs from "fs";
 import Business from "/imports/api/business";
 import EscalationService from "/imports/api/escalations/server/services/EscalationService";
+import Settings from "/imports/api/settings/collection.js";
 import TickleService from "/imports/api/tickles/server/services/TickleService";
 
 Meteor.methods({
-  "account.actions.add"(data) {
+  "account.actions.add" (data) {
     data.userId = this.userId;
     ActionService.createAction(data);
   },
 
-  "account.assignUser"({ _id, assigneeId }) {
+  "account.assignUser" ({
+    _id,
+    assigneeId
+  }) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-    Accounts.update(
-      { _id },
-      {
+    Accounts.update({
+      _id
+    }, {
+      $set: {
+        assigneeId
+      },
+      $unset: {
+        workQueue: null
+      }
+    });
+  },
+  "account.assignUser.bulk" ({
+    accountIds,
+    assigneeId
+  }) {
+    for (let accountId of accountIds) {
+      AccountSecurity.hasRightsOnAccount(this.userId, accountId);
+      Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+      Accounts.update({
+        _id: accountId
+      }, {
         $set: {
           assigneeId
         },
         $unset: {
           workQueue: null
         }
-      }
-    );
+      });
+    }
   },
-  "account.assignUser.bulk"({ accountIds, assigneeId }) {
+  "account.assignWorkQueue" ({
+    _id,
+    workQueue
+  }) {
+    AccountSecurity.hasRightsOnAccount(this.userId, _id);
+    Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
+    Accounts.update({
+      _id
+    }, {
+      $set: {
+        workQueue
+      },
+      $unset: {
+        assigneeId: null
+      }
+    });
+  },
+  "account.assignWorkQueue.bulk" ({
+    accountIds,
+    workQueue
+  }) {
     for (let accountId of accountIds) {
       AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-      Accounts.update(
-        { _id: accountId },
-        {
-          $set: {
-            assigneeId
-          },
-          $unset: {
-            workQueue: null
-          }
-        }
-      );
-    }
-  },
-  "account.assignWorkQueue"({ _id, workQueue }) {
-    AccountSecurity.hasRightsOnAccount(this.userId, _id);
-    Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-    Accounts.update(
-      { _id },
-      {
+      Accounts.update({
+        _id: accountId
+      }, {
         $set: {
           workQueue
         },
         $unset: {
           assigneeId: null
         }
-      }
-    );
-  },
-  "account.assignWorkQueue.bulk"({ accountIds, workQueue }) {
-    for (let accountId of accountIds) {
-      AccountSecurity.hasRightsOnAccount(this.userId, accountId);
-      Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
-      Accounts.update(
-        { _id: accountId },
-        {
-          $set: {
-            workQueue
-          },
-          $unset: {
-            assigneeId: null
-          }
-        }
-      );
+      });
     }
   },
 
-  "account.attachment.remove"(_id, attachmentId, key) {
-    AccountSecurity.hasRightsOnAccount(this.userId, _id);
-    Accounts.update(
-      { _id },
-      {
-        $pull: {
-          attachmentIds: attachmentId
-        }
+  "account.attachment.remove" (_id, attachmentId, key) {
+    const {
+      rootFolder
+    } = Settings.findOne({
+      rootFolder: {
+        $ne: null
       }
-    );
-    const { path } = Uploads.findOne({ _id: attachmentId });
-    Uploads.remove({ _id: attachmentId });
-    fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + "/" + path);
+    });
+    AccountSecurity.hasRightsOnAccount(this.userId, _id);
+    Accounts.update({
+      _id
+    }, {
+      $pull: {
+        attachmentIds: attachmentId
+      }
+    });
+    const {
+      path
+    } = Uploads.findOne({
+      _id: attachmentId
+    });
+    Uploads.remove({
+      _id: attachmentId
+    });
+    fs.unlinkSync(rootFolder + Business.ACCOUNTS_FOLDER + path);
   },
 
-  "account.updateActiveInsCode"(_id, insCode, insName) {
+  "account.updateActiveInsCode" (_id, insCode, insName) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          activeInsCode: insCode,
-          activeInsName: insName
-        }
+    Accounts.update({
+      _id
+    }, {
+      $set: {
+        activeInsCode: insCode,
+        activeInsName: insName
       }
-    );
+    });
   },
 
-  "accounts.count"() {
+  "accounts.count" () {
     const result = [];
     const facilities = Facilities.find().fetch();
     for (let count in facilities) {
@@ -139,7 +161,9 @@ Meteor.methods({
         let currentMonth = 0;
         let currentWeek = 0;
         //select accounts this month and week. To be optimized.
-        const accounts = Accounts.find({ facilityId: facility._id }).fetch();
+        const accounts = Accounts.find({
+          facilityId: facility._id
+        }).fetch();
         for (let index in accounts) {
           const account = accounts[index];
 
@@ -163,11 +187,17 @@ Meteor.methods({
     return result;
   },
 
-  "accounts.increment_view_count"(_id) {
-    Accounts.update({ _id }, { $inc: { numberOfViews: 1 } });
+  "accounts.increment_view_count" (_id) {
+    Accounts.update({
+      _id
+    }, {
+      $inc: {
+        numberOfViews: 1
+      }
+    });
   },
 
-  "accounts.get"() {
+  "accounts.get" () {
     let result = {
       hold: [],
       active: []
@@ -184,68 +214,86 @@ Meteor.methods({
     return result;
   },
 
-  "account.tickle"({ tickleDate, _id, tickleUserId, tickleReason }) {
-    TickleService.addMessage({ tickleDate, _id, tickleUserId, tickleReason });
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          tickleDate,
-          tickleUserId,
-          tickleReason
-        },
-        $unset: {
-          employeeToRespond: null
-        }
+  "account.tickle" ({
+    tickleDate,
+    _id,
+    tickleUserId,
+    tickleReason
+  }) {
+    TickleService.addMessage({
+      tickleDate,
+      _id,
+      tickleUserId,
+      tickleReason
+    });
+    Accounts.update({
+      _id
+    }, {
+      $set: {
+        tickleDate,
+        tickleUserId,
+        tickleReason
+      },
+      $unset: {
+        employeeToRespond: null
       }
-    );
+    });
   },
 
-  "account.escalate"({ reason, accountId }) {
+  "account.escalate" ({
+    reason,
+    accountId
+  }) {
     const escalationId = EscalationService.createEscalation(reason, this.userId, accountId);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $set: {
-          employeeToRespond: RolesEnum.MANAGER,
-          escalationId
-        },
-        $unset: {
-          tickleDate: null,
-          tickleUserId: null,
-          tickleReason: null
-        }
+    Accounts.update({
+      _id: accountId
+    }, {
+      $set: {
+        employeeToRespond: RolesEnum.MANAGER,
+        escalationId
+      },
+      $unset: {
+        tickleDate: null,
+        tickleUserId: null,
+        tickleReason: null
       }
-    );
+    });
   },
 
-  "accounts.getSample"(filters) {
+  "accounts.getSample" (filters) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    return AccountsRaw.aggregateSync([
-      { $match: filters },
-      { $sample: { size: 20 } }
+    return AccountsRaw.aggregateSync([{
+        $match: filters
+      },
+      {
+        $sample: {
+          size: 20
+        }
+      }
     ]);
   },
 
-  "account.comment.add"(data) {
+  "account.comment.add" (data) {
     data.userId = this.userId;
     ActionService.addComment(data);
   },
 
-  "account.update"(_id, data) {
+  "account.update" (_id, data) {
     ActionService.updateAccount(_id, data, this.userId);
   },
 
-  "account.tag"({ _id, tagIds }) {
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          tagIds
-        }
+  "account.tag" ({
+    _id,
+    tagIds
+  }) {
+    Accounts.update({
+      _id
+    }, {
+      $set: {
+        tagIds
       }
-    );
+    });
   }
 });

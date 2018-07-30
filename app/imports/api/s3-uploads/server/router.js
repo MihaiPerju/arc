@@ -4,9 +4,9 @@ import { Accounts } from "meteor/accounts-base";
 import fs from "fs";
 import Uploader from "/imports/api/s3-uploads/server/s3";
 import UploadedFile from "/imports/api/s3-uploads/server/UploadedFile";
-import Business from "/imports/api/business";
 import Uploads from "../uploads/collection";
 import AccountsCollection from "/imports/api/accounts/collection";
+import Settings from "/imports/api/settings/collection.js";
 
 let postRoutes = Picker.filter(function(req, res) {
   return req.method == "POST";
@@ -79,7 +79,7 @@ export function createRoute(path, handler) {
           });
         });
       },
-      uploadLocal(accountId) {
+      uploadLocal({ accountId }) {
         return _.map(req.filenames, function(filePath) {
           const { resourceType, resourceId } = req.postData;
 
@@ -89,10 +89,13 @@ export function createRoute(path, handler) {
           const stats = fs.statSync(filePath);
           const fileSizeInBytes = stats.size;
 
-          const { attachmentIds } = AccountsCollection.findOne({
-            _id: accountId
-          });
+          const { attachmentIds } =
+            AccountsCollection.findOne({
+              _id: accountId
+            }) || [];
+            
           let fileName = filePath.replace(os.tmpdir() + "/", "");
+          
           if (attachmentIds) {
             const count = Uploads.find({
               name: { $regex: fileName.slice(0, fileName.indexOf(".")) },
@@ -109,16 +112,19 @@ export function createRoute(path, handler) {
             }
           }
 
-          let movePath = Business.LOCAL_STORAGE_FOLDER + "/" + fileName;
+          const { rootFolder } = Settings.findOne({
+            rootFolder: { $ne: null }
+          });
+
+          let movePath = rootFolder + fileName;
           movePath = movePath.replace(/\s+/g, "-");
           //If there is no local folder
-          if (!fs.existsSync(Business.LOCAL_STORAGE_FOLDER)) {
-            fs.mkdirSync(Business.LOCAL_STORAGE_FOLDER);
+          if (!fs.existsSync(rootFolder)) {
+            fs.mkdirSync(rootFolder);
           }
           //Move file to specified storage folder
           fs.renameSync(filePath, movePath);
-
-          filePath = movePath.replace(Business.LOCAL_STORAGE_FOLDER + "/", "");
+          filePath = movePath.replace(rootFolder, "");
 
           const mimeType = Uploader.guessMimeType(fileName);
           const uploadFile = new UploadedFile(
