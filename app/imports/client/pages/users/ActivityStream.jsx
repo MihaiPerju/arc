@@ -9,6 +9,7 @@ import actionTypesEnum, {
   typeList
 } from "/imports/api/accounts/enums/actionTypesEnum";
 import Loading from "/imports/client/lib/ui/Loading";
+import ActivityStreamGraph from "./ActivityStreamGraph";
 
 export default class ActivityStream extends React.Component {
   constructor() {
@@ -77,7 +78,7 @@ export default class ActivityStream extends React.Component {
       options: { limit, skip }
     });
     _.extend(params.filters, {
-      type: {$nin: ["file", "revert"]}
+      type: { $nin: ["file", "revert"] }
     });
 
     accountActionsQuery.clone(params).fetch((err, actions) => {
@@ -310,6 +311,9 @@ export default class ActivityStream extends React.Component {
 
     return (
       <div className="cc-container settings-container">
+        <div>
+          <ActivityStreamGraph/>
+        </div>
         <div ref="isScroll" style={{ width: "200%", overflowY: "scroll" }}>
           <div className="header__block">
             <div className="actions_filter__bar">

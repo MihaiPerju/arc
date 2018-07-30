@@ -186,4 +186,23 @@ export default class ActionService {
       }
     }
   }
+
+  static graphStandarziseData(actionsPerHour) {
+    const graphData = [];
+
+    for (let i = 0; i < 24; i++) {
+      let data = [];
+      data.push(i, 0);
+      graphData.push(data);
+    }
+
+    actionsPerHour.map(actionPerHour => {
+      graphData.find((data, index) => {
+        if (data[0] === actionPerHour._id.h) {
+          graphData[index] = [actionPerHour._id.h, actionPerHour.total];
+        }
+      });
+    });
+    return graphData;
+  }
 }

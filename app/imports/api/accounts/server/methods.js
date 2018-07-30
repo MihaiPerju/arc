@@ -11,6 +11,7 @@ import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import fs from "fs";
 import Business from "/imports/api/business";
 import EscalationService from "/imports/api/escalations/server/services/EscalationService";
+import AccountActions from "/imports/api/accountActions/collection";
 
 Meteor.methods({
   "account.actions.add"(data) {
@@ -230,7 +231,7 @@ Meteor.methods({
   },
 
   "account.comment.add"(data) {
-    data.userId = this.userId
+    data.userId = this.userId;
     ActionService.addComment(data);
   },
 
@@ -243,7 +244,7 @@ Meteor.methods({
     );
   },
 
-  "account.tag" ({_id, tagIds}) {
+  "account.tag"({ _id, tagIds }) {
     Accounts.update(
       { _id },
       {
@@ -252,6 +253,39 @@ Meteor.methods({
         }
       }
     );
-  }
+  },
 
+  async "account.getActionPerHour"(userId, date) {
+    const AccountsRaw = AccountActions.rawCollection();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+
+    const actionsPerHour = await AccountsRaw.aggregateSync([
+      {
+        $match: {
+          createdAt: {
+            $gte: new Date(moment(date).startOf("day")),
+            $lt: new Date(
+              moment(date)
+                .add(1, "day")
+                .startOf("day")
+            )
+          },
+          userId
+        }
+      },
+      {
+        $group: {
+          _id: {
+            y: { $year: "$createdAt" },
+            m: { $month: "$createdAt" },
+            d: { $dayOfMonth: "$createdAt" },
+            h: { $hour: "$createdAt" }
+          },
+          total: { $sum: 1 }
+        }
+      }
+    ]).toArray();
+
+    return ActionService.graphStandarziseData(actionsPerHour);
+  }
 });
