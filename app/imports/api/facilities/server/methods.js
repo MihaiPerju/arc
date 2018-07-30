@@ -7,6 +7,7 @@ import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
 import Uploads from "../../s3-uploads/uploads/collection";
+import bcrypt from "bcrypt";
 
 Meteor.methods({
   "facility.create"(data) {
@@ -22,6 +23,11 @@ Meteor.methods({
 
   "facility.update"(facility) {
     Security.isAdminOrTech(this.userId);
+    if (facility.password) {
+      const salt = bcrypt.genSaltSync(10);
+      const hash = bcrypt.hashSync(facility.password, salt);
+      facility.password = hash;
+    }
     const facilityData = FacilitySchema.clean(facility);
     Facilities.update(
       { _id: facility._id },
