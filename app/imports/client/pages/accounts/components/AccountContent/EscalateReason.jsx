@@ -61,9 +61,12 @@ class EscalateReason extends Component {
         </div>
         <div className="comment-list">
           {data &&
-            data.messages.map(message => {
+            data.messages.map((message, index) => {
               return (
-                <div className="comment-item flex--helper flex--column">
+                <div
+                  key={index}
+                  className="comment-item flex--helper flex--column"
+                >
                   <div className="comment__wrapper flex--helper flex-justify--space-between">
                     {/*Add name from db*/}
                     <div className="name truncate">{message.userName}</div>

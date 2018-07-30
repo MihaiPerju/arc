@@ -12,6 +12,7 @@ import fs from "fs";
 import Business from "/imports/api/business";
 import EscalationService from "/imports/api/escalations/server/services/EscalationService";
 import AccountActions from "/imports/api/accountActions/collection";
+import TickleService from "/imports/api/tickles/server/services/TickleService";
 
 Meteor.methods({
   "account.actions.add"(data) {
@@ -99,18 +100,6 @@ Meteor.methods({
     fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + "/" + path);
   },
 
-  "account.attachment.update_order"(_id, attachmentIds) {
-    AccountSecurity.hasRightsOnAccount(this.userId, _id);
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          attachmentIds
-        }
-      }
-    );
-  },
-
   "account.updateActiveInsCode"(_id, insCode, insName) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Accounts.update(
@@ -196,25 +185,40 @@ Meteor.methods({
     return result;
   },
 
-  "account.tickle"({ tickleDate, _id, tickleUserId }) {
+  "account.tickle"({ tickleDate, _id, tickleUserId, tickleReason }) {
+    TickleService.addMessage({ tickleDate, _id, tickleUserId, tickleReason });
     Accounts.update(
       { _id },
       {
         $set: {
           tickleDate,
-          tickleUserId
+          tickleUserId,
+          tickleReason
+        },
+        $unset: {
+          employeeToRespond: null
         }
       }
     );
   },
 
   "account.escalate"({ reason, accountId }) {
-    EscalationService.createEscalation(reason, this.userId, accountId);
+    const escalationId = EscalationService.createEscalation(
+      reason,
+      this.userId,
+      accountId
+    );
     Accounts.update(
       { _id: accountId },
       {
         $set: {
-          employeeToRespond: RolesEnum.MANAGER
+          employeeToRespond: RolesEnum.MANAGER,
+          escalationId
+        },
+        $unset: {
+          tickleDate: null,
+          tickleUserId: null,
+          tickleReason: null
         }
       }
     );
@@ -236,12 +240,7 @@ Meteor.methods({
   },
 
   "account.update"(_id, data) {
-    Accounts.update(
-      { _id },
-      {
-        $set: data
-      }
-    );
+    ActionService.updateAccount(_id, data, this.userId);
   },
 
   "account.tag"({ _id, tagIds }) {

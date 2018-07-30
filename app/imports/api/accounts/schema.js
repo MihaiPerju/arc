@@ -148,7 +148,15 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
+  tickleReason: {
+    type: String,
+    optional: true
+  },
   employeeToRespond: {
+    type: String,
+    optional: true
+  },
+  escalationId: {
     type: String,
     optional: true
   },

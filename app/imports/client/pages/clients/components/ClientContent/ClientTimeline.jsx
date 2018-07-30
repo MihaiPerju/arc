@@ -100,7 +100,7 @@ export default class ClientTimeline extends Component {
 
   componentWillReceiveProps(props) {
     // set the limit to initial value
-    this.setState({ limit: 10 });
+    this.setState({ limit: 10, skip: 0, accountActions: [] });
     const { _id } = props.client;
     const { limit, skip } = this.state;
     this.getActions(_id, limit, skip);
@@ -111,7 +111,7 @@ export default class ClientTimeline extends Component {
     _.extend(params, {
       options: { limit, skip }
     });
-    
+
     accountActionsQuery.clone(params).fetch((err, actions) => {
       if (!err) {
         let { accountActions } = this.state;
@@ -195,6 +195,8 @@ export default class ClientTimeline extends Component {
         return <i className="icon-file-text-o" />;
       case actionTypesEnum.FLAG:
         return <i className="icon-flag" />;
+      case actionTypesEnum.EDIT:
+        return <i className="icon-pencil" />;
     }
   };
 
@@ -212,7 +214,10 @@ export default class ClientTimeline extends Component {
       flagResponse,
       isFlagApproved,
       manager,
-      account
+      account,
+      fieldUpdatedValue,
+      fieldPreviousValue,
+      accountField
     } = data;
 
     switch (type) {
@@ -342,6 +347,30 @@ export default class ClientTimeline extends Component {
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+        );
+      case actionTypesEnum.EDIT:
+        return (
+          <div>
+            {fieldPreviousValue ? (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                updated the account <b>{account && account.acctNum}</b> with
+                value <b>{fieldPreviousValue}</b> to <b>{fieldUpdatedValue}</b>{" "}
+                in the field <b>{accountField}</b>.
+              </div>
+            ) : (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                updated the account <b>{account && account.acctNum}</b> and
+                added the value <b>{fieldUpdatedValue}</b> in the field{" "}
+                <b>{accountField}</b>.
               </div>
             )}
           </div>
