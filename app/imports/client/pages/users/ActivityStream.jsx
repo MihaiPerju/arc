@@ -64,7 +64,7 @@ export default class ActivityStream extends React.Component {
 
   componentWillReceiveProps(props) {
     // set the limit to initial value
-    this.setState({ limit: 20 });
+    this.setState({ limit: 20, skip: 0, accountActions: [] });
     const { userId } = FlowRouter.current().params;
     const { limit, skip } = this.state;
 
@@ -75,9 +75,6 @@ export default class ActivityStream extends React.Component {
     const params = UserService.getActionsQueryParams(id);
     _.extend(params, {
       options: { limit, skip }
-    });
-    _.extend(params.filters, {
-      type: {$nin: ["file", "revert"]}
     });
 
     accountActionsQuery.clone(params).fetch((err, actions) => {
@@ -104,6 +101,8 @@ export default class ActivityStream extends React.Component {
         return <i className="icon-inbox" />;
       case actionTypesEnum.FLAG:
         return <i className="icon-flag" />;
+      case actionTypesEnum.EDIT:
+        return <i className="icon-pencil" />;
     }
   };
 
@@ -121,7 +120,10 @@ export default class ActivityStream extends React.Component {
       flagResponse,
       isFlagApproved,
       manager,
-      account
+      account,
+      fieldUpdatedValue,
+      fieldPreviousValue,
+      accountField
     } = data;
 
     switch (type) {
@@ -274,6 +276,30 @@ export default class ActivityStream extends React.Component {
                     flag with reason <b>{flagResponse}</b>
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+        );
+      case actionTypesEnum.EDIT:
+        return (
+          <div>
+            {fieldPreviousValue ? (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                updated the account <b>{account && account.acctNum}</b> with
+                value <b>{fieldPreviousValue}</b> to <b>{fieldUpdatedValue}</b>{" "}
+                in the field <b>{accountField}</b>.
+              </div>
+            ) : (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                updated the account <b>{account && account.acctNum}</b> and
+                added the value <b>{fieldUpdatedValue}</b> in the field{" "}
+                <b>{accountField}</b>.
               </div>
             )}
           </div>

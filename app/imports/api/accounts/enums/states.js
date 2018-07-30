@@ -32,7 +32,8 @@ const StateList = [
   States.HOLD,
   States.ARCHIVED,
   States.ACTIVE,
-  States.ESCALATED
+  States.ESCALATED,
+  States.REVIEW
 ];
 
 export { StateList };

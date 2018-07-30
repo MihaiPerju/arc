@@ -14,16 +14,19 @@ import Escalations from "/imports/api/escalations/collection";
 import NotificationService from "/imports/api/notifications/server/services/NotificationService";
 import Users from "/imports/api/users/collection";
 import Facilities from "/imports/api/facilities/collection";
+import Tickles from "/imports/api/tickles/collection";
 
 export default class ActionService {
   //Adding action to account
   static createAction(data) {
-    const { accountId, actionId, reasonCode: reasonId, userId, addedBy } = data;
+    const { accountId, actionId, reasonCode, userId, addedBy } = data;
     const action = Actions.findOne({
       _id: actionId.value ? actionId.value : actionId
     });
     const { inputs } = action;
     const createdAt = new Date();
+    const { value: reasonId } = reasonCode || {};
+
     const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
     const { clientId } = Accounts.findOne({ _id: accountId });
     const accountActionData = {
@@ -113,8 +116,14 @@ export default class ActionService {
   static changeState(accountId, { state, substateId }) {
     const { escalationId } = Accounts.findOne({ _id: accountId }) || null;
     if (escalationId) {
+      // remove previous escalated comments
       Escalations.remove({ _id: escalationId });
     }
+    
+    // remove previous tickles history
+    Tickles.remove({ accountId });
+
+    // when substateId is present
     if (substateId && substateId !== GeneralEnums.NA) {
       const substate = SubstatesCollection.findOne({ _id: substateId });
       const { name } = substate || {};
@@ -122,16 +131,26 @@ export default class ActionService {
         { _id: accountId },
         {
           $set: {
-            state,
             substate: name
-          },
-          $unset: {
-            tickleDate: null,
-            escalationId: null
           }
         }
       );
     }
+
+    Accounts.update(
+      { _id: accountId },
+      {
+        $set: {
+          state
+        },
+        $unset: {
+          tickleDate: null,
+          employeeToRespond: null,
+          tickleUserId: null,
+          tickleReason: null
+        }
+      }
+    );
   }
 
   static removeAssignee(_id) {
@@ -184,6 +203,31 @@ export default class ActionService {
         NotificationService.createGlobal(_id);
         NotificationService.createCommentNotification(_id, accountId);
       }
+    }
+  }
+
+  static updateAccount(_id, data, userId) {
+    const key = Object.keys(data)[0];
+    const account = Accounts.findOne({ _id });
+    if (key) {
+      const editData = {
+        clientId: account["clientId"],
+        createdAt: new Date(),
+        userId,
+        accountField: key,
+        fieldPreviousValue: account[key],
+        fieldUpdatedValue: data[key],
+        type: actionTypesEnum.EDIT,
+        accountId: _id
+      };
+
+      AccountActions.insert(editData);
+      Accounts.update(
+        { _id },
+        {
+          $set: data
+        }
+      );
     }
   }
 }

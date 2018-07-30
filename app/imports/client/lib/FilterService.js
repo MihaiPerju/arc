@@ -69,6 +69,9 @@ export default class FilterService {
     if ("tagIds" in queryParams) {
       model.tagIds = queryParams.tagIds;
     }
+    if ("medNo" in queryParams) {
+      model.medNo = +queryParams.medNo;
+    }
 
     return model;
   }

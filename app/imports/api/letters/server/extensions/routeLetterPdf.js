@@ -1,40 +1,48 @@
-import {getUserByToken} from '/imports/api/s3-uploads/server/router';
+import {
+    getUserByToken
+} from '/imports/api/s3-uploads/server/router';
 import Security from '/imports/api/accounts/security';
-import {roleGroups} from '/imports/api/users/enums/roles';
+import {
+    roleGroups
+} from '/imports/api/users/enums/roles';
 import LetterService from '/imports/api/letters/server/letter.service.js';
-import fs from 'fs';
+import fs, {
+    existsSync
+} from 'fs';
+import Settings from "/imports/api/settings/collection";
+import Business from "/imports/api/business";
 
 Picker.route('/letters/pdf/:accountId/:letterId/:token',
-    function(params, req, res, next) {
+    function (params, req, res, next) {
         const user = getUserByToken(params.token);
-
+        const {
+            letterId
+        } = params;
+        const {
+            rootFolder
+        } = Settings.findOne({
+            rootFolder: {
+                $ne: null
+            }
+        });
         if (!user) {
             res.writeHead(404);
             res.write('Not logged in!');
             return;
         }
 
-        const tmpPdfLocation = LetterService.getLetterTemporalPdfLoc(params.accountId, params.letterId);
+        const letterLocation = rootFolder + Business.ACCOUNTS_FOLDER + letterId + ".pdf";
 
-        if (!tmpPdfLocation) {
+        if (!existsSync(letterLocation)) {
             res.writeHead(404);
-            res.write('An error occurred');
-            return;
+            res.write('File Not Found');
+            res.end();
         }
+        data = fs.readFileSync(letterLocation);
 
-        let data;
-        try {
-            data = fs.readFileSync(tmpPdfLocation);
-        } catch (err) {
-            res.writeHead(404);
-            res.end('Error 404 - Not found.');
-            return;
-        }
-
-        fs.unlink(tmpPdfLocation, (error) => {console.error(error)});
         res.writeHead(200, {
             'Content-Type': 'application/pdf',
-            'Content-Disposition': `attachment; filename=${params.letterId}.pdf`,
+            'Content-Disposition': `attachment; filename=${letterId}.pdf`,
         });
         res.end(data);
     });

@@ -76,8 +76,18 @@ export default new SimpleSchema({
     type: insuranceColumnSchema,
     optional: true
   },
-  metaData:{
+  metaData: {
     type: Object,
     optional: true
+  },
+  tickleDate: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
+  },
+  tickleReason: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
   }
 });

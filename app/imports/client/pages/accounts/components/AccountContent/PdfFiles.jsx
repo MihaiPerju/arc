@@ -19,31 +19,6 @@ export default class ActionBlock extends Component {
     this.setState({ numPages });
   };
 
-  downloadPdfs() {
-    const { account } = this.props;
-    const { items } = this.child.state;
-
-    //creating attachmentIds
-    let attachmentIds = [];
-
-    for (let item of items) {
-      attachmentIds.push(item._id);
-    }
-
-    //Updating status in Db
-    Meteor.call(
-      "account.attachment.update_order",
-      account._id,
-      attachmentIds,
-      err => {
-        if (!err) {
-          window.open("/pdfs/" + account._id + "/" + getToken(), "_blank");
-        } else {
-          Notifier.error(err.reason);
-        }
-      }
-    );
-  }
   getPdfName(pdf) {
     return pdf.name.slice(0, pdf.name.indexOf("."));
   }
@@ -120,16 +95,6 @@ export default class ActionBlock extends Component {
                 />
               </div>
             </div>
-            {account &&
-              account.attachments &&
-              account.attachments.length > 1 && (
-                <button
-                  onClick={this.downloadPdfs.bind(this)}
-                  className="btn-download"
-                >
-                  <span className="text-dark-grey">Download all</span>
-                </button>
-              )}
           </div>
           <div className="block-list file-list pdf-container">
             {account &&
@@ -162,13 +127,11 @@ export default class ActionBlock extends Component {
                               onClick={this.reviewPdf.bind(this, index)}
                               className="btn-text--blue"
                             >
-                              {
-                                index === pdfIndex ? (
-                                  <i className="icon-close"/>
-                                ) : (
-                                  <i className="icon-view"/>
-                                )
-                              }
+                              {index === pdfIndex ? (
+                                <i className="icon-close" />
+                              ) : (
+                                <i className="icon-view" />
+                              )}
                             </button>
                           </div>
                           {index === pdfIndex && (

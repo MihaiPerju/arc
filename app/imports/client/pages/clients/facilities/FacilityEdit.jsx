@@ -15,6 +15,9 @@ import RegionListQuery from "/imports/api/regions/queries/regionList.js";
 import SelectUsersContainer from "/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx";
 import Loading from "/imports/client/lib/ui/Loading";
 import { frequencyOptions } from "/imports/api/facilities/enums/frequency";
+import { getToken } from "/imports/api/s3-uploads/utils";
+import { getImagePath } from "/imports/api/utils";
+import DropzoneComponent from "react-dropzone-component";
 
 export default class FacilityCreate extends Component {
   constructor() {
@@ -50,6 +53,18 @@ export default class FacilityCreate extends Component {
     }));
   };
 
+  onRemoveLogo() {
+    const { facility } = this.props;
+
+    Meteor.call("facility.removeLogo", facility._id, err => {
+      if (!err) {
+        Notifier.success("Logo removed!");
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
   onSubmit(data) {
     data.clientId = FlowRouter.current().params._id;
     Meteor.call("facility.update", data, err => {
@@ -78,10 +93,22 @@ export default class FacilityCreate extends Component {
     const schema = FacilitySchema.omit("clientId");
 
     const { facility } = this.props;
-
     if (loading) {
       return <Loading />;
     }
+
+    const componentConfig = {
+      postUrl: "/uploads/facility-logo/" + facility._id + "/" + getToken()
+    };
+
+    const djsConfig = {
+      complete(file) {
+        Notifier.success("Logo added");
+        this.removeFile(file);
+      },
+      acceptedFiles: "image/*"
+    };
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -105,6 +132,28 @@ export default class FacilityCreate extends Component {
               {this.state.error && (
                 <div className="error">{this.state.error}</div>
               )}
+
+              <div className="main__block">
+                {facility && facility.logoPath ? (
+                  <div>
+                    <img src={getImagePath(facility.logoPath)} />
+                    <a href="" onClick={this.onRemoveLogo.bind(this)}>
+                      Remove Logo
+                    </a>
+                  </div>
+                ) : (
+                  <div className="add-content">
+                    <i className="icon-upload" />
+                    <div className="drop-file__wrapper">
+                      <DropzoneComponent
+                        config={componentConfig}
+                        djsConfig={djsConfig}
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
@@ -257,54 +306,6 @@ export default class FacilityCreate extends Component {
               </ListField>
             </AutoForm>
           </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-class NewContact extends Component {
-  render() {
-    const { close } = this.props;
-
-    return (
-      <div className="action-block action-new-contact">
-        <div className="header__block">
-          <div className="title-block text-uppercase">Contact information</div>
-        </div>
-        <div className="row__action">
-          <div className="type">Contact nr. 1</div>
-          <div className="btn-delete" onClick={close}>
-            Delete
-          </div>
-        </div>
-        <div className="form-wrapper">
-          <input type="text" placeholder="Client name" />
-        </div>
-        <div className="form-wrapper">
-          <input type="text" placeholder="First name" />
-        </div>
-        <div className="form-wrapper">
-          <input type="text" placeholder="Phone number" />
-        </div>
-        <div className="form-wrapper">
-          <input type="text" placeholder="Email" />
-        </div>
-        <div className="form-wrapper">
-          <input type="text" placeholder="Phone number" />
-        </div>
-        <div className="form-wrapper">
-          <input type="text" placeholder="Email" />
-        </div>
-        <div className="select-group">
-          <div className="form-wrapper">
-            <select name="filter">
-              <option value="">Contact Description</option>
-            </select>
-          </div>
-        </div>
-        <div className="form-wrapper">
-          <textarea placeholder="*Note" />
         </div>
       </div>
     );

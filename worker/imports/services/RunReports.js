@@ -10,6 +10,7 @@ import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
 import { fields } from "/imports/api/reports/enums/reportColumn";
+import Settings from "/imports/api/settings/collection.js";
 
 export default class RunReports {
   static run() {
@@ -48,7 +49,7 @@ export default class RunReports {
     _.map(reportColumns, (value, key) => {
       if (value && key !== fields.INSURANCES) {
         if (key === fields.METADATA) {
-          _.map(reportColumns['metaData'], (value, key) => {
+          _.map(reportColumns["metaData"], (value, key) => {
             if (value) {
               columns[`metaData[${key}]`] = `meta column: ${key}`;
             }
@@ -73,9 +74,11 @@ export default class RunReports {
   }
 
   static saveReport({ reportId, _id }) {
+    const { rootFolder } = Settings.findOne({
+      rootFolder: { $ne: null }
+    });
     //Path to new file
-    const pathToSave =
-      os.tmpdir() + FoldersEnum.APP_FOLDER + FoldersEnum.REPORTS_FOLDER;
+    const pathToSave = rootFolder + FoldersEnum.REPORTS_FOLDER;
     //Check and see if folder for saving is missing
     this.checkFolder(pathToSave);
 

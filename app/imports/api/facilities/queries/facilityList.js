@@ -1,7 +1,11 @@
 import Facilities from "../collection";
 
 export default Facilities.createQuery("facilityList", {
-  $filter({ filters, options, params }) {
+  $filter({
+    filters,
+    options,
+    params
+  }) {
     if (params.clientId) {
       filters.clientId = params.clientId;
     }
@@ -16,6 +20,7 @@ export default Facilities.createQuery("facilityList", {
   zipCode: 1,
   addressOne: 1,
   addressTwo: 1,
+  logoPath: 1,
   regionId: 1,
   status: 1,
   placementRules: 1,

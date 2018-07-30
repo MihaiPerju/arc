@@ -1,7 +1,7 @@
 export default class UserService {
   static getActionsQueryParams(userId) {
     const params = {
-      filters: { userId },
+      filters: { userId, type: { $nin: ["file", "revert"] } },
       actionsFilter: {},
       userFilter: {}
     };
@@ -10,7 +10,7 @@ export default class UserService {
 
     if (type) {
       _.extend(params.filters, {
-        type
+        $and: [{ type: { $nin: ["file", "revert"] } }, { type }]
       });
     }
     return params;
