@@ -14,7 +14,7 @@ const createFolderStructure = function () {
     rootFolder: {
       $ne: null
     }
-  });
+  }) || "/tmp/arcc";
 
   if (!rootFolder) {
     Settings.insert({

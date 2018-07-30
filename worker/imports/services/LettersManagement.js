@@ -23,7 +23,7 @@ const {
   rootFolder: {
     $ne: null
   }
-}) || "/tmp/arcc";
+});
 
 export default class LetterManagement {
   static run() {
