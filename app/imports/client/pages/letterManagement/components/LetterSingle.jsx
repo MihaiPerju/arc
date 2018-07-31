@@ -3,6 +3,7 @@ import classNames from "classnames";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
+import Dialog from '../../../lib/ui/Dialog';
 
 export default class LetterSingle extends Component {
   constructor() {
