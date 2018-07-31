@@ -18,6 +18,7 @@ import { frequencyOptions } from "/imports/api/facilities/enums/frequency";
 import { getToken } from "/imports/api/s3-uploads/utils";
 import { getImagePath } from "/imports/api/utils";
 import DropzoneComponent from "react-dropzone-component";
+import SimpleSchema from "simpl-schema";
 
 export default class FacilityCreate extends Component {
   constructor() {
@@ -85,6 +86,20 @@ export default class FacilityCreate extends Component {
   onClose = () => {
     const { close } = this.props;
     close();
+  };
+
+  onPasswordSubmit = data => {
+    const { facility } = this.props;
+    const { password } = data;
+    const {passwordForm} = this.refs;
+    Meteor.call("facility.updatePassword", password, facility._id, err => {
+      if (!err) {
+        Notifier.success("Facility password updated!");
+        passwordForm.reset()
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   };
 
   render() {
@@ -202,15 +217,6 @@ export default class FacilityCreate extends Component {
                 <AutoField labelHidden={true} placeholder="User" name="user" />
                 <ErrorField name="user" />
               </div>
-              <div className="form-wrapper">
-                <AutoField
-                  type="password"
-                  labelHidden={true}
-                  placeholder="********"
-                  name="password"
-                />
-                <ErrorField name="password" />
-              </div>
               <div className="select-group">
                 <div className="form-wrapper">
                   <div>
@@ -246,7 +252,7 @@ export default class FacilityCreate extends Component {
                 </div>
               </div>
               <SelectUsersContainer />
-              <ListField name="contacts">
+              <ListField name="contacts" showListField={() => {}}>
                 <ListItemField name="$">
                   <NestField>
                     <div>
@@ -305,9 +311,39 @@ export default class FacilityCreate extends Component {
                 </ListItemField>
               </ListField>
             </AutoForm>
+            <div className="action-block" style={{ marginTop: "20px" }}>
+              <div className="header__block">
+                <div classname="title-block text-uppercase">
+                  Change Password
+                </div>
+              </div>
+              <AutoForm
+                schema={changePasswordSchema}
+                onSubmit={this.onPasswordSubmit.bind(this)}
+                ref="passwordForm"
+              >
+                <div className="form-wrapper">
+                  <AutoField
+                    type="password"
+                    labelHidden={true}
+                    placeholder="Password"
+                    name="password"
+                  />
+                  <ErrorField name="password" />
+                </div>
+                <button className="btn--green">
+                  Confirm
+                </button>
+              </AutoForm>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 }
+const changePasswordSchema = new SimpleSchema({
+  password: {
+    type: String
+  }
+});

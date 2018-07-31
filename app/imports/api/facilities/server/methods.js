@@ -1,6 +1,4 @@
-import {
-  Meteor
-} from "meteor/meteor";
+import { Meteor } from "meteor/meteor";
 import Facilities from "/imports/api/facilities/collection.js";
 import Security from "/imports/api/security/security.js";
 import FacilitySchema from "../schema.js";
@@ -13,39 +11,37 @@ import bcrypt from "bcrypt";
 import Settings from "/imports/api/settings/collection.js";
 
 Meteor.methods({
-  "facility.create" (data) {
+  "facility.create"(data) {
     Security.isAdminOrTech(this.userId);
 
     Facilities.insert(data);
   },
 
-  "facility.get" (facilityId) {
+  "facility.get"(facilityId) {
     Security.isAdminOrTech(this.userId);
     return Facilities.findOne(facilityId);
   },
 
-  "facility.update" (facility) {
+  "facility.update"(facility) {
     Security.isAdminOrTech(this.userId);
-    if (facility.password) {
-      const salt = bcrypt.genSaltSync(10);
-      const hash = bcrypt.hashSync(facility.password, salt);
-      facility.password = hash;
-    }
     const facilityData = FacilitySchema.clean(facility);
-    Facilities.update({
-      _id: facility._id
-    }, {
-      $set: facilityData
-    });
+    Facilities.update(
+      {
+        _id: facility._id
+      },
+      {
+        $set: facilityData
+      }
+    );
   },
 
-  "facility.remove" (facilityId) {
+  "facility.remove"(facilityId) {
     Security.isAdminOrTech(this.userId);
 
     Facilities.remove(facilityId);
   },
 
-  "facility.removeMany" (facilityIds) {
+  "facility.removeMany"(facilityIds) {
     Security.isAdminOrTech(this.userId);
 
     Facilities.remove({
@@ -55,7 +51,7 @@ Meteor.methods({
     });
   },
 
-  "facility.getRegions" (regionIds) {
+  "facility.getRegions"(regionIds) {
     Security.isAdminOrTech(this.userId);
 
     return Regions.find({
@@ -65,49 +61,69 @@ Meteor.methods({
     }).fetch();
   },
 
-  "facility.getNames" () {
-    return Facilities.find({}, {
-      name: 1
-    }).fetch();
+  "facility.getNames"() {
+    return Facilities.find(
+      {},
+      {
+        name: 1
+      }
+    ).fetch();
   },
 
-  "facility.removeLogo" (_id) {
-    const {
-      rootFolder
-    } = Settings.findOne({
+  "facility.removeLogo"(_id) {
+    const { rootFolder } = Settings.findOne({
       rootFolder: {
         $ne: null
       }
     });
 
-    const {
-      logoPath
-    } = Facilities.findOne({
+    const { logoPath } = Facilities.findOne({
       _id
     });
 
-    Facilities.update({
-      _id
-    }, {
-      $unset: {
-        logoPath: null
+    Facilities.update(
+      {
+        _id
+      },
+      {
+        $unset: {
+          logoPath: null
+        }
       }
-    });
+    );
     fs.unlinkSync(rootFolder + Business.CLIENTS_FOLDER + logoPath);
     Uploads.remove({
       path: logoPath
     });
   },
 
-  "facility.switchStatus" (_id, status) {
+  "facility.switchStatus"(_id, status) {
     Security.isAdminOrTech(this.userId);
 
-    return Facilities.update({
-      _id
-    }, {
-      $set: {
-        status: !status
+    return Facilities.update(
+      {
+        _id
+      },
+      {
+        $set: {
+          status: !status
+        }
       }
-    });
+    );
+  },
+
+  "facility.updatePassword"(password, _id) {
+    Security.isAdminOrTech(this.userId);
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    password = hash;
+    Facilities.update(
+      {
+        _id
+      },
+      {
+        $set: { password }
+      }
+    );
   }
 });
