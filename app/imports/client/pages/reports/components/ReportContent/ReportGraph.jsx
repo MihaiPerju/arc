@@ -1,13 +1,14 @@
 import React from "react";
 import SimpleSchema from "simpl-schema";
-import ReactHighcharts from "react-highcharts";
+import Highcharts from "highcharts";
+import ReactHighcharts from "highcharts-react-official";
 import { EJSON } from "meteor/ejson";
 import moment from "moment/moment";
 import { AutoForm, SelectField } from "/imports/ui/forms";
 import accountsQuery from "/imports/api/accounts/queries/accountList";
 import reportGraphEnum, { graphTypeEnum } from "../../enums/reportGraph";
 
-export default class ReportEdit extends React.Component {
+export default class ReportGraph extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -89,7 +90,7 @@ export default class ReportEdit extends React.Component {
   render() {
     const { xAxis, yAxis, graphType } = this.state;
     const graphData = this.getGraphData(xAxis, yAxis);
-    const config = {
+    const options = {
       chart: {
         type: graphType
       },
@@ -132,7 +133,7 @@ export default class ReportEdit extends React.Component {
         </div>
 
         <div style={{ width: "100%" }}>
-          <ReactHighcharts config={config} />
+          <ReactHighcharts highcharts={Highcharts} options={options} />
         </div>
         <AutoForm schema={graphSchema} onSubmit={this.onSubmit.bind(this)}>
           <div className="form-wrapper select-item">
