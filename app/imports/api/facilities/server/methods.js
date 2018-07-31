@@ -116,13 +116,13 @@ Meteor.methods({
     Security.isAdminOrTech(this.userId);
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
-    password = hash;
+
     Facilities.update(
       {
         _id
       },
       {
-        $set: { password }
+        $set: { password: hash }
       }
     );
   }
