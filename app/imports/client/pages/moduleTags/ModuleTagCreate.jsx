@@ -74,7 +74,7 @@ export default class ModuleTagCreate extends Component {
               <div className="select-group">
                 <div className="form-wrapper">
                   <SelectMulti
-                    className="form-select__multi"
+                    className="form-select__multi select-tag__multi"
                     placeholder="Select modules"
                     labelHidden={true}
                     name="moduleNames"

@@ -49,6 +49,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-close-w:before {
+  content: "\f2d4";
+}
+.icon-check:before {
+  content: "\f008";
+}
+.icon-tag:before {
+  content: "\f02b";
+}
 .icon-response:before {
   content: "\f122";
 }

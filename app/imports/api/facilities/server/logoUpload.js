@@ -1,9 +1,21 @@
-import {createRoute} from '/imports/api/s3-uploads/server/router';
+import {
+    createRoute
+} from '/imports/api/s3-uploads/server/router';
 import Facilities from "../../facilities/collection";
 import Uploads from '/imports/api/s3-uploads/uploads/collection';
 import Security from '/imports/api/security/security.js';
+import Settings from "/imports/api/settings/collection.js";
+import fs from "fs";
+import Business from "/imports/api/business";
 
-createRoute('/uploads/facility-logo/:facilityId/:token', ({user, facilityId, error, filenames, success, uploadLocal}) => {
+createRoute('/uploads/facility-logo/:facilityId/:token', ({
+    user,
+    facilityId,
+    error,
+    filenames,
+    success,
+    uploadLocal
+}) => {
 
     if (!user) {
         return error("Not logged in!");
@@ -14,9 +26,29 @@ createRoute('/uploads/facility-logo/:facilityId/:token', ({user, facilityId, err
         return error('Invalid number of files');
     }
 
-    const [uploadId] = uploadLocal();
-    const {path} = Uploads.findOne({_id: uploadId});
-    Facilities.update({_id: facilityId}, {
+    const [uploadId] = uploadLocal({});
+
+
+    const {
+        rootFolder
+    } = Settings.findOne({
+        rootFolder: {
+            $ne: null
+        }
+    });
+
+    const {
+        path
+    } = Uploads.findOne({
+        _id: uploadId
+    });
+
+    const movePath = rootFolder + Business.CLIENTS_FOLDER + path;
+    fs.renameSync(rootFolder + path, movePath);
+
+    Facilities.update({
+        _id: facilityId
+    }, {
         $set: {
             logoPath: path
         }

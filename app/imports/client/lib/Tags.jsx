@@ -5,6 +5,7 @@ export default class TagItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isOpenedDropdown: false,
       selectedTags: []
     };
   }
@@ -32,29 +33,68 @@ export default class TagItem extends Component {
     FlowRouter.setQueryParams({ tagIds: selectedTags });
   };
 
+  openDropdown = () => {
+    const {isOpenedDropdown} = this.state;
+
+    if (!isOpenedDropdown) {
+      document.addEventListener("click", this.outsideClick, false);
+    } else {
+      document.removeEventListener("click", this.outsideClick, false);
+    }
+
+    this.setState({
+      isOpenedDropdown: !isOpenedDropdown
+    })
+  };
+
+  outsideClick = e => {
+    if (this.node.contains(e.target)) {
+      return;
+    }
+
+    this.openDropdown();
+  };
+
+  nodeRef = node => {
+    this.node = node;
+  };
+
   render() {
     const { moduleTags } = this.props;
-    const { selectedTags } = this.state;
+    const { selectedTags, isOpenedDropdown } = this.state;
+    const btnToggleClasses = classNames('js-toggle-dropdown', {
+      'active': isOpenedDropdown
+    });
 
     return (
-      <div>
-        {moduleTags.map((tag, index) => {
-          const { _id, name } = tag;
-          const tagClass = classNames({
-            "btn--red": selectedTags.includes(_id),
-            "btn--light-blue": !selectedTags.includes(_id)
-          });
-          return (
-            <button
-              key={index}
-              className={tagClass}
-              style={{ margin: "7px 6px 7px 0px", borderRadius: "25px" }}
-              onClick={this.onSwitchTags.bind(this, _id)}
-            >
-              {name}
-            </button>
-          );
-        })}
+      <div className="tag-dropdown">
+        <button className={btnToggleClasses} onClick={this.openDropdown}>
+          <i className="icon-tag"/>
+        </button>
+        {
+          isOpenedDropdown && (
+            <div className="tag-dropdown__container" ref={this.nodeRef}>
+              <div className="tag-caret">
+                <div className="tag-caret__outer"/>
+                <div className="tag-caret__inner"/>
+              </div>
+              <ul className="tag-list">
+                {moduleTags.map((tag, index) => {
+                  const { _id, name } = tag;
+                  const tagClass = classNames('tag-item', {
+                    "tag-item__active": selectedTags.includes(_id)
+                  });
+
+                  return (
+                    <li className={tagClass} key={index}>
+                      <a href="javascript:;" onClick={this.onSwitchTags.bind(this, _id)}>{name}</a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )
+        }
       </div>
     );
   }

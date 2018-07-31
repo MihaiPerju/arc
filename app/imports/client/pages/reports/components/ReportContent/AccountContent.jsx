@@ -103,7 +103,8 @@ export default class AccountContent extends Component {
     } else if (types.dates.includes (columnKeys)) {
       return (
         <div key={index}>
-          {moment (account[columnKeys]).format ('MM/DD/YYYY, hh:mm a')}
+          {account[columnKeys] &&
+            moment(account[columnKeys]).format("MM/DD/YYYY, hh:mm a")}
         </div>
       );
     } else {
