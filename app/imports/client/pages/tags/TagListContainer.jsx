@@ -180,10 +180,11 @@ class TagListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={tagsSelected.length}
             deleteAction={this.deleteAction}
+            moduleTags={moduleTags}
             hideSort
             hideFilter
           />
-          <Tags moduleTags={moduleTags} />
+          {/* <Tags moduleTags={moduleTags} /> */}
           <TagList
             class={this.state.filter ? "task-list decreased" : "task-list"}
             tagsSelected={tagsSelected}
