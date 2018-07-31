@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import {types, fields} from '/imports/api/reports/enums/reportColumn';
-
+import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync';
 export default class AccountContent extends Component {
   constructor () {
     super ();
@@ -115,54 +115,54 @@ export default class AccountContent extends Component {
     const {tableHeader, accounts} = this.props;
 
     return (
-      <div className="table-container flex--helper">
-        <div className="table-container__left flex--helper">
-          <div className="table-header truncate text-left table-field text-light-grey">
-            Account name
-          </div>
-          {accounts.map ((account, index) => (
-            <div className="table-field truncate">
-              {'Account No.' + (index + 1)}
-            </div>
-          ))}
-        </div>
-
-        <div className="table-container__right">
-          <div>
-            <div className="table-row">
-              {tableHeader.map ((header, index) => (
-                <div
-                  key={index}
-                  className="table-header text-center table-field text-light-grey"
-                >
-                  {this.getHeaderNames (header, index)}
+      <ScrollSync>
+        <div className="table-container flex--helper">
+          <ScrollSyncPane>
+            <div className="table-container__left">
+              <div className="table-header truncate text-left table-field text-light-grey">
+                Account name
+              </div>
+              {accounts.map ((account, index) => (
+                <div className="table-field truncate">
+                  {'Account No.' + (index + 1)}
                 </div>
               ))}
             </div>
-            {accounts.map ((account, index) => {
-              return (
-                <div className="table-row" key={index}>
-                  {/* <div className="table-field table-field--fixed truncate text-center">
-                {'Account No.' + (index + 1)}
-              </div> */}
-                  {tableHeader.map ((columnKeys, idx) => {
-                    if (idx > 0) {
-                      return (
-                        <div
-                          key={idx}
-                          className="table-field table-field--grey text-center"
-                        >
-                          {this.getColumnValues (columnKeys, account, idx)}
-                        </div>
-                      );
-                    }
-                  })}
-                </div>
-              );
-            })}
-          </div>
+          </ScrollSyncPane>
+          <ScrollSyncPane>
+            <div className="table-container__right">
+              <div className="table-row">
+                {tableHeader.map ((header, index) => (
+                  <div
+                    key={index}
+                    className="table-header text-center table-field text-light-grey"
+                  >
+                    {this.getHeaderNames (header, index)}
+                  </div>
+                ))}
+              </div>
+              {accounts.map ((account, index) => {
+                return (
+                  <div className="table-row" key={index}>
+                    {tableHeader.map ((columnKeys, idx) => {
+                      if (idx > 0) {
+                        return (
+                          <div
+                            key={idx}
+                            className="table-field table-field--grey text-center"
+                          >
+                            {this.getColumnValues (columnKeys, account, idx)}
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
+                );
+              })}
+            </div>
+          </ScrollSyncPane>
         </div>
-      </div>
+      </ScrollSync>
     );
   }
 }

@@ -49,10 +49,23 @@
     }
 
     &-container {
-      min-height: 100%;
+      height: 100%;
 
       &__left {
-        flex-direction: column
+        width: 200px;
+        height: 100%;
+        overflow-y: auto;
+
+        .table-field {
+          display: block;
+          background: $color-white;
+        }
+      }
+
+      &__right {
+        height: 100%;
+        overflow: auto;
+        width: calc(100% - 200px);
       }
     }
 
