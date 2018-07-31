@@ -206,7 +206,7 @@ export default class ActionService {
     }
   }
 
-  static graphStandarziseData(actionsPerHour) {
+  static graphStandardizeData(actionsPerHour) {
     const graphData = [];
 
     for (let i = 0; i < 24; i++) {

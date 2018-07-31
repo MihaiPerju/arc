@@ -335,6 +335,6 @@ Meteor.methods({
       }
     ]).toArray();
 
-    return ActionService.graphStandarziseData(actionsPerHour);
+    return ActionService.graphStandardizeData(actionsPerHour);
   }
 });
