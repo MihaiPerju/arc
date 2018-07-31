@@ -7,8 +7,6 @@ import {
   ErrorField
 } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
-import accountAttachmentsQuery from "/imports/api/accounts/queries/accountAttachmentsList";
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import AccountViewService from "/imports/client/pages/accounts/services/AccountViewService";
 import { variablesEnum } from "/imports/api/letterTemplates/enums/variablesEnum";
 import PdfAttachments from "./PdfAttachments";
@@ -25,7 +23,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
   componentWillMount() {
     const { account, onChange } = this.props;
-    if (account.selectedAttachmentIds) {
+    if (account.selectedAttachmentIds && account.selectedAttachmentIds.length) {
       // update
       account.selectedAttachmentIds.forEach(id => {
         this.onSelectAttachment(id);

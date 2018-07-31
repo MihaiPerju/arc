@@ -1,27 +1,29 @@
 import Settings from "/imports/api/settings/collection.js";
 import Business from "/imports/api/business";
 import fs from "fs";
-
+import os from "os"
 
 Meteor.startup(function () {
   createFolderStructure();
 });
 
 const createFolderStructure = function () {
-  let {
-    rootFolder
-  } = Settings.findOne({
+  let rootSettings = Settings.findOne({
     rootFolder: {
       $ne: null
     }
-  }) || "/tmp/arcc/";
-
-  if (!rootFolder) {
-    Settings.insert({
-      rootFolder: "/tmp/arcc/"
+  });
+  if (!rootSettings) {
+    const _id = Settings.insert({
+      rootFolder: os.tmpdir() + "/"
+    })
+    rootSettings = Settings.findOne({
+      _id
     });
-    rootFolder = "/tmp/arcc/";
   }
+  let {
+    rootFolder
+  } = rootSettings;
 
   //Create default root folder
   if (!fs.existsSync(rootFolder)) {

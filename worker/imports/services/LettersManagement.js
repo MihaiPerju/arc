@@ -24,6 +24,7 @@ const {
     $ne: null
   }
 });
+
 export default class LetterManagement {
   static run() {
     const letters = Letters.find({
