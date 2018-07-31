@@ -23,7 +23,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
 
   componentWillMount() {
     const { account, onChange } = this.props;
-    if (account.selectedAttachmentIds.length) {
+    if (account.selectedAttachmentIds && account.selectedAttachmentIds.length) {
       // update
       account.selectedAttachmentIds.forEach(id => {
         this.onSelectAttachment(id);
