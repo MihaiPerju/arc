@@ -12,7 +12,6 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
-import Tags from "/imports/client/lib/Tags";
 
 class ClientContainer extends Pager {
   constructor() {
@@ -176,9 +175,9 @@ class ClientContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
+            moduleTags={moduleTags}
             hideSort
           />
-          <Tags moduleTags={moduleTags} />
           <ClientList
             class={this.state.filter ? "task-list decreased" : "task-list"}
             setClient={this.setClient.bind(this)}

@@ -13,7 +13,6 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
-import Tags from "/imports/client/lib/Tags";
 
 class CodeListContainer extends Pager {
   constructor() {
@@ -175,10 +174,10 @@ class CodeListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
+            moduleTags={moduleTags}
             hideSort
             hideFilter
           />
-          <Tags moduleTags={moduleTags} />
           <CodeList
             class={this.state.filter ? "task-list decreased" : "task-list"}
             codesSelected={codesSelected}

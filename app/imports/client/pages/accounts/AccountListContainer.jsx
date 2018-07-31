@@ -14,7 +14,6 @@ import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
-import Tags from "/imports/client/lib/Tags";
 
 class AccountListContainer extends Pager {
   constructor() {
@@ -400,6 +399,7 @@ class AccountListContainer extends Pager {
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
+            moduleTags={moduleTags}
           />
           {assignUser && (
             <AccountAssigning
@@ -420,7 +420,6 @@ class AccountListContainer extends Pager {
               uncheckAccountList={this.uncheckAccountList}
             />
           )}
-          <Tags moduleTags={moduleTags} />
           <AccountList
             classes={"task-list"}
             accountsSelected={accountsSelected}

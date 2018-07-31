@@ -14,7 +14,6 @@ import PagerService from "../../lib/PagerService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
-import Tags from "/imports/client/lib/Tags";
 
 class ActionListContainer extends Pager {
   constructor() {
@@ -183,10 +182,10 @@ class ActionListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={actionsSelected.length}
             deleteAction={this.deleteAction}
+            moduleTags={moduleTags}
             hideSort
             hideFilter
           />
-          <Tags moduleTags={moduleTags} />
           <ActionList
             class={this.state.filter ? "task-list decreased" : "task-list"}
             actionsSelected={actionsSelected}

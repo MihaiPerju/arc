@@ -12,6 +12,7 @@ import fs from "fs";
 import Business from "/imports/api/business";
 import EscalationService from "/imports/api/escalations/server/services/EscalationService";
 import AccountActions from "/imports/api/accountActions/collection";
+import Settings from "/imports/api/settings/collection.js";
 import TickleService from "/imports/api/tickles/server/services/TickleService";
 
 Meteor.methods({
@@ -24,7 +25,9 @@ Meteor.methods({
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     Accounts.update(
-      { _id },
+      {
+        _id
+      },
       {
         $set: {
           assigneeId
@@ -40,7 +43,9 @@ Meteor.methods({
       AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
       Accounts.update(
-        { _id: accountId },
+        {
+          _id: accountId
+        },
         {
           $set: {
             assigneeId
@@ -56,7 +61,9 @@ Meteor.methods({
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     Accounts.update(
-      { _id },
+      {
+        _id
+      },
       {
         $set: {
           workQueue
@@ -72,7 +79,9 @@ Meteor.methods({
       AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
       Accounts.update(
-        { _id: accountId },
+        {
+          _id: accountId
+        },
         {
           $set: {
             workQueue
@@ -86,24 +95,37 @@ Meteor.methods({
   },
 
   "account.attachment.remove"(_id, attachmentId, key) {
+    const { rootFolder } = Settings.findOne({
+      rootFolder: {
+        $ne: null
+      }
+    });
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Accounts.update(
-      { _id },
+      {
+        _id
+      },
       {
         $pull: {
           attachmentIds: attachmentId
         }
       }
     );
-    const { path } = Uploads.findOne({ _id: attachmentId });
-    Uploads.remove({ _id: attachmentId });
-    fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + "/" + path);
+    const { path } = Uploads.findOne({
+      _id: attachmentId
+    });
+    Uploads.remove({
+      _id: attachmentId
+    });
+    fs.unlinkSync(rootFolder + Business.ACCOUNTS_FOLDER + path);
   },
 
   "account.updateActiveInsCode"(_id, insCode, insName) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Accounts.update(
-      { _id },
+      {
+        _id
+      },
       {
         $set: {
           activeInsCode: insCode,
@@ -140,7 +162,9 @@ Meteor.methods({
         let currentMonth = 0;
         let currentWeek = 0;
         //select accounts this month and week. To be optimized.
-        const accounts = Accounts.find({ facilityId: facility._id }).fetch();
+        const accounts = Accounts.find({
+          facilityId: facility._id
+        }).fetch();
         for (let index in accounts) {
           const account = accounts[index];
 
@@ -165,7 +189,16 @@ Meteor.methods({
   },
 
   "accounts.increment_view_count"(_id) {
-    Accounts.update({ _id }, { $inc: { numberOfViews: 1 } });
+    Accounts.update(
+      {
+        _id
+      },
+      {
+        $inc: {
+          numberOfViews: 1
+        }
+      }
+    );
   },
 
   "accounts.get"() {
@@ -186,9 +219,16 @@ Meteor.methods({
   },
 
   "account.tickle"({ tickleDate, _id, tickleUserId, tickleReason }) {
-    TickleService.addMessage({ tickleDate, _id, tickleUserId, tickleReason });
+    TickleService.addMessage({
+      tickleDate,
+      _id,
+      tickleUserId,
+      tickleReason
+    });
     Accounts.update(
-      { _id },
+      {
+        _id
+      },
       {
         $set: {
           tickleDate,
@@ -209,7 +249,9 @@ Meteor.methods({
       accountId
     );
     Accounts.update(
-      { _id: accountId },
+      {
+        _id: accountId
+      },
       {
         $set: {
           employeeToRespond: RolesEnum.MANAGER,
@@ -229,8 +271,14 @@ Meteor.methods({
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
     return AccountsRaw.aggregateSync([
-      { $match: filters },
-      { $sample: { size: 20 } }
+      {
+        $match: filters
+      },
+      {
+        $sample: {
+          size: 20
+        }
+      }
     ]);
   },
 
@@ -245,7 +293,9 @@ Meteor.methods({
 
   "account.tag"({ _id, tagIds }) {
     Accounts.update(
-      { _id },
+      {
+        _id
+      },
       {
         $set: {
           tagIds
