@@ -219,7 +219,7 @@ class ReportHeader extends Component {
         "customFields"
       ];
     } else {
-      tableHeader = ["Account name", ...selectedReportColumns];
+      tableHeader = [...selectedReportColumns];
     }
 
     return (
