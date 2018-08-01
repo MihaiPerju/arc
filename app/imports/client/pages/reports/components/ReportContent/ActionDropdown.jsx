@@ -8,6 +8,10 @@ export default class ActionDropdown extends Component {
     }
   }
 
+  componentWillUnmount () {
+    document.removeEventListener ('click', this.outsideClick, false);
+  }
+
   openDropdown = () => {
     const {isOpenedDropdown} = this.state;
 
