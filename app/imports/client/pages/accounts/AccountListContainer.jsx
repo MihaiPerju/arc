@@ -92,6 +92,13 @@ class AccountListContainer extends Pager {
       this.setPagerInitial();
     }
     this.updatePager();
+
+    const accountId = FlowRouter.getQueryParam("accountId");
+    if (accountId) {
+      this.setState({
+        currentAccount: accountId
+      });
+    }
   }
 
   uncheckAccountList = () => {
