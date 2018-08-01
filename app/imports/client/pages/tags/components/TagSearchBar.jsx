@@ -95,8 +95,6 @@ export default class TagSearchBar extends Component {
       sort__none: hideSort
     });
 
-    console.log(moduleTags.length);
-
     return (
       <AutoForm
         autosave
