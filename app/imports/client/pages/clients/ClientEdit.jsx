@@ -153,7 +153,11 @@ export default class EditClient extends React.Component {
                 )}
               </div>
 
-              <ListField name="contacts" className="insurance-block">
+              <ListField
+                name="contacts"
+                className="insurance-block"
+                showListField={() => {}}
+              >
                 <ListItemField name="$">
                   <NestField name="">
                     <div className="form-wrapper">
