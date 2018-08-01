@@ -23,7 +23,7 @@ export default class ActionDropdown extends Component {
   };
 
   outsideClick = e => {
-    if (this.node.contains(e.target)) {
+    if (this.node && this.node.contains(e.target)) {
       return;
     }
 

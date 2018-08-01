@@ -4,6 +4,7 @@ import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import Tags from "/imports/client/lib/Tags";
 
 export default class SubstateSearchBar extends Component {
   constructor() {
@@ -71,11 +72,7 @@ export default class SubstateSearchBar extends Component {
   };
 
   render() {
-    const {
-      dropdown,
-      selectAll,
-      model
-    } = this.state;
+    const { dropdown, selectAll, model } = this.state;
     const {
       btnGroup,
       deleteAction,
@@ -83,7 +80,8 @@ export default class SubstateSearchBar extends Component {
       icons,
       getProperAccounts,
       hideSort,
-      hideFilter
+      hideFilter,
+      moduleTags
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -141,13 +139,14 @@ export default class SubstateSearchBar extends Component {
               </div>
             </div>
 
-            {!hideFilter && (
-              <div className="filter-block">
+            <div className="filter-block">
+              {!hideFilter && (
                 <button>
                   <i className="icon-filter" />
                 </button>
-              </div>
-            )}
+              )}
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
+            </div>
           </div>
         </div>
       </AutoForm>
