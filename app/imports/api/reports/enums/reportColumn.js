@@ -13,7 +13,8 @@ export default [
   { value: "substate", label: "Substate" },
   { value: "activeInsCode", label: "Active Insurance Code" },
   { value: "tickleDate", label: "Tickle Date" },
-  { value: "tickleReason", label: "Tickle Reason" }
+  { value: "tickleReason", label: "Tickle Reason" },
+  { value: "workQueue", label: "Work Queue" }
 ];
 
 const insuranceColumnEnum = [
