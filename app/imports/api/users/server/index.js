@@ -5,7 +5,7 @@ import './avatarUpload';
 import '../links';
 import './expose.js';
 import './logoUpload';
-import './csvUpload';
+import './placementFileUpload';
 import './inventoryFileUpload';
 import './paymentFileUpload';
 import './extensions/imageRoute';
