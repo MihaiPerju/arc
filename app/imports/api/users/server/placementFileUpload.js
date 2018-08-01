@@ -34,7 +34,7 @@ createRoute(
     fs.renameSync(filenames[0], rootFolder + Business.ACCOUNTS_FOLDER + fileName);
 
     const job = {
-      type: jobTypes.IMPORT_PLACEMENT,
+      type: jobTypes.IMPORT_DATA,
       status: jobStatuses.NEW,
       filePath: fileName,
       facilityId,

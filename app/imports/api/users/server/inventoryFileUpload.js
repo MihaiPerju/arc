@@ -1,72 +1,49 @@
-import { createRoute } from "/imports/api/s3-uploads/server/router";
-import Papa from "papaparse";
-import ParseService from "/imports/api/facilities/server/services/CsvParseService";
-import AccountService from "/imports/api/facilities/server/services/AccountImportingService";
-import Files from "../../files/collection";
-import Facilities from "../../facilities/collection";
-import os from "os";
+import {
+  createRoute
+} from "/imports/api/s3-uploads/server/router";
 import fs from "fs";
-import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
-import AccountActions from "/imports/api/accountActions/collection";
+import os from "os";
+import JobQueue from '/imports/api/jobQueue/collection';
+import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
+import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
+import Settings from "/imports/api/settings/collection";
+import Business from "/imports/api/business";
+import fileTypes from "/imports/api/files/enums/fileTypes";
 
 createRoute(
   "/uploads/inventory/:facilityId/:token",
-  ({ user, facilityId, error, filenames, success }) => {
+  ({
+    user,
+    facilityId,
+    error,
+    filenames,
+    success
+  }) => {
     if (filenames.length != 1) {
       return error("Invalid number of files");
     }
 
-    const importRules = ParseService.getImportRules(
-      facilityId,
-      "inventoryRules"
-    );
-
-    //Parsing and getting the CSV like a string
+    const {
+      rootFolder
+    } = Settings.findOne({
+      rootFolder: {
+        $ne: null
+      }
+    });
     let fileName = filenames[0].replace(os.tmpdir() + "/", "");
-    const stream = fs.readFileSync(filenames[0]);
-    const csvString = stream.toString();
 
-    //Keep reference to previous file
-    const { fileId, clientId } = Facilities.findOne({ _id: facilityId });
-    const newFileId = Files.insert({
-      fileName,
+    fs.renameSync(filenames[0], rootFolder + Business.ACCOUNTS_FOLDER + fileName);
+
+    const job = {
+      type: jobTypes.IMPORT_DATA,
+      status: jobStatuses.NEW,
+      filePath: fileName,
       facilityId,
-      previousFileId: fileId
-    });
+      fileType: fileTypes.INVENTORY,
+      userId: user._id
+    }
 
-    const fileData = {
-      type: actionTypesEnum.FILE,
-      createdAt: new Date(),
-      fileId: newFileId,
-      fileName,
-      userId: user._id,
-      clientId
-    };
-
-    const accountActionId = AccountActions.insert(fileData);
-
-    //Add reference to facility
-    Facilities.update(
-      { _id: facilityId },
-      {
-        $set: {
-          fileId: newFileId
-        },
-        $push: {
-          fileIds: accountActionId
-        }
-      }
-    );
-
-    //Pass links to accounts to link them too
-    const links = { facilityId, fileId: newFileId };
-
-    Papa.parse(csvString, {
-      chunk: results => {
-        // the result needs to be performed here
-        AccountService.update(results.data, importRules, links);
-      }
-    });
+    JobQueue.insert(job);
 
     success();
   }
