@@ -1,51 +1,52 @@
-import React, { Component } from "react";
-import { AutoForm, AutoField } from "/imports/ui/forms";
-import SimpleSchema from "simpl-schema";
-import Dropdown from "/imports/client/lib/Dropdown";
-import classNames from "classnames";
-import Dialog from "/imports/client/lib/ui/Dialog";
+import React, {Component} from 'react';
+import {AutoForm, AutoField} from '/imports/ui/forms';
+import SimpleSchema from 'simpl-schema';
+import Dropdown from '/imports/client/lib/Dropdown';
+import classNames from 'classnames';
+import Dialog from '/imports/client/lib/ui/Dialog';
+import Tags from '/imports/client/lib/Tags';
 
 export default class SubstateSearchBar extends Component {
-  constructor() {
-    super();
+  constructor () {
+    super ();
     this.state = {
       dropdown: false,
       selectAll: false,
-      model: {}
+      model: {},
     };
   }
 
-  componentWillMount() {
-    this.getFilterParams();
+  componentWillMount () {
+    this.getFilterParams ();
   }
 
-  onSubmit(params) {
-    if (FlowRouter.current().queryParams.page != "1") {
-      this.props.setPagerInitial();
+  onSubmit (params) {
+    if (FlowRouter.current ().queryParams.page != '1') {
+      this.props.setPagerInitial ();
     }
 
-    if ("stateName" in params) {
-      FlowRouter.setQueryParams({ stateName: params.stateName });
+    if ('stateName' in params) {
+      FlowRouter.setQueryParams ({stateName: params.stateName});
     }
   }
 
   openDropdown = () => {
     if (!this.state.dropdown) {
-      document.addEventListener("click", this.outsideClick, false);
+      document.addEventListener ('click', this.outsideClick, false);
     } else {
-      document.removeEventListener("click", this.outsideClick, false);
+      document.removeEventListener ('click', this.outsideClick, false);
     }
-    this.setState({
-      dropdown: !this.state.dropdown
+    this.setState ({
+      dropdown: !this.state.dropdown,
     });
   };
 
   outsideClick = e => {
-    if (this.node.contains(e.target)) {
+    if (this.node.contains (e.target)) {
       return;
     }
 
-    this.openDropdown();
+    this.openDropdown ();
   };
 
   nodeRef = node => {
@@ -53,29 +54,25 @@ export default class SubstateSearchBar extends Component {
   };
 
   selectAll = () => {
-    const { selectAll } = this.state;
-    this.setState({
-      selectAll: !selectAll
+    const {selectAll} = this.state;
+    this.setState ({
+      selectAll: !selectAll,
     });
   };
 
   getFilterParams = () => {
-    const queryParams = FlowRouter.current().queryParams;
+    const queryParams = FlowRouter.current ().queryParams;
     const model = {};
 
-    if ("stateName" in queryParams) {
+    if ('stateName' in queryParams) {
       model.stateName = queryParams.stateName;
     }
 
-    this.setState({ model });
+    this.setState ({model});
   };
 
-  render() {
-    const {
-      dropdown,
-      selectAll,
-      model
-    } = this.state;
+  render () {
+    const {dropdown, selectAll, model} = this.state;
     const {
       btnGroup,
       deleteAction,
@@ -83,19 +80,20 @@ export default class SubstateSearchBar extends Component {
       icons,
       getProperAccounts,
       hideSort,
-      hideFilter
+      hideFilter,
+      moduleTags,
     } = this.props;
-    const classes = classNames({
-      "select-type": true,
-      open: dropdown
+    const classes = classNames ({
+      'select-type': true,
+      open: dropdown,
     });
-    const btnSelectClasses = classNames({
-      "btn-select": true,
-      active: selectAll
+    const btnSelectClasses = classNames ({
+      'btn-select': true,
+      active: selectAll,
     });
-    const searchClasses = classNames("search-input", {
+    const searchClasses = classNames ('search-input', {
       full__width: btnGroup,
-      sort__none: hideSort
+      sort__none: hideSort,
     });
 
     return (
@@ -103,34 +101,32 @@ export default class SubstateSearchBar extends Component {
         autosave
         autosaveDelay={500}
         ref="filters"
-        onSubmit={this.onSubmit.bind(this)}
+        onSubmit={this.onSubmit.bind (this)}
         schema={schema}
         model={model}
       >
         <div className="search-bar">
-          {!hideSort && (
+          {!hideSort &&
             <div className={classes} ref={this.nodeRef}>
               <div className={btnSelectClasses} onClick={this.selectAll} />
               <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
                 <i className="icon-angle-down" />
               </div>
-              {dropdown && (
+              {dropdown &&
                 <Dropdown
                   toggleDropdown={this.openDropdown}
                   getProperAccounts={getProperAccounts}
                   options={dropdownOptions}
-                />
-              )}
-            </div>
-          )}
+                />}
+            </div>}
           <div className="search-bar__wrapper flex--helper">
-            {btnGroup ? (
-              <BtnGroup
-                getProperAccounts={getProperAccounts}
-                icons={icons}
-                deleteAction={deleteAction}
-              />
-            ) : null}
+            {btnGroup
+              ? <BtnGroup
+                  getProperAccounts={getProperAccounts}
+                  icons={icons}
+                  deleteAction={deleteAction}
+                />
+              : null}
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
@@ -141,13 +137,13 @@ export default class SubstateSearchBar extends Component {
               </div>
             </div>
 
-            {!hideFilter && (
-              <div className="filter-block">
+            <div className="filter-block">
+              {!hideFilter &&
                 <button>
                   <i className="icon-filter" />
-                </button>
-              </div>
-            )}
+                </button>}
+              {moduleTags.length && <Tags moduleTags={moduleTags} />}
+            </div>
           </div>
         </div>
       </AutoForm>
@@ -156,67 +152,64 @@ export default class SubstateSearchBar extends Component {
 }
 
 class BtnGroup extends Component {
-  constructor() {
-    super();
+  constructor () {
+    super ();
     this.state = {
       in: false,
-      dialogIsActive: false
+      dialogIsActive: false,
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ in: true });
+  componentDidMount () {
+    setTimeout (() => {
+      this.setState ({in: true});
     }, 1);
   }
 
   deleteAction = () => {
-    this.setState({
-      dialogIsActive: true
+    this.setState ({
+      dialogIsActive: true,
     });
   };
 
   closeDialog = () => {
-    this.setState({
-      dialogIsActive: false
+    this.setState ({
+      dialogIsActive: false,
     });
   };
 
   confirmDelete = () => {
-    this.setState({
-      dialogIsActive: false
+    this.setState ({
+      dialogIsActive: false,
     });
-    this.props.deleteAction();
+    this.props.deleteAction ();
   };
 
-  render() {
-    const { deleteAction, icons } = this.props;
-    const { dialogIsActive } = this.state;
-    const btnClasses = classNames("btn-group flex--helper", {
-      in: this.state.in
+  render () {
+    const {deleteAction, icons} = this.props;
+    const {dialogIsActive} = this.state;
+    const btnClasses = classNames ('btn-group flex--helper', {
+      in: this.state.in,
     });
 
     return (
       <div className={btnClasses}>
-        {icons ? (
-          icons.map(element => {
-            return (
-              <button onClick={element.method}>
-                <i className={"icon-" + element.icon} />
-              </button>
-            );
-          })
-        ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
-        {deleteAction && (
+        {icons
+          ? icons.map (element => {
+              return (
+                <button onClick={element.method}>
+                  <i className={'icon-' + element.icon} />
+                </button>
+              );
+            })
+          : <button>
+              <i className="icon-archive" />
+            </button>}
+        {deleteAction &&
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
-          </button>
-        )}
-        {dialogIsActive && (
+          </button>}
+        {dialogIsActive &&
           <Dialog
             title="Confirm"
             className="account-dialog"
@@ -233,17 +226,16 @@ class BtnGroup extends Component {
                 Confirm & delete
               </button>
             </div>
-          </Dialog>
-        )}
+          </Dialog>}
       </div>
     );
   }
 }
 
-const schema = new SimpleSchema({
+const schema = new SimpleSchema ({
   stateName: {
     type: String,
     optional: true,
-    label: "Search by State name"
-  }
+    label: 'Search by State name',
+  },
 });
