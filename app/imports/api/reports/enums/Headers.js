@@ -70,6 +70,9 @@ export default {
   },
   tickleReason: {
     label: "Tickle Reason"
+  },
+  workQueue: {
+    label: "Work Queue"
   }
 };
 

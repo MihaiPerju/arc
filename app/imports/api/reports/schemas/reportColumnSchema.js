@@ -89,5 +89,10 @@ export default new SimpleSchema({
     type: Boolean,
     optional: true,
     defaultValue: false
+  },
+  workQueue: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
   }
 });
