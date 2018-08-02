@@ -3,6 +3,7 @@ import classNames from "classnames";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
+import Dialog from '../../../lib/ui/Dialog';
 
 export default class LetterSingle extends Component {
   constructor() {
@@ -87,11 +88,11 @@ export default class LetterSingle extends Component {
         <div className="row__block align-center">
           {letter.isManuallyMailed ? (
             <div className="item-name text-blue">
-              {letter.letterTemplate.name && letter.letterTemplate.name}
+              {letter.letterTemplate && letter.letterTemplate.name}
             </div>
           ) : (
             <div className="item-name text-dark-grey">
-              {letter.letterTemplate.name && letter.letterTemplate.name}
+              {letter.letterTemplate && letter.letterTemplate.name}
             </div>
           )}
           <div className="status pending">{letter.status}</div>

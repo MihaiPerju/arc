@@ -167,10 +167,10 @@ class SubstatesListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={substateSelected.length}
             deleteAction={this.deleteAction}
+            moduleTags={moduleTags}
             hideSort
             hideFilter
           />
-          <Tags moduleTags={moduleTags} />
           <SubstatesList
             class={filter ? "task-list decreased" : "task-list"}
             substateSelected={substateSelected}

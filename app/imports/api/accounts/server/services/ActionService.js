@@ -15,6 +15,7 @@ import NotificationService from "/imports/api/notifications/server/services/Noti
 import Users from "/imports/api/users/collection";
 import Facilities from "/imports/api/facilities/collection";
 import Tickles from "/imports/api/tickles/collection";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class ActionService {
   //Adding action to account
@@ -119,7 +120,7 @@ export default class ActionService {
       // remove previous escalated comments
       Escalations.remove({ _id: escalationId });
     }
-    
+
     // remove previous tickles history
     Tickles.remove({ accountId });
 
@@ -204,6 +205,25 @@ export default class ActionService {
         NotificationService.createCommentNotification(_id, accountId);
       }
     }
+  }
+
+  static graphStandardizeData(actionsPerHour) {
+    const graphData = [];
+
+    for (let i = 0; i < 24; i++) {
+      let data = [];
+      data.push(i, 0);
+      graphData.push(data);
+    }
+
+    actionsPerHour.map(actionPerHour => {
+      graphData.find((data, index) => {
+        if (data[0] === actionPerHour._id.h) {
+          graphData[index] = [actionPerHour._id.h, actionPerHour.total];
+        }
+      });
+    });
+    return graphData;
   }
 
   static updateAccount(_id, data, userId) {

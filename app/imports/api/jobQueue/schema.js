@@ -16,6 +16,22 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
+  filePath: {
+    type: String,
+    optional: true
+  },
+  facilityId: {
+    type: String,
+    optional: true
+  },
+  fileType: {
+    type: String,
+    optional: true
+  },
+  userId: {
+    type: String,
+    optional: true
+  },
   status: {
     type: String
   }

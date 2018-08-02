@@ -1,8 +1,8 @@
 import {
   createRoute
 } from "/imports/api/s3-uploads/server/router";
-import fs from "fs";
 import os from "os";
+import fs from "fs";
 import JobQueue from '/imports/api/jobQueue/collection';
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
@@ -11,7 +11,7 @@ import Business from "/imports/api/business";
 import fileTypes from "/imports/api/files/enums/fileTypes";
 
 createRoute(
-  "/uploads/inventory/:facilityId/:token",
+  "/uploads/csv/:facilityId/:token",
   ({
     user,
     facilityId,
@@ -22,7 +22,6 @@ createRoute(
     if (filenames.length != 1) {
       return error("Invalid number of files");
     }
-
     const {
       rootFolder
     } = Settings.findOne({
@@ -39,7 +38,7 @@ createRoute(
       status: jobStatuses.NEW,
       filePath: fileName,
       facilityId,
-      fileType: fileTypes.INVENTORY,
+      fileType: fileTypes.PLACEMENT,
       userId: user._id
     }
 
