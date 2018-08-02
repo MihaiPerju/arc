@@ -215,3 +215,9 @@ route("/letter-management/list", LetterListContainer);
 import ModuleTagsListContainer from "/imports/client/pages/moduleTags/ModuleTagsListContainer.jsx";
 
 route("/module-tags/list", ModuleTagsListContainer);
+
+
+//Flagged accounts
+import FlaggedAccountListContainer from "/imports/client/pages/accounts/FlaggedAccountListContainer";
+
+route("/flagged-account/list", FlaggedAccountListContainer);

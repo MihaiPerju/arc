@@ -4,7 +4,8 @@ import Facilities from "/imports/api/facilities/collection";
 import RolesEnum from "/imports/api/users/enums/roles";
 import AccountAttachmentsQuery from "/imports/api/accounts/queries/accountAttachmentsList";
 import Users from "/imports/api/users/collection";
-import Escalations from "/imports/api/escalations/collection";
+import FlaggedAccountListQuery from "../queries/flaggedAccountList";
+import AccountActions from "/imports/api/accountActions/collection";
 
 Accounts.expose({});
 AccountAttachmentsQuery.expose({});
@@ -53,5 +54,49 @@ AccountListQuery.expose({
         ]
       });
     }
+  }
+});
+
+FlaggedAccountListQuery.expose({
+  firewall(userId, params) {
+    const userFacilities = Facilities.find(
+      {
+        allowedUsers: { $in: [userId] }
+      },
+      { fields: { _id: 1, clientId: 1 } }
+    ).fetch();
+
+    let userFacilitiesArr = [],
+      clientIds = [],
+      flaggedAccountIds = [];
+    for (let element of userFacilities) {
+      userFacilitiesArr.push(element._id);
+      clientIds.push(element.clientId);
+    }
+
+    clientIds = [...new Set(clientIds)];
+
+    const flaggedAccounts = AccountActions.find(
+      {
+        clientId: { $in: clientIds },
+        type: "flag",
+        managerId: { $exists: false }
+      },
+      { fields: { accountId: 1, _id: 0 } }
+    ).fetch();
+
+    flaggedAccountIds = flaggedAccounts.map(account => account.accountId);
+    flaggedAccountIds = [...new Set(flaggedAccountIds)];
+
+    _.extend(params.filters, {
+      facilityId: {
+        $in: userFacilitiesArr
+      },
+      _id: { $in: flaggedAccountIds },
+      $or: [
+        { employeeToRespond: null },
+        { employeeToRespond: RolesEnum.MANAGER }
+      ]
+    });
   }
 });

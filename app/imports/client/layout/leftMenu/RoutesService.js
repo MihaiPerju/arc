@@ -104,7 +104,8 @@ export default class RouteService {
           icon: "copy"
         },
         { name: "action/list", label: "Actions", icon: "thumb-tack" },
-        { name: "tag/list", label: "Tags", icon: "tags" }
+        { name: "tag/list", label: "Tags", icon: "tags" },
+        { name: "flagged-account/list", label: "Flagged Accounts", icon: "user" }
       ];
     } else {
       return [
