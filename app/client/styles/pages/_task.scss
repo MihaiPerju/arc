@@ -358,6 +358,11 @@
 .header-account {
   .right__side {
     padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .main-info {
+    padding-bottom: 18px;
   }
   
   .left__side {
@@ -365,6 +370,8 @@
       span {
         position: relative;
         padding-right: 45px;
+        padding-top: 2px;
+        height: 32px;
 
         &:hover {
           .edit-info__btn {
@@ -1189,15 +1196,18 @@
 //Metadata Container
 .metadata-container {
   margin-top: 20px;
+
   .main-content {
-    .main-content__header {
+    &__header {
       margin-bottom: 0;
       padding-left: 0;
       padding-right: 0;
       padding-bottom: 0;
     }
+
     .additional-info {
       margin-top: 0;
+
       > ul {
         flex-wrap: wrap;
         overflow: hidden;
@@ -1205,13 +1215,16 @@
           flex-basis: 100%;
           border-bottom: 1px #ebebeb solid;
           position: relative;
+
           &:last-of-type {
             border-bottom: 0;
           }
+
           > div {
             width: 50%;
             padding-top: 10px;
             padding-bottom: 10px;
+
             &:first-of-type {
               margin-bottom: 0;
               border-right: 1px #ebebeb solid;

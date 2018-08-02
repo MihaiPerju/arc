@@ -96,7 +96,7 @@ export default class AccountContentHeader extends Component {
         <div className="main-info">
           <div className="left__side">
             <div className="name">
-              <span>
+              <span className="truncate">
                 {account && account.ptName}
                 <EditInfoDialog
                   accountId={account._id}
