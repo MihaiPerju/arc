@@ -120,7 +120,6 @@ class Header extends Component {
                           className="toggle-dropdown"
                           style={{cursor: "pointer"}}
                         >
-                          {/* <a href={`/${user._id}/activity`}> */}
                           <a onClick={this.handleClick.bind(this, user._id)}>
                             {user.profile.firstName +
                               " " +
