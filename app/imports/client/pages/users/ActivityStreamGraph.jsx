@@ -10,14 +10,13 @@ export default class ActivityStreamGraph extends React.Component {
     super();
     this.state = {
       graphData: [],
-      selectedDate: null,
-      date: new Date()
+      selectedDate: moment()
     };
   }
 
   componentWillMount() {
-    const { date } = this.state;
-    this.getAccountActions(date);
+    const { selectedDate } = this.state;
+    this.getAccountActions(new Date(selectedDate));
   }
 
   getAccountActions = date => {

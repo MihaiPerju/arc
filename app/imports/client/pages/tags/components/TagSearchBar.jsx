@@ -139,11 +139,12 @@ export default class TagSearchBar extends Component {
             </div>
 
             <div className="filter-block">
-              {!hideFilter &&
+              {!hideFilter && (
                 <button>
                   <i className="icon-filter" />
-                </button>}
-              {moduleTags.length && <Tags moduleTags={moduleTags} />}
+                </button>
+              )}
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
             </div>
           </div>
         </div>
