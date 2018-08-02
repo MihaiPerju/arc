@@ -179,6 +179,7 @@ class TagListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={tagsSelected.length}
             deleteAction={this.deleteAction}
+            moduleTags={moduleTags}
             hideSort
             hideFilter
             moduleTags={moduleTags}
