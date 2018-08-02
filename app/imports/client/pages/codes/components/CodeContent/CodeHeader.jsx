@@ -15,7 +15,7 @@ export default class ReportHeader extends Component {
                     <div className="title">{code.code}</div>
                 </div>
                 <div className="row__header">
-                    <div className="plasment-block">
+                    <div className="placement-block">
                         <div className="text-light-grey">Type</div>
                         <div className="label label--grey text-uppercase">{code.type}</div>
                     </div>

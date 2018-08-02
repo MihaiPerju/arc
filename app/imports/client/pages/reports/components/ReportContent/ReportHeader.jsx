@@ -233,7 +233,7 @@ class ReportHeader extends Component {
               <div className="title">{report.name}</div>
             </div>
             <div className="row__header">
-              <div className="plasment-block">
+              <div className="placement-block">
                 <div className="text-light-grey">Placement date</div>
                 <div className="time">11:20</div>
               </div>
