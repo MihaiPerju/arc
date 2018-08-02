@@ -88,7 +88,7 @@ export default class LetterSearchBar extends Component {
                 </button>
               )}
               {
-                moduleTags.length && <Tags moduleTags={moduleTags}/>
+                moduleTags.length ? <Tags moduleTags={moduleTags}/> : <div />
               }
             </div>
           </div>
