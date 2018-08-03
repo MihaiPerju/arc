@@ -3,7 +3,7 @@ import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import AccountContent from "./AccountContent.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
-import query from "/imports/api/accounts/queries/flaggedAccountList";
+import query from "/imports/api/accounts/queries/accountList";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import Loading from "/imports/client/lib/ui/Loading";
 import PagerService from "/imports/client/lib/PagerService";

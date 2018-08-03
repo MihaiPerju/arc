@@ -95,6 +95,7 @@ export default class RouteService {
           label: "Unassigned",
           icon: "question-circle-o"
         },
+        { name: "flagged", label: "Flagged", icon: "flag" },
         { name: "client/list", label: "Clients", icon: "users" },
         { name: "admin/user/list", label: "Users", icon: "user-circle-o" },
         { name: "reports/list", label: "Reports", icon: "file-text-o" },
@@ -104,8 +105,7 @@ export default class RouteService {
           icon: "copy"
         },
         { name: "action/list", label: "Actions", icon: "thumb-tack" },
-        { name: "tag/list", label: "Tags", icon: "tags" },
-        { name: "flagged-account/list", label: "Flagged Accounts", icon: "user" }
+        { name: "tag/list", label: "Tags", icon: "tags" }
       ];
     } else {
       return [

@@ -220,4 +220,4 @@ route("/module-tags/list", ModuleTagsListContainer);
 //Flagged accounts
 import FlaggedAccountListContainer from "/imports/client/pages/accounts/FlaggedAccountListContainer";
 
-route("/flagged-account/list", FlaggedAccountListContainer);
+route("/flagged", FlaggedAccountListContainer);

@@ -95,6 +95,7 @@ export default class CommentSingle extends React.Component {
   onFlagRepond = data => {
     const { selectedFlag, isFlagApproved } = this.state;
     const { flagResponse } = data;
+    const { closeRightPanel } = this.props;
 
     Meteor.call(
       "comment.respondFlag",
@@ -102,6 +103,7 @@ export default class CommentSingle extends React.Component {
       err => {
         if (!err) {
           Notifier.success("Responded");
+          closeRightPanel();
         } else {
           Notifier.error(err.error);
         }
@@ -135,13 +137,16 @@ export default class CommentSingle extends React.Component {
     const userId = Meteor.userId();
     const isRep = Roles.userIsInRole(user._id, RolesEnum.REP);
     const commentClasses = classNames({
-      "message": true,
+      message: true,
       "text-light-grey": !comment.correctComment,
       "text-blue": comment.correctComment
     });
-    const commentItemClasses = classNames('comment__wrapper flex--helper flex-justify--space-between', {
-      'p-r--35': this.showFlags(comment._id)
-    });
+    const commentItemClasses = classNames(
+      "comment__wrapper flex--helper flex-justify--space-between",
+      {
+        "p-r--35": this.showFlags(comment._id)
+      }
+    );
 
     return (
       <div className="comment-item flex--helper flex--column">
