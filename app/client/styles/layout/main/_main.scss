@@ -68,14 +68,17 @@
   overflow: hidden;
   overflow-x: auto;
   justify-content: space-between;
+
   > .left__side {
     width: 520px;
     flex-shrink: 0;
     transition: width $transition300;
+
     &.full__width {
       width: 100%;
     }
   }
+
   > .right__side {
     width: calc(100% - 520px);
     min-width: 510px;
@@ -84,6 +87,7 @@
     overflow-y: auto;
     opacity: 0;
     transition: opacity 100ms ease;
+
     &.in {
       opacity: 1;
     }
@@ -134,7 +138,7 @@
       }
     }
   }
-  
+
   .form-group {
     position: relative;
     margin-bottom: 15px;
@@ -156,7 +160,8 @@
         padding-left: 15px;
       }
 
-      .react-datepicker-wrapper, .react-datepicker__input-container {
+      .react-datepicker-wrapper,
+      .react-datepicker__input-container {
         display: block;
       }
     }
@@ -169,6 +174,7 @@
   border-bottom: 1px #e1e1e1 solid;
   height: 70px;
   color: #838383;
+
   .sort-options {
     width: 20%;
     float: left;
@@ -177,11 +183,13 @@
     &.tickle__width {
       width: 16%;
     }
+
     .sort-icons span {
       margin: 8px;
       font-weight: 700;
       cursor: pointer;
     }
+
     .sortAcctBal-active-asc,
     .sortAcctBal-active-desc,
     .sortTickleDate-active-asc,
@@ -297,6 +305,7 @@
       line-height: 1.4rem;
       padding: 5px;
     }
+
     .btn-select {
       width: 16px;
       height: 16px;
@@ -399,16 +408,19 @@
     border-radius: 3px;
     padding: 25px 15px;
     margin-bottom: 35px;
+
     .main-info {
       display: flex;
       border-bottom: 1px #ebebeb solid;
     }
   }
+
   .main-content__header {
     .title {
       font-size: 2.4rem;
       padding-left: 30px;
       position: relative;
+
       &:before {
         font-family: $font-icon;
         position: absolute;
@@ -418,22 +430,27 @@
         color: $extra-light-grey;
       }
     }
-    .plasment-block {
+
+    .placement-block {
       display: flex;
       margin-top: 20px;
       flex-shrink: 0;
+
       .time {
         margin-left: 5px;
       }
     }
+
     .row__header {
       &:first-of-type {
         border-bottom: 1px #ebebeb solid;
         padding-bottom: 15px;
+
         .text-light-grey {
           padding-left: 30px;
         }
       }
+
       &:nth-of-type(2) {
         display: flex;
         flex-wrap: wrap;
@@ -441,57 +458,75 @@
         align-items: center;
       }
     }
+
     .btn-group {
       button {
         margin-top: 20px;
+
         &:nth-of-type(2) {
           margin-left: 15px;
         }
       }
     }
   }
+
   .left__side {
-    width: 65%;
+    width: 55%;
+    overflow: hidden;
+
     .name {
       font-size: 2.4rem;
       line-height: 2.4rem;
       margin-bottom: 10px;
     }
+
     .row__block {
       display: flex;
       flex-wrap: wrap;
       margin-left: -15px;
     }
+
     .pacient-id {
       margin-left: 15px;
       margin-bottom: 20px;
     }
+
     .financial-class {
       margin-left: 15px;
       margin-bottom: 20px;
     }
+
     .location {
       margin-left: 15px;
       margin-bottom: 20px;
     }
+
     .label-group {
       margin-left: 15px;
       margin-bottom: 20px;
     }
   }
+
   .right__side {
-    width: 35%;
+    width: 45%;
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
+
     .price-col {
       text-align: right;
       margin-bottom: 20px;
       padding-left: 40px;
+      
+      &:first-of-type {
+        flex-grow: 1;
+      }
+
       .price {
         font-size: 2.4rem;
         position: relative;
         margin-bottom: 7px;
+
         &:before {
           content: "\f155";
           font-family: $font-icon;
@@ -501,16 +536,17 @@
       }
     }
   }
+
   .additional-info {
-    margin-top: 20px;
+    margin-top: 10px;
 
     &.account-info > ul {
-      padding-bottom: 20px;
 
-      li{
+      li {
         padding-left: 45px;
         padding-right: 45px;
         flex-basis: 25%;
+        margin-top: 20px;
 
         &:hover {
           .edit-info__btn {
@@ -519,12 +555,13 @@
         }
       }
     }
+
     > ul {
       list-style: none;
       display: flex;
-      overflow-y: hidden;
-      overflow-x: auto;
       justify-content: space-between;
+      flex-wrap: wrap;
+
       li {
         display: flex;
         padding-right: 15px;
@@ -532,11 +569,14 @@
         position: relative;
         flex-basis: 20%;
         flex-wrap: wrap;
+        flex-grow: 1;
+
         &:last-of-type {
           &:before {
             display: none;
           }
         }
+
         &:before {
           content: " ";
           position: absolute;
@@ -547,10 +587,12 @@
           top: 50%;
           transform: $translateY;
         }
+
         > div {
           width: 100%;
           white-space: nowrap;
         }
+
         > div {
           &:first-of-type {
             margin-bottom: 10px;
@@ -559,10 +601,12 @@
       }
     }
   }
+
   .description-block {
     background: $color-white;
     padding: 10px 15px;
     border-radius: 3px;
+
     p {
       line-height: 2rem;
       word-wrap: break-word;

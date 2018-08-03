@@ -262,7 +262,7 @@ export default class ClientSearchBar extends Component {
                             }
                           />
                         </div>
-                        <div className="flex--helper flex-justify--end">
+                        <div className="flex--helper flex-justify--space-between">
                           <button
                             className="btn--red"
                             onClick={this.resetFilters}
