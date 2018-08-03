@@ -311,9 +311,9 @@ export default class FacilityCreate extends Component {
                 </ListItemField>
               </ListField>
             </AutoForm>
-            <div className="action-block" style={{ marginTop: "20px" }}>
+            <div className="action-block m-t--20">
               <div className="header__block">
-                <div classname="title-block text-uppercase">
+                <div className="title-block text-uppercase">
                   Change Password
                 </div>
               </div>
@@ -331,9 +331,11 @@ export default class FacilityCreate extends Component {
                   />
                   <ErrorField name="password" />
                 </div>
-                <button className="btn--green">
-                  Confirm
-                </button>
+                <div className="btn-group m-t--10 text--right">
+                  <button className="btn--green">
+                    Confirm
+                  </button>
+                </div>
               </AutoForm>
             </div>
           </div>

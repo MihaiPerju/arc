@@ -100,6 +100,7 @@
       z-index: 2;
     }
   }
+
   .select-form {
     position: relative;
     margin-bottom: 15px;
@@ -118,6 +119,7 @@
       color: $extra-light-grey;
       pointer-events: none;
     }
+
     select {
       background: #f2f1f1;
       border-bottom: 0;
@@ -132,6 +134,7 @@
       }
     }
   }
+  
   .form-group {
     position: relative;
     margin-bottom: 15px;
