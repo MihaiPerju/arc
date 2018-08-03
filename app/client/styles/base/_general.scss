@@ -113,6 +113,11 @@ h6 {
 
 .img-circle {
   border-radius: 50%;
+  background: $color-white;
+}
+
+.border--light-grey {
+  border: 1px #e1e1e1 solid;
 }
 
 .md-avatar {
