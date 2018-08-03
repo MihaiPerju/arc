@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import moment from "moment/moment";
 import AccountActioning from "./AccountActioning";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
-import "react-datepicker/dist/react-datepicker.css";
 import EditInfoDialog from "./EditInfoDialog";
 import commaNumber from "comma-number";
 
@@ -96,7 +95,7 @@ export default class AccountContentHeader extends Component {
         <div className="main-info">
           <div className="left__side">
             <div className="name">
-              <span>
+              <span className="truncate">
                 {account && account.ptName}
                 <EditInfoDialog
                   accountId={account._id}

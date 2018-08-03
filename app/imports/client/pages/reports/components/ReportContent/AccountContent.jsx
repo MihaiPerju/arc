@@ -1,26 +1,28 @@
-import React, {Component} from 'react';
-import moment from 'moment';
-import {types, fields} from '/imports/api/reports/enums/reportColumn';
-import {ScrollSync, ScrollSyncPane} from 'react-scroll-sync';
+import React, { Component } from "react";
+import moment from "moment";
+import { types, fields } from "/imports/api/reports/enums/reportColumn";
+import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
+
 export default class AccountContent extends Component {
-  constructor () {
-    super ();
+  constructor() {
+    super();
   }
 
   getHeaderNames = (header, index) => {
-    const {reportColumns} = this.props.report;
+    const { reportColumns } = this.props.report;
     if (header === fields.INSURANCES) {
       return (
         <div key={index}>
-          {reportColumns[header].map (insurance => {
-            return _.map (insurance, (value, key) => {
+          <div>{header}</div>
+          {reportColumns[header].map(insurance => {
+            return _.map(insurance, (value, key) => {
               if (value) {
                 return (
                   <div
                     style={{
-                      width: '32%',
-                      float: 'left',
-                      borderRight: '1px #d7d7d7 solid',
+                      width: "32%",
+                      float: "left",
+                      borderRight: "1px #d7d7d7 solid"
                     }}
                   >
                     {key}
@@ -34,14 +36,14 @@ export default class AccountContent extends Component {
     } else if (header === fields.METADATA) {
       return (
         <div key={index}>
-          {_.map (reportColumns[header], (value, key) => {
+          {_.map(reportColumns[header], (value, key) => {
             if (value) {
               return (
                 <div
                   style={{
-                    width: '32%',
-                    float: 'left',
-                    borderRight: '1px #d7d7d7 solid',
+                    width: "32%",
+                    float: "left",
+                    borderRight: "1px #d7d7d7 solid"
                   }}
                 >
                   {key}
@@ -57,19 +59,19 @@ export default class AccountContent extends Component {
   };
 
   getColumnValues = (columnKeys, account, index) => {
-    const {reportColumns} = this.props.report;
-    if (columnKeys === 'insurances') {
+    const { reportColumns } = this.props.report;
+    if (columnKeys === "insurances") {
       return (
         <div key={index}>
-          {reportColumns[columnKeys].map ((insurance, i) => {
-            return _.map (insurance, (value, key) => {
+          {reportColumns[columnKeys].map((insurance, i) => {
+            return _.map(insurance, (value, key) => {
               if (value) {
                 return (
                   <div
                     style={{
-                      width: '32%',
-                      float: 'left',
-                      borderRight: '1px #d7d7d7 solid',
+                      width: "32%",
+                      float: "left",
+                      borderRight: "1px #d7d7d7 solid"
                     }}
                   >
                     {account.insurances[i] && account.insurances[i][key]}
@@ -80,17 +82,17 @@ export default class AccountContent extends Component {
           })}
         </div>
       );
-    } else if (columnKeys === 'metaData') {
+    } else if (columnKeys === "metaData") {
       return (
         <div key={index}>
-          {_.map (reportColumns[columnKeys], (value, key) => {
+          {_.map(reportColumns[columnKeys], (value, key) => {
             if (value) {
               return (
                 <div
                   style={{
-                    width: '32%',
-                    float: 'left',
-                    borderRight: '1px #d7d7d7 solid',
+                    width: "32%",
+                    float: "left",
+                    borderRight: "1px #d7d7d7 solid"
                   }}
                 >
                   {account.metaData && account.metaData[key]}
@@ -100,20 +102,23 @@ export default class AccountContent extends Component {
           })}
         </div>
       );
-    } else if (types.dates.includes (columnKeys)) {
+    } else if (types.dates.includes(columnKeys)) {
       return (
         <div key={index}>
           {account[columnKeys] &&
             moment(account[columnKeys]).format("MM/DD/YYYY, hh:mm a")}
         </div>
       );
+    } else if (columnKeys === "workQueue") {
+      return <div key={index}>{account["tag"] && account["tag"].name}</div>;
     } else {
       return <div key={index}>{account[columnKeys]}</div>;
     }
   };
 
-  render () {
-    const {tableHeader, accounts} = this.props;
+  render() {
+    const { tableHeader, accounts, report } = this.props;
+    const { reportColumns } = report;
 
     return (
       <ScrollSync>
@@ -123,9 +128,9 @@ export default class AccountContent extends Component {
               <div className="table-header truncate text-left table-field text-light-grey">
                 Account name
               </div>
-              {accounts.map ((account, index) => (
+              {accounts.map((account, index) => (
                 <div className="table-field truncate">
-                  {'Account No.' + (index + 1)}
+                  {"Account No." + (index + 1)}
                 </div>
               ))}
             </div>
@@ -133,29 +138,41 @@ export default class AccountContent extends Component {
           <ScrollSyncPane>
             <div className="table-container__right">
               <div className="table-row">
-                {tableHeader.map ((header, index) => (
-                  <div
-                    key={index}
-                    className="table-header text-center table-field text-light-grey"
-                  >
-                    {this.getHeaderNames (header, index)}
-                  </div>
-                ))}
+                {tableHeader.map((header, index) => {
+                  if (
+                    header === fields.INSURANCES &&
+                    reportColumns[fields.INSURANCES].length === 0
+                  ) {
+                    return <div />;
+                  }
+                  return (
+                    <div
+                      key={index}
+                      className="table-header text-center table-field text-light-grey"
+                    >
+                      {this.getHeaderNames(header, index)}
+                    </div>
+                  );
+                })}
               </div>
-              {accounts.map ((account, index) => {
+              {accounts.map((account, index) => {
                 return (
                   <div className="table-row" key={index}>
-                    {tableHeader.map ((columnKeys, idx) => {
-                      if (idx > 0) {
-                        return (
-                          <div
-                            key={idx}
-                            className="table-field table-field--grey text-center"
-                          >
-                            {this.getColumnValues (columnKeys, account, idx)}
-                          </div>
-                        );
+                    {tableHeader.map((columnKeys, idx) => {
+                      if (
+                        columnKeys === fields.INSURANCES &&
+                        reportColumns[fields.INSURANCES].length === 0
+                      ) {
+                        return <div />;
                       }
+                      return (
+                        <div
+                          key={idx}
+                          className="table-field table-field--grey text-center"
+                        >
+                          {this.getColumnValues(columnKeys, account, idx)}
+                        </div>
+                      );
                     })}
                   </div>
                 );

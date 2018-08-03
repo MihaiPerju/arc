@@ -15,6 +15,7 @@ import NotificationService from "/imports/api/notifications/server/services/Noti
 import Users from "/imports/api/users/collection";
 import Facilities from "/imports/api/facilities/collection";
 import Tickles from "/imports/api/tickles/collection";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class ActionService {
   //Adding action to account

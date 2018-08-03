@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import autoBind from "react-autobind";
 import Notifier from "/imports/client/lib/Notifier";
-import {
-  AutoForm,
-  AutoField,
-  ErrorField
-} from "uniforms-unstyled";
+import { AutoForm, AutoField, ErrorField } from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import CommentSingle from "./CommentSingle.jsx";
 import RolesEnum from "/imports/api/users/enums/roles";
@@ -25,7 +21,10 @@ export default class CommentList extends Component {
   onSubmit({ content }) {
     const { account } = this.props;
     let { isCorrectNote } = this.state;
-    isCorrectNote = (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && isCorrectNote) ? true : undefined;
+    isCorrectNote =
+      Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && isCorrectNote
+        ? true
+        : undefined;
 
     if (!content) {
       Notifier.error("Message has no content");
@@ -37,6 +36,7 @@ export default class CommentList extends Component {
           if (!err) {
             Notifier.success("Comment added!");
             this.refs.comment.reset();
+            this.setState({ isCorrectNote: false });
           } else {
             Notifier.error(err.reason);
           }

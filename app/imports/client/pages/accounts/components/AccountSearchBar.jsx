@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import { AutoForm, AutoField, SelectField } from "/imports/ui/forms";
-import SimpleSchema from "simpl-schema";
-import Dropdown from "/imports/client/lib/Dropdown";
-import classNames from "classnames";
-import _ from "underscore";
-import Dialog from "/imports/client/lib/ui/Dialog";
-import Tags from "/imports/client/lib/Tags";
-import DatePicker from "react-datepicker";
-import facilityQuery from "/imports/api/facilities/queries/facilityList";
-import substateQuery from "/imports/api/substates/queries/listSubstates";
-import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
-import Notifier from "/imports/client/lib/Notifier";
-import RolesEnum from "/imports/api/users/enums/roles";
-import userListQuery from "/imports/api/users/queries/listUsers.js";
-import FilterService from "/imports/client/lib/FilterService";
+import React, {Component} from 'react';
+import {AutoForm, AutoField, SelectField} from '/imports/ui/forms';
+import SimpleSchema from 'simpl-schema';
+import Dropdown from '/imports/client/lib/Dropdown';
+import classNames from 'classnames';
+import _ from 'underscore';
+import Dialog from '/imports/client/lib/ui/Dialog';
+import Tags from '/imports/client/lib/Tags';
+import DatePicker from 'react-datepicker';
+import facilityQuery from '/imports/api/facilities/queries/facilityList';
+import substateQuery from '/imports/api/substates/queries/listSubstates';
+import clientsQuery from '/imports/api/clients/queries/clientsWithFacilites';
+import Notifier from '/imports/client/lib/Notifier';
+import RolesEnum from '/imports/api/users/enums/roles';
+import userListQuery from '/imports/api/users/queries/listUsers.js';
+import FilterService from '/imports/client/lib/FilterService';
 
 export default class AccountSearchBar extends Component {
-  constructor() {
-    super();
+  constructor () {
+    super ();
     this.state = {
       dropdown: false,
       dialogIsActive: false,
@@ -37,189 +37,188 @@ export default class AccountSearchBar extends Component {
       admitDateMin: null,
       admitDateMax: null,
       tickleUserIdOptions: [],
-      model: {}
+      model: {},
     };
   }
 
-  componentWillMount() {
+  componentWillMount () {
     let facilityOptions = [];
     let clientOptions = [];
     let substates = [];
     let tickleUserIdOptions = [];
     let model = {};
 
-    facilityQuery.fetch((err, res) => {
+    facilityQuery.fetch ((err, res) => {
       if (!err) {
-        res.map(facility => {
-          facilityOptions.push({ label: facility.name, value: facility._id });
+        res.map (facility => {
+          facilityOptions.push ({label: facility.name, value: facility._id});
         });
-        this.setState({ facilityOptions });
+        this.setState ({facilityOptions});
       }
     });
-    clientsQuery.fetch((err, res) => {
+    clientsQuery.fetch ((err, res) => {
       if (!err) {
-        res.map(client => {
-          clientOptions.push({ label: client.clientName, value: client._id });
+        res.map (client => {
+          clientOptions.push ({label: client.clientName, value: client._id});
         });
-        this.setState({ clientOptions });
+        this.setState ({clientOptions});
       }
     });
     substateQuery
-      .clone({
-        filters: { status: true }
+      .clone ({
+        filters: {status: true},
       })
-      .fetch((err, res) => {
+      .fetch ((err, res) => {
         if (!err) {
-          res.map(substate => {
+          res.map (substate => {
             const label = `${substate.stateName}: ${substate.name}`;
-            substates.push({
+            substates.push ({
               label: label,
-              value: substate.name
+              value: substate.name,
             });
           });
-          this.setState({ substates });
+          this.setState ({substates});
         }
       });
     userListQuery
-      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
-      .fetch((err, res) => {
+      .clone ({filters: {roles: {$in: [RolesEnum.REP]}}})
+      .fetch ((err, res) => {
         if (!err) {
-          res.map(user => {
-            tickleUserIdOptions.push({
-              label:
-                user.profile &&
-                user.profile.lastName + " " + user.profile.firstName,
-              value: user._id
+          res.map (user => {
+            tickleUserIdOptions.push ({
+              label: user.profile &&
+                user.profile.lastName + ' ' + user.profile.firstName,
+              value: user._id,
             });
           });
         }
       });
-    this.setState({ tickleUserIdOptions });
-    model = FilterService.getFilterParams();
+    this.setState ({tickleUserIdOptions});
+    model = FilterService.getFilterParams ();
     const {
       dischrgDateMin,
       dischrgDateMax,
       fbDateMin,
       fbDateMax,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
     } = model;
-    this.setState({
+    this.setState ({
       model,
       dischrgDateMin,
       dischrgDateMax,
       fbDateMin,
       fbDateMax,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
     });
   }
 
-  componentWillReceiveProps(props) {
-    const { query } = FlowRouter.current().params;
+  componentWillReceiveProps (props) {
+    const {query} = FlowRouter.current ().params;
     if (query && query.medNo) {
-      let model = FilterService.getFilterParams();
-      this.setState({
-        model
+      let model = FilterService.getFilterParams ();
+      this.setState ({
+        model,
       });
     }
   }
 
-  onSubmit(params) {
+  onSubmit (params) {
     const {
       dischrgDateMin,
       dischrgDateMax,
       fbDateMin,
       fbDateMax,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
     } = this.state;
-    if (FlowRouter.current().queryParams.page != "1") {
-      this.props.setPagerInitial();
+    if (FlowRouter.current ().queryParams.page != '1') {
+      this.props.setPagerInitial ();
     }
 
-    if ("tickleUserId" in params) {
-      FlowRouter.setQueryParams({ tickleUserId: params.tickleUserId });
+    if ('tickleUserId' in params) {
+      FlowRouter.setQueryParams ({tickleUserId: params.tickleUserId});
     }
-    if ("clientId" in params) {
-      FlowRouter.setQueryParams({ clientId: params.clientId });
+    if ('clientId' in params) {
+      FlowRouter.setQueryParams ({clientId: params.clientId});
     }
-    if ("facilityId" in params) {
-      FlowRouter.setQueryParams({ facilityId: params.facilityId });
+    if ('facilityId' in params) {
+      FlowRouter.setQueryParams ({facilityId: params.facilityId});
     }
-    if ("facCode" in params) {
-      FlowRouter.setQueryParams({ facCode: params.facCode });
+    if ('facCode' in params) {
+      FlowRouter.setQueryParams ({facCode: params.facCode});
     }
-    if ("ptType" in params) {
-      FlowRouter.setQueryParams({ ptType: params.ptType });
+    if ('ptType' in params) {
+      FlowRouter.setQueryParams ({ptType: params.ptType});
     }
-    if ("acctBalMin" in params) {
-      FlowRouter.setQueryParams({ acctBalMin: params.acctBalMin });
+    if ('acctBalMin' in params) {
+      FlowRouter.setQueryParams ({acctBalMin: params.acctBalMin});
     }
-    if ("acctBalMax" in params) {
+    if ('acctBalMax' in params) {
       if (params.acctBalMax < params.acctBalMin) {
-        Notifier.error(
-          "Maximum value should be greater or equal to minimum value"
+        Notifier.error (
+          'Maximum value should be greater or equal to minimum value'
         );
       } else {
-        FlowRouter.setQueryParams({ acctBalMax: params.acctBalMax });
+        FlowRouter.setQueryParams ({acctBalMax: params.acctBalMax});
       }
     }
-    if ("finClass" in params) {
-      FlowRouter.setQueryParams({ finClass: params.finClass });
+    if ('finClass' in params) {
+      FlowRouter.setQueryParams ({finClass: params.finClass});
     }
-    if ("substate" in params) {
-      FlowRouter.setQueryParams({ substate: params.substate });
+    if ('substate' in params) {
+      FlowRouter.setQueryParams ({substate: params.substate});
     }
-    if ("activeInsCode" in params) {
-      FlowRouter.setQueryParams({ activeInsCode: params.activeInsCode });
+    if ('activeInsCode' in params) {
+      FlowRouter.setQueryParams ({activeInsCode: params.activeInsCode});
     }
-    if ("medNo" in params) {
-      FlowRouter.setQueryParams({ medNo: params.medNo });
+    if ('medNo' in params) {
+      FlowRouter.setQueryParams ({medNo: params.medNo});
     }
 
-    FlowRouter.setQueryParams({
-      dischrgDateMin: FilterService.formatDate(dischrgDateMin)
+    FlowRouter.setQueryParams ({
+      dischrgDateMin: FilterService.formatDate (dischrgDateMin),
     });
 
-    FlowRouter.setQueryParams({
-      dischrgDateMax: FilterService.formatDate(dischrgDateMax)
+    FlowRouter.setQueryParams ({
+      dischrgDateMax: FilterService.formatDate (dischrgDateMax),
     });
 
-    FlowRouter.setQueryParams({
-      fbDateMin: FilterService.formatDate(fbDateMin)
+    FlowRouter.setQueryParams ({
+      fbDateMin: FilterService.formatDate (fbDateMin),
     });
 
-    FlowRouter.setQueryParams({
-      fbDateMax: FilterService.formatDate(fbDateMax)
+    FlowRouter.setQueryParams ({
+      fbDateMax: FilterService.formatDate (fbDateMax),
     });
 
-    FlowRouter.setQueryParams({
-      admitDateMin: FilterService.formatDate(admitDateMin)
+    FlowRouter.setQueryParams ({
+      admitDateMin: FilterService.formatDate (admitDateMin),
     });
 
-    FlowRouter.setQueryParams({
-      admitDateMax: FilterService.formatDate(admitDateMax)
+    FlowRouter.setQueryParams ({
+      admitDateMax: FilterService.formatDate (admitDateMax),
     });
   }
 
   openDropdown = () => {
     if (!this.state.dropdown) {
-      document.addEventListener("click", this.outsideClick, false);
+      document.addEventListener ('click', this.outsideClick, false);
     } else {
-      document.removeEventListener("click", this.outsideClick, false);
+      document.removeEventListener ('click', this.outsideClick, false);
     }
-    this.setState({
-      dropdown: !this.state.dropdown
+    this.setState ({
+      dropdown: !this.state.dropdown,
     });
   };
 
   outsideClick = e => {
-    if (this.node.contains(e.target)) {
+    if (this.node.contains (e.target)) {
       return;
     }
 
-    this.openDropdown();
+    this.openDropdown ();
   };
 
   nodeRef = node => {
@@ -227,123 +226,123 @@ export default class AccountSearchBar extends Component {
   };
 
   onDateSelect = (selectedDate, field) => {
-    if (field === "dischrgDateMin") {
-      this.setState({ dischrgDateMin: selectedDate });
-    } else if (field === "dischrgDateMax") {
-      const { dischrgDateMin } = this.state;
+    if (field === 'dischrgDateMin') {
+      this.setState ({dischrgDateMin: selectedDate});
+    } else if (field === 'dischrgDateMax') {
+      const {dischrgDateMin} = this.state;
       if (selectedDate && selectedDate < dischrgDateMin) {
-        Notifier.error(
-          "Maximum date should be greater or equal to minimum date"
+        Notifier.error (
+          'Maximum date should be greater or equal to minimum date'
         );
       }
-      this.setState({ dischrgDateMax: selectedDate });
-    } else if (field === "fbDateMin") {
-      this.setState({ fbDateMin: selectedDate });
-    } else if (field === "fbDateMax") {
-      const { fbDateMin } = this.state;
+      this.setState ({dischrgDateMax: selectedDate});
+    } else if (field === 'fbDateMin') {
+      this.setState ({fbDateMin: selectedDate});
+    } else if (field === 'fbDateMax') {
+      const {fbDateMin} = this.state;
       if (selectedDate && selectedDate < fbDateMin) {
-        Notifier.error(
-          "Maximum date should be greater or equal to minimum date"
+        Notifier.error (
+          'Maximum date should be greater or equal to minimum date'
         );
       }
-      this.setState({ fbDateMax: selectedDate });
-    } else if (field === "admitDateMin") {
-      this.setState({ admitDateMin: selectedDate });
-    } else if (field === "admitDateMax") {
-      const { admitDateMin } = this.state;
+      this.setState ({fbDateMax: selectedDate});
+    } else if (field === 'admitDateMin') {
+      this.setState ({admitDateMin: selectedDate});
+    } else if (field === 'admitDateMax') {
+      const {admitDateMin} = this.state;
       if (selectedDate && selectedDate < admitDateMin) {
-        Notifier.error(
-          "Maximum date should be greater or equal to minimum date"
+        Notifier.error (
+          'Maximum date should be greater or equal to minimum date'
         );
       }
-      this.setState({ admitDateMax: selectedDate });
+      this.setState ({admitDateMax: selectedDate});
     }
   };
 
   manageSortBar = () => {
-    const { sort } = this.state;
-    this.setState({
-      sort: !sort
+    const {sort} = this.state;
+    this.setState ({
+      sort: !sort,
     });
   };
 
   sortAccounts = (key, sortKey) => {
-    if (FlowRouter.getQueryParam(key) === sortKey) {
-      FlowRouter.setQueryParams({ [key]: null });
+    if (FlowRouter.getQueryParam (key) === sortKey) {
+      FlowRouter.setQueryParams ({[key]: null});
     } else {
-      FlowRouter.setQueryParams({ [key]: sortKey });
+      FlowRouter.setQueryParams ({[key]: sortKey});
     }
   };
 
   getSortClasses = (key, sortKey) => {
-    const param = FlowRouter.getQueryParam(key);
+    const param = FlowRouter.getQueryParam (key);
     let classes = {};
-    if (sortKey === "ASC") {
+    if (sortKey === 'ASC') {
       classes = {
-        "icon-angle-up": true,
-        [`${key}-active-asc`]: param && param === "ASC"
+        'icon-angle-up': true,
+        [`${key}-active-asc`]: param && param === 'ASC',
       };
     } else {
       classes = {
-        "icon-angle-down": true,
-        [`${key}-active-desc`]: param && param === "DESC"
+        'icon-angle-down': true,
+        [`${key}-active-desc`]: param && param === 'DESC',
       };
     }
-    return classNames(classes);
+    return classNames (classes);
   };
 
   openDialog = e => {
-    e.preventDefault();
-    this.setState({
-      dialogIsActive: true
+    e.preventDefault ();
+    this.setState ({
+      dialogIsActive: true,
     });
   };
 
   closeDialog = () => {
-    this.setState({
-      dialogIsActive: false
+    this.setState ({
+      dialogIsActive: false,
     });
   };
 
   addFilters = () => {
-    const { filters } = this.refs;
-    filters.submit();
-    this.closeDialog();
+    const {filters} = this.refs;
+    filters.submit ();
+    this.closeDialog ();
   };
 
   onChange = (field, value) => {
-    if (field === "acctNum") {
-      FlowRouter.setQueryParams({ acctNum: value });
+    if (field === 'acctNum') {
+      FlowRouter.setQueryParams ({acctNum: value});
     }
   };
 
   getOptions = tags => {
-    return _.map(tags, tag => ({
+    return _.map (tags, tag => ({
       value: tag._id,
-      label: tag.name
+      label: tag.name,
     }));
   };
 
   resetFilters = () => {
-    let appliedFilters = FlowRouter.current().queryParams;
-    appliedFilters = _.omit(appliedFilters, "page", "tagIds");
-    appliedFilters = _.mapObject(appliedFilters, () => null);
-    FlowRouter.setQueryParams(appliedFilters);
-    const { filters } = this.refs;
-    filters.reset();
-    this.setState({
+    let appliedFilters = FlowRouter.current ().queryParams;
+    appliedFilters = _.omit (appliedFilters, 'page', 'tagIds');
+    appliedFilters = _.mapObject (appliedFilters, () => null);
+    FlowRouter.setQueryParams (appliedFilters);
+    const {filters} = this.refs;
+    filters.reset ();
+    this.setState ({
       dischrgDateMin: null,
       dischrgDateMax: null,
       fbDateMin: null,
       fbDateMax: null,
       admitDateMin: null,
       admitDateMax: null,
-      model: {}
+      model: {},
     });
-    this.closeDialog();
+    this.closeDialog ();
   };
 
-  render() {
+  render () {
     const {
       dropdown,
       dialogIsActive,
@@ -359,7 +358,7 @@ export default class AccountSearchBar extends Component {
       admitDateMin,
       admitDateMax,
       tickleUserIdOptions,
-      model
+      model,
     } = this.state;
     const {
       options,
@@ -369,40 +368,43 @@ export default class AccountSearchBar extends Component {
       icons,
       getProperAccounts,
       assignFilterArr,
-      moduleTags
+      moduleTags,
     } = this.props;
 
-    const classes = classNames({
-      "select-type": true,
-      open: dropdown
+    const classes = classNames ({
+      'select-type': true,
+      open: dropdown,
     });
-    const btnSelectClasses = classNames({
-      "btn-select": true,
-      active: selectAll
+    const btnSelectClasses = classNames ({
+      'btn-select': true,
+      active: selectAll,
     });
 
-    const searchBarClasses = classNames({
-      "search-input": true,
-      full__width:
-        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) ||
-        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)),
-      sort__width:
-        btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      "account-search": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
+    const searchBarClasses = classNames ({
+      'search-input': true,
+      full__width: (btnGroup &&
+        Roles.userIsInRole (Meteor.userId (), RolesEnum.TECH)) ||
+        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.ADMIN)),
+      sort__width: btnGroup &&
+        Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
+      'account-search': Roles.userIsInRole (
+        Meteor.userId (),
+        RolesEnum.MANAGER
+      ),
       'tag--none': moduleTags.length === 0,
     });
 
-    const currentStateName = FlowRouter.current().params.state;
+    const currentStateName = FlowRouter.current ().params.state;
 
-    const sortOptionClasses = classNames({
-      "sort-options": true,
-      tickle__width: currentStateName === "tickles"
+    const sortOptionClasses = classNames ({
+      'sort-options': true,
+      tickle__width: currentStateName === 'tickles',
     });
 
     return (
       <AutoForm
         ref="filters"
-        onSubmit={this.onSubmit.bind(this)}
+        onSubmit={this.onSubmit.bind (this)}
         schema={schema}
         onChange={this.onChange}
         model={model}
@@ -413,23 +415,22 @@ export default class AccountSearchBar extends Component {
             <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
               <i className="icon-angle-down" />
             </div>
-            {dropdown && (
+            {dropdown &&
               <Dropdown
                 toggleDropdown={this.openDropdown}
                 getProperAccounts={getProperAccounts}
                 options={dropdownOptions}
                 assignFilterArr={assignFilterArr}
-              />
-            )}
+              />}
           </div>
           <div className="search-bar__wrapper flex--helper">
-            {btnGroup ? (
-              <BtnGroup
-                getProperAccounts={getProperAccounts}
-                icons={icons}
-                deleteAction={deleteAction}
-              />
-            ) : null}
+            {btnGroup
+              ? <BtnGroup
+                  getProperAccounts={getProperAccounts}
+                  icons={icons}
+                  deleteAction={deleteAction}
+                />
+              : null}
             <div className={searchBarClasses}>
               <div className="form-group">
                 <AutoField
@@ -441,9 +442,9 @@ export default class AccountSearchBar extends Component {
             </div>
 
             <div className="filter-block flex--helper">
-              <button onClick={this.openDialog.bind(this)}>
+              <button onClick={this.openDialog.bind (this)}>
                 <i className="icon-filter" />
-                {dialogIsActive && (
+                {dialogIsActive &&
                   <Dialog
                     className="account-dialog filter-dialog"
                     closePortal={this.closeDialog}
@@ -454,18 +455,17 @@ export default class AccountSearchBar extends Component {
                     </button>
                     <div className="filter-bar">
                       <div className="select-wrapper">
-                        {Roles.userIsInRole(
-                          Meteor.userId(),
+                        {Roles.userIsInRole (
+                          Meteor.userId (),
                           RolesEnum.MANAGER
-                        ) && (
+                        ) &&
                           <div className="select-form">
                             <SelectField
                               label="Tickle:"
                               name="tickleUserId"
                               options={tickleUserIdOptions}
                             />
-                          </div>
-                        )}
+                          </div>}
 
                         <div className="select-form">
                           <SelectField
@@ -524,26 +524,25 @@ export default class AccountSearchBar extends Component {
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
-                              todayButton={"Today"}
+                              todayButton={'Today'}
                               placeholderText="From Discharge Date"
                               selected={dischrgDateMin}
                               onChange={date =>
-                                this.onDateSelect(date, "dischrgDateMin")
-                              }
+                                this.onDateSelect (date, 'dischrgDateMin')}
                             />
                           </div>
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
-                              todayButton={"Today"}
+                              todayButton={'Today'}
                               placeholderText="To Discharge Date"
                               selected={dischrgDateMax}
                               onChange={date =>
-                                this.onDateSelect(date, "dischrgDateMax")
-                              }
+                                this.onDateSelect (date, 'dischrgDateMax')}
                             />
                           </div>
                         </div>
@@ -551,29 +550,29 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Last Bill Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
-                              todayButton={"Today"}
+                              todayButton={'Today'}
                               placeholderText="From Last Bill Date"
                               selected={fbDateMin}
                               onChange={date =>
-                                this.onDateSelect(date, "fbDateMin")
-                              }
+                                this.onDateSelect (date, 'fbDateMin')}
                             />
                           </div>
                           <div>
                             <label>To Last Bill Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
-                              todayButton={"Today"}
+                              todayButton={'Today'}
                               placeholderText="To Last Bill Date"
                               selected={fbDateMax}
                               onChange={date =>
-                                this.onDateSelect(date, "fbDateMax")
-                              }
+                                this.onDateSelect (date, 'fbDateMax')}
                             />
                           </div>
                         </div>
@@ -581,29 +580,29 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Admit Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
-                              todayButton={"Today"}
+                              todayButton={'Today'}
                               placeholderText="From Admit Date"
                               selected={admitDateMin}
                               onChange={date =>
-                                this.onDateSelect(date, "admitDateMin")
-                              }
+                                this.onDateSelect (date, 'admitDateMin')}
                             />
                           </div>
                           <div>
                             <label>To Admit Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
-                              todayButton={"Today"}
+                              todayButton={'Today'}
                               placeholderText="To Admit Date"
                               selected={admitDateMax}
                               onChange={date =>
-                                this.onDateSelect(date, "admitDateMax")
-                              }
+                                this.onDateSelect (date, 'admitDateMax')}
                             />
                           </div>
                         </div>
@@ -629,7 +628,7 @@ export default class AccountSearchBar extends Component {
                             placeholder="Search by active Insurance Code"
                           />
                         </div>
-                        <div className="flex--helper flex-justify--end">
+                        <div className="flex--helper flex-justify--space-between">
                           <button
                             className="btn--red"
                             onClick={this.resetFilters}
@@ -645,69 +644,62 @@ export default class AccountSearchBar extends Component {
                         </div>
                       </div>
                     </div>
-                  </Dialog>
-                )}
+                  </Dialog>}
               </button>
-              {
-                moduleTags.length && <Tags moduleTags={moduleTags}/>
-              }
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
             </div>
-            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+            {Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
               <div
-                className={sort ? "filter-block active" : "filter-block"}
+                className={sort ? 'filter-block active' : 'filter-block'}
                 onClick={this.manageSortBar}
               >
                 <button>
-                  {sort ? (
-                    <i className="icon-angle-up" />
-                  ) : (
-                    <i className="icon-angle-down" />
-                  )}
+                  {sort
+                    ? <i className="icon-angle-up" />
+                    : <i className="icon-angle-down" />}
                 </button>
-              </div>
-            )}
+              </div>}
           </div>
         </div>
-        {sort && (
+        {sort &&
           <div className="sort-bar">
             <div className={sortOptionClasses}>
               <div>Account Balance</div>
               <div className="sort-icons">
                 <span
-                  onClick={() => this.sortAccounts("sortAcctBal", "ASC")}
-                  className={this.getSortClasses("sortAcctBal", "ASC")}
+                  onClick={() => this.sortAccounts ('sortAcctBal', 'ASC')}
+                  className={this.getSortClasses ('sortAcctBal', 'ASC')}
                 />
                 <span
-                  onClick={() => this.sortAccounts("sortAcctBal", "DESC")}
-                  className={this.getSortClasses("sortAcctBal", "DESC")}
+                  onClick={() => this.sortAccounts ('sortAcctBal', 'DESC')}
+                  className={this.getSortClasses ('sortAcctBal', 'DESC')}
                 />
               </div>
             </div>
-            {currentStateName === "tickles" && (
+            {currentStateName === 'tickles' &&
               <div className={sortOptionClasses}>
                 <div>Tickle Date</div>
                 <div className="sort-icons">
                   <span
-                    onClick={() => this.sortAccounts("sortTickleDate", "ASC")}
-                    className={this.getSortClasses("sortTickleDate", "ASC")}
+                    onClick={() => this.sortAccounts ('sortTickleDate', 'ASC')}
+                    className={this.getSortClasses ('sortTickleDate', 'ASC')}
                   />
                   <span
-                    onClick={() => this.sortAccounts("sortTickleDate", "DESC")}
-                    className={this.getSortClasses("sortTickleDate", "DESC")}
+                    onClick={() => this.sortAccounts ('sortTickleDate', 'DESC')}
+                    className={this.getSortClasses ('sortTickleDate', 'DESC')}
                   />
                 </div>
-              </div>
-            )}
+              </div>}
             <div className={sortOptionClasses}>
               <div>Created At</div>
               <div className="sort-icons">
                 <span
-                  onClick={() => this.sortAccounts("sortCreatedAt", "ASC")}
-                  className={this.getSortClasses("sortCreatedAt", "ASC")}
+                  onClick={() => this.sortAccounts ('sortCreatedAt', 'ASC')}
+                  className={this.getSortClasses ('sortCreatedAt', 'ASC')}
                 />
                 <span
-                  onClick={() => this.sortAccounts("sortCreatedAt", "DESC")}
-                  className={this.getSortClasses("sortCreatedAt", "DESC")}
+                  onClick={() => this.sortAccounts ('sortCreatedAt', 'DESC')}
+                  className={this.getSortClasses ('sortCreatedAt', 'DESC')}
                 />
               </div>
             </div>
@@ -715,12 +707,12 @@ export default class AccountSearchBar extends Component {
               <div>Discharge Date</div>
               <div className="sort-icons">
                 <span
-                  onClick={() => this.sortAccounts("sortDischrgDate", "ASC")}
-                  className={this.getSortClasses("sortDischrgDate", "ASC")}
+                  onClick={() => this.sortAccounts ('sortDischrgDate', 'ASC')}
+                  className={this.getSortClasses ('sortDischrgDate', 'ASC')}
                 />
                 <span
-                  onClick={() => this.sortAccounts("sortDischrgDate", "DESC")}
-                  className={this.getSortClasses("sortDischrgDate", "DESC")}
+                  onClick={() => this.sortAccounts ('sortDischrgDate', 'DESC')}
+                  className={this.getSortClasses ('sortDischrgDate', 'DESC')}
                 />
               </div>
             </div>
@@ -728,12 +720,12 @@ export default class AccountSearchBar extends Component {
               <div>Last Bill Date</div>
               <div className="sort-icons">
                 <span
-                  onClick={() => this.sortAccounts("sortFbDate", "ASC")}
-                  className={this.getSortClasses("sortFbDate", "ASC")}
+                  onClick={() => this.sortAccounts ('sortFbDate', 'ASC')}
+                  className={this.getSortClasses ('sortFbDate', 'ASC')}
                 />
                 <span
-                  onClick={() => this.sortAccounts("sortFbDate", "DESC")}
-                  className={this.getSortClasses("sortFbDate", "DESC")}
+                  onClick={() => this.sortAccounts ('sortFbDate', 'DESC')}
+                  className={this.getSortClasses ('sortFbDate', 'DESC')}
                 />
               </div>
             </div>
@@ -741,80 +733,76 @@ export default class AccountSearchBar extends Component {
               <div>Admit Date</div>
               <div className="sort-icons">
                 <span
-                  onClick={() => this.sortAccounts("sortAdmitDate", "ASC")}
-                  className={this.getSortClasses("sortAdmitDate", "ASC")}
+                  onClick={() => this.sortAccounts ('sortAdmitDate', 'ASC')}
+                  className={this.getSortClasses ('sortAdmitDate', 'ASC')}
                 />
                 <span
-                  onClick={() => this.sortAccounts("sortAdmitDate", "DESC")}
-                  className={this.getSortClasses("sortAdmitDate", "DESC")}
+                  onClick={() => this.sortAccounts ('sortAdmitDate', 'DESC')}
+                  className={this.getSortClasses ('sortAdmitDate', 'DESC')}
                 />
               </div>
             </div>
-          </div>
-        )}
+          </div>}
       </AutoForm>
     );
   }
 }
 
 class BtnGroup extends Component {
-  constructor() {
-    super();
+  constructor () {
+    super ();
     this.state = {
       in: false,
-      dialogIsActive: false
+      dialogIsActive: false,
     };
   }
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ in: true });
+  componentDidMount () {
+    setTimeout (() => {
+      this.setState ({in: true});
     }, 1);
   }
 
   deleteAction = () => {
-    this.setState({
-      dialogIsActive: true
+    this.setState ({
+      dialogIsActive: true,
     });
   };
 
   closeDialog = () => {
-    this.setState({
-      dialogIsActive: false
+    this.setState ({
+      dialogIsActive: false,
     });
   };
 
   confirmDelete = () => {
-    this.setState({
-      dialogIsActive: false
+    this.setState ({
+      dialogIsActive: false,
     });
-    this.props.deleteAction();
+    this.props.deleteAction ();
   };
 
-  render() {
-    const { deleteAction, icons } = this.props;
-    const { dialogIsActive } = this.state;
+  render () {
+    const {deleteAction, icons} = this.props;
+    const {dialogIsActive} = this.state;
     return (
-      <div className={this.state.in ? "btn-group in" : "btn-group"}>
-        {icons ? (
-          icons.map(element => {
-            return (
-              <button onClick={element.method}>
-                <i className={"icon-" + element.icon} />
-              </button>
-            );
-          })
-        ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
-        {deleteAction && (
+      <div className={this.state.in ? 'btn-group in' : 'btn-group'}>
+        {icons
+          ? icons.map (element => {
+              return (
+                <button onClick={element.method}>
+                  <i className={'icon-' + element.icon} />
+                </button>
+              );
+            })
+          : <button>
+              <i className="icon-archive" />
+            </button>}
+        {deleteAction &&
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
-          </button>
-        )}
-        {dialogIsActive && (
+          </button>}
+        {dialogIsActive &&
           <Dialog className="account-dialog" closePortal={this.closeDialog}>
             <div className="form-wrapper">
               Are you sure you want to delete selected items ?
@@ -827,72 +815,71 @@ class BtnGroup extends Component {
                 Confirm & delete
               </button>
             </div>
-          </Dialog>
-        )}
+          </Dialog>}
       </div>
     );
   }
 }
 
-const schema = new SimpleSchema({
+const schema = new SimpleSchema ({
   facilityId: {
     type: String,
     optional: true,
-    label: "Filter by Facility"
+    label: 'Filter by Facility',
   },
   tickleUserId: {
     type: String,
     optional: true,
-    label: "Filter by Tickle Author"
+    label: 'Filter by Tickle Author',
   },
   clientId: {
     type: String,
     optional: true,
-    label: "Filter by Client"
+    label: 'Filter by Client',
   },
   acctNum: {
     type: String,
     optional: true,
-    label: "Search by Account Number"
+    label: 'Search by Account Number',
   },
   facCode: {
     type: String,
     optional: true,
-    label: "Search by Facility Code"
+    label: 'Search by Facility Code',
   },
   ptType: {
     type: String,
     optional: true,
-    label: "Search by Patient Type"
+    label: 'Search by Patient Type',
   },
   medNo: {
     type: String,
     optional: true,
-    label: "Search by Medical Number"
+    label: 'Search by Medical Number',
   },
   acctBalMin: {
     type: SimpleSchema.Integer,
     optional: true,
-    label: "Search by Account Balance"
+    label: 'Search by Account Balance',
   },
   acctBalMax: {
     type: SimpleSchema.Integer,
     optional: true,
-    label: "Search by Account Balance"
+    label: 'Search by Account Balance',
   },
   finClass: {
     type: String,
     optional: true,
-    label: "Search by Financial Class"
+    label: 'Search by Financial Class',
   },
   substate: {
     type: String,
     optional: true,
-    label: "Search by Substate"
+    label: 'Search by Substate',
   },
   activeInsCode: {
     type: String,
     optional: true,
-    label: "Search by active Insurance Code"
-  }
+    label: 'Search by active Insurance Code',
+  },
 });

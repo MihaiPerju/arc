@@ -2,7 +2,6 @@ import JobQueue from "/imports/api/jobQueue/collection";
 import Reports from "/imports/api/reports/collection";
 import { EJSON } from "meteor/ejson";
 import fs from "fs";
-import os from "os";
 import FoldersEnum from "/imports/api/business.js";
 import StatusEnum from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import Accounts from "/imports/api/accounts/collection";
@@ -54,6 +53,8 @@ export default class RunReports {
               columns[`metaData[${key}]`] = `meta column: ${key}`;
             }
           });
+        } else if (key === "workQueue") {
+          columns["name"] = Headers[key] ? Headers[key].label : "";
         } else {
           columns[key] = Headers[key] ? Headers[key].label : "";
         }
@@ -120,7 +121,23 @@ export default class RunReports {
       })
     );
 
-    AccountsNative.find(filters)
+    AccountsNative.aggregate([
+      {
+        $lookup: {
+          from: "tags",
+          localField: "workQueue",
+          foreignField: "_id",
+          as: "tag"
+        }
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [{ $arrayElemAt: ["$tag", 0] }, "$$ROOT"]
+          }
+        }
+      }
+    ])
       .pipe(stringifier)
       .pipe(file);
   }

@@ -4,7 +4,6 @@ import Notifier from '/imports/client/lib/Notifier';
 import Header from '/imports/client/layout/header/Header';
 import LeftMenu from '/imports/client/layout/leftMenu/LeftMenu';
 import Login from "/imports/client/pages/users/Login";
-import NotificationGlobal from "/imports/client/pages/home/components/NotificationGlobal";
 
 export default ({ main, routeProps }) => {
   // main represents the component to render passed from the router
@@ -14,8 +13,6 @@ export default ({ main, routeProps }) => {
     return (
       <div id="cc-app">
         <Header />
-        <NotificationGlobal />
-
         <main className="main-section">
           <LeftMenu />
           {React.createElement(main, routeProps)}

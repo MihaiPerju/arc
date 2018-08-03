@@ -38,6 +38,11 @@ class Header extends Component {
     this.node = node;
   };
 
+  handleClick = (id, e) => {
+    e.stopPropagation();
+    FlowRouter.go(`/${id}/activity`);
+  };
+
   state = { activeItem: "Dashboard" };
 
   render() {
@@ -100,22 +105,36 @@ class Header extends Component {
                   />
                 </a>
               </div>
-              <div className={this.state.dropdown ? "right__side open" : "right__side"}>
+              <div
+                className={
+                  this.state.dropdown ? "right__side open" : "right__side"
+                }
+              >
                 <div className="owner-menu">
-                  <Notifications/>
-                  {(isRep)
+                  <Notifications />
+                  {isRep
                     ? user.profile && (
-                        <a href={`/${user._id}/activity`} className="toggle-dropdown">
-                          <span>
+                        <div
+                          onClick={this.openDropdown}
+                          ref={this.nodeRef}
+                          className="toggle-dropdown"
+                          style={{cursor: "pointer"}}
+                        >
+                          <a onClick={this.handleClick.bind(this, user._id)}>
                             {user.profile.firstName +
                               " " +
                               user.profile.lastName}
-                          </span>
+                          </a>
                           <div className="profile-img" />
-                        </a>
+                        </div>
                       )
                     : user.profile && (
-                        <a href="" className="toggle-dropdown" onClick={this.openDropdown} ref={this.nodeRef}>
+                        <a
+                          href=""
+                          className="toggle-dropdown"
+                          onClick={this.openDropdown}
+                          ref={this.nodeRef}
+                        >
                           <span>
                             {user.profile.firstName +
                               " " +
