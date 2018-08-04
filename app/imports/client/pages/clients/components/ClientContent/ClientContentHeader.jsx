@@ -140,7 +140,7 @@ export default class ClientContentHeader extends Component {
               <ActionDropdown
                 facilityHref={"/client/" + client._id + "/manage-facilities"}
                 regionHref={FlowRouter.url("region.list", { id: client._id })}
-                onEdit={() => this.onEdit()}
+                onEdit={this.onEdit}
                 disableAction={() => this.disableAction(client._id, client.status)}
                 onOpenAssignDialog={this.onOpenAssignDialog}
                 status={client.status}

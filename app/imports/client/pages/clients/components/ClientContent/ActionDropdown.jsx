@@ -58,7 +58,7 @@ export default class ActionDropdown extends Component {
                   <a href={facilityHref}>Manage facilities</a>
                 </li>
                 <li className="action-item">
-                  <a href="" onClick={onEdit}>Edit client</a>
+                  <a href="javascript:void(0)" onClick={onEdit}>Edit client</a>
                 </li>
                 <li className="action-item">
                   <a href="" onClick={disableAction}>{status ? "Disable client" : "Enable client"}</a>
