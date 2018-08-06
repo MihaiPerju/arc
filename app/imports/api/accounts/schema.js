@@ -236,5 +236,10 @@ export default new SimpleSchema({
   },
   "lockBreakUsers.$": {
     type: String
+  },
+  flagCounter: {
+    type: Number,
+    optional: true,
+    defaultValue: 0
   }
 });

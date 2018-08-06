@@ -93,6 +93,10 @@ h6 {
   text-align: center;
 }
 
+.text--right {
+  text-align: right;
+}
+
 .align-center {
   display: flex;
   align-items: center;
@@ -109,6 +113,11 @@ h6 {
 
 .img-circle {
   border-radius: 50%;
+  background: $color-white;
+}
+
+.border--light-grey {
+  border: 1px #e1e1e1 solid;
 }
 
 .md-avatar {
@@ -169,6 +178,10 @@ h6 {
 
 .m-t--20 {
   margin-top: 20px;
+}
+
+.m-t--10 {
+  margin-top: 10px;
 }
 
 .truncate {

@@ -13,7 +13,7 @@ class CommentsListContainer extends React.Component {
   }
 
   render() {
-    const { account, data, isLoading, error } = this.props;
+    const { account, data, isLoading, error, closeRightPanel } = this.props;
 
     if (isLoading) {
       return <Loading />;
@@ -23,7 +23,7 @@ class CommentsListContainer extends React.Component {
       return <div>Error: {error.reason}</div>;
     }
 
-    return <CommentList account={account} comments={data} />;
+    return <CommentList closeRightPanel={closeRightPanel} account={account} comments={data} />;
   }
 }
 

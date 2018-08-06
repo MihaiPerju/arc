@@ -77,7 +77,7 @@ export default class AccountContent extends Component {
             <ActionBlock closeRightPanel={closeRightPanel} account={account} />
             <LetterList account={account} />
             <PdfFiles account={account} />
-            <CommentsListContainer account={account} />
+            <CommentsListContainer account={account} closeRightPanel={closeRightPanel} />
           </div>
         )}
       </div>
