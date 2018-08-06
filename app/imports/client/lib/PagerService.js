@@ -385,7 +385,7 @@ export default class PagerService {
       regionName,
       createdAtMin,
       createdAtMax,
-      letterIds,
+      letterName,
       tagIds;
 
     _.extend(params, {
@@ -450,11 +450,7 @@ export default class PagerService {
     }
 
     if (currentPath.indexOf("letter-management/list") > -1) {
-      letterIds = FlowRouter.getQueryParam("letterIds");
-    }
-
-    if (currentPath.indexOf("letter-management/list") > -1) {
-      letterIds = FlowRouter.getQueryParam("letterIds");
+      letterName = FlowRouter.getQueryParam("letterTemplateName");
     }
 
     if (currentPath.indexOf("module-tags/list") > -1) {
@@ -563,8 +559,10 @@ export default class PagerService {
     }
 
     // letter-management search
-    if (letterIds) {
-      _.extend(params.filters, { _id: { $in: letterIds } });
+    if (letterName) {
+      _.extend(params.filters, {
+        letterTemplateName: { $regex: letterName, $options: "i" }
+      });
     }
   }
 
