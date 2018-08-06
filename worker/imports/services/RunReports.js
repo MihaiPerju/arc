@@ -10,10 +10,11 @@ import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
 import { fields } from "/imports/api/reports/enums/reportColumn";
 import Settings from "/imports/api/settings/collection.js";
+import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 
 export default class RunReports {
   static run() {
-    const job = JobQueue.findOne({ workerId: null });
+    const job = JobQueue.findOne({ workerId: null, type: JobQueueEnum.RUN_REPORT });
     if (job) {
       // Mark job as taken
       JobQueue.update(
@@ -90,7 +91,7 @@ export default class RunReports {
     const filters = this.getFilters(reportId);
 
     //Write file
-    const AccountsNative = Accounts.rawCollection();
+    const AccountsNative = Accounts.rawCollection(filters);
 
     let columns = this.getColumns(reportId);
 
