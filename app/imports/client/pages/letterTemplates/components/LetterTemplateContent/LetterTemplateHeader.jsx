@@ -16,7 +16,7 @@ export default class LetterTemplateHeader extends Component {
                     <div className="title">{template.name}</div>
                 </div>
                 <div className="row__header">
-                    <div className="plasment-block">
+                    <div className="placement-block">
                         <div className="text-light-grey">Category</div>
                         <div className="type">{template.category}</div>
                     </div>

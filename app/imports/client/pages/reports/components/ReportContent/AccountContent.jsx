@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import moment from "moment";
 import { types, fields } from "/imports/api/reports/enums/reportColumn";
 import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
+
 export default class AccountContent extends Component {
   constructor() {
     super();
@@ -12,6 +13,7 @@ export default class AccountContent extends Component {
     if (header === fields.INSURANCES) {
       return (
         <div key={index}>
+          <div>{header}</div>
           {reportColumns[header].map(insurance => {
             return _.map(insurance, (value, key) => {
               if (value) {
@@ -115,7 +117,8 @@ export default class AccountContent extends Component {
   };
 
   render() {
-    const { tableHeader, accounts } = this.props;
+    const { tableHeader, accounts, report } = this.props;
+    const { reportColumns } = report;
 
     return (
       <ScrollSync>
@@ -135,29 +138,41 @@ export default class AccountContent extends Component {
           <ScrollSyncPane>
             <div className="table-container__right">
               <div className="table-row">
-                {tableHeader.map((header, index) => (
-                  <div
-                    key={index}
-                    className="table-header text-center table-field text-light-grey"
-                  >
-                    {this.getHeaderNames(header, index)}
-                  </div>
-                ))}
+                {tableHeader.map((header, index) => {
+                  if (
+                    header === fields.INSURANCES &&
+                    reportColumns[fields.INSURANCES].length === 0
+                  ) {
+                    return <div />;
+                  }
+                  return (
+                    <div
+                      key={index}
+                      className="table-header text-center table-field text-light-grey"
+                    >
+                      {this.getHeaderNames(header, index)}
+                    </div>
+                  );
+                })}
               </div>
               {accounts.map((account, index) => {
                 return (
                   <div className="table-row" key={index}>
                     {tableHeader.map((columnKeys, idx) => {
-                      if (idx > 0) {
-                        return (
-                          <div
-                            key={idx}
-                            className="table-field table-field--grey text-center"
-                          >
-                            {this.getColumnValues(columnKeys, account, idx)}
-                          </div>
-                        );
+                      if (
+                        columnKeys === fields.INSURANCES &&
+                        reportColumns[fields.INSURANCES].length === 0
+                      ) {
+                        return <div />;
                       }
+                      return (
+                        <div
+                          key={idx}
+                          className="table-field table-field--grey text-center"
+                        >
+                          {this.getColumnValues(columnKeys, account, idx)}
+                        </div>
+                      );
                     })}
                   </div>
                 );

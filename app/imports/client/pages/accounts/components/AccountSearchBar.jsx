@@ -628,7 +628,7 @@ export default class AccountSearchBar extends Component {
                             placeholder="Search by active Insurance Code"
                           />
                         </div>
-                        <div className="flex--helper flex-justify--end">
+                        <div className="flex--helper flex-justify--space-between">
                           <button
                             className="btn--red"
                             onClick={this.resetFilters}
