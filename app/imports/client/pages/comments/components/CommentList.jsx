@@ -51,7 +51,7 @@ export default class CommentList extends Component {
   };
 
   render() {
-    const { account, comments } = this.props;
+    const { account, comments, closeRightPanel } = this.props;
     const { isCorrectNote } = this.state;
 
     return (
@@ -86,6 +86,7 @@ export default class CommentList extends Component {
                 comment={comment}
                 key={index}
                 commentId={index}
+                closeRightPanel={closeRightPanel}
               />
             );
           })}
