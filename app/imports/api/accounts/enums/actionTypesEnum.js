@@ -6,7 +6,8 @@ const typeList = [
   "file",
   "revert",
   "flag",
-  "edit"
+  "edit",
+  "lockBreak"
 ];
 export { typeList };
 
@@ -18,5 +19,6 @@ export default {
   FILE: "file",
   REVERT: "revert",
   FLAG: "flag",
-  EDIT: "edit"
+  EDIT: "edit",
+  LOCK_BREAK: "lockBreak"
 };

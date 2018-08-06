@@ -47,7 +47,8 @@ export default class AccountContent extends Component {
       account,
       openMetaData,
       closeRightPanel,
-      accountsSelected
+      accountsSelected,
+      removeLock
     } = this.props;
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;
@@ -55,11 +56,19 @@ export default class AccountContent extends Component {
     return (
       <div className="main-content">
         {account && (
-          <div>
+          <div
+            style={{
+              pointerEvents:
+                account.lockBreakUsers.indexOf(Meteor.userId()) === -1
+                  ? "inherit"
+                  : "none"
+            }}
+          >
             <AccountContentHeader
               account={account}
               openMetaData={openMetaData}
               closeRightPanel={closeRightPanel}
+              removeLock={removeLock}
             />
             {this.escalateReason()}
             {this.tickleBlock()}
