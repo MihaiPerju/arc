@@ -129,7 +129,7 @@ export default class AccountContent extends Component {
                 Account name
               </div>
               {accounts.map((account, index) => (
-                <div className="table-field truncate">
+                <div key={index} className="table-field truncate">
                   {"Account No." + (index + 1)}
                 </div>
               ))}
