@@ -66,9 +66,12 @@ export default class ReportsService {
 
     for (let field of requiredFields) {
       //Field not completed
-      if (!data[field]) {
-        return { error: "Filters uncomplete!" };
+      if (field.indexOf("Start") === -1 && field.indexOf("End") === -1) {
+        if (!data[field]) {
+          return { error: "Filters uncomplete!" };
+        }
       }
+
       filterBuilderData[field] = data[field];
 
       //Removing 'Start' and 'End' prefixes if they are
@@ -86,17 +89,41 @@ export default class ReportsService {
       }
       if (ReportsService.isNumber(field)) {
         //If is Number
-        filters[field] = {
-          $gte: data[field + "Start"],
-          $lt: data[field + "End"]
-        };
+        if (data[field + "Start"] && data[field + "End"]) {
+          filters[field] = {
+            $gte: data[field + "Start"],
+            $lt: data[field + "End"]
+          };
+        } else if (data[field + "Start"]) {
+          filters[field] = {
+            $gte: data[field + "Start"]
+          };
+        } else if (data[field + "End"]) {
+          filters[field] = {
+            $lt: data[field + "End"]
+          };
+        } else {
+          return { error: "Atleast one field is required!" };
+        }
       }
       if (ReportsService.isDate(field)) {
         //If is Date
-        filters[field] = {
-          $gte: data[field + "Start"],
-          $lt: data[field + "End"]
-        };
+        if (data[field + "Start"] && data[field + "End"]) {
+          filters[field] = {
+            $gte: data[field + "Start"],
+            $lt: data[field + "End"]
+          };
+        } else if (data[field + "Start"]) {
+          filters[field] = {
+            $gte: data[field + "Start"]
+          };
+        } else if (data[field + "End"]) {
+          filters[field] = {
+            $lt: data[field + "End"]
+          };
+        } else {
+          return { error: "Atleast one field is required!" };
+        }
       }
       if (ReportsService.isString(field)) {
         //If is a string
