@@ -484,14 +484,6 @@ export default class AccountSearchBar extends Component {
                             />
                           </div>
                         </div>
-                        {/* <div className="select-form">
-                          <SelectField
-                            label="Facility:"
-                            name="facilityId"
-                            placeholder="Select Facility"
-                            options={facilityOptions}
-                          />
-                        </div> */}
                         <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
                             label="Facility code:"
@@ -504,13 +496,6 @@ export default class AccountSearchBar extends Component {
                             placeholder="Search by Patient Type"
                           />
                         </div>
-                        {/* <div className="form-group">
-                          <AutoField
-                            label="Patient Type:"
-                            name="ptType"
-                            placeholder="Search by Patient Type"
-                          />
-                        </div> */}
                         <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
                             label="Medical Number:"
@@ -523,13 +508,6 @@ export default class AccountSearchBar extends Component {
                             placeholder="Search by Financial Class"
                           />
                         </div>
-                        {/* <div className="form-group">
-                          <AutoField
-                            label="Financial Class:"
-                            name="finClass"
-                            placeholder="Search by Financial Class"
-                          />
-                        </div> */}
                         <div className="flex--helper form-group__pseudo">
                           <div className="select-form">
                             <SelectField
@@ -547,21 +525,6 @@ export default class AccountSearchBar extends Component {
                             />
                           </div>
                         </div>
-                        {/* <div className="select-form">
-                          <SelectField
-                            label="Substate:"
-                            placeholder="Substate"
-                            options={substates}
-                            name="substate"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <AutoField
-                            label="Active Insurance Code:"
-                            name="activeInsCode"
-                            placeholder="Search by active Insurance Code"
-                          />
-                        </div> */}
                         <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
                             label="Minimum Account Balance:"
