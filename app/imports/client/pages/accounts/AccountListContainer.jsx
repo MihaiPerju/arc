@@ -267,21 +267,23 @@ class AccountListContainer extends Pager {
   getUserOptions(accounts) {
     let userOptions = [];
     for (let account of accounts) {
-      for (let user of account.facility.users) {
-        let item = {
-          label:
-            user &&
-            user.profile &&
-            user.profile.firstName +
-              " " +
-              user.profile.lastName +
-              "(" +
-              user.roles[0] +
-              ")",
-          value: user && user._id
-        };
-        if (!userOptions.includes(item)) {
-          userOptions.push(item);
+      if(account.facility) {
+        for (let user of account.facility.users) {
+          let item = {
+            label:
+              user &&
+              user.profile &&
+              user.profile.firstName +
+                " " +
+                user.profile.lastName +
+                "(" +
+                user.roles[0] +
+                ")",
+            value: user && user._id
+          };
+          if (!userOptions.includes(item)) {
+            userOptions.push(item);
+          }
         }
       }
     }

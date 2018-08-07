@@ -51,14 +51,9 @@ p {
   margin: 0 0 10px
 }
 
-ul:not(.cc-custom-list) {
+ul {
   margin: 0;
-  padding: 0;
-  list-style-position: inside;
-
-  li {
-
-  }
+  padding-left: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {

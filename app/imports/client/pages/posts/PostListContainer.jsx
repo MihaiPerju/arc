@@ -1,6 +1,6 @@
 import React from 'react';
 import Pager from '/imports/client/lib/Pager.jsx';
-// import query from '/imports/api/posts/queries/postList';
+import query from '/imports/api/posts/queries/postList';
 import PostList from './components/PostList.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import {Button} from 'semantic-ui-react'
