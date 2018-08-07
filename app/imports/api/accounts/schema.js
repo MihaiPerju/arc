@@ -220,5 +220,10 @@ export default new SimpleSchema({
   },
   "tagIds.$": {
     type: String
+  },
+  flagCounter: {
+    type: Number,
+    optional: true,
+    defaultValue: 0
   }
 });

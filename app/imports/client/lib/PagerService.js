@@ -6,8 +6,13 @@ export default class PagerService {
   queryParams;
   static setQuery(query, { page, perPage, state, assign, filters, options }) {
     let params = this.getPagerOptions(page, perPage);
-
-    if (state || state === "") {
+    const { route } = FlowRouter.current();
+    
+    if (
+      state ||
+      state === "" ||
+      route.path.indexOf("flagged") > -1
+    ) {
       this.getAccountFilters(params, state, filters, options);
       this.getProperAccounts(params, assign);
     } else {
@@ -325,6 +330,12 @@ export default class PagerService {
 
     if (medNo) {
       _.extend(params.filters, { medNo: +medNo });
+    }
+
+    if (FlowRouter.current().route.path.indexOf("/flagged") > -1) {
+      _.extend(params, {
+        flagged: true
+      });
     }
 
     //adding sort query options

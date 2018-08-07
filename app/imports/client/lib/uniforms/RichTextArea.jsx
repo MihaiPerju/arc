@@ -1,68 +1,83 @@
 import React from "react";
 import connectField from "uniforms/connectField";
 import filterDOMProps from "uniforms/filterDOMProps";
-import "react-select/dist/react-select.css";
-import RichTextEditor, { EditorValue } from "react-rte";
-import EditorDropdown from "./EditorDropdown";
-import { Modifier, EditorState } from "draft-js";
+import CKEditor from "react-ckeditor-component";
+import variablesEnum from "/imports/api/letterTemplates/enums/variablesEnum";
 
 class RichTextArea extends React.Component {
   constructor(props) {
     super(...arguments, props);
     this._intermediate = "";
     this.state = {
-      value: RichTextEditor.createEmptyValue()
+      value: ""
     };
   }
 
   componentWillMount() {
     if (this.props.value) {
       this.setState({
-        value: RichTextEditor.createValueFromString(this.props.value, "html")
+        value: this.props.value
       });
     }
   }
 
-  onChange = value => {
-    this.setState({ value });
-    this.props.onChange(value.toString("html"));
-  };
-
-  setEditorValue = (newValue, editorState) => {
-    const contentState = Modifier.insertText(
-      editorState.getCurrentContent(),
-      editorState.getSelection(),
-      `{${newValue}}`
-    );
-
-    const nextEditorState = EditorState.push(
-      editorState,
-      contentState,
-      "insert-characters"
-    );
-    this.onChange(new EditorValue(nextEditorState));
+  onChange = evt => {
+    var newContent = evt.editor.getData();
+    this.setState({
+      value: newContent
+    });
+    this.props.onChange(newContent.toString("html"));
   };
 
   render() {
-    const customControls = [
-      (setter, getter, editorState) => {
-        return (
-          <EditorDropdown
-            editorState={editorState}
-            setEditorValue={this.setEditorValue}
-          />
-        );
-      }
-    ];
     const { id, label, ...props } = this.props;
     const { value } = this.state;
     return (
       <div {...filterDOMProps(props)}>
         {label && <label htmlFor={id}>{label}</label>}
-        <RichTextEditor
-          value={value}
-          onChange={this.onChange}
-          customControls={customControls}
+        <CKEditor
+          activeClass="p10"
+          content={value}
+          events={{
+            change: this.onChange
+          }}
+          config={{
+            on: {
+              pluginsLoaded: function() {
+                const editor = this,
+                  config = editor.config;
+
+                editor.ui.addRichCombo("my-combo", {
+                  label: "Select variables",
+                  title: "Select variables",
+                  toolbar: "basicstyles,0",
+
+                  panel: {
+                    css: [CKEDITOR.skin.getPath("editor")].concat(
+                      config.contentsCss
+                    ),
+                    multiSelect: false,
+                    attributes: { "aria-label": "Select variables" }
+                  },
+
+                  init: function() {
+                    variablesEnum.map(data => {
+                      this.add(data.value, data.label);
+                    });
+                  },
+
+                  onClick: function(value) {
+                    editor.focus();
+                    editor.fire("saveSnapshot");
+
+                    editor.insertHtml(`{${value}}`);
+
+                    editor.fire("saveSnapshot");
+                  }
+                });
+              }
+            }
+          }}
         />
       </div>
     );
