@@ -152,7 +152,7 @@ class ActionListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       actionsSelected,
       currentAction,
@@ -164,7 +164,7 @@ class ActionListContainer extends Pager {
       moduleTags
     } = this.state;
     const action = objectFromArray(data, currentAction);
-    if (loading || loadingSubstates) {
+    if (isLoading || loadingSubstates) {
       return <Loading />;
     }
 

@@ -85,13 +85,13 @@ class ScheduleBlock extends Component {
     };
 
     render() {
-        const {data, error, loading, report} = this.props;
+        const {data, error, isLoading, report} = this.props;
         const {blankSchedule} = this.state;
         const users = this.getUserOptions(this.state.users);
         const clients = this.getClientOptions(this.state.clients);
         schema = schema.omit("reportId");
 
-        if (loading) {
+        if (isLoading) {
             return <Loading/>;
         }
 

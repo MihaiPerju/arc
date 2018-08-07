@@ -47,10 +47,10 @@ class ReasonCodesBlock extends Component {
   };
 
   render() {
-    const { data, error, loading, action, isPrivate } = this.props;
+    const { data, error, isLoading, action, isPrivate } = this.props;
     const { blankSchedule } = this.state;
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

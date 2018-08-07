@@ -112,12 +112,12 @@ class Notitfications extends Component {
 
   render() {
     const {dropdownIsActive, badge} = this.state;
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const notificationBtnClasses = classNames('notification-btn', {
       'active': dropdownIsActive
     });
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

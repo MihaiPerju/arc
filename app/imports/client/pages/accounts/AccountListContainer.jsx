@@ -361,7 +361,7 @@ class AccountListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       accountsSelected,
       currentAccount,
@@ -382,7 +382,7 @@ class AccountListContainer extends Pager {
       { icon: "users", method: this.assignToWorkQueue }
     ];
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

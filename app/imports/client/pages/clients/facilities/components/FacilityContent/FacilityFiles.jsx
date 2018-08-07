@@ -54,10 +54,10 @@ class FacilityFiles extends Component {
     }
 
     render() {
-        const {data, loading, error} = this.props;
+        const {data, isLoading, error} = this.props;
         const {dialogIsActive} = this.state;
 
-        if (loading) {
+        if (isLoading) {
             return <Loading/>;
         }
 

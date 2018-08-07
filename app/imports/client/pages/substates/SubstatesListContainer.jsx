@@ -136,7 +136,7 @@ class SubstatesListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       substateSelected,
       currentSubstate,
@@ -147,7 +147,7 @@ class SubstatesListContainer extends Pager {
       moduleTags
     } = this.state;
     const substate = objectFromArray(data, currentSubstate);
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

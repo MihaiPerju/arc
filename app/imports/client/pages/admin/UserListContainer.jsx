@@ -124,7 +124,7 @@ class UserListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       usersSelected,
       currentUser,
@@ -134,7 +134,7 @@ class UserListContainer extends Pager {
     } = this.state;
     const user = objectFromArray(data, currentUser);
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

@@ -159,7 +159,7 @@ class ReportListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       reportsSelected,
       currentReport,
@@ -171,7 +171,7 @@ class ReportListContainer extends Pager {
     } = this.state;
     const report = objectFromArray(data, currentReport);
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

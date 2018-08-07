@@ -136,7 +136,7 @@ class LetterTemplateListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       templatesSelected,
       currentTemplate,
@@ -146,7 +146,7 @@ class LetterTemplateListContainer extends Pager {
       moduleTags
     } = this.state;
     const template = objectFromArray(data, currentTemplate);
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 
