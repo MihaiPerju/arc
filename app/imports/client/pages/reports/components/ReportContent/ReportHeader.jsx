@@ -210,7 +210,7 @@ class ReportHeader extends Component {
     let tableHeader = [];
     if (report.type === reportTypes.ACCOUNT_ACTIONS) {
       tableHeader = [
-        "S.No.",
+        "accountId",
         "type",
         "userId",
         "createdAt",
