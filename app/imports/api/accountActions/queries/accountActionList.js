@@ -55,5 +55,6 @@ export default AccountActions.createQuery("accountActionList", {
   customFields: 1,
   accountField: 1,
   fieldPreviousValue: 1,
-  fieldUpdatedValue: 1
+  fieldUpdatedValue: 1,
+  reasonCode: 1
 });

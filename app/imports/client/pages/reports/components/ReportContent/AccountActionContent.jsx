@@ -8,6 +8,58 @@ export default class AccountActionContent extends Component {
     super();
   }
 
+  getDataRows = (actionPerformed, columnKey, idx) => {
+    if (columnKey === "userId") {
+      return (
+        <div key={idx}>
+          {actionPerformed["user"] &&
+            `${actionPerformed["user"].profile.firstName} ${
+              actionPerformed["user"].profile.lastName
+            }`}
+        </div>
+      );
+    } else if (columnKey === "actionId") {
+      return (
+        <div key={idx}>
+          {actionPerformed["action"] && actionPerformed["action"].title}
+        </div>
+      );
+    } else if (columnKey === "customFields") {
+      return (
+        <div key={idx}>
+          {_.map(actionPerformed[columnKey], (value, key) => {
+            if (value) {
+              return (
+                <div>
+                  <b>{key}: </b>
+                  <span>
+                    {typeof value === "object"
+                      ? moment(value).format("MM/DD/YYYY, hh:mm")
+                      : value}
+                  </span>
+                </div>
+              );
+            }
+          })}
+        </div>
+      );
+    } else if (columnKey === "accountId") {
+      return (
+        <div key={idx}>
+          {actionPerformed["account"] && actionPerformed["account"].acctNum}
+        </div>
+      );
+    }
+    return (
+      <div key={idx}>
+        {typeof actionPerformed[columnKey] === "object"
+          ? actionPerformed[columnKey] &&
+            moment(actionPerformed[columnKey]).format("MM/DD/YYYY, hh:mm")
+          : actionPerformed[columnKey]}
+      </div>
+    );
+  };
+
   render() {
     const { tableHeader, accountActions } = this.props;
 
@@ -47,75 +99,12 @@ export default class AccountActionContent extends Component {
                 return (
                   <div className="table-row" key={index}>
                     {tableHeader.map((columnKey, idx) => {
-                      if (columnKey === "userId") {
-                        return (
-                          <div
-                            key={idx}
-                            className="table-field table-field--grey text-center"
-                          >
-                            {actionPerformed["user"] &&
-                              `${actionPerformed["user"].profile.firstName} ${
-                                actionPerformed["user"].profile.lastName
-                              }`}
-                          </div>
-                        );
-                      } else if (columnKey === "actionId") {
-                        return (
-                          <div
-                            key={idx}
-                            className="table-field table-field--grey text-center"
-                          >
-                            {actionPerformed["action"] &&
-                              actionPerformed["action"].title}
-                          </div>
-                        );
-                      } else if (columnKey === "customFields") {
-                        return (
-                          <div
-                            key={idx}
-                            className="table-field table-field--grey text-center"
-                          >
-                            {_.map(actionPerformed[columnKey], (value, key) => {
-                              if (value) {
-                                return (
-                                  <div>
-                                    <b>{key}: </b>
-                                    <span>
-                                      {typeof value === "object"
-                                        ? moment(value).format(
-                                            "MM/DD/YYYY, hh:mm"
-                                          )
-                                        : value}
-                                    </span>
-                                  </div>
-                                );
-                              }
-                            })}
-                          </div>
-                        );
-                      } else if (columnKey === "accountId") {
-                        return (
-                          <div
-                            key={idx}
-                            className="table-field table-field--grey text-center"
-                          >
-                            {actionPerformed["account"] &&
-                              actionPerformed["account"].acctNum}
-                          </div>
-                        );
-                      }
-
                       return (
                         <div
                           key={idx}
                           className="table-field table-field--grey text-center"
                         >
-                          {typeof actionPerformed[columnKey] === "object"
-                            ? actionPerformed[columnKey] &&
-                              moment(actionPerformed[columnKey]).format(
-                                "MM/DD/YYYY, hh:mm"
-                              )
-                            : actionPerformed[columnKey]}
+                          {this.getDataRows(actionPerformed, columnKey, idx)}
                         </div>
                       );
                     })}
