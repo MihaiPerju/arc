@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import classNames from "classnames";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
 import Dialog from '../../../lib/ui/Dialog';
-
+import classNames from 'classnames';
 export default class LetterSingle extends Component {
   constructor() {
     super();
@@ -68,15 +67,18 @@ export default class LetterSingle extends Component {
   };
 
   render() {
-    const classes = classNames({
-      "list-item": true,
-      "user-item": true
-    });
     const { letter, moduleTags } = this.props;
     const { dialogIsActive } = this.state;
+    const itemClasses = classNames('list-item user-item', {
+      'letter-item': letter.status == Statuses.NEW
+    });
+    const statusClasses = classNames('status', {
+      'pending': letter.status == Statuses.NEW,
+      'manually': letter.status == Statuses.MANUALLY_MAILED
+    });
 
     return (
-      <div className={classes}>
+      <div className={itemClasses}>
         <div className="check-item">
           <TagItem
             title="Tag Letter"
@@ -95,7 +97,7 @@ export default class LetterSingle extends Component {
               {letter.letterTemplate && letter.letterTemplate.name}
             </div>
           )}
-          <div className="status pending">{letter.status}</div>
+          <div className={statusClasses}>{letter.status}</div>
           {letter.status == Statuses.NEW && (
             <button
               className="btn-text--green"
