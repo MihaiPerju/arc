@@ -1,5 +1,7 @@
 import React from "react";
-import { render } from "react-dom";
+import {
+  render
+} from "react-dom";
 
 import route from "./router";
 import "./logoutRoute";
@@ -15,27 +17,27 @@ import Login from '/imports/client/pages/users/Login';
 import Dashboard from '/imports/client/pages/users/Dashboard';
 
 route('/dashboard', Home, {}, {
-    name: 'dashboard',
+  name: 'dashboard',
 
 });
 route('/', Login, {}, {
-    name: 'login',
+  name: 'login',
 
 });
 route('/my-profile', MyProfile, {}, {
-    name: 'profile',
+  name: 'profile',
 });
 route('/:userId/activity', ActivityStream);
 route('/password/change', ChangePassword, {}, {
-    name: 'password.change',
+  name: 'password.change',
 
 });
 route('/password/forgot', ForgotPassword, {}, {
-    name: 'password.forgot',
+  name: 'password.forgot',
 
 });
 route('/reset-password/:token', ResetPassword, {}, {
-    name: 'password.reset',
+  name: 'password.reset',
 
 });
 route('/dashboard', Dashboard);
@@ -46,19 +48,10 @@ import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
 import EditUser from '/imports/client/pages/admin/EditUser.jsx';
 import Settings from "/imports/client/pages/admin/Settings";
 
-route("/admin/settings",Settings);
+route("/admin/settings", Settings);
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
 route('/admin/user/:userId/edit', EditUser);
-
-//Posts
-import PostListContainer from "/imports/client/pages/posts/PostListContainer.jsx";
-import CreatePost from "/imports/client/pages/posts/CreatePost.jsx";
-import EditPost from "/imports/client/pages/posts/EditPost.jsx";
-
-route("/post/list", PostListContainer);
-route("/post/create", CreatePost);
-route("/post/:postId/edit", EditPost);
 
 //Clients
 import CreateClient from "/imports/client/pages/clients/ClientCreate";
@@ -84,17 +77,13 @@ import LetterView from "/imports/client/pages/letters/LetterView.jsx";
 
 route(
   "/account/:accountId/create-letter",
-  LetterCreateContainer,
-  {},
-  {
+  LetterCreateContainer, {}, {
     name: "letter.create"
   }
 );
 route(
   "/account/:accountId/letter/:letterId/view",
-  LetterView,
-  {},
-  {
+  LetterView, {}, {
     name: "letter.view"
   }
 );
@@ -106,25 +95,19 @@ import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.
 
 route(
   "/client/:_id/manage-facilities",
-  FacilityContainer,
-  {},
-  {
+  FacilityContainer, {}, {
     name: "facility.list"
   }
 );
 route(
   "/client/:_id/manage-facilities/create",
-  FacilityCreate,
-  {},
-  {
+  FacilityCreate, {}, {
     name: "facility.create"
   }
 );
 route(
   "/client/:_id/manage-facilities/:facilityId/edit",
-  FacilityEdit,
-  {},
-  {
+  FacilityEdit, {}, {
     name: "facility.edit"
   }
 );
@@ -155,9 +138,7 @@ import RegionListContainer from "/imports/client/pages/regions/RegionsListContai
 
 route(
   "/client/:id/region/list",
-  RegionListContainer,
-  {},
-  {
+  RegionListContainer, {}, {
     name: "region.list"
   }
 );
@@ -171,9 +152,7 @@ route("/accounts/filter-builder", AccountFilterBuilder);
 route("/reports/list", ReportListContainer);
 route(
   "/report/create/facilityid/:facilityId",
-  ReportCreate,
-  {},
-  {
+  ReportCreate, {}, {
     name: "report.create.facilityid"
   }
 );
