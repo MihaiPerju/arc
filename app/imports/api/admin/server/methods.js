@@ -123,6 +123,7 @@ Meteor.methods({
   "admin.updateRootFolder" ({
     rootFolder
   }) {
+    rootFolder = rootFolder.trim();
     if (rootFolder[0] !== "/") {
       rootFolder = "/" + rootFolder;
     }
