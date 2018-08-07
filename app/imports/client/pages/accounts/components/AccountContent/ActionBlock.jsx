@@ -101,6 +101,7 @@ export default class ActionBlock extends Component {
   onUnflag = data => {
     const { selectedFlag, isFlagApproved } = this.state;
     const { flagResponse } = data;
+    const { closeRightPanel } = this.props;
 
     Meteor.call(
       "action.respondFlag",
@@ -108,6 +109,7 @@ export default class ActionBlock extends Component {
       err => {
         if (!err) {
           Notifier.success("Responded");
+          closeRightPanel();
         } else {
           Notifier.error(err.error);
         }
@@ -176,9 +178,7 @@ export default class ActionBlock extends Component {
                           (isRep && userId === actionPerformed.user._id)
                             ? actionPerformed.user && (
                                 <a
-                                  href={`/${
-                                    actionPerformed.user._id
-                                  }/activity`}
+                                  href={`/${actionPerformed.user._id}/activity`}
                                 >
                                   {actionPerformed.user.profile.firstName +
                                     " " +

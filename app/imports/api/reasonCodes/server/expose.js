@@ -7,7 +7,12 @@ reasonCodesListQuery.expose({
       _.extend(params.filters, {
         $or: [{ managerId: userId }, { managerId: null }]
       });
+    } else if (Roles.userIsInRole(userId, RolesEnum.REP)) {
+      _.extend(params.filters, {
+        $or: [{ clientId: { $exists: true } }, { managerId: null }]
+      });
     } else {
+      // for admin and tech
       _.extend(params.filters, {
         managerId: null
       });

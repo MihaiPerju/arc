@@ -1,76 +1,86 @@
 import React, {Component} from 'react';
 
 export default class ActionDropdown extends Component {
-  constructor() {
-    super();
+  constructor () {
+    super ();
     this.state = {
-      isOpenedDropdown: false
-    }
+      isOpenedDropdown: false,
+    };
+  }
+
+  componentWillUnmount () {
+    document.removeEventListener ('click', this.outsideClick, false);
   }
 
   openDropdown = () => {
     const {isOpenedDropdown} = this.state;
 
     if (!isOpenedDropdown) {
-      document.addEventListener("click", this.outsideClick, false);
+      document.addEventListener ('click', this.outsideClick, false);
     } else {
-      document.removeEventListener("click", this.outsideClick, false);
+      document.removeEventListener ('click', this.outsideClick, false);
     }
 
-    this.setState({
-      isOpenedDropdown: !isOpenedDropdown
-    })
+    this.setState ({
+      isOpenedDropdown: !isOpenedDropdown,
+    });
   };
 
   outsideClick = e => {
-    if (this.node && this.node.contains(e.target)) {
+    if (this.node && this.node.contains (e.target)) {
       return;
     }
 
-    this.openDropdown();
+    this.openDropdown ();
   };
 
   nodeRef = node => {
     this.node = node;
   };
 
-  render() {
+  render () {
     const {isOpenedDropdown} = this.state;
-    const {status, facilityHref, regionHref, onEdit, disableAction, onOpenAssignDialog} = this.props;
+    const {
+      status,
+      facilityHref,
+      regionHref,
+      onEdit,
+      disableAction,
+      onOpenAssignDialog,
+    } = this.props;
 
     return (
       <div className="action-dropdown" ref={this.nodeRef}>
         <div className="action-dropdown__btn" onClick={this.openDropdown}>
-          <i className="icon-angle-down"/>
+          <i className="icon-angle-down" />
         </div>
-        {
-          isOpenedDropdown && (
-            <div className="action-dropdown__container">
-              <div className="action-caret">
-                <div className="action-caret__outer"/>
-                <div className="action-caret__inner"/>
-              </div>
-              <ul className="action-list">
-                <li className="action-item">
-                  <a href={regionHref}>Manage regions</a>
-                </li>
-                <li className="action-item">
-                  <a href={facilityHref}>Manage facilities</a>
-                </li>
-                <li className="action-item">
-                  <a href="" onClick={onEdit}>Edit client</a>
-                </li>
-                <li className="action-item">
-                  <a href="" onClick={disableAction}>{status ? "Disable client" : "Enable client"}</a>
-                </li>
-                <li className="action-item">
-                  <a href="" onClick={onOpenAssignDialog}>Assign Manager</a>
-                </li>
-              </ul>
+        {isOpenedDropdown &&
+          <div className="action-dropdown__container">
+            <div className="action-caret">
+              <div className="action-caret__outer" />
+              <div className="action-caret__inner" />
             </div>
-          )
-        }
+            <ul className="action-list">
+              <li className="action-item">
+                <a href={regionHref}>Manage regions</a>
+              </li>
+              <li className="action-item">
+                <a href={facilityHref}>Manage facilities</a>
+              </li>
+              <li className="action-item">
+                <a href="" onClick={onEdit}>Edit client</a>
+              </li>
+              <li className="action-item">
+                <a href="" onClick={disableAction}>
+                  {status ? 'Disable client' : 'Enable client'}
+                </a>
+              </li>
+              <li className="action-item">
+                <a href="" onClick={onOpenAssignDialog}>Assign Manager</a>
+              </li>
+            </ul>
+          </div>}
       </div>
-    )
+    );
   }
 }

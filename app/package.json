@@ -39,6 +39,7 @@
     "react-addons-pure-render-mixin": "^15.3.1",
     "react-autobind": "^1.0.6",
     "react-chartjs": "^1.2.0",
+    "react-ckeditor-component": "^1.1.0",
     "react-datepicker": "^1.4.1",
     "react-dom": "^15.6.2",
     "react-dropzone-component": "^1.4.1",

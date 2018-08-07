@@ -73,12 +73,15 @@ export default class FlagService {
     };
 
     const userActionId = AccountActions.insert(userActionData);
-    
+
     Accounts.update(
       { _id: accountId },
       {
         $push: {
           flagIds: userActionId
+        },
+        $inc: {
+          flagCounter: 1
         }
       }
     );
@@ -95,6 +98,15 @@ export default class FlagService {
           managerId,
           flagResponse,
           isFlagApproved
+        }
+      }
+    );
+    const { accountId } = AccountActions.findOne({ _id });
+    Accounts.update(
+      { _id: accountId },
+      {
+        $inc: {
+          flagCounter: -1
         }
       }
     );

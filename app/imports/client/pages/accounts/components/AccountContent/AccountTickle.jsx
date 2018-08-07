@@ -51,6 +51,7 @@ export default class AccountTickle extends React.Component {
           <span className="text-light-grey">Tickle date</span>
           <AutoForm onSubmit={this.tickle} schema={schema}>
             <DatePicker
+              calendarClassName="cc-datepicker"
               showMonthDropdown
               showYearDropdown
               yearDropdownItemNumber={4}

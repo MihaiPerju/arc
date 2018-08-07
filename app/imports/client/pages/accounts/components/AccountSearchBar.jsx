@@ -541,6 +541,7 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
@@ -554,6 +555,7 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
@@ -569,6 +571,7 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Last Bill Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
@@ -582,6 +585,7 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>To Last Bill Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
@@ -597,6 +601,7 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>From Admit Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
@@ -610,6 +615,7 @@ export default class AccountSearchBar extends Component {
                           <div>
                             <label>To Admit Date:</label>
                             <DatePicker
+                              calendarClassName="cc-datepicker"
                               showMonthDropdown
                               showYearDropdown
                               yearDropdownItemNumber={4}
