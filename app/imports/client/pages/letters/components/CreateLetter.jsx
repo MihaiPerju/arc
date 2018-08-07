@@ -9,6 +9,7 @@ export default class CreateLetter extends React.Component {
       reset,
       selectedAttachments,
       letterTemplateId,
+      letterTemplateName,
       keywordsValues
     } = this.props;
     const attachmentIds = this.getAttachmentIds(selectedAttachments);
@@ -18,6 +19,7 @@ export default class CreateLetter extends React.Component {
       accountId,
       attachmentIds,
       letterTemplateId,
+      letterTemplateName,
       letterValues: keywordsValues
     };
     Meteor.call("letter.create", data, err => {

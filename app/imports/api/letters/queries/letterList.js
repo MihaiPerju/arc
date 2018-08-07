@@ -12,6 +12,7 @@ export default Letters.createQuery("letterList", {
   status: 1,
   createdAt: 1,
   letterTemplateId: 1,
+  letterTemplateName: 1,
   letterTemplate: {
     name: 1
   },

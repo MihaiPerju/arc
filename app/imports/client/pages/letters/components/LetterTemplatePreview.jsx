@@ -37,6 +37,7 @@ export default class LetterTemplatePreview extends React.Component {
       reset,
       selectedAttachments,
       letterTemplateId,
+      letterTemplateName,
       currentComponent,
       selectedLetter,
       keywordsValues,
@@ -56,6 +57,7 @@ export default class LetterTemplatePreview extends React.Component {
             {currentComponent === "create" ? (
               <CreateLetter
                 letterTemplateId={letterTemplateId}
+                letterTemplateName={letterTemplateName}
                 reset={reset}
                 accountId={accountId}
                 letterBody={letterBody}
@@ -66,6 +68,7 @@ export default class LetterTemplatePreview extends React.Component {
             ) : (
               <LetterEdit
                 letterTemplateId={letterTemplateId}
+                letterTemplateName={letterTemplateName}
                 reset={reset}
                 accountId={accountId}
                 letterBody={letterBody}

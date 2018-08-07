@@ -88,11 +88,11 @@ export default class LetterSingle extends Component {
         <div className="row__block align-center">
           {letter.isManuallyMailed ? (
             <div className="item-name text-blue">
-              {letter.letterTemplate && letter.letterTemplate.name}
+              {letter && letter.letterTemplateName}
             </div>
           ) : (
             <div className="item-name text-dark-grey">
-              {letter.letterTemplate && letter.letterTemplate.name}
+              {letter && letter.letterTemplateName}
             </div>
           )}
           <div className="status pending">{letter.status}</div>

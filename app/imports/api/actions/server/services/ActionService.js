@@ -60,7 +60,7 @@ export default class ActionService {
   }
 
   static createLetter(data) {
-    const { userId, accountId, letterTemplateId } = data;
+    const { userId, accountId, letterTemplateId, letterTemplateName } = data;
     const { clientId } = Accounts.findOne({ _id: accountId });
     const letterData = {
       userId,
@@ -68,7 +68,8 @@ export default class ActionService {
       createdAt: new Date(),
       accountId,
       letterTemplateId,
-      clientId
+      clientId,
+      letterTemplateName
     };
     Letter.insert(data);
     const accountActionId = AccountActions.insert(letterData);
