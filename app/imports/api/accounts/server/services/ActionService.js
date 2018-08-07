@@ -250,4 +250,64 @@ export default class ActionService {
       );
     }
   }
+
+  static addLockToAccount(_id, userId) {
+    // remove previous lock from the account by logged-in user
+    const account = Accounts.findOne({ lockOwnerId: userId });
+    
+    if (account) {
+      this.removeLockFromAccount(account._id, userId);
+    }
+
+    Accounts.update(
+      {
+        _id,
+        lockOwnerId: null
+      },
+      {
+        $set: {
+          lockOwnerId: userId,
+          lockTimestamp: new Date()
+        }
+      }
+    );
+  }
+
+  static removeLockFromAccount(userId) {
+    Accounts.update(
+      {
+        lockOwnerId: userId
+      },
+      {
+        $set: {
+          lockOwnerId: null,
+          lockTimestamp: null,
+          lockBreakUsers: []
+        }
+      }
+    );
+  }
+
+  static breakLockFromAccount(_id, userId) {
+    const { clientId } = Accounts.findOne({ _id });
+    const data = {
+      userId,
+      type: actionTypesEnum.LOCK_BREAK,
+      createdAt: new Date(),
+      accountId: _id,
+      clientId
+    };
+
+    AccountActions.insert(data);
+    Accounts.update(
+      {
+        _id
+      },
+      {
+        $push: {
+          lockBreakUsers: userId
+        }
+      }
+    );
+  }
 }

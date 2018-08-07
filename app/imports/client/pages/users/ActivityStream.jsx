@@ -104,6 +104,8 @@ export default class ActivityStream extends React.Component {
         return <i className="icon-flag" />;
       case actionTypesEnum.EDIT:
         return <i className="icon-pencil" />;
+      case actionTypesEnum.LOCK_BREAK:
+        return <i className="icon-lock" />;
     }
   };
 
@@ -302,6 +304,27 @@ export default class ActivityStream extends React.Component {
                 added the value <b>{fieldUpdatedValue}</b> in the field{" "}
                 <b>{accountField}</b>.
               </div>
+            )}
+          </div>
+        );
+      case actionTypesEnum.LOCK_BREAK:
+        return (
+          <div>
+            {user && (
+              <b>
+                {user.profile.firstName} {user.profile.lastName}
+              </b>
+            )}{" "}
+            breaked the lock of the account with Account Number{" "}
+            {account && (
+              <a
+                className="text-blue"
+                href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                  account._id
+                }`}
+              >
+                {account.acctNum}
+              </a>
             )}
           </div>
         );

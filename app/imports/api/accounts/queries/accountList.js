@@ -190,5 +190,15 @@ export default Accounts.createQuery("accountList", {
   tagIds: 1,
   other1: 1,
   other2: 1,
-  tickleReason: 1
+  tickleReason: 1,
+  lockTimestamp: 1,
+  lockOwnerId: 1,
+  lockOwner: {
+    profile: {
+      firstName: 1,
+      lastName: 1
+    },
+    emails: 1
+  },
+  lockBreakUsers: 1
 });

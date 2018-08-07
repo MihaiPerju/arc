@@ -14,12 +14,12 @@ import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import Dialog from "/imports/client/lib/ui/Dialog";
 
 class AccountListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
-      dialogIsActive: false,
       accountsSelected: [],
       currentAccount: null,
       page: 1,
@@ -33,7 +33,10 @@ class AccountListContainer extends Pager {
       tags: [],
       dropdownOptions: [],
       currentRouteState: null,
-      moduleTags: []
+      moduleTags: [],
+      isLockedDialogActive: false,
+      lockOwnerName: null,
+      lockedAccountId: null
     });
     this.query = query;
   }
@@ -90,6 +93,9 @@ class AccountListContainer extends Pager {
         currentRouteState: state
       });
       this.setPagerInitial();
+
+      // remove any locked account
+      this.removeLock();
     }
     this.updatePager();
 
@@ -99,6 +105,11 @@ class AccountListContainer extends Pager {
         currentAccount: accountId
       });
     }
+  }
+
+  componentWillUnmount() {
+    // remove any locked account
+    this.removeLock();
   }
 
   uncheckAccountList = () => {
@@ -164,19 +175,23 @@ class AccountListContainer extends Pager {
 
   selectAccount = newAccount => {
     const { currentAccount } = this.state;
-    if (currentAccount === newAccount._id) {
-      this.setState({
-        currentAccount: null,
-        showMetaData: false
-      });
-    } else {
-      this.setState({
-        currentAccount: newAccount._id,
-        showMetaData: false
-      });
-      const { state } = FlowRouter.current().params;
-      if (state === "active") {
-        this.incrementViewCount(newAccount._id);
+    if (this.checkAccountIsLocked(newAccount)) {
+      if (currentAccount === newAccount._id) {
+        this.setState({
+          currentAccount: null,
+          showMetaData: false
+        });
+        this.removeLock();
+      } else {
+        this.setState({
+          currentAccount: newAccount._id,
+          showMetaData: false
+        });
+        const { state } = FlowRouter.current().params;
+        if (state === "active") {
+          this.incrementViewCount(newAccount._id);
+        }
+        this.addLock(newAccount._id);
       }
     }
   };
@@ -360,6 +375,64 @@ class AccountListContainer extends Pager {
       });
   };
 
+  addLock = _id => {
+    Meteor.call("account.addLock", _id, err => {
+      if (err) {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  removeLock = () => {
+    Meteor.call("account.removeLock", err => {
+      if (err) {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  checkAccountIsLocked = account => {
+    // account is locked
+    const { lockOwnerId, lockOwner, _id, lockBreakUsers } = account;
+
+    if (
+      lockOwnerId &&
+      Meteor.userId() !== lockOwnerId &&
+      lockBreakUsers.indexOf(Meteor.userId()) === -1
+    ) {
+      const lockOwnerName = `${lockOwner.profile.firstName} ${
+        lockOwner.profile.lastName
+      }`;
+      this.setState({
+        isLockedDialogActive: true,
+        lockOwnerName,
+        lockedAccountId: _id
+      });
+      return false;
+    }
+    return true;
+  };
+
+  closeDialog = () => {
+    this.setState({
+      isLockedDialogActive: false,
+      lockOwnerName: null,
+      lockedAccountId: null
+    });
+  };
+
+  breakLock = () => {
+    const { lockedAccountId } = this.state;
+    Meteor.call("account.breakLock", lockedAccountId, err => {
+      if (err) {
+        Notifier.error(err.reason);
+      } else {
+        this.setState({ currentAccount: lockedAccountId });
+        this.closeDialog();
+      }
+    });
+  };
+
   render() {
     const { data, loading, error } = this.props;
     const {
@@ -373,7 +446,9 @@ class AccountListContainer extends Pager {
       showMetaData,
       assignFilterArr,
       dropdownOptions,
-      moduleTags
+      moduleTags,
+      isLockedDialogActive,
+      lockOwnerName
     } = this.state;
     const options = this.getData(data);
     const account = this.getAccount(currentAccount);
@@ -452,6 +527,7 @@ class AccountListContainer extends Pager {
               openMetaData={this.openMetaDataSlider}
               accountsSelected={accountsSelected}
               closeRightPanel={this.closeRightPanel}
+              removeLock={this.removeLock}
             />
           )}
         {showMetaData && (
@@ -459,6 +535,26 @@ class AccountListContainer extends Pager {
             account={account}
             closeMetaData={this.closeMetaDataSlider}
           />
+        )}
+        {isLockedDialogActive && (
+          <Dialog
+            title="Confirm"
+            className="account-dialog"
+            closePortal={this.closeDialog}
+          >
+            <div className="form-wrapper">
+              Currently the account is locked by the <b>{lockOwnerName}</b>. Do
+              you want to break the lock?
+            </div>
+            <div className="btn-group">
+              <button className="btn-cancel" onClick={this.closeDialog}>
+                Cancel
+              </button>
+              <button className="btn--light-blue" onClick={this.breakLock}>
+                Confirm & break
+              </button>
+            </div>
+          </Dialog>
         )}
       </div>
     );
@@ -485,7 +581,8 @@ class RightSide extends Component {
       account,
       openMetaData,
       closeRightPanel,
-      accountsSelected
+      accountsSelected,
+      removeLock
     } = this.props;
     return (
       <div className={fade ? "right__side in" : "right__side"}>
@@ -494,6 +591,7 @@ class RightSide extends Component {
           openMetaData={openMetaData}
           accountsSelected={accountsSelected}
           closeRightPanel={closeRightPanel}
+          removeLock={removeLock}
         />
       </div>
     );

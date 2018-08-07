@@ -4,6 +4,7 @@ import AccountActioning from "./AccountActioning";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import EditInfoDialog from "./EditInfoDialog";
 import commaNumber from "comma-number";
+import Countdown from "react-countdown-now";
 
 export default class AccountContentHeader extends Component {
   getOptions(users = []) {
@@ -76,12 +77,27 @@ export default class AccountContentHeader extends Component {
     }
   };
 
-  getValue = (value) =>{
+  getValue = value => {
     if (value) {
       FlowRouter.setQueryParams({ medNo: value });
     }
-    
-  }
+  };
+
+  restartTimer = e => {
+    e.preventDefault();
+    const { account } = this.props;
+    Meteor.call("account.restartLockTimer", account._id, err => {
+      if (err) {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  onComplete = () => {
+    const { removeLock, closeRightPanel } = this.props;
+    removeLock();
+    closeRightPanel();
+  };
 
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
@@ -92,6 +108,17 @@ export default class AccountContentHeader extends Component {
     let userOptions = this.getFirstOption(account, options).concat(options);
     return (
       <div className="header-block header-account">
+        {account.lockOwnerId === Meteor.userId() && (
+          <a href="" onClick={this.restartTimer}>
+            Restart timer
+          </a>
+        )}
+        {account.lockTimestamp && (
+          <Countdown
+            date={new Date(account.lockTimestamp).getTime() + 9000} //1800000
+            onComplete={this.onComplete}
+          />
+        )}
         <div className="main-info">
           <div className="left__side">
             <div className="name">
@@ -284,7 +311,9 @@ export default class AccountContentHeader extends Component {
             <li className="text-center">
               <div className="text-light-grey">Medical Number</div>
               <div className="text-dark-grey">
-                <a href='' onClick={this.getValue.bind(this,account.medNo)}>{account && account.medNo}</a>
+                <a href="" onClick={this.getValue.bind(this, account.medNo)}>
+                  {account && account.medNo}
+                </a>
               </div>
             </li>
             <li className="text-center">

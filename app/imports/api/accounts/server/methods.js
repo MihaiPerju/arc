@@ -336,5 +336,31 @@ Meteor.methods({
     ]).toArray();
 
     return ActionService.graphStandardizeData(actionsPerHour);
+  },
+
+  "account.addLock"(_id) {
+    ActionService.addLockToAccount(_id, this.userId);
+  },
+
+  "account.removeLock"() {
+    ActionService.removeLockFromAccount(this.userId);
+  },
+
+  "account.breakLock"(_id) {
+    ActionService.breakLockFromAccount(_id, this.userId);
+  },
+
+  "account.restartLockTimer"(_id) {
+    Accounts.update(
+      {
+        _id,
+        lockOwnerId: this.userId
+      },
+      {
+        $set: {
+          lockTimestamp: new Date()
+        }
+      }
+    );
   }
 });
