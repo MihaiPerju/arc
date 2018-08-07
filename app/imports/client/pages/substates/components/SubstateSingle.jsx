@@ -4,6 +4,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
+import Dialog from '/imports/client/lib/ui/Dialog';
 
 export default class SubstateSingle extends Component {
   constructor(props) {
