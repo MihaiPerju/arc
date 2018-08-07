@@ -51,15 +51,6 @@ route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
 route('/admin/user/:userId/edit', EditUser);
 
-//Posts
-import PostListContainer from "/imports/client/pages/posts/PostListContainer.jsx";
-import CreatePost from "/imports/client/pages/posts/CreatePost.jsx";
-import EditPost from "/imports/client/pages/posts/EditPost.jsx";
-
-route("/post/list", PostListContainer);
-route("/post/create", CreatePost);
-route("/post/:postId/edit", EditPost);
-
 //Clients
 import CreateClient from "/imports/client/pages/clients/ClientCreate";
 import EditClient from "/imports/client/pages/clients/ClientEdit";
