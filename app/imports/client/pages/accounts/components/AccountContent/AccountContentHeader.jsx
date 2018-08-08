@@ -115,7 +115,7 @@ export default class AccountContentHeader extends Component {
         )}
         {account.lockTimestamp && (
           <Countdown
-            date={new Date(account.lockTimestamp).getTime() + 9000} //1800000
+            date={new Date(account.lockTimestamp).getTime() + 60000} //1800000
             onComplete={this.onComplete}
           />
         )}
