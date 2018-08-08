@@ -100,8 +100,9 @@ export default class ReportSearchBar extends Component {
       active: selectAll
     });
     const searchClasses = classNames("search-input", {
-      full__width: btnGroup,
-      sort__none: hideSort
+      full__width: btnGroup && !hideFilter,
+      sort__none: hideSort,
+      'btns--none': btnGroup && hideFilter
     });
 
     return (
