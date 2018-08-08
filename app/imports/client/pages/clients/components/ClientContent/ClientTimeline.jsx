@@ -204,6 +204,8 @@ export default class ClientTimeline extends Component {
         return <i className="icon-flag" />;
       case actionTypesEnum.EDIT:
         return <i className="icon-pencil" />;
+      case actionTypesEnum.LOCK_BREAK:
+        return <i className="icon-lock" />;
     }
   };
 
@@ -382,6 +384,18 @@ export default class ClientTimeline extends Component {
                   added the value <b>{fieldUpdatedValue}</b> in the field{' '}
                   <b>{accountField}</b>.
                 </div>}
+          </div>
+        );
+      case actionTypesEnum.LOCK_BREAK:
+        return (
+          <div>
+            {user && (
+              <b>
+                {user.profile.firstName} {user.profile.lastName}
+              </b>
+            )}{" "}
+            breaked the lock of the account with Account Number{" "}
+            <b>{account && account.acctNum}</b>
           </div>
         );
       default:

@@ -2,10 +2,7 @@ import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import LetterTemplatePreview from "./components/LetterTemplatePreview";
 import GenerateLetterTemplateInputs from "./components/GenerateLetterTemplateInputs";
-import accountAttachmentsQuery from "/imports/api/accounts/queries/accountAttachmentsList";
-import AccountViewService from "/imports/client/pages/accounts/services/AccountViewService";
 import { variablesEnum } from "/imports/api/letterTemplates/enums/variablesEnum";
-import PdfAttachments from "./components/PdfAttachments";
 
 class LetterCreateContainer extends React.Component {
   constructor() {
@@ -99,7 +96,7 @@ class LetterCreateContainer extends React.Component {
 
   render() {
     const { account, selectedTemplate, reset } = this.props;
-    const { keywords, body, _id: letterId } = selectedTemplate;
+    const { keywords, body, _id: letterId, name } = selectedTemplate;
     const {
       letterTemplates,
       pdfAttachments,
@@ -131,6 +128,7 @@ class LetterCreateContainer extends React.Component {
               accountId={account._id}
               letterTemplateBody={body}
               letterTemplateId={letterId}
+              letterTemplateName={name}
               parentState={this.state}
               selectedAttachments={selectedAttachments}
               currentComponent="create"

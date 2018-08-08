@@ -446,7 +446,7 @@ export default class AccountSearchBar extends Component {
                 <i className="icon-filter" />
                 {dialogIsActive &&
                   <Dialog
-                    className="account-dialog filter-dialog"
+                    className="account-dialog filter-dialog filter-dialog__account"
                     closePortal={this.closeDialog}
                     title="Filter by"
                   >
@@ -466,43 +466,64 @@ export default class AccountSearchBar extends Component {
                               options={tickleUserIdOptions}
                             />
                           </div>}
-
-                        <div className="select-form">
-                          <SelectField
-                            label="Client:"
-                            placeholder="Select Client"
-                            name="clientId"
-                            options={clientOptions}
-                          />
+                        <div className="flex--helper form-group__pseudo">
+                          <div className="select-form">
+                            <SelectField
+                              label="Client:"
+                              placeholder="Select Client"
+                              name="clientId"
+                              options={clientOptions}
+                            />
+                          </div>
+                          <div className="select-form">
+                            <SelectField
+                              label="Facility:"
+                              name="facilityId"
+                              placeholder="Select Facility"
+                              options={facilityOptions}
+                            />
+                          </div>
                         </div>
-                        <div className="select-form">
-                          <SelectField
-                            label="Facility:"
-                            name="facilityId"
-                            placeholder="Select Facility"
-                            options={facilityOptions}
-                          />
-                        </div>
-                        <div className="form-group">
+                        <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
                             label="Facility code:"
                             name="facCode"
                             placeholder="Search by Facility Code"
                           />
-                        </div>
-                        <div className="form-group">
                           <AutoField
                             label="Patient Type:"
                             name="ptType"
                             placeholder="Search by Patient Type"
                           />
                         </div>
-                        <div className="form-group">
+                        <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
                             label="Medical Number:"
                             name="medNo"
                             placeholder="Search by Medical Number"
                           />
+                          <AutoField
+                            label="Financial Class:"
+                            name="finClass"
+                            placeholder="Search by Financial Class"
+                          />
+                        </div>
+                        <div className="flex--helper form-group__pseudo">
+                          <div className="select-form">
+                            <SelectField
+                              label="Substate:"
+                              placeholder="Substate"
+                              options={substates}
+                              name="substate"
+                            />
+                          </div>
+                          <div className="form-group">
+                            <AutoField
+                              label="Active Insurance Code:"
+                              name="activeInsCode"
+                              placeholder="Search by active Insurance Code"
+                            />
+                          </div>
                         </div>
                         <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
@@ -605,28 +626,6 @@ export default class AccountSearchBar extends Component {
                                 this.onDateSelect (date, 'admitDateMax')}
                             />
                           </div>
-                        </div>
-                        <div className="form-group">
-                          <AutoField
-                            label="Financial Class:"
-                            name="finClass"
-                            placeholder="Search by Financial Class"
-                          />
-                        </div>
-                        <div className="select-form">
-                          <SelectField
-                            label="Substate:"
-                            placeholder="Substate"
-                            options={substates}
-                            name="substate"
-                          />
-                        </div>
-                        <div className="form-group">
-                          <AutoField
-                            label="Active Insurance Code:"
-                            name="activeInsCode"
-                            placeholder="Search by active Insurance Code"
-                          />
                         </div>
                         <div className="flex--helper flex-justify--space-between">
                           <button

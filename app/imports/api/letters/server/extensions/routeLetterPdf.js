@@ -1,48 +1,37 @@
-import {
-    getUserByToken
-} from '/imports/api/s3-uploads/server/router';
-import Security from '/imports/api/accounts/security';
-import {
-    roleGroups
-} from '/imports/api/users/enums/roles';
-import LetterService from '/imports/api/letters/server/letter.service.js';
-import fs, {
-    existsSync
-} from 'fs';
-import Settings from "/imports/api/settings/collection";
-import Business from "/imports/api/business";
+import { getUserByToken } from "/imports/api/s3-uploads/server/router";
+import LetterService from "/imports/api/letters/server/letter.service.js";
+import fs, { existsSync } from "fs";
 
-Picker.route('/letters/pdf/:accountId/:letterId/:token',
-    function (params, req, res, next) {
-        const user = getUserByToken(params.token);
-        const {
-            letterId
-        } = params;
-        const {
-            rootFolder
-        } = Settings.findOne({
-            rootFolder: {
-                $ne: null
-            }
-        });
-        if (!user) {
-            res.writeHead(404);
-            res.write('Not logged in!');
-            return;
-        }
+Picker.route("/letters/pdf/:accountId/:letterId/:token", function(
+  params,
+  req,
+  res,
+  next
+) {
+  const user = getUserByToken(params.token);
+  const { letterId } = params;
+  
+  if (!user) {
+    res.writeHead(404);
+    res.write("Not logged in!");
+    return;
+  }
 
-        const letterLocation = rootFolder + Business.ACCOUNTS_FOLDER + letterId + ".pdf";
+  const tmpPdfLocation = LetterService.getLetterTemporalPdfLoc(
+    params.accountId,
+    params.letterId
+  );
 
-        if (!existsSync(letterLocation)) {
-            res.writeHead(404);
-            res.write('File Not Found');
-            res.end();
-        }
-        data = fs.readFileSync(letterLocation);
+  if (!existsSync(tmpPdfLocation)) {
+    res.writeHead(404);
+    res.write("File Not Found");
+    res.end();
+  }
+  data = fs.readFileSync(tmpPdfLocation);
 
-        res.writeHead(200, {
-            'Content-Type': 'application/pdf',
-            'Content-Disposition': `attachment; filename=${letterId}.pdf`,
-        });
-        res.end(data);
-    });
+  res.writeHead(200, {
+    "Content-Type": "application/pdf",
+    "Content-Disposition": `attachment; filename=${letterId}.pdf`
+  });
+  res.end(data);
+});

@@ -221,6 +221,22 @@ export default new SimpleSchema({
   "tagIds.$": {
     type: String
   },
+  lockOwnerId: {
+    type: String,
+    optional: true
+  },
+  lockTimestamp: {
+    type: Date,
+    optional: true
+  },
+  lockBreakUsers: {
+    type: Array,
+    optional: true,
+    defaultValue: []
+  },
+  "lockBreakUsers.$": {
+    type: String
+  },
   flagCounter: {
     type: Number,
     optional: true,

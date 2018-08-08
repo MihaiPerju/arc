@@ -52,5 +52,10 @@ Accounts.addLinks({
     type: "many",
     collection: AccountActions,
     field: "letterIds"
+  },
+  lockOwner: {
+    type: "one",
+    collection: Users,
+    field: "lockOwnerId"
   }
 });

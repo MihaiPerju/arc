@@ -77,6 +77,9 @@ export default {
 };
 
 const accountActionHeader = {
+  accountId: {
+    label: "Account Number"
+  },
   createdAt: {
     label: "Created At"
   },
