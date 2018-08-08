@@ -232,9 +232,13 @@
 
     &.full__width {
       width: calc(100% - 215px);
+      
+      &.account-tag--none {
+        width: calc(100% - 175px);
+      }
 
       &.sort__none {
-        width: calc(100% - 164px);
+        width: calc(100% - 125px);
       }
     }
 
@@ -247,8 +251,16 @@
       padding-left: 5px;
     }
 
+    &.btns--none {
+      width: calc(100% - 85px);
+    }
+
     &.tag--none {
       width: calc(100% - 100px);
+    }
+
+    &.tag-btn {
+      width: calc(100% - 220px);
     }
   }
 

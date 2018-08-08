@@ -380,18 +380,19 @@ export default class AccountSearchBar extends Component {
       active: selectAll,
     });
 
-    const searchBarClasses = classNames ({
-      'search-input': true,
-      full__width: (btnGroup &&
+    const searchBarClasses = classNames ('search-input', {
+      'full__width': (btnGroup &&
         Roles.userIsInRole (Meteor.userId (), RolesEnum.TECH)) ||
         (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.ADMIN)),
       sort__width: btnGroup &&
         Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
+      'tag-btn': btnGroup && moduleTags.length,
       'account-search': Roles.userIsInRole (
         Meteor.userId (),
         RolesEnum.MANAGER
       ),
       'tag--none': moduleTags.length === 0,
+      'account-tag--none': btnGroup && moduleTags.length === 0,
     });
 
     const currentStateName = FlowRouter.current ().params.state;
