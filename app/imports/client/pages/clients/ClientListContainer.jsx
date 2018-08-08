@@ -153,7 +153,7 @@ class ClientContainer extends Pager {
     } = this.state;
     const client = this.getClient();
 
-    if (isLoading) {
+    if (isLoading && !FlowRouter.getQueryParam("clientName")) {
       return <Loading />;
     }
 

@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import Notifier from '/imports/client/lib/Notifier';
-import FacilitySchema from '/imports/api/facilities/schema.js';
+import React, { Component } from "react";
+import Notifier from "/imports/client/lib/Notifier";
+import FacilitySchema from "/imports/api/facilities/schema.js";
 import {
   AutoForm,
   AutoField,
@@ -9,120 +9,125 @@ import {
   LongTextField,
   ListField,
   ListItemField,
-  NestField,
-} from '/imports/ui/forms';
-import RegionListQuery from '/imports/api/regions/queries/regionList.js';
-import SelectUsersContainer
-  from '/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx';
-import Loading from '/imports/client/lib/ui/Loading';
-import {frequencyOptions} from '/imports/api/facilities/enums/frequency';
-import {getToken} from '/imports/api/s3-uploads/utils';
-import {getImagePath} from '/imports/api/utils';
-import DropzoneComponent from 'react-dropzone-component';
-import SimpleSchema from 'simpl-schema';
+  NestField
+} from "/imports/ui/forms";
+import RegionListQuery from "/imports/api/regions/queries/regionList.js";
+import SelectUsersContainer from "/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx";
+import Loading from "/imports/client/lib/ui/Loading";
+import { frequencyOptions } from "/imports/api/facilities/enums/frequency";
+import { getToken } from "/imports/api/s3-uploads/utils";
+import { getImagePath } from "/imports/api/utils";
+import DropzoneComponent from "react-dropzone-component";
+import SimpleSchema from "simpl-schema";
 
 export default class FacilityCreate extends Component {
-  constructor () {
-    super ();
+  constructor() {
+    super();
     this.state = {
       newContact: false,
       regions: [],
       loading: true,
+      isDisabled: false,
+      isDisabledPassword: false
     };
   }
 
-  componentWillMount () {
-    RegionListQuery.clone ({
+  componentWillMount() {
+    RegionListQuery.clone({
       filters: {
-        clientId: FlowRouter.current ().params._id,
-      },
-    }).fetch ((err, regions) => {
+        clientId: FlowRouter.current().params._id
+      }
+    }).fetch((err, regions) => {
       if (!err) {
-        this.setState ({
+        this.setState({
           regions,
-          loading: false,
+          loading: false
         });
       } else {
-        Notifier.error ("Couldn't get regions");
+        Notifier.error("Couldn't get regions");
       }
     });
   }
 
   getRegionOptions = regions => {
-    return regions.map ((region, key) => ({
+    return regions.map((region, key) => ({
       value: region._id,
-      label: region.name,
+      label: region.name
     }));
   };
 
-  onRemoveLogo () {
-    const {facility} = this.props;
+  onRemoveLogo() {
+    const { facility } = this.props;
 
-    Meteor.call ('facility.removeLogo', facility._id, err => {
+    Meteor.call("facility.removeLogo", facility._id, err => {
       if (!err) {
-        Notifier.success ('Logo removed!');
+        Notifier.success("Logo removed!");
       } else {
-        Notifier.error (err.reason);
+        Notifier.error(err.reason);
       }
     });
   }
 
-  onSubmit (data) {
-    data.clientId = FlowRouter.current ().params._id;
-    Meteor.call ('facility.update', data, err => {
+  onSubmit(data) {
+    this.setState({ isDisabled: true });
+    data.clientId = FlowRouter.current().params._id;
+    Meteor.call("facility.update", data, err => {
       if (!err) {
-        Notifier.success ('Facility updated!');
-        this.onClose ();
+        Notifier.success("Facility updated!");
+        this.onClose();
       } else {
-        Notifier.error (err.reason);
+        Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   }
 
   onCreateFacility = () => {
-    const {form} = this.refs;
-    form.submit ();
+    const { form } = this.refs;
+    form.submit();
   };
 
   onClose = () => {
-    const {close} = this.props;
-    close ();
+    const { close } = this.props;
+    close();
   };
 
   onPasswordSubmit = data => {
-    const {facility} = this.props;
-    const {password} = data;
-    const {passwordForm} = this.refs;
-    Meteor.call ('facility.updatePassword', password, facility._id, err => {
+    const { facility } = this.props;
+    const { password } = data;
+    const { passwordForm } = this.refs;
+    this.setState({ isDisabledPassword: true });
+    Meteor.call("facility.updatePassword", password, facility._id, err => {
       if (!err) {
-        Notifier.success ('Facility password updated!');
-        passwordForm.reset ();
+        Notifier.success("Facility password updated!");
+        passwordForm.reset();
       } else {
-        Notifier.error (err.reason);
+        Notifier.error(err.reason);
       }
+      this.setState({ isDisabledPassword: false });
     });
   };
 
-  render () {
-    const {regions, loading} = this.state;
-    const regionIds = this.getRegionOptions (regions);
-    const schema = FacilitySchema.omit ('clientId');
+  render() {
+    const { regions, loading, isDisabled, isDisabledPassword } = this.state;
+    const regionIds = this.getRegionOptions(regions);
+    const schema = FacilitySchema.omit("clientId");
 
-    const {facility} = this.props;
+    const { facility } = this.props;
     if (loading) {
       return <Loading />;
     }
 
     const componentConfig = {
-      postUrl: '/uploads/facility-logo/' + facility._id + '/' + getToken (),
+      postUrl: "/uploads/facility-logo/" + facility._id + "/" + getToken()
     };
 
     const djsConfig = {
-      complete (file) {
-        Notifier.success ('Logo added');
-        this.removeFile (file);
+      complete(file) {
+        Notifier.success("Logo added");
+        this.removeFile(file);
       },
-      acceptedFiles: 'image/*',
+      acceptedFiles: "image/*"
     };
 
     return (
@@ -132,8 +137,13 @@ export default class FacilityCreate extends Component {
             <button onClick={this.onClose} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onCreateFacility} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.onCreateFacility}
+              className="btn--green"
+            >
+              Confirm & save {isDisabled && <i className="icon-cog" />}
             </button>
           </div>
         </div>
@@ -141,34 +151,44 @@ export default class FacilityCreate extends Component {
           <div className="action-block i--block drop-file">
             <AutoForm
               schema={schema}
-              onSubmit={this.onSubmit.bind (this)}
+              onSubmit={this.onSubmit.bind(this)}
               ref="form"
               model={facility}
             >
-              {this.state.error &&
-                <div className="error">{this.state.error}</div>}
+              {this.state.error && (
+                <div className="error">{this.state.error}</div>
+              )}
 
               <div className="main__block">
-                {facility && facility.logoPath
-                  ? <div className="text-center">
-                      <img className="lg-avatar img-circle border--light-grey" src={getImagePath (facility.logoPath)} />
-                      <div className="btn-group m-t--10">
-                        <a href="javascript:;" className="cc-button btn-text--red" onClick={this.onRemoveLogo.bind(this)}>
-                          Remove Logo
-                        </a>
+                {facility && facility.logoPath ? (
+                  <div className="text-center">
+                    <img
+                      className="lg-avatar img-circle border--light-grey"
+                      src={getImagePath(facility.logoPath)}
+                    />
+                    <div className="btn-group m-t--10">
+                      <a
+                        href="javascript:;"
+                        className="cc-button btn-text--red"
+                        onClick={this.onRemoveLogo.bind(this)}
+                      >
+                        Remove Logo
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="btn-group-1">
+                    <div className="add-content">
+                      <i className="icon-upload" />
+                      <div className="drop-file__wrapper">
+                        <DropzoneComponent
+                          config={componentConfig}
+                          djsConfig={djsConfig}
+                        />
                       </div>
                     </div>
-                  : <div className="btn-group-1">
-                      <div className="add-content">
-                        <i className="icon-upload" />
-                        <div className="drop-file__wrapper">
-                          <DropzoneComponent
-                            config={componentConfig}
-                            djsConfig={djsConfig}
-                          />
-                        </div>
-                      </div>
-                    </div>}
+                  </div>
+                )}
               </div>
 
               <div className="form-wrapper">
@@ -241,7 +261,7 @@ export default class FacilityCreate extends Component {
               </div>
               <div className="select-group">
                 <div className="form-wrapper">
-                  {regionIds &&
+                  {regionIds && (
                     <div>
                       <SelectField
                         labelHidden={true}
@@ -249,7 +269,8 @@ export default class FacilityCreate extends Component {
                         options={regionIds}
                       />
                       <ErrorField name="regionId" />
-                    </div>}
+                    </div>
+                  )}
                 </div>
               </div>
               <SelectUsersContainer />
@@ -320,7 +341,7 @@ export default class FacilityCreate extends Component {
               </div>
               <AutoForm
                 schema={changePasswordSchema}
-                onSubmit={this.onPasswordSubmit.bind (this)}
+                onSubmit={this.onPasswordSubmit.bind(this)}
                 ref="passwordForm"
               >
                 <div className="form-wrapper">
@@ -333,8 +354,12 @@ export default class FacilityCreate extends Component {
                   <ErrorField name="password" />
                 </div>
                 <div className="btn-group m-t--10 text--right">
-                  <button className="btn--green">
-                    Confirm
+                  <button
+                    style={isDisabledPassword ? { cursor: "not-allowed" } : {}}
+                    disabled={isDisabledPassword}
+                    className="btn--green"
+                  >
+                    Confirm {isDisabledPassword && <i className="icon-cog" />}
                   </button>
                 </div>
               </AutoForm>
@@ -345,8 +370,8 @@ export default class FacilityCreate extends Component {
     );
   }
 }
-const changePasswordSchema = new SimpleSchema ({
+const changePasswordSchema = new SimpleSchema({
   password: {
-    type: String,
-  },
+    type: String
+  }
 });

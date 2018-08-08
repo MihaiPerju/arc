@@ -27,7 +27,8 @@ export default class ReportEdit extends React.Component {
       components: {},
       filter: false,
       shareReport: false,
-      isReportColumn: false
+      isReportColumn: false,
+      isDisabled: false
     };
   }
 
@@ -110,7 +111,8 @@ export default class ReportEdit extends React.Component {
     //Setting state and creating/editing report
     this.setState({
       components,
-      filterBuilderData
+      filterBuilderData,
+      isDisabled: true
     });
 
     const { generalInformation, shareReport } = this.state;
@@ -129,6 +131,7 @@ export default class ReportEdit extends React.Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   }
 
@@ -174,7 +177,8 @@ export default class ReportEdit extends React.Component {
       generalInformation,
       components,
       filterBuilderData,
-      isReportColumn
+      isReportColumn,
+      isDisabled
     } = this.state;
     const { substates, report } = this.props;
     const options = this.getOptions();
@@ -186,8 +190,13 @@ export default class ReportEdit extends React.Component {
             <button onClick={this.onSetEdit} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.finish} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.finish}
+              className="btn--green"
+            >
+              Confirm & save {isDisabled && <i className="icon-cog" />}
             </button>
           </div>
         </div>

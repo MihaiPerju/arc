@@ -24,7 +24,8 @@ export default class ReportCreate extends Component {
       filterBuilderData: {},
       components: {},
       filter: false,
-      shareReport: false
+      shareReport: false,
+      isDisabled: false
     };
   }
 
@@ -32,7 +33,8 @@ export default class ReportCreate extends Component {
     //Setting state and creating/editing report
     this.setState({
       components,
-      filterBuilderData
+      filterBuilderData,
+      isDisabled: true
     });
 
     const { generalInformation, shareReport } = this.state;
@@ -49,6 +51,7 @@ export default class ReportCreate extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
@@ -115,7 +118,8 @@ export default class ReportCreate extends Component {
       components,
       filterBuilderData,
       shareReport,
-      generalInformation
+      generalInformation,
+      isDisabled
     } = this.state;
     const { substates } = this.props;
     const options = this.getOptions();
@@ -129,8 +133,13 @@ export default class ReportCreate extends Component {
               Cancel
             </button>
             {hasGeneralInformation && (
-              <button onClick={this.finish} className="btn--green">
-                Confirm & save
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                onClick={this.finish}
+                className="btn--green"
+              >
+                Confirm & save {isDisabled && <i className="icon-cog" />}
               </button>
             )}
           </div>

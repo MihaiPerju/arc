@@ -18,13 +18,15 @@ export default class ActionCreate extends Component {
   constructor() {
     super();
     this.state = {
-      checked: false
+      checked: false,
+      isDisabled: false
     };
   }
 
   onSubmit(data) {
     const { value } = data.substateId || {};
     data.substateId = value;
+    this.setState({ isDisabled: true });
     Meteor.call("action.create", data, err => {
       if (!err) {
         Notifier.success("Action created!");
@@ -32,6 +34,7 @@ export default class ActionCreate extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   }
 
@@ -62,7 +65,7 @@ export default class ActionCreate extends Component {
   render() {
     const { substates } = this.props;
     const substatesOptions = this.getOptions(substates);
-    const { checked } = this.state;
+    const { checked, isDisabled } = this.state;
 
     return (
       <div className="create-form action-create-form">
@@ -71,8 +74,13 @@ export default class ActionCreate extends Component {
             <button onClick={this.onClose} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onCreateAction} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.onCreateAction}
+              className="btn--green"
+            >
+              Confirm & save {isDisabled && <i className="icon-cog" />}
             </button>
           </div>
         </div>

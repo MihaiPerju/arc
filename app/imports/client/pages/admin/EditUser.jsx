@@ -4,11 +4,7 @@ import query from "/imports/api/users/queries/singleUser.js";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
-import { Button } from "semantic-ui-react";
-import { Container } from "semantic-ui-react";
-import { Divider } from "semantic-ui-react";
 import CreateEditTags from "./components/CreateEditTags";
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import TagsService from "./services/TagsService";
 import TagsListQuery from "/imports/api/tags/queries/listTags.js";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
@@ -24,7 +20,8 @@ class EditUser extends Component {
       firstName: "",
       lastName: "",
       phoneNumber: "",
-      clients: []
+      clients: [],
+      isDisabled: false
     };
   }
 
@@ -38,15 +35,16 @@ class EditUser extends Component {
 
   onSubmit(formData) {
     const { user } = this.props;
+    this.setState({ isDisabled: true });
     Meteor.call("admin.editUser", user._id, formData, err => {
       if (!err) {
         Notifier.success("Data saved !");
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   }
-
 
   getTagList = () => {
     const { data } = this.props;
@@ -69,7 +67,7 @@ class EditUser extends Component {
 
   render() {
     const { data, user } = this.props;
-    const { clients } = this.state;
+    const { clients, isDisabled } = this.state;
     user.email = user.emails[0].address;
     const tags = this.getTagList();
 
@@ -80,8 +78,13 @@ class EditUser extends Component {
             <button onClick={this.closeEdit} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onEditUser} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.onEditUser}
+              className="btn--green"
+            >
+              Confirm & save {isDisabled && <i className="icon-cog" />}
             </button>
           </div>
         </div>

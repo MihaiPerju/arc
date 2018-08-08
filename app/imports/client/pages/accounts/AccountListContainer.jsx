@@ -457,7 +457,7 @@ class AccountListContainer extends Pager {
       { icon: "users", method: this.assignToWorkQueue }
     ];
 
-    if (isLoading) {
+    if (isLoading && !FlowRouter.getQueryParam("acctNum")) {
       return <Loading />;
     }
 
