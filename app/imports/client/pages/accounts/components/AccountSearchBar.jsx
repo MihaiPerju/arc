@@ -383,8 +383,11 @@ export default class AccountSearchBar extends Component {
     const searchBarClasses = classNames ('search-input', {
       'full__width': (btnGroup &&
         Roles.userIsInRole (Meteor.userId (), RolesEnum.TECH)) ||
-        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.ADMIN)),
-      sort__width: btnGroup &&
+        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.ADMIN)) ||
+        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.REP))
+        ,
+      'manager-search': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
+      'sort__width': btnGroup &&
         Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
       'tag-btn': btnGroup && moduleTags.length,
       'account-search': Roles.userIsInRole (
