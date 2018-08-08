@@ -134,7 +134,7 @@ class UserListContainer extends Pager {
     } = this.state;
     const user = objectFromArray(data, currentUser);
 
-    if (isLoading) {
+    if (isLoading && !FlowRouter.getQueryParam("email")) {
       return <Loading />;
     }
 

@@ -156,7 +156,7 @@ class CodeListContainer extends Pager {
     } = this.state;
     const code = objectFromArray(data, currentCode);
 
-    if (isLoading) {
+    if (isLoading && !FlowRouter.getQueryParam("code")) {
       return <Loading />;
     }
 

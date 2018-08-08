@@ -147,7 +147,8 @@ class SubstatesListContainer extends Pager {
       moduleTags
     } = this.state;
     const substate = objectFromArray(data, currentSubstate);
-    if (isLoading) {
+
+    if (isLoading && !FlowRouter.getQueryParam("stateName")) {
       return <Loading />;
     }
 

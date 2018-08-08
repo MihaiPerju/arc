@@ -146,7 +146,8 @@ class LetterTemplateListContainer extends Pager {
       moduleTags
     } = this.state;
     const template = objectFromArray(data, currentTemplate);
-    if (isLoading) {
+
+    if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
       return <Loading />;
     }
 

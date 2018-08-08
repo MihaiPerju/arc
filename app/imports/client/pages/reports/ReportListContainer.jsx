@@ -171,7 +171,7 @@ class ReportListContainer extends Pager {
     } = this.state;
     const report = objectFromArray(data, currentReport);
 
-    if (isLoading) {
+    if (isLoading && !FlowRouter.getQueryParam("name")) {
       return <Loading />;
     }
 

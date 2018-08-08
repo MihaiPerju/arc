@@ -164,7 +164,8 @@ class ActionListContainer extends Pager {
       moduleTags
     } = this.state;
     const action = objectFromArray(data, currentAction);
-    if (isLoading || loadingSubstates) {
+
+    if ((isLoading || loadingSubstates) && !FlowRouter.getQueryParam("title")) {
       return <Loading />;
     }
 
