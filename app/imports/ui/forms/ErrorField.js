@@ -47,5 +47,3 @@ var _default = (0, _connectField.default) (Error, {
 });
 
 exports.default = _default;
-
-console.log(Error);
