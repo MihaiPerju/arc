@@ -148,6 +148,7 @@ export default class ReportGraph extends React.Component {
           onSubmit={this.onSubmit.bind (this)}
         >
           <div className="report-graph__form-wrapper">
+            <h2 className="text-center">Report by:</h2>
             <div className="form-wrapper">
               <SelectField
                 placeholder="X-Axis"
@@ -172,7 +173,7 @@ export default class ReportGraph extends React.Component {
                 options={graphTypeEnum}
               />
             </div>
-            <div className="btn-group__footer flex--helper flex-justify--end m-t--10">
+            <div className="btn-group__footer flex--helper flex-justify--end m-t--20">
               <button type="submit" className="btn--light-blue">
                 Submit
               </button>
