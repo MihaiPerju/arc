@@ -389,12 +389,11 @@ export default class ClientTimeline extends Component {
       case actionTypesEnum.LOCK_BREAK:
         return (
           <div>
-            {user && (
+            {user &&
               <b>
                 {user.profile.firstName} {user.profile.lastName}
-              </b>
-            )}{" "}
-            breaked the lock of the account with Account Number{" "}
+              </b>}{' '}
+            breaked the lock of the account with Account Number{' '}
             <b>{account && account.acctNum}</b>
           </div>
         );
@@ -431,9 +430,12 @@ export default class ClientTimeline extends Component {
       <div className="action-block">
         <div className="header__block flex--helper ">
           <div className="title-block text-uppercase">Actions timeline</div>
-          <button className="btn-filter__action" onClick={this.openDialog}>
-            <i className="icon-filter" />
-          </button>
+          {accountActions.length
+            ? <button className="btn-filter__action" onClick={this.openDialog}>
+                <i className="icon-filter" />
+              </button>
+            : null}
+
           {dialogIsActive &&
             <Dialog
               className="account-dialog filter-dialog"
@@ -560,7 +562,9 @@ export default class ClientTimeline extends Component {
                     </label>
                   </div>
                   <div className="flex--helper flex-justify--end">
-                    <button className="btn--blue" onClick={this.closeDialog}>Done</button>
+                    <button className="btn--blue" onClick={this.closeDialog}>
+                      Done
+                    </button>
                   </div>
                 </div>
               </AutoForm>
@@ -570,19 +574,18 @@ export default class ClientTimeline extends Component {
           ref="isScroll"
           className="timeline flex--helper flex-justify--center"
         >
-          {accountActions.length > 0 &&
-            <div className="timeline-container">
-              {accountActions.map ((action, index) => {
-                const {createdAt, type, user, account} = action;
-                if (
-                  (FlowRouter.getQueryParam ('role') && !user) ||
-                  (FlowRouter.getQueryParam ('substate') && !account)
-                ) {
-                  return <div key={index} />;
-                }
+          {accountActions.length
+            ? <div className="timeline-container">
+                {accountActions.map ((action, index) => {
+                  const {createdAt, type, user, account} = action;
+                  if (
+                    (FlowRouter.getQueryParam ('role') && !user) ||
+                    (FlowRouter.getQueryParam ('substate') && !account)
+                  ) {
+                    return <div key={index} />;
+                  }
 
-                return (
-                  (
+                  return (
                     <TimelineItem
                       key={index}
                       icon={this.getTimelineIcon (type)}
@@ -592,10 +595,10 @@ export default class ClientTimeline extends Component {
                     >
                       {this.getTimelineBody (action)}
                     </TimelineItem>
-                  )
-                );
-              })}
-            </div>}
+                  );
+                })}
+              </div>
+            : <div className="m-t--10">No actions found</div>}
         </div>
         {isScrollLoading && <Loading />}
       </div>

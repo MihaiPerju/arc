@@ -650,7 +650,7 @@ export default class AccountSearchBar extends Component {
                     </div>
                   </Dialog>}
               </button>
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div/>}
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> :null}
             </div>
             {Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
               <div
