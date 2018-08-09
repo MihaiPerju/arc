@@ -361,7 +361,6 @@ export default class AccountSearchBar extends Component {
       model,
     } = this.state;
     const {
-      options,
       btnGroup,
       deleteAction,
       dropdownOptions,
@@ -793,9 +792,9 @@ class BtnGroup extends Component {
     return (
       <div className={this.state.in ? 'btn-group in' : 'btn-group'}>
         {icons
-          ? icons.map (element => {
+          ? icons.map ((element, index) => {
               return (
-                <button onClick={element.method}>
+                <button onClick={element.method} key={index}>
                   <i className={'icon-' + element.icon} />
                 </button>
               );
