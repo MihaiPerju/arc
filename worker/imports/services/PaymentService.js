@@ -1,10 +1,6 @@
 import Papa from "papaparse";
 import fs from "fs";
-import AccountService from "/imports/api/facilities/server/services/AccountImportingService";
 import ParseService from "/imports/api/facilities/server/services/CsvParseService";
-import Files from "/imports/api/files/collection";
-import os from "os";
-import Facilities from "/imports/api/facilities/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import AccountActions from "/imports/api/accountActions/collection";
 import JobQueue from "/imports/api/jobQueue/collection";
@@ -12,13 +8,15 @@ import fileTypes from "/imports/api/files/enums/fileTypes";
 import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
+import PaymentsService from "/imports/api/facilities/server/services/PaymentService";
+import Facilities from "/imports/api/facilities/collection";
 
-export default class PlacementService {
+export default class PaymentService {
   static run() {
     //Look for an untaken job
     const job = JobQueue.findOne({
       workerId: null,
-      fileType: fileTypes.PLACEMENT
+      fileType: fileTypes.PAYMENT
     });
     if (job) {
       //Update the job as taken
@@ -32,20 +30,17 @@ export default class PlacementService {
           }
         }
       );
-      this.processPlacement(job);
+      this.processPayment(job);
     }
   }
 
-  static processPlacement({ facilityId, filePath, userId, _id }) {
+  static processPayment({ facilityId, filePath, userId, _id }) {
     const { rootFolder } = Settings.findOne({
       rootFolder: {
         $ne: null
       }
     });
-    const importRules = ParseService.getImportRules(
-      facilityId,
-      "placementRules"
-    );
+    const importRules = ParseService.getImportRules(facilityId, "paymentRules");
 
     //Parsing and getting the CSV like a string
     const stream = fs.readFileSync(
@@ -53,48 +48,22 @@ export default class PlacementService {
     );
     const csvString = stream.toString();
 
-    //Keep reference to previous file
-    const { fileId, clientId } = Facilities.findOne({
+    const { clientId } = Facilities.findOne({
       _id: facilityId
-    });
-
-    const newFileId = Files.insert({
-      fileName: filePath,
-      facilityId,
-      previousFileId: fileId
     });
 
     const fileData = {
       type: actionTypesEnum.FILE,
       createdAt: new Date(),
-      fileId: newFileId,
       fileName: filePath,
       userId,
       clientId,
-      filetype: fileTypes.PLACEMENT
-    };
-
-    //Add reference to facility
-    Facilities.update(
-      {
-        _id: facilityId
-      },
-      {
-        $set: {
-          fileId: newFileId
-        }
-      }
-    );
-
-    //Pass links to accounts to link them too
-    const links = {
-      facilityId,
-      fileId: newFileId
+      filetype: fileTypes.PAYMENT
     };
 
     Papa.parse(csvString, {
       chunk: results => {
-        AccountService.upload(results.data, importRules, links);
+        PaymentsService.upload(results.data, importRules, facilityId);
         this.createFileAction(results.data, fileData);
       },
       complete: () => {

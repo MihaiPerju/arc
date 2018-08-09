@@ -1,23 +1,22 @@
-import React, {Component} from 'react';
-import moment from 'moment';
-import {AutoForm, SelectField} from '/imports/ui/forms';
-import SimpleSchema from 'simpl-schema';
-import Loading from '/imports/client/lib/ui/Loading';
+import React, { Component } from "react";
+import moment from "moment";
+import { AutoForm, SelectField } from "/imports/ui/forms";
+import SimpleSchema from "simpl-schema";
+import Loading from "/imports/client/lib/ui/Loading";
 import actionTypesEnum, {
-  typeList,
-} from '/imports/api/accounts/enums/actionTypesEnum';
-import substateQuery from '/imports/api/substates/queries/listSubstates';
-import ClientService from '../../services/ClientService';
-import {rolesTypes} from '/imports/api/clients/enums/contactTypes';
-import filterTypeEnums from '../../enums/filterTypes';
-import accountActionsQuery
-  from '/imports/api/accountActions/queries/accountActionList';
-import TimelineItem from './TimelineItem';
-import Dialog from '/imports/client/lib/ui/Dialog';
+  typeList
+} from "/imports/api/accounts/enums/actionTypesEnum";
+import substateQuery from "/imports/api/substates/queries/listSubstates";
+import ClientService from "../../services/ClientService";
+import { rolesTypes } from "/imports/api/clients/enums/contactTypes";
+import filterTypeEnums from "../../enums/filterTypes";
+import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
+import TimelineItem from "./TimelineItem";
+import Dialog from "/imports/client/lib/ui/Dialog";
 
 export default class ClientTimeline extends Component {
-  constructor () {
-    super ();
+  constructor() {
+    super();
     this.state = {
       actionTypes: [],
       substates: [],
@@ -37,151 +36,177 @@ export default class ClientTimeline extends Component {
       limit: 10,
       skip: 0,
       isScrollLoading: false,
-      dialogIsActive: false,
+      dialogIsActive: false
     };
   }
 
-  componentWillMount () {
+  componentWillMount() {
     const actionTypes = [];
     const substates = [];
     const userRoles = [];
-    typeList.map (type => {
-      actionTypes.push ({label: type, value: type});
+    typeList.map(type => {
+      actionTypes.push({ label: type, value: type });
     });
-    this.setState ({actionTypes});
 
-    rolesTypes.map (type => {
-      userRoles.push ({label: type, value: type});
+    rolesTypes.map(type => {
+      userRoles.push({ label: type, value: type });
     });
-    this.setState ({userRoles});
+    this.setState({
+      userRoles,
+      actionTypes
+    });
+
+    FlowRouter.setQueryParams({ type: actionTypesEnum.FILE });
 
     substateQuery
-      .clone ({
-        filters: {status: true},
+      .clone({
+        filters: { status: true }
       })
-      .fetch ((err, res) => {
+      .fetch((err, res) => {
         if (!err) {
-          res.map (substate => {
+          res.map(substate => {
             const label = `${substate.stateName}: ${substate.name}`;
-            substates.push ({
+            substates.push({
               label: label,
-              value: substate.name,
+              value: substate.name
             });
           });
-          this.setState ({substates});
+          this.setState({ substates });
         }
       });
+    this.getFilterParams();
   }
 
-  componentDidMount () {
-    const {isScroll} = this.refs;
+  componentDidMount() {
+    const { isScroll } = this.refs;
     if (isScroll) {
-      isScroll.addEventListener ('scroll', this.onHandleScroll);
+      isScroll.addEventListener("scroll", this.onHandleScroll);
     }
   }
 
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {};
+
+    if ("type" in queryParams) {
+      model.type = queryParams.type;
+    }
+
+    if ("substate" in queryParams) {
+      model.substate = queryParams.substate;
+    }
+
+    if ("role" in queryParams) {
+      model.role = queryParams.role;
+    }
+
+    // work on the check inputs
+
+    this.setState({ model });
+  };
+
   openDialog = () => {
-    this.setState ({
-      dialogIsActive: true,
+    this.setState({
+      dialogIsActive: true
     });
   };
 
   closeDialog = () => {
-    this.setState ({
-      dialogIsActive: false,
+    this.setState({
+      dialogIsActive: false
     });
   };
 
   onHandleScroll = () => {
-    const {skip, accountActions} = this.state;
-    const {isScroll} = this.refs;
-    const {scrollTop, scrollHeight, clientHeight} = isScroll;
+    const { skip, accountActions } = this.state;
+    const { isScroll } = this.refs;
+    const { scrollTop, scrollHeight, clientHeight } = isScroll;
     const scrolledToBottom =
-      Math.ceil (scrollTop + clientHeight) >= scrollHeight;
+      Math.ceil(scrollTop + clientHeight) >= scrollHeight;
     if (scrolledToBottom && skip <= accountActions.length) {
-      this.setState ({isScrollLoading: true});
-      this.loadMoreItems ();
+      this.setState({ isScrollLoading: true });
+      this.loadMoreItems();
     }
   };
 
   loadMoreItems = () => {
-    let {limit, skip} = this.state;
-    const {_id} = this.props.client;
+    let { limit, skip } = this.state;
+    const { _id } = this.props.client;
     skip = skip + limit;
-    this.setState ({limit, skip});
-    this.getActions (_id, limit, skip);
+    this.setState({ limit, skip });
+    this.getActions(_id, limit, skip);
   };
 
-  componentWillReceiveProps (props) {
+  componentWillReceiveProps(props) {
     // set the limit to initial value
-    this.setState ({limit: 10, skip: 0, accountActions: []});
-    const {_id} = props.client;
-    const {limit, skip} = this.state;
-    this.getActions (_id, limit, skip);
+    this.setState({ limit: 10, skip: 0, accountActions: [] });
+    const { _id } = props.client;
+    const { limit, skip } = this.state;
+    this.getActions(_id, limit, skip);
   }
 
   getActions = (id, limit, skip) => {
-    const params = ClientService.getActionsQueryParams (id);
-    _.extend (params, {
-      options: {limit, skip},
+    const params = ClientService.getActionsQueryParams(id);
+    _.extend(params, {
+      options: { limit, skip }
     });
 
-    accountActionsQuery.clone (params).fetch ((err, actions) => {
+    accountActionsQuery.clone(params).fetch((err, actions) => {
       if (!err) {
-        let {accountActions} = this.state;
-        accountActions = accountActions.concat (actions);
-        this.setState ({
+        let { accountActions } = this.state;
+        accountActions = accountActions.concat(actions);
+        this.setState({
           accountActions,
-          isScrollLoading: false,
+          isScrollLoading: false
         });
       }
     });
   };
 
   onSubmit = params => {
-    const {model} = this.state;
-    if ('type' in params) {
-      FlowRouter.setQueryParams ({type: params.type});
+    const { model } = this.state;
+    if ("type" in params) {
+      FlowRouter.setQueryParams({ type: params.type });
       model.type = params.type;
     }
-    if ('substate' in params) {
-      FlowRouter.setQueryParams ({substate: params.substate});
+    if ("substate" in params) {
+      FlowRouter.setQueryParams({ substate: params.substate });
       model.substate = params.substate;
     }
-    if ('role' in params) {
-      FlowRouter.setQueryParams ({role: params.role});
+    if ("role" in params) {
+      FlowRouter.setQueryParams({ role: params.role });
       model.role = params.role;
     }
-    this.setState ({model});
+    this.setState({ model });
   };
 
   handleClick = key => {
     const flag = !this.state[key];
     if (key === filterTypeEnums.LAST_SEVEN_DAYS) {
-      FlowRouter.setQueryParams ({'last-n-days': flag ? 7 : null});
-      this.setState ({
+      FlowRouter.setQueryParams({ "last-n-days": flag ? 7 : null });
+      this.setState({
         lastSevenDays: flag,
         lastThirtyDays: false,
-        lastTwelveMonths: false,
+        lastTwelveMonths: false
       });
     } else if (key === filterTypeEnums.LAST_THIRTY_DAYS) {
-      FlowRouter.setQueryParams ({'last-n-days': flag ? 30 : null});
-      this.setState ({
+      FlowRouter.setQueryParams({ "last-n-days": flag ? 30 : null });
+      this.setState({
         lastSevenDays: false,
         lastThirtyDays: flag,
-        lastTwelveMonths: false,
+        lastTwelveMonths: false
       });
     } else if (key === filterTypeEnums.LAST_TWELVE_MONTHS) {
-      FlowRouter.setQueryParams ({'last-n-months': flag ? 12 : null});
-      this.setState ({
+      FlowRouter.setQueryParams({ "last-n-months": flag ? 12 : null });
+      this.setState({
         lastSevenDays: false,
         lastThirtyDays: false,
-        lastTwelveMonths: flag,
+        lastTwelveMonths: flag
       });
     } else if (key) {
-      FlowRouter.setQueryParams ({[key]: flag ? flag : null});
-      this.setState ({
-        [key]: flag,
+      FlowRouter.setQueryParams({ [key]: flag ? flag : null });
+      this.setState({
+        [key]: flag
       });
     }
   };
@@ -227,163 +252,166 @@ export default class ClientTimeline extends Component {
       fieldUpdatedValue,
       fieldPreviousValue,
       accountField,
+      filetype,
+      numberOfRecords
     } = data;
 
     switch (type) {
       case actionTypesEnum.USER_ACTION:
         return (
           <div>
-            {action &&
+            {action && (
               <div>
-                {user &&
+                {user && (
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
-                  </b>}{' '}
+                  </b>
+                )}{" "}
                 applied action <b>{action.title}</b> to account with Account
                 Number <b>{account && account.acctNum}</b>
-              </div>}
+              </div>
+            )}
             {reasonCode && <div>Reason Code: {reasonCode}</div>}
           </div>
         );
       case actionTypesEnum.SYSTEM_ACTION:
         return (
           <div>
-            {action &&
+            {action && (
               <div>
                 Applied system action <b>{action.title}</b> to account.
-              </div>}
+              </div>
+            )}
           </div>
         );
       case actionTypesEnum.COMMENT:
         return (
           <div>
-            {user &&
+            {user && (
               <b>
                 {user.profile.firstName} {user.profile.lastName}
-              </b>}{' '}
-            commented a comment
-            {' '}
-            <b>{content}</b>
-            {' '}
-            to account with Account Number
-            {' '}
+              </b>
+            )}{" "}
+            commented a comment <b>{content}</b> to account with Account Number{" "}
             <b>{account && account.acctNum}</b>
           </div>
         );
       case actionTypesEnum.LETTER:
         return (
           <div>
-            {letterTemplate &&
+            {letterTemplate && (
               <div>
-                {user &&
+                {user && (
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
-                  </b>}{' '}
-                send a letter with letter-template name{' '}
-                <b>{letterTemplate.name}</b> to account with account number{' '}
+                  </b>
+                )}{" "}
+                send a letter with letter-template name{" "}
+                <b>{letterTemplate.name}</b> to account with account number{" "}
                 <b>{account && account.acctNum}</b>
-              </div>}
+              </div>
+            )}
           </div>
         );
       case actionTypesEnum.FILE:
         return (
           <div>
-            {fileName &&
+            {fileName && (
               <div>
-                {user &&
+                {user && (
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
-                  </b>}{' '}
-                uploaded file <b>{this.getFileName (fileName)}.csv</b>
-              </div>}
+                  </b>
+                )}{" "}
+                uploaded <b>{filetype}</b> file <b>{this.getFileName(fileName)}.csv</b>{" "}
+                with <b>{numberOfRecords} accounts</b>.
+              </div>
+            )}
           </div>
         );
       case actionTypesEnum.REVERT:
         return (
           <div>
-            {fileName &&
+            {fileName && (
               <div>
-                {user &&
+                {user && (
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
-                  </b>}{' '}
-                reverted file <b>{this.getFileName (fileName)}.csv</b>
-              </div>}
+                  </b>
+                )}{" "}
+                reverted file <b>{this.getFileName(fileName)}.csv</b>
+              </div>
+            )}
           </div>
         );
       case actionTypesEnum.FLAG:
         return (
           <div>
-            {actionId
-              ? <div>
-                  <b>
-                    {user.profile.firstName} {user.profile.lastName}
-                  </b>{' '}
-                  flagged an action on account
-                  {' '}
-                  <b>{account && account.acctNum}</b>
-                  .
-                  {!isOpen &&
-                    <div>
-                      <br />
-                      Manager{' '}
-                      <b>
-                        {manager.profile.firstName} {manager.profile.lastName}
-                      </b>{' '}
-                      has responsed to the action and{' '}
-                      {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
-                      flag with reason <b>{flagResponse}</b>
-                    </div>}
-                </div>
-              : <div>
-                  <b>
-                    {user.profile.firstName} {user.profile.lastName}
-                  </b>{' '}
-                  flagged a comment on account
-                  {' '}
-                  <b>{account && account.acctNum}</b>
-                  .
-                  {!isOpen &&
-                    <div>
-                      <br />
-                      Manager{' '}
-                      <b>
-                        {manager.profile.firstName} {manager.profile.lastName}
-                      </b>{' '}
-                      has responsed to a comment and{' '}
-                      {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
-                      flag with reason <b>{flagResponse}</b>
-                    </div>}
-                </div>}
+            {actionId ? (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                flagged an action on account <b>{account && account.acctNum}</b>
+                .
+                {!isOpen && (
+                  <div>
+                    <br />
+                    Manager{" "}
+                    <b>
+                      {manager.profile.firstName} {manager.profile.lastName}
+                    </b>{" "}
+                    has responsed to the action and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    flag with reason <b>{flagResponse}</b>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                flagged a comment on account <b>{account && account.acctNum}</b>
+                .
+                {!isOpen && (
+                  <div>
+                    <br />
+                    Manager{" "}
+                    <b>
+                      {manager.profile.firstName} {manager.profile.lastName}
+                    </b>{" "}
+                    has responsed to a comment and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                    flag with reason <b>{flagResponse}</b>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         );
       case actionTypesEnum.EDIT:
         return (
           <div>
-            {fieldPreviousValue
-              ? <div>
-                  <b>
-                    {user.profile.firstName} {user.profile.lastName}
-                  </b>{' '}
-                  updated the account <b>{account && account.acctNum}</b> with
-                  value
-                  {' '}
-                  <b>{fieldPreviousValue}</b>
-                  {' '}
-                  to
-                  {' '}
-                  <b>{fieldUpdatedValue}</b>
-                  {' '}
-                  in the field <b>{accountField}</b>.
-                </div>
-              : <div>
-                  <b>
-                    {user.profile.firstName} {user.profile.lastName}
-                  </b>{' '}
-                  updated the account <b>{account && account.acctNum}</b> and
-                  added the value <b>{fieldUpdatedValue}</b> in the field{' '}
-                  <b>{accountField}</b>.
-                </div>}
+            {fieldPreviousValue ? (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                updated the account <b>{account && account.acctNum}</b> with
+                value <b>{fieldPreviousValue}</b> to <b>{fieldUpdatedValue}</b>{" "}
+                in the field <b>{accountField}</b>.
+              </div>
+            ) : (
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                updated the account <b>{account && account.acctNum}</b> and
+                added the value <b>{fieldUpdatedValue}</b> in the field{" "}
+                <b>{accountField}</b>.
+              </div>
+            )}
           </div>
         );
       case actionTypesEnum.LOCK_BREAK:
@@ -399,15 +427,15 @@ export default class ClientTimeline extends Component {
           </div>
         );
       default:
-        return '';
+        return "";
     }
   };
 
   getFileName = name => {
-    return name.split ('.')[0] || '';
+    return name.split(".")[0] || "";
   };
 
-  render () {
+  render() {
     const {
       actionTypes,
       substates,
@@ -424,7 +452,7 @@ export default class ClientTimeline extends Component {
       userRoles,
       accountActions,
       isScrollLoading,
-      dialogIsActive,
+      dialogIsActive
     } = this.state;
 
     return (
@@ -434,7 +462,7 @@ export default class ClientTimeline extends Component {
           <button className="btn-filter__action" onClick={this.openDialog}>
             <i className="icon-filter" />
           </button>
-          {dialogIsActive &&
+          {dialogIsActive && (
             <Dialog
               className="account-dialog filter-dialog"
               closePortal={this.closeDialog}
@@ -482,7 +510,8 @@ export default class ClientTimeline extends Component {
                     <input checked={weekToDate} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.WEEK_TO_DATE)}
+                        this.handleClick(filterTypeEnums.WEEK_TO_DATE)
+                      }
                     >
                       Week to date
                     </label>
@@ -491,7 +520,8 @@ export default class ClientTimeline extends Component {
                     <input checked={monthToDate} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.MONTH_TO_DATE)}
+                        this.handleClick(filterTypeEnums.MONTH_TO_DATE)
+                      }
                     >
                       Month to date
                     </label>
@@ -500,7 +530,8 @@ export default class ClientTimeline extends Component {
                     <input checked={yearToDate} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.YEAR_TO_DATE)}
+                        this.handleClick(filterTypeEnums.YEAR_TO_DATE)
+                      }
                     >
                       Year to date
                     </label>
@@ -509,7 +540,8 @@ export default class ClientTimeline extends Component {
                     <input checked={lastSevenDays} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.LAST_SEVEN_DAYS)}
+                        this.handleClick(filterTypeEnums.LAST_SEVEN_DAYS)
+                      }
                     >
                       Last 7 days
                     </label>
@@ -518,7 +550,8 @@ export default class ClientTimeline extends Component {
                     <input checked={lastThirtyDays} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.LAST_THIRTY_DAYS)}
+                        this.handleClick(filterTypeEnums.LAST_THIRTY_DAYS)
+                      }
                     >
                       Last 30 days
                     </label>
@@ -527,7 +560,8 @@ export default class ClientTimeline extends Component {
                     <input checked={lastTwelveMonths} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.LAST_TWELVE_MONTHS)}
+                        this.handleClick(filterTypeEnums.LAST_TWELVE_MONTHS)
+                      }
                     >
                       Last 12 months
                     </label>
@@ -536,7 +570,8 @@ export default class ClientTimeline extends Component {
                     <input checked={yesterday} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.YESTERDAY)}
+                        this.handleClick(filterTypeEnums.YESTERDAY)
+                      }
                     >
                       Yesterday
                     </label>
@@ -545,7 +580,8 @@ export default class ClientTimeline extends Component {
                     <input checked={lastWeek} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.LAST_WEEK)}
+                        this.handleClick(filterTypeEnums.LAST_WEEK)
+                      }
                     >
                       Last Week
                     </label>
@@ -554,48 +590,51 @@ export default class ClientTimeline extends Component {
                     <input checked={lastMonth} type="checkbox" />
                     <label
                       onClick={() =>
-                        this.handleClick (filterTypeEnums.LAST_MONTH)}
+                        this.handleClick(filterTypeEnums.LAST_MONTH)
+                      }
                     >
                       Last Month
                     </label>
                   </div>
                   <div className="flex--helper flex-justify--end">
-                    <button className="btn--blue" onClick={this.closeDialog}>Done</button>
+                    <button className="btn--blue" onClick={this.closeDialog}>
+                      Done
+                    </button>
                   </div>
                 </div>
               </AutoForm>
-            </Dialog>}
+            </Dialog>
+          )}
         </div>
         <div
           ref="isScroll"
           className="timeline flex--helper flex-justify--center"
         >
-          {accountActions.length > 0 &&
+          {accountActions.length > 0 && (
             <div className="timeline-container">
-              {accountActions.map ((action, index) => {
-                const {createdAt, type, user, account} = action;
+              {accountActions.map((action, index) => {
+                const { createdAt, type, user, account } = action;
                 if (
-                  (FlowRouter.getQueryParam ('role') && !user) ||
-                  (FlowRouter.getQueryParam ('substate') && !account)
+                  (FlowRouter.getQueryParam("role") && !user) ||
+                  (FlowRouter.getQueryParam("substate") && !account)
                 ) {
                   return <div key={index} />;
                 }
 
                 return (
-                  (
-                    <TimelineItem
-                      key={index}
-                      icon={this.getTimelineIcon (type)}
-                      createdAt={moment (createdAt).format (
-                        'MMMM Do YYYY, hh:mm a'
-                      )}
-                    >
-                      {this.getTimelineBody (action)}
-                    </TimelineItem>
-                  )
+                  <TimelineItem
+                    key={index}
+                    icon={this.getTimelineIcon(type)}
+                    createdAt={moment(createdAt).format(
+                      "MMMM Do YYYY, hh:mm a"
+                    )}
+                  >
+                    {this.getTimelineBody(action)}
+                  </TimelineItem>
                 );
               })}
-            </div>}
+            </div>
+          )}
         </div>
         {isScrollLoading && <Loading />}
       </div>
@@ -603,20 +642,20 @@ export default class ClientTimeline extends Component {
   }
 }
 
-const schema = new SimpleSchema ({
+const schema = new SimpleSchema({
   type: {
     type: String,
     optional: true,
-    label: 'Search by Action type',
+    label: "Search by Action type"
   },
   substate: {
     type: String,
     optional: true,
-    label: 'Search by Substate',
+    label: "Search by Substate"
   },
   role: {
     type: String,
     optional: true,
-    label: 'Search by User role',
-  },
+    label: "Search by User role"
+  }
 });
