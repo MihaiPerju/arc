@@ -267,6 +267,14 @@
     &.manager-search {
       width: calc(100% - 135px);
     }
+
+    &.btn-groups {
+      width: calc(100% - 255px)
+    }
+
+    &.tag-btn--true {
+      width: calc(100% - 180px);
+    }
   }
   
   .select-type {

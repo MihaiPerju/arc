@@ -386,7 +386,9 @@ export default class AccountSearchBar extends Component {
         (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.ADMIN)) ||
         (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.REP))
         ,
-      'manager-search': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
+      'manager-search': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length === 0,
+      'tag-btn--true': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length,
+      'btn-groups': btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length,
       'sort__width': btnGroup &&
         Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
       'tag-btn': btnGroup && moduleTags.length,
@@ -649,7 +651,7 @@ export default class AccountSearchBar extends Component {
                     </div>
                   </Dialog>}
               </button>
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div/>}
             </div>
             {Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
               <div
