@@ -76,7 +76,8 @@ class ReportListContainer extends Pager {
 
   setReport = _id => {
     const { currentReport } = this.state;
-
+    // removing reportId from the query when navigating from notification
+    FlowRouter.setQueryParams({ reportId: null });
     if (currentReport === _id) {
       this.setState({ currentReport: null });
     } else {

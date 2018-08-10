@@ -72,7 +72,7 @@ class Notitfications extends Component {
           Report:
           <a
             className="text-blue"
-            href={`reports/list?reportId=${metaData.reportId}`}
+            href={`/reports/list?reportId=${metaData.reportId}`}
           >
             {metaData.name}
           </a>
