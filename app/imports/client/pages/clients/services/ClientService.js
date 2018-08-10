@@ -1,4 +1,5 @@
 import moment from "moment";
+import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 
 export default class ClientService {
   static getActionsQueryParams(clientId) {
@@ -139,5 +140,64 @@ export default class ClientService {
       month = date.getMonth();
 
     return new Date(year, month, 1);
+  }
+
+  static getFilterParams() {
+    const queryParams = FlowRouter.current().queryParams;
+    const model = {},
+      state = {};
+
+    if ("type" in queryParams) {
+      model.type = queryParams.type;
+    } else {
+      model.type = actionTypesEnum.FILE;
+      FlowRouter.setQueryParams({ type: actionTypesEnum.FILE });
+    }
+
+    if ("substate" in queryParams) {
+      model.substate = queryParams.substate;
+    }
+
+    if ("role" in queryParams) {
+      model.role = queryParams.role;
+    }
+
+    if ("last-n-days" in queryParams) {
+      if (queryParams["last-n-days"] === 7) {
+        state.lastSevenDays = true;
+      } else {
+        state.lastThirtyDays = true;
+      }
+    }
+
+    if ("last-n-months" in queryParams) {
+      state.lastTwelveMonths = true;
+    }
+
+    if ("weekToDate" in queryParams) {
+      state.weekToDate = true;
+    }
+
+    if ("monthToDate" in queryParams) {
+      state.monthToDate = true;
+    }
+
+    if ("yearToDate" in queryParams) {
+      state.yearToDate = true;
+    }
+
+    if ("yesterday" in queryParams) {
+      state.yesterday = true;
+    }
+
+    if ("lastWeek" in queryParams) {
+      state.lastWeek = true;
+    }
+
+    if ("lastMonth" in queryParams) {
+      state.lastMonth = true;
+    }
+
+    return { model, state };
   }
 }
