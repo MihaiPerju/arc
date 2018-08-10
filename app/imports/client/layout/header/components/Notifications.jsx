@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import classNames from 'classnames';
+import React, { Component } from "react";
+import classNames from "classnames";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import NotificationQuery from "/imports/api/notifications/queries/notificationList";
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
@@ -12,11 +12,11 @@ class Notitfications extends Component {
     this.state = {
       dropdownIsActive: false,
       badge: true
-    }
+    };
   }
 
   openDropdown = () => {
-    const {dropdownIsActive} = this.state;
+    const { dropdownIsActive } = this.state;
 
     if (!dropdownIsActive) {
       document.addEventListener("click", this.outsideClick, false);
@@ -27,7 +27,7 @@ class Notitfications extends Component {
     this.setState({
       dropdownIsActive: !dropdownIsActive,
       badge: false
-    })
+    });
   };
 
   outsideClick = e => {
@@ -50,7 +50,17 @@ class Notitfications extends Component {
       type === NotificationTypeEnum.RESPONSE
     ) {
       return (
-        "Manager responded to account with Account Number " + metaData.acctNum
+        <div>
+          Manager responded to account with Account Number{" "}
+          <a
+            className="text-blue"
+            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
+              metaData.accountId
+            }`}
+          >
+            {metaData.acctNum}
+          </a>
+        </div>
       );
     } else if (
       metaData &&
@@ -60,7 +70,10 @@ class Notitfications extends Component {
       return (
         <div>
           Report:
-          <a href={`reports/list?reportId=${metaData.reportId}`}>
+          <a
+            className="text-blue"
+            href={`reports/list?reportId=${metaData.reportId}`}
+          >
             {metaData.name}
           </a>
           has been completed
@@ -82,7 +95,7 @@ class Notitfications extends Component {
             className="text-blue"
             href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
               metaData.accountId
-              }`}
+            }`}
           >
             {metaData.acctNum}
           </a>
@@ -100,7 +113,7 @@ class Notitfications extends Component {
             className="text-blue"
             href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
               metaData.accountId
-              }`}
+            }`}
           >
             {metaData.acctNum}
           </a>
@@ -111,10 +124,10 @@ class Notitfications extends Component {
   };
 
   render() {
-    const {dropdownIsActive, badge} = this.state;
+    const { dropdownIsActive, badge } = this.state;
     const { data, loading, error } = this.props;
-    const notificationBtnClasses = classNames('notification-btn', {
-      'active': dropdownIsActive
+    const notificationBtnClasses = classNames("notification-btn", {
+      active: dropdownIsActive
     });
 
     if (loading) {
@@ -127,61 +140,62 @@ class Notitfications extends Component {
 
     return (
       <div className="notification-dropdown">
-        <a href="javascript:;" className={notificationBtnClasses} onClick={this.openDropdown} ref={this.nodeRef}>
-          <i className="icon-bell-o"/>
-          {
-            badge && data.length > 1 && (
+        <a
+          href="javascript:;"
+          className={notificationBtnClasses}
+          onClick={this.openDropdown}
+          ref={this.nodeRef}
+        >
+          <i className="icon-bell-o" />
+          {badge &&
+            data.length > 1 && (
               <div className="badge text-center">{data.length}</div>
-            )
-          }
+            )}
         </a>
-        {
-          dropdownIsActive && (
-            <div className="notification-dropdown__container">
-              <div className="notification-caret">
-                <div className="notification-outer"/>
-                <div className="notification-inner"/>
-              </div>
-              <div className="notification-dropdown__wrapper">
-                {
-                  data.map((notification, index) => (
-                    <NotificationItem key={index}
-                                      content={notification.content}
-                                      time={'11.22.63'}
-                    >
-                      {this.getMessage(notification)}
-                    </NotificationItem>
-                  ))
-                }
-                {
-                  data.length === 0 && (
-                    <div className="notification-none text-center text-light-grey">No notifications!</div>
-                  )
-                }
-              </div>
+        {dropdownIsActive && (
+          <div className="notification-dropdown__container">
+            <div className="notification-caret">
+              <div className="notification-outer" />
+              <div className="notification-inner" />
             </div>
-          )
-        }
+            <div className="notification-dropdown__wrapper">
+              {data.map((notification, index) => (
+                <NotificationItem
+                  key={index}
+                  content={notification.content}
+                  time={"11.22.63"}
+                >
+                  {this.getMessage(notification)}
+                </NotificationItem>
+              ))}
+              {data.length === 0 && (
+                <div className="notification-none text-center text-light-grey">
+                  No notifications!
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
-    )
+    );
   }
 }
 
 class NotificationItem extends Component {
   render() {
-    const {time, children} = this.props;
+    const { time, children } = this.props;
 
     return (
       <div className="notification-row">
         <div className="notification-icon">
-          <i className="icon-response"/>
+          <i className="icon-response" />
         </div>
         <div className="notification-info__content">
           <div className="notification-content text-light-grey">{children}</div>
           <div className="notification-time">{time}</div>
         </div>
       </div>
-    )
+    );
   }
 }
 

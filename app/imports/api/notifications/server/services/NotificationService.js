@@ -32,7 +32,8 @@ export default class NotificationService {
           receiverId,
           type: NotificationTypeEnum.RESPONSE,
           "metaData.accountId": accountId,
-          "metaData.acctNum": acctNum
+          "metaData.acctNum": acctNum,
+          "metaData.state": "escalated" // the reponse notifications will be always for escalated acounts 
         }
       },
       { upsert: true }
