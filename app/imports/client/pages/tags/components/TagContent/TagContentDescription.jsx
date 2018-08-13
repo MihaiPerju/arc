@@ -11,7 +11,8 @@ export default class TagContentDescription extends Component {
     super();
     this.state = {
       selectedUser: [],
-      selectAllChkBox: false
+      selectAllChkBox: false,
+      isDisabled: false
     };
   }
 
@@ -25,6 +26,7 @@ export default class TagContentDescription extends Component {
   onSubmit = data => {
     const { userIds } = data;
     const { currentTag } = this.props;
+    this.setState({ isDisabled: true });
     Meteor.call(
       "user.addTag",
       { userIds, tagId: currentTag._id },
@@ -32,7 +34,10 @@ export default class TagContentDescription extends Component {
         if (!err) {
           Notifier.success("Successfully added !");
           this.refs.form.reset();
+        } else {
+          Notifier.success(err.reason);
         }
+        this.setState({ isDisabled: false });
       }
     );
   };
@@ -82,7 +87,7 @@ export default class TagContentDescription extends Component {
   render() {
     const { users, currentTag, untaggedUsers, taggedUsers } = this.props;
     const options = this.getOptions(untaggedUsers);
-    const { selectedUser, selectAllChkBox } = this.state;
+    const { selectedUser, selectAllChkBox, isDisabled } = this.state;
 
     return (
       <div className="create-form">
@@ -108,7 +113,13 @@ export default class TagContentDescription extends Component {
               </div>
             </div>
             <div className="btn-group-1 flex--helper flex-justify--end">
-              <button className="btn--green">Submit</button>
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                className="btn--green"
+              >
+                Submit {isDisabled && <i className="icon-cog" />}
+              </button>
             </div>
           </AutoForm>
         </div>

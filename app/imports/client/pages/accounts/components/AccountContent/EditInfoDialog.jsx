@@ -1,62 +1,64 @@
-import React, {Component} from 'react';
-import Dialog from '/imports/client/lib/ui/Dialog';
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
-import SimpleSchema from 'simpl-schema';
-import DatePicker from 'react-datepicker';
-import fieldTypes from '/imports/api/accounts/config/accounts';
-import Notifier from '/imports/client/lib/Notifier';
-import moment from 'moment';
+import React, { Component } from "react";
+import Dialog from "/imports/client/lib/ui/Dialog";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import SimpleSchema from "simpl-schema";
+import DatePicker from "react-datepicker";
+import fieldTypes from "/imports/api/accounts/config/accounts";
+import Notifier from "/imports/client/lib/Notifier";
+import moment from "moment";
 
 export default class EditInfoDialog extends Component {
-  constructor () {
-    super ();
+  constructor() {
+    super();
     this.state = {
       dialogIsActive: false,
       selectedDate: null,
+      isDisabled: false
     };
   }
 
   onSubmit = data => {
-    const {accountId} = this.props;
-    if ('ptName' in data) {
-      data.ptName = data.ptName.replace (/,/g, ', ');
+    const { accountId } = this.props;
+    if ("ptName" in data) {
+      data.ptName = data.ptName.replace(/,/g, ", ");
     }
-
-    Meteor.call ('account.update', accountId, data, err => {
+    this.setState({ isDisabled: true });
+    Meteor.call("account.update", accountId, data, err => {
       if (!err) {
-        Notifier.success ('Account updated!');
-        this.setState ({dialogIsActive: false, selectedDate: null});
+        Notifier.success("Account updated!");
+        this.setState({ dialogIsActive: false, selectedDate: null });
       } else {
-        Notifier.error (err.reason);
+        Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
   onDateSelect = newDate => {
-    this.setState ({selectedDate: moment (newDate)});
+    this.setState({ selectedDate: moment(newDate) });
   };
 
   openDialog = editField => {
-    this.setState ({
-      dialogIsActive: true,
+    this.setState({
+      dialogIsActive: true
     });
   };
 
   closeDialog = () => {
-    this.setState ({
-      dialogIsActive: false,
+    this.setState({
+      dialogIsActive: false
     });
   };
   getSchema = editField => {
-    return new SimpleSchema ({[editField]: {type: String}});
+    return new SimpleSchema({ [editField]: { type: String } });
   };
 
   getEditForm = name => {
-    const {editValue, editField} = this.props;
-    const {selectedDate} = this.state;
+    const { editValue, editField } = this.props;
+    const { selectedDate, isDisabled } = this.state;
 
-    const schema = this.getSchema (name);
-    if (fieldTypes.dates.includes (name)) {
+    const schema = this.getSchema(name);
+    if (fieldTypes.dates.includes(name)) {
       return (
         <div className="edit-info__dialog-wrapper">
           <div className="input-datetime">
@@ -65,27 +67,29 @@ export default class EditInfoDialog extends Component {
               showMonthDropdown
               showYearDropdown
               yearDropdownItemNumber={4}
-              todayButton={'Today'}
+              todayButton={"Today"}
               placeholderText="Select New Date"
               onChange={this.onDateSelect}
-              selected={selectedDate ? selectedDate : moment (editValue)}
+              selected={selectedDate ? selectedDate : moment(editValue)}
             />
           </div>
           <div className="btn-group__footer flex--helper flex-justify--end">
             <button
-              onClick={this.onSubmit.bind (this, {
-                [editField]: selectedDate && selectedDate.toDate (),
+              onClick={this.onSubmit.bind(this, {
+                [editField]: selectedDate && selectedDate.toDate()
               })}
               type="submit"
               className="btn--light-blue"
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
             >
-              Submit
+              Submit {isDisabled && <i className="icon-cog" />}
             </button>
           </div>
         </div>
       );
-    } else if (fieldTypes.others.includes (name)) {
-      if (typeof editValue === 'object') {
+    } else if (fieldTypes.others.includes(name)) {
+      if (typeof editValue === "object") {
         return (
           <div className="edit-info__dialog-wrapper">
             <div className="input-datetime">
@@ -93,18 +97,20 @@ export default class EditInfoDialog extends Component {
                 calendarClassName="cc-datepicker"
                 placeholderText="Select New Date"
                 onChange={this.onDateSelect}
-                selected={selectedDate ? selectedDate : moment (editValue)}
+                selected={selectedDate ? selectedDate : moment(editValue)}
               />
             </div>
             <div className="btn-group__footer flex--helper flex-justify--end">
               <button
-                onClick={this.onSubmit.bind (this, {
-                  [editField]: selectedDate && selectedDate.toDate (),
+                onClick={this.onSubmit.bind(this, {
+                  [editField]: selectedDate && selectedDate.toDate()
                 })}
                 type="submit"
                 className="btn--light-blue"
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
               >
-                Submit
+                Submit {isDisabled && <i className="icon-cog" />}
               </button>
             </div>
           </div>
@@ -114,7 +120,7 @@ export default class EditInfoDialog extends Component {
     return (
       <AutoForm
         onBlur={this.onBlur}
-        model={{[name]: editValue}}
+        model={{ [name]: editValue }}
         schema={schema}
         onSubmit={this.onSubmit}
       >
@@ -124,14 +130,19 @@ export default class EditInfoDialog extends Component {
             name={name}
             inputRef={x => {
               if (x) {
-                x.focus ();
+                x.focus();
               }
             }}
           />
           <ErrorField name={name} />
           <div className="btn-group__footer flex--helper flex-justify--end">
-            <button type="submit" className="btn--light-blue">
-              Submit
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              type="submit"
+              className="btn--light-blue"
+            >
+              Submit {isDisabled && <i className="icon-cog" />}
             </button>
           </div>
         </div>
@@ -139,28 +150,29 @@ export default class EditInfoDialog extends Component {
     );
   };
 
-  render () {
-    const {dialogIsActive} = this.state;
-    const {editField} = this.props;
+  render() {
+    const { dialogIsActive } = this.state;
+    const { editField } = this.props;
 
     return (
       <button
         className="edit-info__btn"
-        onClick={this.openDialog.bind (this, editField)}
+        onClick={this.openDialog.bind(this, editField)}
       >
         <i className="icon-pencil" />
         {dialogIsActive &&
-          editField &&
-          <Dialog
-            className="account-dialog edit-info__dialog"
-            closePortal={this.closeDialog}
-            title={'Edit info'}
-          >
-            <button className="close-dialog" onClick={this.closeDialog}>
-              <i className="icon-close" />
-            </button>
-            {this.getEditForm (editField)}
-          </Dialog>}
+          editField && (
+            <Dialog
+              className="account-dialog edit-info__dialog"
+              closePortal={this.closeDialog}
+              title={"Edit info"}
+            >
+              <button className="close-dialog" onClick={this.closeDialog}>
+                <i className="icon-close" />
+              </button>
+              {this.getEditForm(editField)}
+            </Dialog>
+          )}
       </button>
     );
   }

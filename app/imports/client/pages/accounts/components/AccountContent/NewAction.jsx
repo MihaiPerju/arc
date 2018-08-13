@@ -28,7 +28,8 @@ export default class NewAction extends Component {
       reasonCodes: [],
       loading: true,
       selectedAction: {},
-      dateLabelKeys: []
+      dateLabelKeys: [],
+      isDisabled: false
     };
   }
 
@@ -83,6 +84,8 @@ export default class NewAction extends Component {
       }
       data[dateLabelKeys[i]] = new Date(this.state[dateLabelKeys[i]]);
     }
+
+    this.setState({ isDisabled: true });
     Meteor.call("account.actions.add", data, err => {
       if (!err) {
         Notifier.success("Data saved");
@@ -93,6 +96,7 @@ export default class NewAction extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   }
 
@@ -192,7 +196,7 @@ export default class NewAction extends Component {
   };
 
   render() {
-    const { selectedAction, loading } = this.state;
+    const { selectedAction, loading, isDisabled } = this.state;
     const actions = this.getActionOptions(this.state.actions);
     const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
     const { inputs } = selectedAction[0] || {};
@@ -236,8 +240,13 @@ export default class NewAction extends Component {
               >
                 Cancel
               </button>
-              <button type="submit" className="btn--green">
-                Save
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                type="submit"
+                className="btn--green"
+              >
+                Save {isDisabled && <i className="icon-cog" />}
               </button>
             </div>
           </AutoForm>

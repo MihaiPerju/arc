@@ -10,7 +10,8 @@ export default class AccountTickle extends React.Component {
   constructor() {
     super();
     this.state = {
-      tickleDate: moment()
+      tickleDate: moment(),
+      isDisabled: false
     };
   }
 
@@ -22,6 +23,7 @@ export default class AccountTickle extends React.Component {
       tickleDate: new Date(tickleDate),
       tickleUserId: Meteor.userId()
     });
+    this.setState({ isDisabled: true });
 
     Meteor.call("account.tickle", data, err => {
       if (!err) {
@@ -31,6 +33,7 @@ export default class AccountTickle extends React.Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
@@ -44,7 +47,7 @@ export default class AccountTickle extends React.Component {
   };
 
   render() {
-    const { tickleDate } = this.state;
+    const { tickleDate, isDisabled } = this.state;
     return (
       <div className="action-block">
         <div className="input-datetime flex--helper flex--column">
@@ -78,8 +81,13 @@ export default class AccountTickle extends React.Component {
                 <button className="btn-cancel" onClick={this.closeDialog}>
                   Cancel
                 </button>
-                <button type="submit" className="btn--light-blue">
-                  Confirm & send
+                <button
+                  style={isDisabled ? { cursor: "not-allowed" } : {}}
+                  disabled={isDisabled}
+                  type="submit"
+                  className="btn--light-blue"
+                >
+                  Confirm & send {isDisabled && <i className="icon-cog" />}
                 </button>
               </div>
             </div>
