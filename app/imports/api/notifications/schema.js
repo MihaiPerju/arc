@@ -22,5 +22,9 @@ export default new SimpleSchema({
     type: Object,
     optional: true,
     blackbox: true
+  },
+  createdAt: {
+    type: Date,
+    optional: true
   }
 });

@@ -12,7 +12,8 @@ export default class NotificationService {
           type: NotificationTypeEnum.GLOBAL,
           receiverId,
           message: "Manager responded to escalation",
-          seen: false
+          seen: false,
+          createdAt: new Date()
         }
       },
       { upsert: true }
@@ -32,7 +33,8 @@ export default class NotificationService {
           receiverId,
           type: NotificationTypeEnum.RESPONSE,
           "metaData.accountId": accountId,
-          "metaData.acctNum": acctNum
+          "metaData.acctNum": acctNum,
+          createdAt: new Date()
         }
       },
       { upsert: true }
@@ -52,7 +54,8 @@ export default class NotificationService {
           receiverId,
           type: NotificationTypeEnum.REPORT,
           "metaData.reportId": reportId,
-          "metaData.name": name
+          "metaData.name": name,
+          createdAt: new Date()
         }
       },
       { upsert: true }
@@ -74,7 +77,8 @@ export default class NotificationService {
           type: NotificationTypeEnum.FLAG,
           "metaData.accountId": accountId,
           "metaData.acctNum": acctNum,
-          "metaData.state": state
+          "metaData.state": state,
+          createdAt: new Date()
         }
       },
       { upsert: true }
@@ -97,7 +101,8 @@ export default class NotificationService {
           type: NotificationTypeEnum.COMMENT,
           "metaData.accountId": accountId,
           "metaData.acctNum": acctNum,
-          "metaData.state": state
+          "metaData.state": state,
+          createdAt: new Date()
         }
       },
       { upsert: true }

@@ -1,10 +1,11 @@
-import React, {Component} from 'react';
-import classNames from 'classnames';
+import React, { Component } from "react";
+import classNames from "classnames";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import NotificationQuery from "/imports/api/notifications/queries/notificationList";
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
 import flagTypesEnum from "/imports/api/accounts/enums/flagTypesEnum";
+import moment from "moment";
 
 class Notitfications extends Component {
   constructor() {
@@ -12,11 +13,11 @@ class Notitfications extends Component {
     this.state = {
       dropdownIsActive: false,
       badge: true
-    }
+    };
   }
 
   openDropdown = () => {
-    const {dropdownIsActive} = this.state;
+    const { dropdownIsActive } = this.state;
 
     if (!dropdownIsActive) {
       document.addEventListener("click", this.outsideClick, false);
@@ -27,7 +28,7 @@ class Notitfications extends Component {
     this.setState({
       dropdownIsActive: !dropdownIsActive,
       badge: false
-    })
+    });
   };
 
   outsideClick = e => {
@@ -75,14 +76,14 @@ class Notitfications extends Component {
         <div>
           <span>
             User flagged
-            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"}
+            {metaData.flagType === flagTypesEnum.ACTION ? " an " : " a "}
             {metaData.flagType} on account with Account number
           </span>
           <a
             className="text-blue"
             href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
               metaData.accountId
-              }`}
+            }`}
           >
             {metaData.acctNum}
           </a>
@@ -100,7 +101,7 @@ class Notitfications extends Component {
             className="text-blue"
             href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
               metaData.accountId
-              }`}
+            }`}
           >
             {metaData.acctNum}
           </a>
@@ -111,10 +112,10 @@ class Notitfications extends Component {
   };
 
   render() {
-    const {dropdownIsActive, badge} = this.state;
+    const { dropdownIsActive, badge } = this.state;
     const { data, isLoading, error } = this.props;
-    const notificationBtnClasses = classNames('notification-btn', {
-      'active': dropdownIsActive
+    const notificationBtnClasses = classNames("notification-btn", {
+      active: dropdownIsActive
     });
 
     if (isLoading) {
@@ -127,61 +128,62 @@ class Notitfications extends Component {
 
     return (
       <div className="notification-dropdown">
-        <a href="javascript:;" className={notificationBtnClasses} onClick={this.openDropdown} ref={this.nodeRef}>
-          <i className="icon-bell-o"/>
-          {
-            badge && data.length > 1 && (
+        <a
+          href="javascript:;"
+          className={notificationBtnClasses}
+          onClick={this.openDropdown}
+          ref={this.nodeRef}
+        >
+          <i className="icon-bell-o" />
+          {badge &&
+            data.length > 1 && (
               <div className="badge text-center">{data.length}</div>
-            )
-          }
+            )}
         </a>
-        {
-          dropdownIsActive && (
-            <div className="notification-dropdown__container">
-              <div className="notification-caret">
-                <div className="notification-outer"/>
-                <div className="notification-inner"/>
-              </div>
-              <div className="notification-dropdown__wrapper">
-                {
-                  data.map((notification, index) => (
-                    <NotificationItem key={index}
-                                      content={notification.content}
-                                      time={'11.22.63'}
-                    >
-                      {this.getMessage(notification)}
-                    </NotificationItem>
-                  ))
-                }
-                {
-                  data.length === 0 && (
-                    <div className="notification-none text-center text-light-grey">No notifications!</div>
-                  )
-                }
-              </div>
+        {dropdownIsActive && (
+          <div className="notification-dropdown__container">
+            <div className="notification-caret">
+              <div className="notification-outer" />
+              <div className="notification-inner" />
             </div>
-          )
-        }
+            <div className="notification-dropdown__wrapper">
+              {data.map((notification, index) => (
+                <NotificationItem
+                  key={index}
+                  content={notification.content}
+                  time={moment(notification.createdAt).format("MM/DD/YYYY, h:mm a")}
+                >
+                  {this.getMessage(notification)}
+                </NotificationItem>
+              ))}
+              {data.length === 0 && (
+                <div className="notification-none text-center text-light-grey">
+                  No notifications!
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
-    )
+    );
   }
 }
 
 class NotificationItem extends Component {
   render() {
-    const {time, children} = this.props;
+    const { time, children } = this.props;
 
     return (
       <div className="notification-row">
         <div className="notification-icon">
-          <i className="icon-response"/>
+          <i className="icon-response" />
         </div>
         <div className="notification-info__content">
           <div className="notification-content text-light-grey">{children}</div>
           <div className="notification-time">{time}</div>
         </div>
       </div>
-    )
+    );
   }
 }
 
@@ -191,7 +193,8 @@ export default withQuery(
       filters: {
         receiverId: Meteor.userId(),
         type: { $ne: NotificationTypeEnum.GLOBAL }
-      }
+      },
+      options: { sort: { createdAt: -1 } }
     });
   },
   { reactive: true }
