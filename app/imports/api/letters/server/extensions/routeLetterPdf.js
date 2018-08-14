@@ -1,6 +1,7 @@
 import { getUserByToken } from "/imports/api/s3-uploads/server/router";
-import LetterService from "/imports/api/letters/server/letter.service.js";
 import fs, { existsSync } from "fs";
+import Settings from "/imports/api/settings/collection";
+import Business from "/imports/api/business";
 
 Picker.route("/letters/pdf/:accountId/:letterId/:token", function(
   params,
@@ -10,24 +11,26 @@ Picker.route("/letters/pdf/:accountId/:letterId/:token", function(
 ) {
   const user = getUserByToken(params.token);
   const { letterId } = params;
-  
+  const { rootFolder } = Settings.findOne({
+    rootFolder: {
+      $ne: null
+    }
+  });
   if (!user) {
     res.writeHead(404);
     res.write("Not logged in!");
     return;
   }
 
-  const tmpPdfLocation = LetterService.getLetterTemporalPdfLoc(
-    params.accountId,
-    params.letterId
-  );
+  const letterLocation =
+    rootFolder + Business.ACCOUNTS_FOLDER + letterId + ".pdf";
 
-  if (!existsSync(tmpPdfLocation)) {
+  if (!existsSync(letterLocation)) {
     res.writeHead(404);
     res.write("File Not Found");
     res.end();
   }
-  data = fs.readFileSync(tmpPdfLocation);
+  data = fs.readFileSync(letterLocation);
 
   res.writeHead(200, {
     "Content-Type": "application/pdf",

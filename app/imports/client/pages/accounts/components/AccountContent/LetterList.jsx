@@ -67,6 +67,13 @@ class LetterList extends Component {
     });
   }
 
+  resetForm = () => {
+    this.setState({
+      editLetter: false,
+      createLetter: false
+    });
+  };
+
   redirectToPdf(pdf) {
     window.open("/letters/pdf/" + pdf, "_blank");
   }
@@ -109,7 +116,7 @@ class LetterList extends Component {
           {createLetter ? (
             <NewLetter
               letterTemplates={letterTemplates}
-              cancel={this.toggleLetter.bind(this)}
+              cancel={this.resetForm}
               account={account}
             />
           ) : null}
@@ -118,7 +125,7 @@ class LetterList extends Component {
             <EditLetter
               letterTemplates={letterTemplates}
               selectedLetter={selectedLetter}
-              cancelEdit={() => this.toggleEditLetter()}
+              cancelEdit={this.resetForm}
               account={account}
             />
           ) : null}
