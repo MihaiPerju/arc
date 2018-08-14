@@ -19,26 +19,14 @@ export default class AddReportColumn extends Component {
     this.state = {
       accountSimpleColumn: [],
       insuranceColumn: [],
-      metaDataColumn: {},
       reportColumnSchema: null
     };
   }
 
   componentWillMount() {
-    const { mongoFilters } = this.props.report;
-
-    Meteor.call(
-      "report.getMetaDataColumns",
-      mongoFilters,
-      (err, metaDataColumn) => {
-        if (!err) {
-          this.setState({
-            metaDataColumn
-          });
-          this.extendSchema();
-        }
-      }
-    );
+    this.setState({
+      reportColumnSchema: schema
+    });
   }
 
   closeDialog = () => {
@@ -63,39 +51,9 @@ export default class AddReportColumn extends Component {
     });
   };
 
-  extendSchema = () => {
-    const { metaDataColumn } = this.state;
-    const { hasHeader, noHeader } = metaDataColumn;
-
-    noHeader.map(value => {
-      schema.extend({
-        [`metaData.${value}`]: {
-          type: Boolean,
-          optional: true,
-          defaultValue: false
-        }
-      });
-    });
-
-    hasHeader.map(value => {
-      schema.extend({
-        [`metaData.${value}`]: {
-          type: Boolean,
-          optional: true,
-          defaultValue: false
-        }
-      });
-    });
-
-    this.setState({
-      reportColumnSchema: schema
-    });
-  };
-
   render() {
     const { report } = this.props;
-    const { metaDataColumn, reportColumnSchema } = this.state;
-    const { hasHeader, noHeader } = metaDataColumn;
+    const { reportColumnSchema } = this.state;
 
     if (!reportColumnSchema) {
       return <div />;
@@ -144,30 +102,6 @@ export default class AddReportColumn extends Component {
                   </NestField>
                 </ListItemField>
               </ListField>
-              <div style={{ width: "50%", float: "left" }}>
-                <div>Columns without Header:</div>
-                {noHeader.map((col, index) => {
-                  return (
-                    <BoolField
-                      key={`meta-no-heads-${index}`}
-                      name={`metaData.${col}`}
-                      label={col}
-                    />
-                  );
-                })}
-              </div>
-              <div style={{ width: "50%", float: "left" }}>
-                <div>Columns with Header:</div>
-                {hasHeader.map((col, index) => {
-                  return (
-                    <BoolField
-                      key={`meta-heads-${index}`}
-                      name={`metaData.${col}`}
-                      label={col}
-                    />
-                  );
-                })}
-              </div>
             </AutoForm>
           </div>
           <div className="btn-group">

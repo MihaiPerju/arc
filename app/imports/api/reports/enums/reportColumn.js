@@ -11,6 +11,7 @@ export default [
   { value: "medNo", label: "Medical Number" },
   { value: "state", label: "State" },
   { value: "substate", label: "Substate" },
+  { value: "metaData", label: "Meta Data" },
   { value: "activeInsCode", label: "Active Insurance Code" },
   { value: "tickleDate", label: "Tickle Date" },
   { value: "tickleReason", label: "Tickle Reason" },

@@ -77,8 +77,9 @@ export default new SimpleSchema({
     optional: true
   },
   metaData: {
-    type: Object,
-    optional: true
+    type: Boolean,
+    optional: true,
+    defaultValue: false
   },
   tickleDate: {
     type: Boolean,

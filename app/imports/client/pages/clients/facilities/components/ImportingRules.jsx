@@ -140,13 +140,15 @@ export default class ImportingRules extends React.Component {
                   />
                   <ErrorField name="hasHeader" />
                 </div>
-                <button
-                  type="button"
-                  className="btn--white"
-                  onClick={copyRules}
-                >
-                  Copy file headers
-                </button>
+                {rules != "paymentRules" && (
+                  <button
+                    type="button"
+                    className="btn--white"
+                    onClick={copyRules}
+                  >
+                    Copy file headers
+                  </button>
+                )}
               </div>
             </div>
 
