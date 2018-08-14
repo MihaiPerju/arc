@@ -214,7 +214,7 @@ export default class AccountSearchBar extends Component {
   };
 
   outsideClick = e => {
-    if (this.node.contains (e.target)) {
+    if (this.node && this.node.contains (e.target)) {
       return;
     }
 
@@ -788,9 +788,9 @@ class BtnGroup extends Component {
     return (
       <div className={this.state.in ? 'btn-group in' : 'btn-group'}>
         {icons
-          ? icons.map (element => {
+          ? icons.map ((element, index) => {
               return (
-                <button onClick={element.method}>
+                <button key={index} onClick={element.method}>
                   <i className={'icon-' + element.icon} />
                 </button>
               );
