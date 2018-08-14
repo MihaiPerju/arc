@@ -51,7 +51,17 @@ class Notitfications extends Component {
       type === NotificationTypeEnum.RESPONSE
     ) {
       return (
-        "Manager responded to account with Account Number " + metaData.acctNum
+        <div>
+          Manager responded to account with Account Number{" "}
+          <a
+            className="text-blue"
+            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
+              metaData.accountId
+            }`}
+          >
+            {metaData.acctNum}
+          </a>
+        </div>
       );
     } else if (
       metaData &&
@@ -61,7 +71,10 @@ class Notitfications extends Component {
       return (
         <div>
           Report:
-          <a href={`reports/list?reportId=${metaData.reportId}`}>
+          <a
+            className="text-blue"
+            href={`/reports/list?reportId=${metaData.reportId}`}
+          >
             {metaData.name}
           </a>
           has been completed

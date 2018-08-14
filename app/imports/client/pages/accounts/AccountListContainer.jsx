@@ -175,6 +175,8 @@ class AccountListContainer extends Pager {
 
   selectAccount = newAccount => {
     const { currentAccount } = this.state;
+    // removing accountId from the query when navigating from notification
+    FlowRouter.setQueryParams({ accountId: null });
     if (this.checkAccountIsLocked(newAccount)) {
       if (currentAccount === newAccount._id) {
         this.setState({
@@ -282,7 +284,7 @@ class AccountListContainer extends Pager {
   getUserOptions(accounts) {
     let userOptions = [];
     for (let account of accounts) {
-      if(account.facility) {
+      if (account.facility) {
         for (let user of account.facility.users) {
           let item = {
             label:
