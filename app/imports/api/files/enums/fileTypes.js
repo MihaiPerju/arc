@@ -1,4 +1,5 @@
 export default {
     PLACEMENT: "placement",
-    INVENTORY: "inventory"
+    INVENTORY: "inventory",
+    PAYMENT: "payment"
 }

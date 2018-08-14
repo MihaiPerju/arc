@@ -3,6 +3,6 @@ const STATUSES = {
   PENDING: "Pending",
   SENT: "Sent",
   RECEIVED: "Received",
-  MANUALLY_MAILED:"ManuallyMailed"
+  MANUALLY_MAILED:"Manually Mailed"
 };
 export default STATUSES;

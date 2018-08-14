@@ -380,15 +380,20 @@ export default class AccountSearchBar extends Component {
     });
 
     const searchBarClasses = classNames ('search-input', {
-      'full__width': (btnGroup &&
+      full__width: (btnGroup &&
         Roles.userIsInRole (Meteor.userId (), RolesEnum.TECH)) ||
         (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.ADMIN)) ||
-        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.REP))
-        ,
-      'manager-search': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length === 0,
-      'tag-btn--true': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length,
-      'btn-groups': btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length,
-      'sort__width': btnGroup &&
+        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.REP)),
+      'manager-search': !btnGroup &&
+        Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
+        moduleTags.length === 0,
+      'tag-btn--true': !btnGroup &&
+        Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
+        moduleTags.length,
+      'btn-groups': btnGroup &&
+        Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
+        moduleTags.length,
+      sort__width: btnGroup &&
         Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
       'tag-btn': btnGroup && moduleTags.length,
       'account-search': Roles.userIsInRole (
@@ -650,7 +655,7 @@ export default class AccountSearchBar extends Component {
                     </div>
                   </Dialog>}
               </button>
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div/>}
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
             </div>
             {Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
               <div

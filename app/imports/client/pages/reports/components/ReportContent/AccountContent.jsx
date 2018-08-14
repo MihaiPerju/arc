@@ -33,26 +33,6 @@ export default class AccountContent extends Component {
           })}
         </div>
       );
-    } else if (header === fields.METADATA) {
-      return (
-        <div key={index}>
-          {_.map(reportColumns[header], (value, key) => {
-            if (value) {
-              return (
-                <div
-                  style={{
-                    width: "32%",
-                    float: "left",
-                    borderRight: "1px #d7d7d7 solid"
-                  }}
-                >
-                  {key}
-                </div>
-              );
-            }
-          })}
-        </div>
-      );
     } else {
       return <div key={index}>{header}</div>;
     }
@@ -85,21 +65,15 @@ export default class AccountContent extends Component {
     } else if (columnKeys === "metaData") {
       return (
         <div key={index}>
-          {_.map(reportColumns[columnKeys], (value, key) => {
-            if (value) {
+          {account.metaData &&
+            _.map(account.metaData, (value, key) => {
               return (
-                <div
-                  style={{
-                    width: "32%",
-                    float: "left",
-                    borderRight: "1px #d7d7d7 solid"
-                  }}
-                >
-                  {account.metaData && account.metaData[key]}
+                <div>
+                  <div style={{ float: "left", fontWeight: "bold" }}>{key}</div>
+                  <div>{value}</div>
                 </div>
               );
-            }
-          })}
+            })}
         </div>
       );
     } else if (types.dates.includes(columnKeys)) {
