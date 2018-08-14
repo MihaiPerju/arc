@@ -118,7 +118,6 @@ export default class RunReports {
           }
         );
         NotificationService.createReportNotification(authorId, reportId);
-        NotificationService.createGlobal(authorId);
       })
     );
 
