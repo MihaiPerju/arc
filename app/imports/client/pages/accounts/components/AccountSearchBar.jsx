@@ -362,7 +362,6 @@ export default class AccountSearchBar extends Component {
       model
     } = this.state;
     const {
-      options,
       btnGroup,
       deleteAction,
       dropdownOptions,
@@ -376,21 +375,30 @@ export default class AccountSearchBar extends Component {
       "select-type": true,
       open: dropdown
     });
+    
     const btnSelectClasses = classNames({
       "btn-select": true,
       active: selectAll
     });
 
-    const searchBarClasses = classNames("search-input", {
-      full__width:
-        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) ||
-        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)),
-      sort__width:
-        btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      "tag-btn": btnGroup && moduleTags.length,
-      "account-search": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      "tag--none": moduleTags.length === 0,
-      "account-tag--none": btnGroup && moduleTags.length === 0
+    const searchBarClasses = classNames ('search-input', {
+      'full__width': (btnGroup &&
+        Roles.userIsInRole (Meteor.userId (), RolesEnum.TECH)) ||
+        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.ADMIN)) ||
+        (btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.REP))
+        ,
+      'manager-search': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length === 0,
+      'tag-btn--true': !btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length,
+      'btn-groups': btnGroup && Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) && moduleTags.length,
+      'sort__width': btnGroup &&
+        Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER),
+      'tag-btn': btnGroup && moduleTags.length,
+      'account-search': Roles.userIsInRole (
+        Meteor.userId (),
+        RolesEnum.MANAGER
+      ),
+      'tag--none': moduleTags.length === 0,
+      'account-tag--none': btnGroup && moduleTags.length === 0,
     });
 
     const currentStateName = FlowRouter.current().params.state;
@@ -653,7 +661,7 @@ export default class AccountSearchBar extends Component {
                   </Dialog>
                 )}
               </button>
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> :null}
             </div>
             {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
               <div
@@ -798,25 +806,23 @@ class BtnGroup extends Component {
     const { deleteAction, icons } = this.props;
     const { dialogIsActive } = this.state;
     return (
-      <div className={this.state.in ? "btn-group in" : "btn-group"}>
-        {icons ? (
-          icons.map(element => {
-            return (
-              <button onClick={element.method}>
-                <i className={"icon-" + element.icon} />
-              </button>
-            );
-          })
-        ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
-        {deleteAction && (
+      <div className={this.state.in ? 'btn-group in' : 'btn-group'}>
+        {icons
+          ? icons.map ((element, index) => {
+              return (
+                <button onClick={element.method} key={index}>
+                  <i className={'icon-' + element.icon} />
+                </button>
+              );
+            })
+          : <button>
+              <i className="icon-archive" />
+            </button>}
+        {deleteAction &&
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
           </button>
-        )}
+        }
         {dialogIsActive && (
           <Dialog className="account-dialog" closePortal={this.closeDialog}>
             <div className="form-wrapper">
