@@ -3,15 +3,16 @@ import LettersManagement from "../services/LettersManagement";
 import EmailsManagement from "../services/EmailsManagement";
 import PlacementService from "../services/PlacementService";
 import InventoryService from "../services/InventoryService";
+import PaymentService from "../services/PaymentService";
 
 // Job for running reports
 SyncedCron.add({
   name: "Run Report",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     ReportsManagement.run();
   }
 });
@@ -19,11 +20,11 @@ SyncedCron.add({
 //Job for sending letters
 SyncedCron.add({
   name: "Send Letters",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     LettersManagement.run();
   }
 });
@@ -31,11 +32,11 @@ SyncedCron.add({
 //Job for sending emails
 SyncedCron.add({
   name: "Send Mails",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     EmailsManagement.run();
   }
 });
@@ -43,11 +44,11 @@ SyncedCron.add({
 //Job for importing accounts from placement file
 SyncedCron.add({
   name: "Import Accounts from Placement",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     PlacementService.run();
   }
 });
@@ -55,11 +56,23 @@ SyncedCron.add({
 //Job for importing accounts from inventory file
 SyncedCron.add({
   name: "Import Accounts from Inventory",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     InventoryService.run();
+  }
+});
+
+//Job for payment file
+SyncedCron.add({
+  name: "Create Payments",
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.text("every 10 seconds");
+  },
+  job: function() {
+    PaymentService.run();
   }
 });
