@@ -9,7 +9,6 @@ import {
   LongTextField
 } from "/imports/ui/forms";
 import RichTextArea from "/imports/client/lib/uniforms/RichTextArea.jsx";
-import codesQuery from "/imports/api/codes/queries/listCodeNames";
 import { CategoryList } from "/imports/api/letterTemplates/enums/categories.js";
 
 export default class EditLetterTemplate extends React.Component {
@@ -18,21 +17,8 @@ export default class EditLetterTemplate extends React.Component {
 
     this.state = {
       error: null,
-      codes: [],
       isDisabled: false
     };
-  }
-
-  componentWillMount() {
-    codesQuery.clone({}).fetch((err, codes) => {
-      if (!err) {
-        this.setState({
-          codes
-        });
-      } else {
-        Notifier.error("Couldn't get carc/rarc codes");
-      }
-    });
   }
 
   getCategories = categories => {
@@ -64,12 +50,6 @@ export default class EditLetterTemplate extends React.Component {
     const { close } = this.props;
     close();
   };
-
-  getCodeOptions(codes) {
-    return _.map(codes, ({ _id, code }) => {
-      return { value: _id, label: code };
-    });
-  }
 
   render() {
     const { model } = this.props;
