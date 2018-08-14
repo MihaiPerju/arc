@@ -14,7 +14,10 @@ import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 
 export default class RunReports {
   static run() {
-    const job = JobQueue.findOne({ workerId: null, type: JobQueueEnum.RUN_REPORT });
+    const job = JobQueue.findOne({
+      workerId: null,
+      type: JobQueueEnum.RUN_REPORT
+    });
     if (job) {
       // Mark job as taken
       JobQueue.update(
@@ -49,9 +52,16 @@ export default class RunReports {
     _.map(reportColumns, (value, key) => {
       if (value && key !== fields.INSURANCES) {
         if (key === fields.METADATA) {
-          _.map(reportColumns["metaData"], (value, key) => {
-            if (value) {
-              columns[`metaData[${key}]`] = `meta column: ${key}`;
+          const metaDataColumns = this.getMetaDataColumns(reportId);
+          _.map(metaDataColumns, (value, key) => {
+            if (key === "hasHeader") {
+              value.map(header => {
+                columns[`metaData[${header}]`] = `meta column: ${header}`;
+              });
+            } else {
+              value.map(header => {
+                columns[`metaData[${header}]`] = `meta column: ${header}`;
+              });
             }
           });
         } else if (key === "workQueue") {
@@ -73,6 +83,32 @@ export default class RunReports {
     });
 
     return columns;
+  }
+
+  static getMetaDataColumns(reportId) {
+    const filters = this.getFilters(reportId);
+    const metaDataArr = Accounts.find(filters, {
+      fields: { metaData: 1, _id: 0 }
+    }).fetch();
+
+    const metaDataColumn = { hasHeader: [], noHeader: [] };
+    metaDataArr.map(accountMetaData => {
+      _.map(accountMetaData["metaData"], (value, key) => {
+        if (key.indexOf("Column#") === -1) {
+          metaDataColumn["hasHeader"].push(key);
+        } else {
+          metaDataColumn["noHeader"].push(key);
+        }
+      });
+    });
+
+    metaDataColumn["hasHeader"] = Array.from(
+      new Set(metaDataColumn["hasHeader"])
+    );
+    metaDataColumn["noHeader"] = Array.from(
+      new Set(metaDataColumn["noHeader"])
+    );
+    return metaDataColumn;
   }
 
   static saveReport({ reportId, _id }) {
@@ -118,7 +154,6 @@ export default class RunReports {
           }
         );
         NotificationService.createReportNotification(authorId, reportId);
-        NotificationService.createGlobal(authorId);
       })
     );
 

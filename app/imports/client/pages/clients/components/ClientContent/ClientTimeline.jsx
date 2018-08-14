@@ -42,18 +42,19 @@ export default class ClientTimeline extends Component {
   }
 
   componentWillMount () {
-    const actionTypes = [];
-    const substates = [];
-    const userRoles = [];
+    const actionTypes = [], substates = [], userRoles = [];
+
     typeList.map (type => {
       actionTypes.push ({label: type, value: type});
     });
-    this.setState ({actionTypes});
 
     rolesTypes.map (type => {
       userRoles.push ({label: type, value: type});
     });
-    this.setState ({userRoles});
+    this.setState ({
+      userRoles,
+      actionTypes,
+    });
 
     substateQuery
       .clone ({
@@ -71,6 +72,20 @@ export default class ClientTimeline extends Component {
           this.setState ({substates});
         }
       });
+
+    const {model, state} = ClientService.getFilterParams ();
+    this.setState ({
+      model,
+      weekToDate: state.weekToDate,
+      monthToDate: state.monthToDate,
+      yearToDate: state.yearToDate,
+      lastSevenDays: state.lastSevenDays,
+      lastThirtyDays: state.lastThirtyDays,
+      lastTwelveMonths: state.lastTwelveMonths,
+      yesterday: state.yesterday,
+      lastWeek: state.lastWeek,
+      lastMonth: state.lastMonth,
+    });
   }
 
   componentDidMount () {
@@ -79,6 +94,75 @@ export default class ClientTimeline extends Component {
       isScroll.addEventListener ('scroll', this.onHandleScroll);
     }
   }
+
+  componentWillReceiveProps (props) {
+    // set the limit to initial value
+    this.setState ({limit: 10, skip: 0, accountActions: []});
+    const {_id} = props.client;
+    const {limit, skip} = this.state;
+    this.getActions (_id, limit, skip);
+  }
+
+  componentWillUnmount () {
+    this.resetFilters ();
+  }
+
+  getFilterParams = () => {
+    const queryParams = FlowRouter.current ().queryParams;
+    const model = {};
+
+    if ('type' in queryParams) {
+      model.type = queryParams.type;
+    }
+
+    if ('substate' in queryParams) {
+      model.substate = queryParams.substate;
+    }
+
+    if ('role' in queryParams) {
+      model.role = queryParams.role;
+    }
+
+    if ('last-n-days' in queryParams) {
+      if (queryParams['last-n-days'] === 7) {
+        this.setState ({lastSevenDays: true});
+      } else {
+        this.setState ({lastThirtyDays: true});
+      }
+    }
+
+    if ('last-n-months' in queryParams) {
+      this.setState ({lastTwelveMonths: true});
+    }
+
+    if ('weekToDate' in queryParams) {
+      this.setState ({weekToDate: true});
+    }
+
+    if ('monthToDate' in queryParams) {
+      this.setState ({monthToDate: true});
+    }
+
+    if ('yearToDate' in queryParams) {
+      this.setState ({yearToDate: true});
+    }
+
+    if ('yesterday' in queryParams) {
+      this.setState ({yesterday: true});
+    }
+
+    if ('lastWeek' in queryParams) {
+      this.setState ({lastWeek: true});
+    }
+
+    if ('lastMonth' in queryParams) {
+      this.setState ({lastMonth: true});
+    }
+
+    // work on the check inputs
+
+    this.setState ({model});
+  };
 
   openDialog = () => {
     this.setState ({
@@ -112,14 +196,6 @@ export default class ClientTimeline extends Component {
     this.getActions (_id, limit, skip);
   };
 
-  componentWillReceiveProps (props) {
-    // set the limit to initial value
-    this.setState ({limit: 10, skip: 0, accountActions: []});
-    const {_id} = props.client;
-    const {limit, skip} = this.state;
-    this.getActions (_id, limit, skip);
-  }
-
   getActions = (id, limit, skip) => {
     const params = ClientService.getActionsQueryParams (id);
     _.extend (params, {
@@ -139,7 +215,18 @@ export default class ClientTimeline extends Component {
   };
 
   onSubmit = params => {
-    const {model} = this.state;
+    const {
+      model,
+      weekToDate,
+      monthToDate,
+      yearToDate,
+      lastSevenDays,
+      lastThirtyDays,
+      lastTwelveMonths,
+      yesterday,
+      lastWeek,
+      lastMonth,
+    } = this.state;
     if ('type' in params) {
       FlowRouter.setQueryParams ({type: params.type});
       model.type = params.type;
@@ -152,34 +239,64 @@ export default class ClientTimeline extends Component {
       FlowRouter.setQueryParams ({role: params.role});
       model.role = params.role;
     }
+
+    if (weekToDate) {
+      FlowRouter.setQueryParams ({weekToDate: true});
+    }
+
+    if (monthToDate) {
+      FlowRouter.setQueryParams ({monthToDate: true});
+    }
+
+    if (yearToDate) {
+      FlowRouter.setQueryParams ({yearToDate: true});
+    }
+
+    if (lastSevenDays) {
+      FlowRouter.setQueryParams ({'last-n-days': 7});
+    }
+
+    if (lastThirtyDays) {
+      FlowRouter.setQueryParams ({'last-n-days': 30});
+    }
+
+    if (lastTwelveMonths) {
+      FlowRouter.setQueryParams ({'last-n-months': 12});
+    }
+
+    if (yesterday) {
+      FlowRouter.setQueryParams ({yesterday: true});
+    }
+
+    if (lastWeek) {
+      FlowRouter.setQueryParams ({lastWeek: true});
+    }
+
+    if (lastMonth) {
+      FlowRouter.setQueryParams ({lastMonth: true});
+    }
+
     this.setState ({model});
+    this.closeDialog ();
   };
 
   handleClick = key => {
     const flag = !this.state[key];
     if (key === filterTypeEnums.LAST_SEVEN_DAYS) {
-      FlowRouter.setQueryParams ({'last-n-days': flag ? 7 : null});
       this.setState ({
         lastSevenDays: flag,
         lastThirtyDays: false,
-        lastTwelveMonths: false,
       });
     } else if (key === filterTypeEnums.LAST_THIRTY_DAYS) {
-      FlowRouter.setQueryParams ({'last-n-days': flag ? 30 : null});
       this.setState ({
         lastSevenDays: false,
         lastThirtyDays: flag,
-        lastTwelveMonths: false,
       });
     } else if (key === filterTypeEnums.LAST_TWELVE_MONTHS) {
-      FlowRouter.setQueryParams ({'last-n-months': flag ? 12 : null});
       this.setState ({
-        lastSevenDays: false,
-        lastThirtyDays: false,
         lastTwelveMonths: flag,
       });
     } else if (key) {
-      FlowRouter.setQueryParams ({[key]: flag ? flag : null});
       this.setState ({
         [key]: flag,
       });
@@ -227,6 +344,8 @@ export default class ClientTimeline extends Component {
       fieldUpdatedValue,
       fieldPreviousValue,
       accountField,
+      filetype,
+      numberOfRecords,
     } = data;
 
     switch (type) {
@@ -294,7 +413,12 @@ export default class ClientTimeline extends Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>}{' '}
-                uploaded file <b>{this.getFileName (fileName)}.csv</b>
+                uploaded <b>{filetype}</b> file{' '}
+                <b>
+                  {this.getFileName (fileName)}
+                  .csv
+                </b>{' '}
+                with <b>{numberOfRecords} accounts</b>.
               </div>}
           </div>
         );
@@ -307,7 +431,11 @@ export default class ClientTimeline extends Component {
                   <b>
                     {user.profile.firstName} {user.profile.lastName}
                   </b>}{' '}
-                reverted file <b>{this.getFileName (fileName)}.csv</b>
+                reverted file{' '}
+                <b>
+                  {this.getFileName (fileName)}
+                  .csv
+                </b>
               </div>}
           </div>
         );
@@ -406,6 +534,40 @@ export default class ClientTimeline extends Component {
     return name.split ('.')[0] || '';
   };
 
+  resetFilters = () => {
+    const {filters} = this.refs;
+    if (filters) {
+      filters.reset ();
+    }
+    const appliedFilters = {
+      type: null,
+      substate: null,
+      role: null,
+      weekToDate: null,
+      monthToDate: null,
+      yearToDate: null,
+      yesterday: null,
+      lastWeek: null,
+      lastMonth: null,
+      'last-n-months': null,
+      'last-n-days': null,
+    };
+    this.setState ({
+      weekToDate: false,
+      monthToDate: false,
+      yearToDate: false,
+      lastSevenDays: false,
+      lastThirtyDays: false,
+      lastTwelveMonths: false,
+      yesterday: false,
+      lastWeek: false,
+      lastMonth: false,
+      model: {},
+    });
+    FlowRouter.setQueryParams (appliedFilters);
+    this.closeDialog ();
+  };
+
   render () {
     const {
       actionTypes,
@@ -446,8 +608,6 @@ export default class ClientTimeline extends Component {
                 <i className="icon-close" />
               </button>
               <AutoForm
-                autosave
-                autosaveDelay={500}
                 ref="filters"
                 onSubmit={this.onSubmit}
                 schema={schema}
@@ -561,9 +721,12 @@ export default class ClientTimeline extends Component {
                       Last Month
                     </label>
                   </div>
-                  <div className="flex--helper flex-justify--end">
+                  <div className="flex--helper flex-justify--space-between">
                     <button className="btn--blue" onClick={this.closeDialog}>
                       Done
+                    </button>
+                    <button className="btn--red" onClick={this.resetFilters}>
+                      Reset
                     </button>
                   </div>
                 </div>

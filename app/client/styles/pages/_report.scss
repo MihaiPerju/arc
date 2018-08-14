@@ -223,3 +223,46 @@
     }
   }
 }
+
+.report-graph {
+  border-radius: 3px;
+  overflow: hidden;
+
+  &__form {
+    h2 {
+      font-size: 1.8rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+
+    &-wrapper {
+      background: $color-white;
+      border-radius: 3px;
+      padding: 20px;
+    }
+  
+    select {
+      background: #f2f1f1;
+      border-bottom: 0;
+      border-radius: 3px;
+      color: #838383;
+      padding: 12px 15px;
+      line-height: 1.6rem;
+    }
+  
+    .form-wrapper {
+      position: relative;
+
+      &:before {
+        content: "\f107";
+        font-family: "arcc_font_set";
+        position: absolute;
+        top: 12px;
+        right: 15px;
+        color: #b7b7b7;
+        pointer-events: none;
+      }
+    }
+  }
+}
