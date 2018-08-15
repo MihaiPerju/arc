@@ -15,6 +15,10 @@ export default class TagItem extends Component {
     this.setState({ selectedTags });
   }
 
+  componentWillUnmount () {
+    document.removeEventListener ('click', this.outsideClick, false);
+  }
+
   componentWillReceiveProps() {
     if (!FlowRouter.getQueryParam("tagIds")) {
       this.setState({ selectedTags: [] });
