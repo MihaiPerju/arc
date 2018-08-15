@@ -67,6 +67,11 @@ a {
   font-size: 1.1rem !important;
 }
 
+.empty-block {
+  background: $color-white;
+  padding: 20px 10px;
+}
+
 .flex {
   &--column {
     flex-direction: column;

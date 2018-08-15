@@ -374,9 +374,16 @@ export default class AccountSearchBar extends Component {
       'select-type': true,
       open: dropdown,
     });
+<<<<<<< HEAD
     const btnSelectClasses = classNames ({
       'btn-select': true,
       active: selectAll,
+=======
+    
+    const btnSelectClasses = classNames({
+      "btn-select": true,
+      active: selectAll
+>>>>>>> origin
     });
 
     const searchBarClasses = classNames ('search-input', {
@@ -655,7 +662,11 @@ export default class AccountSearchBar extends Component {
                     </div>
                   </Dialog>}
               </button>
+<<<<<<< HEAD
               {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
+=======
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> :null}
+>>>>>>> origin
             </div>
             {Roles.userIsInRole (Meteor.userId (), RolesEnum.MANAGER) &&
               <div
@@ -810,8 +821,14 @@ class BtnGroup extends Component {
         {deleteAction &&
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
+<<<<<<< HEAD
           </button>}
         {dialogIsActive &&
+=======
+          </button>
+        }
+        {dialogIsActive && (
+>>>>>>> origin
           <Dialog className="account-dialog" closePortal={this.closeDialog}>
             <div className="form-wrapper">
               Are you sure you want to delete selected items ?

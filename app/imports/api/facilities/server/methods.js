@@ -80,6 +80,7 @@ Meteor.methods({
     const { logoPath } = Facilities.findOne({
       _id
     });
+    const filePath = rootFolder + Business.CLIENTS_FOLDER + logoPath;
 
     Facilities.update(
       {
@@ -91,7 +92,10 @@ Meteor.methods({
         }
       }
     );
-    fs.unlinkSync(rootFolder + Business.CLIENTS_FOLDER + logoPath);
+
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
     Uploads.remove({
       path: logoPath
     });

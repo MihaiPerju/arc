@@ -61,7 +61,7 @@ export default class ModuleTagEdit extends React.Component {
         </div>
 
         <div>
-          <div className="action-block">
+          <div className="action-block m-t--20">
             <div className="header__block">
               <div className="title-block text-uppercase">Tag information</div>
             </div>
@@ -79,7 +79,7 @@ export default class ModuleTagEdit extends React.Component {
               <div className="select-group">
                 <div className="form-wrapper">
                   <SelectMulti
-                    className="form-select__multi"
+                    className="form-select__multi select-tag__multi"
                     placeholder="Select modules"
                     labelHidden={true}
                     name="moduleNames"

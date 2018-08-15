@@ -96,7 +96,9 @@ export default class Uploader {
             });
         }
 
-        fs.unlinkSync(filePath);
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
 
         return uploadedFile;
     }

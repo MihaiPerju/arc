@@ -1,9 +1,5 @@
 import Actions from "/imports/api/actions/collection";
 import Substates from "/imports/api/substates/collection";
-import Letter from "/imports/api/letters/collection";
-import AccountActions from "/imports/api/accountActions/collection";
-import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
-import Accounts from "/imports/api/accounts/collection";
 
 export default class ActionService {
   static createAction(data) {
@@ -56,31 +52,6 @@ export default class ActionService {
     Substates.update(
       { _id: previousSubstateId },
       { $pull: { actionIds: actionId } }
-    );
-  }
-
-  static createLetter(data) {
-    const { userId, accountId, letterTemplateId, letterTemplateName } = data;
-    const { clientId } = Accounts.findOne({ _id: accountId });
-    const letterData = {
-      userId,
-      type: actionTypesEnum.LETTER,
-      createdAt: new Date(),
-      accountId,
-      letterTemplateId,
-      clientId,
-      letterTemplateName
-    };
-    Letter.insert(data);
-    const accountActionId = AccountActions.insert(letterData);
-
-    Accounts.update(
-      { _id: accountId },
-      {
-        $push: {
-          letterIds: accountActionId
-        }
-      }
     );
   }
 }
