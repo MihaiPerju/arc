@@ -477,7 +477,7 @@ export default class AccountSearchBar extends Component {
                               options={tickleUserIdOptions}
                             />
                           </div>}
-                        <div className="flex--helper form-group__pseudo">
+                        <div className="flex--helper form-group__pseudo--3">
                           <div className="select-form">
                             <SelectField
                               label="Client:"
@@ -494,8 +494,16 @@ export default class AccountSearchBar extends Component {
                               options={facilityOptions}
                             />
                           </div>
+                          <div className="select-form">
+                            <SelectField
+                              label="Substate:"
+                              placeholder="Substate"
+                              options={substates}
+                              name="substate"
+                            />
+                          </div>
                         </div>
-                        <div className="form-group flex--helper form-group__pseudo">
+                        <div className="form-group flex--helper form-group__pseudo--3">
                           <AutoField
                             label="Facility code:"
                             name="facCode"
@@ -506,49 +514,35 @@ export default class AccountSearchBar extends Component {
                             name="ptType"
                             placeholder="Search by Patient Type"
                           />
-                        </div>
-                        <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
                             label="Medical Number:"
                             name="medNo"
                             placeholder="Search by Medical Number"
                           />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo--3">
                           <AutoField
                             label="Financial Class:"
                             name="finClass"
                             placeholder="Search by Financial Class"
                           />
-                        </div>
-                        <div className="flex--helper form-group__pseudo">
-                          <div className="select-form">
-                            <SelectField
-                              label="Substate:"
-                              placeholder="Substate"
-                              options={substates}
-                              name="substate"
-                            />
-                          </div>
-                          <div className="form-group">
-                            <AutoField
-                              label="Active Insurance Code:"
-                              name="activeInsCode"
-                              placeholder="Search by active Insurance Code"
-                            />
-                          </div>
-                        </div>
-                        <div className="form-group flex--helper form-group__pseudo">
+                          <AutoField
+                            label="Active Insurance Code:"
+                            name="activeInsCode"
+                            placeholder="Search by active Insurance Code"
+                          />
                           <AutoField
                             label="Minimum Account Balance:"
                             name="acctBalMin"
                             placeholder="Minimum Account Balance"
                           />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo--3">
                           <AutoField
                             label="Maximum Account Balance:"
                             name="acctBalMax"
                             placeholder="Maximum Account Balance"
                           />
-                        </div>
-                        <div className="form-group flex--helper form-group__pseudo">
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
