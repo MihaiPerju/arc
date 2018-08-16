@@ -110,12 +110,12 @@ class LetterListContainer extends Pager {
           />
           <LetterList letters={data} moduleTags={moduleTags} />
           <PaginationBar
-            module="Letter Management File"
             create={this.createForm}
             closeForm={this.closeForm}
             nextPage={this.nextPage}
             range={range}
             total={total}
+            drop
           />
         </div>
         {create && <RightSide create={create} close={this.closeForm} />}

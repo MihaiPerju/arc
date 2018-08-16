@@ -59,8 +59,10 @@ Meteor.methods({
           }
         }
       );
-      if (logoPath)
-        fs.unlinkSync(rootFolder + Business.CLIENTS_FOLDER + logoPath);
+      const filePath = rootFolder + Business.CLIENTS_FOLDER + logoPath;
+      if (logoPath && fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
     }
   },
 

@@ -117,7 +117,10 @@ Meteor.methods({
     Uploads.remove({
       _id: attachmentId
     });
-    fs.unlinkSync(rootFolder + Business.ACCOUNTS_FOLDER + path);
+    const filePath = rootFolder + Business.ACCOUNTS_FOLDER + path;
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
   },
 
   "account.updateActiveInsCode"(_id, insCode, insName) {

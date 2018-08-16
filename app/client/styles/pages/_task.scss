@@ -309,7 +309,7 @@
   }
 
   &__account .cc-dialog__card {
-    max-width: 700px;
+    max-width: 800px;
   }
 }
 
@@ -420,13 +420,16 @@
     background: rgba(255, 255, 255, 0.4);
     overflow-y: auto;
     width: 100%;
+
     &.decreased {
       height: calc(100% - 227px);
     }
   }
+
   .financial-class {
     color: #aa831a;
   }
+
   .list-item {
     border-bottom: 1px #e1e1e1 solid;
     padding: 15px 47px;
@@ -434,6 +437,45 @@
     cursor: pointer;
     background: rgba($color-white, 0.5);
     height: 74px;
+
+    .status {
+      padding: 0 20px;
+      position: relative;
+      padding-left: 17px;
+
+      &:before {
+        content: " ";
+        border-radius: 50%;
+        width: 7px;
+        height: 7px;
+        position: absolute;
+        top: 4px;
+        left: 0;
+      } 
+
+      &.pending {
+        &:before {
+          background: #fbaf5d;
+          animation: pulse 1s infinite ease-in-out;
+        }
+      }
+
+      &.manually {
+        &:before {
+          background: $green;
+        }
+      }
+    }
+
+    &.letter-item {
+      .item-name {
+        width: 35%;
+      }
+
+      .status {
+        width: 35%;
+      }
+    }
 
     &.tickled-item {
       .person {
@@ -452,34 +494,44 @@
         position: absolute;
       }
     }
+
     &:hover {
       background: $color-white;
     }
+
     &.bg--yellow {
       background: rgba(255, 247, 153, 0.6);
     }
+
     .row__item {
       display: flex;
       justify-content: space-between;
+
       &:last-of-type {
         margin-top: 11px;
       }
     }
+
     .right__side {
       display: flex;
     }
+
     .pacient-id {
       margin-right: 10px;
     }
+
     .financial-class {
       margin-right: 15px;
     }
+
     .person {
       font-weight: 700;
     }
+
     .price {
       position: relative;
       padding-left: 13px;
+
       &:before {
         content: '\f155';
         font-family: $font-icon;
@@ -1124,6 +1176,10 @@
 
   &.invisible {
     visibility: hidden;
+  }
+
+  &.drop-form {
+    font-size: 1.6rem;
   }
 }
 

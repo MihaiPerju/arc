@@ -1,14 +1,13 @@
 import { Meteor } from "meteor/meteor";
 import Letters from "../collection.js";
-import Statuses from "/imports/api/letters/enums/statuses.js";
-import ActionService from "../../actions/server/services/ActionService.js";
 import Security from "/imports/api/security/security";
 import { roleGroups } from "/imports/api/users/enums/roles";
+import LetterService from "/imports/api/letters/server/service/LetterService";
 
 Meteor.methods({
   "letter.create"(data) {
     data.userId = this.userId;
-    ActionService.createLetter(data);
+    LetterService.createLetter(data);
   },
 
   "letter.get"(letterId) {
@@ -16,39 +15,11 @@ Meteor.methods({
   },
 
   "letter.delete"(letterId) {
-    const { status } = Letters.findOne({ _id: letterId });
-    if (status !== Statuses.NEW) {
-      throw new Meteor.Error(
-        "cannot edit",
-        "Sorry, the letter is already picked up by the system"
-      );
-    }
-    Letters.remove(letterId);
+    LetterService.deleteLetter(letterId);
   },
 
-  "letter.update"(
-    _id,
-    { body, letterTemplateId, attachmentIds, letterValues }
-  ) {
-    const { status } = Letters.findOne({ _id });
-    if (status !== Statuses.NEW) {
-      throw new Meteor.Error(
-        "cannot edit",
-        "Sorry, the letter is already picked up by the system"
-      );
-    }
-
-    Letters.update(
-      { _id },
-      {
-        $set: {
-          body,
-          letterTemplateId,
-          attachmentIds,
-          letterValues
-        }
-      }
-    );
+  "letter.update"(_id, data) {
+    LetterService.updateLetter(_id, data);
   },
 
   "letter.mailManually"(_id) {

@@ -18,7 +18,10 @@ Meteor.methods({
         avatar: ""
       }
     });
-    fs.unlinkSync(Business.LOCAL_STORAGE_FOLDER + "/" + path);
+    const filePath = Business.LOCAL_STORAGE_FOLDER + "/" + path;
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
     Uploads.remove(_id);
   },
 

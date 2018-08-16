@@ -362,7 +362,6 @@ export default class AccountSearchBar extends Component {
       model
     } = this.state;
     const {
-      options,
       btnGroup,
       deleteAction,
       dropdownOptions,
@@ -376,6 +375,7 @@ export default class AccountSearchBar extends Component {
       "select-type": true,
       open: dropdown
     });
+
     const btnSelectClasses = classNames({
       "btn-select": true,
       active: selectAll
@@ -384,7 +384,20 @@ export default class AccountSearchBar extends Component {
     const searchBarClasses = classNames("search-input", {
       full__width:
         (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) ||
-        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)),
+        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) ||
+        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)),
+      "manager-search":
+        !btnGroup &&
+        Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
+        moduleTags.length === 0,
+      "tag-btn--true":
+        !btnGroup &&
+        Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
+        moduleTags.length,
+      "btn-groups":
+        btnGroup &&
+        Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
+        moduleTags.length,
       sort__width:
         btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
       "tag-btn": btnGroup && moduleTags.length,
@@ -467,7 +480,7 @@ export default class AccountSearchBar extends Component {
                             />
                           </div>
                         )}
-                        <div className="flex--helper form-group__pseudo">
+                        <div className="flex--helper form-group__pseudo--3">
                           <div className="select-form">
                             <SelectField
                               label="Client:"
@@ -484,8 +497,16 @@ export default class AccountSearchBar extends Component {
                               options={facilityOptions}
                             />
                           </div>
+                          <div className="select-form">
+                            <SelectField
+                              label="Substate:"
+                              placeholder="Substate"
+                              options={substates}
+                              name="substate"
+                            />
+                          </div>
                         </div>
-                        <div className="form-group flex--helper form-group__pseudo">
+                        <div className="form-group flex--helper form-group__pseudo--3">
                           <AutoField
                             label="Facility code:"
                             name="facCode"
@@ -496,49 +517,35 @@ export default class AccountSearchBar extends Component {
                             name="ptType"
                             placeholder="Search by Patient Type"
                           />
-                        </div>
-                        <div className="form-group flex--helper form-group__pseudo">
                           <AutoField
                             label="Medical Number:"
                             name="medNo"
                             placeholder="Search by Medical Number"
                           />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo--3">
                           <AutoField
                             label="Financial Class:"
                             name="finClass"
                             placeholder="Search by Financial Class"
                           />
-                        </div>
-                        <div className="flex--helper form-group__pseudo">
-                          <div className="select-form">
-                            <SelectField
-                              label="Substate:"
-                              placeholder="Substate"
-                              options={substates}
-                              name="substate"
-                            />
-                          </div>
-                          <div className="form-group">
-                            <AutoField
-                              label="Active Insurance Code:"
-                              name="activeInsCode"
-                              placeholder="Search by active Insurance Code"
-                            />
-                          </div>
-                        </div>
-                        <div className="form-group flex--helper form-group__pseudo">
+                          <AutoField
+                            label="Active Insurance Code:"
+                            name="activeInsCode"
+                            placeholder="Search by active Insurance Code"
+                          />
                           <AutoField
                             label="Minimum Account Balance:"
                             name="acctBalMin"
                             placeholder="Minimum Account Balance"
                           />
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo--3">
                           <AutoField
                             label="Maximum Account Balance:"
                             name="acctBalMax"
                             placeholder="Maximum Account Balance"
                           />
-                        </div>
-                        <div className="form-group flex--helper form-group__pseudo">
                           <div>
                             <label>From Discharge Date:</label>
                             <DatePicker
@@ -653,7 +660,7 @@ export default class AccountSearchBar extends Component {
                   </Dialog>
                 )}
               </button>
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
+              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : null}
             </div>
             {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
               <div
@@ -802,7 +809,7 @@ class BtnGroup extends Component {
         {icons ? (
           icons.map((element, index) => {
             return (
-              <button key={index} onClick={element.method}>
+              <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon} />
               </button>
             );
