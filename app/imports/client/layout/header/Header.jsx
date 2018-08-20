@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { createContainer } from "meteor/react-meteor-data";
 import { getImagePath } from "../../../api/utils";
-import RoutesService from "./../leftMenu/RoutesService";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import Notifications from "./components/Notifications";
+import RoutesService from "../leftMenu/RoutesService";
 
 class Header extends Component {
   constructor() {
@@ -46,49 +45,11 @@ class Header extends Component {
   state = { activeItem: "Dashboard" };
 
   render() {
+    const { routeName } = this.props;
     const user = Meteor.user();
-
-    let routes = [
-      { name: "/dashboard", label: "Home" },
-      { name: "/accounts", label: "Accounts" }
-    ];
-    if (user && user.roles && user.roles.includes(RolesEnum.ADMIN)) {
-      routes.push(
-        { name: "/admin/user/list", label: "User Management" },
-        { name: "/letter-templates/list", label: "Letter templates" }
-      );
-    }
-    if (user && user.roles && user.roles.includes(RolesEnum.TECH)) {
-      routes.push({
-        name: "/letter-templates/list",
-        label: "Letter templates"
-      });
-    }
-
-    const adminAndTechRoutes = [
-      { name: "/client/list", label: "Clients" },
-      { name: "/code/list", label: "CARC/RARC Codes" },
-      { name: "/reports/list", label: "Reports" },
-      { name: "/action/list", label: "Actions" },
-      { name: "/inscompany/list", label: "Insurance Companies" }
-    ];
-
-    const managerRoutes = [
-      { name: "/letter-templates/list", label: "Letter templates" },
-      { name: "/reports/list", label: "Reports" }
-    ];
-
-    if (
-      user &&
-      Roles.userIsInRole(user._id, [RolesEnum.ADMIN, RolesEnum.TECH])
-    ) {
-      routes = routes.concat(adminAndTechRoutes);
-    }
-    if (user && Roles.userIsInRole(user._id, [RolesEnum.MANAGER])) {
-      routes = routes.concat(managerRoutes);
-    }
-
     const isRep = user && Roles.userIsInRole(user._id, RolesEnum.REP);
+
+    console.log(routeName);
 
     return (
       <div>
@@ -103,6 +64,7 @@ class Header extends Component {
                     src="/assets/img/logo.png"
                     alt=""
                   />
+                  <div>{RoutesService.getRouteName(routeName)}</div>
                 </a>
               </div>
               <div
@@ -118,7 +80,7 @@ class Header extends Component {
                           onClick={this.openDropdown}
                           ref={this.nodeRef}
                           className="toggle-dropdown"
-                          style={{cursor: "pointer"}}
+                          style={{ cursor: "pointer" }}
                         >
                           <a onClick={this.handleClick.bind(this, user._id)}>
                             {user.profile.firstName +

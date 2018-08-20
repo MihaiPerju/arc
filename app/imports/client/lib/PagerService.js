@@ -460,7 +460,7 @@ export default class PagerService {
       });
     }
 
-    if (currentPath.indexOf("letter-management/list") > -1) {
+    if (currentPath.indexOf("letters/list") > -1) {
       letterName = FlowRouter.getQueryParam("letterTemplateName");
     }
 
@@ -569,7 +569,7 @@ export default class PagerService {
       });
     }
 
-    // letter-management search
+    // letters search
     if (letterName) {
       _.extend(params.filters, {
         letterTemplateName: { $regex: letterName, $options: "i" }
