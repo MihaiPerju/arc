@@ -49,8 +49,6 @@ class Header extends Component {
     const user = Meteor.user();
     const isRep = user && Roles.userIsInRole(user._id, RolesEnum.REP);
 
-    console.log(routeName);
-
     return (
       <div>
         {user && (
