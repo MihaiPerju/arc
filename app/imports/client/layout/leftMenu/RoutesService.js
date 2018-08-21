@@ -81,7 +81,7 @@ export default class RouteService {
         },
         {
           name: "module-tags/list",
-          label: "Module Tags",
+          label: "Tags",
           icon: "tags"
         }
       ];
@@ -163,7 +163,7 @@ export default class RouteService {
         },
         {
           name: "module-tags/list",
-          label: "Module Tags",
+          label: "Tags",
           icon: "tags"
         }
       ];
@@ -240,7 +240,7 @@ export default class RouteService {
         },
         {
           name: "tag/list",
-          label: "Tags",
+          label: "Work Queues",
           icon: "tags"
         }
       ];
