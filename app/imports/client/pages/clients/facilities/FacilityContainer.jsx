@@ -140,7 +140,7 @@ class FacilityContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       facilitiesSelected,
       currentFacility,
@@ -150,7 +150,7 @@ class FacilityContainer extends Pager {
     } = this.state;
     const facility = this.getFacility();
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

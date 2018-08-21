@@ -100,7 +100,7 @@ class ModuleTagsListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       tagsSelected,
       currentTag,
@@ -112,7 +112,7 @@ class ModuleTagsListContainer extends Pager {
     
     const tag = objectFromArray(data, currentTag);
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

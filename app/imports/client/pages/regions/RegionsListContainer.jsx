@@ -135,11 +135,11 @@ class RegionListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const { regionsSelected, currentRegion, create, range, total } = this.state;
     const region = objectFromArray(data, currentRegion);
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 

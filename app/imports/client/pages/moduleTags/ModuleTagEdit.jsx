@@ -10,12 +10,14 @@ export default class ModuleTagEdit extends React.Component {
     super();
 
     this.state = {
-      error: null
+      error: null,
+      isDisabled: false
     };
   }
 
   onSubmit(formData) {
     const { tag, setEdit } = this.props;
+    this.setState({ isDisabled: true });
     Meteor.call("moduleTag.edit", tag._id, formData, err => {
       if (!err) {
         Notifier.success("Tag saved !");
@@ -23,6 +25,7 @@ export default class ModuleTagEdit extends React.Component {
       } else {
         Notifier.error("An error occurred!");
       }
+      this.setState({ isDisabled: false });
     });
   }
 
@@ -45,6 +48,7 @@ export default class ModuleTagEdit extends React.Component {
 
   render() {
     const { tag, clients } = this.props;
+    const { isDisabled } = this.state;
     const options = this.getOptions(clients);
 
     return (
@@ -54,8 +58,21 @@ export default class ModuleTagEdit extends React.Component {
             <button onClick={this.onSetEdit} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onEditTag} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.onEditTag}
+              className="btn--green"
+            >
+              {isDisabled ? (
+                <div>
+                  {" "}
+                  Loading
+                  <i className="icon-cog" />
+                </div>
+              ) : (
+                "Confirm & Save"
+              )}
             </button>
           </div>
         </div>

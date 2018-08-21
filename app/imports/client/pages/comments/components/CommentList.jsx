@@ -12,7 +12,8 @@ export default class CommentList extends Component {
 
     this.state = {
       content: null,
-      isCorrectNote: false
+      isCorrectNote: false,
+      isDisabled: false
     };
 
     autoBind(this);
@@ -29,6 +30,7 @@ export default class CommentList extends Component {
     if (!content) {
       Notifier.error("Message has no content");
     } else {
+      this.setState({ isDisabled: true });
       Meteor.call(
         "account.comment.add",
         { content, accountId: account._id, isCorrectNote },
@@ -36,7 +38,7 @@ export default class CommentList extends Component {
           if (!err) {
             Notifier.success("Comment added!");
             this.refs.comment.reset();
-            this.setState({ isCorrectNote: false });
+            this.setState({ isCorrectNote: false, isDisabled: false });
           } else {
             Notifier.error(err.reason);
           }
@@ -52,7 +54,7 @@ export default class CommentList extends Component {
 
   render() {
     const { account, comments, closeRightPanel } = this.props;
-    const { isCorrectNote } = this.state;
+    const { isCorrectNote, isDisabled } = this.state;
 
     return (
       <div className="action-block">
@@ -68,7 +70,21 @@ export default class CommentList extends Component {
                 name="content"
               />
               <ErrorField name="content" />
-              <button className="btn-post">Post</button>
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                className="btn-post"
+              >
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Post"
+                )}
+              </button>
             </div>
           </AutoForm>
           {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (

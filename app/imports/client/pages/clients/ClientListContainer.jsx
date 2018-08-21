@@ -142,7 +142,7 @@ class ClientContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       clientsSelected,
       currentClient,
@@ -153,7 +153,7 @@ class ClientContainer extends Pager {
     } = this.state;
     const client = this.getClient();
 
-    if (loading) {
+    if (isLoading && !FlowRouter.getQueryParam("clientName")) {
       return <Loading />;
     }
 

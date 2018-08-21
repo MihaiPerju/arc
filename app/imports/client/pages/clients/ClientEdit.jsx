@@ -22,7 +22,8 @@ export default class EditClient extends React.Component {
 
     this.state = {
       model: {},
-      error: null
+      error: null,
+      isDisabled: false
     };
   }
 
@@ -41,6 +42,7 @@ export default class EditClient extends React.Component {
 
   onSubmit = data => {
     const { client, setEdit } = this.props;
+    this.setState({ isDisabled: true });
 
     Meteor.call("client.update", client._id, data, err => {
       if (!err) {
@@ -49,6 +51,7 @@ export default class EditClient extends React.Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
@@ -64,6 +67,7 @@ export default class EditClient extends React.Component {
 
   render() {
     const { client } = this.props;
+    const { isDisabled } = this.state;
 
     const componentConfig = {
       postUrl: "/uploads/logo/" + client._id + "/" + getToken()
@@ -84,8 +88,13 @@ export default class EditClient extends React.Component {
             <button onClick={this.closeEdit} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onEditClient} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              onClick={this.onEditClient}
+              disabled={isDisabled}
+              className="btn--green"
+            >
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm & Save"}
             </button>
           </div>
         </div>

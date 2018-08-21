@@ -15,7 +15,8 @@ export default class AccountActioning extends React.Component {
       assignToUser: true,
       assignToWorkQueue: false,
       workQueueOptions: [],
-      loadingWorkQueues: true
+      loadingWorkQueues: true,
+      isDisabled: false
     };
   }
 
@@ -38,6 +39,7 @@ export default class AccountActioning extends React.Component {
 
   assignToUser = ({ assigneeId }) => {
     const { accountIds, uncheckAccountList } = this.props;
+    this.setState({ isDisabled: true });
     Meteor.call("account.assignUser.bulk", { accountIds, assigneeId }, err => {
       if (!err) {
         Notifier.success("Account assigned to user!");
@@ -46,10 +48,12 @@ export default class AccountActioning extends React.Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
   assignToWorkQueue = ({ workQueue }) => {
     const { accountIds, uncheckAccountList } = this.props;
+    this.setState({ isDisabled: true });
     Meteor.call(
       "account.assignWorkQueue.bulk",
       { accountIds, workQueue },
@@ -61,6 +65,7 @@ export default class AccountActioning extends React.Component {
         } else {
           Notifier.error(err.reason);
         }
+        this.setState({ isDisabled: false });
       }
     );
   };
@@ -71,7 +76,8 @@ export default class AccountActioning extends React.Component {
     const {
       workQueueOptions,
       assignToWorkQueue,
-      loadingWorkQueues
+      loadingWorkQueues,
+      isDisabled
     } = this.state;
 
     if (loadingWorkQueues) {
@@ -97,8 +103,13 @@ export default class AccountActioning extends React.Component {
               <button className="btn-cancel" onClick={this.closeDialog}>
                 Cancel
               </button>
-              <button type="submit" className="btn--light-blue">
-                Confirm
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                type="submit"
+                className="btn--light-blue"
+              >
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
               </button>
             </div>
           </AutoForm>
@@ -119,8 +130,13 @@ export default class AccountActioning extends React.Component {
               <button className="btn-cancel" onClick={this.closeDialog}>
                 Cancel
               </button>
-              <button type="submit" className="btn--light-blue">
-                Confirm
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                type="submit"
+                className="btn--light-blue"
+              >
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
               </button>
             </div>
           </AutoForm>

@@ -23,7 +23,8 @@ export default class ActionEdit extends React.Component {
 
     this.state = {
       error: null,
-      checked: false
+      checked: false,
+      isDisabled: false
     };
   }
 
@@ -31,7 +32,8 @@ export default class ActionEdit extends React.Component {
     const { action } = this.props;
     const { value } = formData.substateId || {};
     formData.substateId = value;
-    
+    this.setState({ isDisabled: true });
+
     Meteor.call("action.edit", action._id, formData, err => {
       if (!err) {
         Notifier.success("Data saved!");
@@ -39,6 +41,7 @@ export default class ActionEdit extends React.Component {
       } else {
         Notifier.error("An error occurred!");
       }
+      this.setState({ isDisabled: false });
     });
   }
 
@@ -89,7 +92,7 @@ export default class ActionEdit extends React.Component {
 
   render() {
     const { action, substates } = this.props;
-    const { checked } = this.state;
+    const { checked, isDisabled } = this.state;
     const substatesOptions = this.getOptions(substates);
 
     const { id } = FlowRouter.current().params;
@@ -106,8 +109,13 @@ export default class ActionEdit extends React.Component {
             <button onClick={this.onSetEdit} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onEditAction} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.onEditAction}
+              className="btn--green"
+            >
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm & Save"}
             </button>
           </div>
         </div>

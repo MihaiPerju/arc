@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import ModuleTagsSchema from "/imports/api/moduleTags/schema";
-import {
-  AutoForm,
-  AutoField,
-  ErrorField
-} from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import moduleListEnum from "./enums/moduleList";
 
@@ -13,10 +9,11 @@ export default class ModuleTagCreate extends Component {
   constructor() {
     super();
 
-    this.state = {};
+    this.state = { isDisabled: false };
   }
 
   onSubmit(data) {
+    this.setState({ isDisabled: true });
     Meteor.call("moduleTag.create", data, err => {
       if (!err) {
         Notifier.success("Tag added!");
@@ -24,6 +21,7 @@ export default class ModuleTagCreate extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   }
 
@@ -45,6 +43,7 @@ export default class ModuleTagCreate extends Component {
   };
 
   render() {
+    const { isDisabled } = this.state;
     const options = this.getOptions();
 
     return (
@@ -54,8 +53,21 @@ export default class ModuleTagCreate extends Component {
             <button onClick={this.onClose} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onCreateTag} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.onCreateTag}
+              className="btn--green"
+            >
+              {isDisabled ? (
+                <div>
+                  {" "}
+                  Loading
+                  <i className="icon-cog" />
+                </div>
+              ) : (
+                "Confirm & Save"
+              )}
             </button>
           </div>
         </div>

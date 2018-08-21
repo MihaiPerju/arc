@@ -93,7 +93,7 @@ class LetterListContainer extends Pager {
     const { data, isLoading, error } = this.props;
     const { total, range, create, moduleTags } = this.state;
 
-    if (isLoading) {
+    if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
       return <Loading />;
     }
 
@@ -103,9 +103,10 @@ class LetterListContainer extends Pager {
     return (
       <div className="cc-container">
         <div className={create ? "left__side" : "left__side full__width"}>
-          <LetterSearchBar setPagerInitial={this.setPagerInitial}
-                           moduleTags={moduleTags}
-                           hideFilter
+          <LetterSearchBar
+            setPagerInitial={this.setPagerInitial}
+            moduleTags={moduleTags}
+            hideFilter
           />
           <LetterList letters={data} moduleTags={moduleTags} />
           <PaginationBar

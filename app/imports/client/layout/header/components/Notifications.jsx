@@ -5,6 +5,7 @@ import NotificationQuery from "/imports/api/notifications/queries/notificationLi
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
 import flagTypesEnum from "/imports/api/accounts/enums/flagTypesEnum";
+import moment from "moment";
 
 class Notitfications extends Component {
   constructor() {
@@ -88,7 +89,7 @@ class Notitfications extends Component {
         <div>
           <span>
             User flagged
-            {metaData.flagType === flagTypesEnum.ACTION ? "an" : "a"}
+            {metaData.flagType === flagTypesEnum.ACTION ? " an " : " a "}
             {metaData.flagType} on account with Account number
           </span>
           <a
@@ -125,12 +126,12 @@ class Notitfications extends Component {
 
   render() {
     const { dropdownIsActive, badge } = this.state;
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const notificationBtnClasses = classNames("notification-btn", {
       active: dropdownIsActive
     });
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 
@@ -163,7 +164,7 @@ class Notitfications extends Component {
                 <NotificationItem
                   key={index}
                   content={notification.content}
-                  time={"11.22.63"}
+                  time={moment(notification.createdAt).format("MM/DD/YYYY, h:mm a")}
                 >
                   {this.getMessage(notification)}
                 </NotificationItem>
@@ -205,7 +206,8 @@ export default withQuery(
       filters: {
         receiverId: Meteor.userId(),
         type: { $ne: NotificationTypeEnum.GLOBAL }
-      }
+      },
+      options: { sort: { createdAt: -1 } }
     });
   },
   { reactive: true }

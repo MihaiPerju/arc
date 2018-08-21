@@ -12,12 +12,14 @@ class EscalateReason extends Component {
   constructor() {
     super();
     this.state = {
-      escalation: {}
+      escalation: {},
+      isDisabled: false
     };
   }
 
   onRespond = content => {
     const { closeRightPanel, accountId } = this.props;
+    this.setState({ isDisabled: true });
     Meteor.call("escalation.addMessage", content, accountId, err => {
       if (!err) {
         Notifier.success("Response sent!");
@@ -25,11 +27,13 @@ class EscalateReason extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
   render() {
     const { data, isLoading, error } = this.props;
+    const { isDisabled } = this.state;
 
     if (isLoading) {
       return <div>Loading</div>;
@@ -53,8 +57,13 @@ class EscalateReason extends Component {
                 name="content"
               />
               <ErrorField name="content" />
-              <button type="submit" className="btn-post">
-                Post
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                type="submit"
+                className="btn-post"
+              >
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Post"}
               </button>
             </div>
           </AutoForm>
