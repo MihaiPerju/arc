@@ -83,7 +83,7 @@ export default class EditInfoDialog extends Component {
               style={isDisabled ? { cursor: "not-allowed" } : {}}
               disabled={isDisabled}
             >
-              Submit {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Submit"}
             </button>
           </div>
         </div>
@@ -110,7 +110,7 @@ export default class EditInfoDialog extends Component {
                 style={isDisabled ? { cursor: "not-allowed" } : {}}
                 disabled={isDisabled}
               >
-                Submit {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Submit"}
               </button>
             </div>
           </div>
@@ -142,7 +142,7 @@ export default class EditInfoDialog extends Component {
               type="submit"
               className="btn--light-blue"
             >
-              Submit {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Submit"}
             </button>
           </div>
         </div>

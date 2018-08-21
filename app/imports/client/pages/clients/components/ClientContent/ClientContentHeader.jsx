@@ -210,7 +210,7 @@ export default class ClientContentHeader extends Component {
                   disabled={isDisabled}
                   className="btn--light-blue"
                 >
-                  Confirm {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
                 </button>
               </div>
             </AutoForm>

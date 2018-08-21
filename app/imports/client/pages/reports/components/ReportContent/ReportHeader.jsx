@@ -107,7 +107,7 @@ class ReportHeader extends Component {
 
   onRunReport = () => {
     const { report } = this.props;
-    this.setState({isDisabled: true})
+    this.setState({ isDisabled: true });
     Meteor.call(
       "jobQueue.create",
       {
@@ -121,7 +121,7 @@ class ReportHeader extends Component {
         } else {
           Notifier.success("Job started");
         }
-        this.setState({isDisabled: false})
+        this.setState({ isDisabled: false });
       }
     );
   };
@@ -133,7 +133,7 @@ class ReportHeader extends Component {
   };
 
   getRunButton = status => {
-    const {isDisabled} = this.state
+    const { isDisabled } = this.state;
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
         return (
@@ -152,7 +152,11 @@ class ReportHeader extends Component {
       default:
         return (
           <li className="action-item">
-            <a style={isDisabled ? { pointerEvents: "none" } : {}} href="javascript:;" onClick={this.onRunReport}>
+            <a
+              style={isDisabled ? { pointerEvents: "none" } : {}}
+              href="javascript:;"
+              onClick={this.onRunReport}
+            >
               Run report
             </a>
           </li>
@@ -278,7 +282,15 @@ class ReportHeader extends Component {
                     className="btn--light-blue"
                     onClick={this.copyReport}
                   >
-                    Confirm & copy {isDisabled && <i className="icon-cog" />}
+                    {isDisabled ? (
+                      <div>
+                        {" "}
+                        Loading
+                        <i className="icon-cog" />
+                      </div>
+                    ) : (
+                      "Confirm & Copy"
+                    )}
                   </button>
                 </div>
               </Dialog>

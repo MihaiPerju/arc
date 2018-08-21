@@ -213,7 +213,15 @@ class CreateReasonCode extends Component {
                 disabled={isDisabled}
                 className="btn--green"
               >
-                Create {isDisabled && <i className="icon-cog" />}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Create"
+                )}
               </button>
             </div>
           </AutoForm>

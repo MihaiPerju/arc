@@ -193,7 +193,15 @@ export default class ImportingRules extends React.Component {
                 disabled={isDisabled}
                 className="btn--green"
               >
-                Submit {isDisabled && <i className="icon-cog" />}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Submit"
+                )}
               </button>
             </div>
           </AutoForm>

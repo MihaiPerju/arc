@@ -107,7 +107,15 @@ export default class FacilityCreate extends Component {
               onClick={this.onCreateFacility}
               className="btn--green"
             >
-              Confirm & save {isDisabled && <i className="icon-cog" />}
+              {isDisabled ? (
+                <div>
+                  {" "}
+                  Loading
+                  <i className="icon-cog" />
+                </div>
+              ) : (
+                "Confirm & Save"
+              )}
             </button>
           </div>
         </div>

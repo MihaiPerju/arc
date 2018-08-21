@@ -63,7 +63,15 @@ export class Login extends React.Component {
                 className="btn-login"
                 type="submit"
               >
-                Login {isDisabled && <i className="icon-cog" />}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Login"
+                )}
               </button>
             </AutoForm>
             {error && <div className="alert-message">{error}</div>}

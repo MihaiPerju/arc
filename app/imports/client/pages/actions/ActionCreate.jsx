@@ -80,7 +80,7 @@ export default class ActionCreate extends Component {
               onClick={this.onCreateAction}
               className="btn--green"
             >
-              Confirm & save {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm & Save"}
             </button>
           </div>
         </div>

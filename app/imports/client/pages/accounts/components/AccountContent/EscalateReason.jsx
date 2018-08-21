@@ -63,7 +63,7 @@ class EscalateReason extends Component {
                 type="submit"
                 className="btn-post"
               >
-                Post {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Post"}
               </button>
             </div>
           </AutoForm>

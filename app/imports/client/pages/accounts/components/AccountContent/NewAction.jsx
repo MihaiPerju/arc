@@ -246,7 +246,7 @@ export default class NewAction extends Component {
                 type="submit"
                 className="btn--green"
               >
-                Save {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Save"}
               </button>
             </div>
           </AutoForm>

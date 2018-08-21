@@ -91,7 +91,15 @@ class FacilityFiles extends Component {
                         onClick={this.deleteAction.bind(this, file._id)}
                         className="btn-cancel"
                       >
-                        Roll Back {isDisabled && <i className="icon-cog" />}
+                        {isDisabled ? (
+                          <div>
+                            {" "}
+                            Loading
+                            <i className="icon-cog" />
+                          </div>
+                        ) : (
+                          "Roll Back"
+                        )}
                       </button>
                     </div>
                   </div>

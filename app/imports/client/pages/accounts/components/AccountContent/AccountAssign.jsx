@@ -142,7 +142,7 @@ export default class AccountAssign extends React.Component {
                 type="submit"
                 className="btn--light-blue"
               >
-                Confirm {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog" /></div>:"Confirm"}
               </button>
             </div>
           </AutoForm>
@@ -170,7 +170,7 @@ export default class AccountAssign extends React.Component {
                 type="submit"
                 className="btn--light-blue"
               >
-                Confirm {isDisabled && <i className="icon-cog" />}
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
               </button>
             </div>
           </AutoForm>
