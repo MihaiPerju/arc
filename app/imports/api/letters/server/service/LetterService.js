@@ -16,11 +16,12 @@ import AccountActions from "/imports/api/accountActions/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 
-const { rootFolder } = Settings.findOne({
-  rootFolder: {
-    $ne: null
-  }
-});
+const { rootFolder } =
+  Settings.findOne({
+    rootFolder: {
+      $ne: null
+    }
+  }) || {};
 
 export default class LetterService {
   static createLetter(data) {
