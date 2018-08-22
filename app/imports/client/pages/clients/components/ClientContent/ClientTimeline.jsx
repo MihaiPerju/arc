@@ -521,7 +521,7 @@ export default class ClientTimeline extends Component {
               <b>
                 {user.profile.firstName} {user.profile.lastName}
               </b>}{' '}
-            breaked the lock of the account with Account Number{' '}
+            broke the lock of the account with Account Number{' '}
             <b>{account && account.acctNum}</b>
           </div>
         );
