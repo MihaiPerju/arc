@@ -5,6 +5,8 @@ import RulesEnum from "../../enums/importingRules";
 import stateEnum from "../../../accounts/enums/states";
 import Backup from "/imports/api/backup/collection";
 import ActionService from "../../../accounts/server/services/ActionService";
+import FileService from "/imports/api/files/server/services/FileService";
+import UploadStatuses from "/imports/api/files/enums/statuses";
 
 export default class AccountService {
   //For placement file
@@ -14,6 +16,9 @@ export default class AccountService {
     const clientId = this.getClientIdByFacilityId(facilityId);
 
     const accounts = this.convertToAccounts(results, importRules, labels);
+    if (!accounts.length) {
+      FileService.updateFileStatus(fileId, UploadStatuses.FAIL);
+    }
     const existentAccounts = Accounts.find({ facilityId }).fetch();
 
     //Find account numbers of all created accounts and existent accounts

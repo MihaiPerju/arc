@@ -33,7 +33,7 @@ export default class FileSingle extends Component {
   };
 
   render() {
-    const { file, filesSelected, currentFile, moduleTags } = this.props;
+    const { file, filesSelected, currentFile } = this.props;
     const checked = filesSelected.includes(file._id);
     const classes = classNames({
       "list-item": true,
@@ -46,12 +46,6 @@ export default class FileSingle extends Component {
         <div className="check-item">
           <input checked={checked} type="checkbox" className="hidden" />
           <label onClick={this.onSelectFile.bind(this)} />
-          <TagItem
-            title="Tag File"
-            tagIds={file.tagIds}
-            moduleTags={moduleTags}
-            onSubmitTags={this.onSubmitTags.bind(this)}
-          />
         </div>
         <div className="row__block align-center">
           <div className="item-name">{file.fileName}</div>

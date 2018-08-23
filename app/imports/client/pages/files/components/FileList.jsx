@@ -10,7 +10,6 @@ export default class FileList extends Component {
         selectFile,
         filesSelected,
         currentFile,
-        moduleTags
       } = this.props;
       return (
         <FileSingle
@@ -20,7 +19,6 @@ export default class FileList extends Component {
           setFile={setFile}
           file={file}
           key={file._id}
-          moduleTags={moduleTags}
         />
       );
     }, this);
