@@ -1,0 +1,10 @@
+.top-titles{
+    color: #0c0b3c  !important;
+    font-weight: 600 !important;
+   margin-left: 50px !important;
+    @include mds-font-size(20px, $base-line-height);
+    
+}
+.header__logo{
+    margin-right: 50px !important; 
+}
