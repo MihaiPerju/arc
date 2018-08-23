@@ -16,8 +16,11 @@ export default class AccountService {
     const clientId = this.getClientIdByFacilityId(facilityId);
 
     const accounts = this.convertToAccounts(results, importRules, labels);
+
+    //If there are no accounts, file is not valid and nothing should take effect
     if (!accounts.length) {
       FileService.updateFileStatus(fileId, UploadStatuses.FAIL);
+      return;
     }
     const existentAccounts = Accounts.find({ facilityId }).fetch();
 

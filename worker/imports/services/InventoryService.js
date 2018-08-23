@@ -61,7 +61,9 @@ export default class InventoryService {
     const newFileId = Files.insert({
       fileName: filePath,
       facilityId,
-      previousFileId: fileId
+      clientId,
+      previousFileId: fileId,
+      type: fileTypes.INVENTORY
     });
 
     const fileData = {

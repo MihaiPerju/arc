@@ -12,6 +12,9 @@ export default new SimpleSchema({
   facilityId: {
     type: String
   },
+  clientId: {
+    type: String
+  },
   createdAt: {
     type: Date,
     autoValue: function() {
@@ -23,5 +26,8 @@ export default new SimpleSchema({
   status: {
     type: String,
     defaultValue: UploadStatus.SUCCESS
+  },
+  type: {
+    type: String
   }
 });

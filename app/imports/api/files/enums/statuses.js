@@ -1,4 +1,5 @@
 export default {
   SUCCESS: "success",
-  FAIL: "fail"
+  FAIL: "fail",
+  DISMISS: "dismiss"
 };

@@ -1,8 +1,17 @@
 import React, { Component } from "react";
 import UploadStatus from "/imports/api/files/enums/statuses";
 import { getToken } from "../../../../../api/s3-uploads/utils";
+import Notifier from "/imports/client/lib/Notifier";
+import HeaderEdit from "./FileHeaderEdit";
 
 export default class ReportHeader extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isEditingHeaders: false
+    };
+  }
+
   onEdit = () => {
     const { setEdit } = this.props;
     setEdit();
@@ -16,8 +25,29 @@ export default class ReportHeader extends Component {
     window.open("/file/" + file._id + "/" + getToken(), "_blank");
   };
 
+  onOpenDialog = () => {
+    this.setState({ isEditingHeaders: true });
+  };
+
+  onCloseDialog = () => {
+    this.setState({ isEditingHeaders: false });
+  };
+
+  onDismissFile = () => {
+    const { file } = this.props;
+    Meteor.call("file.dismiss", file._id, err => {
+      if (!err) {
+        Notifier.success("File Dismissed!");
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
   render() {
     const { file } = this.props;
+    const { isEditingHeaders } = this.state;
+
     const styles = {
       backgroundColor: file.status === UploadStatus.SUCCESS ? "green" : "red"
     };
@@ -37,6 +67,19 @@ export default class ReportHeader extends Component {
           <button style={{ color: "black" }} onClick={this.onDownloadFile}>
             Download
           </button>
+          {file.status === UploadStatus.FAIL && (
+            <button style={{ color: "black" }} onClick={this.onDismissFile}>
+              Dismiss
+            </button>
+          )}
+
+          <button style={{ color: "black" }} onClick={this.onOpenDialog}>
+            Edit headers
+          </button>
+
+          {isEditingHeaders && (
+            <HeaderEdit file={file} onCloseDialog={this.onCloseDialog} />
+          )}
         </div>
       </div>
     );

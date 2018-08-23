@@ -61,7 +61,9 @@ export default class PlacementService {
     const newFileId = Files.insert({
       fileName: filePath,
       facilityId,
-      previousFileId: fileId
+      clientId,
+      previousFileId: fileId,
+      type: fileTypes.PLACEMENT
     });
 
     const fileData = {
