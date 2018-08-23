@@ -1,2 +1,3 @@
-import './methods';
-import './expose';
+import "./methods";
+import "./expose";
+import "./extensions/fileSingle";

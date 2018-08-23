@@ -32,6 +32,10 @@ export default class FileSingle extends Component {
     });
   };
 
+  getFileName = name => {
+    return name.split(".")[0] || "";
+  };
+
   render() {
     const { file, filesSelected, currentFile } = this.props;
     const checked = filesSelected.includes(file._id);
@@ -48,7 +52,7 @@ export default class FileSingle extends Component {
           <label onClick={this.onSelectFile.bind(this)} />
         </div>
         <div className="row__block align-center">
-          <div className="item-name">{file.fileName}</div>
+          <div className="item-name">{this.getFileName(file.fileName)}</div>
         </div>
       </div>
     );
