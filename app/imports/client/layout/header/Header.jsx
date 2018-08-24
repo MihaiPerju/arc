@@ -62,7 +62,7 @@ class Header extends Component {
                     src="/assets/img/logo.png"
                     alt=""
                   />
-                  <div>{RoutesService.getRouteName(routeName)}</div>
+                  <div className="top-titles">{RoutesService.getRouteName(routeName)}</div>
                 </a>
               </div>
               <div
