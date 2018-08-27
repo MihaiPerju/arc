@@ -21,7 +21,7 @@ class FileListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
+      range: {}
     });
     this.query = query;
   }
@@ -129,13 +129,7 @@ class FileListContainer extends Pager {
 
   render() {
     const { data, isLoading, error } = this.props;
-    const {
-      filesSelected,
-      currentFile,
-      create,
-      range,
-      total,
-    } = this.state;
+    const { filesSelected, currentFile, create, range, total } = this.state;
     const file = objectFromArray(data, currentFile);
 
     if (isLoading && !FlowRouter.getQueryParam("file")) {
@@ -202,7 +196,7 @@ class RightSide extends Component {
     const { file, create, close } = this.props;
     return (
       <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <FileCreate close={close} /> : <FileContent file={file} />}
+        <FileContent file={file} />
       </div>
     );
   }

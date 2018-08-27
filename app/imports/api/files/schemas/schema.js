@@ -29,5 +29,12 @@ export default new SimpleSchema({
   },
   type: {
     type: String
+  },
+  header: {
+    type: Array,
+    optional: true
+  },
+  "header.$": {
+    type: SimpleSchema.oneOf(SimpleSchema.Integer, String)
   }
 });

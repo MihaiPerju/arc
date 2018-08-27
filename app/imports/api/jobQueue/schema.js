@@ -1,4 +1,5 @@
 import SimpleSchema from "simpl-schema";
+import Statuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 
 export default new SimpleSchema({
   type: {
@@ -33,6 +34,11 @@ export default new SimpleSchema({
     optional: true
   },
   status: {
-    type: String
+    type: String,
+    defaultValue: Statuses.NEW
+  },
+  fileId: {
+    type: String,
+    optional: true
   }
 });

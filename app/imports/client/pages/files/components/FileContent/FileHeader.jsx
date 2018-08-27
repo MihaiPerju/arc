@@ -44,6 +44,18 @@ export default class ReportHeader extends Component {
     });
   };
 
+  onRetryUpload = () => {
+    const { file } = this.props;
+    console.log(file);
+    Meteor.call("file.retryUpload", file.fileName, file._id, err => {
+      if (!err) {
+        Notifier.success("Job Created");
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
   render() {
     const { file } = this.props;
     const { isEditingHeaders } = this.state;
@@ -75,6 +87,10 @@ export default class ReportHeader extends Component {
 
           <button style={{ color: "black" }} onClick={this.onOpenDialog}>
             Edit headers
+          </button>
+
+          <button style={{ color: "black" }} onClick={this.onRetryUpload}>
+            Retry Upload
           </button>
 
           {isEditingHeaders && (

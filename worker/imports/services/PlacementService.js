@@ -42,6 +42,7 @@ export default class PlacementService {
         $ne: null
       }
     });
+
     const importRules = ParseService.getImportRules(
       facilityId,
       "placementRules"
@@ -58,7 +59,7 @@ export default class PlacementService {
       _id: facilityId
     });
 
-    const newFileId = Files.insert({
+    const fileId = Files.insert({
       fileName: filePath,
       facilityId,
       clientId,
@@ -69,7 +70,7 @@ export default class PlacementService {
     const fileData = {
       type: actionTypesEnum.FILE,
       createdAt: new Date(),
-      fileId: newFileId,
+      fileId: fileId,
       fileName: filePath,
       userId,
       clientId,
@@ -83,7 +84,7 @@ export default class PlacementService {
       },
       {
         $set: {
-          fileId: newFileId
+          fileId
         }
       }
     );
@@ -91,7 +92,7 @@ export default class PlacementService {
     //Pass links to accounts to link them too
     const links = {
       facilityId,
-      fileId: newFileId
+      fileId
     };
 
     Papa.parse(csvString, {
@@ -100,6 +101,7 @@ export default class PlacementService {
         this.createFileAction(results.data, fileData);
       },
       complete: () => {
+        console.log("OK!");
         JobQueue.update(
           {
             _id

@@ -7,10 +7,26 @@ import Backup from "/imports/api/backup/collection";
 import ActionService from "../../../accounts/server/services/ActionService";
 import FileService from "/imports/api/files/server/services/FileService";
 import UploadStatuses from "/imports/api/files/enums/statuses";
+import Files from "/imports/api/files/collection";
 
 export default class AccountService {
   //For placement file
   static upload(results, rules, { fileId, facilityId }) {
+    //Update the file headers;
+    const { header } = Files.findOne({ _id: fileId });
+    if (!header) {
+      Files.update(
+        { _id: fileId },
+        {
+          $set: {
+            header: results[0]
+          }
+        }
+      );
+    } else {
+      results[0] = header;
+    }
+
     const { labels, importRules } = this.standardize(results, rules);
 
     const clientId = this.getClientIdByFacilityId(facilityId);

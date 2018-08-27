@@ -2,6 +2,7 @@ import ReportsManagement from "../services/RunReports";
 import LettersManagement from "../services/LettersManagement";
 import EmailsManagement from "../services/EmailsManagement";
 import PlacementService from "../services/PlacementService";
+import ReuploadService from "../services/ReuploadService";
 import InventoryService from "../services/InventoryService";
 import PaymentService from "../services/PaymentService";
 
@@ -76,3 +77,15 @@ SyncedCron.add({
 //     PaymentService.run();
 //   }
 // });
+
+//Job for importing re-uploading files with changed header
+SyncedCron.add({
+  name: "Reupload Files",
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.text("every 10 seconds");
+  },
+  job: function() {
+    ReuploadService.run();
+  }
+});
