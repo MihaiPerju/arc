@@ -6,11 +6,12 @@ import Settings from "/imports/api/settings/collection";
 import Future from "fibers/future";
 
 export default class FileService {
-  static updateFileStatus(_id, status) {
+  static update(_id, data) {
+    console.log(data);
     Files.update(
       { _id },
       {
-        $set: { status }
+        $set: data
       }
     );
   }

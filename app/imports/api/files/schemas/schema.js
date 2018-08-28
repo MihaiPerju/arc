@@ -36,5 +36,13 @@ export default new SimpleSchema({
   },
   "header.$": {
     type: SimpleSchema.oneOf(SimpleSchema.Integer, String)
+  },
+  corruptRows: {
+    type: Array,
+    optional: true
+  },
+  "corruptRows.$": {
+    type: SimpleSchema.Integer,
+    optional: true
   }
 });

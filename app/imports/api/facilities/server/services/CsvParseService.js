@@ -104,6 +104,7 @@ export default class CsvParseService {
 
   //Get import rules
   static getImportRules(_id, rules) {
+    console.log(rules)
     const facility = Facilities.findOne({ _id });
     return facility[rules];
   }

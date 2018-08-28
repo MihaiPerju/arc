@@ -12,13 +12,15 @@ import fileTypes from "/imports/api/files/enums/fileTypes";
 import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
+import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
 
 export default class PlacementService {
   static run() {
     //Look for an untaken job
     const job = JobQueue.findOne({
       workerId: null,
-      fileType: fileTypes.PLACEMENT
+      fileType: fileTypes.PLACEMENT,
+      type: jobTypes.IMPORT_DATA
     });
     if (job) {
       //Update the job as taken
@@ -61,7 +63,9 @@ export default class PlacementService {
     const newFileId = Files.insert({
       fileName: filePath,
       facilityId,
-      previousFileId: fileId
+      clientId,
+      previousFileId: fileId,
+      type: fileTypes.PLACEMENT
     });
 
     const fileData = {

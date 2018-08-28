@@ -46,7 +46,6 @@ export default class ReportHeader extends Component {
 
   onRetryUpload = () => {
     const { file } = this.props;
-    console.log(file);
     Meteor.call("file.retryUpload", file.fileName, file._id, err => {
       if (!err) {
         Notifier.success("Job Created");
@@ -96,6 +95,13 @@ export default class ReportHeader extends Component {
           {isEditingHeaders && (
             <HeaderEdit file={file} onCloseDialog={this.onCloseDialog} />
           )}
+          {file.corruptRows &&
+            file.corruptRows.length && (
+              <div>
+                <div>Encountered problems with following rows: </div>
+                <div>{file.corruptRows.map(row => row)}</div>
+              </div>
+            )}
         </div>
       </div>
     );

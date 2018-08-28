@@ -5,6 +5,7 @@ import FileTypes from "/imports/api/files/enums/fileTypes";
 import FileService from "./services/FileService";
 import Facilities from "/imports/api/facilities/collection";
 import JobQueue from "../../jobQueue/collection";
+import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
 
 Meteor.methods({
   "file.rollback"(_id) {
@@ -19,18 +20,11 @@ Meteor.methods({
   },
 
   "file.getHeader"(_id) {
-    console.log(_id);
-    const { type, fileName, header } = Files.findOne({ _id });
-    if (type === FileTypes.INVENTORY) {
-      return "Inventory";
-    } else {
-      return header;
-    }
+    const { header } = Files.findOne({ _id });
+    return header;
   },
 
   "file.updateHeader"(_id, header) {
-    console.log(_id);
-    console.log(header);
     Files.update(
       { _id },
       {
@@ -40,16 +34,14 @@ Meteor.methods({
   },
 
   "file.retryUpload"(filePath, fileId) {
-    console.log(filePath);
     const job = JobQueue.findOne({ filePath });
 
     //Remove unnecessary data
     delete job.workerId;
     delete job._id;
     delete job.status;
-    job.userId = this.userId;
+    delete job.status;
     job.fileId = fileId;
-
-    JobQueue.insert(job);
+    (job.type = jobTypes.RETRY_UPLOAD), JobQueue.insert(job);
   }
 });

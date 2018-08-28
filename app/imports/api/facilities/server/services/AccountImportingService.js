@@ -13,31 +13,32 @@ export default class AccountService {
   //For placement file
   static upload(results, rules, { fileId, facilityId }) {
     //Update the file headers;
-    const { header } = Files.findOne({ _id: fileId });
+    const { header } = Files.findOne({
+      _id: fileId
+    });
     if (!header) {
-      Files.update(
-        { _id: fileId },
-        {
-          $set: {
-            header: results[0]
-          }
-        }
-      );
+      Files.update({ _id: fileId }, { $set: { header: results[0] } });
     } else {
       results[0] = header;
     }
-
     const { labels, importRules } = this.standardize(results, rules);
 
     const clientId = this.getClientIdByFacilityId(facilityId);
 
-    const accounts = this.convertToAccounts(results, importRules, labels);
+    const { accounts, corruptRows } = this.convertToAccounts(
+      results,
+      importRules,
+      labels
+    );
 
     //If there are no accounts, file is not valid and nothing should take effect
     if (!accounts.length) {
-      FileService.updateFileStatus(fileId, UploadStatuses.FAIL);
+      FileService.update(fileId, { status: UploadStatuses.FAIL });
       return;
+    } else {
+      FileService.update(fileId, { status: UploadStatuses.SUCCESS });
     }
+
     const existentAccounts = Accounts.find({ facilityId }).fetch();
 
     //Find account numbers of all created accounts and existent accounts
@@ -61,8 +62,10 @@ export default class AccountService {
       Object.assign(toUpdateAccount, { fileId });
 
       const { invoiceNo } =
-        Accounts.find({ acctNum: toUpdateAccountId, facilityId }).fetch()[0] ||
-        {};
+        Accounts.find({
+          acctNum: toUpdateAccountId,
+          facilityId
+        }).fetch()[0] || {};
 
       if (toUpdateAccount.invoiceNo) {
         toUpdateAccount.invoiceNo = _.union(
@@ -75,9 +78,7 @@ export default class AccountService {
 
       Accounts.update(
         { acctNum: toUpdateAccountId, facilityId },
-        {
-          $set: toUpdateAccount
-        }
+        { $set: toUpdateAccount }
       );
     });
 
@@ -165,7 +166,7 @@ export default class AccountService {
     }
 
     for (let rule in results[0]) {
-      results[0][rule] = results[0][rule].toLowerCase();
+      results[0][rule] = results[0][rule].toString().toLowerCase();
     }
 
     //If importing rules are with header, convert them.
@@ -182,20 +183,30 @@ export default class AccountService {
   }
 
   static convertToAccounts(results, importRules, labels) {
-    const accounts = [];
+    let accounts = [];
+    let corruptRows = [];
 
     for (let i = 0; i < results.length - 1; i++) {
       let account = this.createAccount(results[i], importRules, labels);
-      accounts.push(account);
+      if (!account) {
+        corruptRows.push(i + 1);
+      } else {
+        accounts.push(account);
+      }
     }
 
-    return accounts;
+    return { accounts, corruptRows };
   }
 
   static createAccount(data, rules, labels) {
     let importRules = { ...rules };
     let account = {};
     let mainFields = [];
+
+    let uploadErrors = {
+      dates: 0,
+      numbers: 0
+    };
 
     //Extract insurances first
     account.insurances = [];
@@ -225,18 +236,34 @@ export default class AccountService {
           policy - 1,
           phone - 1
         );
-        //Get insurances
+
         account.insurances.push({
-          insName: this.convertToType("insName", data[insName - 1]),
-          insCode: this.convertToType("insCode", data[insCode - 1]),
-          insBal: this.convertToType("insBal", data[insBal - 1]),
-          address1: this.convertToType("address1", data[address1 - 1]),
-          address2: this.convertToType("address2", data[address2 - 1]),
-          city: this.convertToType("city", data[city - 1]),
-          state: this.convertToType("state", data[state - 1]),
-          zip: this.convertToType("zip", data[zip - 1]),
-          policy: this.convertToType("policy", data[policy - 1]),
-          phone: this.convertToType("phone", data[phone - 1])
+          insName: this.convertToType(
+            "insName",
+            data[insName - 1],
+            uploadErrors
+          ),
+          insCode: this.convertToType(
+            "insCode",
+            data[insCode - 1],
+            uploadErrors
+          ),
+          insBal: this.convertToType("insBal", data[insBal - 1], uploadErrors),
+          address1: this.convertToType(
+            "address1",
+            data[address1 - 1],
+            uploadErrors
+          ),
+          address2: this.convertToType(
+            "address2",
+            data[address2 - 1],
+            uploadErrors
+          ),
+          city: this.convertToType("city", data[city - 1], uploadErrors),
+          state: this.convertToType("state", data[state - 1], uploadErrors),
+          zip: this.convertToType("zip", data[zip - 1], uploadErrors),
+          policy: this.convertToType("policy", data[policy - 1], uploadErrors),
+          phone: this.convertToType("phone", data[phone - 1], uploadErrors)
         });
       }
     );
@@ -245,7 +272,11 @@ export default class AccountService {
 
     for (let rule in importRules) {
       mainFields.push(importRules[rule] - 1);
-      let value = this.convertToType(rule, data[importRules[rule] - 1]);
+      let value = this.convertToType(
+        rule,
+        data[importRules[rule] - 1],
+        uploadErrors
+      );
       account[rule] = value;
     }
 
@@ -264,12 +295,14 @@ export default class AccountService {
       }
     });
     Object.assign(account, { metaData });
-
+    if (uploadErrors.numbers || uploadErrors.dates) {
+      return null;
+    }
     //Account is ready: main fields + insurances + meta
     return account;
   }
 
-  static convertToType(rule, value) {
+  static convertToType(rule, value, uploadErrors) {
     const { types } = RulesEnum;
     if (types.dates.includes(rule)) {
       const date = new Date(value);
@@ -280,9 +313,18 @@ export default class AccountService {
         "/" +
         date.getFullYear();
       const parsed = moment(dateString, "MM/DD/YYYY", true);
+      // If the date isn't valid add an exception
+      if (parsed.isValid() === false) {
+        uploadErrors.dates++;
+      }
       return parsed.isValid() ? parsed.toDate() : null;
     } else if (types.numbers.includes(rule)) {
       const parsed = parseInt(value, 10);
+
+      //If the number isn't valid add an exception
+      if (isNaN(parsed)) {
+        uploadErrors.numbers++;
+      }
       return isNaN(parsed) ? null : parsed;
     } else if (types.others.includes(rule)) {
       const date = new Date(value);
@@ -336,9 +378,29 @@ export default class AccountService {
 
   //For inventory file
   static update(results, rules, { fileId, facilityId }) {
-    const { labels, importRules } = this.standardize(results, rules);
+    //Update the file headers;
+    const { header } = Files.findOne({
+      _id: fileId
+    });
+    if (!header) {
+      Files.update({ _id: fileId }, { $set: { header: results[0] } });
+    } else {
+      results[0] = header;
+    }
 
-    const accounts = this.convertToAccounts(results, importRules, labels);
+    const { labels, importRules } = this.standardize(results, rules);
+    const { accounts, uploadErrors } = this.convertToAccounts(
+      results,
+      importRules,
+      labels
+    );
+
+    //If there are no accounts, file is not valid and nothing should take effect
+    if (!accounts.length || uploadErrors.numbers || uploadErrors.dates) {
+      FileService.update(fileId, { status: UploadStatuses.FAIL });
+      return;
+    }
+
     const clientId = this.getClientIdByFacilityId(facilityId);
 
     const { oldAccountIds, newAccountIds } = this.filterAccounts(accounts);

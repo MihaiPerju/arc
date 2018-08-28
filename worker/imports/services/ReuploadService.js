@@ -12,16 +12,18 @@ import fileTypes from "/imports/api/files/enums/fileTypes";
 import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
+import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
 
 export default class ReuploadService {
   static run() {
     //Look for an untaken job
     const job = JobQueue.findOne({
       workerId: null,
-      status: jobStatuses.REUPLOAD
+      status: jobStatuses.NEW,
+      type: jobTypes.RETRY_UPLOAD
     });
     if (job) {
-      //Update the job as taken
+      // Update the job as taken
       JobQueue.update(
         {
           _id: job._id
@@ -33,43 +35,37 @@ export default class ReuploadService {
         }
       );
       this.reuploadFile(job);
+      job;
     }
   }
-
-  static reuploadFile(job) {
-    const { facilityId, filePath, userId, _id } = job;
-    const previousFileId = job.fileId;
-
+  static reuploadFile({ facilityId, filePath, fileId, fileType, userId, _id }) {
     const { rootFolder } = Settings.findOne({
       rootFolder: {
         $ne: null
       }
     });
 
-    const importRules = ParseService.getImportRules(
-      facilityId,
-      "placementRules"
-    );
-
+    const ruleType = fileType + "Rules";
+    const importRules = ParseService.getImportRules(facilityId, ruleType);
     //Parsing and getting the CSV like a string
     const stream = fs.readFileSync(
       rootFolder + Business.ACCOUNTS_FOLDER + filePath
     );
     const csvString = stream.toString();
 
-    //Keep reference to previous file
-    const { fileId, clientId } = Facilities.findOne({
+    //Get client Id
+    const { clientId } = Facilities.findOne({
       _id: facilityId
     });
 
     const fileData = {
-      type: actionTypesEnum.FILE,
+      type: actionTypesEnum.REUPLOAD,
       createdAt: new Date(),
       fileId,
       fileName: filePath,
       userId,
       clientId,
-      filetype: fileTypes.PLACEMENT
+      fileType
     };
 
     //Add reference to facility
@@ -87,31 +83,26 @@ export default class ReuploadService {
     //Pass links to accounts to link them too
     const links = {
       facilityId,
-      fileId: fileId
+      fileId
     };
 
     Papa.parse(csvString, {
       chunk: results => {
-        AccountService.upload(results.data, importRules, links);
-        this.reuploadAction(results.data, fileData);
+        if (fileType === fileTypes.INVENTORY) {
+          AccountService.update(results.data, importRules, links);
+        } else {
+          AccountService.upload(results.data, importRules, links);
+        }
+        // this.createFileAction(results.data, fileData);
       },
       complete: () => {
-        JobQueue.update(
-          {
-            _id
-          },
-          {
-            $set: {
-              status: jobStatuses.FINISHED
-            }
-          }
-        );
         // executed after all files are complete
+        JobQueue.update({ _id }, { $set: { status: jobStatuses.FINISHED } });
       }
     });
   }
 
-  static reuploadAction(records, fileData) {
+  static createFileAction(records, fileData) {
     let numberOfRecords = records.length;
     const lastElement = records[numberOfRecords - 1];
     if (lastElement.length < 2) {

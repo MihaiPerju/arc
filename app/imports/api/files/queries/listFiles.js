@@ -8,5 +8,6 @@ export default Files.createQuery("listFiles", {
   $paginate: true,
   fileName: 1,
   status: 1,
-  type: 1
+  type: 1,
+  corruptRows: 1
 });

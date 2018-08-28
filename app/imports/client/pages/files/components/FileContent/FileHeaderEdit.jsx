@@ -25,7 +25,7 @@ export default class FileHeaderEdit extends Component {
         this.createSchema(res);
         this.setState({ model });
       } else {
-        console.log(err);
+        Notifier.error(err.reason);
       }
     });
   }
@@ -86,7 +86,10 @@ export default class FileHeaderEdit extends Component {
               {schema._schemaKeys.map(key => {
                 return (
                   <div key={key}>
-                    <AutoField name={key} />
+                    <AutoField
+                      label={"Column " + parseInt(parseInt(key) + 1)}
+                      name={key}
+                    />
                     <ErrorField name={key} />
                   </div>
                 );
