@@ -97,17 +97,16 @@ export default class ReportHeader extends Component {
           {isEditingHeaders && (
             <HeaderEdit file={file} onCloseDialog={this.onCloseDialog} />
           )}
-          {file.corruptRows &&
-            file.corruptRows.length && (
-              <div>
-                <div>Encountered problems with following rows: </div>
-                <ul>
-                  {file.corruptRows.map(row => {
-                    return <li>{row}</li>;
-                  })}
-                </ul>
-              </div>
-            )}
+          {file.corruptRows && file.corruptRows.length ? (
+            <div>
+              <div>Encountered problems with following rows: </div>
+              <ul>
+                {file.corruptRows.map(row => {
+                  return <li>{row}</li>;
+                })}
+              </ul>
+            </div>
+          ) : null}
         </div>
       </div>
     );
