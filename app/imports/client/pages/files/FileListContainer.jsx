@@ -160,6 +160,7 @@ class FileListContainer extends Pager {
             btnGroup={filesSelected.length}
             deleteAction={this.deleteAction}
             hideSort
+            close={this.closeRightPanel}
             hideFilter
           />
           <FileList

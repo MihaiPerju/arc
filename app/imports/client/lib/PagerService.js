@@ -413,7 +413,8 @@ export default class PagerService {
       tagIds,
       fileName,
       clientId,
-      facilityId;
+      facilityId,
+      status;
 
     _.extend(params, {
       filters: {}
@@ -488,6 +489,7 @@ export default class PagerService {
       fileName = FlowRouter.getQueryParam("fileName");
       clientId = FlowRouter.getQueryParam("clientId");
       facilityId = FlowRouter.getQueryParam("facilityId");
+      status = FlowRouter.getQueryParam("status");
     }
 
     tagIds = FlowRouter.getQueryParam("tagIds");
@@ -612,6 +614,16 @@ export default class PagerService {
     if (facilityId) {
       _.extend(params.filters, {
         facilityId: facilityId
+      });
+    }
+
+    if (status) {
+      _.extend(params.filters, {
+        status
+      });
+    } else {
+      _.extend(params.filters, {
+        status: { $ne: "dismiss" }
       });
     }
   }

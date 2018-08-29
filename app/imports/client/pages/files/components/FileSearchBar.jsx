@@ -9,6 +9,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import FilterService from "/imports/client/lib/FilterService";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import statuses from "/imports/api/files/enums/statuses";
 
 export default class FileSearchBar extends Component {
   constructor() {
@@ -20,6 +21,7 @@ export default class FileSearchBar extends Component {
       fileName: null,
       clientOptions: [],
       facilityOptions: [],
+      statusOptions: [],
       model: {}
     };
   }
@@ -27,6 +29,11 @@ export default class FileSearchBar extends Component {
   componentWillMount() {
     let facilityOptions = [];
     let clientOptions = [];
+    const statusOptions = [
+      { label: "Success", value: statuses.SUCCESS },
+      { label: "Dismissed", value: statuses.DISMISS },
+      { label: "Failed", value: statuses.FAIL }
+    ];
 
     facilityQuery.fetch((err, res) => {
       if (!err) {
@@ -48,11 +55,14 @@ export default class FileSearchBar extends Component {
     this.setState({
       model,
       facilityOptions,
-      clientOptions
+      clientOptions,
+      statusOptions
     });
   }
 
   onSubmit(params) {
+    const { close } = this.props;
+    close();
     if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
     }
@@ -61,6 +71,9 @@ export default class FileSearchBar extends Component {
     }
     if (params.facilityId || params.facilityId === "") {
       FlowRouter.setQueryParams({ facilityId: params.facilityId });
+    }
+    if (params.status || params.status === "") {
+      FlowRouter.setQueryParams({ status: params.status });
     }
   }
 
@@ -140,7 +153,8 @@ export default class FileSearchBar extends Component {
       selectAll,
       model,
       clientOptions,
-      facilityOptions
+      facilityOptions,
+      statusOptions
     } = this.state;
     const {
       options,
@@ -150,6 +164,7 @@ export default class FileSearchBar extends Component {
       icons,
       hideSort
     } = this.props;
+
     const classes = classNames({
       "select-type": true,
       open: dropdown
@@ -222,7 +237,6 @@ export default class FileSearchBar extends Component {
                         <div className="flex--helper form-group__pseudo--3">
                           <div className="select-form">
                             <SelectField
-                              label="Client:"
                               placeholder="Select Client"
                               name="clientId"
                               options={clientOptions}
@@ -230,10 +244,16 @@ export default class FileSearchBar extends Component {
                           </div>
                           <div className="select-form">
                             <SelectField
-                              label="Facility:"
                               name="facilityId"
                               placeholder="Select Facility"
                               options={facilityOptions}
+                            />
+                          </div>
+                          <div className="select-form">
+                            <SelectField
+                              name="status"
+                              placeholder="Select Status"
+                              options={statusOptions}
                             />
                           </div>
                         </div>
@@ -364,5 +384,10 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by File Name"
+  },
+  status: {
+    type: String,
+    optional: true,
+    label: "Search by File Status"
   }
 });

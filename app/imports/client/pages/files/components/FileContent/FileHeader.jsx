@@ -17,7 +17,7 @@ export default class ReportHeader extends Component {
     setEdit();
   };
   getFileName = name => {
-    return name.split(".")[0] || "";
+    return (name && name.split(".")[0]) || "";
   };
 
   onDownloadFile = () => {
@@ -60,35 +60,38 @@ export default class ReportHeader extends Component {
     const { isEditingHeaders } = this.state;
 
     const styles = {
-      backgroundColor: file.status === UploadStatus.SUCCESS ? "green" : "red"
+      backgroundColor:
+        file && file.status === UploadStatus.SUCCESS ? "green" : "red"
     };
     return (
       <div className="main-content__header header-block">
         <div className="row__header">
           <div className="text-light-grey">File name</div>
-          <div className="title">{this.getFileName(file.fileName)}</div>
+          <div className="title">{this.getFileName(file && file.fileName)}</div>
         </div>
         <div className="row__header">
           <div className="placement-block">
             <div className="text-light-grey">Upload Status</div>
             <div style={styles} className="label label--grey text-uppercase">
-              {file.status}
+              {file && file.status}
             </div>
           </div>
           <button style={{ color: "black" }} onClick={this.onDownloadFile}>
             Download
           </button>
-          {file.status === UploadStatus.FAIL && (
-            <button style={{ color: "black" }} onClick={this.onDismissFile}>
-              Dismiss
-            </button>
-          )}
+          {file &&
+            file.status === UploadStatus.FAIL && (
+              <button style={{ color: "black" }} onClick={this.onDismissFile}>
+                Dismiss
+              </button>
+            )}
 
-          {file.hasHeader && (
-            <button style={{ color: "black" }} onClick={this.onOpenDialog}>
-              Edit headers
-            </button>
-          )}
+          {file &&
+            file.hasHeader && (
+              <button style={{ color: "black" }} onClick={this.onOpenDialog}>
+                Edit headers
+              </button>
+            )}
 
           <button style={{ color: "black" }} onClick={this.onRetryUpload}>
             Retry Upload
@@ -97,7 +100,7 @@ export default class ReportHeader extends Component {
           {isEditingHeaders && (
             <HeaderEdit file={file} onCloseDialog={this.onCloseDialog} />
           )}
-          {file.corruptRows && file.corruptRows.length ? (
+          {file && file.corruptRows && file.corruptRows.length ? (
             <div>
               <div>Encountered problems with following rows: </div>
               <ul>
