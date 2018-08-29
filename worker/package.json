@@ -6,7 +6,7 @@
     "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc meteor run --port 4000"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.42",
+    "@babel/runtime": "7.0.0-beta.55",
     "buffer-to-stream": "^1.0.0",
     "csv-parse": "^2.5.0",
     "csv-stringify": "^3.0.0",
