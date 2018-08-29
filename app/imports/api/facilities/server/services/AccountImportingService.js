@@ -31,14 +31,14 @@ export default class AccountService {
       labels
     );
 
-    //If there are no accounts, file is not valid and nothing should take effect
-    if (!accounts.length) {
-      FileService.update(fileId, { status: UploadStatuses.FAIL });
+    //If there are no accounts or we have broken ones, file is not valid and nothing should take effect
+    if (!accounts.length || corruptRows.length) {
+      FileService.update(fileId, { corruptRows, status: UploadStatuses.FAIL });
       return;
-    } else {
-      FileService.update(fileId, { status: UploadStatuses.SUCCESS });
-      FileService.update(fileId, { corruptRows });
     }
+
+    //Other case - file upload was a success
+    FileService.update(fileId, { status: UploadStatuses.SUCCESS });
 
     const existentAccounts = Accounts.find({ facilityId }).fetch();
 
