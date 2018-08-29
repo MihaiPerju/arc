@@ -53,7 +53,6 @@ export default class FileSearchBar extends Component {
   }
 
   onSubmit(params) {
-    console.log(params);
     if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
     }

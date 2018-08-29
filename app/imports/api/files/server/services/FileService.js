@@ -7,7 +7,6 @@ import Future from "fibers/future";
 
 export default class FileService {
   static update(_id, data) {
-    console.log(data);
     Files.update(
       { _id },
       {
