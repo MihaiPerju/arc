@@ -6,7 +6,6 @@ import FileContent from "./FileContent.jsx";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/files/queries/listFiles";
 import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
@@ -127,12 +126,22 @@ class FileListContainer extends Pager {
     this.recount(queryParams);
   };
 
+  getFile = () => {
+    const { data } = this.props;
+    const { currentFile } = this.state;
+    for (let file of data) {
+      if (file._id === currentFile) {
+        return file;
+      }
+    }
+  };
+
   render() {
     const { data, isLoading, error } = this.props;
     const { filesSelected, currentFile, create, range, total } = this.state;
-    const file = objectFromArray(data, currentFile);
+    const file = this.getFile(currentFile);
 
-    if (isLoading && !FlowRouter.getQueryParam("file")) {
+    if (isLoading && !FlowRouter.getQueryParam("fileName")) {
       return <Loading />;
     }
 

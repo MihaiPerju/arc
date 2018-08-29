@@ -15,7 +15,7 @@ import MetaDataSlider from "/imports/client/pages/accounts/components/AccountCon
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 import Dialog from "/imports/client/lib/ui/Dialog";
-
+ 
 class AccountListContainer extends Pager {
   constructor() {
     super();

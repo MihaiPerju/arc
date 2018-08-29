@@ -1,33 +1,67 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField } from "/imports/ui/forms";
+import { AutoForm, AutoField, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
-import Tags from "/imports/client/lib/Tags";
 import classNames from "classnames";
+import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import Notifier from "/imports/client/lib/Notifier";
+import FilterService from "/imports/client/lib/FilterService";
+import facilityQuery from "/imports/api/facilities/queries/facilityList";
+import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 
 export default class FileSearchBar extends Component {
   constructor() {
     super();
     this.state = {
+      dialogIsActive: false,
       dropdown: false,
       selectAll: false,
+      fileName: null,
+      clientOptions: [],
+      facilityOptions: [],
       model: {}
     };
   }
 
   componentWillMount() {
-    this.getFilterParams();
+    let facilityOptions = [];
+    let clientOptions = [];
+
+    facilityQuery.fetch((err, res) => {
+      if (!err) {
+        res.map(facility => {
+          facilityOptions.push({ label: facility.name, value: facility._id });
+        });
+        this.setState({ facilityOptions });
+      }
+    });
+    clientsQuery.fetch((err, res) => {
+      if (!err) {
+        res.map(client => {
+          clientOptions.push({ label: client.clientName, value: client._id });
+        });
+        this.setState({ clientOptions });
+      }
+    });
+    let model = FilterService.getFilterParams();
+    this.setState({
+      model,
+      facilityOptions,
+      clientOptions
+    });
   }
 
   onSubmit(params) {
-    const { queryParams } = FlowRouter.current();
-    if (queryParams.page != "1" && "file" in params) {
+    console.log(params);
+    if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
     }
-
-    if ("file" in params) {
-      FlowRouter.setQueryParams({ file: params.file });
+    if (params.clientId || params.clientId === "") {
+      FlowRouter.setQueryParams({ clientId: params.clientId });
+    }
+    if (params.facilityId || params.facilityId === "") {
+      FlowRouter.setQueryParams({ facilityId: params.facilityId });
     }
   }
 
@@ -56,33 +90,66 @@ export default class FileSearchBar extends Component {
 
   selectAll = () => {
     const { selectAll } = this.state;
-    this.setState({
-      selectAll: !selectAll
-    });
+    this.setState({ selectAll: !selectAll });
+  };
+
+  openDialog = e => {
+    e.preventDefault();
+    this.setState({ dialogIsActive: true });
+  };
+
+  closeDialog = () => {
+    this.setState({ dialogIsActive: false });
+  };
+
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+
+  onChange = (field, value) => {
+    if (field === "fileName") {
+      FlowRouter.setQueryParams({
+        fileName: value
+      });
+    }
   };
 
   getFilterParams = () => {
     const queryParams = FlowRouter.current().queryParams;
     const model = {};
 
-    if ("file" in queryParams) {
-      model.file = queryParams.file;
+    if ("fileName" in queryParams) {
+      model.fileName = queryParams.fileName;
     }
 
     this.setState({ model });
   };
 
+  resetFilters = () => {
+    FlowRouter.setQueryParams({ fileName: null });
+    const { filters } = this.refs;
+    filters.reset();
+    this.closeDialog();
+  };
+
   render() {
-    const { dropdown, selectAll, model } = this.state;
+    const {
+      dialogIsActive,
+      dropdown,
+      selectAll,
+      model,
+      clientOptions,
+      facilityOptions
+    } = this.state;
     const {
       options,
       btnGroup,
       deleteAction,
       dropdownOptions,
       icons,
-      getProperAccounts,
-      hideSort,
-      hideFilter,
+      hideSort
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -93,18 +160,16 @@ export default class FileSearchBar extends Component {
       active: selectAll
     });
     const searchClasses = classNames("search-input", {
-      full__width: btnGroup && !hideFilter,
-      sort__none: hideSort,
-      "btns--none": btnGroup && hideFilter
+      full__width: btnGroup,
+      sort__none: hideSort
     });
 
     return (
       <AutoForm
-        autosave
-        autosaveDelay={500}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
+        onChange={this.onChange}
         model={model}
       >
         <div className="search-bar">
@@ -135,17 +200,63 @@ export default class FileSearchBar extends Component {
               <div className="form-group">
                 <AutoField
                   labelHidden={true}
-                  name="file"
-                  placeholder="Search"
+                  name="fileName"
+                  placeholder="Search by File Name"
                 />
               </div>
             </div>
-            <div className="filter-block">
-              {!hideFilter && (
-                <button>
-                  <i className="icon-filter" />
-                </button>
-              )}
+
+            <div className="filter-block flex--helper">
+              <button onClick={this.openDialog.bind(this)}>
+                <i className="icon-filter" />
+                {dialogIsActive && (
+                  <Dialog
+                    className="account-dialog filter-dialog filter-dialog__account"
+                    closePortal={this.closeDialog}
+                    title="Filter by"
+                  >
+                    <button className="close-dialog" onClick={this.closeDialog}>
+                      <i className="icon-close" />
+                    </button>
+                    <div className="filter-bar">
+                      <div className="select-wrapper">
+                        <div className="flex--helper form-group__pseudo--3">
+                          <div className="select-form">
+                            <SelectField
+                              label="Client:"
+                              placeholder="Select Client"
+                              name="clientId"
+                              options={clientOptions}
+                            />
+                          </div>
+                          <div className="select-form">
+                            <SelectField
+                              label="Facility:"
+                              name="facilityId"
+                              placeholder="Select Facility"
+                              options={facilityOptions}
+                            />
+                          </div>
+                        </div>
+                        <div className="flex--helper flex-justify--space-between">
+                          <button
+                            className="btn--red"
+                            onClick={this.resetFilters}
+                          >
+                            Reset
+                          </button>
+                          <button
+                            className="btn--blue"
+                            onClick={this.addFilters}
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Dialog>
+                )}
+              </button>
             </div>
           </div>
         </div>
@@ -212,6 +323,7 @@ class BtnGroup extends Component {
         )}
         {deleteAction && (
           <button onClick={this.deleteAction}>
+            Meteor.call("reset")
             <i className="icon-trash-o" />
           </button>
         )}
@@ -240,9 +352,18 @@ class BtnGroup extends Component {
 }
 
 const schema = new SimpleSchema({
-  file: {
+  facilityId: {
+    type: String,
+    optional: true
+  },
+  clientId: {
     type: String,
     optional: true,
-    label: "Search by File name"
+    label: "Filter by assignee"
+  },
+  fileName: {
+    type: String,
+    optional: true,
+    label: "Search by File Name"
   }
 });
