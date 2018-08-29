@@ -1,6 +1,7 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
   queryParams;
@@ -623,7 +624,7 @@ export default class PagerService {
       });
     } else {
       _.extend(params.filters, {
-        status: { $ne: "dismiss" }
+        status: { $ne: statuses.DISMISS }
       });
     }
   }
