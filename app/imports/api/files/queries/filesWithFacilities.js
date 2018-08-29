@@ -1,6 +1,6 @@
 import Files from "../collection";
 
-export default Files.createQuery("listFiles", {
+export default Files.createQuery("listFilesWithFacilities", {
   $filter({ filters, options, params }) {
     _.extend(filters, params.filters);
     _.extend(options, params.options);
@@ -9,6 +9,9 @@ export default Files.createQuery("listFiles", {
   fileName: 1,
   status: 1,
   type: 1,
-  corruptRows: 1,
-  hasHeader: 1
+  facility: {
+    _id: 1,
+    placementRules: 1,
+    inventoryRules: 1
+  }
 });

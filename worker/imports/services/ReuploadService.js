@@ -14,16 +14,16 @@ import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
 
-export default class PlacementService {
+export default class ReuploadService {
   static run() {
     //Look for an untaken job
     const job = JobQueue.findOne({
       workerId: null,
-      fileType: fileTypes.PLACEMENT,
-      type: jobTypes.IMPORT_DATA
+      status: jobStatuses.NEW,
+      type: jobTypes.RETRY_UPLOAD
     });
     if (job) {
-      //Update the job as taken
+      // Update the job as taken
       JobQueue.update(
         {
           _id: job._id
@@ -34,55 +34,38 @@ export default class PlacementService {
           }
         }
       );
-      this.processPlacement(job);
+      this.reuploadFile(job);
+      job;
     }
   }
-
-  static processPlacement({ facilityId, filePath, userId, _id }) {
+  static reuploadFile({ facilityId, filePath, fileId, fileType, userId, _id }) {
     const { rootFolder } = Settings.findOne({
       rootFolder: {
         $ne: null
       }
     });
-    const importRules = ParseService.getImportRules(
-      facilityId,
-      "placementRules"
-    );
 
+    const ruleType = fileType + "Rules";
+    const importRules = ParseService.getImportRules(facilityId, ruleType);
     //Parsing and getting the CSV like a string
     const stream = fs.readFileSync(
       rootFolder + Business.ACCOUNTS_FOLDER + filePath
     );
     const csvString = stream.toString();
 
-    //Keep reference to previous file
-    const { fileId, clientId, placementRules } = Facilities.findOne({
+    //Get client Id
+    const { clientId } = Facilities.findOne({
       _id: facilityId
     });
 
-    if (!placementRules) {
-      throw new Meteor.Error(
-        "The Facility Doesn't Have Configured Importing Rules"
-      );
-    }
-
-    const newFileId = Files.insert({
-      fileName: filePath,
-      facilityId,
-      clientId,
-      previousFileId: fileId,
-      type: fileTypes.PLACEMENT,
-      hasHeader: placementRules.hasHeader
-    });
-
     const fileData = {
-      type: actionTypesEnum.FILE,
+      type: actionTypesEnum.REUPLOAD,
       createdAt: new Date(),
-      fileId: newFileId,
+      fileId,
       fileName: filePath,
       userId,
       clientId,
-      filetype: fileTypes.PLACEMENT
+      fileType
     };
 
     //Add reference to facility
@@ -92,7 +75,7 @@ export default class PlacementService {
       },
       {
         $set: {
-          fileId: newFileId
+          fileId
         }
       }
     );
@@ -100,26 +83,21 @@ export default class PlacementService {
     //Pass links to accounts to link them too
     const links = {
       facilityId,
-      fileId: newFileId
+      fileId
     };
 
     Papa.parse(csvString, {
       chunk: results => {
-        AccountService.upload(results.data, importRules, links);
-        this.createFileAction(results.data, fileData);
+        if (fileType === fileTypes.INVENTORY) {
+          AccountService.update(results.data, importRules, links);
+        } else {
+          AccountService.upload(results.data, importRules, links);
+        }
+        // this.createFileAction(results.data, fileData);
       },
       complete: () => {
-        JobQueue.update(
-          {
-            _id
-          },
-          {
-            $set: {
-              status: jobStatuses.FINISHED
-            }
-          }
-        );
         // executed after all files are complete
+        JobQueue.update({ _id }, { $set: { status: jobStatuses.FINISHED } });
       }
     });
   }

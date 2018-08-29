@@ -8,6 +8,7 @@
   "dependencies": {
     "@babel/runtime": "7.0.0-beta.55",
     "buffer-to-stream": "^1.0.0",
+    "csv-parse": "^2.5.0",
     "csv-stringify": "^3.0.0",
     "event-emitter": "^0.3.5",
     "fibers": "^2.0.2",

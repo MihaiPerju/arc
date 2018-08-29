@@ -1,18 +1,15 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
   queryParams;
   static setQuery(query, { page, perPage, state, assign, filters, options }) {
     let params = this.getPagerOptions(page, perPage);
     const { route } = FlowRouter.current();
-    
-    if (
-      state ||
-      state === "" ||
-      route.path.indexOf("flagged") > -1
-    ) {
+
+    if (state || state === "" || route.path.indexOf("flagged") > -1) {
       this.getAccountFilters(params, state, filters, options);
       this.getProperAccounts(params, assign);
     } else {
@@ -98,6 +95,23 @@ export default class PagerService {
       perPage,
       state,
       assign
+    };
+  }
+  static getFilesQueryParams() {
+    const facilityId = FlowRouter.getQueryParam("facilityId");
+    const clientId = FlowRouter.getQueryParam("clientId");
+    const fileName = FlowRouter.getQueryParam("fileName");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        facilityId,
+        clientId,
+        fileName
+      },
+      page,
+      perPage
     };
   }
 
@@ -397,7 +411,11 @@ export default class PagerService {
       createdAtMin,
       createdAtMax,
       letterName,
-      tagIds;
+      tagIds,
+      fileName,
+      clientId,
+      facilityId,
+      status;
 
     _.extend(params, {
       filters: {}
@@ -466,6 +484,13 @@ export default class PagerService {
 
     if (currentPath.indexOf("module-tags/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
+    }
+
+    if (currentPath.indexOf("file/list") > -1) {
+      fileName = FlowRouter.getQueryParam("fileName");
+      clientId = FlowRouter.getQueryParam("clientId");
+      facilityId = FlowRouter.getQueryParam("facilityId");
+      status = FlowRouter.getQueryParam("status");
     }
 
     tagIds = FlowRouter.getQueryParam("tagIds");
@@ -573,6 +598,33 @@ export default class PagerService {
     if (letterName) {
       _.extend(params.filters, {
         letterTemplateName: { $regex: letterName, $options: "i" }
+      });
+    }
+
+    // file search
+    if (fileName) {
+      _.extend(params.filters, {
+        fileName: { $regex: fileName, $options: "i" }
+      });
+    }
+    if (clientId) {
+      _.extend(params.filters, {
+        clientId: clientId
+      });
+    }
+    if (facilityId) {
+      _.extend(params.filters, {
+        facilityId: facilityId
+      });
+    }
+
+    if (status) {
+      _.extend(params.filters, {
+        status
+      });
+    } else {
+      _.extend(params.filters, {
+        status: { $ne: statuses.DISMISS }
       });
     }
   }

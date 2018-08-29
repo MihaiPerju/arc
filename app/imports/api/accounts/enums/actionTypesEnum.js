@@ -20,5 +20,6 @@ export default {
   REVERT: "revert",
   FLAG: "flag",
   EDIT: "edit",
-  LOCK_BREAK: "lockBreak"
+  LOCK_BREAK: "lockBreak",
+  REUPLOAD: "reupload"
 };

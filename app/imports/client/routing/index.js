@@ -200,3 +200,8 @@ route("/module-tags/list", ModuleTagsListContainer);
 import FlaggedAccountListContainer from "/imports/client/pages/accounts/FlaggedAccountListContainer";
 
 route("/flagged", FlaggedAccountListContainer);
+
+//Tags
+import FileListContainer from "/imports/client/pages/files/FileListContainer.jsx";
+
+route("/file/list", FileListContainer);
