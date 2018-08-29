@@ -37,6 +37,7 @@ export default class AccountService {
       return;
     } else {
       FileService.update(fileId, { status: UploadStatuses.SUCCESS });
+      FileService.update(fileId, { corruptRows });
     }
 
     const existentAccounts = Accounts.find({ facilityId }).fetch();
@@ -389,16 +390,20 @@ export default class AccountService {
     }
 
     const { labels, importRules } = this.standardize(results, rules);
-    const { accounts, uploadErrors } = this.convertToAccounts(
+
+    const { accounts, corruptRows } = this.convertToAccounts(
       results,
       importRules,
       labels
     );
 
     //If there are no accounts, file is not valid and nothing should take effect
-    if (!accounts.length || uploadErrors.numbers || uploadErrors.dates) {
+    if (!accounts.length) {
       FileService.update(fileId, { status: UploadStatuses.FAIL });
       return;
+    } else {
+      FileService.update(fileId, { status: UploadStatuses.SUCCESS });
+      FileService.update(fileId, { corruptRows });
     }
 
     const clientId = this.getClientIdByFacilityId(facilityId);

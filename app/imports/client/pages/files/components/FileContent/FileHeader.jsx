@@ -84,9 +84,11 @@ export default class ReportHeader extends Component {
             </button>
           )}
 
-          <button style={{ color: "black" }} onClick={this.onOpenDialog}>
-            Edit headers
-          </button>
+          {file.hasHeader && (
+            <button style={{ color: "black" }} onClick={this.onOpenDialog}>
+              Edit headers
+            </button>
+          )}
 
           <button style={{ color: "black" }} onClick={this.onRetryUpload}>
             Retry Upload
@@ -99,7 +101,11 @@ export default class ReportHeader extends Component {
             file.corruptRows.length && (
               <div>
                 <div>Encountered problems with following rows: </div>
-                <div>{file.corruptRows.map(row => row)}</div>
+                <ul>
+                  {file.corruptRows.map(row => {
+                    return <li>{row}</li>;
+                  })}
+                </ul>
               </div>
             )}
         </div>

@@ -9,5 +9,6 @@ export default Files.createQuery("listFiles", {
   fileName: 1,
   status: 1,
   type: 1,
-  corruptRows: 1
+  corruptRows: 1,
+  hasHeader: 1
 });

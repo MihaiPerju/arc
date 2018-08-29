@@ -20,8 +20,10 @@ Meteor.methods({
   },
 
   "file.getHeader"(_id) {
-    const { header } = Files.findOne({ _id });
-    return header;
+    const { header, hasHeader } = Files.findOne({ _id });
+    if (hasHeader) {
+      return header;
+    }
   },
 
   "file.updateHeader"(_id, header) {

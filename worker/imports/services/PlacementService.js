@@ -56,16 +56,23 @@ export default class PlacementService {
     const csvString = stream.toString();
 
     //Keep reference to previous file
-    const { fileId, clientId } = Facilities.findOne({
+    const { fileId, clientId, placementRules } = Facilities.findOne({
       _id: facilityId
     });
+
+    if (!placementRules) {
+      throw new Meteor.Error(
+        "The Facility Doesn't Have Configured Importing Rules"
+      );
+    }
 
     const newFileId = Files.insert({
       fileName: filePath,
       facilityId,
       clientId,
       previousFileId: fileId,
-      type: fileTypes.PLACEMENT
+      type: fileTypes.PLACEMENT,
+      hasHeader: placementRules.hasHeader
     });
 
     const fileData = {

@@ -44,5 +44,8 @@ export default new SimpleSchema({
   "corruptRows.$": {
     type: SimpleSchema.Integer,
     optional: true
+  },
+  hasHeader: {
+    type: Boolean
   }
 });
