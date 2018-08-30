@@ -15,7 +15,7 @@ import MetaDataSlider from "/imports/client/pages/accounts/components/AccountCon
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 import Dialog from "/imports/client/lib/ui/Dialog";
- 
+
 class AccountListContainer extends Pager {
   constructor() {
     super();
@@ -175,6 +175,7 @@ class AccountListContainer extends Pager {
 
   selectAccount = newAccount => {
     const { currentAccount } = this.state;
+    this.removeLock();
     // removing accountId from the query when navigating from notification
     FlowRouter.setQueryParams({ accountId: null });
     if (this.checkAccountIsLocked(newAccount)) {
@@ -183,7 +184,6 @@ class AccountListContainer extends Pager {
           currentAccount: null,
           showMetaData: false
         });
-        this.removeLock();
       } else {
         this.setState({
           currentAccount: newAccount._id,
