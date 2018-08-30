@@ -166,20 +166,21 @@ export default class AccountContent extends Component {
                           </div>
                         );
                     })}
-                    {metadataHeaders.map((header, idx) => {
-                      return (
-                        <div
-                          key={idx}
-                          className="table-field table-field--grey text-center"
-                        >
-                          {this.getMetadataValues(
-                            account.metaData,
-                            header,
-                            idx
-                          )}
-                        </div>
-                      );
-                    })}
+                    {tableHeader.includes(fields.METADATA) &&
+                      metadataHeaders.map((header, idx) => {
+                        return (
+                          <div
+                            key={idx}
+                            className="table-field table-field--grey text-center"
+                          >
+                            {this.getMetadataValues(
+                              account.metaData,
+                              header,
+                              idx
+                            )}
+                          </div>
+                        );
+                      })}
                   </div>
                 );
               })}
