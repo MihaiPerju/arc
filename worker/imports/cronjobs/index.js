@@ -18,17 +18,17 @@ import PaymentService from "../services/PaymentService";
 //   }
 // });
 
-// //Job for sending letters
-// SyncedCron.add({
-//   name: "Send Letters",
-//   schedule: function(parser) {
-//     // parser is a later.parse object
-//     return parser.text("every 10 seconds");
-//   },
-//   job: function() {
-//     LettersManagement.run();
-//   }
-// });
+//Job for sending letters
+SyncedCron.add({
+  name: "Send Letters",
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.text("at 1:00 am on Wednesday");
+  },
+  job: function() {
+    LettersManagement.run();
+  }
+});
 
 // //Job for sending emails
 // SyncedCron.add({
