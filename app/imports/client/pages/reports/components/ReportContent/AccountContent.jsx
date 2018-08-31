@@ -39,12 +39,11 @@ export default class AccountContent extends Component {
     const { accounts } = this.props;
     let metadataHeaders = [];
     _.map(accounts, account => {
-      if (
-        account.metaData &&
-        Object.keys(account.metaData).length > metadataHeaders.length
-      ) {
-        metadataHeaders = Object.keys(account.metaData);
-      }
+      _.map(account.metaData, (value, key) => {
+        if (!metadataHeaders.includes(key)) {
+          metadataHeaders.push(key);
+        }
+      });
     });
     return metadataHeaders;
   }
@@ -134,7 +133,6 @@ export default class AccountContent extends Component {
                 return (
                   <div className="table-row" key={index}>
                     {tableHeader.map((header, idx) => {
-                      console.log(header);
                       if (
                         header !== fields.METADATA &&
                         header !== fields.INSURANCES
