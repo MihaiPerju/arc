@@ -54,43 +54,27 @@ export default class AccountContent extends Component {
   }
 
   getInsuranceHeader = (insurance, index) => {
-    return (
-      <div>
-        {_.map(insurance, (value, key) => {
-          if (value) {
-            return (
-              <div
-                key={index}
-                className="table-header text-center table-field text-light-grey"
-              >
-                {ordinal(index + 1) + " " + Headers[key].label}
-              </div>
-            );
-          }
-        })}
-      </div>
-    );
+    return _.map(insurance, (value, key) => {
+      if (value) {
+        return (
+          <div className="table-header text-center table-field text-light-grey">
+            {ordinal(index + 1) + " " + Headers[key].label}
+          </div>
+        );
+      }
+    });
   };
 
   getInsuranceValues = (insuranceRules, insurance, index) => {
-    return (
-      <div>
-        {_.map(insuranceRules, (value, key) => {
-          console.log(value);
-          console.log(key);
-          if (value) {
-            return (
-              <div
-                className="table-field table-field--grey text-center"
-                key={index}
-              >
-                {insurance && insurance[key]}
-              </div>
-            );
-          }
-        })}
-      </div>
-    );
+    return _.map(insuranceRules, (value, key) => {
+      if (value) {
+        return (
+          <div className="table-field table-field--grey text-center">
+            {insurance && insurance[key]}
+          </div>
+        );
+      }
+    });
   };
 
   render() {
@@ -130,6 +114,10 @@ export default class AccountContent extends Component {
                     );
                   }
                 })}
+                {tableHeader.includes(fields.INSURANCES) &&
+                  reportColumns.insurances.map((insurance, index) => {
+                    return this.getInsuranceHeader(insurance, index);
+                  })}
                 {tableHeader.includes(fields.METADATA) &&
                   metadataHeaders.map((header, index) => {
                     return (
@@ -140,10 +128,6 @@ export default class AccountContent extends Component {
                         {this.getHeaderNames(header, index)}
                       </div>
                     );
-                  })}
-                {tableHeader.includes(fields.INSURANCES) &&
-                  reportColumns.insurances.map((insurance, index) => {
-                    return this.getInsuranceHeader(insurance, index);
                   })}
               </div>
               {accounts.map((account, index) => {
@@ -164,6 +148,14 @@ export default class AccountContent extends Component {
                           </div>
                         );
                     })}
+                    {tableHeader.includes(fields.INSURANCES) &&
+                      reportColumns.insurances.map((insurance, index) => {
+                        return this.getInsuranceValues(
+                          insurance,
+                          account.insurances && account.insurances[index],
+                          index
+                        );
+                      })}
                     {tableHeader.includes(fields.METADATA) &&
                       metadataHeaders.map((header, idx) => {
                         return (
@@ -177,14 +169,6 @@ export default class AccountContent extends Component {
                               idx
                             )}
                           </div>
-                        );
-                      })}
-                    {tableHeader.includes(fields.INSURANCES) &&
-                      reportColumns.insurances.map((insurance, index) => {
-                        return this.getInsuranceValues(
-                          insurance,
-                          account.insurances && account.insurances[index],
-                          index
                         );
                       })}
                   </div>
