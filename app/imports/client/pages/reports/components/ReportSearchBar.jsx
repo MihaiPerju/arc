@@ -141,7 +141,7 @@ export default class ReportSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  labelhidden={true}
                   name="name"
                   placeholder="Search"
                 />

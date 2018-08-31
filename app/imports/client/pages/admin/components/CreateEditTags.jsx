@@ -82,14 +82,14 @@ export default class CreateEditTags extends Component {
                                                   ref="tagForm">
 
                                             <div className="form-wrapper">
-                                                <AutoField labelHidden={true} placeholder="Name" name="name"/>
+                                                <AutoField labelhidden={true} placeholder="Name" name="name"/>
                                                 <ErrorField name="name"/>
                                             </div>
 
                                             <div className="select-group">
                                                 <div className="form-wrapper">
                                                     <SelectField placeholder="Select Client"
-                                                                labelHidden={true}
+                                                                labelhidden={true}
                                                                 options={clientOptns}
                                                                 name="clientId"/>
                                                     <ErrorField name="clientId"/>

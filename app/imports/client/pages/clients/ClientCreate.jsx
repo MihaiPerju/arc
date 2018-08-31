@@ -72,7 +72,7 @@ export default class CreateClient extends Component {
               )}
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  labelhidden={true}
                   placeholder="Client name"
                   name="clientName"
                 />
@@ -81,7 +81,7 @@ export default class CreateClient extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  labelhidden={true}
                   placeholder="Email"
                   name="email"
                 />

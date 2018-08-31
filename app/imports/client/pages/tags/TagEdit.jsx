@@ -91,7 +91,7 @@ export default class TagEdit extends React.Component {
               model={tag}
             >
               <div className="form-wrapper">
-                <AutoField labelHidden={true} placeholder="Name" name="name" />
+                <AutoField labelhidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
 
@@ -99,7 +99,7 @@ export default class TagEdit extends React.Component {
                 <div className="form-wrapper">
                   <SelectField
                     placeholder="Select Client"
-                    labelHidden={true}
+                    labelhidden={true}
                     options={clientOptns}
                     name="clientId"
                   />

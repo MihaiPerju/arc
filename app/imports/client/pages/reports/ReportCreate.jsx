@@ -167,7 +167,7 @@ export default class ReportCreate extends Component {
             >
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  labelhidden={true}
                   placeholder="Report name"
                   name="name"
                 />
@@ -175,7 +175,7 @@ export default class ReportCreate extends Component {
               </div>
               <div className="form-wrapper">
                 <SelectField
-                  labelHidden={true}
+                  labelhidden={true}
                   placeholder="Select type"
                   name="type"
                   options={options}

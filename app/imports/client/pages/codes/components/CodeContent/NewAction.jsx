@@ -49,7 +49,7 @@ export default class NewAction extends Component {
                     <AutoForm schema={ActionSchema} ref="form">
                         <div className="select-row">
                             <div className="select-group">
-                                <AutoField labelHidden={true} name="action" options={actions}/>
+                                <AutoField labelhidden={true} name="action" options={actions}/>
                                 <ErrorField name="action"/>
                             </div>
                         </div>

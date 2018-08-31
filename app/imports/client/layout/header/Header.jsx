@@ -4,6 +4,13 @@ import { getImagePath } from "../../../api/utils";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import Notifications from "./components/Notifications";
 import RoutesService from "../leftMenu/RoutesService";
+import PropTypes from "prop-types";
+import createClass from "create-react-class";
+
+Object.assign(React, {
+  PropTypes,
+  createClass
+});
 
 class Header extends Component {
   constructor() {
@@ -62,7 +69,9 @@ class Header extends Component {
                     src="/assets/img/logo.png"
                     alt=""
                   />
-                  <div className="top-titles">{RoutesService.getRouteName(routeName)}</div>
+                  <div className="top-titles">
+                    {RoutesService.getRouteName(routeName)}
+                  </div>
                 </a>
               </div>
               <div

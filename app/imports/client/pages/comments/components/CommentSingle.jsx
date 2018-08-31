@@ -192,7 +192,7 @@ export default class CommentSingle extends React.Component {
               <AutoForm onSubmit={this.onFlagAdd} schema={flagSchema}>
                 <div className="form-wrapper">
                   <LongTextField
-                    labelHidden={true}
+                    labelhidden={true}
                     placeholder="Type flag reason"
                     name="flagReason"
                   />
@@ -216,7 +216,7 @@ export default class CommentSingle extends React.Component {
                 </div>
                 <div className="form-wrapper">
                   <LongTextField
-                    labelHidden={true}
+                    labelhidden={true}
                     placeholder="Type to respond"
                     name="flagResponse"
                   />

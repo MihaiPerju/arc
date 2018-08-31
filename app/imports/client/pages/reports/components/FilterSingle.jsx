@@ -26,17 +26,17 @@ export default class FiltersSingle extends React.Component {
     renderWidget(name) {
         if (ReportsService.isEnum(name)) {
             return <div className="select-wrapper m-t--0">
-                <AutoField placeholder="Select filter" labelHidden={true} name={name}/>
+                <AutoField placeholder="Select filter" labelhidden={true} name={name}/>
                 <ErrorField name={name}/>
             </div>
         }
         if (ReportsService.isDate(name)) {
             return (
                 <div className="input-datetime">
-                    <AutoField placeholder="Select start date" labelHidden={true} name={`${name}Start`}/>
+                    <AutoField placeholder="Select start date" labelhidden={true} name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
-                    <AutoField placeholder="Select finish date" labelHidden={true} name={`${name}End`}/>
+                    <AutoField placeholder="Select finish date" labelhidden={true} name={`${name}End`}/>
                     <ErrorField name={`${name}End`}/>
                 </div>
             )
@@ -45,10 +45,10 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isNumber(name)) {
             return (
                 <div className="form-wrapper__i">
-                    <AutoField labelHidden={true} placeholder="Type minimum value" name={`${name}Start`}/>
+                    <AutoField labelhidden={true} placeholder="Type minimum value" name={`${name}Start`}/>
                     <ErrorField name={`${name}Start`}/>
 
-                    <AutoField labelHidden={true} placeholder="Type maximum value" name={`${name}End`}/>
+                    <AutoField labelhidden={true} placeholder="Type maximum value" name={`${name}End`}/>
                     <ErrorField name={`${name}End`}/>
                 </div>
             )
@@ -57,7 +57,7 @@ export default class FiltersSingle extends React.Component {
         if (ReportsService.isLink(name)) {
             return (
                 <div className="check-group">
-                    <SelectField labelHidden={true} name={name} options={this.getOptions(name)}/>
+                    <SelectField labelhidden={true} name={name} options={this.getOptions(name)}/>
                 </div>
             )
         }
@@ -65,11 +65,11 @@ export default class FiltersSingle extends React.Component {
         return (
             <div>
                 <div className="form-wrapper__i">
-                    <AutoField labelHidden={true} placeholder="Type your filter" name={name}/>
+                    <AutoField labelhidden={true} placeholder="Type your filter" name={name}/>
                     <ErrorField name={name}/>
                 </div>
                 <div className="select-wrapper">
-                    <AutoField labelHidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
+                    <AutoField labelhidden={true} placeholder="Select matching pattern" name={`${name}Match`}/>
                     <ErrorField name={`${name}Match`}/>
                 </div>
             </div>

@@ -390,7 +390,7 @@ export default class ActivityStream extends React.Component {
                   <div className="flex--helper form-group__pseudo">
                     <div className="select-form">
                       <SelectField
-                        labelHidden={true}
+                        labelhidden={true}
                         name="type"
                         options={actionTypes}
                       />

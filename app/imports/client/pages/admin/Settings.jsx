@@ -40,7 +40,7 @@ export default class Settings extends React.Component {
           <h2>Admin Settings</h2>
           <AutoForm className="settings-form" model={model} onSubmit={this.onSubmit} schema={schema}>
             <AutoField
-              labelHidden={true}
+              labelhidden={true}
               name="rootFolder"
               placeholder="Type Root Directory"
             />

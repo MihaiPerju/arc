@@ -28,7 +28,7 @@ class SelectMulti extends React.Component {
             id,
             label,
             options,
-            labelHidden,
+            labelhidden,
             placeholder,
             ...props
         } = this.props;
@@ -36,7 +36,7 @@ class SelectMulti extends React.Component {
 
         return (
             <div {...filterDOMProps(props)}>
-                {label && !labelHidden && (
+                {label && !labelhidden && (
                     <label htmlFor={id}>
                         {label}
                     </label>

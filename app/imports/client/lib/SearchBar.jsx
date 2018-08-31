@@ -120,7 +120,7 @@ export default class SearchBar extends Component {
                         }
                         <div className={btnGroup ? 'search-input' : 'search-input full__width'}>
                             <div className="form-group">
-                                <AutoField labelHidden={true} name="clientName" placeholder="Search"/>
+                                <AutoField labelhidden={true} name="clientName" placeholder="Search"/>
                             </div>
                         </div>
 

@@ -93,7 +93,7 @@ export default class AccountActioning extends React.Component {
           >
             <div className="form-wrapper select-item">
               <AutoField
-                labelHidden={true}
+                labelhidden={true}
                 name="assigneeId"
                 options={options}
               />
@@ -120,7 +120,7 @@ export default class AccountActioning extends React.Component {
           >
             <div className="form-wrapper select-item">
               <AutoField
-                labelHidden={true}
+                labelhidden={true}
                 name="workQueue"
                 options={workQueueOptions}
               />

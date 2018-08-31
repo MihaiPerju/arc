@@ -27,7 +27,7 @@ var Text = function Text(_ref) {
   var disabled = _ref.disabled,
     id = _ref.id,
     inputRef = _ref.inputRef,
-    label = !_ref.labelHidden && _ref.label,
+    label = !_ref.labelhidden && _ref.label,
     name = _ref.name,
     _onChange = _ref.onChange,
     placeholder = _ref.placeholder,
@@ -43,7 +43,7 @@ var Text = function Text(_ref) {
       "placeholder",
       "type",
       "value",
-      "labelHidden"
+      "labelhidden"
     ]);
   return _react.default.createElement(
     "div",

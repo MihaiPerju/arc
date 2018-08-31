@@ -39,7 +39,7 @@ var Nest = function Nest(_ref) {
   var children = _ref.children,
     fields = _ref.fields,
     itemProps = _ref.itemProps,
-    label = !_ref.labelHidden && _ref.label,
+    label = !_ref.labelhidden && _ref.label,
     name = _ref.name,
     props = (0, _objectWithoutProperties2.default)(_ref, [
       "children",

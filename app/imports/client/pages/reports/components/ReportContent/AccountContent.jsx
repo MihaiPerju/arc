@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import moment from "moment";
 import { types, fields } from "/imports/api/reports/enums/reportColumn";
 import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
+import ordinal from "ordinal";
+import Headers from "/imports/api/reports/enums/Headers";
 
 export default class AccountContent extends Component {
   constructor() {
@@ -9,60 +11,17 @@ export default class AccountContent extends Component {
   }
 
   getHeaderNames = (header, index) => {
-    const { reportColumns } = this.props.report;
-    if (header === fields.INSURANCES) {
+    if (header !== fields.METADATA && header !== fields.INSURANCES) {
       return (
         <div key={index}>
-          <div>{header}</div>
-          {reportColumns[header].map(insurance => {
-            return _.map(insurance, (value, key) => {
-              if (value) {
-                return (
-                  <div
-                    style={{
-                      width: "32%",
-                      float: "left",
-                      borderRight: "1px #d7d7d7 solid"
-                    }}
-                  >
-                    {key}
-                  </div>
-                );
-              }
-            });
-          })}
+          {Headers[header] ? Headers[header].label : header}
         </div>
       );
-    } else if (header !== fields.METADATA) {
-      return <div key={index}>{header}</div>;
     }
   };
 
   getColumnValues = (columnKeys, account, index) => {
-    const { reportColumns } = this.props.report;
-    if (columnKeys === "insurances") {
-      return (
-        <div key={index}>
-          {reportColumns[columnKeys].map((insurance, i) => {
-            return _.map(insurance, (value, key) => {
-              if (value) {
-                return (
-                  <div
-                    style={{
-                      width: "32%",
-                      float: "left",
-                      borderRight: "1px #d7d7d7 solid"
-                    }}
-                  >
-                    {account.insurances[i] && account.insurances[i][key]}
-                  </div>
-                );
-              }
-            });
-          })}
-        </div>
-      );
-    } else if (types.dates.includes(columnKeys)) {
+    if (types.dates.includes(columnKeys)) {
       return (
         <div key={index}>
           {account[columnKeys] &&
@@ -94,6 +53,46 @@ export default class AccountContent extends Component {
     return <div key={key}>{metadata[header]}</div>;
   }
 
+  getInsuranceHeader = (insurance, index) => {
+    return (
+      <React.Fragment>
+        {_.map(insurance, (value, key) => {
+          if (value) {
+            return (
+              <div
+                key={index}
+                className="table-header text-center table-field text-light-grey"
+              >
+                {ordinal(index + 1) + " " + Headers[key].label}
+              </div>
+            );
+          }
+        })}
+      </React.Fragment>
+    );
+  };
+
+  getInsuranceValues = (insuranceRules, insurance, index) => {
+    return (
+      <React.Fragment>
+        {_.map(insuranceRules, (value, key) => {
+          console.log(value);
+          console.log(key);
+          if (value) {
+            return (
+              <div
+                className="table-field table-field--grey text-center"
+                key={index}
+              >
+                {insurance && insurance[key]}
+              </div>
+            );
+          }
+        })}
+      </React.Fragment>
+    );
+  };
+
   render() {
     const { tableHeader, accounts, report } = this.props;
     const { reportColumns } = report;
@@ -118,11 +117,9 @@ export default class AccountContent extends Component {
               <div className="table-row">
                 {tableHeader.map((header, index) => {
                   if (
-                    header === fields.INSURANCES &&
-                    reportColumns[fields.INSURANCES].length === 0
+                    header !== fields.METADATA &&
+                    header !== fields.INSURANCES
                   ) {
-                    return <div />;
-                  } else if (header !== fields.METADATA) {
                     return (
                       <div
                         key={index}
@@ -144,6 +141,10 @@ export default class AccountContent extends Component {
                       </div>
                     );
                   })}
+                {tableHeader.includes(fields.INSURANCES) &&
+                  reportColumns.insurances.map((insurance, index) => {
+                    return this.getInsuranceHeader(insurance, index);
+                  })}
               </div>
               {accounts.map((account, index) => {
                 return (
@@ -151,12 +152,9 @@ export default class AccountContent extends Component {
                     {tableHeader.map((header, idx) => {
                       console.log(header);
                       if (
-                        header === fields.INSURANCES &&
-                        reportColumns[fields.INSURANCES].length === 0
-                      ) {
-                        return <div />;
-                      }
-                      if (header !== fields.METADATA)
+                        header !== fields.METADATA &&
+                        header !== fields.INSURANCES
+                      )
                         return (
                           <div
                             key={idx}
@@ -179,6 +177,14 @@ export default class AccountContent extends Component {
                               idx
                             )}
                           </div>
+                        );
+                      })}
+                    {tableHeader.includes(fields.INSURANCES) &&
+                      reportColumns.insurances.map((insurance, index) => {
+                        return this.getInsuranceValues(
+                          insurance,
+                          account.insurances && account.insurances[index],
+                          index
                         );
                       })}
                   </div>

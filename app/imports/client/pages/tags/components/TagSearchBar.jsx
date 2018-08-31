@@ -131,7 +131,7 @@ export default class TagSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  labelhidden={true}
                   name="tagName"
                   placeholder="Search"
                 />

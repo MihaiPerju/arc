@@ -132,7 +132,7 @@ export default class SubstateSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  labelhidden={true}
                   name="stateName"
                   placeholder="Search by State"
                 />

@@ -79,7 +79,7 @@ export default class ModuleTagCreate extends Component {
               ref="form"
             >
               <div className="form-wrapper">
-                <AutoField labelHidden={true} placeholder="Name" name="name" />
+                <AutoField labelhidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
 
@@ -88,7 +88,7 @@ export default class ModuleTagCreate extends Component {
                   <SelectMulti
                     className="form-select__multi select-tag__multi"
                     placeholder="Select modules"
-                    labelHidden={true}
+                    labelhidden={true}
                     name="moduleNames"
                     options={options}
                   />

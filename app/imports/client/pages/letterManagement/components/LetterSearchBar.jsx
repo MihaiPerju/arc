@@ -52,7 +52,7 @@ export default class LetterSearchBar extends Component {
       >
         <div className="search-bar">
           <AutoField
-            labelHidden={true}
+            labelhidden={true}
             name="letterTemplateName"
             placeholder="Search"
           />

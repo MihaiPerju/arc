@@ -213,7 +213,7 @@ export default class FileSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  labelhidden={true}
                   name="fileName"
                   placeholder="Search by File Name"
                 />
