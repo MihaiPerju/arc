@@ -118,7 +118,7 @@ var AutoField =
                   props.component = _BoolField.default;
                   break;
               }
-              props.component.labelhidden = props.labelhidden;
+              props.component.labelHidden = props.labelHidden;
               (0, _invariant.default)(
                 props.component,
                 "Unsupported field type: %s",

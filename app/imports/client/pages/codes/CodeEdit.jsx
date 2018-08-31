@@ -79,13 +79,13 @@ export default class CodeEdit extends React.Component {
                 <div className="error">{this.state.error}</div>
               )}
               <div className="form-wrapper">
-                <AutoField labelhidden={true} placeholder="Code" name="code" />
+                <AutoField labelHidden={true} placeholder="Code" name="code" />
                 <ErrorField name="code" />
               </div>
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Action"
                   name="action"
                 />
@@ -95,7 +95,7 @@ export default class CodeEdit extends React.Component {
               <div className="select-group b-b--0 p-b--0">
                 <div className="form-wrapper m-b--0">
                   <AutoField
-                    labelhidden={true}
+                    labelHidden={true}
                     placeholder="Type"
                     name="type"
                   />
@@ -105,7 +105,7 @@ export default class CodeEdit extends React.Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Description"
                   name="description"
                 />
@@ -114,7 +114,7 @@ export default class CodeEdit extends React.Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Short Description"
                   name="description_short"
                 />
@@ -123,7 +123,7 @@ export default class CodeEdit extends React.Component {
 
               <div className="form-wrapper">
                 <LongTextField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Denial Action"
                   name="denial_action"
                 />

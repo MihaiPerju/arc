@@ -215,7 +215,7 @@ export default class ClientSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   name="clientName"
                   placeholder="Search by client name"
                 />

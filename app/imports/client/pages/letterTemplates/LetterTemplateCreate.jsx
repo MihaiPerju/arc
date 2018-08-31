@@ -87,7 +87,7 @@ export default class CreateLetterTemplate extends Component {
             >
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   type="text"
                   placeholder="Letter name"
                   name="name"
@@ -96,7 +96,7 @@ export default class CreateLetterTemplate extends Component {
               </div>
               <div className="form-wrapper">
                 <LongTextField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Description"
                   name="description"
                 />
@@ -109,7 +109,7 @@ export default class CreateLetterTemplate extends Component {
               <div className="select-group">
                 <div className="form-wrapper">
                   <SelectField
-                    labelhidden={true}
+                    labelHidden={true}
                     name="category"
                     placeholder="Category"
                     options={categories}

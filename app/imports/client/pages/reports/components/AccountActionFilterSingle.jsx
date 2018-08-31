@@ -31,7 +31,7 @@ export default class FiltersSingle extends React.Component {
         <div className="select-wrapper m-t--0">
           <AutoField
             placeholder="Select filter"
-            labelhidden={true}
+            labelHidden={true}
             name={name}
           />
           <ErrorField name={name} />
@@ -43,14 +43,14 @@ export default class FiltersSingle extends React.Component {
         <div className="input-datetime">
           <AutoField
             placeholder="Select start date"
-            labelhidden={true}
+            labelHidden={true}
             name={`${name}Start`}
           />
           <ErrorField name={`${name}Start`} />
 
           <AutoField
             placeholder="Select finish date"
-            labelhidden={true}
+            labelHidden={true}
             name={`${name}End`}
           />
           <ErrorField name={`${name}End`} />
@@ -62,7 +62,7 @@ export default class FiltersSingle extends React.Component {
       return (
         <div className="check-group">
           <SelectField
-            labelhidden={true}
+            labelHidden={true}
             name={name}
             options={this.getOptions(name)}
           />
@@ -76,7 +76,7 @@ export default class FiltersSingle extends React.Component {
           <SelectMulti
             className="form-select__multi"
             placeholder="Select types"
-            labelhidden={true}
+            labelHidden={true}
             name={name}
             options={inputTypesEnum}
           />
@@ -88,7 +88,7 @@ export default class FiltersSingle extends React.Component {
       <div>
         <div className="form-wrapper__i">
           <AutoField
-            labelhidden={true}
+            labelHidden={true}
             placeholder="Type your filter"
             name={name}
           />
@@ -96,7 +96,7 @@ export default class FiltersSingle extends React.Component {
         </div>
         <div className="select-wrapper">
           <AutoField
-            labelhidden={true}
+            labelHidden={true}
             placeholder="Select matching pattern"
             name={`${name}Match`}
           />

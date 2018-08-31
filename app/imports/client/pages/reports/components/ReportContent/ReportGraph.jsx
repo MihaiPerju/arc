@@ -152,7 +152,7 @@ export default class ReportGraph extends React.Component {
             <div className="form-wrapper">
               <SelectField
                 placeholder="X-Axis"
-                labelhidden={true}
+                labelHidden={true}
                 name="xAxis"
                 options={reportGraphEnum.axisData}
               />
@@ -160,7 +160,7 @@ export default class ReportGraph extends React.Component {
             <div className="form-wrapper m-t--10">
               <SelectField
                 placeholder="Y-Axis"
-                labelhidden={true}
+                labelHidden={true}
                 name="yAxis"
                 options={reportGraphEnum.axisData}
               />
@@ -168,7 +168,7 @@ export default class ReportGraph extends React.Component {
             <div className="form-wrapper m-t--10">
               <SelectField
                 placeholder="Type of graph"
-                labelhidden={true}
+                labelHidden={true}
                 name="graphType"
                 options={graphTypeEnum}
               />

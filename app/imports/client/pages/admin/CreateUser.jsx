@@ -68,7 +68,7 @@ export default class CreateUser extends Component {
               )}
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="First name"
                   name="firstName"
                 />
@@ -76,7 +76,7 @@ export default class CreateUser extends Component {
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Last name"
                   name="lastName"
                 />
@@ -84,7 +84,7 @@ export default class CreateUser extends Component {
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Email"
                   name="email"
                 />
@@ -92,7 +92,7 @@ export default class CreateUser extends Component {
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Phone Number"
                   name="phoneNumber"
                 />
@@ -102,7 +102,7 @@ export default class CreateUser extends Component {
                 <AutoField
                   type="password"
                   name="password"
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Password"
                 />
                 <ErrorField name="password" />
@@ -111,7 +111,7 @@ export default class CreateUser extends Component {
               <div className="form-wrapper">
                 <AutoField
                   type="password"
-                  labelhidden={true}
+                  labelHidden={true}
                   name="confirm_password"
                   placeholder="Confirm Password"
                 />

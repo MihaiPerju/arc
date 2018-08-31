@@ -447,7 +447,7 @@ export default class AccountSearchBar extends Component {
             <div className={searchBarClasses}>
               <div className="form-group">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   name="acctNum"
                   placeholder="Search by Account Number"
                 />

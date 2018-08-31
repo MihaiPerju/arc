@@ -71,7 +71,7 @@ export default class AccountTickle extends React.Component {
             <div className="form-group">
               <AutoField
                 className="text-area"
-                labelhidden={true}
+                labelHidden={true}
                 placeholder="Type tickle reason..."
                 name="tickleReason"
               />

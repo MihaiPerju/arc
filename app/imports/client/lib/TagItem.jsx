@@ -72,7 +72,7 @@ export default class TagItem extends Component {
                   <SelectMulti
                     className="form-select__multi"
                     placeholder="Select tags"
-                    labelhidden={true}
+                    labelHidden={true}
                     name="tagIds"
                     options={options}
                   />

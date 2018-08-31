@@ -235,7 +235,7 @@ export default class ActionBlock extends Component {
                 <AutoForm onSubmit={this.onFlagAdd} schema={flagSchema}>
                   <div className="form-wrapper">
                     <LongTextField
-                      labelhidden={true}
+                      labelHidden={true}
                       placeholder="Type flag reason"
                       name="flagReason"
                     />
@@ -259,7 +259,7 @@ export default class ActionBlock extends Component {
                   </div>
                   <div className="form-wrapper">
                     <LongTextField
-                      labelhidden={true}
+                      labelHidden={true}
                       placeholder="Type to respond"
                       name="flagResponse"
                     />

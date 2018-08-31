@@ -10,14 +10,14 @@ export default class FilterBar extends Component {
                 <div className="select-wrapper">
                     <div className="select-form">
                         <SelectField
-                            labelhidden={true}
+                            labelHidden={true}
                             name="facilityId"
                             options={options && options.facilities}
                         />
                     </div>
                     <div className="select-form">
                         <SelectField
-                            labelhidden={true}
+                            labelHidden={true}
                             name="assigneeId"
                             options={options && options.assignees}
                         />

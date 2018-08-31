@@ -82,7 +82,7 @@ export default class TagCreate extends Component {
               ref="form"
             >
               <div className="form-wrapper">
-                <AutoField labelhidden={true} placeholder="Name" name="name" />
+                <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
 
@@ -90,7 +90,7 @@ export default class TagCreate extends Component {
                 <div className="form-wrapper">
                   <SelectField
                     placeholder="Select Client"
-                    labelhidden={true}
+                    labelHidden={true}
                     options={clientOptns}
                     name="clientId"
                   />

@@ -55,7 +55,7 @@ export default class AccountContent extends Component {
 
   getInsuranceHeader = (insurance, index) => {
     return (
-      <React.Fragment>
+      <div>
         {_.map(insurance, (value, key) => {
           if (value) {
             return (
@@ -68,13 +68,13 @@ export default class AccountContent extends Component {
             );
           }
         })}
-      </React.Fragment>
+      </div>
     );
   };
 
   getInsuranceValues = (insuranceRules, insurance, index) => {
     return (
-      <React.Fragment>
+      <div>
         {_.map(insuranceRules, (value, key) => {
           console.log(value);
           console.log(key);
@@ -89,7 +89,7 @@ export default class AccountContent extends Component {
             );
           }
         })}
-      </React.Fragment>
+      </div>
     );
   };
 

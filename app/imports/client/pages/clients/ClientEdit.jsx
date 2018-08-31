@@ -114,7 +114,7 @@ export default class EditClient extends React.Component {
             >
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Client name"
                   name="clientName"
                 />
@@ -123,7 +123,7 @@ export default class EditClient extends React.Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Email"
                   name="email"
                 />
@@ -132,7 +132,7 @@ export default class EditClient extends React.Component {
 
               <div className="form-wrapper">
                 <LongTextField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Financial goals"
                   name="financialGoals"
                 />
@@ -171,7 +171,7 @@ export default class EditClient extends React.Component {
                   <NestField name="">
                     <div className="form-wrapper">
                       <TextField
-                        labelhidden={true}
+                        labelHidden={true}
                         placeholder="First Name"
                         name="firstName"
                       />
@@ -179,7 +179,7 @@ export default class EditClient extends React.Component {
                     </div>
                     <div className="form-wrapper">
                       <TextField
-                        labelhidden={true}
+                        labelHidden={true}
                         placeholder="Last Name"
                         name="lastName"
                       />
@@ -188,7 +188,7 @@ export default class EditClient extends React.Component {
                     <div className="select-group b-b--0 p-b--0">
                       <div className="form-wrapper m-b--0">
                         <AutoField
-                          labelhidden={true}
+                          labelHidden={true}
                           placeholder="Contact type"
                           name="contactType"
                         />
@@ -197,7 +197,7 @@ export default class EditClient extends React.Component {
                     </div>
                     <div className="form-wrapper">
                       <TextField
-                        labelhidden={true}
+                        labelHidden={true}
                         placeholder="Phone"
                         name="phone"
                       />
@@ -205,7 +205,7 @@ export default class EditClient extends React.Component {
                     </div>
                     <div className="form-wrapper">
                       <TextField
-                        labelhidden={true}
+                        labelHidden={true}
                         placeholder="Email"
                         name="email"
                       />
@@ -213,7 +213,7 @@ export default class EditClient extends React.Component {
                     </div>
                     <div className="form-wrapper">
                       <LongTextField
-                        labelhidden={true}
+                        labelHidden={true}
                         placeholder="Notes"
                         name="notes"
                       />

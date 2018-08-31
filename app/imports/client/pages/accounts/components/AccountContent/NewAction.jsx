@@ -186,7 +186,7 @@ export default class NewAction extends Component {
     return (
       <div className="custom-inputs" key={index}>
         <AutoField
-          labelhidden={true}
+          labelHidden={true}
           placeholder={input.label}
           name={input.label}
         />
@@ -223,7 +223,7 @@ export default class NewAction extends Component {
               {reasonCodes.length > 0 && (
                 <div className="select-group">
                   <SelectSimple
-                    labelhidden={true}
+                    labelHidden={true}
                     name="reasonCode"
                     options={reasonCodes}
                   />

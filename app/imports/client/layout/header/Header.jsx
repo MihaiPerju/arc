@@ -4,13 +4,6 @@ import { getImagePath } from "../../../api/utils";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import Notifications from "./components/Notifications";
 import RoutesService from "../leftMenu/RoutesService";
-import PropTypes from "prop-types";
-import createClass from "create-react-class";
-
-Object.assign(React, {
-  PropTypes,
-  createClass
-});
 
 class Header extends Component {
   constructor() {

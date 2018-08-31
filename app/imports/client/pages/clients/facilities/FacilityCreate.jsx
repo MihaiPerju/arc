@@ -130,12 +130,12 @@ export default class FacilityCreate extends Component {
                 <div className="error">{this.state.error}</div>
               )}
               <div className="form-wrapper">
-                <AutoField labelhidden={true} placeholder="Name" name="name" />
+                <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="First address"
                   name="addressOne"
                 />
@@ -143,19 +143,19 @@ export default class FacilityCreate extends Component {
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Second address"
                   name="addressTwo"
                 />
                 <ErrorField name="addressTwo" />
               </div>
               <div className="form-wrapper">
-                <AutoField labelhidden={true} placeholder="City" name="city" />
+                <AutoField labelHidden={true} placeholder="City" name="city" />
                 <ErrorField name="city" />
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="State"
                   name="state"
                 />
@@ -163,7 +163,7 @@ export default class FacilityCreate extends Component {
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Sftp state"
                   name="sftpPath"
                 />
@@ -171,7 +171,7 @@ export default class FacilityCreate extends Component {
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Zip code"
                   name="zipCode"
                 />
@@ -182,7 +182,7 @@ export default class FacilityCreate extends Component {
                   {regionIds && (
                     <div>
                       <SelectField
-                        labelhidden={true}
+                        labelHidden={true}
                         name="regionId"
                         options={regionIds}
                       />
@@ -198,7 +198,7 @@ export default class FacilityCreate extends Component {
                     <div>
                       <div className="form-wrapper">
                         <AutoField
-                          labelhidden={true}
+                          labelHidden={true}
                           placeholder="First Name"
                           name="firstName"
                         />
@@ -206,7 +206,7 @@ export default class FacilityCreate extends Component {
                       </div>
                       <div className="form-wrapper">
                         <AutoField
-                          labelhidden={true}
+                          labelHidden={true}
                           placeholder="Last Name"
                           name="lastName"
                         />
@@ -214,7 +214,7 @@ export default class FacilityCreate extends Component {
                       </div>
                       <div className="form-wrapper">
                         <AutoField
-                          labelhidden={true}
+                          labelHidden={true}
                           placeholder="Phone"
                           name="phone"
                         />
@@ -222,7 +222,7 @@ export default class FacilityCreate extends Component {
                       </div>
                       <div className="form-wrapper">
                         <AutoField
-                          labelhidden={true}
+                          labelHidden={true}
                           placeholder="Email"
                           name="email"
                         />
@@ -231,7 +231,7 @@ export default class FacilityCreate extends Component {
                       <div className="select-group">
                         <div className="form-wrapper">
                           <AutoField
-                            labelhidden={true}
+                            labelHidden={true}
                             placeholder="Contact Type"
                             name="contactType"
                           />
@@ -240,7 +240,7 @@ export default class FacilityCreate extends Component {
                       </div>
                       <div className="form-wrapper">
                         <LongTextField
-                          labelhidden={true}
+                          labelHidden={true}
                           placeholder="Notes"
                           name="notes"
                         />

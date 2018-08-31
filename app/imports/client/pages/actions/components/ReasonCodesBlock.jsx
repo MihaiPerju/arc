@@ -186,7 +186,7 @@ class CreateReasonCode extends Component {
           >
             <div className="form-wrapper">
               <AutoField
-                labelhidden={true}
+                labelHidden={true}
                 placeholder="Reason"
                 name="reason"
               />
@@ -195,7 +195,7 @@ class CreateReasonCode extends Component {
             {isPrivate && (
               <div className="select-form">
                 <SelectField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Select Client"
                   name="clientId"
                   options={clientOptions}

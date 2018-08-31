@@ -136,7 +136,7 @@ export default class ImportingRules extends React.Component {
                     className="radio-group__wrapper"
                     name="hasHeader"
                     options={options}
-                    labelhidden={true}
+                    labelHidden={true}
                   />
                   <ErrorField name="hasHeader" />
                 </div>

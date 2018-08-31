@@ -30,7 +30,7 @@ export default class AccountEscalation extends React.Component {
       <AutoForm onSubmit={this.escalate} schema={escalateSchema}>
         <div className="form-wrapper">
           <AutoField
-            labelhidden={true}
+            labelHidden={true}
             placeholder="Type Escalation Reason"
             name="reason"
           />

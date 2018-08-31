@@ -126,7 +126,7 @@ export default class EditInfoDialog extends Component {
       >
         <div className="form-wrapper">
           <AutoField
-            labelhidden={true}
+            labelHidden={true}
             name={name}
             inputRef={x => {
               if (x) {

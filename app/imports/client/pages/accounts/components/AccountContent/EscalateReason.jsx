@@ -52,7 +52,7 @@ class EscalateReason extends Component {
             <div className="form-group">
               <AutoField
                 className="text-area"
-                labelhidden={true}
+                labelHidden={true}
                 placeholder="Type escalate reason..."
                 name="content"
               />

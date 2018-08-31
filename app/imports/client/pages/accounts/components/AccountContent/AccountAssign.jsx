@@ -126,7 +126,7 @@ export default class AccountAssign extends React.Component {
           >
             <div className="form-wrapper select-item">
               <AutoField
-                labelhidden={true}
+                labelHidden={true}
                 name="assigneeId"
                 options={userOptions}
               />
@@ -154,7 +154,7 @@ export default class AccountAssign extends React.Component {
           >
             <div className="form-wrapper select-item">
               <AutoField
-                labelhidden={true}
+                labelHidden={true}
                 name="workQueue"
                 options={workQueueOptions}
               />

@@ -140,7 +140,7 @@ export default class ActionSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   name="title"
                   placeholder="Search"
                 />

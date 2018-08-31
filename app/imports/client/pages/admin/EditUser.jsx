@@ -111,7 +111,7 @@ class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="First name"
                   name="profile.firstName"
                 />
@@ -120,7 +120,7 @@ class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Last name"
                   name="profile.lastName"
                 />
@@ -129,7 +129,7 @@ class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Email"
                   name="email"
                 />
@@ -138,7 +138,7 @@ class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Phone number"
                   name="profile.phoneNumber"
                 />

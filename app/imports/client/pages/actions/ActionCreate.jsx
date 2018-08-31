@@ -97,7 +97,7 @@ export default class ActionCreate extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Title"
                   name="title"
                 />
@@ -106,7 +106,7 @@ export default class ActionCreate extends Component {
 
               <div className="form-wrapper">
                 <LongTextField
-                  labelhidden={true}
+                  labelHidden={true}
                   placeholder="Description"
                   name="description"
                 />
@@ -126,7 +126,7 @@ export default class ActionCreate extends Component {
                   <div className="form-wrapper">
                     <SelectSimple
                       placeholder="Substate"
-                      labelhidden={true}
+                      labelHidden={true}
                       name="substateId"
                       options={substatesOptions}
                     />
@@ -141,7 +141,7 @@ export default class ActionCreate extends Component {
                     <div className="form-wrapper">
                       <SelectField
                         placeholder="Select type"
-                        labelhidden={true}
+                        labelHidden={true}
                         options={inputTypesEnum}
                         name="type"
                       />
@@ -149,7 +149,7 @@ export default class ActionCreate extends Component {
                     </div>
                     <div className="form-wrapper">
                       <AutoField
-                        labelhidden={true}
+                        labelHidden={true}
                         name="label"
                         placeholder="label"
                       />

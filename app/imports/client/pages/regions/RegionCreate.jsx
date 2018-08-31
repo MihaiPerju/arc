@@ -74,7 +74,7 @@ export default class RegionCreate extends React.Component {
                 <div className="error">{this.state.error}</div>
               )}
               <div className="form-wrapper">
-                <AutoField labelhidden={true} placeholder="Name" name="name" />
+                <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
             </AutoForm>

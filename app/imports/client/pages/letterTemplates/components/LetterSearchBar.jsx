@@ -134,7 +134,7 @@ export default class LetterSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelhidden={true}
+                  labelHidden={true}
                   name="letterTemplateName"
                   placeholder="Search"
                 />
