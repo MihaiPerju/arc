@@ -13,7 +13,8 @@ export default class ReportSearchBar extends Component {
     this.state = {
       dropdown: false,
       selectAll: false,
-      model: {}
+      model: {},
+      filter: false,
     };
   }
 
@@ -59,6 +60,9 @@ export default class ReportSearchBar extends Component {
   nodeRef = node => {
     this.node = node;
   };
+  closeDialog = () => {
+    this.setState(() => ({ dialogIsActive: false }) );
+  };
 
   selectAll = () => {
     const {selectAll} = this.state;
@@ -78,8 +82,24 @@ export default class ReportSearchBar extends Component {
     this.setState({model});
   };
 
+  showDialog = () => {
+    this.setState(() => ({dialogIsActive : true}))
+  }
+  // To be complete...
+  resetFilters = () => {
+    let appliedFilters = FlowRouter.current().queryParams;
+    console.log('appliedFilters', appliedFilters);
+    this.closeDialog();
+  };
+  // To be complete...
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+
   render() {
-    const {filter, active, dropdown, selectAll, model} = this.state;
+    const {filter, active, dropdown, selectAll, model, dialogIsActive} = this.state;
     const {
       options,
       btnGroup,
@@ -149,8 +169,54 @@ export default class ReportSearchBar extends Component {
             </div>
             <div className="filter-block">
               {!hideFilter && (
-                <button>
+                <button onClick={this.showDialog}>
                   <i className="icon-filter"/>
+                  {dialogIsActive && (
+                  <Dialog
+                    className="account-dialog filter-dialog filter-dialog__account"
+                    title="Filter by"
+                    closePortal={this.closeDialog}
+                  >
+                    <button className="close-dialog" onClick={this.closeDialog}>
+                      <i className="icon-close" />
+                    </button>
+                    <div className="filter-bar">
+                      <div className="select-wrapper">
+                        <div className="form-group flex--helper form-group__pseudo--3">
+                          <AutoField
+                            label="Account Number:"
+                            name="acctNum"
+                            placeholder="Search by Account Number"
+                          />
+                          <AutoField
+                            label="Facility code:"
+                            name="facCode"
+                            placeholder="Search by Facility Code"
+                          />
+                          <AutoField
+                            label="Patient Type:"
+                            name="ptType"
+                            placeholder="Search by Patient Type"
+                          />
+                        </div>
+                        <div className="flex--helper flex-justify--space-between">
+                          <button
+                            className="btn--red"
+                            onClick={this.resetFilters}
+                          >
+                            Reset
+                          </button>
+                          <button
+                            className="btn--blue"
+                            onClick={this.addFilters}
+                          >
+                            Done
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Dialog>
+                  )}
                 </button>
               )}
               {
@@ -265,5 +331,20 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by report name"
-  }
+  },
+  facCode: {
+    type: String,
+    optional: true,
+    label: "Search by Facility Code"
+  },
+  acctNum: {
+    type: String,
+    optional: true,
+    label: "Search by Account Number"
+  },
+  ptType: {
+    type: String,
+    optional: true,
+    label: "Search by Patient Type"
+  },
 });

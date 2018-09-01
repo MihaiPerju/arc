@@ -194,7 +194,7 @@ class ReportListContainer extends Pager {
             closeRightPanel={this.closeRightPanel}
             moduleTags={moduleTags}
             hideSort
-            hideFilter
+            hideFilter={false}
           />
           <ReportList
             class={this.state.filter ? "task-list decreased" : "task-list"}
