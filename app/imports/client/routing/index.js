@@ -197,7 +197,7 @@ route("/substate/list", SubstatesListContainer);
 //Letter management
 import LetterListContainer from "/imports/client/pages/letterManagement/LetterListContainer.jsx";
 
-route("/letter-management/list", LetterListContainer);
+route("/letters/list", LetterListContainer);
 
 //Module tagging
 import ModuleTagsListContainer from "/imports/client/pages/moduleTags/ModuleTagsListContainer.jsx";
@@ -209,3 +209,8 @@ route("/module-tags/list", ModuleTagsListContainer);
 import FlaggedAccountListContainer from "/imports/client/pages/accounts/FlaggedAccountListContainer";
 
 route("/flagged", FlaggedAccountListContainer);
+
+//Tags
+import FileListContainer from "/imports/client/pages/files/FileListContainer.jsx";
+
+route("/file/list", FileListContainer);

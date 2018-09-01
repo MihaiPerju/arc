@@ -19,7 +19,7 @@ import classNames from "classnames";
 export default class ImportingRules extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, collapse: false };
+    this.state = { loading: true, collapse: false, isDisabled: false };
   }
 
   componentWillMount() {
@@ -44,6 +44,7 @@ export default class ImportingRules extends React.Component {
   }
 
   onSubmitImportingRules = importRules => {
+    this.setState({ isDisabled: true });
     const facilityId = this.props.model._id;
     const { rules } = this.props;
     const newFacility = { _id: facilityId };
@@ -55,6 +56,7 @@ export default class ImportingRules extends React.Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
@@ -99,7 +101,7 @@ export default class ImportingRules extends React.Component {
   };
 
   render() {
-    const { schema, loading, collapse, showListField } = this.state;
+    const { schema, loading, collapse, showListField, isDisabled } = this.state;
     const { model, rules, copyRules } = this.props;
     const fields = RulesService.getSchemaFields(rules);
     const options = [
@@ -186,8 +188,21 @@ export default class ImportingRules extends React.Component {
             </div>
 
             <div className="btn-group">
-              {/*<button className="btn--red">Cancel</button>*/}
-              <button className="btn--green">Submit</button>
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                className="btn--green"
+              >
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Submit"
+                )}
+              </button>
             </div>
           </AutoForm>
         )}

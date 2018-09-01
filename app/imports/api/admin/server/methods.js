@@ -1,3 +1,4 @@
+import { Accounts } from "meteor/accounts-base";
 import Users from "/imports/api/users/collection.js";
 import Security from "/imports/api/security/security.js";
 import Settings from "/imports/api/settings/collection.js";
@@ -6,20 +7,12 @@ import Substates from "/imports/api/substates/collection";
 import Backup from "/imports/api/backup/collection";
 import Files from "/imports/api/files/collection";
 import Letters from "/imports/api/letters/collection.js";
-import Accounts from "/imports/api/accounts/collection";
+import AccountsCollection from "/imports/api/accounts/collection";
 import Escalations from "/imports/api/escalations/collection";
-import {
-  createFolderStructure
-} from "/imports/startup/server/folders";
+import { createFolderStructure } from "/imports/startup/server/folders";
 
 Meteor.methods({
-  "admin.createUser" ({
-    firstName,
-    lastName,
-    email,
-    phoneNumber,
-    password
-  }) {
+  "admin.createUser"({ firstName, lastName, email, phoneNumber, password }) {
     Security.checkAdmin(this.userId);
 
     return Accounts.createUser({
@@ -33,11 +26,7 @@ Meteor.methods({
     });
   },
 
-  "admin.editUser" (userId, {
-    email,
-    profile,
-    tagIds
-  }) {
+  "admin.editUser"(userId, { email, profile, tagIds }) {
     Security.checkAdmin(this.userId);
 
     if (!userId) {
@@ -55,21 +44,26 @@ Meteor.methods({
       throw new Meteor.Error("Email already in use!");
     }
 
-    Users.update({
-      _id: userId
-    }, {
-      $set: {
-        emails: [{
-          address: email,
-          verified: false
-        }],
-        profile,
-        tagIds
+    Users.update(
+      {
+        _id: userId
+      },
+      {
+        $set: {
+          emails: [
+            {
+              address: email,
+              verified: false
+            }
+          ],
+          profile,
+          tagIds
+        }
       }
-    });
+    );
   },
 
-  "admin.suspendUser" (userId) {
+  "admin.suspendUser"(userId) {
     Security.checkAdmin(this.userId);
 
     if (!userId) {
@@ -78,24 +72,30 @@ Meteor.methods({
 
     const settings = Settings.findOne();
 
-    Settings.update({
-      _id: settings._id
-    }, {
-      $addToSet: {
-        suspendedUserIds: userId
+    Settings.update(
+      {
+        _id: settings._id
+      },
+      {
+        $addToSet: {
+          suspendedUserIds: userId
+        }
       }
-    });
+    );
 
-    Users.update({
-      _id: userId
-    }, {
-      $set: {
-        "profile.suspended": true
+    Users.update(
+      {
+        _id: userId
+      },
+      {
+        $set: {
+          "profile.suspended": true
+        }
       }
-    });
+    );
   },
 
-  "admin.resumeUser" (userId) {
+  "admin.resumeUser"(userId) {
     Security.checkAdmin(this.userId);
     if (!userId) {
       throw new Meteor.Error("No user");
@@ -103,26 +103,30 @@ Meteor.methods({
 
     const settings = Settings.findOne();
 
-    Settings.update({
-      _id: settings._id
-    }, {
-      $pull: {
-        suspendedUserIds: userId
+    Settings.update(
+      {
+        _id: settings._id
+      },
+      {
+        $pull: {
+          suspendedUserIds: userId
+        }
       }
-    });
+    );
 
-    Users.update({
-      _id: userId
-    }, {
-      $set: {
-        "profile.suspended": false
+    Users.update(
+      {
+        _id: userId
+      },
+      {
+        $set: {
+          "profile.suspended": false
+        }
       }
-    });
+    );
   },
 
-  "admin.updateRootFolder" ({
-    rootFolder
-  }) {
+  "admin.updateRootFolder"({ rootFolder }) {
     rootFolder = rootFolder.trim();
     if (rootFolder[0] !== "/") {
       rootFolder = "/" + rootFolder;
@@ -130,22 +134,26 @@ Meteor.methods({
     if (rootFolder[rootFolder.length - 1] !== "/") {
       rootFolder += "/";
     }
-    Settings.update({
-      rootFolder: {
-        $ne: null
+    Settings.update(
+      {
+        rootFolder: {
+          $ne: null
+        }
+      },
+      {
+        $set: {
+          rootFolder
+        }
+      },
+      {
+        upsert: true
       }
-    }, {
-      $set: {
-        rootFolder
-      }
-    }, {
-      upsert: true
-    });
+    );
 
     createFolderStructure();
   },
 
-  "admin.getRootFolder" () {
+  "admin.getRootFolder"() {
     return Settings.findOne({
       rootFolder: {
         $exists: true
@@ -153,7 +161,7 @@ Meteor.methods({
     });
   },
 
-  "admin.deleteUser" (userId) {
+  "admin.deleteUser"(userId) {
     Security.checkAdmin(this.userId);
 
     Users.remove({
@@ -161,7 +169,7 @@ Meteor.methods({
     });
   },
 
-  "admin.deleteManyUsers" (userIds) {
+  "admin.deleteManyUsers"(userIds) {
     Security.checkAdmin(this.userId);
     Users.remove({
       _id: {
@@ -174,7 +182,7 @@ Meteor.methods({
   reset(entity) {
     switch (entity) {
       case "accounts":
-        Accounts.remove({});
+        AccountsCollection.remove({});
         Backup.remove({});
         Escalations.remove({});
         break;
@@ -188,7 +196,7 @@ Meteor.methods({
         Letters.remove({});
         break;
       default:
-        Accounts.remove({});
+        AccountsCollection.remove({});
         Backup.remove({});
         Escalations.remove({});
         AccountActions.remove({});

@@ -47,10 +47,10 @@ class ReasonCodesBlock extends Component {
   };
 
   render() {
-    const { data, error, loading, action, isPrivate } = this.props;
+    const { data, error, isLoading, action, isPrivate } = this.props;
     const { blankSchedule } = this.state;
 
-    if (loading) {
+    if (isLoading) {
       return <Loading />;
     }
 
@@ -101,7 +101,7 @@ class ReasonCodesBlock extends Component {
                           {reasonCode.client && reasonCode.client.clientName}
                         </div>
                       </div>
-                    )} 
+                    )}
                   </div>
                   {((isPrivate &&
                     Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) ||
@@ -136,7 +136,8 @@ class CreateReasonCode extends Component {
   constructor() {
     super();
     this.state = {
-      clientOptions: []
+      clientOptions: [],
+      isDisabled: false
     };
   }
 
@@ -156,6 +157,7 @@ class CreateReasonCode extends Component {
     const { action, isPrivate } = this.props;
     data.actionId = action._id;
     data.managerId = isPrivate && Meteor.userId();
+    this.setState({ isDisabled: true });
 
     Meteor.call("reasonCode.create", data, err => {
       if (!err) {
@@ -164,19 +166,24 @@ class CreateReasonCode extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
   render() {
     const { close, isPrivate } = this.props;
-    const { clientOptions } = this.state;
+    const { clientOptions, isDisabled } = this.state;
     return (
       <div className="new-section">
         <div className="text-label">
           Create {isPrivate && "Private"} Reason Code
         </div>
         <div className="reason-code-form">
-          <AutoForm schema={!isPrivate ? schema : privateReasonSchema} onSubmit={this.onSubmit} ref="form">
+          <AutoForm
+            schema={!isPrivate ? schema : privateReasonSchema}
+            onSubmit={this.onSubmit}
+            ref="form"
+          >
             <div className="form-wrapper">
               <AutoField
                 labelHidden={true}
@@ -201,7 +208,21 @@ class CreateReasonCode extends Component {
               <button type="button" className="btn-cancel" onClick={close}>
                 Cancel
               </button>
-              <button className="btn--green">Create</button>
+              <button
+                style={isDisabled ? { cursor: "not-allowed" } : {}}
+                disabled={isDisabled}
+                className="btn--green"
+              >
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Create"
+                )}
+              </button>
             </div>
           </AutoForm>
         </div>

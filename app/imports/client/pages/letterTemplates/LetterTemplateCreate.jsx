@@ -14,10 +14,13 @@ import { CategoryList } from "/imports/api/letterTemplates/enums/categories.js";
 export default class CreateLetterTemplate extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      isDisabled: false
+    };
   }
 
   onSubmit = data => {
+    this.setState({ isDisabled: true });
     Meteor.call("letterTemplate.create", data, err => {
       if (!err) {
         Notifier.success("Letter template added!");
@@ -25,6 +28,7 @@ export default class CreateLetterTemplate extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
@@ -46,6 +50,7 @@ export default class CreateLetterTemplate extends Component {
   };
 
   render() {
+    const { isDisabled } = this.state;
     const categories = this.getCategories(CategoryList);
 
     return (
@@ -55,8 +60,21 @@ export default class CreateLetterTemplate extends Component {
             <button onClick={this.onClose} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onCreate} className="btn--green">
-              Confirm & save
+            <button
+              style={isDisabled ? { cursor: "not-allowed" } : {}}
+              disabled={isDisabled}
+              onClick={this.onCreate}
+              className="btn--green"
+            >
+              {isDisabled ? (
+                <div>
+                  {" "}
+                  Loading
+                  <i className="icon-cog" />
+                </div>
+              ) : (
+                "Confirm & Save"
+              )}
             </button>
           </div>
         </div>

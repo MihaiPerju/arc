@@ -3197,6 +3197,10 @@ pdfjs-dist@2.0.305:
     node-ensure "^0.0.0"
     worker-loader "^1.1.0"
 
+pdfmerge@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/pdfmerge/-/pdfmerge-1.0.1.tgz#f2fea65baad340e3e2e6b075f335f9d1377955f1"
+
 pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
@@ -3433,6 +3437,10 @@ react-ckeditor-component@^1.1.0:
     babel-preset-react "^6.16.0"
     babel-runtime "^6.11.6"
     load-script "^1.0.0"
+
+react-countdown-now@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/react-countdown-now/-/react-countdown-now-1.3.0.tgz#13c262a530614c69e68a0d277bd33b45d925cd56"
 
 react-datepicker@^1.4.1:
   version "1.6.0"

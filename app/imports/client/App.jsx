@@ -1,8 +1,8 @@
-import React from 'react';
-import NotificationsSystem from 'react-notification-system';
-import Notifier from '/imports/client/lib/Notifier';
-import Header from '/imports/client/layout/header/Header';
-import LeftMenu from '/imports/client/layout/leftMenu/LeftMenu';
+import React from "react";
+import NotificationsSystem from "react-notification-system";
+import Notifier from "/imports/client/lib/Notifier";
+import Header from "/imports/client/layout/header/Header";
+import LeftMenu from "/imports/client/layout/leftMenu/LeftMenu";
 import Login from "/imports/client/pages/users/Login";
 
 export default ({ main, routeProps }) => {
@@ -12,7 +12,7 @@ export default ({ main, routeProps }) => {
   if (Meteor.userId())
     return (
       <div id="cc-app">
-        <Header />
+        <Header routeName={FlowRouter.current().context.pathname} />
         <main className="main-section">
           <LeftMenu />
           {React.createElement(main, routeProps)}

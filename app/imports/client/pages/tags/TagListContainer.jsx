@@ -47,7 +47,7 @@ class TagListContainer extends Pager {
   }
 
   componentWillReceiveProps(newProps) {
-    const {queryParams} = FlowRouter.current();
+    const { queryParams } = FlowRouter.current();
     if (queryParams.tagName && queryParams.tagName == "") {
       this.setPagerInitial();
     }
@@ -148,7 +148,7 @@ class TagListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       tagsSelected,
       currentTag,
@@ -161,7 +161,7 @@ class TagListContainer extends Pager {
     } = this.state;
     const tag = objectFromArray(data, currentTag);
 
-    if (loading || loadingClients) {
+    if ((isLoading || loadingClients) && !FlowRouter.getQueryParam("tagName")) {
       return <Loading />;
     }
 

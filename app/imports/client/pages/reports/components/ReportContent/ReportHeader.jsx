@@ -24,7 +24,8 @@ class ReportHeader extends Component {
       accounts: [],
       dialogIsActive: false,
       selectedReportColumns: [],
-      accountActions: []
+      accountActions: [],
+      isDisabled: false
     };
   }
 
@@ -106,6 +107,7 @@ class ReportHeader extends Component {
 
   onRunReport = () => {
     const { report } = this.props;
+    this.setState({ isDisabled: true });
     Meteor.call(
       "jobQueue.create",
       {
@@ -119,6 +121,7 @@ class ReportHeader extends Component {
         } else {
           Notifier.success("Job started");
         }
+        this.setState({ isDisabled: false });
       }
     );
   };
@@ -130,11 +133,12 @@ class ReportHeader extends Component {
   };
 
   getRunButton = status => {
+    const { isDisabled } = this.state;
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
         return (
           <li className="action-item">
-            <a href="javascript:;">Runing...</a>
+            <a href="javascript:;">Running...</a>
           </li>
         );
       case JobQueueStatuses.FINISHED:
@@ -148,7 +152,11 @@ class ReportHeader extends Component {
       default:
         return (
           <li className="action-item">
-            <a href="javascript:;" onClick={this.onRunReport}>
+            <a
+              style={isDisabled ? { pointerEvents: "none" } : {}}
+              href="javascript:;"
+              onClick={this.onRunReport}
+            >
               Run report
             </a>
           </li>
@@ -182,13 +190,14 @@ class ReportHeader extends Component {
   copyReport = () => {
     const { closeRightPanel, report } = this.props;
     const { _id } = report;
-    this.setState({ dialogIsActive: false });
+    this.setState({ dialogIsActive: false, isDisabled: true });
     Meteor.call("report.copy", _id, err => {
       if (!err) {
         Notifier.success("Report created");
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
       closeRightPanel();
     });
   };
@@ -204,7 +213,8 @@ class ReportHeader extends Component {
       schedule,
       loading,
       dialogIsActive,
-      selectedReportColumns
+      selectedReportColumns,
+      isDisabled
     } = this.state;
     const job = data;
     let tableHeader = [];
@@ -266,8 +276,21 @@ class ReportHeader extends Component {
                   <button className="btn-cancel" onClick={this.closeDialog}>
                     Cancel
                   </button>
-                  <button className="btn--light-blue" onClick={this.copyReport}>
-                    Confirm & copy
+                  <button
+                    style={isDisabled ? { cursor: "not-allowed" } : {}}
+                    disabled={isDisabled}
+                    className="btn--light-blue"
+                    onClick={this.copyReport}
+                  >
+                    {isDisabled ? (
+                      <div>
+                        {" "}
+                        Loading
+                        <i className="icon-cog" />
+                      </div>
+                    ) : (
+                      "Confirm & Copy"
+                    )}
                   </button>
                 </div>
               </Dialog>

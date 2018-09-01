@@ -70,7 +70,7 @@ export default class RouteService {
           icon: "window-restore"
         },
         {
-          name: "/letter-management/list",
+          name: "/letters/list",
           label: "Letters",
           icon: "copy"
         },
@@ -86,7 +86,7 @@ export default class RouteService {
         },
         {
           name: "module-tags/list",
-          label: "Module Tags",
+          label: "Tags",
           icon: "tags"
         }
       ];
@@ -132,6 +132,11 @@ export default class RouteService {
           icon: "question-circle-o"
         },
         {
+          name: "file/list",
+          label: "Files",
+          icon: "copy"
+        },
+        {
           name: "client/list",
           label: "Clients",
           icon: "users"
@@ -157,7 +162,7 @@ export default class RouteService {
           icon: "window-restore"
         },
         {
-          name: "/letter-management/list",
+          name: "/letters/list",
           label: "Letters",
           icon: "copy"
         },
@@ -168,7 +173,7 @@ export default class RouteService {
         },
         {
           name: "module-tags/list",
-          label: "Module Tags",
+          label: "Tags",
           icon: "tags"
         }
       ];
@@ -234,7 +239,27 @@ export default class RouteService {
           icon: "file-text-o"
         },
         {
-          name: "/letter-management/list",
+          name: "flagged",
+          label: "Flagged",
+          icon: "flag"
+        },
+        {
+          name: "client/list",
+          label: "Clients",
+          icon: "users"
+        },
+        {
+          name: "admin/user/list",
+          label: "Users",
+          icon: "user-circle-o"
+        },
+        {
+          name: "reports/list",
+          label: "Reports",
+          icon: "file-text-o"
+        },
+        {
+          name: "/letters/list",
           label: "Letters",
           icon: "copy"
         },
@@ -245,7 +270,7 @@ export default class RouteService {
         },
         {
           name: "tag/list",
-          label: "Tags",
+          label: "Work Queues",
           icon: "tags"
         }
       ];
@@ -276,6 +301,92 @@ export default class RouteService {
           icon: "comments-o"
         }
       ];
+    }
+  }
+
+  static getRouteName(path) {
+    switch (path) {
+      case "/dashboard":
+        return "Dashboard";
+        break;
+      case "/accounts/active": {
+        return "Active Accounts";
+        break;
+      }
+      case "/accounts/review": {
+        return "Accounts In Review";
+        break;
+      }
+      case "/accounts/hold": {
+        return "Accounts on Hold";
+        break;
+      }
+      case "/accounts/archived": {
+        return "Archived Accounts";
+        break;
+      }
+      case "/accounts/tickles": {
+        return "Tickled Accounts";
+        break;
+      }
+      case "/accounts/escalated": {
+        return "Escalated Accounts";
+        break;
+      }
+      case "/flagged": {
+        return "Escalated Accounts";
+        break;
+      }
+      case "/accounts/unassigned": {
+        return "Unassigned Accounts";
+        break;
+      }
+      case "/client/list": {
+        return "Clients";
+        break;
+      }
+      case "/admin/user/list": {
+        return "Users";
+        break;
+      }
+      case "/code/list": {
+        return "Reason Codes";
+        break;
+      }
+      case "/reports/list": {
+        return "Reports";
+        break;
+      }
+      case "/letter-templates/list": {
+        return "Letter Templates";
+        break;
+      }
+      case "/letters/list": {
+        return "Letters";
+        break;
+      }
+      case "/action/list": {
+        return "Actions";
+        break;
+      }
+      case "/substate/list": {
+        return "Substates";
+        break;
+      }
+      case "/module-tags/list": {
+        return "Tags";
+        break;
+      }
+      case "/tag/list": {
+        return "Work Queues";
+        break;
+      }
+      case "/file/list": {
+        return "Files";
+        break;
+      }
+      default:
+        break;
     }
   }
 }

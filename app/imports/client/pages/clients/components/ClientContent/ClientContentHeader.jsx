@@ -4,7 +4,7 @@ import { roleGroups } from "/imports/api/users/enums/roles";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import ActionDropdown from './ActionDropdown';
+import ActionDropdown from "./ActionDropdown";
 import {
   AutoForm,
   AutoField,
@@ -25,7 +25,8 @@ export default class ClientContentHeader extends Component {
     this.state = {
       dialogIsActive: false,
       isAssigning: false,
-      managers: []
+      managers: [],
+      isDisabled: false
     };
   }
 
@@ -83,15 +84,17 @@ export default class ClientContentHeader extends Component {
         const message = status ? "Client disabled!" : "Client enabled!";
         Notifier.success(message);
         this.onClose();
+      } else {
+        Notifier.error(err.reason);
       }
     });
   };
 
   onSubmit = managerIds => {
     const { client } = this.props;
-
     const data = { ...managerIds };
     const { _id } = client;
+    this.setState({ isDisabled: true });
     Meteor.call("client.update", _id, data, err => {
       if (err) {
         Notifier.error(err.reason);
@@ -99,6 +102,7 @@ export default class ClientContentHeader extends Component {
         Notifier.success("Managers Assigned!");
         this.closeDialog();
       }
+      this.setState({ isDisabled: false });
     });
   };
 
@@ -111,7 +115,7 @@ export default class ClientContentHeader extends Component {
 
   render() {
     const { client } = this.props;
-    const { dialogIsActive, isAssigning, managers } = this.state;
+    const { dialogIsActive, isAssigning, managers, isDisabled } = this.state;
 
     const managerIdsOptions = this.getManagerOptions(managers);
 
@@ -141,7 +145,9 @@ export default class ClientContentHeader extends Component {
                 facilityHref={"/client/" + client._id + "/manage-facilities"}
                 regionHref={FlowRouter.url("region.list", { id: client._id })}
                 onEdit={this.onEdit}
-                disableAction={() => this.disableAction(client._id, client.status)}
+                disableAction={() =>
+                  this.disableAction(client._id, client.status)
+                }
                 onOpenAssignDialog={this.onOpenAssignDialog}
                 status={client.status}
               />
@@ -199,7 +205,13 @@ export default class ClientContentHeader extends Component {
                 <button className="btn-cancel" onClick={this.closeDialog}>
                   Cancel
                 </button>
-                <button className="btn--light-blue">Confirm</button>
+                <button
+                  style={isDisabled ? { cursor: "not-allowed" } : {}}
+                  disabled={isDisabled}
+                  className="btn--light-blue"
+                >
+               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
+                </button>
               </div>
             </AutoForm>
           </Dialog>

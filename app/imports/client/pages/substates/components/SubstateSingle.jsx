@@ -4,7 +4,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
-import Dialog from '/imports/client/lib/ui/Dialog';
+import Dialog from "/imports/client/lib/ui/Dialog";
 
 export default class SubstateSingle extends Component {
   constructor(props) {
@@ -133,7 +133,7 @@ export default class SubstateSingle extends Component {
           {actions.length === 0 && "-"}
         </div>
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
-          {substate.status ? "Active" : "In-Active"}
+          {substate.status ? "Active" : "Not Active"}
         </div>
         <div className="substates-field text-center">
           <TagItem

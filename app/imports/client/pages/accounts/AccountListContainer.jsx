@@ -175,6 +175,7 @@ class AccountListContainer extends Pager {
 
   selectAccount = newAccount => {
     const { currentAccount } = this.state;
+    this.removeLock();
     // removing accountId from the query when navigating from notification
     FlowRouter.setQueryParams({ accountId: null });
     if (this.checkAccountIsLocked(newAccount)) {
@@ -183,7 +184,6 @@ class AccountListContainer extends Pager {
           currentAccount: null,
           showMetaData: false
         });
-        this.removeLock();
       } else {
         this.setState({
           currentAccount: newAccount._id,
@@ -436,7 +436,7 @@ class AccountListContainer extends Pager {
   };
 
   render() {
-    const { data, loading, error } = this.props;
+    const { data, isLoading, error } = this.props;
     const {
       accountsSelected,
       currentAccount,
@@ -459,7 +459,7 @@ class AccountListContainer extends Pager {
       { icon: "users", method: this.assignToWorkQueue }
     ];
 
-    if (loading) {
+    if (isLoading && !FlowRouter.getQueryParam("acctNum")) {
       return <Loading />;
     }
 

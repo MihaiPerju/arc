@@ -56,14 +56,7 @@ export default class AccountContent extends Component {
     return (
       <div className="main-content">
         {account && (
-          <div
-            style={{
-              pointerEvents:
-                account.lockBreakUsers.indexOf(Meteor.userId()) === -1
-                  ? "inherit"
-                  : "none"
-            }}
-          >
+          <div>
             <AccountContentHeader
               account={account}
               openMetaData={openMetaData}
@@ -77,7 +70,10 @@ export default class AccountContent extends Component {
             <ActionBlock closeRightPanel={closeRightPanel} account={account} />
             <LetterList account={account} />
             <PdfFiles account={account} />
-            <CommentsListContainer account={account} closeRightPanel={closeRightPanel} />
+            <CommentsListContainer
+              account={account}
+              closeRightPanel={closeRightPanel}
+            />
           </div>
         )}
       </div>

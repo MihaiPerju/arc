@@ -2,44 +2,45 @@ import ReportsManagement from "../services/RunReports";
 import LettersManagement from "../services/LettersManagement";
 import EmailsManagement from "../services/EmailsManagement";
 import PlacementService from "../services/PlacementService";
+import ReuploadService from "../services/ReuploadService";
 import InventoryService from "../services/InventoryService";
 import PaymentService from "../services/PaymentService";
 
-// Job for running reports
-SyncedCron.add({
-  name: "Run Report",
-  schedule: function(parser) {
-    // parser is a later.parse object
-    return parser.text("every 10 seconds");
-  },
-  job: function() {
-    ReportsManagement.run();
-  }
-});
+// // Job for running reports
+// SyncedCron.add({
+//   name: "Run Report",
+//   schedule: function(parser) {
+//     // parser is a later.parse object
+//     return parser.text("every 10 seconds");
+//   },
+//   job: function() {
+//     ReportsManagement.run();
+//   }
+// });
 
 //Job for sending letters
 SyncedCron.add({
   name: "Send Letters",
   schedule: function(parser) {
     // parser is a later.parse object
-    return parser.text("every 10 seconds");
+    return parser.text("at 1:00 am on Wednesday");
   },
   job: function() {
     LettersManagement.run();
   }
 });
 
-//Job for sending emails
-SyncedCron.add({
-  name: "Send Mails",
-  schedule: function(parser) {
-    // parser is a later.parse object
-    return parser.text("every 10 seconds");
-  },
-  job: function() {
-    EmailsManagement.run();
-  }
-});
+// //Job for sending emails
+// SyncedCron.add({
+//   name: "Send Mails",
+//   schedule: function(parser) {
+//     // parser is a later.parse object
+//     return parser.text("every 10 seconds");
+//   },
+//   job: function() {
+//     EmailsManagement.run();
+//   }
+// });
 
 //Job for importing accounts from placement file
 SyncedCron.add({
@@ -65,14 +66,26 @@ SyncedCron.add({
   }
 });
 
-//Job for payment file
+// //Job for payment file
+// SyncedCron.add({
+//   name: "Create Payments",
+//   schedule: function(parser) {
+//     // parser is a later.parse object
+//     return parser.text("every 10 seconds");
+//   },
+//   job: function() {
+//     PaymentService.run();
+//   }
+// });
+
+//Job for importing re-uploading files with changed header
 SyncedCron.add({
-  name: "Create Payments",
+  name: "Reupload Files",
   schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
   job: function() {
-    PaymentService.run();
+    ReuploadService.run();
   }
 });

@@ -19,7 +19,8 @@ const moduleNames = {
   ACTIONS: "Actions",
   SUBSTATES: "Substates",
   ACCOUNT: "Account",
-  TAGS: "Tags"
+  TAGS: "Tags",
+  FILES: "Files"
 };
 
 export default moduleList;

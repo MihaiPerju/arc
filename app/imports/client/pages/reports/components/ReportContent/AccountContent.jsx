@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import moment from "moment";
 import { types, fields } from "/imports/api/reports/enums/reportColumn";
 import { ScrollSync, ScrollSyncPane } from "react-scroll-sync";
+import ordinal from "ordinal";
+import Headers from "/imports/api/reports/enums/Headers";
 
 export default class AccountContent extends Component {
   constructor() {
@@ -9,74 +11,17 @@ export default class AccountContent extends Component {
   }
 
   getHeaderNames = (header, index) => {
-    const { reportColumns } = this.props.report;
-    if (header === fields.INSURANCES) {
+    if (header !== fields.METADATA && header !== fields.INSURANCES) {
       return (
         <div key={index}>
-          <div>{header}</div>
-          {reportColumns[header].map(insurance => {
-            return _.map(insurance, (value, key) => {
-              if (value) {
-                return (
-                  <div
-                    style={{
-                      width: "32%",
-                      float: "left",
-                      borderRight: "1px #d7d7d7 solid"
-                    }}
-                  >
-                    {key}
-                  </div>
-                );
-              }
-            });
-          })}
+          {Headers[header] ? Headers[header].label : header}
         </div>
       );
-    } else {
-      return <div key={index}>{header}</div>;
     }
   };
 
   getColumnValues = (columnKeys, account, index) => {
-    const { reportColumns } = this.props.report;
-    if (columnKeys === "insurances") {
-      return (
-        <div key={index}>
-          {reportColumns[columnKeys].map((insurance, i) => {
-            return _.map(insurance, (value, key) => {
-              if (value) {
-                return (
-                  <div
-                    style={{
-                      width: "32%",
-                      float: "left",
-                      borderRight: "1px #d7d7d7 solid"
-                    }}
-                  >
-                    {account.insurances[i] && account.insurances[i][key]}
-                  </div>
-                );
-              }
-            });
-          })}
-        </div>
-      );
-    } else if (columnKeys === "metaData") {
-      return (
-        <div key={index}>
-          {account.metaData &&
-            _.map(account.metaData, (value, key) => {
-              return (
-                <div>
-                  <div style={{ float: "left", fontWeight: "bold" }}>{key}</div>
-                  <div>{value}</div>
-                </div>
-              );
-            })}
-        </div>
-      );
-    } else if (types.dates.includes(columnKeys)) {
+    if (types.dates.includes(columnKeys)) {
       return (
         <div key={index}>
           {account[columnKeys] &&
@@ -90,10 +35,51 @@ export default class AccountContent extends Component {
     }
   };
 
+  getMetadataHeaders() {
+    const { accounts } = this.props;
+    let metadataHeaders = [];
+    _.map(accounts, account => {
+      _.map(account.metaData, (value, key) => {
+        if (!metadataHeaders.includes(key)) {
+          metadataHeaders.push(key);
+        }
+      });
+    });
+    return metadataHeaders;
+  }
+
+  getMetadataValues(metadata, header, key) {
+    return <div key={key}>{metadata[header]}</div>;
+  }
+
+  getInsuranceHeader = (insurance, index) => {
+    return _.map(insurance, (value, key) => {
+      if (value) {
+        return (
+          <div className="table-header text-center table-field text-light-grey">
+            {ordinal(index + 1) + " " + Headers[key].label}
+          </div>
+        );
+      }
+    });
+  };
+
+  getInsuranceValues = (insuranceRules, insurance, index) => {
+    return _.map(insuranceRules, (value, key) => {
+      if (value) {
+        return (
+          <div className="table-field table-field--grey text-center">
+            {insurance && insurance[key]}
+          </div>
+        );
+      }
+    });
+  };
+
   render() {
     const { tableHeader, accounts, report } = this.props;
     const { reportColumns } = report;
-
+    const metadataHeaders = this.getMetadataHeaders();
     return (
       <ScrollSync>
         <div className="table-container flex--helper">
@@ -114,40 +100,75 @@ export default class AccountContent extends Component {
               <div className="table-row">
                 {tableHeader.map((header, index) => {
                   if (
-                    header === fields.INSURANCES &&
-                    reportColumns[fields.INSURANCES].length === 0
+                    header !== fields.METADATA &&
+                    header !== fields.INSURANCES
                   ) {
-                    return <div />;
+                    return (
+                      <div
+                        key={index}
+                        className="table-header text-center table-field text-light-grey"
+                      >
+                        {this.getHeaderNames(header, index)}
+                      </div>
+                    );
                   }
-                  return (
-                    <div
-                      key={index}
-                      className="table-header text-center table-field text-light-grey"
-                    >
-                      {this.getHeaderNames(header, index)}
-                    </div>
-                  );
                 })}
+                {tableHeader.includes(fields.INSURANCES) &&
+                  reportColumns.insurances.map((insurance, index) => {
+                    return this.getInsuranceHeader(insurance, index);
+                  })}
+                {tableHeader.includes(fields.METADATA) &&
+                  metadataHeaders.map((header, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="table-header text-center table-field text-light-grey"
+                      >
+                        {this.getHeaderNames(header, index)}
+                      </div>
+                    );
+                  })}
               </div>
               {accounts.map((account, index) => {
                 return (
                   <div className="table-row" key={index}>
-                    {tableHeader.map((columnKeys, idx) => {
+                    {tableHeader.map((header, idx) => {
                       if (
-                        columnKeys === fields.INSURANCES &&
-                        reportColumns[fields.INSURANCES].length === 0
-                      ) {
-                        return <div />;
-                      }
-                      return (
-                        <div
-                          key={idx}
-                          className="table-field table-field--grey text-center"
-                        >
-                          {this.getColumnValues(columnKeys, account, idx)}
-                        </div>
-                      );
+                        header !== fields.METADATA &&
+                        header !== fields.INSURANCES
+                      )
+                        return (
+                          <div
+                            key={idx}
+                            className="table-field table-field--grey text-center"
+                          >
+                            {this.getColumnValues(header, account, idx)}
+                          </div>
+                        );
                     })}
+                    {tableHeader.includes(fields.INSURANCES) &&
+                      reportColumns.insurances.map((insurance, index) => {
+                        return this.getInsuranceValues(
+                          insurance,
+                          account.insurances && account.insurances[index],
+                          index
+                        );
+                      })}
+                    {tableHeader.includes(fields.METADATA) &&
+                      metadataHeaders.map((header, idx) => {
+                        return (
+                          <div
+                            key={idx}
+                            className="table-field table-field--grey text-center"
+                          >
+                            {this.getMetadataValues(
+                              account.metaData,
+                              header,
+                              idx
+                            )}
+                          </div>
+                        );
+                      })}
                   </div>
                 );
               })}

@@ -315,7 +315,7 @@ export default class ActivityStream extends React.Component {
                 {user.profile.firstName} {user.profile.lastName}
               </b>
             )}{" "}
-            breaked the lock of the account with Account Number{" "}
+            broke the lock of the account with Account Number{" "}
             {account && (
               <a
                 className="text-blue"
