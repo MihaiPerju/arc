@@ -10,22 +10,21 @@ export default class RuleCreate extends React.Component {
     this.state = {};
   }
 
-  onSubmit(data) {
-    console.log("At least called");
-    data.clientId = FlowRouter.current().params.id;
-    Meteor.call("rule.create", data, err => {
-      if (!err) {
-        Notifier.success("Rule added!");
-        this.onClose();
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
-  }
+  onSubmit = data => {
+    console.log(data);
+    // data.clientId = FlowRouter.current().params.id;
+    // Meteor.call("rule.create", data, err => {
+    //   if (!err) {
+    //     Notifier.success("Rule added!");
+    //     this.onClose();
+    //   } else {
+    //     Notifier.error(err.reason);
+    //   }
+    // });
+  };
 
   onCreateRule = () => {
     const { form } = this.refs;
-    console.log(form);
     form.submit();
   };
 
@@ -50,11 +49,7 @@ export default class RuleCreate extends React.Component {
         </div>
         <div className="create-form__wrapper">
           <div className="action-block i--block">
-            <AutoForm
-              schema={schema}
-              onSubmit={this.onSubmit.bind(this)}
-              ref="form"
-            >
+            <AutoForm schema={schema} onSubmit={this.onSubmit} ref="form">
               {this.state.error && (
                 <div className="error">{this.state.error}</div>
               )}

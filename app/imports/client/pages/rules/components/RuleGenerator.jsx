@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import TwoWayQuerybuilder from "react-two-way-querybuilder";
+import connectField from "uniforms/connectField";
 
 const fields = [
   {
@@ -12,7 +13,13 @@ const fields = [
     name: "lastName",
     operators: "all",
     label: "Last Name",
-    input: { type: "text" }
+    input: {
+      type: "select",
+      options: [
+        { value: "Smith", name: "Smith" },
+        { value: "London", name: "London" }
+      ]
+    }
   },
   { name: "age", operators: "all", label: "Age", input: { type: "text" } },
   {
@@ -23,14 +30,14 @@ const fields = [
   }
 ];
 
-class App extends Component {
-  handleChange(event) {
-    console.log("query", event.query);
-  }
+class RuleGenerator extends Component {
+  handleChange = query => {
+    this.props.onChange(query.data);
+  };
 
   render() {
     return <TwoWayQuerybuilder fields={fields} onChange={this.handleChange} />;
   }
 }
 
-export default App;
+export default connectField(RuleGenerator, {});
