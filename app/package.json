@@ -59,6 +59,7 @@
     "react-scroll-sync": "^0.5.0",
     "react-select": "^1.0.0-rc.10",
     "react-sortable-hoc": "^0.6.8",
+    "react-two-way-querybuilder": "^1.0.9",
     "read-file": "^0.2.0",
     "semantic-ui-react": "^0.75.1",
     "shuffle-array": "^1.0.1",
