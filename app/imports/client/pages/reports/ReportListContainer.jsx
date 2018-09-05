@@ -58,6 +58,12 @@ class ReportListContainer extends Pager {
     if (queryParams.name && queryParams.name == "") {
       this.setPagerInitial();
     }
+    if (queryParams.facCode && queryParams.facCode == "") {
+      this.setPagerInitial();
+    }
+    if (queryParams.ptType && queryParams.ptType == "") {
+      this.setPagerInitial();
+    }
     this.updatePager();
   }
 
