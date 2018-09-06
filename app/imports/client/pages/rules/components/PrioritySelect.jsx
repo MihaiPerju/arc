@@ -10,7 +10,7 @@ class PriorityGetter extends Component {
 
   componentWillReceiveProps = props => {
     const { data } = props;
-    if (data.priority) {
+    if (data && data.priority) {
       this.props.setPriority(data.priority + 1);
     }
   };

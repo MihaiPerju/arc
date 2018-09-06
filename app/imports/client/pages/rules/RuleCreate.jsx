@@ -14,7 +14,7 @@ export default class RuleCreate extends React.Component {
     this.state = {
       clientOptions: [],
       facilityOptions: [],
-      model: {}
+      model: { priority: 1 }
     };
   }
 
@@ -59,19 +59,13 @@ export default class RuleCreate extends React.Component {
   }
 
   onSubmit = data => {
-    // const { clientId } = this.state;
-    // if (!clientId) {
-    //   this.setState({ error: "Client Id is required" });
-    // } else {
-    //   data.clientId = this.state.clientId;
-    //   Meteor.call("rule.create", data, (err, res) => {
-    //     if (!err) {
-    //       Notifier.success("Rule added!");
-    //     } else {
-    //       Notifier.error(err.reason);
-    //     }
-    //   });
-    // }
+    Meteor.call("rule.create", data, (err, res) => {
+      if (!err) {
+        Notifier.success("Rule added!");
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   };
 
   onCreateRule = () => {
