@@ -4,19 +4,42 @@ import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import { SelectField } from "/imports/ui/forms";
-
+import PrioritySelect from "./components/PrioritySelect";
 export default class RuleCreate extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      clientOptions: []
+      clientOptions: [],
+      facilityOptions: [],
+      model: {}
     };
   }
 
+  onChange = (key, value) => {
+    if (key === "clientId") {
+      let facilityOptions = [{ label: "All", value: "all" }];
+      let clientId = value;
+      facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
+        if (!err) {
+          res.map(facility => {
+            facilityOptions.push({ label: facility.name, value: facility._id });
+          });
+          this.setState({ facilityOptions });
+        }
+      });
+    }
+  };
+
+  onChangePriority = priority => {
+    this.setState({ model: { priority } });
+  };
+
   componentWillMount() {
     let clientOptions = [];
+    let facilityOptions = [{ label: "All", value: "all" }];
     clientsQuery.fetch((err, res) => {
       if (!err) {
         res.map(client => {
@@ -25,16 +48,30 @@ export default class RuleCreate extends React.Component {
         this.setState({ clientOptions });
       }
     });
+    facilityQuery.fetch((err, res) => {
+      if (!err) {
+        res.map(facility => {
+          facilityOptions.push({ label: facility.name, value: facility._id });
+        });
+        this.setState({ facilityOptions });
+      }
+    });
   }
 
   onSubmit = data => {
-    Meteor.call("rule.create", data, (err, res) => {
-      if (!err) {
-        Notifier.success("Rule added!");
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
+    // const { clientId } = this.state;
+    // if (!clientId) {
+    //   this.setState({ error: "Client Id is required" });
+    // } else {
+    //   data.clientId = this.state.clientId;
+    //   Meteor.call("rule.create", data, (err, res) => {
+    //     if (!err) {
+    //       Notifier.success("Rule added!");
+    //     } else {
+    //       Notifier.error(err.reason);
+    //     }
+    //   });
+    // }
   };
 
   onCreateRule = () => {
@@ -48,7 +85,8 @@ export default class RuleCreate extends React.Component {
   };
 
   render() {
-    const { clientOptions } = this.state;
+    const { clientOptions, facilityOptions, model } = this.state;
+    console.log(model);
 
     return (
       <div className="create-form">
@@ -64,10 +102,22 @@ export default class RuleCreate extends React.Component {
         </div>
         <div className="create-form__wrapper">
           <div className="action-block i--block">
-            <AutoForm schema={RuleSchema} onSubmit={this.onSubmit} ref="form">
-              {this.state.error && (
-                <div className="error">{this.state.error}</div>
-              )}
+            <AutoForm
+              model={model}
+              onChange={this.onChange}
+              schema={RuleSchema}
+              onSubmit={this.onSubmit}
+              ref="form"
+            >
+              <PrioritySelect setPriority={this.onChangePriority} />
+              <div className="form-wrapper">
+                <AutoField
+                  labelHidden={true}
+                  placeholder="Priority"
+                  name="priority"
+                />
+                <ErrorField name="priority" />
+              </div>
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
@@ -89,6 +139,17 @@ export default class RuleCreate extends React.Component {
                     options={clientOptions}
                   />
                   <ErrorField name="clientId" />
+                </div>
+              </div>
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <SelectField
+                    labelHidden={true}
+                    label="Select Facility"
+                    name="facilityId"
+                    options={facilityOptions}
+                  />
+                  <ErrorField name="facilityId" />
                 </div>
               </div>
 

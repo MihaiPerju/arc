@@ -2,19 +2,23 @@ import SimpleSchema from "simpl-schema";
 
 export default new SimpleSchema({
   name: {
-    type: String,
-    optional:true //testing 
+    type: String
   },
   description: {
-    type: String,
-    optional:true //testing 
+    type: String
   },
   clientId: {
-    type: String,
-    optional:true //testing 
+    type: String
+  },
+  facilityId: {
+    type: String
   },
   rule: {
     type: Object,
     blackbox: true
+  },
+  priority: {
+    type: SimpleSchema.Integer,
+    min: 1
   }
 });
