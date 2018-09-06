@@ -1,19 +1,20 @@
-import SimpleSchema from 'simpl-schema';
+import SimpleSchema from "simpl-schema";
 
 export default new SimpleSchema({
-    name: {
-        type: String
-    },
-    description: {
-        type: String
-    },
-    rule: {
-        type: Array,
-        optional: true
-    },
-    "rule.$": {
-        type: Object,
-        optional: true,
-        blackbox: true
-    }
+  name: {
+    type: String,
+    optional:true //testing 
+  },
+  description: {
+    type: String,
+    optional:true //testing 
+  },
+  clientId: {
+    type: String,
+    optional:true //testing 
+  },
+  rule: {
+    type: Object,
+    blackbox: true
+  }
 });

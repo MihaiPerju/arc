@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import TwoWayQuerybuilder from "react-two-way-querybuilder";
+import TwoWayQuerybuilder from "./rule-generator/TwoWayQuerybuilder";
 import connectField from "uniforms/connectField";
 
 const fields = [
@@ -31,12 +31,25 @@ const fields = [
 ];
 
 class RuleGenerator extends Component {
-  handleChange = query => {
-    this.props.onChange(query.data);
+  constructor() {
+    super();
+  }
+
+  onChange = query => {
+    this.props.onChange(query);
   };
 
   render() {
-    return <TwoWayQuerybuilder fields={fields} onChange={this.handleChange} />;
+    const query = this.props.value && this.props.value.query;
+    const config = { query };
+
+    return (
+      <TwoWayQuerybuilder
+        config={config}
+        fields={fields}
+        onChange={this.onChange}
+      />
+    );
   }
 }
 

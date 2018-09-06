@@ -3,24 +3,38 @@ import RuleSchema from "/imports/api/rules/schemas/schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
+import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import { SelectField } from "/imports/ui/forms";
+
 export default class RuleCreate extends React.Component {
   constructor() {
     super();
 
-    this.state = {};
+    this.state = {
+      clientOptions: []
+    };
+  }
+
+  componentWillMount() {
+    let clientOptions = [];
+    clientsQuery.fetch((err, res) => {
+      if (!err) {
+        res.map(client => {
+          clientOptions.push({ label: client.clientName, value: client._id });
+        });
+        this.setState({ clientOptions });
+      }
+    });
   }
 
   onSubmit = data => {
-    console.log(data);
-    // data.clientId = FlowRouter.current().params.id;
-    // Meteor.call("rule.create", data, err => {
-    //   if (!err) {
-    //     Notifier.success("Rule added!");
-    //     this.onClose();
-    //   } else {
-    //     Notifier.error(err.reason);
-    //   }
-    // });
+    Meteor.call("rule.create", data, (err, res) => {
+      if (!err) {
+        Notifier.success("Rule added!");
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   };
 
   onCreateRule = () => {
@@ -34,7 +48,8 @@ export default class RuleCreate extends React.Component {
   };
 
   render() {
-    const schema = RuleSchema.omit("clientId");
+    const { clientOptions } = this.state;
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -49,7 +64,7 @@ export default class RuleCreate extends React.Component {
         </div>
         <div className="create-form__wrapper">
           <div className="action-block i--block">
-            <AutoForm schema={schema} onSubmit={this.onSubmit} ref="form">
+            <AutoForm schema={RuleSchema} onSubmit={this.onSubmit} ref="form">
               {this.state.error && (
                 <div className="error">{this.state.error}</div>
               )}
@@ -64,6 +79,17 @@ export default class RuleCreate extends React.Component {
                   name="description"
                 />
                 <ErrorField name="description" />
+              </div>
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <SelectField
+                    labelHidden={true}
+                    label="Select Client"
+                    name="clientId"
+                    options={clientOptions}
+                  />
+                  <ErrorField name="clientId" />
+                </div>
               </div>
 
               <RuleGenerator name="rule" />

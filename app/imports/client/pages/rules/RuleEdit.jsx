@@ -3,18 +3,31 @@ import RuleSchema from "/imports/api/rules/schemas/schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
+import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import { SelectField } from "/imports/ui/forms";
 
 export default class RuleEdit extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      error: null
+      clientOptions: []
     };
   }
 
+  componentWillMount() {
+    let clientOptions = [];
+    clientsQuery.fetch((err, res) => {
+      if (!err) {
+        res.map(client => {
+          clientOptions.push({ label: client.clientName, value: client._id });
+        });
+        this.setState({ clientOptions });
+      }
+    });
+  }
+
   onSubmit(data) {
-    data.clientId = FlowRouter.current().params.id;
     Meteor.call("rule.update", data, err => {
       if (!err) {
         Notifier.success("Rule Updated");
@@ -25,7 +38,7 @@ export default class RuleEdit extends React.Component {
     });
   }
 
-  onCreateRule = () => {
+  onEditRule = () => {
     const { form } = this.refs;
     form.submit();
   };
@@ -37,7 +50,7 @@ export default class RuleEdit extends React.Component {
 
   render() {
     const { rule } = this.props;
-    const schema = RuleSchema.omit("clientId");
+    const { clientOptions } = this.state;
 
     return (
       <div className="create-form">
@@ -46,7 +59,7 @@ export default class RuleEdit extends React.Component {
             <button onClick={this.onClose} className="btn-cancel">
               Cancel
             </button>
-            <button onClick={this.onCreateRule} className="btn--green">
+            <button onClick={this.onEditRule} className="btn--green">
               Confirm & save
             </button>
           </div>
@@ -55,13 +68,10 @@ export default class RuleEdit extends React.Component {
           <div className="action-block i--block">
             <AutoForm
               model={rule}
-              schema={schema}
+              schema={RuleSchema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
             >
-              {this.state.error && (
-                <div className="error">{this.state.error}</div>
-              )}
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
@@ -74,7 +84,19 @@ export default class RuleEdit extends React.Component {
                 />
                 <ErrorField name="description" />
 
+                <div className="select-wrapper">
+                  <div className="select-form">
+                    <SelectField
+                      labelHidden={true}
+                      label="Select Client"
+                      name="clientId"
+                      options={clientOptions}
+                    />
+                  </div>
+                </div>
+
                 <RuleGenerator name="rule" />
+                <ErrorField name="description" />
               </div>
             </AutoForm>
           </div>
