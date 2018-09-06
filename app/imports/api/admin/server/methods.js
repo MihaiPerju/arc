@@ -7,6 +7,7 @@ import Substates from "/imports/api/substates/collection";
 import Backup from "/imports/api/backup/collection";
 import Files from "/imports/api/files/collection";
 import Letters from "/imports/api/letters/collection.js";
+import Rules from "/imports/api/rules/collection.js";
 import AccountsCollection from "/imports/api/accounts/collection";
 import Escalations from "/imports/api/escalations/collection";
 import { createFolderStructure } from "/imports/startup/server/folders";
@@ -194,6 +195,9 @@ Meteor.methods({
         break;
       case "letters":
         Letters.remove({});
+        break;
+      case "rules":
+        Rules.remove({});
         break;
       default:
         AccountsCollection.remove({});
