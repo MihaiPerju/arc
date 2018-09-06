@@ -87,13 +87,12 @@ export default class ReportSearchBar extends Component {
     }
 
     if ("facCode" in queryParams) {
-      model.name = queryParams.name;
+      model.facCode = queryParams.facCode;
     }
 
     if ("ptType" in queryParams) {
-      model.name = queryParams.name;
+      model.ptType = queryParams.ptType;
     }
-
     this.setState({model});
   };
 
