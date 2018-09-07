@@ -2,11 +2,16 @@ import Security from "/imports/api/security/security.js";
 import Clients from "/imports/api/clients/collection.js";
 import Uploads from "/imports/api/s3-uploads/uploads/collection";
 import Facilities from "/imports/api/facilities/collection.js";
+import User from "/imports/api/users/collection.js"
 import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection.js";
+import sendEmail from './emailTemplate'
 
+Meteor.startup(function () {
+  process.env.MAIL_URL="smtp://3b14232c5b2ecb:384dd38ca0149d@smtp.mailtrap.io:2525"
+});
 Meteor.methods({
   "client.create"(data) {
     Security.isAdminOrTech(this.userId);
@@ -28,14 +33,21 @@ Meteor.methods({
   },
 
   "client.update"(_id, data) {
+     let id=data.managerIds[0]
     Security.isAdminOrTech(this.userId);
-
     Clients.update(
       { _id },
       {
         $set: data
       }
     );
+    let ids=data.managerIds
+    let to
+    for(i of ids){
+      let managerData= User.findOne({_id:i}).getEmail()
+      to=managerData
+      sendEmail({ to, email:data.email });
+    }
   },
 
   "client.removeLogo"(clientId) {
