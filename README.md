@@ -31,3 +31,8 @@ tech - tech-x@app.com, where x in {1,2,3}
 rep - rep-x@app.com, where x in {1,2,3}
 
 The password is 12345 for all accounts.
+
+
+## Documents
+
+Official documentation - https://docs.google.com/document/d/1d6iB3vKQXrOSnXWmGpik0F31zmIpJrZgyLOEMsKaU_s/edit?ts=5b7c3d6d
