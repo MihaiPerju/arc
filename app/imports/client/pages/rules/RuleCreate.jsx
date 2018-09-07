@@ -14,7 +14,8 @@ export default class RuleCreate extends React.Component {
     this.state = {
       clientOptions: [],
       facilityOptions: [],
-      model: { priority: 1 }
+      clientId: null,
+      model: {}
     };
   }
 
@@ -22,6 +23,7 @@ export default class RuleCreate extends React.Component {
     if (key === "clientId") {
       let facilityOptions = [{ label: "All", value: "all" }];
       let clientId = value;
+      this.setState({ clientId, model: { priority: 1 } });
       facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
         if (!err) {
           res.map(facility => {
@@ -79,9 +81,8 @@ export default class RuleCreate extends React.Component {
   };
 
   render() {
-    const { clientOptions, facilityOptions, model } = this.state;
+    const { clientOptions, facilityOptions, model, clientId } = this.state;
     console.log(model);
-
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -103,27 +104,6 @@ export default class RuleCreate extends React.Component {
               onSubmit={this.onSubmit}
               ref="form"
             >
-              <PrioritySelect setPriority={this.onChangePriority} />
-              <div className="form-wrapper">
-                <AutoField
-                  labelHidden={true}
-                  placeholder="Priority"
-                  name="priority"
-                />
-                <ErrorField name="priority" />
-              </div>
-              <div className="form-wrapper">
-                <AutoField labelHidden={true} placeholder="Name" name="name" />
-                <ErrorField name="name" />
-              </div>
-              <div className="form-wrapper">
-                <AutoField
-                  labelHidden={true}
-                  placeholder="Description"
-                  name="description"
-                />
-                <ErrorField name="description" />
-              </div>
               <div className="select-wrapper">
                 <div className="select-form">
                   <SelectField
@@ -147,6 +127,34 @@ export default class RuleCreate extends React.Component {
                 </div>
               </div>
 
+              <PrioritySelect
+                clientId={clientId}
+                setPriority={this.onChangePriority}
+              />
+
+              {clientId && (
+                <div className="form-wrapper">
+                  <AutoField
+                    labelHidden={true}
+                    placeholder="Priority"
+                    name="priority"
+                  />
+                  <ErrorField name="priority" />
+                </div>
+              )}
+
+              <div className="form-wrapper">
+                <AutoField labelHidden={true} placeholder="Name" name="name" />
+                <ErrorField name="name" />
+              </div>
+              <div className="form-wrapper">
+                <AutoField
+                  labelHidden={true}
+                  placeholder="Description"
+                  name="description"
+                />
+                <ErrorField name="description" />
+              </div>
               <RuleGenerator name="rule" />
               <ErrorField name="rule" />
             </AutoForm>

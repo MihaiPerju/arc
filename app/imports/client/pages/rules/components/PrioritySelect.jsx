@@ -21,12 +21,13 @@ class PriorityGetter extends Component {
 }
 
 export default withQuery(
-  props => {
+  ({ clientId }) => {
     return query.clone({
       limit: 1,
       options: {
         sort: { priority: -1 }
-      }
+      },
+      filters: { clientId }
     });
   },
   { reactive: true, single: true }
