@@ -14,7 +14,7 @@ export default class ClientContent extends Component {
   }
 
   componentWillReceiveProps() {
-    this.setState({ edit: false });
+    // this.setState({ edit: false });
   }
 
   setEdit = () => {
