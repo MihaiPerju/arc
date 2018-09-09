@@ -20,5 +20,9 @@ export default new SimpleSchema({
   priority: {
     type: SimpleSchema.Integer,
     min: 1
+  },
+  isBreakingLoop: {
+    type: Boolean,
+    defaultValue: false
   }
 });

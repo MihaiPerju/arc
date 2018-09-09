@@ -157,6 +157,12 @@ export default class RuleCreate extends React.Component {
               </div>
               <RuleGenerator name="rule" />
               <ErrorField name="rule" />
+              <div className="form-wrapper">
+                <AutoField
+                  label="Stop execution if this condition is true"
+                  name="isBreakingLoop"
+                />
+              </div>
             </AutoForm>
           </div>
         </div>

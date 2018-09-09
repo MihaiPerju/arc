@@ -9,6 +9,8 @@ export default Rules.createQuery("listRules", {
   name: 1,
   description: 1,
   clientId: 1,
+  facilityId: 1,
   rule: 1,
-  priority: 1
+  priority: 1,
+  isBreakingLoop: 1
 });

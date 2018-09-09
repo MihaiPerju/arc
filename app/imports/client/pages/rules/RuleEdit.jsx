@@ -54,7 +54,7 @@ export default class RuleEdit extends React.Component {
     });
   }
 
-  onSubmit(data) {
+  onSubmit = data => {
     Meteor.call("rule.update", data, err => {
       if (!err) {
         Notifier.success("Rule Updated");
@@ -63,7 +63,7 @@ export default class RuleEdit extends React.Component {
         Notifier.error(err.reason);
       }
     });
-  }
+  };
 
   onEditRule = () => {
     const { form } = this.refs;
@@ -119,31 +119,37 @@ export default class RuleEdit extends React.Component {
                   name="description"
                 />
                 <ErrorField name="description" />
+              </div>
 
-                <div className="select-wrapper">
-                  <div className="select-form">
-                    <SelectField
-                      labelHidden={true}
-                      label="Select Client"
-                      name="clientId"
-                      options={clientOptions}
-                    />
-                  </div>
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <SelectField
+                    labelHidden={true}
+                    label="Select Client"
+                    name="clientId"
+                    options={clientOptions}
+                  />
                 </div>
-                <div className="select-wrapper">
-                  <div className="select-form">
-                    <SelectField
-                      labelHidden={true}
-                      label="Select Facility"
-                      name="facilityId"
-                      options={facilityOptions}
-                    />
-                    <ErrorField name="facilityId" />
-                  </div>
+              </div>
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <SelectField
+                    labelHidden={true}
+                    label="Select Facility"
+                    name="facilityId"
+                    options={facilityOptions}
+                  />
+                  <ErrorField name="facilityId" />
                 </div>
+              </div>
 
-                <RuleGenerator name="rule" />
-                <ErrorField name="description" />
+              <RuleGenerator name="rule" />
+              <ErrorField name="description" />
+              <div className="form-wrapper">
+                <AutoField
+                  label="Stop execution if this condition is true"
+                  name="isBreakingLoop"
+                />
               </div>
             </AutoForm>
           </div>
