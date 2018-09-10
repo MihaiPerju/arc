@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField,SelectField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
@@ -217,7 +217,7 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectSimple label={false} name="actionId" options={actions} />
+                <SelectField  name="actionId" labelHidden={false} options={actions}  placeholder="actions" />
                 <ErrorField name="actionId" />
               </div>
               {reasonCodes.length > 0 && (
