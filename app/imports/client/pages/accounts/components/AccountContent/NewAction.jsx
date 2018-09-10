@@ -92,7 +92,7 @@ export default class NewAction extends Component {
         //Clear inputs
         this.refs.form.reset();
         hide();
-        closeRightPanel();
+        // closeRightPanel();
       } else {
         Notifier.error(err.reason);
       }
@@ -246,7 +246,15 @@ export default class NewAction extends Component {
                 type="submit"
                 className="btn--green"
               >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Save"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Save"
+                )}
               </button>
             </div>
           </AutoForm>

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import AccountContent from "./AccountContent.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
 import query from "/imports/api/accounts/queries/accountList";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
@@ -15,6 +14,7 @@ import MetaDataSlider from "/imports/client/pages/accounts/components/AccountCon
 import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 import Dialog from "/imports/client/lib/ui/Dialog";
+import RightSide from "./components/AccountRightSide";
 
 class AccountListContainer extends Pager {
   constructor() {
@@ -266,12 +266,6 @@ class AccountListContainer extends Pager {
     this.closeRightPanel();
   };
 
-  getAccount(currentAccount) {
-    const { data } = this.props;
-    const [account] = data.filter(account => account._id === currentAccount);
-    return account || null;
-  }
-
   getAccounts(accountsSelected) {
     const { data } = this.props;
     let accounts = [];
@@ -359,10 +353,7 @@ class AccountListContainer extends Pager {
   };
 
   closeRightPanel = () => {
-    this.setState({
-      currentAccount: null,
-      showMetaData: false
-    });
+    this.setState({ currentAccount: null, showMetaData: false });
   };
 
   getModuleTags = () => {
@@ -435,6 +426,11 @@ class AccountListContainer extends Pager {
     });
   };
 
+  componentWillUpdate = (props, state) => {
+    console.log(props);
+    console.log(state);
+  };
+
   render() {
     const { data, isLoading, error } = this.props;
     const {
@@ -453,7 +449,6 @@ class AccountListContainer extends Pager {
       lockOwnerName
     } = this.state;
     const options = this.getData(data);
-    const account = this.getAccount(currentAccount);
     const icons = [
       { icon: "user", method: this.assignToUser },
       { icon: "users", method: this.assignToWorkQueue }
@@ -525,8 +520,8 @@ class AccountListContainer extends Pager {
         {(currentAccount || accountsSelected.length) &&
           !showMetaData && (
             <RightSide
-              account={account}
               openMetaData={this.openMetaDataSlider}
+              currentAccount={currentAccount}
               accountsSelected={accountsSelected}
               closeRightPanel={this.closeRightPanel}
               removeLock={this.removeLock}
@@ -558,43 +553,6 @@ class AccountListContainer extends Pager {
             </div>
           </Dialog>
         )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const {
-      account,
-      openMetaData,
-      closeRightPanel,
-      accountsSelected,
-      removeLock
-    } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        <AccountContent
-          account={account}
-          openMetaData={openMetaData}
-          accountsSelected={accountsSelected}
-          closeRightPanel={closeRightPanel}
-          removeLock={removeLock}
-        />
       </div>
     );
   }
