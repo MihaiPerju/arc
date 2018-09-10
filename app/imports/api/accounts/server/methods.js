@@ -16,8 +16,9 @@ import Settings from "/imports/api/settings/collection.js";
 import TickleService from "/imports/api/tickles/server/services/TickleService";
 import sendEmail from './emailTemplate'
 import User from "/imports/api/users/collection.js"
+import MAIL_URL from '../../../../config'
 Meteor.startup(function () {
-  process.env.MAIL_URL="smtp://3b14232c5b2ecb:384dd38ca0149d@smtp.mailtrap.io:2525"
+  process.env.MAIL_URL=MAIL_URL
 });
 
 Meteor.methods({
