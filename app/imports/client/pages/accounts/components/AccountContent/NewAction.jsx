@@ -68,7 +68,7 @@ export default class NewAction extends Component {
   }
 
   onSubmit(data) {
-    const { account, hide, closeRightPanel } = this.props;
+    const { account, hide, freezeAccount } = this.props;
     const { dateLabelKeys } = this.state;
     data.accountId = account._id;
     if (account.assignee) {
@@ -92,7 +92,7 @@ export default class NewAction extends Component {
         //Clear inputs
         this.refs.form.reset();
         hide();
-        // closeRightPanel();
+        freezeAccount();
       } else {
         Notifier.error(err.reason);
       }

@@ -180,10 +180,7 @@ class AccountListContainer extends Pager {
     FlowRouter.setQueryParams({ accountId: null });
     if (this.checkAccountIsLocked(newAccount)) {
       if (currentAccount === newAccount._id) {
-        this.setState({
-          currentAccount: null,
-          showMetaData: false
-        });
+        this.closeRightPanel();
       } else {
         this.setState({
           currentAccount: newAccount._id,
@@ -353,6 +350,7 @@ class AccountListContainer extends Pager {
   };
 
   closeRightPanel = () => {
+    console.log("Closed");
     this.setState({ currentAccount: null, showMetaData: false });
   };
 
@@ -424,11 +422,6 @@ class AccountListContainer extends Pager {
         this.closeDialog();
       }
     });
-  };
-
-  componentWillUpdate = (props, state) => {
-    console.log(props);
-    console.log(state);
   };
 
   render() {

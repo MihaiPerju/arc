@@ -18,6 +18,18 @@ import Tickles from "/imports/api/tickles/collection";
 import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class ActionService {
+  //Freezing account to be processed by the rules engine
+  static freezeAccount(_id) {
+    Accounts.update(
+      { _id },
+      {
+        $set: {
+          isPending: true
+        }
+      }
+    );
+  }
+
   //Adding action to account
   static createAction(data) {
     const { accountId, actionId, reasonCode, userId, addedBy } = data;
@@ -254,7 +266,7 @@ export default class ActionService {
   static addLockToAccount(_id, userId) {
     // remove previous lock from the account by logged-in user
     const account = Accounts.findOne({ lockOwnerId: userId });
-    
+
     if (account) {
       this.removeLockFromAccount(account._id, userId);
     }

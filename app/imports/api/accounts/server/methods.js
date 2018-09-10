@@ -16,6 +16,10 @@ import Settings from "/imports/api/settings/collection.js";
 import TickleService from "/imports/api/tickles/server/services/TickleService";
 
 Meteor.methods({
+  "account.freeze"(_id) {
+    ActionService.freezeAccount(_id);
+  },
+
   "account.actions.add"(data) {
     data.userId = this.userId;
     ActionService.createAction(data);

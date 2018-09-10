@@ -241,5 +241,10 @@ export default new SimpleSchema({
     type: Number,
     optional: true,
     defaultValue: 0
+  },
+  isPending: {
+    type: Boolean,
+    //to be changed to true when working with Rules Engine
+    defaultValue: false
   }
 });
