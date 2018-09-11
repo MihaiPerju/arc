@@ -1,6 +1,7 @@
 import Accounts from "/imports/api/accounts/collection";
 import Rules from "/imports/api/rules/collection";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
+import Operators from "/imports/api/rules/enums/operators";
 
 export default class RulesEngine {
   static run() {
@@ -36,12 +37,13 @@ export default class RulesEngine {
     if (data) {
       //Start the first step recursively
       expression = RulesEngine.recursiveCheck(data, account);
-      const truthValue = eval(expression);
-      if (truthValue) {
-        console.log("TRUE. ACTION THE ACCOUNT!");
-      } else {
-        console.log("FALSE. DON'T ACTION THE ACCOUNT!");
-      }
+      console.log(expression);
+      // const truthValue = eval(expression);
+      // if (truthValue) {
+      //   console.log("TRUE. ACTION THE ACCOUNT!");
+      // } else {
+      //   console.log("FALSE. DON'T ACTION THE ACCOUNT!");
+      // }
     }
   }
 
@@ -50,31 +52,41 @@ export default class RulesEngine {
       //If there are no rules or it contains a single rule, add the condition itself
       const { combinator } = condition;
       if (combinator) {
-        condition = condition.rules[0];
+        // condition = condition.rules[0];
+        return RulesEngine.recursiveCheck(condition.rules[0], account);
       }
       const { field } = condition;
       return RulesEngine.evaluateComparison(account[field], condition);
     } else if (condition.rules.length > 1) {
-      console.log("COMPOUND CONDITION");
-      // //Decide which conditional will be used in dependence of combinator
-      // const { combinator } = condition;
-      // const conditionalString = combinator === Operators.AND ? "$and" : "$or";
+      //Decide which conditional will be used in dependence of combinator
+      const { combinator } = condition;
+      const conditionalString = combinator === Operators.AND ? "&&" : "||";
 
-      // //Prepare the array of conditions
+      let expression = "(";
 
       // //Take the combinator and decide which filter to apply
-      // for (let rule of condition.rules) {
-      //   let ruleFilters = {};
-      //   this.addFilter(rule, ruleFilters);
-      // }
+      for (let index in condition.rules) {
+        const rule = condition.rules[index];
+        let expressionChunk = RulesEngine.recursiveCheck(rule, account);
+        // console.log(expressionChunk);
+        expression = expression + expressionChunk;
+        if (index != condition.rules.length - 1) {
+          expression += conditionalString;
+        }
+      }
+      expression += ")";
+      return expression;
     }
   }
 
   static evaluateComparison(valueToCompare, condition) {
     const { operator, value } = condition;
     const compareOperator = RulesEngine.convertSign(operator);
-
-    return eval(valueToCompare + compareOperator + value);
+    // return eval(valueToCompare + compareOperator + value);
+    if (valueToCompare && compareOperator && value) {
+      return valueToCompare + compareOperator + value;
+    }
+    return true;
   }
 
   static convertSign(sign) {
