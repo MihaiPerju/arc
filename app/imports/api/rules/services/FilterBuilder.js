@@ -2,6 +2,7 @@
 
 import Operators from "../enums/operators";
 
+
 export default class FilterBuilder {
   static convert(rule) {
     let filters = {};

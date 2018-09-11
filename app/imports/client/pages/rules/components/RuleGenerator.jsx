@@ -4,28 +4,27 @@ import connectField from "uniforms/connectField";
 
 const fields = [
   {
-    name: "firstName",
+    name: "acctNum",
     operators: "all",
-    label: "First Name",
+    label: "Account Number",
     input: { type: "text" }
   },
   {
-    name: "lastName",
+    name: "facCode",
     operators: "all",
-    label: "Last Name",
-    input: {
-      type: "select",
-      options: [
-        { value: "Smith", name: "Smith" },
-        { value: "London", name: "London" }
-      ]
-    }
+    label: "Facility Code",
+    input: { type: "text" }
   },
-  { name: "age", operators: "all", label: "Age", input: { type: "text" } },
   {
-    name: "birthDate",
+    name: "medNo",
     operators: "all",
-    label: "Birth date",
+    label: "Medical Number",
+    input: { type: "text" }
+  },
+  {
+    name: "acctBal",
+    operators: "all",
+    label: "AccountBalance",
     input: { type: "text" }
   }
 ];

@@ -7,6 +7,8 @@ import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import { SelectField } from "/imports/ui/forms";
 import PrioritySelect from "./components/PrioritySelect";
+import FacilitySelector from "/imports/api/facilities/enums/selectors";
+
 export default class RuleCreate extends React.Component {
   constructor() {
     super();
@@ -21,7 +23,10 @@ export default class RuleCreate extends React.Component {
 
   onChange = (key, value) => {
     if (key === "clientId") {
-      let facilityOptions = [{ label: "All", value: "all" }];
+      let facilityOptions = [
+        { label: "Select Facility" },
+        { label: "All", value: FacilitySelector.ALL }
+      ];
       let clientId = value;
       this.setState({ clientId, model: { priority: 1 } });
       facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
@@ -40,8 +45,11 @@ export default class RuleCreate extends React.Component {
   };
 
   componentWillMount() {
-    let clientOptions = [];
-    let facilityOptions = [{ label: "All", value: "all" }];
+    let clientOptions = [{ label: "Select client" }];
+    let facilityOptions = [
+      { label: "Select Facility" },
+      { label: "All", value: "all" }
+    ];
     clientsQuery.fetch((err, res) => {
       if (!err) {
         res.map(client => {
