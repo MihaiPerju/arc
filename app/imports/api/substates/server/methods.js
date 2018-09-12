@@ -19,16 +19,21 @@ Meteor.methods({
   },
   "substate.delete"(_id) {
     Security.checkAdmin(this.userId);
-    Substates.remove({ _id } );
+    // Substates.remove({ _id } );
+    Substates.update({ _id }, { $set: { status: false } });
   },
   "substate.deleteMany"(ids) {
     Security.checkAdmin(this.userId);
 
-    Substates.remove({
-      _id: {
+    Substates.update(
+     { _id: {
         $in: ids
-      }
-    });
+      }},
+      {
+        $set: { status: false}
+      },
+      { multi: true }
+    );
   },
 
   "substate.tag"({ _id, tagIds }) {
