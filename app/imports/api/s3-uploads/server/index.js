@@ -1,2 +1,2 @@
-// import '../uploads/collection'; // to load indexes
-// import './hooks';
+import '../uploads/collection'; // to load indexes
+import './hooks';
