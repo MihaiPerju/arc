@@ -71,6 +71,8 @@ export default class EditInfoDialog extends Component {
               placeholderText="Select New Date"
               onChange={this.onDateSelect}
               selected={selectedDate ? selectedDate : moment(editValue)}
+              fixedHeight
+
             />
           </div>
           <div className="btn-group__footer flex--helper flex-justify--end">
@@ -98,6 +100,7 @@ export default class EditInfoDialog extends Component {
                 placeholderText="Select New Date"
                 onChange={this.onDateSelect}
                 selected={selectedDate ? selectedDate : moment(editValue)}
+                fixedHeight
               />
             </div>
             <div className="btn-group__footer flex--helper flex-justify--end">

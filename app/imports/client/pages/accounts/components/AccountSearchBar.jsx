@@ -559,6 +559,7 @@ export default class AccountSearchBar extends Component {
                               onChange={date =>
                                 this.onDateSelect(date, "dischrgDateMin")
                               }
+                              fixedHeight
                             />
                           </div>
                           <div>
@@ -574,6 +575,7 @@ export default class AccountSearchBar extends Component {
                               onChange={date =>
                                 this.onDateSelect(date, "dischrgDateMax")
                               }
+                              fixedHeight
                             />
                           </div>
                         </div>
@@ -591,6 +593,7 @@ export default class AccountSearchBar extends Component {
                               onChange={date =>
                                 this.onDateSelect(date, "fbDateMin")
                               }
+                              fixedHeight
                             />
                           </div>
                           <div>
@@ -606,6 +609,7 @@ export default class AccountSearchBar extends Component {
                               onChange={date =>
                                 this.onDateSelect(date, "fbDateMax")
                               }
+                              fixedHeight
                             />
                           </div>
                         </div>
@@ -623,6 +627,7 @@ export default class AccountSearchBar extends Component {
                               onChange={date =>
                                 this.onDateSelect(date, "admitDateMin")
                               }
+                              fixedHeight
                             />
                           </div>
                           <div>
@@ -638,6 +643,7 @@ export default class AccountSearchBar extends Component {
                               onChange={date =>
                                 this.onDateSelect(date, "admitDateMax")
                               }
+                              fixedHeight
                             />
                           </div>
                         </div>
