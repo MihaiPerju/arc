@@ -83,6 +83,7 @@ export default class ActivityStreamGraph extends React.Component {
             selected={selectedDate}
             onChange={this.onChange}
             placeholderText="Select New Date"
+            fixedHeight
           />
         </div>
         <button
