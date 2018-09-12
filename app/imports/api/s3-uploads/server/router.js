@@ -66,19 +66,19 @@ export function createRoute(path, handler) {
           })
         );
       },
-      // upload() {
-      //   return _.map(req.filenames, function(filename) {
-      //     const { resourceType, resourceId } = req.postData;
-      //     uploadId = resourceId;
-      //     const uploadedFile = S3Uploader.upload(filename);
+      upload() {
+        return _.map(req.filenames, function(filename) {
+          const { resourceType, resourceId } = req.postData;
+          uploadId = resourceId;
+          const uploadedFile = S3Uploader.upload(filename);
 
-      //     return uploadedFile.save({
-      //       resourceType,
-      //       resourceId,
-      //       userId: user && user._id
-      //     });
-      //   });
-      // },
+          return uploadedFile.save({
+            resourceType,
+            resourceId,
+            userId: user && user._id
+          });
+        });
+      },
       uploadLocal({ accountId }) {
         return _.map(req.filenames, function(filePath) {
           const { resourceType, resourceId } = req.postData;
@@ -93,9 +93,9 @@ export function createRoute(path, handler) {
             AccountsCollection.findOne({
               _id: accountId
             }) || [];
-
+            
           let fileName = filePath.replace(os.tmpdir() + "/", "");
-
+          
           if (attachmentIds) {
             const count = Uploads.find({
               name: { $regex: fileName.slice(0, fileName.indexOf(".")) },
