@@ -2,7 +2,7 @@
   "name": "boilerplate",
   "private": true,
   "scripts": {
-    "start": "MONGO_URL=mongodb://localhost:27017/db meteor run --settings .deploy/local.json",
+    "start": " meteor run --settings .deploy/local.json",
     "deploy:qa": "meteor npm i ; cd .deploy/qa && mup deploy",
     "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc ROOT_URL=http://192.168.2.61:3000 meteor --settings .deploy/pms/local.json"
   },
