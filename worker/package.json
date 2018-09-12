@@ -2,7 +2,7 @@
   "name": "worker",
   "private": true,
   "scripts": {
-    "start": "MONGO_URL=mongodb://localhost:27017/db meteor run --port 4000",
+    "start": "meteor run --port 4000",
     "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc meteor run --port 4000"
   },
   "dependencies": {
