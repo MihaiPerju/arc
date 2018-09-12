@@ -47,7 +47,7 @@ Meteor.startup(() => {
   if (!fs.existsSync(reportsFolder)) {
     fs.mkdirSync(reportsFolder);
   }
-});
 
-//Launching cronjob
-SyncedCron.start();
+  //Launching cronjob
+  SyncedCron.start();
+});
