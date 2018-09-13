@@ -6,13 +6,12 @@ import Operators from "/imports/api/rules/enums/operators";
 export default class RulesEngine {
   static run() {
     //Get the pending accounts
-    const accounts = Accounts.find({ isPending: true }).fetch();
-    for (let account of accounts) {
-      RulesEngine.solveAccount(account);
-
-      //Clear pending status
-      // Accounts.update({_id:account._id},{$set:{isPending:false}});
-    }
+    // const accounts = Accounts.find({ isPending: true }).fetch();
+    // for (let account of accounts) {
+    //   RulesEngine.solveAccount(account);
+    //   //Clear pending status
+    //   // Accounts.update({_id:account._id},{$set:{isPending:false}});
+    // }
   }
 
   static solveAccount = account => {
