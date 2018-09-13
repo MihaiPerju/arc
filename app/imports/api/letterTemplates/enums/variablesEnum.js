@@ -14,11 +14,12 @@ export default [
     {label: "Financial Class", value: "Financial Class",},
     {label: "Admit Date", value: "Admit Date",},
     {label: "Medical Number", value: "Medical Number",},
-    {label: "StateZip", value: "StateZip",},
+    {label: "state", value: "state",},
     {label: "Substate", value: "Substate",},
     {label: "User Last Name", value: "User Last Name",},
     {label: "User First Name", value: "User First Name",},
-    {label: " User Phone", value: " User Phone",},
+    {label: "User Phone", value: "User Phone",},
+    {label: "StateZip", value: "StateZip",},
    
 ]
 export const variablesEnum = {
@@ -31,15 +32,15 @@ export const variablesEnum = {
         scope: "account"
     },
     "Facility Address": {
-        field: "facAddress",
+        field: "addressOne",
         scope: "account"
     },
-    "Facility Address 2": {
-        field: "facAddress2",
+    "Facility Address2": {
+        field: "addressTwo",
         scope: "account"
     },
     "Facility City": {
-        field: "facCity",
+        field: "city",
         scope: "account"
     },
     "Client Name": {
@@ -81,8 +82,8 @@ export const variablesEnum = {
         field: "medNo",
         scope: "account"
     },
-    "StateZip": {
-        field: "StateZip",
+    "state": {
+        field: "state",
         scope: "account"
     },
     "Substate": {
@@ -98,7 +99,11 @@ export const variablesEnum = {
         scope: "user"
     },
     "User Phone": {
-        field: "phone",
+        field: "phoneNumber",
         scope: "user"
+    },
+    "StateZip" : {
+        field: "zip",
+        scope: "account"
     },
 };
