@@ -1,21 +1,16 @@
-import {
-  Meteor
-} from "meteor/meteor";
+import { Meteor } from "meteor/meteor";
 import "/imports/cronjobs";
 import os from "os";
 import fs from "fs";
 import FoldersEnum from "/imports/api/business";
-import {
-  Random
-} from "meteor/random";
+import { Random } from "meteor/random";
 import Settings from "/imports/api/settings/collection.js";
+import "/imports/watchers/index";
 
 Meteor.startup(() => {
   workerId = Random.id();
 
-  const {
-    rootFolder
-  } = Settings.findOne({
+  const { rootFolder } = Settings.findOne({
     rootFolder: {
       $ne: null
     }
