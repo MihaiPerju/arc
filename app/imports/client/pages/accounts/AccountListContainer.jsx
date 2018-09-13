@@ -270,9 +270,9 @@ class AccountListContainer extends Pager {
     const { data } = this.props;
     const [account] = data.filter(account => account._id === currentAccount);
     if(account){
-      account.addressOne=account.facility.addressOne || null
-      account.addressTwo=account.facility.addressTwo || null
-      account.zip=account.facility.zipCode || null
+      account.FacilityAddress=account.facility.addressOne || null
+      account.FacilityAddress2=account.facility.addressTwo || null
+      account.StateZip=account.facility.zipCode || null
       account.city=account.facility.city || null
       account.state=account.facility.state || null
     
@@ -280,7 +280,7 @@ class AccountListContainer extends Pager {
       account.clientName=account.client.clientName
     }
     if(account.facility&&account.facility.name){
-      account.facName=account.facility.name
+      account.facilityName=account.facility.name
     }
   }
     return account || null;
