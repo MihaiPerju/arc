@@ -176,6 +176,7 @@ export default class NewAction extends Component {
             onChange={date => {
               this.onChange(date, input.label);
             }}
+            fixedHeight
           />
           {!this.state[input.label] && (
             <div className="alert-notice">{input.label} is required</div>
