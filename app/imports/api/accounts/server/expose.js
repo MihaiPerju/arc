@@ -11,10 +11,9 @@ AccountAttachmentsQuery.expose({});
 AccountListQuery.expose({
   firewall(userId, params) {
     //Don't get the pending accounts
-    // _.extend(params.filters, {
-    //   isPending: false,
-    //   acctNum: 1
-    // });
+    _.extend(params.filters, {
+      isPending: false
+    });
 
     const userFacilities = Facilities.find(
       {

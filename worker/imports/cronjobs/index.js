@@ -5,7 +5,6 @@ import PlacementService from "../services/PlacementService";
 import ReuploadService from "../services/ReuploadService";
 import InventoryService from "../services/InventoryService";
 import PaymentService from "../services/PaymentService";
-import RulesEngine from "../services/RulesEngine";
 
 // // Job for running reports
 // SyncedCron.add({
@@ -88,17 +87,5 @@ SyncedCron.add({
   },
   job: function() {
     ReuploadService.run();
-  }
-});
-
-//Job for passing accounts  through Rules Engine
-SyncedCron.add({
-  name: "Rules Engine",
-  schedule: function(parser) {
-    // parser is a later.parse object
-    return parser.text("every 10 seconds");
-  },
-  job: function() {
-    RulesEngine.run();
   }
 });

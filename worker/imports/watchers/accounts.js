@@ -1,11 +1,30 @@
 import Accounts from "/imports/api/accounts/collection";
-import Rules from "/imports/api/rules/collection";
+import RulesEngine from "../services/RulesEngine";
 
 Meteor.startup(function() {
   const AccountsNative = Accounts.rawCollection();
 
-  const changeStream = AccountsNative.watch();
-  changeStream.on("change", data => {
-    console.log(data);
-  });
+  const pipeline = [
+    {
+      $match: {
+        operationType: "update",
+        "updateDescription.updatedFields.isPending": true
+      }
+    }
+  ];
+
+  const changeStream = AccountsNative.watch(pipeline);
+
+  changeStream.on(
+    "change",
+    Meteor.bindEnvironment(
+      function(data) {
+        const updatedDocumentId = data.documentKey._id;
+        RulesEngine.run(updatedDocumentId);
+      },
+      function(error) {
+        console.log(error);
+      }
+    )
+  );
 });

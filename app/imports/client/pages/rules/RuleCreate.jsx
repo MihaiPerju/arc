@@ -90,7 +90,6 @@ export default class RuleCreate extends React.Component {
 
   render() {
     const { clientOptions, facilityOptions, model, clientId } = this.state;
-    console.log(model);
     return (
       <div className="create-form">
         <div className="create-form__bar">

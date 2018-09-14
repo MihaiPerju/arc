@@ -350,7 +350,6 @@ class AccountListContainer extends Pager {
   };
 
   closeRightPanel = () => {
-    console.log("Closed");
     this.setState({ currentAccount: null, showMetaData: false });
   };
 

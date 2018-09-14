@@ -4,30 +4,25 @@ import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import Operators from "/imports/api/rules/enums/operators";
 
 export default class RulesEngine {
-  static run() {
-    //Get the pending accounts
-    // const accounts = Accounts.find({ isPending: true }).fetch();
-    // for (let account of accounts) {
-    //   RulesEngine.solveAccount(account);
-    //   //Clear pending status
-    //   // Accounts.update({_id:account._id},{$set:{isPending:false}});
-    // }
+  static run(_id) {
+    const account = Accounts.findOne({ _id });
+    RulesEngine.solveAccount(account);
+    //Clear pending status
+    Accounts.update({ _id: account._id }, { $set: { isPending: false } });
   }
 
   static solveAccount = account => {
     let { clientId, facilityId } = account;
 
-    //To be streamed instead of simple fetching
+    //Getting indexed rules
     const rules = Rules.find({ clientId }).fetch();
 
     for (let statement of rules) {
-      // RulesEngine.compareAccount(account, rule);
       if (statement.rule) {
         RulesEngine.evaluate(account, statement.rule);
       }
     }
   };
-
   /////////////////CONVERTOR
 
   static evaluate(account, rule) {
@@ -36,13 +31,12 @@ export default class RulesEngine {
     if (data) {
       //Start the first step recursively
       expression = RulesEngine.recursiveCheck(data, account);
-      console.log(expression);
-      // const truthValue = eval(expression);
-      // if (truthValue) {
-      //   console.log("TRUE. ACTION THE ACCOUNT!");
-      // } else {
-      //   console.log("FALSE. DON'T ACTION THE ACCOUNT!");
-      // }
+      const truthValue = eval(expression);
+      if (truthValue) {
+        console.log("TRUE. ACTION THE ACCOUNT!");
+      } else {
+        console.log("FALSE. DON'T ACTION THE ACCOUNT!");
+      }
     }
   }
 
