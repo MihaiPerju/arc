@@ -8,6 +8,13 @@ import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import { SelectField } from "/imports/ui/forms";
 import PrioritySelect from "./components/PrioritySelect";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
+import triggerTypes, {
+  triggerOptions
+} from "/imports/api/rules/enums/triggers";
+import userQuery from "/imports/api/users/queries/listUsers.js";
+import workQueueQuery from "/imports/api/tags/queries/listTags";
+import actionQuery from "/imports/api/actions/queries/actionList";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class RuleCreate extends React.Component {
   constructor() {
@@ -16,40 +23,22 @@ export default class RuleCreate extends React.Component {
     this.state = {
       clientOptions: [],
       facilityOptions: [],
-      clientId: null,
-      model: {}
+      model: {},
+      triggerType: null,
+      userOptions: [],
+      workQueueOptions: [],
+      actionOptions: []
     };
   }
 
-  onChange = (key, value) => {
-    if (key === "clientId") {
-      let facilityOptions = [
-        { label: "Select Facility" },
-        { label: "All", value: FacilitySelector.ALL }
-      ];
-      let clientId = value;
-      this.setState({ clientId, model: { priority: 1 } });
-      facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
-        if (!err) {
-          res.map(facility => {
-            facilityOptions.push({ label: facility.name, value: facility._id });
-          });
-          this.setState({ facilityOptions });
-        }
-      });
-    }
-  };
+  componentDidMount() {
+    let userOptions = [];
+    let workQueueOptions = [];
+    let actionOptions = [];
+    let clientOptions = [];
+    let facilityOptions = [{ label: "All", value: "all" }];
 
-  onChangePriority = priority => {
-    this.setState({ model: { priority } });
-  };
-
-  componentWillMount() {
-    let clientOptions = [{ label: "Select client" }];
-    let facilityOptions = [
-      { label: "Select Facility" },
-      { label: "All", value: "all" }
-    ];
+    //Filling the client options
     clientsQuery.fetch((err, res) => {
       if (!err) {
         res.map(client => {
@@ -58,6 +47,8 @@ export default class RuleCreate extends React.Component {
         this.setState({ clientOptions });
       }
     });
+
+    //Filling the facility options
     facilityQuery.fetch((err, res) => {
       if (!err) {
         res.map(facility => {
@@ -66,7 +57,74 @@ export default class RuleCreate extends React.Component {
         this.setState({ facilityOptions });
       }
     });
+
+    //Filling the user options
+    userQuery
+      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
+      .fetch((err, res) => {
+        if (!err) {
+          res.map(user => {
+            userOptions.push({
+              label:
+                user.profile &&
+                user.profile.lastName + " " + user.profile.firstName,
+              value: user._id
+            });
+          });
+          this.setState({ userOptions });
+        }
+      });
+
+    //Filling the work queue options
+    workQueueQuery.clone().fetch((err, res) => {
+      if (!err) {
+        res.map(workQueue => {
+          workQueueOptions.push({
+            label: workQueue.name,
+            value: workQueue._id
+          });
+        });
+        this.setState({ workQueueOptions });
+      }
+    });
+
+    //Filling the action options
+    actionQuery.clone().fetch((err, res) => {
+      if (!err) {
+        res.map(action => {
+          actionOptions.push({
+            label: action.title,
+            value: action._id
+          });
+        });
+        this.setState({ actionOptions });
+      }
+    });
   }
+
+  onChange = (key, value) => {
+    if (key === "clientId") {
+      let clientId = value;
+      let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
+      this.setState({ model: { priority: 1, clientId } });
+      facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
+        if (!err) {
+          res.map(facility => {
+            facilityOptions.push({ label: facility.name, value: facility._id });
+          });
+          this.setState({ facilityOptions });
+        }
+      });
+    } else if (key === "triggerType") {
+      this.setState({ triggerType: value });
+    }
+  };
+
+  onChangePriority = priority => {
+    let { model } = this.state;
+    model.priority = priority;
+    this.setState({ model });
+  };
 
   onSubmit = data => {
     Meteor.call("rule.create", data, (err, res) => {
@@ -89,7 +147,17 @@ export default class RuleCreate extends React.Component {
   };
 
   render() {
-    const { clientOptions, facilityOptions, model, clientId } = this.state;
+    const {
+      clientOptions,
+      facilityOptions,
+      model,
+      triggerType,
+      userOptions,
+      workQueueOptions,
+      actionOptions
+    } = this.state;
+
+    console.log(model);
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -113,9 +181,9 @@ export default class RuleCreate extends React.Component {
             >
               <div className="select-wrapper">
                 <div className="select-form">
-                  <SelectField
+                  <AutoField
                     labelHidden={true}
-                    label="Select Client"
+                    placeholder="Select Client"
                     name="clientId"
                     options={clientOptions}
                   />
@@ -124,9 +192,9 @@ export default class RuleCreate extends React.Component {
               </div>
               <div className="select-wrapper">
                 <div className="select-form">
-                  <SelectField
+                  <AutoField
                     labelHidden={true}
-                    label="Select Facility"
+                    placeholder="Select Facility"
                     name="facilityId"
                     options={facilityOptions}
                   />
@@ -135,11 +203,11 @@ export default class RuleCreate extends React.Component {
               </div>
 
               <PrioritySelect
-                clientId={clientId}
+                clientId={model.clientId}
                 setPriority={this.onChangePriority}
               />
 
-              {clientId && (
+              {model.clientId && (
                 <div className="form-wrapper">
                   <AutoField
                     labelHidden={true}
@@ -164,6 +232,87 @@ export default class RuleCreate extends React.Component {
               </div>
               <RuleGenerator name="rule" />
               <ErrorField name="rule" />
+
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <AutoField
+                    labelHidden={true}
+                    options={triggerOptions}
+                    placeholder="Select a Type of Update"
+                    name="triggerType"
+                  />
+                  <ErrorField name="triggerType" />
+                </div>
+              </div>
+
+              {triggerType === triggerTypes.ACTION && (
+                <div className="select-wrapper">
+                  <div className="select-form">
+                    <AutoField
+                      labelHidden={true}
+                      placeholder="Select Action"
+                      options={actionOptions}
+                      name="actionId"
+                    />
+                    <ErrorField name="actionId" />
+                  </div>
+                </div>
+              )}
+
+              {triggerType === triggerTypes.ASSIGN_USER && (
+                <div className="select-wrapper">
+                  <div className="select-form">
+                    <AutoField
+                      labelHidden={true}
+                      placeholder="Select User"
+                      name="assigneeId"
+                      options={userOptions}
+                    />
+                    <ErrorField name="assigneeId" />
+                  </div>
+                </div>
+              )}
+
+              {triggerType === triggerTypes.ASSIGN_WORK_QUEUE && (
+                <div className="select-wrapper">
+                  <div className="select-form">
+                    <AutoField
+                      labelHidden={true}
+                      placeholder="Select Work Queue"
+                      options={workQueueOptions}
+                      name="workQueueId"
+                    />
+                    <ErrorField name="workQueueId" />
+                  </div>
+                </div>
+              )}
+
+              {triggerType === triggerTypes.EDIT && (
+                <div>
+                  <div className="select-wrapper">
+                    <div className="select-form">
+                      <AutoField
+                        options={triggerOptions}
+                        labelHidden={true}
+                        placeholder="Select Field"
+                        name="editField"
+                      />
+                      <ErrorField name="editField" />
+                    </div>
+                  </div>
+                  <div className="select-wrapper">
+                    <div className="select-form">
+                      <AutoField
+                        labelHidden={true}
+                        placeholder="New Value"
+                        name="editValue"
+                      />
+                      <ErrorField name="editValue" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="form-wrapper">
                 <AutoField
                   label="Stop execution if this condition is true"

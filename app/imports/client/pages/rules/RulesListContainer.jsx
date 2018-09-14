@@ -19,7 +19,7 @@ class RuleListContainer extends Pager {
       rulesSelected: [],
       currentRule: null,
       filter: false,
-      create: true,
+      create: false,
       page: 1,
       perPage: 13,
       total: 0,
