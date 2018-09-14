@@ -12,5 +12,11 @@ export default Rules.createQuery("listRules", {
   facilityId: 1,
   rule: 1,
   priority: 1,
-  isBreakingLoop: 1
+  isBreakingLoop: 1,
+  triggerType: 1,
+  actionId: 1,
+  assigneeId: 1,
+  workQueueId: 1,
+  editField: 1,
+  editValue: 1
 });

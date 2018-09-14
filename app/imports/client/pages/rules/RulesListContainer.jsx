@@ -103,7 +103,7 @@ class RuleListContainer extends Pager {
   deleteAction = () => {
     const { rulesSelected } = this.state;
 
-    Meteor.call("rule.deleteMany", rulesSelected, err => {
+    Meteor.call("rules.delete", rulesSelected, err => {
       if (!err) {
         Notifier.success("Rules deleted !");
         this.setState({

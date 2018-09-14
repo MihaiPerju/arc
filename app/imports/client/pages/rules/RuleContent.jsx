@@ -34,6 +34,8 @@ export default class RuleContent extends Component {
                 <div className="region">{rule.name}</div>
                 <div className="text-light-grey">Rule Description</div>
                 <div className="region">{rule.description}</div>
+                <div className="text-light-grey">Rule Priority</div>
+                <div className="region">{rule.priority}</div>
               </div>
               <div className="text-center">
                 <button

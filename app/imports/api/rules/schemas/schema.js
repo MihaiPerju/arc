@@ -43,9 +43,11 @@ export default new SimpleSchema({
     optional: true
   },
   editField: {
-    type: String
+    type: String,
+    optional: true
   },
   editValue: {
-    type: String
+    type: String,
+    optional: true
   }
 });

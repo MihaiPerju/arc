@@ -4,8 +4,17 @@ import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
-import { SelectField } from "/imports/ui/forms";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
+import { SelectField } from "/imports/ui/forms";
+import PrioritySelect from "./components/PrioritySelect";
+import FacilitySelector from "/imports/api/facilities/enums/selectors";
+import triggerTypes, {
+  triggerOptions
+} from "/imports/api/rules/enums/triggers";
+import userQuery from "/imports/api/users/queries/listUsers.js";
+import workQueueQuery from "/imports/api/tags/queries/listTags";
+import actionQuery from "/imports/api/actions/queries/actionList";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class RuleEdit extends React.Component {
   constructor() {
@@ -13,14 +22,20 @@ export default class RuleEdit extends React.Component {
 
     this.state = {
       clientOptions: [],
-      facilityOptions: []
+      facilityOptions: [],
+      model: {},
+      triggerType: null,
+      userOptions: [],
+      workQueueOptions: [],
+      actionOptions: []
     };
   }
 
   onChange = (key, value) => {
     if (key === "clientId") {
-      let facilityOptions = [{ label: "All", value: "all" }];
       let clientId = value;
+      let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
+      this.setState({ model: { priority: 1, clientId } });
       facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
         if (!err) {
           res.map(facility => {
@@ -29,13 +44,19 @@ export default class RuleEdit extends React.Component {
           this.setState({ facilityOptions });
         }
       });
+    } else if (key === "triggerType") {
+      this.setState({ triggerType: value });
     }
   };
 
-  componentWillMount() {
+  componentDidMount() {
+    let userOptions = [];
+    let workQueueOptions = [];
+    let actionOptions = [];
     let clientOptions = [];
     let facilityOptions = [{ label: "All", value: "all" }];
 
+    //Filling the client options
     clientsQuery.fetch((err, res) => {
       if (!err) {
         res.map(client => {
@@ -44,6 +65,8 @@ export default class RuleEdit extends React.Component {
         this.setState({ clientOptions });
       }
     });
+
+    //Filling the facility options
     facilityQuery.fetch((err, res) => {
       if (!err) {
         res.map(facility => {
@@ -52,6 +75,55 @@ export default class RuleEdit extends React.Component {
         this.setState({ facilityOptions });
       }
     });
+
+    //Filling the user options
+    userQuery
+      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
+      .fetch((err, res) => {
+        if (!err) {
+          res.map(user => {
+            userOptions.push({
+              label:
+                user.profile &&
+                user.profile.lastName + " " + user.profile.firstName,
+              value: user._id
+            });
+          });
+          this.setState({ userOptions });
+        }
+      });
+
+    //Filling the work queue options
+    workQueueQuery.clone().fetch((err, res) => {
+      if (!err) {
+        res.map(workQueue => {
+          workQueueOptions.push({
+            label: workQueue.name,
+            value: workQueue._id
+          });
+        });
+        this.setState({ workQueueOptions });
+      }
+    });
+
+    //Filling the action options
+    actionQuery.clone().fetch((err, res) => {
+      if (!err) {
+        res.map(action => {
+          actionOptions.push({
+            label: action.title,
+            value: action._id
+          });
+        });
+        this.setState({ actionOptions });
+      }
+    });
+
+    //Setting the trigger type
+    const { rule } = this.props;
+    if (rule.triggerType) {
+      this.setState({ triggerType: rule.triggerType });
+    }
   }
 
   onSubmit = data => {
@@ -77,7 +149,14 @@ export default class RuleEdit extends React.Component {
 
   render() {
     const { rule } = this.props;
-    const { clientOptions, facilityOptions } = this.state;
+    const {
+      clientOptions,
+      facilityOptions,
+      triggerType,
+      userOptions,
+      workQueueOptions,
+      actionOptions
+    } = this.state;
 
     return (
       <div className="create-form">
@@ -100,6 +179,29 @@ export default class RuleEdit extends React.Component {
               onChange={this.onChange}
               ref="form"
             >
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <SelectField
+                    labelHidden={true}
+                    label="Select Client"
+                    name="clientId"
+                    options={clientOptions}
+                  />
+                </div>
+              </div>
+
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <SelectField
+                    labelHidden={true}
+                    label="Select Facility"
+                    name="facilityId"
+                    options={facilityOptions}
+                  />
+                  <ErrorField name="facilityId" />
+                </div>
+              </div>
+
               <div className="form-wrapper">
                 <AutoField
                   labelHidden={true}
@@ -121,30 +223,89 @@ export default class RuleEdit extends React.Component {
                 <ErrorField name="description" />
               </div>
 
+              <RuleGenerator name="rule" />
+              <ErrorField name="description" />
+
               <div className="select-wrapper">
                 <div className="select-form">
-                  <SelectField
+                  <AutoField
                     labelHidden={true}
-                    label="Select Client"
-                    name="clientId"
-                    options={clientOptions}
+                    options={triggerOptions}
+                    placeholder="Select a Type of Update"
+                    name="triggerType"
                   />
-                </div>
-              </div>
-              <div className="select-wrapper">
-                <div className="select-form">
-                  <SelectField
-                    labelHidden={true}
-                    label="Select Facility"
-                    name="facilityId"
-                    options={facilityOptions}
-                  />
-                  <ErrorField name="facilityId" />
+                  <ErrorField name="triggerType" />
                 </div>
               </div>
 
-              <RuleGenerator name="rule" />
-              <ErrorField name="description" />
+              {triggerType === triggerTypes.ACTION && (
+                <div className="select-wrapper">
+                  <div className="select-form">
+                    <AutoField
+                      labelHidden={true}
+                      placeholder="Select Action"
+                      options={actionOptions}
+                      name="actionId"
+                    />
+                    <ErrorField name="actionId" />
+                  </div>
+                </div>
+              )}
+
+              {triggerType === triggerTypes.ASSIGN_USER && (
+                <div className="select-wrapper">
+                  <div className="select-form">
+                    <AutoField
+                      labelHidden={true}
+                      placeholder="Select User"
+                      name="assigneeId"
+                      options={userOptions}
+                    />
+                    <ErrorField name="assigneeId" />
+                  </div>
+                </div>
+              )}
+
+              {triggerType === triggerTypes.ASSIGN_WORK_QUEUE && (
+                <div className="select-wrapper">
+                  <div className="select-form">
+                    <AutoField
+                      labelHidden={true}
+                      placeholder="Select Work Queue"
+                      options={workQueueOptions}
+                      name="workQueueId"
+                    />
+                    <ErrorField name="workQueueId" />
+                  </div>
+                </div>
+              )}
+
+              {triggerType === triggerTypes.EDIT && (
+                <div>
+                  <div className="select-wrapper">
+                    <div className="select-form">
+                      <AutoField
+                        options={triggerOptions}
+                        labelHidden={true}
+                        placeholder="Select Field"
+                        name="editField"
+                      />
+                      <ErrorField name="editField" />
+                    </div>
+                  </div>
+                  <div className="select-wrapper">
+                    <div className="select-form">
+                      <AutoField
+                        labelHidden={true}
+                        placeholder="New Value"
+                        name="editValue"
+                      />
+                      <ErrorField name="editValue" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="form-wrapper">
                 <AutoField
                   label="Stop execution if this condition is true"
