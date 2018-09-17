@@ -269,6 +269,20 @@ class AccountListContainer extends Pager {
   getAccount(currentAccount) {
     const { data } = this.props;
     const [account] = data.filter(account => account._id === currentAccount);
+    if(account){
+      account.FacilityAddress=account.facility.addressOne || null
+      account.FacilityAddress2=account.facility.addressTwo || null
+      account.FacilityZip=account.facility.zipCode || null
+      account.FacilityCity=account.facility.city || null
+      account.FacilityState=account.facility.state || null
+    
+    if(account.client&&account.client.clientName){
+      account.clientName=account.client.clientName
+    }
+    if(account.facility&&account.facility.name){
+      account.facilityName=account.facility.name
+    }
+  }
     return account || null;
   }
 

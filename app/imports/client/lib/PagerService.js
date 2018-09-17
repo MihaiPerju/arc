@@ -420,7 +420,9 @@ export default class PagerService {
     _.extend(params, {
       filters: {}
     });
-
+    if(filters&&filters.status){
+      status=filters.status
+    }
     let currentPath = FlowRouter.current().route.path;
 
     if (currentPath.indexOf("client/list") > -1) {
@@ -617,7 +619,7 @@ export default class PagerService {
         facilityId: facilityId
       });
     }
-
+    
     if (status) {
       _.extend(params.filters, {
         status
