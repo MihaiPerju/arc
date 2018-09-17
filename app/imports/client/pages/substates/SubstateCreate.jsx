@@ -14,6 +14,7 @@ export default class SubstateCreate extends Component {
   constructor() {
     super();
     this.state = { isDisabled: false };
+    this.state = {hasGeneralInformation: false};
   }
 
   onSubmit = data => {
@@ -42,9 +43,19 @@ export default class SubstateCreate extends Component {
     const { close } = this.props;
     close();
   };
-
+  onChangeModel = model => {
+    if (model.stateName && model.name && model.description) {
+      this.setState({
+        hasGeneralInformation: true
+      });
+    } else {
+      this.setState({
+        hasGeneralInformation: false
+      });
+    }
+  };
   render() {
-    const { isDisabled } = this.state;
+    const { isDisabled,hasGeneralInformation, } = this.state;
     const states = this.getStates(StateList);
 
     return (
@@ -54,6 +65,7 @@ export default class SubstateCreate extends Component {
             <button onClick={this.onClose} className="btn-cancel">
               Cancel
             </button>
+            {hasGeneralInformation && (
             <button
               style={isDisabled ? { cursor: "not-allowed" } : {}}
               disabled={isDisabled}
@@ -70,6 +82,7 @@ export default class SubstateCreate extends Component {
                 "Confirm & Save"
               )}
             </button>
+              )}
           </div>
         </div>
         <div className="create-form__wrapper">
@@ -77,6 +90,7 @@ export default class SubstateCreate extends Component {
             <AutoForm
               schema={SubstateSchema}
               onSubmit={this.onSubmit}
+              onChangeModel={this.onChangeModel}
               ref="form"
             >
               <div className="select-group">
