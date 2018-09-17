@@ -61,6 +61,7 @@ export default class AccountTickle extends React.Component {
               todayButton={"Today"}
               selected={tickleDate}
               onChange={this.onChange}
+              fixedHeight
             />
             {!tickleDate && (
               <div className="alert-notice" required="">

@@ -33,6 +33,7 @@ var Error = function Error(_ref) {
       "errorMessage"
     ]);
   props.className = "alert-notice";
+
   return !error
     ? _nothing.default
     : _react.default.createElement(

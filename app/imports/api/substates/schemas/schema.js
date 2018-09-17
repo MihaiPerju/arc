@@ -10,7 +10,8 @@ export default new SimpleSchema({
     allowedValues: StateList
   },
   description: {
-    type: String
+    type: String,
+    optional: true
   },
   actionIds: {
     type: Array,
