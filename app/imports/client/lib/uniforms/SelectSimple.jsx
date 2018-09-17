@@ -1,49 +1,43 @@
-import React from 'react';
-import connectField from 'uniforms/connectField';
-import filterDOMProps from 'uniforms/filterDOMProps';
-import Select from 'react-select';
-import 'react-select/dist/react-select.css';
+import React from "react";
+import connectField from "uniforms/connectField";
+import filterDOMProps from "uniforms/filterDOMProps";
+import Select from "react-select";
+import "react-select/dist/react-select.css";
 
 class SelectSimple extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: props.value
-        }
-    }
-
-    onChange = (newValue) => {
-        this.props.onChange(newValue);
-        this.setState({
-            value: newValue
-        });
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: props.value
     };
+  }
 
-    render() {
-        const {
-            id,
-            label,
-            options,
-            ...props
-        } = this.props;
-        const {value} = this.state;
+  onChange = newValue => {
+    this.props.onChange(newValue);
+    this.setState({
+      value: newValue
+    });
+  };
 
-        return (
-            <div {...filterDOMProps(props)}>
-                {label && (
-                    <label htmlFor={id}>
-                        {label}
-                    </label>
-                )}
-                <Select
-                    options={options}
-                    onChange={this.onChange}
-                    value={value}
-                    name={this.props.name}
-                />
-            </div>
-        );
-    }
+  render() {
+    const { id, label, labelHidden, options, ...props } = this.props;
+    const { value } = this.state;
+
+    return (
+      <div {...filterDOMProps(props)}>
+        {!labelHidden && <label htmlFor={id}>{label}</label>}
+        <Select
+          options={options}
+          onChange={this.onChange}
+          value={value}
+          name={this.props.name}
+        />
+      </div>
+    );
+  }
 }
 
-export default connectField(SelectSimple, {ensureValue: false, includeInChain: false});
+export default connectField(SelectSimple, {
+  ensureValue: false,
+  includeInChain: false
+});
