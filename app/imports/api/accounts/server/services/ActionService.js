@@ -88,6 +88,52 @@ export default class ActionService {
     }
   }
 
+  //Adding a system action
+  static createSystemAction(_id) {
+    const { substateId, title, state } = Actions.findOne({ _id });
+    console.log(substateId);
+    console.log(title);
+    console.log(state);
+    console.log(this.userId);
+
+    // const accountActionData = {
+    //   userId,
+    //   actionId: actionId.value,
+    //   reasonCode: reasonId && reason,
+    //   addedBy,
+    //   type: actionTypesEnum.USER_ACTION,
+    //   createdAt,
+    //   accountId,
+    //   clientId
+    // };
+
+    // const accountActionId = AccountActions.insert(accountActionData);
+    // Accounts.update(
+    //   { _id: accountId },
+    //   {
+    //     $set: {
+    //       hasLastSysAction: false
+    //     },
+    //     $push: {
+    //       actionsLinkData: accountActionId
+    //     }
+    //   }
+    // );
+    // Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, { accountId, action });
+
+    // this.changeState(accountId, action);
+
+    // const actionsSubState = _.flatten([
+    //   StatesSubstates["Archived"],
+    //   StatesSubstates["Hold"]
+    // ]);
+    // const index = _.indexOf(actionsSubState, action.substate);
+
+    // if (index > -1) {
+    //   this.removeAssignee(accountId);
+    // }
+  }
+
   static archive(accountIds, facilityId, fileId) {
     _.map(accountIds, accountId => {
       const action = {
