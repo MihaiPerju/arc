@@ -19,7 +19,8 @@ export default [
   { label: "User Last Name", value: "User Last Name" },
   { label: "User First Name", value: "User First Name" },
   { label: "User Phone", value: "User Phone" },
-  { label: "Facility Zip", value: "Facility Zip" }
+  { label: "Facility Zip", value: "Facility Zip" },
+  { label: "Facility State", value: "Facility State" }
 ];
 export const variablesEnum = {
   "Account Number": {
@@ -46,7 +47,7 @@ export const variablesEnum = {
     field: "clientName",
     scope: "account"
   },
-  State: {
+  "Facility State": {
     field: "FacilityState",
     scope: "account"
   },
@@ -89,6 +90,10 @@ export const variablesEnum = {
 
   Substate: {
     field: "substate",
+    scope: "account"
+  },
+  State: {
+    field: "state",
     scope: "account"
   },
   "User Last Name": {
