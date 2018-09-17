@@ -37,6 +37,11 @@ export default Accounts.createQuery("accountList", {
       profile: 1,
       roles: 1
     },
+    addressOne:1,
+    addressTwo:1,
+    city:1,
+    state:1,
+    zipCode:1,
     files: {
       $filter({ filters, params }) {
         if (!_.isEmpty(params.actionsFilter)) {
