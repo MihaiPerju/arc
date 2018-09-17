@@ -19,7 +19,8 @@ export default [
     {label: "User Last Name", value: "User Last Name",},
     {label: "User First Name", value: "User First Name",},
     {label: "User Phone", value: "User Phone",},
-    {label: "StateZip", value: "StateZip",},
+    {label: "FacilityZip", value: "FacilityZip",},
+    
    
 ]
 export const variablesEnum = {
@@ -28,23 +29,27 @@ export const variablesEnum = {
         scope: "account"
     },
     "Facility Name": {
-        field: "facName",
+        field: "facilityName",
         scope: "account"
     },
     "Facility Address": {
-        field: "addressOne",
+        field: "FacilityAddress",
         scope: "account"
     },
     "Facility Address2": {
-        field: "addressTwo",
+        field: "FacilityAddress2",
         scope: "account"
     },
     "Facility City": {
-        field: "city",
+        field: "FacilityCity",
         scope: "account"
     },
     "Client Name": {
         field: "clientName",
+        scope: "account"
+    },
+    "state": {
+        field: "Facilitystate",
         scope: "account"
     },
      "Facility Code": {
@@ -82,10 +87,7 @@ export const variablesEnum = {
         field: "medNo",
         scope: "account"
     },
-    "state": {
-        field: "state",
-        scope: "account"
-    },
+  
     "Substate": {
         field: "substate",
         scope: "account"
@@ -102,8 +104,8 @@ export const variablesEnum = {
         field: "phoneNumber",
         scope: "user"
     },
-    "StateZip" : {
-        field: "zip",
+    "FacilityZip" : {
+        field: "FacilityZip",
         scope: "account"
     },
 };
