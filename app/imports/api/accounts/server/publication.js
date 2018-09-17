@@ -37,6 +37,15 @@ Meteor.publish("tickledAccounts", tickleUserId => {
     Accounts.find({ tickleUserId }),
     1000
   );
-
+ 
   return ticklesCount;
+});
+Meteor.publish("flaggedAccounts", flaggedUserId => {
+  let flaggedCount = new Counter(
+    "flaggedAccounts",
+    Accounts.find({flagCounter: {
+      $gt: 0
+    }}),
+  );
+  return flaggedCount;
 });
