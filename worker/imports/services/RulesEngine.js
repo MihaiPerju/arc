@@ -2,6 +2,8 @@ import Accounts from "/imports/api/accounts/collection";
 import Rules from "/imports/api/rules/collection";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import Operators from "/imports/api/rules/enums/operators";
+import ActionService from "/imports/api/accounts/server/services/ActionService";
+import triggerTypes from "/imports/api/rules/enums/triggers";
 
 export default class RulesEngine {
   static run(_id) {
@@ -27,13 +29,24 @@ export default class RulesEngine {
 
   static evaluate(account, rule) {
     let expression = "true";
-    let { data } = rule;
+    let { data, triggerType } = rule;
     if (data) {
       //Start the first step recursively
       expression = RulesEngine.recursiveCheck(data, account);
       const truthValue = eval(expression);
       if (truthValue) {
         console.log("TRUE. ACTION THE ACCOUNT!");
+
+        //Decide what should we do with the account
+        if (triggerType === triggerTypes.ACTION) {
+          ActionService.createSystemAction();
+        } else if ((triggerType = triggerTypes.ASSIGN_WORK_QUEUE)) {
+          console.log("Assign to work queue");
+        } else if (triggerType === triggerTypes.ASSIGN_USER) {
+          console.log("Assign User");
+        } else if (triggerType === triggerTypes.EDIT) {
+          console.log("Edit a field");
+        }
       } else {
         console.log("FALSE. DON'T ACTION THE ACCOUNT!");
       }
