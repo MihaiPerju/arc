@@ -19,7 +19,6 @@ Meteor.methods({
   },
   "substate.delete"(_id) {
     Security.checkAdmin(this.userId);
-    // Substates.remove({ _id } );
     Substates.update({ _id }, { $set: { status: false } });
   },
   "substate.deleteMany"(ids) {
