@@ -1,15 +1,13 @@
-import { Meteor } from "meteor/meteor";
-import "/imports/cronjobs";
-import os from "os";
-import fs from "fs";
-import FoldersEnum from "/imports/api/business";
-import { Random } from "meteor/random";
 import Settings from "/imports/api/settings/collection.js";
 import Business from "/imports/api/business";
+import fs from "fs";
+import os from "os"
 
-Meteor.startup(() => {
-  workerId = Random.id();
+Meteor.startup(function () {
+  createFolderStructure();
+});
 
+const createFolderStructure = function () {
   let rootSettings = Settings.findOne({
     rootFolder: {
       $ne: null
@@ -18,12 +16,14 @@ Meteor.startup(() => {
   if (!rootSettings) {
     const _id = Settings.insert({
       rootFolder: os.tmpdir() + "/"
-    });
+    })
     rootSettings = Settings.findOne({
       _id
     });
   }
-  let { rootFolder } = rootSettings;
+  let {
+    rootFolder
+  } = rootSettings;
 
   //Create default root folder
   if (!fs.existsSync(rootFolder)) {
@@ -47,6 +47,8 @@ Meteor.startup(() => {
   if (!fs.existsSync(reportsFolder)) {
     fs.mkdirSync(reportsFolder);
   }
-  //Launching cronjob
-  SyncedCron.start();
-});
+}
+
+export {
+  createFolderStructure
+};

@@ -231,6 +231,7 @@ export default class FacilitySearchBar extends Component {
                             onChange={date =>
                               this.onDateSelect(date, "createdAtMin")
                             }
+                            fixedHeight
                           />
                           <DatePicker
                             showMonthDropdown
@@ -242,6 +243,7 @@ export default class FacilitySearchBar extends Component {
                             onChange={date =>
                               this.onDateSelect(date, "createdAtMax")
                             }
+                            fixedHeight
                           />
                         </div>
                         <div className="flex--helper flex-justify--end">
