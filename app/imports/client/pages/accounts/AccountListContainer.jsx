@@ -274,7 +274,7 @@ class AccountListContainer extends Pager {
       account.FacilityAddress2=account.facility.addressTwo || null
       account.FacilityZip=account.facility.zipCode || null
       account.FacilityCity=account.facility.city || null
-      account.Facilitystate=account.facility.state || null
+      account.FacilityState=account.facility.state || null
     
     if(account.client&&account.client.clientName){
       account.clientName=account.client.clientName
