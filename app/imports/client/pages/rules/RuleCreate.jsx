@@ -15,6 +15,7 @@ import userQuery from "/imports/api/users/queries/listUsers.js";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import RolesEnum from "/imports/api/users/enums/roles";
+import fieldsOptions from "/imports/api/rules/enums/accountFields";
 
 export default class RuleCreate extends React.Component {
   constructor() {
@@ -291,7 +292,7 @@ export default class RuleCreate extends React.Component {
                   <div className="select-wrapper">
                     <div className="select-form">
                       <AutoField
-                        options={triggerOptions}
+                        options={fieldsOptions}
                         labelHidden={true}
                         placeholder="Select Field"
                         name="editField"

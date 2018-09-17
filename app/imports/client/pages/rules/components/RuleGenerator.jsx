@@ -1,33 +1,7 @@
 import React, { Component } from "react";
 import TwoWayQuerybuilder from "./rule-generator/TwoWayQuerybuilder";
 import connectField from "uniforms/connectField";
-
-const fields = [
-  {
-    name: "acctNum",
-    operators: "all",
-    label: "Account Number",
-    input: { type: "text" }
-  },
-  {
-    name: "facCode",
-    operators: "all",
-    label: "Facility Code",
-    input: { type: "text" }
-  },
-  {
-    name: "medNo",
-    operators: "all",
-    label: "Medical Number",
-    input: { type: "text" }
-  },
-  {
-    name: "acctBal",
-    operators: "all",
-    label: "AccountBalance",
-    input: { type: "text" }
-  }
-];
+import fields from "./rule-generator/helpers/fields";
 
 class RuleGenerator extends Component {
   constructor() {

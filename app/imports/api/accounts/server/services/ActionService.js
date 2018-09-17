@@ -89,49 +89,42 @@ export default class ActionService {
   }
 
   //Adding a system action
-  static createSystemAction(_id) {
+  static createSystemAction(_id, accountId) {
     const { substateId, title, state } = Actions.findOne({ _id });
-    console.log(substateId);
-    console.log(title);
-    console.log(state);
-    console.log(this.userId);
-    
-    // const accountActionData = {
-    //   userId,
-    //   actionId: actionId.value,
-    //   reasonCode: reasonId && reason,
-    //   addedBy,
-    //   type: actionTypesEnum.USER_ACTION,
-    //   createdAt,
-    //   accountId,
-    //   clientId
-    // };
+    const { clientId } = Accounts.findOne({ _id: accountId });
+    const action = Actions.findOne({ _id });
 
-    // const accountActionId = AccountActions.insert(accountActionData);
-    // Accounts.update(
-    //   { _id: accountId },
-    //   {
-    //     $set: {
-    //       hasLastSysAction: false
-    //     },
-    //     $push: {
-    //       actionsLinkData: accountActionId
-    //     }
-    //   }
-    // );
-    // Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, { accountId, action });
+    const accountAction = {
+      actionId: _id,
+      type: actionTypesEnum.SYSTEM_ACTION,
+      createdAt: new Date(),
+      accountId,
+      clientId
+    };
 
-    // this.changeState(accountId, action);
+    const accountActionId = AccountActions.insert(accountAction);
+    Accounts.update(
+      { _id: accountId },
+      {
+        $set: {
+          hasLastSysAction: true
+        },
+        $push: {
+          actionsLinkData: accountActionId
+        }
+      }
+    );
+    this.changeState(accountId, action);
 
-    // const actionsSubState = _.flatten([
-    //   StatesSubstates["Archived"],
-    //   StatesSubstates["Hold"]
-    // ]);
-    // const index = _.indexOf(actionsSubState, action.substate);
+    const actionsSubState = _.flatten([
+      StatesSubstates["Archived"],
+      StatesSubstates["Hold"]
+    ]);
+    const index = _.indexOf(actionsSubState, action.substate);
 
-    // if (index > -1) {
-    //   this.removeAssignee(accountId);
-    // }
+    if (index > -1) {
+      this.removeAssignee(accountId);
+    }
   }
 
   static archive(accountIds, facilityId, fileId) {
@@ -217,7 +210,7 @@ export default class ActionService {
       { _id },
       {
         $unset: {
-          workQueue: null,
+          workQueueId: null,
           assigneeId: null
         }
       }
@@ -250,13 +243,13 @@ export default class ActionService {
   }
 
   static sendNotification(accountId) {
-    const { assigneeId, workQueue } = Accounts.findOne({ _id: accountId });
+    const { assigneeId, workQueueId } = Accounts.findOne({ _id: accountId });
 
     if (assigneeId && Roles.userIsInRole(assigneeId, RolesEnum.REP)) {
       NotificationService.createGlobal(assigneeId);
       NotificationService.createCommentNotification(assigneeId, accountId);
-    } else if (workQueue) {
-      const users = Users.find({ tagIds: workQueue }).fetch();
+    } else if (workQueueId) {
+      const users = Users.find({ tagIds: workQueueId }).fetch();
       for (let user of users) {
         const { _id } = user;
         NotificationService.createGlobal(_id);

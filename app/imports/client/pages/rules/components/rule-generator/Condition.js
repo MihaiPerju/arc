@@ -61,6 +61,7 @@ class Condition extends React.Component {
   }
 
   render() {
+    console.log(this.state.data);
     return (
       <div className={this.styles.condition}>
         <select

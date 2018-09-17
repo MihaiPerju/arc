@@ -102,7 +102,7 @@ export default Accounts.createQuery("accountList", {
   },
   metaData: 1,
   escalationId: 1,
-  workQueue: 1,
+  workQueueId: 1,
   tag: {
     name: 1
   },

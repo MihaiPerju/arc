@@ -60,10 +60,10 @@ class FlaggedAccountListContainer extends Pager {
           });
           this.setState({ tags, assignFilterArr, dropdownOptions });
         } else {
-          let assignFilterArr = ["assigneeId", "workQueue"];
+          let assignFilterArr = ["assigneeId", "workQueueId"];
           let dropdownOptions = [
             { label: "Personal Accounts", filter: "assigneeId" },
-            { label: "Work Queue Accounts", filter: "workQueue" }
+            { label: "Work Queue Accounts", filter: "workQueueId" }
           ];
           this.setState({ assignFilterArr, dropdownOptions });
         }

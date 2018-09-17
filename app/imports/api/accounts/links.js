@@ -36,7 +36,7 @@ Accounts.addLinks({
   tag: {
     type: "one",
     collection: Tags,
-    field: "workQueue"
+    field: "workQueueId"
   },
   flags: {
     type: "many",

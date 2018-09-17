@@ -67,7 +67,7 @@ export default class NewAction extends Component {
     });
   }
 
-  onSubmit(data) {
+  onSubmit = data => {
     const { account, hide, freezeAccount } = this.props;
     const { dateLabelKeys } = this.state;
     data.accountId = account._id;
@@ -75,7 +75,7 @@ export default class NewAction extends Component {
       data.addedBy = `${account.assignee.profile.firstName} ${
         account.assignee.profile.lastName
       }`;
-    } else if (account.workQueue) {
+    } else if (account.workQueueId) {
       data.addedBy = account.tag.name;
     }
     for (let i = 0; i < dateLabelKeys.length; i++) {
@@ -98,7 +98,7 @@ export default class NewAction extends Component {
       }
       this.setState({ isDisabled: false });
     });
-  }
+  };
 
   onHide(e) {
     const { hide } = this.props;

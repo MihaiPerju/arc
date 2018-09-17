@@ -21,7 +21,8 @@ Meteor.methods({
   },
 
   "rule.update"(data) {
-    const { triggerType, priority, clientId } = data;
+    const { priority, clientId } = data;
+    //Increase priority for all the rules that have a priority greater than or equal to the new one
     Rules.update(
       {
         priority: { $gte: priority },
@@ -33,43 +34,13 @@ Meteor.methods({
       { multi: true }
     );
 
-    let unsetter = {};
-    if (triggerType == triggerTypes.EDIT) {
-      unsetter = {
-        assigneeId: null,
-        workQueueId: null,
-        actionId: null
-      };
-    } else if (triggerType === triggerTypes.ASSIGN_USER) {
-      unsetter = {
-        editField: null,
-        editValue: null,
-        actionId: null,
-        workQueueId: null
-      };
-    } else if (triggerType === triggerTypes.ASSIGN_WORK_QUEUE) {
-      unsetter = {
-        editField: null,
-        editValue: null,
-        assigneeId: null,
-        actionId: null
-      };
-    } else if (triggerType === triggerTypes.ACTION) {
-      unsetter = {
-        assigneeId: null,
-        workQueueId: null,
-        editField: null,
-        editValue: null
-      };
-    }
-
+    //Update the rule itself
     Rules.update(
       {
         _id: data._id
       },
       {
         $set: data
-        // $unset: unsetter
       }
     );
   },

@@ -57,7 +57,7 @@ AccountListQuery.expose({
       _.extend(params.filters, {
         $and: [
           {
-            $or: [{ assigneeId: userId }, { workQueue: { $in: tagIds } }]
+            $or: [{ assigneeId: userId }, { workQueueId: { $in: tagIds } }]
           },
           {
             $or: [{ employeeToRespond: null }, { employeeToRespond: userId }]

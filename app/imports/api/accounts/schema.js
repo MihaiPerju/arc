@@ -160,7 +160,7 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
-  workQueue: {
+  workQueueId: {
     type: String,
     optional: true
   },

@@ -21,35 +21,68 @@ export default class RulesEngine {
 
     for (let statement of rules) {
       if (statement.rule) {
-        RulesEngine.evaluate(account, statement.rule);
+        const isRuleRespected = RulesEngine.evaluate(account, statement.rule);
+        if (isRuleRespected) {
+          //Apply the actions as stated in the rule
+          RulesEngine.applyChanges(account, statement);
+
+          //See if the rule has stop condition
+          if (statement.isBreakingLoop) {
+            break;
+          }
+        }
       }
     }
   };
-  /////////////////CONVERTOR
+
+  static applyChanges(account, statement) {
+    const {
+      triggerType,
+      actionId,
+      assigneeId,
+      workQueueId,
+      editField,
+      editValue
+    } = statement;
+
+    //Decide what to do with the accounts
+    switch (triggerType) {
+      case triggerTypes.ACTION:
+        ActionService.createSystemAction(actionId, account._id);
+        console.log("System action applied.");
+        break;
+      case triggerTypes.EDIT:
+        const updater = {};
+        updater[editField] = editValue;
+        Accounts.update({ _id: account._id }, { $set: updater });
+        console.log("System assignment to Work Queue.");
+        break;
+
+      case triggerTypes.ASSIGN_USER:
+        Accounts.update(
+          { _id: account._id },
+          { $set: { assigneeId }, $unset: { workQueue: null } }
+        );
+        console.log("System assignment to Work Queue.");
+        break;
+      case triggerTypes.ASSIGN_WORK_QUEUE:
+        Accounts.update(
+          { _id: account._id },
+          { $set: { workQueueId }, $unset: { assigneeId: null } }
+        );
+        break;
+    }
+  }
 
   static evaluate(account, rule) {
-    let expression = "true";
-    let { data, triggerType } = rule;
+    let { data } = rule;
     if (data) {
       //Start the first step recursively
-      expression = RulesEngine.recursiveCheck(data, account);
-      const truthValue = eval(expression);
-      if (truthValue) {
-        console.log("TRUE. ACTION THE ACCOUNT!");
+      let expression = RulesEngine.recursiveCheck(data, account);
 
-        //Decide what should we do with the account
-        if (triggerType === triggerTypes.ACTION) {
-          ActionService.createSystemAction();
-        } else if ((triggerType = triggerTypes.ASSIGN_WORK_QUEUE)) {
-          console.log("Assign to work queue");
-        } else if (triggerType === triggerTypes.ASSIGN_USER) {
-          console.log("Assign User");
-        } else if (triggerType === triggerTypes.EDIT) {
-          console.log("Edit a field");
-        }
-      } else {
-        console.log("FALSE. DON'T ACTION THE ACCOUNT!");
-      }
+      //Convert and return the truth value
+      const truthValue = eval(expression);
+      return truthValue;
     }
   }
 
@@ -74,7 +107,6 @@ export default class RulesEngine {
       for (let index in condition.rules) {
         const rule = condition.rules[index];
         let expressionChunk = RulesEngine.recursiveCheck(rule, account);
-        // console.log(expressionChunk);
         expression = expression + expressionChunk;
         if (index != condition.rules.length - 1) {
           expression += conditionalString;

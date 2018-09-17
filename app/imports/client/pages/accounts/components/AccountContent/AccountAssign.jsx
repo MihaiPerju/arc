@@ -66,14 +66,14 @@ export default class AccountAssign extends React.Component {
     });
   };
 
-  assignToWorkQueue = ({ workQueue }) => {
+  assignToWorkQueue = ({ workQueueId }) => {
     const { accountId, closeRightPanel } = this.props;
     let accountIds = [];
     accountIds.push(accountId);
     this.setState({ isDisabled: true });
     Meteor.call(
       "account.assignWorkQueue",
-      { _id: accountId, workQueue },
+      { _id: accountId, workQueueId },
       err => {
         if (!err) {
           Notifier.success("Account assigned to Work Queue!");
@@ -114,7 +114,7 @@ export default class AccountAssign extends React.Component {
             <label htmlFor="a1">User</label>
           </div>
           <div className="check-group" onClick={this.showQueueForm}>
-            <input id="a2" type="radio" name="assign" value="workQueue" />
+            <input id="a2" type="radio" name="assign" value="workQueueId" />
             <label htmlFor="a2">Work Queue</label>
           </div>
         </div>
@@ -155,10 +155,10 @@ export default class AccountAssign extends React.Component {
             <div className="form-wrapper select-item">
               <AutoField
                 labelHidden={true}
-                name="workQueue"
+                name="workQueueId"
                 options={workQueueOptions}
               />
-              <ErrorField name="workQueue" />
+              <ErrorField name="workQueueId" />
             </div>
             <div className="btn-group">
               <button className="btn-cancel" onClick={this.closeDialog}>
@@ -187,7 +187,7 @@ const assignSchema = new SimpleSchema({
 });
 
 const workQueueSchema = new SimpleSchema({
-  workQueue: {
+  workQueueId: {
     type: String
   }
 });
