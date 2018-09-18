@@ -174,7 +174,7 @@ export default class RuleCreate extends React.Component {
       workQueueOptions,
       actionOptions
     } = this.state;
-    console.log(model);
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
