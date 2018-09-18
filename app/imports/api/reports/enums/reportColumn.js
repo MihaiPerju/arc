@@ -15,7 +15,7 @@ export default [
   { value: "activeInsCode", label: "Active Insurance Code" },
   { value: "tickleDate", label: "Tickle Date" },
   { value: "tickleReason", label: "Tickle Reason" },
-  { value: "workQueue", label: "Work Queue" }
+  { value: "workQueueId", label: "Work Queue" }
 ];
 
 const insuranceColumnEnum = [

@@ -67,15 +67,15 @@ export default class NewAction extends Component {
     });
   }
 
-  onSubmit(data) {
-    const { account, hide, closeRightPanel } = this.props;
+  onSubmit = data => {
+    const { account, hide, freezeAccount } = this.props;
     const { dateLabelKeys } = this.state;
     data.accountId = account._id;
     if (account.assignee) {
       data.addedBy = `${account.assignee.profile.firstName} ${
         account.assignee.profile.lastName
       }`;
-    } else if (account.workQueue) {
+    } else if (account.workQueueId) {
       data.addedBy = account.tag.name;
     }
     for (let i = 0; i < dateLabelKeys.length; i++) {
@@ -92,13 +92,13 @@ export default class NewAction extends Component {
         //Clear inputs
         this.refs.form.reset();
         hide();
-        closeRightPanel();
+        freezeAccount();
       } else {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
     });
-  }
+  };
 
   onHide(e) {
     const { hide } = this.props;
@@ -247,7 +247,15 @@ export default class NewAction extends Component {
                 type="submit"
                 className="btn--green"
               >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Save"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Save"
+                )}
               </button>
             </div>
           </AutoForm>

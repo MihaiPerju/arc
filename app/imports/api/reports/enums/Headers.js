@@ -71,7 +71,7 @@ export default {
   tickleReason: {
     label: "Tickle Reason"
   },
-  workQueue: {
+  workQueueId: {
     label: "Work Queue"
   }
 };

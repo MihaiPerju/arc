@@ -5,6 +5,7 @@ import fs from "fs";
 import FoldersEnum from "/imports/api/business";
 import { Random } from "meteor/random";
 import Settings from "/imports/api/settings/collection.js";
+import "/imports/watchers/index";
 import Business from "/imports/api/business";
 
 Meteor.startup(() => {

@@ -16,6 +16,10 @@ import Settings from "/imports/api/settings/collection.js";
 import TickleService from "/imports/api/tickles/server/services/TickleService";
 
 Meteor.methods({
+  "account.freeze"(_id) {
+    ActionService.freezeAccount(_id);
+  },
+
   "account.actions.add"(data) {
     data.userId = this.userId;
     ActionService.createAction(data);
@@ -33,7 +37,7 @@ Meteor.methods({
           assigneeId
         },
         $unset: {
-          workQueue: null
+          workQueueId: null
         }
       }
     );
@@ -51,13 +55,13 @@ Meteor.methods({
             assigneeId
           },
           $unset: {
-            workQueue: null
+            workQueueId: null
           }
         }
       );
     }
   },
-  "account.assignWorkQueue"({ _id, workQueue }) {
+  "account.assignWorkQueue"({ _id, workQueueId }) {
     AccountSecurity.hasRightsOnAccount(this.userId, _id);
     Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
     Accounts.update(
@@ -66,7 +70,7 @@ Meteor.methods({
       },
       {
         $set: {
-          workQueue
+          workQueueId
         },
         $unset: {
           assigneeId: null
@@ -74,7 +78,7 @@ Meteor.methods({
       }
     );
   },
-  "account.assignWorkQueue.bulk"({ accountIds, workQueue }) {
+  "account.assignWorkQueue.bulk"({ accountIds, workQueueId }) {
     for (let accountId of accountIds) {
       AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
@@ -84,7 +88,7 @@ Meteor.methods({
         },
         {
           $set: {
-            workQueue
+            workQueueId
           },
           $unset: {
             assigneeId: null

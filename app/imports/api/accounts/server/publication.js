@@ -4,7 +4,7 @@ import RolesEnum from "/imports/api/users/enums/roles";
 Meteor.publish("unassignedAccounts", () => {
   let unassignedCount = new Counter(
     "unassignedAccounts",
-    Accounts.find({ $and: [{ assigneeId: null }, { workQueue: null }] }),
+    Accounts.find({ $and: [{ assigneeId: null }, { workQueueId: null }] }),
     1000
   );
 

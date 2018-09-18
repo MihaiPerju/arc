@@ -2,11 +2,12 @@
   "name": "worker",
   "private": true,
   "scripts": {
-    "start": " MONGO_URL=mongodb://localhost:27017/db meteor run --port 4000",
+    "start": "MONGO_URL='mongodb://arcc:12345@pms-shard-00-00-tuhpo.mongodb.net:27017,pms-shard-00-01-tuhpo.mongodb.net:27017,pms-shard-00-02-tuhpo.mongodb.net:27017/test?ssl=true&replicaSet=PMS-shard-0&authSource=admin' meteor run --port 4000",
     "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc meteor run --port 4000"
   },
   "dependencies": {
     "@babel/runtime": "7.0.0-beta.55",
+    "bcrypt": "^3.0.0",
     "buffer-to-stream": "^1.0.0",
     "csv-parse": "^2.5.0",
     "csv-stringify": "^3.0.0",

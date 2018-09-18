@@ -51,12 +51,12 @@ export default class AccountActioning extends React.Component {
       this.setState({ isDisabled: false });
     });
   };
-  assignToWorkQueue = ({ workQueue }) => {
+  assignToWorkQueue = ({ workQueueId }) => {
     const { accountIds, uncheckAccountList } = this.props;
     this.setState({ isDisabled: true });
     Meteor.call(
       "account.assignWorkQueue.bulk",
-      { accountIds, workQueue },
+      { accountIds, workQueueId },
       err => {
         if (!err) {
           Notifier.success("Account assigned to Work Queue!");
@@ -121,10 +121,10 @@ export default class AccountActioning extends React.Component {
             <div className="form-wrapper select-item">
               <AutoField
                 labelHidden={true}
-                name="workQueue"
+                name="workQueueId"
                 options={workQueueOptions}
               />
-              <ErrorField name="workQueue" />
+              <ErrorField name="workQueueId" />
             </div>
             <div className="btn-group">
               <button className="btn-cancel" onClick={this.closeDialog}>
@@ -173,7 +173,7 @@ const assignSchema = new SimpleSchema({
 });
 
 const workQueueSchema = new SimpleSchema({
-  workQueue: {
+  workQueueId: {
     type: String
   }
 });
