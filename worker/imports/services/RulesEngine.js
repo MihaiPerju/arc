@@ -49,13 +49,11 @@ export default class RulesEngine {
     switch (triggerType) {
       case triggerTypes.ACTION:
         ActionService.createSystemAction(actionId, account._id);
-        console.log("System action applied.");
         break;
       case triggerTypes.EDIT:
         const updater = {};
         updater[editField] = editValue;
         Accounts.update({ _id: account._id }, { $set: updater });
-        console.log("System assignment to Work Queue.");
         break;
 
       case triggerTypes.ASSIGN_USER:
@@ -63,7 +61,6 @@ export default class RulesEngine {
           { _id: account._id },
           { $set: { assigneeId }, $unset: { workQueue: null } }
         );
-        console.log("System assignment to Work Queue.");
         break;
       case triggerTypes.ASSIGN_WORK_QUEUE:
         Accounts.update(

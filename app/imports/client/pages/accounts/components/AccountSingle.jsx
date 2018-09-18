@@ -43,7 +43,7 @@ export default class AccountSingle extends Component {
     Meteor.call("account.freeze", _id, err => {
       if (!err) {
       }
-      Notifier.success("Done");
+      Notifier.success("Account Sent to be Processed!");
     });
   };
 
