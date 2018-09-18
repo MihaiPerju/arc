@@ -23,7 +23,7 @@ random@1.1.0
 alanning:roles
 meteorhacks:picker
 dburles:collection-helpers
-dynamic-import@0.4.0
+dynamic-import@0.4.2
 aldeed:collection2-core
 fourseven:scss
 static-html
@@ -38,5 +38,5 @@ email@1.2.3
 percolate:synced-cron
 react-meteor-data
 cultofcoders:grapher@1.3.6
-underscore
+underscore@1.0.10
 natestrauser:publish-performant-counts
