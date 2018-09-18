@@ -5,8 +5,6 @@ import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
-import { SelectField } from "/imports/ui/forms";
-import PrioritySelect from "./components/PrioritySelect";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
@@ -16,6 +14,7 @@ import workQueueQuery from "/imports/api/tags/queries/listTags";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
+import RuleQuery from "/imports/api/rules/queries/listRules";
 
 export default class RuleCreate extends React.Component {
   constructor() {
@@ -104,10 +103,14 @@ export default class RuleCreate extends React.Component {
   }
 
   onChange = (key, value) => {
+    let { model } = this.state;
+    model[key] = value;
+
     if (key === "clientId") {
       let clientId = value;
       let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
-      this.setState({ model: { priority: 1, clientId } });
+      _.extend(model, { priority: 1, clientId });
+      this.setState({ model });
       facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
         if (!err) {
           res.map(facility => {
@@ -116,15 +119,29 @@ export default class RuleCreate extends React.Component {
           this.setState({ facilityOptions });
         }
       });
+
+      this.getPriority(clientId);
     } else if (key === "triggerType") {
       this.setState({ triggerType: value });
     }
   };
 
-  onChangePriority = priority => {
+  getPriority = clientId => {
     let { model } = this.state;
-    model.priority = priority;
-    this.setState({ model });
+    RuleQuery.clone({
+      options: {
+        sort: { priority: -1 }
+      },
+      filters: { clientId }
+    }).fetchOne((err, rule) => {
+      if (!err) {
+        let priority = rule ? rule.priority + 1 : 1;
+        _.extend(model, { priority });
+        this.setState({ model });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   };
 
   onSubmit = data => {
@@ -202,14 +219,10 @@ export default class RuleCreate extends React.Component {
                 </div>
               </div>
 
-              <PrioritySelect
-                clientId={model.clientId}
-                setPriority={this.onChangePriority}
-              />
-
               {model.clientId && (
                 <div className="form-wrapper">
                   <AutoField
+                    value={model.priority}
                     labelHidden={true}
                     placeholder="Priority"
                     name="priority"

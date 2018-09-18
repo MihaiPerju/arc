@@ -6,7 +6,6 @@ import RuleGenerator from "./components/RuleGenerator";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import { SelectField } from "/imports/ui/forms";
-import PrioritySelect from "./components/PrioritySelect";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
