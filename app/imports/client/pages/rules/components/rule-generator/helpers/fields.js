@@ -1,25 +1,25 @@
 const fields = [
   {
     name: "ptType",
-    operators: "all",
+    operators: ["="],
     label: "Patient Type",
     input: { type: "text" }
   },
   {
     name: "ptName",
-    operators: "all",
+    operators: ["="],
     label: "Patient Name",
     input: { type: "text" }
   },
   {
     name: "dischrgDate",
-    operators: "all",
+    operators: ["="],
     label: "Discharge Date",
     input: { type: "text" }
   },
   {
     name: "fbDate",
-    operators: "all",
+    operators: ["="],
     label: "Last Bill Date",
     input: { type: "text" }
   },
@@ -37,62 +37,62 @@ const fields = [
   },
   {
     name: "admitDate",
-    operators: "all",
+    operators: ["="],
     label: "Admit Date",
     input: { type: "text" }
   },
   { name: "state", operators: "all", label: "State", input: { type: "text" } },
   {
     name: "substate",
-    operators: "all",
+    operators: ["="],
     label: "Substate",
     input: { type: "text" }
   },
   {
     name: "activeInsCode",
-    operators: "all",
+    operators: ["="],
     label: "Active Insurance Code",
     input: { type: "text" }
   },
   {
     name: "tickleDate",
-    operators: "all",
+    operators: ["="],
     label: "Tickle Date",
     input: { type: "text" }
   },
   {
     name: "tickleReason",
-    operators: "all",
+    operators: ["="],
     label: "Tickle Reason",
     input: { type: "text" }
   },
   {
     name: "workQueueId",
-    operators: "all",
+    operators: ["="],
     label: "Work Queue",
     input: { type: "text" }
   },
   {
     name: "acctNum",
-    operators: "all",
+    operators: ["="],
     label: "Account Number",
     input: { type: "text" }
   },
   {
     name: "facCode",
-    operators: "all",
+    operators: ["="],
     label: "Facility Code",
     input: { type: "text" }
   },
   {
     name: "medNo",
-    operators: "all",
+    operators: ["="],
     label: "Medical Number",
     input: { type: "text" }
   },
   {
     name: "acctBal",
-    operators: "all",
+    operators: ["="],
     label: "AccountBalance",
     input: { type: "text" }
   }

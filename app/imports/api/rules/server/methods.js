@@ -1,5 +1,4 @@
 import Rules from "/imports/api/rules/collection.js";
-import FilterBuilder from "../services/FilterBuilder";
 import triggerTypes, {
   triggerOptions
 } from "/imports/api/rules/enums/triggers";
