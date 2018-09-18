@@ -30,12 +30,25 @@ export default class RuleContent extends Component {
             <div className="main-content flex-content region-content">
               <div className="intro-block text-center">
                 <i className="icon-globe" />
+                {rule.client &&
+                  rule.client.clientName && (
+                    <div>
+                      <div className="text-light-grey">Client</div>
+                      <div className="region">{rule.client.clientName}</div>
+                    </div>
+                  )}
                 <div className="text-light-grey">Rule name</div>
                 <div className="region">{rule.name}</div>
                 <div className="text-light-grey">Rule Description</div>
                 <div className="region">{rule.description}</div>
                 <div className="text-light-grey">Rule Priority</div>
                 <div className="region">{rule.priority}</div>
+
+                <div className="text-light-grey">
+                  {rule.isBreakingLoop
+                    ? "This rule can stop other rules"
+                    : "This rule would not stop other rules"}
+                </div>
               </div>
               <div className="text-center">
                 <button

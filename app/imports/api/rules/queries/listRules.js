@@ -18,5 +18,8 @@ export default Rules.createQuery("listRules", {
   assigneeId: 1,
   workQueueId: 1,
   editField: 1,
-  editValue: 1
+  editValue: 1,
+  client: {
+    clientName: 1
+  }
 });
