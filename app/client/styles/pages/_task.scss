@@ -678,7 +678,7 @@
     > form {
       display: flex;
       align-items: flex-start;
-      width: 100%;
+      // width: 100%;
       .select-row {
         width: 100%;
       }
@@ -1483,4 +1483,18 @@
       padding: 12px;
     }
   }
+}
+
+.cc-container{
+  .list-item{
+    height: 110px;
+  }
+} 
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.select-width{
+  min-width: 370px;
 }
