@@ -5,6 +5,9 @@ export default Codes.createQuery('listCodes', {
         _.extend(filters, params.filters);
         _.extend(options, params.options);
     },
+    $options:{
+        sort: { code: 1 }
+    },
     $paginate: true,
     code: 1,
     action: 1,
