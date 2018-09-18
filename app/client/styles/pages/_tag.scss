@@ -243,3 +243,13 @@ margin-top: -5px;
   margin-right: 5px;
 }
 
+.module-tags {
+  .list-item{
+    height: 74px;
+  }
+  .item-name{
+    text-transform: capitalize;
+    font-weight: bold;
+  }
+}
+

@@ -3,6 +3,7 @@ import ModuleTagSingle from "./ModuleTagSingle";
 
 export default class ModuleTagList extends Component {
   render() {
+    debugger
     const { tags } = this.props;
     const tagList = tags.map(function(tag, index) {
       const { setTag, selectTag, tagsSelected, currentTag } = this.props;
