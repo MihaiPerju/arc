@@ -94,6 +94,7 @@ export default class EditLetter extends Component {
               schema={schema}
             >
               <SelectField
+                className="select-width"
                 name="selectedOption"
                 placeholder="Select letter"
                 options={options}
