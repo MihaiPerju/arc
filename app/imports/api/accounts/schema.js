@@ -244,7 +244,6 @@ export default new SimpleSchema({
   },
   isPending: {
     type: Boolean,
-    //to be changed to true when working with Rules Engine
-    defaultValue: false
+    defaultValue: true
   }
 });

@@ -2,13 +2,21 @@ import Accounts from "/imports/api/accounts/collection";
 import RulesEngine from "../services/RulesEngine";
 
 Meteor.startup(function() {
+  //Launch Change Stream
   const AccountsNative = Accounts.rawCollection();
 
   const pipeline = [
     {
       $match: {
-        operationType: "update",
-        "updateDescription.updatedFields.isPending": true
+        $or: [
+          {
+            operationType: "update",
+            "updateDescription.updatedFields.isPending": true
+          },
+          {
+            operationType: "insert"
+          }
+        ]
       }
     }
   ];
