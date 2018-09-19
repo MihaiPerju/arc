@@ -65,11 +65,6 @@ export default class TagItem extends Component {
         <div className="left__side">
           <div className="tag-inner-div">
             <a onClick={this.onhandleTag.bind(this)}>
-              {/* <img
-                style={{ width: "16px", margin: "8px" }}
-                src="/assets/img/tags.png"
-                alt=""
-              /> */}
               <div className="menu__icon"><i className="icon-tags tags-icon"></i></div>
             </a>
           </div>

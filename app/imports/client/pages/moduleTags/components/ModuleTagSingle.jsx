@@ -33,20 +33,18 @@ export default class ModuleTagSingle extends Component {
       "bg--yellow": checked,
       open: currentTag === tag._id
     });
-    console.log(tag);
-    console.log(tagsSelected);
-    console.log(currentTag);
+    
     return (
       <div className={classes} onClick={this.onSetTag.bind(this)}>
         <div className="check-item">
           <input checked={checked} type="checkbox" className="hidden" />
           <label onClick={this.onSelectTag.bind(this)} />
         </div>
-        <div className="row-item">
+        <div className="row__block align-center">
+           <div className="menu__icon"><i className="icon-tags icon-color"></i></div>
           <div className="item-name">{tag.name}</div>
-
         </div>
-        <div className="row-item m-t--10">
+        {/* <div className="row-item m-t--10">
           <div className="tag-inner-div">
             <div className="menu__icon"><i className="icon-tags tags-icon"></i></div>
           </div>
@@ -57,7 +55,7 @@ export default class ModuleTagSingle extends Component {
                 <label className="no-tags-found">No tag modules found.</label>
             }
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }

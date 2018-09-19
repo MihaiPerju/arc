@@ -16,10 +16,15 @@
   }
 
   &.main-content .main-content__header .title {
+    text-transform: capitalize;
+  }
+
+  &.main-content .main-content__header .title {
     &:before {
       content: '\f02c';
       font-size: 2.2rem;
       top: 1px;
+      color: #3cb877;
     }
   }
 
@@ -250,6 +255,42 @@ margin-top: -5px;
   .item-name{
     text-transform: capitalize;
     font-weight: bold;
+    margin-left: 5px;
+    font-size: 16px;
+  }
+
+  .tag-icon{
+    width:15px;
+    height: 15px;
+  }
+
+  .icon-color{
+    color: #3cb877;
   }
 }
 
+.tag-header{
+  display: inline-block;
+  width: 100%;
+  padding-bottom: 10px !important;
+}
+
+.left{
+  float: left;
+}
+
+.right{
+  float: right;
+}
+
+.tag-header .btn-group button{
+   margin-top: 0 !important;
+   padding: 9px 20px;
+}
+
+.tag-module{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #000;
+}

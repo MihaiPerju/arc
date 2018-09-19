@@ -6,25 +6,39 @@ export default class ModuleTagHeader extends Component {
     setEdit();
   };
 
+  renderTag(moduleName) {
+    return (
+      <div className="tag-item">
+        {moduleName}
+      </div>
+    );
+  }
+
   render() {
     const { tag } = this.props;
 
     return (
       <div className="main-content__header header-block">
-        <div className="row__header">
-          <div className="text-light-grey">Tag name</div>
-          <div className="title">{tag.name}</div>
-          <br />
-          <div className="text-light-grey">
-            <span>Tagged modules: </span>
-            <b>{tag.moduleNames.toString()}</b>
-          </div>
-        </div>
-        <div className="row__header">
-          <div className="btn-group">
+        <div className="row__header tag-header">
+          {/* <div className="text-light-grey">Tag name</div> */}
+          <div className="title left">{tag.name}</div>
+          <div className="btn-group right">
             <button onClick={this.onEdit} className="btn--white">
               Edit tag
             </button>
+          </div>
+        </div>
+        <div className="row__header">
+          <div className="text-light-grey">
+            <div className="tag-module">Tagged modules </div>
+            <div className="tag-inner-div">
+              {
+                tag.moduleNames.length > 0 ?
+                  tag.moduleNames.map(name => this.renderTag(name)) :
+                  <label className="no-tags-found">No tag modules found.</label>
+              }
+            </div>
+            {/* <b>{tag.moduleNames.toString()}</b> */}
           </div>
         </div>
       </div>
