@@ -8,10 +8,11 @@ import os from "os";
 import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection.js";
 import sendEmail from './emailTemplate'
-import MAIL_URL from '../../../../config'
+import sendEmailForAttachment from './attachmentEmailTemplate'
+import ClientService from "./services/ClientService.js"
 
 Meteor.startup(function () {
-  process.env.MAIL_URL=MAIL_URL
+  process.env.MAIL_URL="smtp://3b14232c5b2ecb:384dd38ca0149d@smtp.mailtrap.io:2525"
 });
 Meteor.methods({
   "client.create"(data) {
@@ -36,7 +37,7 @@ Meteor.methods({
   "client.update"(_id, data) {
      let id=data.managerIds[0]
     Security.isAdminOrTech(this.userId);
-    Clients.update(
+   Clients.update(
       { _id },
       {
         $set: data
@@ -144,5 +145,16 @@ Meteor.methods({
         }
       }
     );
+  },
+  "client.sendEmail"(client_id){
+    const client = Clients.findOne({ _id:client_id });
+    let managers=client.managerIds;
+    let clientName=client.clientName
+    for(manager of managers)
+    {
+      let managerData= User.findOne({_id:manager}).getEmail()
+      sendEmailForAttachment({to:managerData,clientName})
+    }
+    ClientService.sendNotification(managers,client_id,clientName)
   }
 });

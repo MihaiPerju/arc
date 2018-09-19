@@ -14,7 +14,15 @@ export default class PlacementBlock extends Component {
 
         const djsConfig = {
             complete(file) {
-                Notifier.success('Added');
+                const {clientId} = facility
+                Meteor.call("client.sendEmail", clientId,err => {
+                    if (!err) {
+                        Notifier.success('Added');
+                        this.removeFile(file);
+                    } else {
+                      Notifier.error(err.reason);
+                    }
+                  });
                 this.removeFile(file);
             },
             acceptedFiles: '.csv'
