@@ -25,8 +25,12 @@ Meteor.methods({
     Security.checkAdmin(this.userId);
 
     Substates.update(
-      { _id: { $in: ids } },
-      { $set: { status: false } },
+     { _id: {
+        $in: ids
+      }},
+      {
+        $set: { status: false}
+      },
       { multi: true }
     );
   },

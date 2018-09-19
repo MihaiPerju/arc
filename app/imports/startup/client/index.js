@@ -10,3 +10,4 @@ import "/imports/api/users/links";
 import "/imports/api/reasonCodes/links";
 import "/imports/api/accountActions/links";
 import "/imports/api/letters/links";
+import "/imports/api/rules/links";

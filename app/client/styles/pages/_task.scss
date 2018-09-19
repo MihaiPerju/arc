@@ -1495,6 +1495,8 @@
   margin-top: 10px;
 }
 
-.select-width{
-  min-width: 370px;
+.select-width {
+  select {
+    padding-right: 26px;
+  }
 }

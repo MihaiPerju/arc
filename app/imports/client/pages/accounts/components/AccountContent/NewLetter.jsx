@@ -72,6 +72,7 @@ export default class NewLetter extends Component {
               <div className="select-row">
                 <div className="select-group">
                   <SelectField
+                    className="select-width"
                     name="selectedOption"
                     placeholder="Select letter"
                     options={options}

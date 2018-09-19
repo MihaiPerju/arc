@@ -175,6 +175,15 @@ route("/reason-codes/list", ReasonCodesContainer);
 route("/reason-code/create", ReasonCodeCreate);
 route("/reason-code/:id/edit", ReasonCodeEdit);
 
+//Rules Engine
+import RulesContainer from "/imports/client/pages/rules/RulesListContainer";
+import RuleCreate from "/imports/client/pages/rules/RuleCreate";
+import RuleEdit from "/imports/client/pages/rules/RuleEdit";
+
+route("/rules/list", RulesContainer);
+route("/rule/create", RuleCreate);
+route("/rule/:id/edit", RuleEdit);
+
 //Tags
 import TagListContainer from "/imports/client/pages/tags/TagListContainer.jsx";
 
