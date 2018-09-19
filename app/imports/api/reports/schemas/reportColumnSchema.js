@@ -91,7 +91,7 @@ export default new SimpleSchema({
     optional: true,
     defaultValue: false
   },
-  workQueue: {
+  workQueueId: {
     type: Boolean,
     optional: true,
     defaultValue: false

@@ -48,7 +48,8 @@ export default class AccountContent extends Component {
       openMetaData,
       closeRightPanel,
       accountsSelected,
-      removeLock
+      removeLock,
+      freezeAccount
     } = this.props;
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;
@@ -67,7 +68,11 @@ export default class AccountContent extends Component {
             {this.tickleBlock()}
             <PayerBlock account={account} />
             <InvoiceMembers account={account} />
-            <ActionBlock closeRightPanel={closeRightPanel} account={account} />
+            <ActionBlock
+              freezeAccount={freezeAccount}
+              closeRightPanel={closeRightPanel}
+              account={account}
+            />
             <LetterList account={account} />
             <PdfFiles account={account} />
             <CommentsListContainer

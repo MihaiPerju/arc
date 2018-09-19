@@ -4,8 +4,7 @@ import moment from "moment";
 export default class RouteService {
   static getRoutesByRole() {
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
-      return [
-        {
+      return [{
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"
@@ -51,6 +50,11 @@ export default class RouteService {
           icon: "user-circle-o"
         },
         {
+          name: "rules/list",
+          label: "Rules",
+          icon: "code-fork"
+        },
+        {
           name: "code/list",
           label: "Codes",
           icon: "code-fork"
@@ -87,8 +91,7 @@ export default class RouteService {
         }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
-      return [
-        {
+      return [{
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"
@@ -175,8 +178,7 @@ export default class RouteService {
         }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      return [
-        {
+      return [{
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"
@@ -237,6 +239,26 @@ export default class RouteService {
           icon: "file-text-o"
         },
         {
+          name: "flagged",
+          label: "Flagged",
+          icon: "flag"
+        },
+        {
+          name: "client/list",
+          label: "Clients",
+          icon: "users"
+        },
+        {
+          name: "admin/user/list",
+          label: "Users",
+          icon: "user-circle-o"
+        },
+        {
+          name: "reports/list",
+          label: "Reports",
+          icon: "file-text-o"
+        },
+        {
           name: "/letters/list",
           label: "Letters",
           icon: "copy"
@@ -253,8 +275,7 @@ export default class RouteService {
         }
       ];
     } else {
-      return [
-        {
+      return [{
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"

@@ -54,6 +54,7 @@ export default class SubstateCreate extends Component {
             <button onClick={this.onClose} className="btn-cancel">
               Cancel
             </button>
+
             <button
               style={isDisabled ? { cursor: "not-allowed" } : {}}
               disabled={isDisabled}

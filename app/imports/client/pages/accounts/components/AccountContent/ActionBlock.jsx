@@ -136,7 +136,7 @@ export default class ActionBlock extends Component {
   };
 
   render() {
-    const { account, closeRightPanel } = this.props;
+    const { account, closeRightPanel, freezeAccount } = this.props;
     const actionsPerformed = account.actions;
     const { dialogIsActive, selectedFlag, isFlagApproved } = this.state;
     const dialogClasses = classNames("account-dialog");
@@ -154,6 +154,7 @@ export default class ActionBlock extends Component {
           </div>
           {this.state.createAction ? (
             <NewAction
+              freezeAccount={freezeAccount}
               closeRightPanel={closeRightPanel}
               hide={this.newAction}
               account={account}
