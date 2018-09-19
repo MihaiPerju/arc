@@ -109,4 +109,22 @@ export default class NotificationService {
       { upsert: true }
     );
   }
+  static createFileUploadNotification(receiverId, clientId, clientName) {
+    Notifications.update(
+      {
+        type: NotificationTypeEnum.FILEUPLOAD,
+        receiverId,
+      },
+      {
+        $set: {
+          receiverId,
+          type: NotificationTypeEnum.FILEUPLOAD,
+          "metaData.client_id": clientId,
+          message: `A new file has been uploaded for the client ${clientName}`,
+          createdAt: new Date()
+        }
+      },
+      { upsert: true }
+    );
+  }
 }
