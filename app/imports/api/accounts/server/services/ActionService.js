@@ -18,6 +18,18 @@ import Tickles from "/imports/api/tickles/collection";
 import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class ActionService {
+  //Freezing account to be processed by the rules engine
+  static freezeAccount(_id) {
+    Accounts.update(
+      { _id },
+      {
+        $set: {
+          isPending: true
+        }
+      }
+    );
+  }
+
   //Adding action to account
   static createAction(data) {
     const { accountId, actionId, reasonCode, userId, addedBy } = data;
@@ -63,6 +75,45 @@ export default class ActionService {
     );
     Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, { accountId, action });
 
+    this.changeState(accountId, action);
+
+    const actionsSubState = _.flatten([
+      StatesSubstates["Archived"],
+      StatesSubstates["Hold"]
+    ]);
+    const index = _.indexOf(actionsSubState, action.substate);
+
+    if (index > -1) {
+      this.removeAssignee(accountId);
+    }
+  }
+
+  //Adding a system action
+  static createSystemAction(_id, accountId) {
+    const { substateId, title, state } = Actions.findOne({ _id });
+    const { clientId } = Accounts.findOne({ _id: accountId });
+    const action = Actions.findOne({ _id });
+
+    const accountAction = {
+      actionId: _id,
+      type: actionTypesEnum.SYSTEM_ACTION,
+      createdAt: new Date(),
+      accountId,
+      clientId
+    };
+
+    const accountActionId = AccountActions.insert(accountAction);
+    Accounts.update(
+      { _id: accountId },
+      {
+        $set: {
+          hasLastSysAction: true
+        },
+        $push: {
+          actionsLinkData: accountActionId
+        }
+      }
+    );
     this.changeState(accountId, action);
 
     const actionsSubState = _.flatten([
@@ -159,7 +210,7 @@ export default class ActionService {
       { _id },
       {
         $unset: {
-          workQueue: null,
+          workQueueId: null,
           assigneeId: null
         }
       }
@@ -192,13 +243,13 @@ export default class ActionService {
   }
 
   static sendNotification(accountId) {
-    const { assigneeId, workQueue } = Accounts.findOne({ _id: accountId });
+    const { assigneeId, workQueueId } = Accounts.findOne({ _id: accountId });
 
     if (assigneeId && Roles.userIsInRole(assigneeId, RolesEnum.REP)) {
       NotificationService.createGlobal(assigneeId);
       NotificationService.createCommentNotification(assigneeId, accountId);
-    } else if (workQueue) {
-      const users = Users.find({ tagIds: workQueue }).fetch();
+    } else if (workQueueId) {
+      const users = Users.find({ tagIds: workQueueId }).fetch();
       for (let user of users) {
         const { _id } = user;
         NotificationService.createGlobal(_id);
@@ -254,7 +305,7 @@ export default class ActionService {
   static addLockToAccount(_id, userId) {
     // remove previous lock from the account by logged-in user
     const account = Accounts.findOne({ lockOwnerId: userId });
-    
+
     if (account) {
       this.removeLockFromAccount(account._id, userId);
     }

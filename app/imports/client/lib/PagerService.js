@@ -119,21 +119,21 @@ export default class PagerService {
     if (assign === "none") {
       _.extend(params.filters, {
         assigneeId: { $exists: true },
-        workQueue: { $exists: true }
+        workQueueId: { $exists: true }
       });
     } else if (assign) {
       const filterArr = assign.split(",");
       if (_.contains(filterArr, "assigneeId")) {
         _.extend(params.filters, {
           $or: [
-            { workQueue: { $in: filterArr } },
+            { workQueueId: { $in: filterArr } },
             {
               assigneeId: { $exists: true }
             }
           ]
         });
       } else {
-        _.extend(params.filters, { workQueue: { $in: filterArr } });
+        _.extend(params.filters, { workQueueId: { $in: filterArr } });
       }
     }
   }
@@ -176,7 +176,7 @@ export default class PagerService {
       _.extend(params, {
         filters: {
           assigneeId: null,
-          workQueue: null,
+          workQueueId: null,
           tickleDate: null,
           employeeToRespond: null
         }
@@ -422,7 +422,9 @@ export default class PagerService {
     _.extend(params, {
       filters: {}
     });
-
+    if(filters&&filters.status){
+      status=filters.status
+    }
     let currentPath = FlowRouter.current().route.path;
 
     if (currentPath.indexOf("client/list") > -1) {
@@ -632,7 +634,7 @@ if(ptType){
         facilityId: facilityId
       });
     }
-
+    
     if (status) {
       _.extend(params.filters, {
         status

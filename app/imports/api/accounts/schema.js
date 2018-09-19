@@ -160,7 +160,7 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
-  workQueue: {
+  workQueueId: {
     type: String,
     optional: true
   },
@@ -241,5 +241,9 @@ export default new SimpleSchema({
     type: Number,
     optional: true,
     defaultValue: 0
+  },
+  isPending: {
+    type: Boolean,
+    defaultValue: true
   }
 });

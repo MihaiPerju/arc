@@ -20,10 +20,10 @@ export default class AccountSingle extends Component {
     checkAccount(account);
   }
 
-  onSelectAccount() {
+  onSelectAccount = () => {
     const { selectAccount, account } = this.props;
     selectAccount(account);
-  }
+  };
 
   onSubmitTags = data => {
     const { _id } = this.props.account;
@@ -35,6 +35,15 @@ export default class AccountSingle extends Component {
       } else {
         Notifier.error(err.error);
       }
+    });
+  };
+
+  onFreeze = () => {
+    const { _id } = this.props.account;
+    Meteor.call("account.freeze", _id, err => {
+      if (!err) {
+      }
+      Notifier.success("Account Sent to be Processed!");
     });
   };
 
@@ -54,7 +63,7 @@ export default class AccountSingle extends Component {
     });
 
     return (
-      <div className={classes} onClick={this.onSelectAccount.bind(this)}>
+      <div className={classes} onClick={this.onSelectAccount}>
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
           <label onClick={this.onCheck.bind(this)} />

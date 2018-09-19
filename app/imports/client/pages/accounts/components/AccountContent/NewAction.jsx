@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField,SelectField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
@@ -67,15 +67,15 @@ export default class NewAction extends Component {
     });
   }
 
-  onSubmit(data) {
-    const { account, hide, closeRightPanel } = this.props;
+  onSubmit = data => {
+    const { account, hide, freezeAccount } = this.props;
     const { dateLabelKeys } = this.state;
     data.accountId = account._id;
     if (account.assignee) {
       data.addedBy = `${account.assignee.profile.firstName} ${
         account.assignee.profile.lastName
       }`;
-    } else if (account.workQueue) {
+    } else if (account.workQueueId) {
       data.addedBy = account.tag.name;
     }
     for (let i = 0; i < dateLabelKeys.length; i++) {
@@ -92,13 +92,13 @@ export default class NewAction extends Component {
         //Clear inputs
         this.refs.form.reset();
         hide();
-        closeRightPanel();
+        freezeAccount();
       } else {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
     });
-  }
+  };
 
   onHide(e) {
     const { hide } = this.props;
@@ -176,6 +176,7 @@ export default class NewAction extends Component {
             onChange={date => {
               this.onChange(date, input.label);
             }}
+            fixedHeight
           />
           {!this.state[input.label] && (
             <div className="alert-notice">{input.label} is required</div>
@@ -217,7 +218,7 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectSimple label={false} name="actionId" options={actions} />
+                <SelectField  name="actionId" labelHidden={false} options={actions}  placeholder="actions" />
                 <ErrorField name="actionId" />
               </div>
               {reasonCodes.length > 0 && (
@@ -246,7 +247,15 @@ export default class NewAction extends Component {
                 type="submit"
                 className="btn--green"
               >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Save"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Save"
+                )}
               </button>
             </div>
           </AutoForm>

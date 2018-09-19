@@ -28,7 +28,7 @@ export default class AccountContent extends Component {
             moment(account[columnKeys]).format("MM/DD/YYYY, hh:mm a")}
         </div>
       );
-    } else if (columnKeys === "workQueue") {
+    } else if (columnKeys === "workQueueId") {
       return <div key={index}>{account["tag"] && account["tag"].name}</div>;
     } else {
       return <div key={index}>{account[columnKeys]}</div>;

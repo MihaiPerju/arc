@@ -88,12 +88,13 @@ export default class EditLetter extends Component {
             </div>
           </div>
           <div className="form-group">
-            <AutoForm
+            <AutoForm className='full-width'
               model={model}
               onChange={this.onHandleChange.bind(this)}
               schema={schema}
             >
               <SelectField
+                className="select-width"
                 name="selectedOption"
                 placeholder="Select letter"
                 options={options}
