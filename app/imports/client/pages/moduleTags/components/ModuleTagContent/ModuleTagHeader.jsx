@@ -20,7 +20,6 @@ export default class ModuleTagHeader extends Component {
     return (
       <div className="main-content__header header-block">
         <div className="row__header tag-header">
-          {/* <div className="text-light-grey">Tag name</div> */}
           <div className="title left">{tag.name}</div>
           <div className="btn-group right">
             <button onClick={this.onEdit} className="btn--white">
@@ -38,7 +37,6 @@ export default class ModuleTagHeader extends Component {
                   <label className="no-tags-found">No tag modules found.</label>
               }
             </div>
-            {/* <b>{tag.moduleNames.toString()}</b> */}
           </div>
         </div>
       </div>
