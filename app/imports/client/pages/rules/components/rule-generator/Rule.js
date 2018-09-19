@@ -1,100 +1,120 @@
-import PropTypes from "prop-types";
-import React from "react";
-import TreeHelper from "./helpers/TreeHelper";
+import PropTypes from 'prop-types';
+import React from 'react';
+import TreeHelper from './helpers/TreeHelper';
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
 
-const defaultErrorMsg = "Input value is not correct";
+const defaultErrorMsg = 'Input value is not correct';
 
 const isValueCorrect = (pattern, value) => {
-  const newPattern = new RegExp(pattern);
-  const match = newPattern.exec(value);
+  const newPattern = new RegExp (pattern);
+  const match = newPattern.exec (value);
   return match === null;
 };
 
 class Rule extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getFieldByName = this.getFieldByName.bind(this);
-    this.generateRuleObject = this.generateRuleObject.bind(this);
-    this.onFieldChanged = this.onFieldChanged.bind(this);
-    this.onOperatorChanged = this.onOperatorChanged.bind(this);
-    this.onInputChanged = this.onInputChanged.bind(this);
-    this.getInputTag = this.getInputTag.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-    this.treeHelper = new TreeHelper(this.props.data);
-    this.node = this.treeHelper.getNodeByName(this.props.nodeName);
+  constructor (props) {
+    super (props);
+    this.getFieldByName = this.getFieldByName.bind (this);
+    this.generateRuleObject = this.generateRuleObject.bind (this);
+    this.onFieldChanged = this.onFieldChanged.bind (this);
+    this.onOperatorChanged = this.onOperatorChanged.bind (this);
+    this.onInputChanged = this.onInputChanged.bind (this);
+    this.getInputTag = this.getInputTag.bind (this);
+    this.handleDelete = this.handleDelete.bind (this);
+    this.treeHelper = new TreeHelper (this.props.data);
+    this.node = this.treeHelper.getNodeByName (this.props.nodeName);
     this.styles = this.props.styles;
     this.state = {
-      currField: this.generateRuleObject(this.props.fields[0], this.node),
-      validationError: false
+      currField: this.generateRuleObject (this.props.fields[0], this.node),
+      validationError: false,
+      date: '',
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.node = this.treeHelper.getNodeByName(nextProps.nodeName);
+  componentWillReceiveProps (nextProps) {
+    this.node = this.treeHelper.getNodeByName (nextProps.nodeName);
   }
 
-  onFieldChanged(event) {
+  onFieldChanged (event) {
     this.node.field = event.target.value;
-    const field = this.getFieldByName(event.target.value);
-    const rule = this.generateRuleObject(field, this.node);
-    this.setState({ currField: rule });
-    this.props.onChange();
+    const field = this.getFieldByName (event.target.value);
+    const rule = this.generateRuleObject (field, this.node);
+    this.setState ({currField: rule});
+    this.props.onChange ();
   }
 
-  onOperatorChanged(event) {
+  onOperatorChanged (event) {
     this.node.operator = event.target.value;
-    const field = this.getFieldByName(this.node.field);
-    const rule = this.generateRuleObject(field, this.node);
-    this.setState({ currField: rule });
-    this.props.onChange();
+    const field = this.getFieldByName (this.node.field);
+    const rule = this.generateRuleObject (field, this.node);
+    this.setState ({currField: rule});
+    this.props.onChange ();
   }
 
-  onInputChanged(event) {
+  onInputChanged (event) {
     const pattern = this.state.currField.input.pattern;
     if (pattern) {
-      this.setState({
-        validationError: isValueCorrect(pattern, event.target.value)
+      this.setState ({
+        validationError: isValueCorrect (pattern, event.target.value),
       });
     }
     this.node.value = event.target.value;
-    const field = this.getFieldByName(this.node.field);
-    const rule = this.generateRuleObject(field, this.node);
-    this.setState({ currField: rule });
-    this.props.onChange();
+    const field = this.getFieldByName (this.node.field);
+    const rule = this.generateRuleObject (field, this.node);
+    this.setState ({currField: rule});
+    this.props.onChange ();
   }
 
-  getFieldByName(name) {
-    return this.props.fields.find(x => x.name === name);
+  onDateChange = date => {
+    this.node.value = moment (date).toDate ();
+    const field = this.getFieldByName (this.node.field);
+    const rule = this.generateRuleObject (field, this.node);
+    this.setState ({currField: rule, date});
+    this.props.onChange ();
+  };
+
+  getFieldByName (name) {
+    return this.props.fields.find (x => x.name === name);
   }
 
-  getInputTag(inputType) {
+  getInputTag (inputType) {
     const errorText = this.state.currField.input.errorText;
 
     switch (inputType) {
-      case "textarea":
+      case 'textarea':
         return (
           <div className={this.styles.txtArea}>
             <textarea
               className="input"
               onChange={this.onInputChanged}
-              value={this.node.value ? this.node.value : ""}
+              value={this.node.value ? this.node.value : ''}
             />
-            {this.state.validationError ? (
-              <p className={this.styles.error}>
-                {errorText || defaultErrorMsg}
-              </p>
-            ) : null}
+            {this.state.validationError
+              ? <p className={this.styles.error}>
+                  {errorText || defaultErrorMsg}
+                </p>
+              : null}
           </div>
         );
-      case "select":
+      case 'select':
         return (
           <select className={this.styles.select} onChange={this.onInputChanged}>
-            {this.state.currField.input.options.map((option, index) => (
+            {this.state.currField.input.options.map ((option, index) => (
               <option value={option.value} key={index}>
                 {option.name}
               </option>
             ))}
           </select>
+        );
+      case 'date':
+        return (
+          <div>
+            <DatePicker
+              selected={this.state.date}
+              onChange={this.onDateChange}
+            />
+          </div>
         );
       default:
         return (
@@ -105,22 +125,22 @@ class Rule extends React.Component {
               onChange={this.onInputChanged}
               className={this.styles.input}
             />
-            {this.state.validationError ? (
-              <p className={this.styles.error}>
-                {errorText || defaultErrorMsg}
-              </p>
-            ) : null}
+            {this.state.validationError
+              ? <p className={this.styles.error}>
+                  {errorText || defaultErrorMsg}
+                </p>
+              : null}
           </div>
         );
     }
   }
 
-  generateRuleObject(field, node) {
+  generateRuleObject (field, node) {
     const rule = {};
     rule.input = field.input;
-    node = node ? node : this.treeHelper.getNodeByName(this.props.nodeName);
+    node = node ? node : this.treeHelper.getNodeByName (this.props.nodeName);
     rule.input.value = node.value;
-    if (!field.operators || typeof field.operators === "string") {
+    if (!field.operators || typeof field.operators === 'string') {
       rule.operators = this.props.operators;
       return rule;
     }
@@ -132,7 +152,7 @@ class Rule extends React.Component {
         opIndex += 1
       ) {
         if (field.operators[i] === this.props.operators[opIndex].operator) {
-          ruleOperators.push(this.props.operators[opIndex]);
+          ruleOperators.push (this.props.operators[opIndex]);
         }
       }
     }
@@ -140,12 +160,12 @@ class Rule extends React.Component {
     return rule;
   }
 
-  handleDelete() {
-    this.treeHelper.removeNodeByName(this.props.nodeName);
-    this.props.onChange();
+  handleDelete () {
+    this.treeHelper.removeNodeByName (this.props.nodeName);
+    this.props.onChange ();
   }
 
-  render() {
+  render () {
     return (
       <div className={this.styles.rule}>
         <select
@@ -153,7 +173,7 @@ class Rule extends React.Component {
           className={this.styles.select}
           onChange={this.onFieldChanged}
         >
-          {this.props.fields.map((field, index) => (
+          {this.props.fields.map ((field, index) => (
             <option value={field.name} key={index}>
               {field.label}
             </option>
@@ -164,13 +184,13 @@ class Rule extends React.Component {
           className={this.styles.select}
           onChange={this.onOperatorChanged}
         >
-          {this.state.currField.operators.map((operator, index) => (
+          {this.state.currField.operators.map ((operator, index) => (
             <option value={operator.operator} key={index}>
               {operator.label}
             </option>
           ))}
         </select>
-        {this.getInputTag(this.state.currField.input.type)}
+        {this.getInputTag (this.state.currField.input.type)}
         <button
           type="button"
           className={this.styles.deleteBtn}
@@ -190,7 +210,17 @@ Rule.propTypes = {
   nodeName: PropTypes.string.isRequired,
   onChange: PropTypes.func,
   operators: PropTypes.array.isRequired,
-  styles: PropTypes.object.isRequired
+  styles: PropTypes.object.isRequired,
 };
 
 export default Rule;
+
+{
+  /* <select className={this.styles.select} onChange={this.onInputChanged}>
+{this.state.currField.input.options.map((option, index) => (
+  <option value={option.value} key={index}>
+    {option.name}
+  </option>
+))}
+</select> */
+}
