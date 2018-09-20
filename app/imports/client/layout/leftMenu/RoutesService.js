@@ -52,7 +52,7 @@ export default class RouteService {
         {
           name: "rules/list",
           label: "Rules",
-          icon: "code-fork"
+          icon: "pencil"
         },
         {
           name: "code/list",
