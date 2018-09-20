@@ -3643,6 +3643,13 @@ react-sortable-hoc@^0.6.8:
     lodash "^4.12.0"
     prop-types "^15.5.7"
 
+react-two-way-querybuilder@^1.0.9:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/react-two-way-querybuilder/-/react-two-way-querybuilder-1.0.10.tgz#a3371e4bda3084468cbd77a7289110361d65cc13"
+  dependencies:
+    babel-runtime "^6.11.6"
+    prop-types "^15.5.8"
+
 react@^15.0.0, react@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
