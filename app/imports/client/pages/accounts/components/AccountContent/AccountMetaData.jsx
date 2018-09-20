@@ -3,7 +3,6 @@ import React from 'react';
 export default class AccountMetaData extends React.Component {
   render () {
     const {metaData} = this.props;
-
     return (
       <div className="metadata-container">
         <div className="main-content">
