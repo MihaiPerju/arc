@@ -171,7 +171,7 @@ class LetterTemplateListContainer extends Pager {
             moduleTags={moduleTags}
           />
           <LetterTemplatesList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list templates decreased" : "task-list templates"}
             templatesSelected={templatesSelected}
             selectTemplate={this.selectTemplate}
             currentTemplate={currentTemplate}

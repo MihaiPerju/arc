@@ -197,7 +197,7 @@ class ReportListContainer extends Pager {
             hideFilter
           />
           <ReportList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list reports decreased" : "task-list reports"}
             reportsSelected={reportsSelected}
             selectReport={this.selectReport}
             currentReport={currentReport}

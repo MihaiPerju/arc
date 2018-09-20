@@ -1485,11 +1485,17 @@
   }
 }
 
-.accounts{
+.accounts,.clients{
   .list-item{
     height: 110px;
   }
 } 
+
+.codes,.reports,.templates{
+  .list-item{
+    height: 90px;
+  }
+}
 
 .margin-top-10 {
   margin-top: 10px;

@@ -97,7 +97,7 @@ export default class AccountSingle extends Component {
             {account.facility && account.facility.name}
           </div>
         </div>
-        <div className="row__item margin-top-10 ">
+        <div className="row__item margin-top-10">
           <TagItem
             title="Tag Account"
             tagIds={account.tagIds}

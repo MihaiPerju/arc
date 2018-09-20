@@ -179,7 +179,7 @@ class CodeListContainer extends Pager {
             hideFilter
           />
           <CodeList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list codes decreased" : "task-list codes"}
             codesSelected={codesSelected}
             selectCode={this.selectCode}
             currentCode={currentCode}
