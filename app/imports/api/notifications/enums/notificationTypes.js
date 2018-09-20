@@ -6,7 +6,8 @@ export default {
   GLOBAL: "global",
   RESPONSE: "response",
   FLAG: "flag",
-  COMMENT: "comment"
+  COMMENT: "comment",
+  FILEUPLOAD:"upload"
 };
 
 
@@ -18,5 +19,6 @@ export const notificationColors = {
   GLOBAL: "black",
   RESPONSE: "purple",
   FLAG: "orange",
-  COMMENT: "grey"
+  COMMENT: "grey",
+  FILEUPLOAD:"grey"
 }

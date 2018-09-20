@@ -400,6 +400,8 @@ export default class PagerService {
       email,
       title,
       name,
+      facCode,
+      ptType,
       letterTemplateName,
       code,
       tagName,
@@ -441,6 +443,8 @@ export default class PagerService {
 
     if (currentPath.indexOf("reports/list") > -1) {
       name = FlowRouter.getQueryParam("name");
+      facCode=FlowRouter.getQueryParam("facCode")
+      ptType=FlowRouter.getQueryParam("ptType")
     }
 
     if (currentPath.indexOf("letter-templates/list") > -1) {
@@ -524,7 +528,18 @@ export default class PagerService {
         name: { $regex: name, $options: "i" }
       });
     }
-
+if(facCode){
+  _.extend(params.filters, {
+    "filterBuilderData.facCode": {$regex:`${facCode}.*`,$options:"i"}
+  });
+  
+}
+if(ptType){
+  _.extend(params.filters, {
+    "filterBuilderData.ptType":{ $regex: `${ptType}.*`,$options:"i"}
+  });
+  
+}
     // letter-templates search
     if (letterTemplateName) {
       _.extend(params.filters, {

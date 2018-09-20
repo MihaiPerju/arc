@@ -238,26 +238,7 @@ export default class RouteService {
           label: "Reports",
           icon: "file-text-o"
         },
-        {
-          name: "flagged",
-          label: "Flagged",
-          icon: "flag"
-        },
-        {
-          name: "client/list",
-          label: "Clients",
-          icon: "users"
-        },
-        {
-          name: "admin/user/list",
-          label: "Users",
-          icon: "user-circle-o"
-        },
-        {
-          name: "reports/list",
-          label: "Reports",
-          icon: "file-text-o"
-        },
+        
         {
           name: "/letters/list",
           label: "Letters",

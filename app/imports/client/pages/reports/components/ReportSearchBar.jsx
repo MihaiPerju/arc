@@ -6,14 +6,15 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Tags from "/imports/client/lib/Tags";
-
+import _ from "underscore";
 export default class ReportSearchBar extends Component {
   constructor() {
     super();
     this.state = {
       dropdown: false,
       selectAll: false,
-      model: {}
+      model: {},
+      filter: false,
     };
   }
 
@@ -29,6 +30,13 @@ export default class ReportSearchBar extends Component {
     }
     if ("name" in params) {
       FlowRouter.setQueryParams({name: params.name});
+    }
+    if ("facCode" in params) {
+      FlowRouter.setQueryParams({ facCode: params.facCode });
+    }
+
+    if ("ptType" in params) {
+      FlowRouter.setQueryParams({ ptType: params.ptType });
     }
     if (reportIdQueryParams) {
       const {closeRightPanel} = this.props;
@@ -59,6 +67,9 @@ export default class ReportSearchBar extends Component {
   nodeRef = node => {
     this.node = node;
   };
+  closeDialog = () => {
+    this.setState(() => ({ dialogIsActive: false }) );
+  };
 
   selectAll = () => {
     const {selectAll} = this.state;
@@ -75,11 +86,48 @@ export default class ReportSearchBar extends Component {
       model.name = queryParams.name;
     }
 
+    if ("facCode" in queryParams) {
+      model.facCode = queryParams.facCode;
+    }
+
+    if ("ptType" in queryParams) {
+      model.ptType = queryParams.ptType;
+    }
     this.setState({model});
   };
 
+  showDialog = () => {
+    this.setState(() => ({dialogIsActive : true}))
+  }
+  resetFilters = () => {
+    let appliedFilters = FlowRouter.current().queryParams;
+    appliedFilters = _.omit(appliedFilters, "page", "tagIds");
+    appliedFilters = _.mapObject(appliedFilters, () => null);
+    FlowRouter.setQueryParams(appliedFilters);
+    const { filters } = this.refs;
+    filters.reset();
+    this.closeDialog();
+  };
+
+  addFilters = () => {
+    const { filters } = this.refs;
+    filters.submit();
+    this.closeDialog();
+  };
+  onChange = (field, value) => {
+    if (field === "name") {
+      FlowRouter.setQueryParams({ name: value });
+    }
+  };
   render() {
-    const {filter, active, dropdown, selectAll, model} = this.state;
+    const {
+      filter,
+      active,
+      dropdown,
+      selectAll,
+      model,
+      dialogIsActive
+    } = this.state;
     const {
       options,
       btnGroup,
@@ -107,8 +155,7 @@ export default class ReportSearchBar extends Component {
 
     return (
       <AutoForm
-        autosave
-        autosaveDelay={500}
+        onChange={this.onChange}
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
@@ -117,7 +164,7 @@ export default class ReportSearchBar extends Component {
         <div className="search-bar">
           {!hideSort && (
             <div className={classes} ref={this.nodeRef}>
-              <div className={btnSelectClasses} onClick={this.selectAll}/>
+              <div className={btnSelectClasses} onClick={this.selectAll} />
               <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
                 <i className="icon-angle-down"/>
               </div>
@@ -149,13 +196,54 @@ export default class ReportSearchBar extends Component {
             </div>
             <div className="filter-block">
               {!hideFilter && (
-                <button>
+                <button onClick={this.showDialog}>
                   <i className="icon-filter"/>
+                  {dialogIsActive && (
+                    <Dialog
+                      className="account-dialog filter-dialog filter-dialog__account"
+                      title="Filter by"
+                      closePortal={this.closeDialog}
+                    >
+                      <button className="close-dialog" onClick={this.closeDialog}>     
+                        <i className="icon-close" />
+                      </button>
+                      <div className="filter-bar">
+                        <div className="select-wrapper">
+                          <div className="form-group flex--helper form-group__pseudo--3">
+                            <AutoField
+                              label="Facility code:"
+                              name="facCode"
+                              placeholder="Search by Facility Code"
+                            />
+                            <AutoField
+                              label="Patient Type:"
+                              name="ptType"
+                              placeholder="Search by Patient Type"
+                            />
+                          </div>
+                          <div className="flex--helper flex-justify--space-between">
+                            <button
+                              className="btn--red"
+                              onClick={this.resetFilters}
+                            >
+                              Reset
+                            </button>
+                            <button
+                              className="btn--blue"
+                              onClick={this.addFilters}
+                            >
+                              Done
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </Dialog>
+                  )}
                 </button>
               )}
               {
                 moduleTags.length ? <Tags moduleTags={moduleTags}/> : <div />
-              }
+                }
             </div>
 
           </div>
@@ -265,5 +353,15 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by report name"
+  },
+  facCode: {
+    type: String,
+    optional: true,
+    label: "Search by Facility Code"
+  },
+  ptType: {
+    type: String,
+    optional: true,
+    label: "Search by Patient Type"
   }
 });
