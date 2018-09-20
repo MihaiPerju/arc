@@ -11,7 +11,7 @@ import Files from "/imports/api/files/collection";
 
 export default class AccountService {
   //For placement file
-  static upload(results, rules, { fileId, facilityId }) {
+  static upload(results, rules, { fileId, facilityId,managerIds }) {
     //Update the file headers;
     const { header } = Files.findOne({
       _id: fileId
@@ -108,7 +108,7 @@ export default class AccountService {
     );
     _.map(newAccountIds, newAccountId => {
       const newAccount = this.getAccount(accounts, newAccountId);
-      Object.assign(newAccount, { facilityId, clientId, fileId });
+      Object.assign(newAccount, { facilityId, clientId, fileId,managerIds });
       Accounts.insert(newAccount);
     });
   }
