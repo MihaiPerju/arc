@@ -144,13 +144,13 @@ export default class RuleCreate extends React.Component {
 
   onSubmit = data => {
     console.log (data);
-    Meteor.call ('rule.create', data, (err, res) => {
-      if (!err) {
-        Notifier.success ('Rule added!');
-      } else {
-        Notifier.error (err.reason);
-      }
-    });
+    // Meteor.call ('rule.create', data, (err, res) => {
+    //   if (!err) {
+    //     Notifier.success ('Rule added!');
+    //   } else {
+    //     Notifier.error (err.reason);
+    //   }
+    // });
   };
 
   onCreateRule = () => {
@@ -173,7 +173,6 @@ export default class RuleCreate extends React.Component {
       workQueueOptions,
       actionOptions,
     } = this.state;
-    console.log (moment ());
     return (
       <div className="create-form">
         <div className="create-form__bar">
