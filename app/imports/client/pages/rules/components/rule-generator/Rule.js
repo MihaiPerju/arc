@@ -14,6 +14,7 @@ const isValueCorrect = (pattern, value) => {
 
 class Rule extends React.Component {
   constructor (props) {
+    console.log (props);
     super (props);
     this.getFieldByName = this.getFieldByName.bind (this);
     this.generateRuleObject = this.generateRuleObject.bind (this);
@@ -79,6 +80,7 @@ class Rule extends React.Component {
   }
 
   getInputTag (inputType) {
+    console.log (inputType);
     const errorText = this.state.currField.input.errorText;
 
     switch (inputType) {
@@ -166,6 +168,7 @@ class Rule extends React.Component {
   }
 
   render () {
+    console.log (this.props);
     return (
       <div className={this.styles.rule}>
         <select
@@ -176,6 +179,7 @@ class Rule extends React.Component {
           {this.props.fields.map ((field, index) => (
             <option value={field.name} key={index}>
               {field.label}
+              {console.log (field)}
             </option>
           ))}
         </select>

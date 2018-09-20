@@ -84,34 +84,31 @@ export default class QueryParser {
     const combinatorsIndexes = this.getCombinatorsIndexes (query, combinators);
     const tokens = [];
     let token = '';
-    console.log (query);
     for (let i = 0, length = query.length; i < length; i += 1) {
       const combinatorIndexes = combinatorsIndexes.find (x => x.start === i);
       //Don't consider a value being totally gathered until there aren't 2 apostrophes
-      let isFinished = token.replace (/[^']/g, '').length === 2 ? true : false;
+      let isFinished = token.replace (/[^']/g, '').length % 2 === 0
+        ? true
+        : false;
       if (combinatorIndexes) {
         const combinator = query.substring (
           combinatorIndexes.start,
           combinatorIndexes.end
         );
-        console.log ('bzzz');
         token = this.pushTokenIfNotEmpty (token, tokens, operators);
         tokens.push (combinator);
         i = combinatorIndexes.end;
-      } else if (query[i] === '(' || (query[i] === ')' && isFinished)) {
+      } else if ((query[i] === '(' || query[i] === ')') && isFinished) {
         token = this.pushTokenIfNotEmpty (token, tokens, operators);
         tokens.push (query[i]);
       } else {
         token += query[i];
       }
-      console.log (token);
-      console.log (isFinished);
     }
     return tokens;
   }
 
   static pushTokenIfNotEmpty (token, array, operators) {
-    console.log (token);
     token = token.trim ();
     if (token) {
       array.push (this.createTokenObject (token, operators));
@@ -120,22 +117,19 @@ export default class QueryParser {
   }
 
   static createTokenObject (token, operators) {
-    // console.log (token);
     const operatorsPattern = this.getSearchPattern (operators, 'operator');
     const matches = this.matchAll (token, operatorsPattern);
-    // console.log (matches);
-    // const mathesLength = matches.map (el => el.value).join ('').length;
-    // console.log (mathesLength);
+    const mathesLength = matches.map (el => el.value).join ('').length;
 
-    // const operatorEndIndex = matches[0] && matches[0].index + mathesLength;
-    // return {
-    //   field: token.substring (0, matches[0].index).trim (),
-    //   operator: token.substring (matches[0].index, operatorEndIndex),
-    //   value: token
-    //     .substring (operatorEndIndex, token.length)
-    //     .replace (/[']+/g, '')
-    //     .trim (),
-    // };
+    const operatorEndIndex = matches[0] && matches[0].index + mathesLength;
+    return {
+      field: token.substring (0, matches[0].index).trim (),
+      operator: token.substring (matches[0].index, operatorEndIndex),
+      value: token
+        .substring (operatorEndIndex, token.length)
+        .replace (/[']+/g, '')
+        .trim (),
+    };
   }
 
   static matchAll (str, regex) {
