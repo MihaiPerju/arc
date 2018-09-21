@@ -12,13 +12,22 @@ export default class Settings extends React.Component {
   }
 
   componentWillMount () {
-    Meteor.call ('admin.getRootFolder', (err, model) => {
-      if (!err) {
-        this.setState ({model});
-      } else {
-        Notifier.error (err.reason);
+    Meteor.call('admin.checkAdmin',Meteor.userId(), (err, res) => {
+      if(!res)
+      {
+        FlowRouter.go('/dashboard')
       }
-    });
+      else
+      {
+        Meteor.call ('admin.getRootFolder', (err, model) => {
+          if (!err) {
+            this.setState ({model});
+          } else {
+            Notifier.error (err.reason);
+          }
+        });
+      }
+    })
   }
 
   onSubmit (data) {
