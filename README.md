@@ -32,6 +32,17 @@ rep - rep-x@app.com, where x in {1,2,3}
 
 The password is 12345 for all accounts.
 
+## Docker
+
+I (Chris) have added a Dockerfile which should/might work for a unified development enviroment on both windows and linux.
+
+1. Compile the docker image and tag it: `docker build -t meteor-ubuntu ./meteor-ubuntu`
+2. Run `docker-compose up`
+
+To access the box: `docker-compose run arcc bash`
+
+... if everything works, I would like to create a command to (1) automatically do `npm install` and right after `npm start`
+
 
 ## Documents
 

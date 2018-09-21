@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  arcc:
+    image: "meteor-ubuntu"
+#    restart: "unless-stopped"
+    environment:
+      VIRTUAL_HOST: "arcc.chrisheney.com"
+      VIRTUAL_PORT: "3000"
+      VIRTUAL_PROTO: "http"
+      LETSENCRYPT_HOST: "arcc.chrisheney.com"
+      LETSENCRYPT_EMAIL: "chris@chrisheney.com"
+      METEOR_ALLOW_SUPERUSER: "true"
+    command: cd /opt/app; npm install; npm start;
+    ports:
+      - 3000:3000
+    volumes:
+      - ./app:/opt/app
+      - ./worker:/opt/worker
