@@ -72,7 +72,7 @@ export default class TagItem extends Component {
             {
               selectedOptions.length > 0 ?
                 selectedOptions.map(option => this.renderTag(option)) :
-                <label className="no-tags-found">No tags found on this account.</label>
+                <label className="no-tags-found">No tags found.</label>
             }
           </div>
         </div>
