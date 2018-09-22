@@ -25,7 +25,6 @@ export default class ActionBlock extends Component {
 
   redirectToPdf = pdf => {
     const {account} = this.props;
-    console.log (account);
     window.open (
       '/pdf/' + pdf._id + '/' + account._id + '/' + getToken (),
       '_blank'
