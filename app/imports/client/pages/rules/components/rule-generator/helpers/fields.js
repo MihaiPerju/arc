@@ -15,13 +15,13 @@ const fields = [
     name: "dischrgDate",
     operators: ["="],
     label: "Discharge Date",
-    input: { type: "text" }
+    input: { type: "date" }
   },
   {
     name: "fbDate",
     operators: ["="],
     label: "Last Bill Date",
-    input: { type: "text" }
+    input: { type: "date" }
   },
   {
     name: "acctBal",
@@ -58,7 +58,7 @@ const fields = [
     name: "tickleDate",
     operators: ["="],
     label: "Tickle Date",
-    input: { type: "text" }
+    input: { type: "date" }
   },
   {
     name: "tickleReason",
