@@ -25,6 +25,13 @@ class Rule extends React.Component {
     };
   }
 
+  componentWillMount () {
+    const date = moment (new Date (this.node.value));
+    if (date.isValid ()) {
+      this.setState ({date});
+    }
+  }
+
   componentWillReceiveProps = nextProps => {
     this.node = this.treeHelper.getNodeByName (nextProps.nodeName);
   };
@@ -140,9 +147,7 @@ class Rule extends React.Component {
     const rule = {};
     rule.input = field.input;
     node = node ? node : this.treeHelper.getNodeByName (this.props.nodeName);
-    if (field.input.type === 'date') {
-      this.setState ({date: moment ()});
-    } else {
+    if (field.input.type !== 'date') {
       rule.input.value = node.value;
     }
     if (!field.operators || typeof field.operators === 'string') {
