@@ -54,6 +54,7 @@ export default class NewLetter extends Component {
     const {selectedTemplate} = this.state;
     const {avatar, profile} = Meteor.user ();
     const options = this.getOptions (letterTemplates);
+    
     return (
       <div className={this.state.fade ? 'new-letter in' : 'new-letter'}>
         <div className="row-block">
