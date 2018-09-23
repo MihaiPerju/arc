@@ -3,7 +3,6 @@ import React from 'react';
 import TreeHelper from './helpers/TreeHelper';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
-
 const defaultErrorMsg = 'Input value is not correct';
 
 const isValueCorrect = (pattern, value) => {
@@ -14,7 +13,6 @@ const isValueCorrect = (pattern, value) => {
 
 class Rule extends React.Component {
   constructor (props) {
-    console.log (props);
     super (props);
     this.getFieldByName = this.getFieldByName.bind (this);
     this.generateRuleObject = this.generateRuleObject.bind (this);
@@ -27,14 +25,22 @@ class Rule extends React.Component {
     this.node = this.treeHelper.getNodeByName (this.props.nodeName);
     this.styles = this.props.styles;
     this.state = {
-      currField: this.generateRuleObject (this.props.fields[0], this.node),
+      currField: this.findCreateRuleObject (this.props.fields, this.node),
       validationError: false,
-      date: '',
     };
   }
 
   componentWillReceiveProps (nextProps) {
     this.node = this.treeHelper.getNodeByName (nextProps.nodeName);
+  }
+
+  findCreateRuleObject (fields, node) {
+    for (let field of fields) {
+      if (field.name === node.field) {
+        return this.generateRuleObject (field, node);
+        break;
+      }
+    }
   }
 
   onFieldChanged (event) {
@@ -68,6 +74,7 @@ class Rule extends React.Component {
   }
 
   onDateChange = date => {
+    console.log (date);
     this.node.value = moment (date).toDate ();
     const field = this.getFieldByName (this.node.field);
     const rule = this.generateRuleObject (field, this.node);
@@ -80,9 +87,7 @@ class Rule extends React.Component {
   }
 
   getInputTag (inputType) {
-    console.log (inputType);
     const errorText = this.state.currField.input.errorText;
-
     switch (inputType) {
       case 'textarea':
         return (
@@ -141,7 +146,12 @@ class Rule extends React.Component {
     const rule = {};
     rule.input = field.input;
     node = node ? node : this.treeHelper.getNodeByName (this.props.nodeName);
-    rule.input.value = node.value;
+
+    if (field.input.type === 'date') {
+      this.setState ({date: moment (node.value)});
+    } else {
+      rule.input.value = node.value;
+    }
     if (!field.operators || typeof field.operators === 'string') {
       rule.operators = this.props.operators;
       return rule;
@@ -168,7 +178,6 @@ class Rule extends React.Component {
   }
 
   render () {
-    console.log (this.props);
     return (
       <div className={this.styles.rule}>
         <select
@@ -179,7 +188,6 @@ class Rule extends React.Component {
           {this.props.fields.map ((field, index) => (
             <option value={field.name} key={index}>
               {field.label}
-              {console.log (field)}
             </option>
           ))}
         </select>
