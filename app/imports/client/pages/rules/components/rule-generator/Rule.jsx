@@ -14,52 +14,47 @@ const isValueCorrect = (pattern, value) => {
 class Rule extends React.Component {
   constructor (props) {
     super (props);
-    this.getFieldByName = this.getFieldByName.bind (this);
-    this.generateRuleObject = this.generateRuleObject.bind (this);
-    this.onFieldChanged = this.onFieldChanged.bind (this);
-    this.onOperatorChanged = this.onOperatorChanged.bind (this);
-    this.onInputChanged = this.onInputChanged.bind (this);
-    this.getInputTag = this.getInputTag.bind (this);
-    this.handleDelete = this.handleDelete.bind (this);
     this.treeHelper = new TreeHelper (this.props.data);
     this.node = this.treeHelper.getNodeByName (this.props.nodeName);
     this.styles = this.props.styles;
     this.state = {
+      date: '',
       currField: this.findCreateRuleObject (this.props.fields, this.node),
       validationError: false,
+      test: '',
     };
   }
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps = nextProps => {
     this.node = this.treeHelper.getNodeByName (nextProps.nodeName);
-  }
+  };
 
-  findCreateRuleObject (fields, node) {
+  findCreateRuleObject = (fields, node) => {
     for (let field of fields) {
       if (field.name === node.field) {
         return this.generateRuleObject (field, node);
         break;
       }
     }
-  }
+  };
 
-  onFieldChanged (event) {
+  onFieldChanged = event => {
     this.node.field = event.target.value;
     const field = this.getFieldByName (event.target.value);
     const rule = this.generateRuleObject (field, this.node);
     this.setState ({currField: rule});
     this.props.onChange ();
-  }
+  };
 
-  onOperatorChanged (event) {
+  onOperatorChanged = event => {
     this.node.operator = event.target.value;
     const field = this.getFieldByName (this.node.field);
     const rule = this.generateRuleObject (field, this.node);
     this.setState ({currField: rule});
     this.props.onChange ();
-  }
+  };
 
-  onInputChanged (event) {
+  onInputChanged = event => {
     const pattern = this.state.currField.input.pattern;
     if (pattern) {
       this.setState ({
@@ -71,10 +66,9 @@ class Rule extends React.Component {
     const rule = this.generateRuleObject (field, this.node);
     this.setState ({currField: rule});
     this.props.onChange ();
-  }
+  };
 
   onDateChange = date => {
-    console.log (date);
     this.node.value = moment (date).toDate ();
     const field = this.getFieldByName (this.node.field);
     const rule = this.generateRuleObject (field, this.node);
@@ -82,11 +76,11 @@ class Rule extends React.Component {
     this.props.onChange ();
   };
 
-  getFieldByName (name) {
+  getFieldByName = name => {
     return this.props.fields.find (x => x.name === name);
-  }
+  };
 
-  getInputTag (inputType) {
+  getInputTag = inputType => {
     const errorText = this.state.currField.input.errorText;
     switch (inputType) {
       case 'textarea':
@@ -140,15 +134,14 @@ class Rule extends React.Component {
           </div>
         );
     }
-  }
+  };
 
-  generateRuleObject (field, node) {
+  generateRuleObject = (field, node) => {
     const rule = {};
     rule.input = field.input;
     node = node ? node : this.treeHelper.getNodeByName (this.props.nodeName);
-
     if (field.input.type === 'date') {
-      this.setState ({date: moment (node.value)});
+      this.setState ({date: moment ()});
     } else {
       rule.input.value = node.value;
     }
@@ -169,15 +162,17 @@ class Rule extends React.Component {
       }
     }
     rule.operators = ruleOperators;
+    console.log (rule);
     return rule;
-  }
+  };
 
-  handleDelete () {
+  handleDelete = () => {
     this.treeHelper.removeNodeByName (this.props.nodeName);
     this.props.onChange ();
-  }
+  };
 
   render () {
+    console.log (this.state);
     return (
       <div className={this.styles.rule}>
         <select
