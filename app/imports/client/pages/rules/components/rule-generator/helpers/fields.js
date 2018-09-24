@@ -25,7 +25,14 @@ const fields = [
   },
   {
     name: 'acctBal',
-    operators: 'all',
+    operators: [
+      '=',
+      '<',
+      'Greater',
+      'Greater than',
+      'Less than',
+      'Less than or equal to',
+    ],
     label: 'Account Balance',
     input: {type: 'number'},
   },
@@ -86,7 +93,13 @@ const fields = [
   },
   {
     name: 'medNo',
-    operators: ['='],
+    operators: [
+      '=',
+      'Greater',
+      'Greater than',
+      'Less than',
+      'Less than or equal to',
+    ],
     label: 'Medical Number',
     input: {type: 'number'},
   },
