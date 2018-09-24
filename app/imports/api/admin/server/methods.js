@@ -27,11 +27,7 @@ Meteor.methods({
     });
   },
   "admin.checkAdmin"(userId) {
-    let user=Users.findOne({_id:userId})
-    if (_.contains(user.roles, UserRoles.ADMIN)) {
-      return true;
-      }
-    return false
+    return Security.checkIfAdmin(userId);
   },
 
   "admin.editUser"(userId, { email, profile, tagIds }) {
@@ -162,11 +158,14 @@ Meteor.methods({
   },
 
   "admin.getRootFolder"() {
+    // console.log("=------------------------------------",Meteor.userId(),Security.checkIfAdmin(Meteor.userId()))
+  //  if( Security.checkIfAdmin(Meteor.userId())){
     return Settings.findOne({
       rootFolder: {
         $exists: true
       }
     });
+  // }
   },
 
   "admin.deleteUser"(userId) {
