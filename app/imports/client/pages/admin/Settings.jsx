@@ -2,7 +2,7 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-
+import UserRoles from '/imports/api/users/enums/roles';
 export default class Settings extends React.Component {
   constructor () {
     super ();
@@ -12,22 +12,14 @@ export default class Settings extends React.Component {
   }
 
   componentWillMount () {
-    Meteor.call('admin.checkAdmin',Meteor.userId(), (err, res) => {
-      if(!res)
-      {
-        FlowRouter.go('/dashboard')
-      }
-      else
-      {
         Meteor.call ('admin.getRootFolder', (err, model) => {
           if (!err) {
             this.setState ({model});
-          } else {
+          } else {        
             Notifier.error (err.reason);
           }
         });
-      }
-    })
+
   }
 
   onSubmit (data) {
