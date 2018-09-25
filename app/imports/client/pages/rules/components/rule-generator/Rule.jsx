@@ -119,6 +119,7 @@ class Rule extends React.Component {
         return (
           <div>
             <DatePicker
+              className="dateSelect"
               selected={this.state.date}
               onChange={this.onDateChange}
             />
