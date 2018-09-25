@@ -128,6 +128,7 @@ Meteor.methods({
   },
 
   "admin.updateRootFolder"({ rootFolder }) {
+    debugger
     rootFolder = rootFolder.trim();
     if (rootFolder[0] !== "/") {
       rootFolder = "/" + rootFolder;
@@ -178,6 +179,55 @@ Meteor.methods({
       }
     });
   },
+
+  "admin.mailSettingUpdate"({ mailSetting }) {
+    Security.checkAdmin(this.userId);
+
+    Settings.update(
+      {},
+      {
+        $set: {
+          mailSetting
+        }
+      },
+      {
+        upsert: true
+      }
+    );
+  },
+
+  "admin.getMailSetting"() {
+    debugger
+    return Settings.findOne({
+      mailSetting: {
+        $exists: true
+      }
+    });
+  },
+
+  "admin.getLetterSettings"() {
+    return Settings.findOne({
+      letterCompileTime: {
+        $exists: true
+      }
+    });
+  },
+
+  "admin.updateLetterSettings"({ letterCompileTime }) {
+    Security.checkAdmin(this.userId);
+    Settings.update(
+      {},
+      {
+        $set: {
+          letterCompileTime
+        }
+      },
+      {
+        upsert: true
+      }
+    );
+  },
+
 
   //Testing purpose only, delete in production
   reset(entity) {
