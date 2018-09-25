@@ -43,3 +43,25 @@ Picker.route("/report/:reportId", function (params, req, res, next) {
   });
   res.end(data);
 });
+Picker.route("/reportpdf/:reportId", function(params, req, res, next) {
+  const { rootFolder } = Settings.findOne({
+    rootFolder: {
+      $ne: null
+    }
+  });
+
+  const { reportId } = params;
+  const reportPath =
+    rootFolder + FoldersEnum.REPORTS_FOLDER + reportId + ".pdf";
+  if (!fs.existsSync(reportPath)) {
+    res.writeHead(404);
+    res.write("File Not Found");
+    res.end();
+  }
+  let data = fs.readFileSync(reportPath);
+  res.writeHead(200, {
+    "Content-Type": "data:application/pdf",
+    "Content-Disposition": `attachment; filename=reportpdf.pdf`
+  });
+  res.end(data);
+});

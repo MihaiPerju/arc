@@ -131,7 +131,11 @@ class ReportHeader extends Component {
     const { reportId, _id } = data;
     window.open("/report/" + reportId);
   };
-
+  downloadReportpdf=()=>{
+    const { data } = this.props;
+    const { reportId, _id } = data;
+    window.open("/reportpdf/" + reportId);
+  }
   getRunButton = status => {
     const { isDisabled } = this.state;
     switch (status) {
@@ -143,11 +147,18 @@ class ReportHeader extends Component {
         );
       case JobQueueStatuses.FINISHED:
         return (
-          <li className="action-item">
-            <a href="javascript:;" onClick={this.downloadReport}>
-              Download report
+          <ul>
+            <li className="action-item">
+              <a href="javascript:;" onClick={this.downloadReport}>
+                Download report csv
             </a>
-          </li>
+            </li>
+            <li className="action-item">
+              <a href="javascript:;" onClick={this.downloadReportpdf}>
+                Download report pdf
+            </a>
+            </li>
+          </ul>
         );
       default:
         return (
