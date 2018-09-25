@@ -119,6 +119,13 @@ class Rule extends React.Component {
         return (
           <div>
             <DatePicker
+              calendarClassName="cc-datepicker"
+              showMonthDropdown
+              showYearDropdown
+              yearDropdownItemNumber={4}
+              todayButton={'Today'}
+              placeholderText="Select New Date"
+              fixedHeight
               className="dateSelect"
               selected={this.state.date}
               onChange={this.onDateChange}
