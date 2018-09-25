@@ -113,6 +113,12 @@ export default class AccountService {
       currAcctIds,
       existentAcctIds
     );
+<<<<<<< HEAD
+    _.map(newAccountIds, newAccountId => {
+      const newAccount = this.getAccount(accounts, newAccountId);
+      Object.assign(newAccount, { facilityId, clientId, fileId,managerIds });
+      Accounts.insert(newAccount);
+=======
 
     _.map (newAccountIds, newAccountId => {
       const newAccount = this.getAccount (accounts, newAccountId);
@@ -121,6 +127,7 @@ export default class AccountService {
 
       //Create a directory for every account to store attachments
       this.createAccountDirectory (accountId, rootFolder);
+>>>>>>> 8f3bdbb1dcac10baf1213b2613c3471a27e2ec84
     });
   }
 
