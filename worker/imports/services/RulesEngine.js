@@ -129,17 +129,20 @@ export default class RulesEngine {
       case '=':
         return '===';
         break;
-      case 'Greater than':
-        return '>';
+      case '!=':
+        return '!==';
         break;
-      case 'Greater than or equal to':
-        return '>=';
-        break;
-      case 'Less than':
+      case '<':
         return '<';
         break;
-      case 'Less than or equal to':
+      case '<=':
         return '<=';
+        break;
+      case '>':
+        return '>';
+        break;
+      case '>=':
+        return '>=';
         break;
       default:
         break;

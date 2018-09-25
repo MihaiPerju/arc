@@ -1,13 +1,13 @@
 const fields = [
   {
     name: 'ptType',
-    operators: ['='],
+    operators: ['=', '!='],
     label: 'Patient Type',
     input: {type: 'text'},
   },
   {
     name: 'ptName',
-    operators: ['='],
+    operators: ['=', '!='],
     label: 'Patient Name',
     input: {type: 'text'},
   },
@@ -93,13 +93,7 @@ const fields = [
   },
   {
     name: 'medNo',
-    operators: [
-      '=',
-      'Greater',
-      'Greater than',
-      'Less than',
-      'Less than or equal to',
-    ],
+    operators: ['='],
     label: 'Medical Number',
     input: {type: 'number'},
   },
