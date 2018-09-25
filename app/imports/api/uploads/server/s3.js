@@ -1,45 +1,8 @@
-import AWS from './aws';
 import UploadedFile from './UploadedFile';
 import config from '../config';
 import moment from 'moment';
-import path from 'path';
-
-// let S3 = new AWS.S3({
-//     region: config.AWS.region
-// });
 
 export default class Uploader {
-    // static remove(key) {
-    //     const run = Meteor.wrapAsync(S3.deleteObject, S3);
-
-    //     return run({
-    //         Bucket: config.AWS.bucket,
-    //         Key: key
-    //     })
-    // }
-
-    // static getObject(key) {
-    //     const run = Meteor.wrapAsync(S3.getObject, S3);
-
-    //     return run({
-    //         Bucket: config.AWS.bucket,
-    //         Key: key
-    //     });
-    // }
-
-    // static putObject(fileKey, mimeType, stream) {
-    //     let params = {
-    //         Bucket: config.AWS.bucket,
-    //         Key: fileKey,
-    //         Body: stream,
-    //         ContentType: mimeType
-    //     };
-
-    //     const run = Meteor.wrapAsync(S3.putObject, S3);
-
-    //     return run(params);
-    // }
-
     static generateS3Key(filename, context) {
         if (context == null) {
             context = '';

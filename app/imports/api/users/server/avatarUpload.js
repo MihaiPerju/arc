@@ -1,6 +1,6 @@
 import Users from '../collection';
-import {createRoute} from '/imports/api/s3-uploads/server/router';
-import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import {createRoute} from '/imports/api/uploads/server/router';
+import Uploads from '/imports/api/uploads/uploads/collection';
 
 createRoute('/uploads/avatar/:token', ({user, error, filenames, success, uploadLocal}) => {
     if (!user) {

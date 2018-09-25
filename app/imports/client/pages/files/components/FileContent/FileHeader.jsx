@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import UploadStatus from "/imports/api/files/enums/statuses";
-import { getToken } from "../../../../../api/s3-uploads/utils";
+import { getToken } from "../../../../../api/uploads/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import HeaderEdit from "./FileHeaderEdit";
 

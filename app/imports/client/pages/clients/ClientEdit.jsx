@@ -13,7 +13,7 @@ import {
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import DropzoneComponent from "react-dropzone-component";
-import { getToken } from "/imports/api/s3-uploads/utils";
+import { getToken } from "/imports/api/uploads/utils";
 import { getImagePath } from "/imports/api/utils";
 
 export default class EditClient extends React.Component {
