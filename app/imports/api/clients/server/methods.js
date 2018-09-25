@@ -10,11 +10,7 @@ import Settings from "/imports/api/settings/collection.js";
 import sendEmail from './emailTemplate'
 import sendEmailForAttachment from './attachmentEmailTemplate'
 import ClientService from "./services/ClientService.js"
-import MAIL_URL from '../../../../config'
 
-Meteor.startup(function () {
-  process.env.MAIL_URL=MAIL_URL
-});
 Meteor.methods({
   "client.create"(data) {
     Security.isAdminOrTech(this.userId);
