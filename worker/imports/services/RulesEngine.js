@@ -4,6 +4,7 @@ import FacilitySelector from '/imports/api/facilities/enums/selectors';
 import Operators from '/imports/api/rules/enums/operators';
 import ActionService from '/imports/api/accounts/server/services/ActionService';
 import triggerTypes from '/imports/api/rules/enums/triggers';
+import moment from 'moment';
 
 export default class RulesEngine {
   static run (_id) {
@@ -76,7 +77,7 @@ export default class RulesEngine {
     if (data) {
       //Start the first step recursively
       let expression = RulesEngine.recursiveCheck (data, account);
-
+      console.log (expression);
       //Convert and return the truth value
       const truthValue = eval (expression);
       return truthValue;
@@ -116,10 +117,46 @@ export default class RulesEngine {
 
   static evaluateComparison (valueToCompare, condition) {
     const {operator, value} = condition;
-    const compareOperator = RulesEngine.convertSign (operator);
-    // return eval(valueToCompare + compareOperator + value);
     if (valueToCompare && compareOperator && value) {
+      //if the values are dates
+      if (moment (valueToCompare).isValid () && moment (value).isValid ()) {
+        //return moment comparison function as result
+        switch (operator) {
+          case '=':
+            return moment (value).isSame (valueToCompare);
+            break;
+          case '!=':
+            return !moment (value).isSame (valueToCompare);
+            break;
+          case '>':
+            return moment (value).isAfter (valueToCompare);
+            break;
+          case '>=':
+            return (
+              moment (value).isAfter (valueToCompare) ||
+              moment (value).isSame (valueToCompare)
+            );
+            break;
+          case '<':
+            return moment (valueToCompare).isAfter (value);
+            break;
+          case '<=':
+            return (
+              moment (valueToCompare).isAfter (value) ||
+              moment (value).isSame (valueToCompare)
+            );
+            break;
+          default:
+            break;
+        }
+      }
+      //Convert comparison operator
+      const compareOperator = RulesEngine.convertSign (operator);
+
+      //return evaluation string
       return valueToCompare + compareOperator + value;
+
+      // return eval(valueToCompare + compareOperator + value);
     }
     return true;
   }
@@ -132,19 +169,8 @@ export default class RulesEngine {
       case '!=':
         return '!==';
         break;
-      case '<':
-        return '<';
-        break;
-      case '<=':
-        return '<=';
-        break;
-      case '>':
-        return '>';
-        break;
-      case '>=':
-        return '>=';
-        break;
       default:
+        return sign;
         break;
     }
   }
