@@ -83,8 +83,6 @@ export default class ActionBlock extends Component {
       shiftY: 0,
     };
 
-    console.log (this.state);
-
     return (
       <div className="action-block drop-file">
         <div className="header__block">

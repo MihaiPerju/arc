@@ -10,23 +10,18 @@ function buildDefaultConfig (config) {
   defConfig.operators = defConfig.operators
     ? defConfig.operators
     : [
-        {operator: '=', label: '='},
-        {operator: '<>', label: '<>'},
-        {operator: '<', label: '<'},
-        {operator: '>', label: '>'},
-        {operator: '>=', label: '>='},
-        {operator: '<=', label: '<='},
-        {operator: 'is null', label: 'Null'},
-        {operator: 'is not null', label: 'Not Null'},
-        {operator: 'in', label: 'In'},
-        {operator: 'not in', label: 'Not In'},
+        {operator: '=', label: 'Equals'},
+        {operator: '!=', label: 'Not equal to'},
+        {operator: '>', label: 'Greater than'},
+        {operator: '>=', label: 'Greater than or equal to'},
+        {operator: '<', label: 'Less than'},
+        {operator: '<=', label: 'Less than or equal to'},
       ];
   defConfig.combinators = defConfig.combinators
     ? defConfig.combinators
     : [
         {combinator: 'AND', label: 'And'},
         {combinator: 'OR', label: 'Or'},
-        {combinator: 'NOT', label: 'Not'},
       ];
   defConfig.animation = defConfig.animation ? defConfig.animation : 'none';
   defConfig.styles = defConfig.styles

@@ -119,6 +119,7 @@ class Rule extends React.Component {
         return (
           <div>
             <DatePicker
+              className="dateSelect"
               selected={this.state.date}
               onChange={this.onDateChange}
             />
@@ -167,7 +168,6 @@ class Rule extends React.Component {
       }
     }
     rule.operators = ruleOperators;
-    console.log (rule);
     return rule;
   };
 
@@ -177,7 +177,6 @@ class Rule extends React.Component {
   };
 
   render () {
-    console.log (this.state);
     return (
       <div className={this.styles.rule}>
         <select
