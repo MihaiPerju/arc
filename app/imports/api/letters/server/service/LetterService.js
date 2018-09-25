@@ -10,7 +10,7 @@ import Business from "/imports/api/business";
 import { Random } from "meteor/random";
 import { existsSync, renameSync, unlinkSync } from "fs";
 import PDFMerge from "pdfmerge";
-import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Uploads from "/imports/api/uploads/uploads/collection";
 import Letters from "/imports/api/letters/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";

@@ -1,7 +1,7 @@
 import Accounts from '../collection';
-import {createRoute} from '/imports/api/s3-uploads/server/router';
+import {createRoute} from '/imports/api/uploads/server/router';
 import Settings from '/imports/api/settings/collection.js';
-import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import Uploads from '/imports/api/uploads/uploads/collection';
 import Business from '/imports/api/business';
 import fs from 'fs';
 

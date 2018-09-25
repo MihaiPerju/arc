@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DropzoneComponent from 'react-dropzone-component';
-import {getToken} from '/imports/api/s3-uploads/utils';
+import {getToken} from '/imports/api/uploads/utils';
 import {Notifier} from '/imports/client/utils';
 import {getImagePath} from '/imports/api/utils';
 

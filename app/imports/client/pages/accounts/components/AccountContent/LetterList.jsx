@@ -5,7 +5,7 @@ import EditLetter from './EditLetter';
 import LetterListQuery from '/imports/api/letters/queries/letterList.js';
 import {withQuery} from 'meteor/cultofcoders:grapher-react';
 import Loading from '/imports/client/lib/ui/Loading';
-import {getToken} from '/imports/api/s3-uploads/utils';
+import {getToken} from '/imports/api/uploads/utils';
 import letterTemplateQuery
   from '/imports/api/letterTemplates/queries/listLetterTemplates';
 import Notifier from '/imports/client/lib/Notifier';
