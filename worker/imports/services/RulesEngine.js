@@ -77,7 +77,6 @@ export default class RulesEngine {
     if (data) {
       //Start the first step recursively
       let expression = RulesEngine.recursiveCheck (data, account);
-      console.log (expression);
       //Convert and return the truth value
       const truthValue = eval (expression);
       return truthValue;
@@ -120,10 +119,6 @@ export default class RulesEngine {
     if (valueToCompare && value) {
       //if the values are dates
       if (moment (valueToCompare).isValid () && moment (value).isValid ()) {
-        console.log (moment (valueToCompare).startOf ('day'));
-        console.log (operator);
-        console.log (moment (value).startOf ('day'));
-
         //return moment comparison function as result
         switch (operator) {
           case '=':
