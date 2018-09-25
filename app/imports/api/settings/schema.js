@@ -11,5 +11,30 @@ export default new SimpleSchema({
     rootFolder:{
         type:String,
         optional:true
-    }
+    },
+    mailSetting: { type: Object, optional: true },
+    "mailSetting.serverAddress": {
+      type: String,
+      optional: true,
+    },
+    "mailSetting.ssl": {
+      type: Boolean,
+      optional: true,
+    },
+    "mailSetting.port": {
+        type: String,
+        optional: true,
+      },
+    "mailSetting.authentication": {
+      type: String,
+      optional: true,
+    },
+    "mailSetting.username": {
+        type: String,
+        optional: true,
+    },
+    "mailSetting.password": {
+    type: String,
+    optional: true,
+    },
 });
