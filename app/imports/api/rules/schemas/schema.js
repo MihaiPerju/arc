@@ -3,16 +3,26 @@ import triggerTypes from "../enums/triggers";
 
 export default new SimpleSchema({
   name: {
-    type: String
+    type: String,
+   
+    optional:true
   },
   description: {
-    type: String
+    type: String,
+
+    optional:true
+
   },
   clientId: {
-    type: String
+    type: String,
+
+    optional:true
+
   },
   facilityId: {
-    type: String
+    type: String,
+
+    optional:true
   },
   rule: {
     type: Object,
@@ -20,7 +30,9 @@ export default new SimpleSchema({
   },
   priority: {
     type: SimpleSchema.Integer,
-    min: 1
+    min: 1,
+
+    optional:true
   },
   isBreakingLoop: {
     type: Boolean,
@@ -28,7 +40,9 @@ export default new SimpleSchema({
   },
   triggerType: {
     type: String,
-    allowedValues: triggerTypes
+    allowedValues: triggerTypes,
+    
+    optional:true
   },
   actionId: {
     type: String,
