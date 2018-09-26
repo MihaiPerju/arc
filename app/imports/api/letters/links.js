@@ -1,6 +1,6 @@
 import Letters from "/imports/api/letters/collection.js";
 import Accounts from '/imports/api/accounts/collection';
-import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import Uploads from '/imports/api/uploads/uploads/collection';
 import LetterTemplates from '/imports/api/letterTemplates/collection'
 
 Letters.addLinks({

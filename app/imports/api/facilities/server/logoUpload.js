@@ -1,8 +1,8 @@
 import {
     createRoute
-} from '/imports/api/s3-uploads/server/router';
+} from '/imports/api/uploads/server/router';
 import Facilities from "../../facilities/collection";
-import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import Uploads from '/imports/api/uploads/uploads/collection';
 import Security from '/imports/api/security/security.js';
 import Settings from "/imports/api/settings/collection.js";
 import fs from "fs";

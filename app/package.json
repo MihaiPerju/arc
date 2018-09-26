@@ -5,11 +5,10 @@
     "start": "MONGO_URL='mongodb://arcc:12345@pms-shard-00-00-tuhpo.mongodb.net:27017,pms-shard-00-01-tuhpo.mongodb.net:27017,pms-shard-00-02-tuhpo.mongodb.net:27017/test?ssl=true&replicaSet=PMS-shard-0&authSource=admin' meteor run --settings .deploy/local.json",
     "debug": "MONGO_URL='mongodb://arcc:12345@pms-shard-00-00-tuhpo.mongodb.net:27017,pms-shard-00-01-tuhpo.mongodb.net:27017,pms-shard-00-02-tuhpo.mongodb.net:27017/test?ssl=true&replicaSet=PMS-shard-0&authSource=admin' meteor run --inspect --settings .deploy/local.json",
     "deploy:qa": "meteor npm i ; cd .deploy/qa && mup deploy",
-    "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc ROOT_URL=http://192.168.2.61:3000 meteor --settings .deploy/pms/local.json"
+    "pms-test": "MONGO_URL=mongodb://localhost:27017/arcc meteor --settings .deploy/pms/local.json"
   },
   "dependencies": {
     "@babel/runtime": "7.0.0-beta.55",
-    "aws-sdk": "^2.35.0",
     "babel-runtime": "^6.20.0",
     "bcrypt": "^0.8.7",
     "busboy": "^0.2.14",
@@ -37,6 +36,7 @@
     "papaparse": "^4.3.6",
     "pdf-merge": "^1.0.2",
     "pdfmerge": "^1.0.1",
+    "phantomjs-prebuilt": "^2.1.16",
     "pm2-meteor": "^0.9.0",
     "qrcode": "^1.2.0",
     "react": "^15.6.2",

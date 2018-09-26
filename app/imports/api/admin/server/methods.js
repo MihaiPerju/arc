@@ -179,6 +179,46 @@ Meteor.methods({
     });
   },
 
+  "admin.mailSettingUpdate"({mailSetting}) {
+    Security.checkAdmin(this.userId);
+    
+   if(mailSetting.ssl === 'true'){
+     mailSetting = {
+       ...mailSetting,
+       ssl: true
+     }
+   }else{
+     mailSetting = {
+      ...mailSetting,
+      ssl: false
+    }
+   }
+   if(mailSetting.authentication == "Anonymous Account") {
+     delete mailSetting.username;
+     delete mailSetting.password;
+   }
+    
+    Settings.update(
+      {},
+      {
+        $set: {
+          mailSetting
+        }
+      },
+      {
+        upsert: true
+      }
+    );
+  },
+
+  "admin.getMailSetting"() {
+    return Settings.findOne({
+      mailSetting: {
+        $exists: true
+      }
+    });
+  },
+
   //Testing purpose only, delete in production
   reset(entity) {
     switch (entity) {

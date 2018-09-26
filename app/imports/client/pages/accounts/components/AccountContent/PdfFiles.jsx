@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DropzoneComponent from 'react-dropzone-component';
-import {getToken} from '../../../../../api/s3-uploads/utils';
+import {getToken} from '../../../../../api/uploads/utils';
 import Notifier from '../../../../lib/Notifier';
 import ReactHover from 'react-hover';
 export default class ActionBlock extends Component {
@@ -82,8 +82,6 @@ export default class ActionBlock extends Component {
       shiftX: 20,
       shiftY: 0,
     };
-
-    console.log (this.state);
 
     return (
       <div className="action-block drop-file">
