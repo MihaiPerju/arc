@@ -158,6 +158,15 @@ class ReportHeader extends Component {
                 Download report pdf
             </a>
             </li>
+            <li className="action-item">
+            <a
+              style={isDisabled ? { pointerEvents: "none" } : {}}
+              href="javascript:;"
+              onClick={this.onRunReport}
+            >
+              Run report
+            </a>
+            </li>
           </ul>
         );
       default:
@@ -227,7 +236,7 @@ class ReportHeader extends Component {
       selectedReportColumns,
       isDisabled
     } = this.state;
-    const job = data;
+    const job = data[data.length-1];
     let tableHeader = [];
     if (report.type === reportTypes.ACCOUNT_ACTIONS) {
       tableHeader = [
@@ -319,5 +328,5 @@ export default withQuery(
   props => {
     return jobQueueQuery.clone({ filters: { reportId: props.report._id } });
   },
-  { single: true, reactive: true }
+  {  reactive: true }
 )(ReportHeader);
