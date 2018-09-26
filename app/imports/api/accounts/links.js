@@ -2,7 +2,7 @@ import Accounts from "/imports/api/accounts/collection";
 import Facilities from "/imports/api/facilities/collection";
 import Users from "/imports/api/users/collection";
 import Clients from "/imports/api/clients/collection";
-import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Uploads from "/imports/api/uploads/uploads/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import Tags from "/imports/api/tags/collection";
 

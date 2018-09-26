@@ -1,55 +1,53 @@
-import Rules from "/imports/api/rules/collection.js";
-import triggerTypes, {
-  triggerOptions
-} from "/imports/api/rules/enums/triggers";
+import Rules from '/imports/api/rules/collection.js';
+import triggerTypes, {triggerOptions} from '/imports/api/rules/enums/triggers';
 
-Meteor.methods({
-  "rule.create"(data) {
-    const { priority, clientId } = data;
-    Rules.update(
+Meteor.methods ({
+  'rule.create' (data) {
+    const {priority, clientId} = data;
+    Rules.update (
       {
-        priority: { $gte: priority },
-        clientId
+        priority: {$gte: priority},
+        clientId,
       },
       {
-        $inc: { priority: 1 }
+        $inc: {priority: 1},
       },
-      { multi: true }
+      {multi: true}
     );
-    Rules.insert(data);
+    Rules.insert (data);
   },
 
-  "rule.update"(data) {
-    const { priority, clientId } = data;
+  'rule.update' (data) {
+    const {priority, clientId} = data;
     //Increase priority for all the rules that have a priority greater than or equal to the new one
-    Rules.update(
+    Rules.update (
       {
-        priority: { $gte: priority },
-        clientId
+        priority: {$gte: priority},
+        clientId,
       },
       {
-        $inc: { priority: 1 }
+        $inc: {priority: 1},
       },
-      { multi: true }
+      {multi: true}
     );
 
     //Update the rule itself
-    Rules.update(
+    Rules.update (
       {
-        _id: data._id
+        _id: data._id,
       },
       {
-        $set: data
+        $set: data,
       }
     );
   },
-  "rule.delete"(_id) {
+  'rule.delete' (_id) {
     //Take care of the security
-    Rules.remove({ _id });
+    Rules.remove ({_id});
   },
 
-  "rules.delete"(ids) {
+  'rules.delete' (ids) {
     //Take care of the security
-    Rules.remove({ _id: { $in: ids } });
-  }
+    Rules.remove ({_id: {$in: ids}});
+  },
 });

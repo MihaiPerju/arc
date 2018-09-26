@@ -6,7 +6,7 @@ import Regions from "/imports/api/regions/collection";
 import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
-import Uploads from "../../s3-uploads/uploads/collection";
+import Uploads from "../../uploads/uploads/collection";
 import bcrypt from "bcrypt";
 import Settings from "/imports/api/settings/collection.js";
 

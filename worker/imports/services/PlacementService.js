@@ -56,7 +56,7 @@ export default class PlacementService {
     const csvString = stream.toString();
 
     //Keep reference to previous file
-    const { fileId, clientId, placementRules } = Facilities.findOne({
+    const { fileId, clientId, placementRules,allowedUsers } = Facilities.findOne({
       _id: facilityId
     });
 
@@ -65,6 +65,7 @@ export default class PlacementService {
         "The Facility Doesn't Have Configured Importing Rules"
       );
     }
+    
 
     const newFileId = Files.insert({
       fileName: filePath,
@@ -100,7 +101,8 @@ export default class PlacementService {
     //Pass links to accounts to link them too
     const links = {
       facilityId,
-      fileId: newFileId
+      fileId: newFileId,
+      managerIds:allowedUsers
     };
 
     Papa.parse(csvString, {

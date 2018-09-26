@@ -1,4 +1,4 @@
-import { getUserByToken } from "/imports/api/s3-uploads/server/router";
+import { getUserByToken } from "/imports/api/uploads/server/router";
 import fs, { existsSync } from "fs";
 import Settings from "/imports/api/settings/collection";
 import Business from "/imports/api/business";
