@@ -82,7 +82,6 @@ class RightSide extends React.Component {
   componentWillMount() {
     Meteor.call('admin.getRootFolder', (err, model) => {
       if (!err) {
-        console.log(model);
         this.setState({ model });
       } else {
         Notifier.error(err.reason);
