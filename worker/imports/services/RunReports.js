@@ -116,7 +116,7 @@ export default class RunReports {
     return metaDataColumn;
   }
 
-  static saveReport({ reportId, _id }) {
+  static async saveReport({ reportId, _id }) {
     const { rootFolder } = Settings.findOne({
       rootFolder: { $ne: null }
     });
@@ -143,8 +143,19 @@ export default class RunReports {
       header: true,
       delimiter: ","
     });
+    const AccountsRaw = Accounts.rawCollection ();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync (AccountsRaw.aggregate);
 
-    const metaData = Accounts.find({}).fetch()
+    const metaData= await AccountsRaw.aggregateSync ([
+      {
+        $match: filters,
+      },
+      {
+        $sample: {
+          size: 20,
+        },
+      },
+    ]).toArray ()
     // Render HTML
     const renderHtml = meta => {
       const data = <Container>
