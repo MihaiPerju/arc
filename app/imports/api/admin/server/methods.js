@@ -130,7 +130,8 @@ Meteor.methods({
     );
   },
 
-  "admin.updateRootFolder"({ rootFolder }) {
+  "admin.updateRootFolder"({ rootFolder, letterFolderPath }) {
+    /** Root Folder Directory */
     rootFolder = rootFolder.trim();
     if (rootFolder[0] !== "/") {
       rootFolder = "/" + rootFolder;
@@ -138,15 +139,23 @@ Meteor.methods({
     if (rootFolder[rootFolder.length - 1] !== "/") {
       rootFolder += "/";
     }
+
+    /** PDF Folder Directory */
+    letterFolderPath = letterFolderPath.trim();
+    if (letterFolderPath[0] !== "/") {
+      letterFolderPath = "/" + letterFolderPath;
+    }
+
     Settings.update(
-      {
-        rootFolder: {
-          $ne: null
-        }
+      { 
+        // rootFolder: {
+        //    $ne: null
+        // }    
       },
       {
         $set: {
-          rootFolder
+          rootFolder,
+          letterFolderPath
         }
       },
       {
@@ -159,9 +168,18 @@ Meteor.methods({
 
   "admin.getRootFolder"() {
     return Settings.findOne({
-      rootFolder: {
-        $exists: true
-      }
+      $or:[
+        { 
+            rootFolder: {
+            $exists: true
+          } 
+        },
+        {
+          letterFolderPath: {
+            $exists: true
+          }
+        }
+      ]
     });
   },
 

@@ -37,4 +37,8 @@ export default new SimpleSchema({
     type: String,
     optional: true,
     },
+    letterFolderPath:{
+        type:String,
+        optional:true
+    },
 });
