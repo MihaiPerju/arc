@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import ModuleTagsSchema from "/imports/api/moduleTags/schema";
+import TagsSchema from '/imports/api/tags/schemas/schema';
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import moduleListEnum from "./enums/moduleList";
@@ -14,7 +15,7 @@ export default class ModuleTagCreate extends Component {
 
   onSubmit(data) {
     this.setState({ isDisabled: true });
-    Meteor.call("moduleTag.create", data, err => {
+    Meteor.call("tag.create", { data }, err => {
       if (!err) {
         Notifier.success("Tag added!");
         this.onClose();
@@ -36,9 +37,9 @@ export default class ModuleTagCreate extends Component {
   };
 
   getOptions = () => {
-    return _.map(moduleListEnum, moduleName => ({
-      value: moduleName,
-      label: moduleName
+    return _.map(moduleListEnum, entities => ({
+      value: entities,
+      label: entities
     }));
   };
 
@@ -74,7 +75,7 @@ export default class ModuleTagCreate extends Component {
         <div className="create-form__wrapper">
           <div className="action-block i--block">
             <AutoForm
-              schema={ModuleTagsSchema}
+              schema={TagsSchema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
             >
@@ -89,10 +90,10 @@ export default class ModuleTagCreate extends Component {
                     className="form-select__multi select-tag__multi"
                     placeholder="Select modules"
                     labelHidden={true}
-                    name="moduleNames"
+                    name="entities"
                     options={options}
                   />
-                  <ErrorField name="moduleNames" />
+                  <ErrorField name="entities" />
                 </div>
               </div>
             </AutoForm>
