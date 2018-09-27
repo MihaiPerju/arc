@@ -62,11 +62,9 @@ class Rule extends React.Component {
   };
 
   clearValue (value) {
-    console.log (value.indexOf ("'"));
     while (value.indexOf ("'") > -1) {
       let index = value.indexOf ("'");
       value = value.slice (0, index) + value.slice (index + 1, value.length);
-      console.log (value);
     }
     return value;
   }
@@ -196,7 +194,6 @@ class Rule extends React.Component {
 
   render () {
     const {node} = this;
-    console.log (node);
     return (
       <div className={this.styles.rule}>
         <select
