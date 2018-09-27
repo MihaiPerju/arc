@@ -148,7 +148,6 @@ export default class RulesEngine {
           valueToCompare
         );
       }
-      return false;
     }
   }
 
