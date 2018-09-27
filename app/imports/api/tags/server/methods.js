@@ -6,14 +6,7 @@ import TagService from "/imports/api/tags/server/services/TagService";
 
 Meteor.methods({
   "tag.create"(data) {
-    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
       return TagService.createTag(data);
-    }
-
-    throw new Meteor.Error(
-      "not-allowed",
-      "You do not have the correct roles for this!"
-    );
   },
 
   "tag.delete"(_id) {
@@ -26,33 +19,17 @@ Meteor.methods({
     );
   },
 
-  "tag.edit"(id, { client, name }) {
-    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
+  "tag.edit"(id,data) {
       return Tags.update(
         { _id: id },
         {
-          $set: {
-            client,
-            name
-          }
+          $set: data
         }
       );
-    }
-    throw new Meteor.Error(
-      "not-allowed",
-      "You do not have the correct roles for this!"
-    );
   },
 
   "tags.deleteMany"(ids) {
-    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
       Tags.remove({ _id: { $in: ids } });
-    } else {
-      throw new Meteor.Error(
-        "not-allowed",
-        "You do not have the correct roles for this!"
-      );
-    }
   },
 
   "user.addTag"({ userIds, tagId }) {

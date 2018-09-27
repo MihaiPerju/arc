@@ -17,7 +17,7 @@ export default class ModuleTagHeader extends Component {
           <br />
           <div className="text-light-grey">
             <span>Tagged modules: </span>
-            <b>{tag.moduleNames.toString()}</b>
+            <b>{tag.entities.toString()}</b>
           </div>
         </div>
         <div className="row__header">
