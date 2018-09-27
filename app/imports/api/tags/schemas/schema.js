@@ -2,10 +2,12 @@ import SimpleSchema from "simpl-schema";
 
 export default new SimpleSchema({
   name: {
-    type: String
+    type: String,
+    optional: true,
   },
   clientId: {
-    type: String
+    type: String,
+    optional: true,
   },
   tagIds: {
     type: Array,
@@ -13,6 +15,13 @@ export default new SimpleSchema({
     defaultValue: []
   },
   "tagIds.$": {
+    type: String
+  }, 
+  entities: {
+    type: Array,
+    defaultValue: []
+  },
+  "entities.$": {
     type: String
   }
 });

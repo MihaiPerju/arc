@@ -11,7 +11,7 @@ import Rules from "/imports/api/rules/collection.js";
 import AccountsCollection from "/imports/api/accounts/collection";
 import Escalations from "/imports/api/escalations/collection";
 import { createFolderStructure } from "/imports/startup/server/folders";
-
+import UserRoles from '/imports/api/users/enums/roles';
 Meteor.methods({
   "admin.createUser"({ firstName, lastName, email, phoneNumber, password }) {
     Security.checkAdmin(this.userId);
@@ -25,6 +25,9 @@ Meteor.methods({
         phoneNumber
       }
     });
+  },
+  "admin.checkAdmin"(userId) {
+    return Security.checkIfAdmin(userId);
   },
 
   "admin.editUser"(userId, { email, profile, tagIds }) {
@@ -155,11 +158,14 @@ Meteor.methods({
   },
 
   "admin.getRootFolder"() {
+    // console.log("=------------------------------------",Meteor.userId(),Security.checkIfAdmin(Meteor.userId()))
+  //  if( Security.checkIfAdmin(Meteor.userId())){
     return Settings.findOne({
       rootFolder: {
         $exists: true
       }
     });
+  // }
   },
 
   "admin.deleteUser"(userId) {
