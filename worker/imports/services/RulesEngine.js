@@ -116,7 +116,6 @@ export default class RulesEngine {
 
   static evaluateCondition (account, field, condition) {
     const {operator, value} = condition;
-
     //See if account has 'field' property
     if (!account.hasOwnProperty (field)) {
       if (operator === '!') {
@@ -125,11 +124,6 @@ export default class RulesEngine {
         return false;
       }
     } else {
-      //if operator is 'exists'
-      if (operator === '!!') {
-        return true;
-      }
-
       //evaluate other conditions
       const valueToCompare = account[field];
 
@@ -208,16 +202,22 @@ export default class RulesEngine {
         return valueToCompare !== value;
         break;
       case 'contains':
-        return valueToCompare.includes (value);
+        return valueToCompare.toUpperCase ().includes (value.toUpperCase ());
         break;
       case 'startsWith':
-        return valueToCompare.startsWith (value);
+        return valueToCompare.toUpperCase ().startsWith (value.toUpperCase ());
         break;
       case 'endsWith':
-        return valueToCompare.endsWith (value);
+        return valueToCompare.toUpperCase ().endsWith (value.toUpperCase ());
+        break;
+      case '!':
+        return false;
+        break;
+      case '!!':
+        return true;
         break;
       default:
-        return sign;
+        return operator;
         break;
     }
   }

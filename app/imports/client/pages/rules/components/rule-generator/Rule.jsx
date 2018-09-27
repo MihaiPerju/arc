@@ -61,14 +61,25 @@ class Rule extends React.Component {
     this.props.onChange ();
   };
 
+  clearValue (value) {
+    console.log (value.indexOf ("'"));
+    while (value.indexOf ("'") > -1) {
+      let index = value.indexOf ("'");
+      value = value.slice (0, index) + value.slice (index + 1, value.length);
+      console.log (value);
+    }
+    return value;
+  }
+
   onInputChanged = event => {
+    let value = this.clearValue (event.target.value);
     const pattern = this.state.currField.input.pattern;
     if (pattern) {
       this.setState ({
-        validationError: isValueCorrect (pattern, event.target.value),
+        validationError: isValueCorrect (pattern, value),
       });
     }
-    this.node.value = event.target.value;
+    this.node.value = value;
     const field = this.getFieldByName (this.node.field);
     const rule = this.generateRuleObject (field, this.node);
     this.setState ({currField: rule});
