@@ -184,6 +184,8 @@ class Rule extends React.Component {
   };
 
   render () {
+    const {node} = this;
+    console.log (node);
     return (
       <div className={this.styles.rule}>
         <select
@@ -208,7 +210,9 @@ class Rule extends React.Component {
             </option>
           ))}
         </select>
-        {this.getInputTag (this.state.currField.input.type)}
+        {node.operator !== '!!' &&
+          node.operator !== '!' &&
+          this.getInputTag (this.state.currField.input.type)}
         <button
           type="button"
           className={this.styles.deleteBtn}
