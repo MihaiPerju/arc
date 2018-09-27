@@ -12,6 +12,7 @@ import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/reasonCodes/queries/reasonCodesList";
 import clientsQuery from "/imports/api/clients/queries/listClients";
 import RolesEnum from "/imports/api/users/enums/roles.js";
+import Loading from "/imports/client/lib/ui/Loading";
 
 class ReasonCodesBlock extends Component {
   constructor() {
