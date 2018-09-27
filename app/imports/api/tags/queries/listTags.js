@@ -9,5 +9,8 @@ export default Tags.createQuery('listTags', {
     name: 1,
     clientId: 1,
     _id: 1,
-    tagIds: 1
+    tagIds: 1,
+    entities:1,
+  
+    
 });
