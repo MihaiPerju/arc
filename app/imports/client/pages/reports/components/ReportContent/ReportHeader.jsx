@@ -128,12 +128,12 @@ class ReportHeader extends Component {
 
   downloadReport = () => {
     const { data } = this.props;
-    const { reportId, _id } = data;
+    const { reportId, _id } = data[0];
     window.open("/report/" + reportId);
   };
   downloadReportpdf=()=>{
     const { data } = this.props;
-    const { reportId, _id } = data;
+    const { reportId, _id } = data[0];
     window.open("/reportpdf/" + reportId);
   }
   getRunButton = status => {
