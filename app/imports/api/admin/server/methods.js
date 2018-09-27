@@ -158,14 +158,11 @@ Meteor.methods({
   },
 
   "admin.getRootFolder"() {
-    // console.log("=------------------------------------",Meteor.userId(),Security.checkIfAdmin(Meteor.userId()))
-  //  if( Security.checkIfAdmin(Meteor.userId())){
     return Settings.findOne({
       rootFolder: {
         $exists: true
       }
     });
-  // }
   },
 
   "admin.deleteUser"(userId) {
