@@ -7,7 +7,7 @@ const fields = [
   },
   {
     name: 'ptName',
-    operators: ['=', '!='],
+    operators: ['=', '!=', 'contains', 'start_with', 'end_with'],
     label: 'Patient Name',
     input: {type: 'text'},
   },

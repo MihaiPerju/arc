@@ -16,6 +16,9 @@ function buildDefaultConfig (config) {
         {operator: '>=', label: 'Greater than or equal to'},
         {operator: '<', label: 'Less than'},
         {operator: '<=', label: 'Less than or equal to'},
+        {operator: 'contains', label: 'Contains'},
+        {operator: 'start_with', label: 'Start With'},
+        {operator: 'end_with', label: 'End With'},
       ];
   defConfig.combinators = defConfig.combinators
     ? defConfig.combinators

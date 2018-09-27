@@ -6,7 +6,24 @@ export default class QueryParser {
     query = '(';
     for (let i = 0, length = data.rules.length; i < length; i += 1) {
       if (!data.rules[i].combinator) {
-        query += `${data.rules[i].field} ${data.rules[i].operator} '${data.rules[i].value}'`;
+        if(data.rules[i].operator === 'contains'){
+          let contains = {
+            $regex: data.rules[i].value, $options: "i"
+          };
+          query += `${data.rules[i].field} : ${JSON.stringify(contains)}`;
+        } else if(data.rules[i].operator === 'start_with'){
+          let start_with = {
+            $regex: `/^${ data.rules[i].value}/`, $options: "i"
+          };
+          query += `${data.rules[i].field} : ${JSON.stringify(start_with)}`;
+        } else if(data.rules[i].operator === 'end_with'){
+          let end_with = {
+            $regex: `/${ data.rules[i].value}$/`, $options: "i"
+          };
+          query += `${data.rules[i].field} : ${JSON.stringify(end_with)}`;
+        } else {
+          query += `${data.rules[i].field} ${data.rules[i].operator} '${data.rules[i].value}'`;
+        }
         if (i !== length - 1 && !data.rules[i + 1].combinator) {
           query += ` ${data.combinator} `;
         }
