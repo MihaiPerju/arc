@@ -2,8 +2,12 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
+
+import UserRoles from '/imports/api/users/enums/roles';
+
 import SettingSingle from "./SettingSingle";
 import MailSettingContent from "./MailSettingContent";
+
 
 export default class Settings extends React.Component {
   constructor () {
@@ -79,6 +83,7 @@ class RightSide extends React.Component {
     };
   }
 
+
   componentWillMount() {
     Meteor.call('admin.getRootFolder', (err, model) => {
       if (!err) {
@@ -87,6 +92,7 @@ class RightSide extends React.Component {
         Notifier.error(err.reason);
       }
     });
+
   }
 
   componentDidMount() {

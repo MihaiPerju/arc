@@ -1,7 +1,7 @@
 import Users from '/imports/api/users/collection.js';
 import _ from 'underscore';
 import UserRoles from '/imports/api/users/enums/roles';
-
+import { Roles } from 'meteor/alanning:roles';
 export default {
     checkAdmin(userId) {
         this.checkLoggedIn(userId);
@@ -32,5 +32,8 @@ export default {
         if (!Roles.userIsInRole(userId, roles)) {
             throw new Meteor.Error('not-allowed', 'You do not have the correct roles for this!');
         }
+    },
+    checkIfAdmin(userId){
+        return Roles.userIsInRole(userId, [UserRoles.ADMIN]);
     }
 }
