@@ -28,7 +28,6 @@ import "/imports/api/jobQueue/server";
 import "/imports/api/substates/server";
 import "/imports/api/notifications/server";
 import "/imports/api/escalations/server";
-import "/imports/api/moduleTags/server";
 import "/imports/api/accounts/server/publication";
 import "/imports/api/tickles/server";
 import "/imports/api/rules/server";

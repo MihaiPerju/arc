@@ -5,7 +5,7 @@ import PaginationBar from "/imports/client/lib/PaginationBar";
 import ModuleTagContent from "./ModuleTagContent";
 import ModuleTagCreate from "./ModuleTagCreate";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
@@ -25,7 +25,7 @@ class ModuleTagsListContainer extends Pager {
       total: 0,
       range: {}
     });
-    this.query = moduleTagsQuery;
+    this.query = TagsListQuery;
   }
 
   componentWillMount() {
