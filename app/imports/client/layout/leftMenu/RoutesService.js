@@ -52,7 +52,7 @@ export default class RouteService {
         {
           name: "rules/list",
           label: "Rules",
-          icon: "pencil"
+          icon: "file-text-o"
         },
         {
           name: "code/list",
