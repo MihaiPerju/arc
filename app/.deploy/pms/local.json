@@ -1,6 +1,4 @@
 {
-  "LOCAL_STORAGE_PATH": "/tmp/uploads",
-  "public": {},
   "private": {
     "sftp": {
       "host": "localhost",
