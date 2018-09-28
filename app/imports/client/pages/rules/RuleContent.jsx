@@ -60,7 +60,7 @@ export default class RuleContent extends Component {
             <div className="text-block">
               <div className="text-light-grey text-label half-width">This rule will prevent other rules<br/>from taking action if it's true </div>
               <div className="reason">
-                {rule.isBreakingLoop ? "will prevent": "Wouldn't prevent"}
+                {rule.isBreakingLoop ? "Will prevent": "Wouldn't prevent"}
               </div>
             </div>
           </div>
