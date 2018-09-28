@@ -9,6 +9,7 @@ export default class PayItem extends Component {
     super ();
     this.state = {
       dialogIsActive: false,
+      expandedView: false,
     };
   }
 
@@ -44,9 +45,14 @@ export default class PayItem extends Component {
       dialogIsActive: false,
     });
   }
+  expandCard = () => {
+    this.setState(state => ({
+      expandedView: !state.expandedView
+    }))
+  }
   render () {
     const {insurance, index, indexActiveInsCode} = this.props;
-    const {dialogIsActive} = this.state;
+    const {dialogIsActive, expandedView} = this.state;
     const classes = classNames ({
       'pay-item': true,
       active: indexActiveInsCode === index,
@@ -82,7 +88,9 @@ export default class PayItem extends Component {
               </div>
             </Dialog>}
         </div>
-        <div className="pay-item__wrapper">
+        <div className="pay-item__wrapper" onClick={this.expandCard}
+          style={{ height: !expandedView ? '118px' : 'auto' }}
+        >
           <div className="info-row">
             <div className="text-light-grey">Balance</div>
             <div className="text-dark-grey price">
@@ -94,12 +102,12 @@ export default class PayItem extends Component {
               <div className="text-light-grey">Phone number</div>
               <div className="text-dark-grey">{insurance.phone}</div>
             </div>}
-          {insurance.policy &&
+            {insurance.policy &&
             <div className="info-row">
               <div className="text-light-grey">Policy</div>
               <div className="text-dark-grey">{insurance.policy}</div>
             </div>}
-          {insurance.address1 &&
+            {insurance.address1 &&
             <div className="info-row">
               <div className="text-light-grey">Address 1</div>
               <div className="text-dark-grey">{insurance.address1}</div>

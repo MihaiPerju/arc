@@ -1,28 +1,32 @@
-import React from "react";
-import Dialog from "/imports/client/lib/ui/Dialog";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
-import AccountTickle from "./AccountTickle";
-import AccountEscalation from "./AccountEscalation";
-import AccountAssign from "./AccountAssign";
-import classNames from "classnames";
+import React from 'react';
+import Dialog from '/imports/client/lib/ui/Dialog';
+import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import AccountTickle from './AccountTickle';
+import AccountEscalation from './AccountEscalation';
+import AccountAssign from './AccountAssign';
+import classNames from 'classnames';
 
 export default class AccountActioning extends React.Component {
-  constructor() {
-    super();
+  constructor () {
+    super ();
     this.state = {
-      dialogIsActive: false
+      dialogIsActive: false,
     };
   }
 
   openDialog = () => {
-    this.setState({
-      dialogIsActive: true
-    });
+    if (!this.props.metaData) {
+      this.setState ({
+        dialogIsActive: true,
+      });
+    } else {
+      this.props.openMetaData ();
+    }
   };
 
   closeDialog = () => {
-    this.setState({
-      dialogIsActive: false
+    this.setState ({
+      dialogIsActive: false,
     });
   };
 
@@ -34,11 +38,10 @@ export default class AccountActioning extends React.Component {
       title,
       escalate,
       metaData,
-      metaDataGroups,
       tickle,
       openMetaData,
       closeRightPanel,
-      escalationId
+      escalationId,
     } = this.props;
 
     if (tickle) {
@@ -51,7 +54,7 @@ export default class AccountActioning extends React.Component {
       );
     }
     if (metaData) {
-      openMetaData();
+      openMetaData ();
     }
     if (escalate) {
       return (
@@ -77,25 +80,24 @@ export default class AccountActioning extends React.Component {
     }
   };
 
-  render() {
-    const { dialogIsActive } = this.state;
-    const { type, title, tickle } = this.props;
-    const dialogClasses = classNames("account-dialog", {
-      "tickle-dialog": tickle
+  render () {
+    const {dialogIsActive} = this.state;
+    const {type, title, tickle} = this.props;
+    const dialogClasses = classNames ('account-dialog', {
+      'tickle-dialog': tickle,
     });
 
     return (
       <button className="btn--white" onClick={this.openDialog}>
         <span>{type}</span>
-        {dialogIsActive && (
+        {dialogIsActive &&
           <Dialog
             className={dialogClasses}
             closePortal={this.closeDialog}
             title={title}
           >
-            {this.showDialog()}
-          </Dialog>
-        )}
+            {this.showDialog ()}
+          </Dialog>}
       </button>
     );
   }

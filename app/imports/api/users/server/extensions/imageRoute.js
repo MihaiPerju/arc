@@ -1,7 +1,7 @@
 import fs from "fs";
 import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection.js";
-import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Uploads from "/imports/api/uploads/uploads/collection";
 
 Picker.route("/image/:path", function (params, req, res, next) {
   const {

@@ -16,6 +16,7 @@ export default class MenuItem extends Component {
             {label === "Tickles" && <Badge label={label} />}
             {label === "Escalations" && <Badge label={label} />}
             {label === "Unassigned" && <Badge label={label} />}
+            {label === "Flagged" && <Badge label={label} />}
           </a>
         }
       </li>

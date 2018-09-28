@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Notifier from "../../../../../lib/Notifier";
 import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
-import {getToken} from "/imports/api/s3-uploads/utils";
+import {getToken} from "/imports/api/uploads/utils";
 
 export default class InventoryBlock extends Component {
 

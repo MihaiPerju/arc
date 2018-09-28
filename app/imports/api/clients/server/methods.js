@@ -1,12 +1,20 @@
 import Security from "/imports/api/security/security.js";
 import Clients from "/imports/api/clients/collection.js";
-import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Uploads from "/imports/api/uploads/uploads/collection";
 import Facilities from "/imports/api/facilities/collection.js";
+import User from "/imports/api/users/collection.js"
 import fs from "fs";
 import os from "os";
 import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection.js";
+import sendEmail from './emailTemplate'
+import sendEmailForAttachment from './attachmentEmailTemplate'
+import ClientService from "./services/ClientService.js"
+import MAIL_URL from '../../../../config'
 
+Meteor.startup(function () {
+  process.env.MAIL_URL=MAIL_URL
+});
 Meteor.methods({
   "client.create"(data) {
     Security.isAdminOrTech(this.userId);
@@ -28,14 +36,21 @@ Meteor.methods({
   },
 
   "client.update"(_id, data) {
+     let id=data.managerIds[0]
     Security.isAdminOrTech(this.userId);
-
-    Clients.update(
+   Clients.update(
       { _id },
       {
         $set: data
       }
     );
+    let ids=data.managerIds
+    let to
+    for(i of ids){
+      let managerData= User.findOne({_id:i}).getEmail()
+      to=managerData
+      sendEmail({ to, email:data.email });
+    }
   },
 
   "client.removeLogo"(clientId) {
@@ -131,5 +146,17 @@ Meteor.methods({
         }
       }
     );
+  },
+  "client.sendEmail"(client_id){
+    const client = Clients.findOne({ _id:client_id });
+    let managers=client.managerIds;
+    let clientName=client.clientName
+   // for(manager of managers)
+// {
+//   let managerData= User.findOne({_id:manager}).getEmail()
+//   sendEmailForAttachment({to:managerData,clientName})
+// }
+// ClientService.sendNotification(managers,client_id,clientName)
+
   }
 });

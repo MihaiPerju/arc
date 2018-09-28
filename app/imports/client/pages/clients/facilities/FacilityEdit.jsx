@@ -15,7 +15,7 @@ import RegionListQuery from "/imports/api/regions/queries/regionList.js";
 import SelectUsersContainer from "/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx";
 import Loading from "/imports/client/lib/ui/Loading";
 import { frequencyOptions } from "/imports/api/facilities/enums/frequency";
-import { getToken } from "/imports/api/s3-uploads/utils";
+import { getToken } from "/imports/api/uploads/utils";
 import { getImagePath } from "/imports/api/utils";
 import DropzoneComponent from "react-dropzone-component";
 import SimpleSchema from "simpl-schema";

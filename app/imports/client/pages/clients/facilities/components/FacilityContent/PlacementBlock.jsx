@@ -3,7 +3,7 @@ import UploadItem from './UploadItem';
 import Notifier from "../../../../../lib/Notifier";
 import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';
-import { getToken } from "/imports/api/s3-uploads/utils";
+import { getToken } from "/imports/api/uploads/utils";
 
 export default class PlacementBlock extends Component {
     render() {
@@ -14,7 +14,15 @@ export default class PlacementBlock extends Component {
 
         const djsConfig = {
             complete(file) {
-                Notifier.success('Added');
+                const {clientId} = facility
+                Meteor.call("client.sendEmail", clientId,err => {
+                    if (!err) {
+                        Notifier.success('Added');
+                        this.removeFile(file);
+                    } else {
+                      Notifier.error(err.reason);
+                    }
+                  });
                 this.removeFile(file);
             },
             acceptedFiles: '.csv'
