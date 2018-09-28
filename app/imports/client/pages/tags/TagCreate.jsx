@@ -17,6 +17,7 @@ export default class TagCreate extends Component {
 
   onSubmit(data) {
     this.setState({ isDisabled: true });
+    data.workQueueStatus=true;
     Meteor.call("tag.create", { data }, err => {
       if (!err) {
         Notifier.success("Tag added!");
