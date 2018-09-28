@@ -1,4 +1,4 @@
-import { createRoute } from "/imports/api/s3-uploads/server/router";
+import { createRoute } from "/imports/api/uploads/server/router";
 import os from "os";
 import fs from "fs";
 import JobQueue from "/imports/api/jobQueue/collection";

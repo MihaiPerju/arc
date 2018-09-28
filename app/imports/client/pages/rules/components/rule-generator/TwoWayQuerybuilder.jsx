@@ -16,13 +16,15 @@ function buildDefaultConfig (config) {
         {operator: '>=', label: 'Greater than or equal to'},
         {operator: '<', label: 'Less than'},
         {operator: '<=', label: 'Less than or equal to'},
+        {operator: 'contains', label: 'Contains'},
+        {operator: 'startsWith', label: 'Starts with'},
+        {operator: 'endsWith', label: 'Ends with'},
+        {operator: '!', label: 'Not exists'},
+        {operator: '!!', label: 'Exists'},
       ];
   defConfig.combinators = defConfig.combinators
     ? defConfig.combinators
-    : [
-        {combinator: 'AND', label: 'And'},
-        {combinator: 'OR', label: 'Or'},
-      ];
+    : [{combinator: 'AND', label: 'And'}, {combinator: 'OR', label: 'Or'}];
   defConfig.animation = defConfig.animation ? defConfig.animation : 'none';
   defConfig.styles = defConfig.styles
     ? defConfig.styles

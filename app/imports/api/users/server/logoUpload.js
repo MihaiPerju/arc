@@ -1,6 +1,6 @@
-import { createRoute } from "/imports/api/s3-uploads/server/router";
+import { createRoute } from "/imports/api/uploads/server/router";
 import Clients from "/imports/api/clients/collection";
-import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Uploads from "/imports/api/uploads/uploads/collection";
 import Settings from "/imports/api/settings/collection.js";
 import fs from "fs";
 import FoldersEnum from "/imports/api/business";

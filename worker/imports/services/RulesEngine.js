@@ -77,7 +77,6 @@ export default class RulesEngine {
     if (data) {
       //Start the first step recursively
       let expression = RulesEngine.recursiveCheck (data, account);
-      console.log (expression);
       //Convert and return the truth value
       const truthValue = eval (expression);
       return truthValue;
@@ -93,7 +92,7 @@ export default class RulesEngine {
         return RulesEngine.recursiveCheck (condition.rules[0], account);
       }
       const {field} = condition;
-      return RulesEngine.evaluateComparison (account[field], condition);
+      return RulesEngine.evaluateCondition (account, field, condition);
     } else if (condition.rules.length > 1) {
       //Decide which conditional will be used in dependence of combinator
       const {combinator} = condition;
@@ -115,62 +114,110 @@ export default class RulesEngine {
     }
   }
 
-  static evaluateComparison (valueToCompare, condition) {
+  static evaluateCondition (account, field, condition) {
     const {operator, value} = condition;
-    if (valueToCompare && compareOperator && value) {
-      //if the values are dates
-      if (moment (valueToCompare).isValid () && moment (value).isValid ()) {
-        //return moment comparison function as result
-        switch (operator) {
-          case '=':
-            return moment (value).isSame (valueToCompare);
-            break;
-          case '!=':
-            return !moment (value).isSame (valueToCompare);
-            break;
-          case '>':
-            return moment (value).isAfter (valueToCompare);
-            break;
-          case '>=':
-            return (
-              moment (value).isAfter (valueToCompare) ||
-              moment (value).isSame (valueToCompare)
-            );
-            break;
-          case '<':
-            return moment (valueToCompare).isAfter (value);
-            break;
-          case '<=':
-            return (
-              moment (valueToCompare).isAfter (value) ||
-              moment (value).isSame (valueToCompare)
-            );
-            break;
-          default:
-            break;
-        }
+    //See if account has 'field' property
+    if (!account.hasOwnProperty (field)) {
+      if (operator === '!') {
+        return true;
+      } else if (operator === '!!') {
+        return false;
       }
-      //Convert comparison operator
-      const compareOperator = RulesEngine.convertSign (operator);
+    } else {
+      //evaluate other conditions
+      const valueToCompare = account[field];
 
-      //return evaluation string
-      return valueToCompare + compareOperator + value;
-
-      // return eval(valueToCompare + compareOperator + value);
+      if (moment (valueToCompare).isValid () && moment (value).isValid ()) {
+        //date case - return moment comparison function as result
+        return RulesEngine.evaluateDateComparison (
+          operator,
+          value,
+          valueToCompare
+        );
+      } else {
+        //cases except dates
+        return RulesEngine.evaluateDefaultComparison (
+          operator,
+          value,
+          valueToCompare
+        );
+      }
     }
-    return true;
   }
 
-  static convertSign (sign) {
-    switch (sign) {
+  static evaluateDateComparison (operator, value, valueToCompare) {
+    switch (operator) {
       case '=':
-        return '===';
+        return moment (value)
+          .startOf ('day')
+          .isSame (moment (valueToCompare).startOf ('day'));
         break;
       case '!=':
-        return '!==';
+        return !moment (value)
+          .startOf ('day')
+          .isSame (moment (valueToCompare).startOf ('day'));
+        break;
+      case '>':
+        return moment (valueToCompare)
+          .startOf ('day')
+          .isAfter (moment (value).startOf ('day'));
+        break;
+      case '>=':
+        return (
+          moment (valueToCompare)
+            .startOf ('day')
+            .isAfter (moment (value).startOf ('day')) ||
+          moment (value)
+            .startOf ('day')
+            .isSame (moment (valueToCompare).startOf ('day'))
+        );
+        break;
+      case '<':
+        return moment (value)
+          .startOf ('day')
+          .isAfter (moment (valueToCompare).startOf ('day'));
+        break;
+      case '<=':
+        return (
+          moment (value)
+            .startOf ('day')
+            .isAfter (moment (valueToCompare).startOf ('day')) ||
+          moment (value)
+            .startOf ('day')
+            .isSame (moment (valueToCompare).startOf ('day'))
+        );
         break;
       default:
-        return sign;
+        return false;
+        break;
+    }
+  }
+
+  static evaluateDefaultComparison (operator, value, valueToCompare) {
+    switch (operator) {
+      case '=':
+        return valueToCompare === value;
+        break;
+      case '!=':
+        return valueToCompare !== value;
+        break;
+      case 'contains':
+        return valueToCompare.toUpperCase ().includes (value.toUpperCase ());
+        break;
+      case 'startsWith':
+        return valueToCompare.toUpperCase ().startsWith (value.toUpperCase ());
+        break;
+      case 'endsWith':
+        return valueToCompare.toUpperCase ().endsWith (value.toUpperCase ());
+        break;
+      case '!':
+        return false;
+        break;
+      case '!!':
+        return true;
+        break;
+      default:
+        return operator;
         break;
     }
   }

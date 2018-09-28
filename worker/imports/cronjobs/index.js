@@ -6,17 +6,17 @@ import ReuploadService from "../services/ReuploadService";
 import InventoryService from "../services/InventoryService";
 import PaymentService from "../services/PaymentService";
 
-// // Job for running reports
-// SyncedCron.add({
-//   name: "Run Report",
-//   schedule: function(parser) {
-//     // parser is a later.parse object
-//     return parser.text("every 10 seconds");
-//   },
-//   job: function() {
-//     ReportsManagement.run();
-//   }
-// });
+// Job for running reports
+SyncedCron.add({
+  name: "Run Report",
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.text("every 10 seconds");
+  },
+  job: function() {
+    ReportsManagement.run();
+  }
+});
 
 //Job for sending letters
 SyncedCron.add({

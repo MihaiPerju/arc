@@ -2,8 +2,12 @@ import React from 'react';
 import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
+
+import UserRoles from '/imports/api/users/enums/roles';
+
 import SettingSingle from "./SettingSingle";
 import MailSettingContent from "./MailSettingContent";
+
 
 export default class Settings extends React.Component {
   constructor () {
@@ -46,9 +50,9 @@ export default class Settings extends React.Component {
         <div className="task-list full-height" > 
           <SettingSingle 
             page="rootFolder" 
-            title="Root Directory Setting" 
+            title="Directory Settings" 
             setPage={this.setPage} 
-            icon="icon-folder-open" />
+            icon="icon-inbox" />
           <SettingSingle 
             page="mailSetting" 
             title="Mail Setting" 
@@ -79,6 +83,7 @@ class RightSide extends React.Component {
     };
   }
 
+
   componentWillMount() {
     Meteor.call('admin.getRootFolder', (err, model) => {
       if (!err) {
@@ -87,6 +92,7 @@ class RightSide extends React.Component {
         Notifier.error(err.reason);
       }
     });
+
   }
 
   componentDidMount() {
@@ -147,6 +153,10 @@ class RightSide extends React.Component {
               <div className="create-form__wrapper">
                 <div className="action-block">
                 <AutoForm className="settings-form" model={model} onSubmit={this.onSubmit} schema={schema} ref="rootFolderForm" >
+                <div className="header__block">
+                  <div className="title-block text-uppercase">Root Directory Path</div>
+                </div>
+                
                 <div className="form-wrapper">
                   <AutoField
                     labelHidden={true}
@@ -154,6 +164,19 @@ class RightSide extends React.Component {
                     placeholder="Type Root Directory"
                   />
                   <ErrorField name="rootFolder" />
+                  </div>
+
+                <div className="header__block m-t--20">
+                  <div className="title-block text-uppercase">Letter Directory Path</div>
+                </div>
+
+                  <div className="form-wrapper">
+                  <AutoField
+                  labelHidden={true}
+                    name="letterFolderPath"
+                    placeholder="Type Letter Directory"
+                  />
+                  <ErrorField name="letterFolderPath" />
                   </div>
                 </AutoForm>
                 </div>
@@ -167,6 +190,10 @@ class RightSide extends React.Component {
 
 const schema = new SimpleSchema ({
   rootFolder: {
+    type: String,
+    optional: true,
+  },
+  letterFolderPath: {
     type: String,
     optional: true,
   }

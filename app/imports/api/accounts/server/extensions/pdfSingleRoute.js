@@ -1,5 +1,5 @@
-import Uploads from '/imports/api/s3-uploads/uploads/collection';
-import {getUserByToken} from '/imports/api/s3-uploads/server/router';
+import Uploads from '/imports/api/uploads/uploads/collection';
+import {getUserByToken} from '/imports/api/uploads/server/router';
 import fs from 'fs';
 import Settings from '/imports/api/settings/collection.js';
 import Business from '/imports/api/business';

@@ -35,7 +35,6 @@ export default class MailSettingContent extends Component {
   };
 
   onSubmitMailSetting = data => {
-    console.log(data);
     Meteor.call("admin.mailSettingUpdate", data, (err) => {
       if (!err) {
         Notifier.success("Mail Setting Updated !");

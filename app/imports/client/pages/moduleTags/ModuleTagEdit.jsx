@@ -1,6 +1,7 @@
 import React from "react";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import ModuleTagsSchema from "/imports/api/moduleTags/schema";
+import TagsSchema from '/imports/api/tags/schemas/schema';
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import moduleListEnum from "./enums/moduleList";
@@ -18,7 +19,7 @@ export default class ModuleTagEdit extends React.Component {
   onSubmit(formData) {
     const { tag, setEdit } = this.props;
     this.setState({ isDisabled: true });
-    Meteor.call("moduleTag.edit", tag._id, formData, err => {
+    Meteor.call("tag.edit", tag._id, formData, err => {
       if (!err) {
         Notifier.success("Tag saved !");
         setEdit();
@@ -40,9 +41,9 @@ export default class ModuleTagEdit extends React.Component {
   };
 
   getOptions = () => {
-    return _.map(moduleListEnum, moduleName => ({
-      value: moduleName,
-      label: moduleName
+    return _.map(moduleListEnum, entities => ({
+      value: entities,
+      label: entities
     }));
   };
 
@@ -83,7 +84,7 @@ export default class ModuleTagEdit extends React.Component {
               <div className="title-block text-uppercase">Tag information</div>
             </div>
             <AutoForm
-              schema={ModuleTagsSchema}
+              schema={TagsSchema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
               model={tag}
@@ -99,10 +100,10 @@ export default class ModuleTagEdit extends React.Component {
                     className="form-select__multi select-tag__multi"
                     placeholder="Select modules"
                     labelHidden={true}
-                    name="moduleNames"
+                    name="entities"
                     options={options}
                   />
-                  <ErrorField name="moduleNames" />
+                  <ErrorField name="entities" />
                 </div>
               </div>
             </AutoForm>

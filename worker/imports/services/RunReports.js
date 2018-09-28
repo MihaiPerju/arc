@@ -11,6 +11,11 @@ import NotificationService from "../api/notifications/server/services/Notificati
 import { fields } from "/imports/api/reports/enums/reportColumn";
 import Settings from "/imports/api/settings/collection.js";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
+import pdf from "html-pdf";
+import Future from "fibers/future";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import { Container, Table } from "semantic-ui-react";
 
 export default class RunReports {
   static run() {
@@ -111,7 +116,7 @@ export default class RunReports {
     return metaDataColumn;
   }
 
-  static saveReport({ reportId, _id }) {
+  static async saveReport({ reportId, _id }) {
     const { rootFolder } = Settings.findOne({
       rootFolder: { $ne: null }
     });
@@ -121,6 +126,8 @@ export default class RunReports {
     this.checkFolder(pathToSave);
 
     const filePath = pathToSave + "/" + reportId + ".csv";
+    const pdfFilePath = pathToSave + "/" + reportId + ".pdf";
+    const future = new Future();
     const file = fs.createWriteStream(filePath);
 
     //Getting filters
@@ -130,13 +137,55 @@ export default class RunReports {
     const AccountsNative = Accounts.rawCollection(filters);
 
     let columns = this.getColumns(reportId);
-
+  
     const stringifier = stringify({
       columns,
       header: true,
       delimiter: ","
     });
+    const AccountsRaw = Accounts.rawCollection ();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync (AccountsRaw.aggregate);
 
+    const metaData= await AccountsRaw.aggregateSync ([
+      {
+        $match: filters,
+      },
+      {
+        $sample: {
+          size: 20,
+        },
+      },
+    ]).toArray ()
+    // Render HTML
+    const renderHtml = meta => {
+      const data = <Container>
+        <Table textAlign="center" celled>
+          <Table.Body>
+            <Table.Row>
+              {Object.keys(columns).map(item => (
+                <Table.Cell key={item}>{item}</Table.Cell>
+              ))}
+            </Table.Row>
+            {meta.map(d => <Table.Row>
+              {Object.keys(columns).map(item => (
+                <Table.Cell>{d[item]}</Table.Cell>
+              ))}
+            </Table.Row>)}
+          </Table.Body>
+        </Table>
+      </Container>;
+      return ReactDOMServer.renderToString(data)
+    }
+    
+    const reportContent = renderHtml(metaData); 
+
+    pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+      if (err) {
+        future.return(err);
+      } else {
+        future.return(res);
+      }
+    });
     //Catching
     // stringifier.on("error", function(err) {});
 
