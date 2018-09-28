@@ -12,11 +12,11 @@ export default class PayerBlock extends Component {
     };
   }
 
-  componentDidMount() {
-    window.addEventListener("resize", () => {
-      this.refs.slick.innerSlider.onWindowResized();
-    });
-  }
+  // componentDidMount() {
+  //   window.addEventListener("resize", () => {
+  //     this.refs.slick.innerSlider.onWindowResized();
+  //   });
+  // }
 
   componentWillReceiveProps(props) {
     this.refs.slick && this.refs.slick.innerSlider.onWindowResized();
