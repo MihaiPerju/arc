@@ -23,6 +23,7 @@
     list-style: none;
   }
   .menu__item {
+    border-bottom: 1px solid #ccc;
     &.cc--active {
       > a {
         background: $color-white;
