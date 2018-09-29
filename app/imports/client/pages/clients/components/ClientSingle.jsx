@@ -3,7 +3,7 @@ import { getImagePath } from "../../../../api/utils";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 export default class ClientSingle extends Component {
   constructor(props) {
     super(props);
@@ -81,6 +81,7 @@ export default class ClientSingle extends Component {
             tagIds={client.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.CLIENTS}
           />
         </div>
         <div className="row__block align-center">

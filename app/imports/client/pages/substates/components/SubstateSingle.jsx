@@ -5,7 +5,7 @@ import TagItem from "/imports/client/lib/TagItem";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
 import Dialog from "/imports/client/lib/ui/Dialog";
-
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 export default class SubstateSingle extends Component {
   constructor(props) {
     super(props);
@@ -141,6 +141,7 @@ export default class SubstateSingle extends Component {
             tagIds={substate.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.SUBSTATES}
           />
           <button onClick={this.onSetSubstate} className="btn-text--blue">
             <i className="icon-pencil" />

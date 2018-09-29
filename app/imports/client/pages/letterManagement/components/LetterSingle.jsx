@@ -4,6 +4,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
 import Dialog from '../../../lib/ui/Dialog';
 import classNames from 'classnames';
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+
 export default class LetterSingle extends Component {
   constructor() {
     super();
@@ -85,6 +87,7 @@ export default class LetterSingle extends Component {
             tagIds={letter.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.LETTERS}
           />
         </div>
         <div className="row__block align-center">

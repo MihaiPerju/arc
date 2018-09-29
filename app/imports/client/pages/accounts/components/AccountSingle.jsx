@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import commaNumber from 'comma-number';
 import Notifier from '/imports/client/lib/Notifier';
 import TagItem from '/imports/client/lib/TagItem';
-
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 export default class AccountSingle extends Component {
   constructor (props) {
     super (props);
@@ -73,6 +73,7 @@ export default class AccountSingle extends Component {
             tagIds={account.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind (this)}
+            entityName={moduleNames.ACCOUNT}
           />
         </div>
         <div onClick={this.onFreeze} className="mark-task">

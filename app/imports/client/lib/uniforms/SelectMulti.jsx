@@ -23,6 +23,11 @@ class SelectMulti extends React.Component {
         this._intermediate = [];
     };
 
+    handleInputChange = (input) => {
+        if(this.props.updateValue) {
+            this.props.updateValue(input)
+        }
+    }
     render() {
         const {
             id,
@@ -30,6 +35,7 @@ class SelectMulti extends React.Component {
             options,
             labelHidden,
             placeholder,
+            noResultText,
             ...props
         } = this.props;
         const {value} = this.state;
@@ -44,9 +50,11 @@ class SelectMulti extends React.Component {
                 <Select
                     placeholder={placeholder}
                     onChange={this.onChange}
+                    onInputChange={this.handleInputChange}
                     options={options}
                     value={value}
                     multi={true}
+                    noResultsText={noResultText}
                 />
             </div>
         );
