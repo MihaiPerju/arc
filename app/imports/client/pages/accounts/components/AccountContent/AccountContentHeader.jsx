@@ -1,40 +1,40 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import moment from 'moment/moment';
 import AccountActioning from './AccountActioning';
-import RolesEnum, {roleGroups} from '/imports/api/users/enums/roles';
+import RolesEnum, { roleGroups } from '/imports/api/users/enums/roles';
 import EditInfoDialog from './EditInfoDialog';
 import commaNumber from 'comma-number';
 import Countdown from 'react-countdown-now';
 
 export default class AccountContentHeader extends Component {
-  getOptions (users = []) {
+  getOptions(users = []) {
     let options = [];
     for (let user of users) {
       let item = {
         label: user &&
           user.profile &&
           user.profile.firstName +
-            ' ' +
-            user.profile.lastName +
-            '(' +
-            user.roles[0] +
-            ')',
+          ' ' +
+          user.profile.lastName +
+          '(' +
+          user.roles[0] +
+          ')',
         value: user && user._id,
       };
-      options.push (item);
+      options.push(item);
     }
     return options;
   }
 
-  getAssignee () {
-    const {account} = this.props;
+  getAssignee() {
+    const { account } = this.props;
     if (account && account.assignee) {
-      const {profile} = account.assignee;
-      const currentUserId = Meteor.userId ();
-      const isRep = Roles.userIsInRole (account.assigneeId, RolesEnum.REP);
+      const { profile } = account.assignee;
+      const currentUserId = Meteor.userId();
+      const isRep = Roles.userIsInRole(account.assigneeId, RolesEnum.REP);
       if (
         (isRep &&
-          Roles.userIsInRole (currentUserId, roleGroups.ADMIN_TECH_MANAGER)) ||
+          Roles.userIsInRole(currentUserId, roleGroups.ADMIN_TECH_MANAGER)) ||
         (isRep && currentUserId === account.assigneeId)
       ) {
         return (
@@ -57,7 +57,7 @@ export default class AccountContentHeader extends Component {
     return <div className="label label--red">Unassigned</div>;
   }
 
-  getFirstOption (account, options) {
+  getFirstOption(account, options) {
     if (account && account.assigneeId) {
       for (let option of options) {
         if (option.value === account.assigneeId) {
@@ -65,12 +65,12 @@ export default class AccountContentHeader extends Component {
         }
       }
     }
-    return [{label: 'Unassigned'}];
+    return [{ label: 'Unassigned' }];
   }
 
   getOthersData = data => {
     if (typeof data === 'object') {
-      return moment (data).format ('MM/DD/YYYY');
+      return moment(data).format('MM/DD/YYYY');
     } else {
       return data;
     }
@@ -78,42 +78,41 @@ export default class AccountContentHeader extends Component {
 
   getValue = value => {
     if (value) {
-      FlowRouter.setQueryParams ({medNo: value});
+      FlowRouter.setQueryParams({ medNo: value });
     }
   };
 
   restartTimer = e => {
-    e.preventDefault ();
-    const {account} = this.props;
-    Meteor.call ('account.restartLockTimer', account._id, err => {
+    e.preventDefault();
+    const { account } = this.props;
+    Meteor.call('account.restartLockTimer', account._id, err => {
       if (err) {
-        Notifier.error (err.reason);
+        Notifier.error(err.reason);
       }
     });
   };
 
   onComplete = () => {
-    const {removeLock, closeRightPanel} = this.props;
-    removeLock ();
-    closeRightPanel ();
+    const { removeLock, closeRightPanel } = this.props;
+    removeLock();
+    closeRightPanel();
   };
 
-  render () {
-    const {account, openMetaData, closeRightPanel} = this.props;
-
-    const options = this.getOptions (
+  render() {
+    const { account, openMetaData, closeRightPanel } = this.props;
+    const options = this.getOptions(
       account && account.facility && account.facility.users
     );
-    let userOptions = this.getFirstOption (account, options).concat (options);
+    let userOptions = this.getFirstOption(account, options).concat(options);
     return (
       <div className="header-block header-account">
-        {account.lockOwnerId === Meteor.userId () &&
+        {account.lockOwnerId === Meteor.userId() &&
           <a href="" onClick={this.restartTimer}>
             Restart timer
           </a>}
         {account.lockTimestamp &&
           <Countdown
-            date={new Date (account.lockTimestamp).getTime () + 60000} //1800000
+            date={new Date(account.lockTimestamp).getTime() + 60000} //1800000
             onComplete={this.onComplete}
           />}
         <div className="main-info">
@@ -149,14 +148,14 @@ export default class AccountContentHeader extends Component {
                 <div className="label label--grey text-uppercase">
                   CARC(TNM)
                 </div>
-                {this.getAssignee ()}
+                {this.getAssignee()}
               </div>
             </div>
           </div>
           <div className="right__side">
             <div className="price-col">
               <div className="price">
-                {account && commaNumber (account.collectedAmount)}
+                {account && commaNumber(account.collectedAmount)}
               </div>
               <div className="text-light-grey">Collected amount</div>
             </div>
@@ -167,7 +166,7 @@ export default class AccountContentHeader extends Component {
                 editField="acctBal"
               />
               <div className="price">
-                {account && account.acctBal ? commaNumber (account.acctBal) : 0}
+                {account && account.acctBal ? commaNumber(account.acctBal) : 0}
               </div>
 
               <div className="text-light-grey">Remaining balance</div>
@@ -184,7 +183,7 @@ export default class AccountContentHeader extends Component {
               closeRightPanel={closeRightPanel}
             />
             {account &&
-              Roles.userIsInRole (Meteor.userId (), RolesEnum.REP) &&
+              Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
               !account.escalationId &&
               <AccountActioning
                 escalate
@@ -239,7 +238,7 @@ export default class AccountContentHeader extends Component {
               />
               <div className="text-dark-grey">
                 {account && account.dischrgDate
-                  ? moment (account.dischrgDate).format ('MM/DD/YYYY')
+                  ? moment(account.dischrgDate).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
@@ -253,7 +252,7 @@ export default class AccountContentHeader extends Component {
 
               <div className="text-dark-grey">
                 {account && account.createdAt
-                  ? moment (account.createdAt).format ('MM/DD/YYYY')
+                  ? moment(account.createdAt).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
@@ -271,7 +270,7 @@ export default class AccountContentHeader extends Component {
 
               <div className="text-dark-grey">
                 {account && account.admitDate
-                  ? moment (account.admitDate).format ('MM/DD/YYYY')
+                  ? moment(account.admitDate).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
@@ -309,14 +308,14 @@ export default class AccountContentHeader extends Component {
               />
               <div className="text-dark-grey">
                 {account && account.fbDate
-                  ? moment (account.fbDate).format ('MM/DD/YYYY')
+                  ? moment(account.fbDate).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
             <li className="text-center">
               <div className="text-light-grey">Medical Number</div>
               <div className="text-dark-grey">
-                <a href="" onClick={this.getValue.bind (this, account.medNo)}>
+                <a href="" onClick={this.getValue.bind(this, account.medNo)}>
                   {account && account.medNo}
                 </a>
               </div>
@@ -329,7 +328,7 @@ export default class AccountContentHeader extends Component {
                 editField="other1"
               />
               <div className="text-dark-grey">
-                {account && this.getOthersData (account.other1)}
+                {account && this.getOthersData(account.other1)}
               </div>
             </li>
             <li className="text-center">
@@ -340,7 +339,7 @@ export default class AccountContentHeader extends Component {
                 editField="other2"
               />
               <div className="text-dark-grey">
-                {account && this.getOthersData (account.other2)}
+                {account && this.getOthersData(account.other2)}
               </div>
             </li>
           </ul>
