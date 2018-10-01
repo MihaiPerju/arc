@@ -19,6 +19,7 @@ export default class ModuleTagHeader extends Component {
 
     return (
       <div className="main-content__header header-block">
+
         <div className="row__header tag-header">
           <div className="title left">{tag.name}</div>
           <div className="btn-group right">

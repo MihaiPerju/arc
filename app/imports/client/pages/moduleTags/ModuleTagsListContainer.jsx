@@ -11,6 +11,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import { objectFromArray } from "/imports/api/utils";
+import tagsQuery from "/imports/api/tags/queries/listTags";
 
 class ModuleTagsListContainer extends Pager {
   constructor() {
@@ -74,8 +75,7 @@ class ModuleTagsListContainer extends Pager {
 
   deleteAction = () => {
     const { tagsSelected } = this.state;
-
-    Meteor.call("moduleTag.deleteMany", tagsSelected, err => {
+    Meteor.call("tags.deleteMany", tagsSelected, err => {
       if (!err) {
         Notifier.success("Tags deleted !");
         this.setState({
@@ -188,11 +188,7 @@ export default withQuery(
   props => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(moduleTagsQuery, {
-      page,
-      perPage,
-      filters: {}
-    });
+    return PagerService.setQuery(tagsQuery, { page, perPage, filters: {} });
   },
   { reactive: true }
 )(ModuleTagsListContainer);

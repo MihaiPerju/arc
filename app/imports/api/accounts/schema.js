@@ -133,6 +133,13 @@ export default new SimpleSchema({
     blackbox: true,
     optional: true
   },
+  managerIds: {
+    type: Array,
+    optional: true
+  },
+  "managerIds.$": {
+    type: String
+  },
   fileId: {
     type: String
   },

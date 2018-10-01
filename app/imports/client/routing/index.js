@@ -1,4 +1,6 @@
 import React from "react";
+import {mount} from 'react-mounter';
+
 import {
   render
 } from "react-dom";
@@ -18,7 +20,7 @@ import Dashboard from '/imports/client/pages/users/Dashboard';
 
 route('/dashboard', Home, {}, {
   name: 'dashboard',
-
+  
 });
 route('/', Login, {}, {
   name: 'login',
@@ -47,8 +49,20 @@ import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx
 import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
 import EditUser from '/imports/client/pages/admin/EditUser.jsx';
 import Settings from "/imports/client/pages/admin/Settings";
+import App from '/imports/client/App.jsx';
 
-route("/admin/settings", Settings);
+
+FlowRouter.route("/admin/settings", {
+  action(params) {
+    Meteor.call('admin.checkAdmin', Meteor.userId(), (err, res) => {
+      if(err) FlowRouter.go('/dashboard', params);
+      res 
+        ? mount(App, {main: Settings, routeProps: {}})
+        : FlowRouter.go('/dashboard', params)
+      })
+  }
+});
+
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
 route('/admin/user/:userId/edit', EditUser);

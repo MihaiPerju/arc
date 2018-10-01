@@ -1,6 +1,6 @@
 import Security from "/imports/api/security/security.js";
 import Clients from "/imports/api/clients/collection.js";
-import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Uploads from "/imports/api/uploads/uploads/collection";
 import Facilities from "/imports/api/facilities/collection.js";
 import User from "/imports/api/users/collection.js"
 import fs from "fs";
@@ -151,11 +151,12 @@ Meteor.methods({
     const client = Clients.findOne({ _id:client_id });
     let managers=client.managerIds;
     let clientName=client.clientName
-    for(manager of managers)
-    {
-      let managerData= User.findOne({_id:manager}).getEmail()
-      sendEmailForAttachment({to:managerData,clientName})
-    }
-    ClientService.sendNotification(managers,client_id,clientName)
+   // for(manager of managers)
+// {
+//   let managerData= User.findOne({_id:manager}).getEmail()
+//   sendEmailForAttachment({to:managerData,clientName})
+// }
+// ClientService.sendNotification(managers,client_id,clientName)
+
   }
 });

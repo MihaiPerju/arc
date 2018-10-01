@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import { getToken } from "/imports/api/s3-uploads/utils";
+import { getToken } from "/imports/api/uploads/utils";
 import DropzoneComponent from "react-dropzone-component";
 
 export default class LetterSentBlock extends Component {
