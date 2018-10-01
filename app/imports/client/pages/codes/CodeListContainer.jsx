@@ -11,7 +11,7 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class CodeListContainer extends Pager {
@@ -133,9 +133,9 @@ class CodeListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.CODES] } }
+        filters: { entities: { $in: [moduleNames.CODES] } }
       })
       .fetch((err, moduleTags) => {
         if (!err) {
@@ -179,7 +179,7 @@ class CodeListContainer extends Pager {
             hideFilter
           />
           <CodeList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list codes decreased" : "task-list codes"}
             codesSelected={codesSelected}
             selectCode={this.selectCode}
             currentCode={currentCode}

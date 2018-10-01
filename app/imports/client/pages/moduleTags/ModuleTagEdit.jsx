@@ -1,6 +1,5 @@
 import React from "react";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
-import ModuleTagsSchema from "/imports/api/moduleTags/schema";
 import TagsSchema from '/imports/api/tags/schemas/schema';
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import Notifier from "/imports/client/lib/Notifier";

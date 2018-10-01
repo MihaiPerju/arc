@@ -13,7 +13,7 @@ import userTagsQuery from '/imports/api/users/queries/userTags.js';
 import Notifier from '/imports/client/lib/Notifier';
 import MetaDataSlider
   from '/imports/client/pages/accounts/components/AccountContent/MetaData';
-import moduleTagsQuery from '/imports/api/moduleTags/queries/listModuleTags';
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import {moduleNames} from '/imports/client/pages/moduleTags/enums/moduleList';
 import Dialog from '/imports/client/lib/ui/Dialog';
 import RightSide from './components/AccountRightSide';
@@ -355,9 +355,9 @@ class AccountListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone ({
-        filters: {moduleNames: {$in: [moduleNames.ACCOUNT]}},
+        filters: {entities: {$in: [moduleNames.ACCOUNT]}},
       })
       .fetch ((err, moduleTags) => {
         if (!err) {
@@ -491,7 +491,7 @@ class AccountListContainer extends Pager {
               uncheckAccountList={this.uncheckAccountList}
             />}
           <AccountList
-            classes={'task-list'}
+            classes={"task-list accounts"}
             accountsSelected={accountsSelected}
             selectAccount={this.selectAccount}
             checkAccount={this.checkAccount}

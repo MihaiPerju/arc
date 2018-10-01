@@ -12,7 +12,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class ActionListContainer extends Pager {
@@ -140,9 +140,9 @@ class ActionListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.ACTIONS] } }
+        filters: {entities: {$in: [moduleNames.ACTIONS]}},
       })
       .fetch((err, moduleTags) => {
         if (!err) {
@@ -188,7 +188,7 @@ class ActionListContainer extends Pager {
             hideFilter
           />
           <ActionList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list actions decreased" : "task-list actions"}
             actionsSelected={actionsSelected}
             selectAction={this.selectAction}
             currentAction={currentAction}
@@ -239,8 +239,8 @@ class RightSide extends Component {
         {create ? (
           <ActionCreate substates={substates} close={close} />
         ) : (
-          <ActionContent substates={substates} action={action} />
-        )}
+            <ActionContent substates={substates} action={action} />
+          )}
       </div>
     );
   }

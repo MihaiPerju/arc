@@ -134,7 +134,7 @@ class ModuleTagsListContainer extends Pager {
             hideFilter
           />
           <ModuleTagList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list module-tags decreased" : "task-list module-tags"}
             tagsSelected={tagsSelected}
             selectTag={this.selectTag}
             currentTag={currentTag}
