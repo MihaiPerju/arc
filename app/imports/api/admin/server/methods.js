@@ -145,6 +145,9 @@ Meteor.methods({
     if (letterFolderPath[0] !== "/") {
       letterFolderPath = "/" + letterFolderPath;
     }
+    if (letterFolderPath[letterFolderPath.length - 1] !== "/") {
+      letterFolderPath += "/";
+    }
 
     Settings.update(
       { 

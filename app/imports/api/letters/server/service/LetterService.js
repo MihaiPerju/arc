@@ -6,7 +6,6 @@ import ReactDOMServer from "react-dom/server";
 import Accounts from "/imports/api/accounts/collection";
 import Clients from "/imports/api/clients/collection";
 import Settings from "/imports/api/settings/collection";
-import Business from "/imports/api/business";
 import { Random } from "meteor/random";
 import { existsSync, renameSync, unlinkSync } from "fs";
 import PDFMerge from "pdfmerge";
@@ -16,11 +15,20 @@ import AccountActions from "/imports/api/accountActions/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 
-const { rootFolder } =
+const { rootFolder, letterFolderPath } =
   Settings.findOne({
+    $and:[
+      {
     rootFolder: {
       $ne: null
     }
+      },
+      {
+        letterFolderPath : {
+          $ne: null
+        }
+      }
+    ]
   }) || {};
 
 export default class LetterService {
@@ -73,7 +81,7 @@ export default class LetterService {
 
   static deleteLetter(_id) {
     const { status } = Letters.findOne({ _id });
-    const filePath = rootFolder + Business.ACCOUNTS_FOLDER + _id + ".pdf";
+    const filePath = (rootFolder + letterFolderPath).replace('//','/') + _id + ".pdf";
     if (status !== Statuses.NEW) {
       throw new Meteor.Error(
         "cannot edit",
@@ -90,7 +98,7 @@ export default class LetterService {
     let { attachmentIds, body, accountId } = Letters.findOne({ _id: letterId });
     const { clientId } = Accounts.findOne({ _id: accountId });
     const { clientName } = Clients.findOne({ _id: clientId });
-    const filePath = rootFolder + Business.ACCOUNTS_FOLDER + letterId + ".pdf";
+    const filePath = (rootFolder + letterFolderPath).replace('//','/') + letterId + ".pdf";
     const future = new Future();
 
     QRCode.toDataURL(clientName)
@@ -121,15 +129,15 @@ export default class LetterService {
       const { path } = Uploads.findOne({
         _id
       });
-      const attachmentPath = rootFolder + Business.ACCOUNTS_FOLDER + path;
+      const attachmentPath = (rootFolder + letterFolderPath).replace('//','/') + path;
       files.push(attachmentPath);
     }
 
     let newFilename =
-      rootFolder + Business.ACCOUNTS_FOLDER + Random.id() + ".pdf";
+      (rootFolder + letterFolderPath).replace('//','/') + Random.id() + ".pdf";
     while (existsSync(newFilename)) {
       newFilename =
-        rootFolder + Business.ACCOUNTS_FOLDER + Random.id() + ".pdf";
+        (rootFolder + letterFolderPath).replace('//','/') + Random.id() + ".pdf";
     }
 
     PDFMerge(files, newFilename)
