@@ -16,7 +16,6 @@ export default class ModuleTagHeader extends Component {
 
   render() {
     const { tag } = this.props;
-
     return (
       <div className="main-content__header header-block">
 
@@ -33,8 +32,8 @@ export default class ModuleTagHeader extends Component {
             <div className="tag-module">Tagged modules </div>
             <div className="tag-inner-div">
               {
-                tag.moduleNames.length > 0 ?
-                  tag.moduleNames.map(name => this.renderTag(name)) :
+                tag.entities.length > 0 ?
+                  tag.entities.map(name => this.renderTag(name)) :
                   <label className="no-tags-found">No tag modules found.</label>
               }
             </div>
