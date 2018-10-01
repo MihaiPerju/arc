@@ -2,11 +2,7 @@ import React from 'react';
 import { AutoForm, AutoField, ErrorField } from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-import SettingSingle from "./components/SettingSingle";
 import LetterSettings from "./components/LetterSettings";
-
-
-import UserRoles from '/imports/api/users/enums/roles';
 
 import SettingSingle from "./SettingSingle";
 import MailSettingContent from "./MailSettingContent";
@@ -33,10 +29,7 @@ export default class Settings extends React.Component {
       this.setState({ openRightPanel: page });
     }
   };
-
-
-
-
+  
   render () {
 
     const { openRightPanel } = this.state;
