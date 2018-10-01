@@ -200,6 +200,7 @@ Meteor.methods({
     });
   },
 
+
   "admin.mailSettingUpdate"({mailSetting}) {
     Security.checkAdmin(this.userId);
     
@@ -218,7 +219,7 @@ Meteor.methods({
      delete mailSetting.username;
      delete mailSetting.password;
    }
-    
+
     Settings.update(
       {},
       {
@@ -239,6 +240,30 @@ Meteor.methods({
       }
     });
   },
+
+  "admin.getLetterSettings"() {
+    return Settings.findOne({
+      letterCompileTime: {
+        $exists: true
+      }
+    });
+  },
+
+  "admin.updateLetterSettings"({ letterCompileTime }) {
+    Security.checkAdmin(this.userId);
+    Settings.update(
+      {},
+      {
+        $set: {
+          letterCompileTime
+        }
+      },
+      {
+        upsert: true
+      }
+    );
+  },
+
 
   //Testing purpose only, delete in production
   reset(entity) {
