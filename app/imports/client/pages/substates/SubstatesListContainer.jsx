@@ -11,7 +11,7 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "/imports/client/lib/PagerService";
 import Pager from "../../lib/Pager";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class SubstatesListContainer extends Pager {
@@ -124,9 +124,9 @@ class SubstatesListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.SUBSTATES] } }
+        filters: { entities: { $in: [moduleNames.SUBSTATES] } }
       })
       .fetch((err, moduleTags) => {
         if (!err) {

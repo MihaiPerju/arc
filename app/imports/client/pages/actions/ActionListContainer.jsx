@@ -12,7 +12,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class ActionListContainer extends Pager {
@@ -140,9 +140,9 @@ class ActionListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.ACTIONS] } }
+        filters: {entities: {$in: [moduleNames.ACTIONS]}},
       })
       .fetch((err, moduleTags) => {
         if (!err) {

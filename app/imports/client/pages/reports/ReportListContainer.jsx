@@ -13,7 +13,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substatesQuery from "/imports/api/substates/queries/listSubstates";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class ReportListContainer extends Pager {
@@ -154,9 +154,9 @@ class ReportListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.REPORTS] } }
+        filters: { entities: { $in: [moduleNames.REPORTS] } }
       })
       .fetch((err, moduleTags) => {
         if (!err) {
