@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 export default class ReportSingle extends Component {
   constructor(props) {
     super(props);
@@ -56,6 +56,7 @@ export default class ReportSingle extends Component {
             tagIds={report.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.REPORTS}
           />
         </div>
       </div>

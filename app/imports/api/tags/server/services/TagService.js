@@ -7,12 +7,13 @@ export default class TagService {
         if(_id) {
             this.addTagToUser({_id, tagId});
         }
+        return tagId
     }
 
     static addTagToUser ({_id, tagId}) {
         Users.update(
             {_id},
-            {$push: {tagIds: tagId}}
+            {$push: {tagIds: tagId}}    
         )
     }
 }

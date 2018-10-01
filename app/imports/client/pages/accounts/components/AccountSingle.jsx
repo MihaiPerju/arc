@@ -4,7 +4,7 @@ import moment from 'moment/moment';
 import commaNumber from 'comma-number';
 import Notifier from '/imports/client/lib/Notifier';
 import TagItem from '/imports/client/lib/TagItem';
-
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 export default class AccountSingle extends Component {
   constructor (props) {
     super (props);
@@ -67,7 +67,14 @@ export default class AccountSingle extends Component {
       <div className={classes} onClick={this.onSelectAccount}>
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
-          <label onClick={this.onCheck.bind(this)} />
+          <label onClick={this.onCheck.bind (this)} />
+          <TagItem
+            title="Tag Account"
+            tagIds={account.tagIds}
+            moduleTags={moduleTags}
+            onSubmitTags={this.onSubmitTags.bind (this)}
+            entityName={moduleNames.ACCOUNT}
+          />
         </div>
 
         <div onClick={this.onFreeze} className="mark-task">

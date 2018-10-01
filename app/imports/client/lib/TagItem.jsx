@@ -2,14 +2,29 @@ import React, { Component } from "react";
 import SimpleSchema from "simpl-schema";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import Notifier from "/imports/client/lib/Notifier";
 import { AutoForm, ErrorField } from "/imports/ui/forms";
 
 export default class TagItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dialogIsActive: false
+      dialogIsActive: false,
+      passedValue: '',
+      moduleTags: props.moduleTags,
+      tagIds: props.tagIds,
+      
     };
+  }
+  componentWillReceiveProps(props){
+    const {moduleTags, tagIds} = props;
+    if(this.state.moduleTags !== moduleTags){
+      this.setState(()=>({moduleTags: moduleTags}))
+    }
+    if(this.state.tagIds !== tagIds){
+      this.setState(()=>({tagIds: tagIds}))
+    }
+    
   }
 
   onhandleTag = e => {
@@ -41,6 +56,28 @@ export default class TagItem extends Component {
     form.submit();
   };
 
+  handleCreateTagButton = () => {
+    const entities=[this.props.entityName];
+    const {moduleTags, tagIds, passedValue} = this.state;
+    let data={entities,name: passedValue}
+    Meteor.call("tag.create", { data}, (err,result) => {
+      if (!err) {
+        data._id=result
+        moduleTags.push(data)
+        Notifier.success("Tag added!");
+        this.setState(()=>({moduleTags}))
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  updateValue = data => {
+    this.setState(() => ({
+      passedValue: data
+    }))
+  }
+
   renderTag(option) {
     return (
       <div className="tag-item">
@@ -49,16 +86,20 @@ export default class TagItem extends Component {
     );
   }
 
+    
+    
+    
+  
+
   render() {
-    const { tagIds, moduleTags, title } = this.props;
+    const { tagIds, moduleTags, dialogIsActive } = this.state;
+    const { title } = this.props;
 
-    const { dialogIsActive } = this.state;
+    const noResultText =  <a className="create-tag-button" href='javascript:void(0);' onClick={this.handleCreateTagButton}>Create tag</a>
+
     const options = this.getOptions(moduleTags);
-    console.log(tagIds);
-    console.log(options);
-
     let selectedOptions = options.filter(p => tagIds.includes(p.value));
-    console.log(selectedOptions);
+
 
     return (
       <div>
@@ -104,11 +145,14 @@ export default class TagItem extends Component {
                     labelHidden={true}
                     name="tagIds"
                     options={options}
+                    noResultText={noResultText}
+                    updateValue={this.updateValue}
                   />
                   <ErrorField name="tagIds" />
                 </div>
               </div>
             </AutoForm>
+           
             <div className="btn-group">
               <button className="btn-cancel" onClick={this.closeDialog}>
                 Cancel
