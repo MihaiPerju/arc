@@ -17,6 +17,14 @@ export default class ModuleTagSingle extends Component {
     selectTag(tag._id);
   }
 
+  renderTag(moduleName) {
+    return (
+      <div className="tag-item">
+        {moduleName}
+      </div>
+    );
+  }
+
   render() {
     const { tag, tagsSelected, currentTag } = this.props;
     const checked = tagsSelected.includes(tag._id);
@@ -33,6 +41,7 @@ export default class ModuleTagSingle extends Component {
           <label onClick={this.onSelectTag.bind(this)} />
         </div>
         <div className="row__block align-center">
+          <div className="menu__icon"><i className="icon-tags icon-color"></i></div>
           <div className="item-name">{tag.name}</div>
         </div>
       </div>

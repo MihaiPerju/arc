@@ -67,19 +67,14 @@ export default class AccountSingle extends Component {
       <div className={classes} onClick={this.onSelectAccount}>
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
-          <label onClick={this.onCheck.bind (this)} />
-          <TagItem
-            title="Tag Account"
-            tagIds={account.tagIds}
-            moduleTags={moduleTags}
-            onSubmitTags={this.onSubmitTags.bind (this)}
-          />
+          <label onClick={this.onCheck.bind(this)} />
         </div>
+
         <div onClick={this.onFreeze} className="mark-task">
           <input type="checkbox" className="hidden" />
           <label />
         </div>
-        <div className="row__item">
+        <div className="row__item margin-top-10 ">
           <div className="left__side">
             <div
               className={
@@ -97,11 +92,20 @@ export default class AccountSingle extends Component {
             </div>
           </div>
         </div>
-        <div className="row__item">
-          <div className="price">{commaNumber (account.acctBal)}</div>
+
+        <div className="row__item margin-top-10 ">
+          <div className="price">{commaNumber(account.acctBal)}</div>
           <div className="location">
             {account.facility && account.facility.name}
           </div>
+        </div>
+        <div className="row__item margin-top-10">
+          <TagItem
+            title="Tag Account"
+            tagIds={account.tagIds}
+            moduleTags={moduleTags}
+            onSubmitTags={this.onSubmitTags.bind(this)}
+          />
         </div>
       </div>
     );

@@ -179,7 +179,7 @@ class ClientContainer extends Pager {
             hideSort
           />
           <ClientList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list clients decreased" : "task-list clients"}
             setClient={this.setClient.bind(this)}
             selectClient={this.selectClient}
             currentClient={currentClient}

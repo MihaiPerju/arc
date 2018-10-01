@@ -14,6 +14,6 @@ export default class LetterList extends Component {
       );
     }, this);
 
-    return <div className="task-list">{letterList}</div>;
+    return <div className="task-list letters">{letterList}</div>;
   }
 }
