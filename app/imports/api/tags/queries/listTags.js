@@ -11,6 +11,7 @@ export default Tags.createQuery('listTags', {
     _id: 1,
     tagIds: 1,
     entities:1,
+    workQueueStatus:1
   
     
 });

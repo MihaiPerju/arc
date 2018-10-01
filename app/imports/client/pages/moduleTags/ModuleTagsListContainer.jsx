@@ -5,13 +5,12 @@ import PaginationBar from "/imports/client/lib/PaginationBar";
 import ModuleTagContent from "./ModuleTagContent";
 import ModuleTagCreate from "./ModuleTagCreate";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
+import TagsListQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import { objectFromArray } from "/imports/api/utils";
-import tagsQuery from "/imports/api/tags/queries/listTags";
 
 class ModuleTagsListContainer extends Pager {
   constructor() {
@@ -23,7 +22,7 @@ class ModuleTagsListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
     });
     this.query = TagsListQuery;
   }
@@ -31,7 +30,6 @@ class ModuleTagsListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
   }
-
   showFilterBar() {
     this.setState({
       filter: !this.state.filter
@@ -188,7 +186,12 @@ export default withQuery(
   props => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(tagsQuery, { page, perPage, filters: {} });
+    const params = {
+      filters: {workQueueStatus:false}
+  }
+  return TagsListQuery.clone(params);
   },
   { reactive: true }
 )(ModuleTagsListContainer);
+
+

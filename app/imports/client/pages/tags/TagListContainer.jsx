@@ -247,7 +247,10 @@ export default withQuery(
   props => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(tagsQuery, { page, perPage, filters: {} });
+    const params = {
+      filters: {workQueueStatus:true}
+  }
+  return tagsQuery.clone(params);
   },
   { reactive: true }
 )(TagListContainer);
