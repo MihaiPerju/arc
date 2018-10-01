@@ -108,7 +108,6 @@ export default class RulesEngine {
     if (data) {
       //Start the first step recursively
       let expression = RulesEngine.recursiveCheck(data, account);
-      console.log(expression);
       //Convert and return the truth value
       const truthValue = eval(expression);
       return truthValue;
@@ -168,7 +167,7 @@ export default class RulesEngine {
       //evaluate other conditions
       const valueToCompare = account[field];
 
-      if (moment(valueToCompare).isValid() && moment(value).isValid()) {
+      if (!parseInt(value) && !parseInt(valueToCompare) && moment(valueToCompare).isValid() && moment(value).isValid()) {
         //date case - return moment comparison function as result
         return RulesEngine.evaluateDateComparison(
           operator,
@@ -243,10 +242,10 @@ export default class RulesEngine {
   static evaluateDefaultComparison(operator, value, valueToCompare) {
     switch (operator) {
       case '=':
-        return valueToCompare === value;
+        return valueToCompare == value;
         break;
       case '!=':
-        return valueToCompare !== value;
+        return valueToCompare != value;
         break;
       case 'contains':
         return valueToCompare.toUpperCase().includes(value.toUpperCase());
@@ -264,7 +263,7 @@ export default class RulesEngine {
         return true;
         break;
       default:
-        return operator;
+        return valueToCompare + operator + value;
         break;
     }
   }
