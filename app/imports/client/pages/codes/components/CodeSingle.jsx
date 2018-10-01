@@ -46,6 +46,11 @@ export default class CodeSingle extends Component {
         <div className="check-item">
           <input checked={checked} type="checkbox" className="hidden" />
           <label onClick={this.onSelectCode.bind(this)} />
+        </div>
+        <div className="row__item margin-top-10">
+          <div className="item-name">{code.code}</div>
+        </div>
+        <div className="row__item margin-top-10">
           <TagItem
             title="Tag Code"
             tagIds={code.tagIds}
@@ -53,9 +58,6 @@ export default class CodeSingle extends Component {
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.CODES}
           />
-        </div>
-        <div className="row__block align-center">
-          <div className="item-name">{code.code}</div>
         </div>
       </div>
     );

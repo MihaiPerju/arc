@@ -84,16 +84,27 @@ export default class ClientSingle extends Component {
             entityName={moduleNames.CLIENTS}
           />
         </div>
-        <div className="row__block align-center">
+        <div className="row__item margin-top-10">
           <div className="info">
             <div className="person-name">{name}</div>
-            <div className="item-name text-blue">{mail}</div>
+            <div className="row__item margin-top-10">
+              <div className="item-name text-blue">{mail}</div>
+            </div>
+            <div className="row__item margin-top-10">
+              <TagItem
+                title="Tag Client"
+                tagIds={client.tagIds}
+                moduleTags={moduleTags}
+                onSubmitTags={this.onSubmitTags.bind(this)}
+              />
+            </div>
           </div>
           <img
             className="md-avatar img-circle"
             src={avatar ? getImagePath(avatar) : "/assets/img/user.svg"}
           />
         </div>
+
       </div>
     );
   }

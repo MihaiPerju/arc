@@ -54,6 +54,11 @@ export default class LetterTemplateSingle extends Component {
         <div className="check-item">
           <input checked={checked} type="checkbox" className="hidden" />
           <label onClick={this.onSelectTemplate.bind(this)} />
+        </div>
+        <div className="row__item margin-top-10">
+          <div className="item-name">{template.name}</div>
+        </div>
+        <div className="row__item margin-top-10">
           <TagItem
             title="Tag templates"
             tagIds={template.tagIds}
@@ -61,9 +66,6 @@ export default class LetterTemplateSingle extends Component {
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.TEMPLATES}
           />
-        </div>
-        <div className="row__block align-center">
-          <div className="item-name">{template.name}</div>
         </div>
       </div>
     );

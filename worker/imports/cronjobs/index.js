@@ -21,11 +21,11 @@ SyncedCron.add({
 //Job for sending letters
 SyncedCron.add({
   name: "Send Letters",
-  schedule: function(parser) {
+  schedule: function (parser) {
     // parser is a later.parse object
     return parser.text("at 1:00 am on Wednesday");
   },
-  job: function() {
+  job: function () {
     LettersManagement.run();
   }
 });
@@ -45,11 +45,11 @@ SyncedCron.add({
 //Job for importing accounts from placement file
 SyncedCron.add({
   name: "Import Accounts from Placement",
-  schedule: function(parser) {
+  schedule: function (parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function() {
+  job: function () {
     PlacementService.run();
   }
 });
@@ -57,11 +57,11 @@ SyncedCron.add({
 //Job for importing accounts from inventory file
 SyncedCron.add({
   name: "Import Accounts from Inventory",
-  schedule: function(parser) {
+  schedule: function (parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function() {
+  job: function () {
     InventoryService.run();
   }
 });
@@ -81,11 +81,11 @@ SyncedCron.add({
 //Job for importing re-uploading files with changed header
 SyncedCron.add({
   name: "Reupload Files",
-  schedule: function(parser) {
+  schedule: function (parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function() {
+  job: function () {
     ReuploadService.run();
   }
 });

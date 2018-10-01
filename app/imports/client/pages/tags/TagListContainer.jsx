@@ -185,7 +185,7 @@ class TagListContainer extends Pager {
             moduleTags={moduleTags}
           />
           <TagList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list work-queues decreased" : "task-list work-queues"}
             tagsSelected={tagsSelected}
             selectTag={this.selectTag}
             currentTag={currentTag}
