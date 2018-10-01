@@ -428,7 +428,7 @@ class FlaggedAccountListContainer extends Pager {
             />
           )}
           <AccountList
-            classes={"task-list"}
+            classes={"task-list accounts"}
             accountsSelected={accountsSelected}
             selectAccount={this.selectAccount}
             checkAccount={this.checkAccount}

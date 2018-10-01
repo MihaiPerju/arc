@@ -1,17 +1,16 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
+import { AutoForm, AutoField, ErrorField } from '/imports/ui/forms';
 import SimpleSchema from 'simpl-schema';
 import Notifier from '/imports/client/lib/Notifier';
-
-import UserRoles from '/imports/api/users/enums/roles';
+import LetterSettings from "./components/LetterSettings";
 
 import SettingSingle from "./SettingSingle";
 import MailSettingContent from "./MailSettingContent";
 
 
 export default class Settings extends React.Component {
-  constructor () {
-    super ();
+  constructor() {
+    super();
     this.state = {
       openRightPanel: null
     };
@@ -30,15 +29,14 @@ export default class Settings extends React.Component {
       this.setState({ openRightPanel: page });
     }
   };
-
-
-
+  
   render () {
+
     const { openRightPanel } = this.state;
     return (
 
       <div className="cc-container">
-      <div className={
+ <div className={
         openRightPanel
           ? "left__side"
           : "left__side full__width"
@@ -58,6 +56,11 @@ export default class Settings extends React.Component {
             title="Mail Setting" 
             setPage={this.setPage} 
             icon="icon-envelope" />
+            <SettingSingle
+              page="letterMailSettings"
+              title="Letter Settings"
+              setPage={this.setPage}
+            />
       </div>  
       </div>
 
@@ -78,12 +81,11 @@ class RightSide extends React.Component {
     super();
     this.state = {
       fade: false,
-      isDisabled: false,
       model: {},
+      isDisabled: false
     };
   }
-
-
+  
   componentWillMount() {
     Meteor.call('admin.getRootFolder', (err, model) => {
       if (!err) {
@@ -106,12 +108,13 @@ class RightSide extends React.Component {
     closePanel();
   };
 
-  onSubmit (data) {
-    Meteor.call ('admin.updateRootFolder', data, err => {
+
+  onSubmit = (data) => {
+    Meteor.call('admin.updateRootFolder', data, err => {
       if (!err) {
-        Notifier.success ('Settings updated!');
+        Notifier.success('Settings updated!');
       } else {
-        Notifier.error (err.reason);
+        Notifier.error(err.reason);
       }
     });
   }
@@ -127,6 +130,7 @@ class RightSide extends React.Component {
 
     return (
       <div className={fade ? "right__side in" : "right__side"}>
+
         {page == 'mailSetting' && 
           <MailSettingContent 
           isDisabled={isDisabled}
@@ -158,11 +162,13 @@ class RightSide extends React.Component {
                 </div>
                 
                 <div className="form-wrapper">
+
                   <AutoField
                     labelHidden={true}
                     name="rootFolder"
                     placeholder="Type Root Directory"
                   />
+
                   <ErrorField name="rootFolder" />
                   </div>
 
@@ -183,18 +189,27 @@ class RightSide extends React.Component {
               </div>
           </div>
           }
+        {page == 'letterMailSettings' &&
+          <LetterSettings closePanel={this.closePanel} />
+        }
+
       </div>
     );
   }
 }
 
-const schema = new SimpleSchema ({
+const schema = new SimpleSchema({
   rootFolder: {
     type: String,
     optional: true,
   },
-  letterFolderPath: {
+  letterCompileTime: { 
+       type: String,
+    optional: true,
+  },
+ letterFolderPath: {
     type: String,
     optional: true,
   }
 });
+

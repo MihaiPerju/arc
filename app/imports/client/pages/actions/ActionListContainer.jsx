@@ -188,7 +188,7 @@ class ActionListContainer extends Pager {
             hideFilter
           />
           <ActionList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list actions decreased" : "task-list actions"}
             actionsSelected={actionsSelected}
             selectAction={this.selectAction}
             currentAction={currentAction}
@@ -239,8 +239,8 @@ class RightSide extends Component {
         {create ? (
           <ActionCreate substates={substates} close={close} />
         ) : (
-          <ActionContent substates={substates} action={action} />
-        )}
+            <ActionContent substates={substates} action={action} />
+          )}
       </div>
     );
   }
