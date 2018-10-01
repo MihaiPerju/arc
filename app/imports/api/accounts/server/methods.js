@@ -7,7 +7,7 @@ import StateEnum from '/imports/api/accounts/enums/states';
 import TimeService from './services/TimeService';
 import moment from 'moment';
 import Facilities from '/imports/api/facilities/collection';
-import Uploads from '/imports/api/s3-uploads/uploads/collection';
+import Uploads from '/imports/api/uploads/uploads/collection';
 import fs from 'fs';
 import Business from '/imports/api/business';
 import EscalationService

@@ -61,14 +61,23 @@ class Rule extends React.Component {
     this.props.onChange ();
   };
 
+  clearValue (value) {
+    while (value.indexOf ("'") > -1) {
+      let index = value.indexOf ("'");
+      value = value.slice (0, index) + value.slice (index + 1, value.length);
+    }
+    return value;
+  }
+
   onInputChanged = event => {
+    let value = this.clearValue (event.target.value);
     const pattern = this.state.currField.input.pattern;
     if (pattern) {
       this.setState ({
-        validationError: isValueCorrect (pattern, event.target.value),
+        validationError: isValueCorrect (pattern, value),
       });
     }
-    this.node.value = event.target.value;
+    this.node.value = value;
     const field = this.getFieldByName (this.node.field);
     const rule = this.generateRuleObject (field, this.node);
     this.setState ({currField: rule});
@@ -119,6 +128,14 @@ class Rule extends React.Component {
         return (
           <div>
             <DatePicker
+              calendarClassName="cc-datepicker"
+              showMonthDropdown
+              showYearDropdown
+              yearDropdownItemNumber={4}
+              todayButton={'Today'}
+              placeholderText="Select New Date"
+              fixedHeight
+              className="dateSelect"
               selected={this.state.date}
               onChange={this.onDateChange}
             />
@@ -167,7 +184,6 @@ class Rule extends React.Component {
       }
     }
     rule.operators = ruleOperators;
-    console.log (rule);
     return rule;
   };
 
@@ -177,7 +193,7 @@ class Rule extends React.Component {
   };
 
   render () {
-    console.log (this.state);
+    const {node} = this;
     return (
       <div className={this.styles.rule}>
         <select
@@ -202,7 +218,9 @@ class Rule extends React.Component {
             </option>
           ))}
         </select>
-        {this.getInputTag (this.state.currField.input.type)}
+        {node.operator !== '!!' &&
+          node.operator !== '!' &&
+          this.getInputTag (this.state.currField.input.type)}
         <button
           type="button"
           className={this.styles.deleteBtn}

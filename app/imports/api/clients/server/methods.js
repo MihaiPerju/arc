@@ -1,6 +1,6 @@
 import Security from "/imports/api/security/security.js";
 import Clients from "/imports/api/clients/collection.js";
-import Uploads from "/imports/api/s3-uploads/uploads/collection";
+import Uploads from "/imports/api/uploads/uploads/collection";
 import Facilities from "/imports/api/facilities/collection.js";
 import User from "/imports/api/users/collection.js"
 import fs from "fs";

@@ -1,5 +1,5 @@
 import SimpleSchema from 'simpl-schema';
-import AvatarThumbsSchema from '/imports/api/s3-uploads/uploads/thumbsSchema';
+import AvatarThumbsSchema from '/imports/api/uploads/uploads/thumbsSchema';
 
 const AvatarSchema = new SimpleSchema({
     _id: {type: String},

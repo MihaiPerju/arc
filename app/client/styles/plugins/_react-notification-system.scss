@@ -33,6 +33,12 @@
               opacity 0.3s $animation-standard-curve;
   overflow: hidden;
 
+  .notification-message {
+    font-size: 1.6em;
+    line-height: 1.6em;
+    margin-left: 10px;
+  }
+
   &-visible {
     opacity: 1;
     transform: translateX(0);

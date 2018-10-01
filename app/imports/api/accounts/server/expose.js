@@ -30,9 +30,13 @@ AccountListQuery.expose({
     if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
       if (params.flagged) {
         _.extend(params.filters, {
-          flagCounter: {
-            $gt: 0
-          }
+          $and: [{
+            flagCounter: {
+              $gt: 0
+              ,
+            }
+          },
+        {managerIds:userId}]
         });
       } else {
         _.extend(params.filters, {

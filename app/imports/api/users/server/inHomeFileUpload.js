@@ -1,4 +1,4 @@
-import { createRoute } from "/imports/api/s3-uploads/server/router";
+import { createRoute } from "/imports/api/uploads/server/router";
 import Papa from "papaparse";
 import fs from "fs";
 import LetterManagementService from "/imports/api/letters/server/service/LetterManagementService.js";

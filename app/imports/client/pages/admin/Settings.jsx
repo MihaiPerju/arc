@@ -6,6 +6,12 @@ import SettingSingle from "./components/SettingSingle";
 import LetterSettings from "./components/LetterSettings";
 
 
+import UserRoles from '/imports/api/users/enums/roles';
+
+import SettingSingle from "./SettingSingle";
+import MailSettingContent from "./MailSettingContent";
+
+
 export default class Settings extends React.Component {
   constructor() {
     super();
@@ -30,43 +36,49 @@ export default class Settings extends React.Component {
 
 
 
-  render() {
+
+  render () {
+
     const { openRightPanel } = this.state;
     return (
 
       <div className="cc-container">
-        <div className={
-          openRightPanel
-            ? "left__side"
-            : "left__side full__width"
-        }
-        >
-          <div className="search-bar">
-            <div className="title"> Admin Settings</div>
-          </div>
-          <div className="task-list full-height" >
-            <SettingSingle
-              page="rootFolder"
-              title="Root Directory Setting"
-              setPage={this.setPage}
-              icon="icon-folder-open" />
+ <div className={
+        openRightPanel
+          ? "left__side"
+          : "left__side full__width"
+      }
+      >   
+      <div className="search-bar">
+        <div className="title"> Admin Settings</div>
+      </div>
+        <div className="task-list full-height" > 
+          <SettingSingle 
+            page="rootFolder" 
+            title="Directory Settings" 
+            setPage={this.setPage} 
+            icon="icon-inbox" />
+          <SettingSingle 
+            page="mailSetting" 
+            title="Mail Setting" 
+            setPage={this.setPage} 
+            icon="icon-envelope" />
             <SettingSingle
               page="letterMailSettings"
               title="Letter Settings"
               setPage={this.setPage}
             />
-
-          </div>
-        </div>
-
-        {openRightPanel && (
-          <RightSide
-            page={openRightPanel}
-            closePanel={this.closePanel}
-          />
-        )}
-
+      </div>  
       </div>
+
+      {openRightPanel && (
+        <RightSide
+          page={openRightPanel}
+          closePanel={this.closePanel}
+        />
+      )}
+
+    </div>
     );
   }
 }
@@ -80,7 +92,7 @@ class RightSide extends React.Component {
       isDisabled: false
     };
   }
-
+  
   componentWillMount() {
     Meteor.call('admin.getRootFolder', (err, model) => {
       if (!err) {
@@ -89,6 +101,7 @@ class RightSide extends React.Component {
         Notifier.error(err.reason);
       }
     });
+
   }
 
   componentDidMount() {
@@ -101,6 +114,7 @@ class RightSide extends React.Component {
     const { closePanel } = this.props;
     closePanel();
   };
+
 
   onSubmit = (data) => {
     Meteor.call('admin.updateRootFolder', data, err => {
@@ -123,39 +137,69 @@ class RightSide extends React.Component {
 
     return (
       <div className={fade ? "right__side in" : "right__side"}>
+
+        {page == 'mailSetting' && 
+          <MailSettingContent 
+          isDisabled={isDisabled}
+          closePanel={this.closePanel}
+          />
+        }
         {page == 'rootFolder' &&
-          <div className="create-form">
-            <div className="create-form__bar">
-              <div className="btn-group">
-                <button onClick={this.closePanel} className="btn-cancel">
-                  Cancel
-            </button>
-                <button
-                  style={isDisabled ? { cursor: "not-allowed" } : {}}
-                  disabled={isDisabled}
-                  onClick={this.submitDirectorySetting}
-                  className="btn--green"
-                >
-                  {isDisabled ? <div> Loading<i className="icon-cog" /></div> : "Confirm & Save"}
-                </button>
-              </div>
-            </div>
-            <div className="create-form__wrapper">
-              <div className="action-block">
-                <AutoForm className="settings-form" model={model} onSubmit={this.onSubmit.bind(this)} schema={schema} ref="rootFolderForm">
+             <div className="create-form">
+             <div className="create-form__bar">
+               <div className="btn-group">
+                 <button onClick={this.closePanel} className="btn-cancel">
+                   Cancel
+                 </button>
+                 <button
+                   style={isDisabled ? { cursor: "not-allowed" } : {}}
+                   disabled={isDisabled}
+                   onClick={this.submitDirectorySetting}
+                   className="btn--green"
+                 >
+                   {isDisabled ? <div> Loading<i className="icon-cog" /></div> : "Confirm & Save"}
+                 </button>
+               </div>
+             </div>
+              <div className="create-form__wrapper">
+                <div className="action-block">
+                <AutoForm className="settings-form" model={model} onSubmit={this.onSubmit} schema={schema} ref="rootFolderForm" >
+                <div className="header__block">
+                  <div className="title-block text-uppercase">Root Directory Path</div>
+                </div>
+                
+                <div className="form-wrapper">
+
                   <AutoField
                     labelHidden={true}
                     name="rootFolder"
                     placeholder="Type Root Directory"
                   />
+
+                  <ErrorField name="rootFolder" />
+                  </div>
+
+                <div className="header__block m-t--20">
+                  <div className="title-block text-uppercase">Letter Directory Path</div>
+                </div>
+
+                  <div className="form-wrapper">
+                  <AutoField
+                  labelHidden={true}
+                    name="letterFolderPath"
+                    placeholder="Type Letter Directory"
+                  />
+                  <ErrorField name="letterFolderPath" />
+                  </div>
                 </AutoForm>
+                </div>
               </div>
-            </div>
           </div>
-        }
+          }
         {page == 'letterMailSettings' &&
           <LetterSettings closePanel={this.closePanel} />
         }
+
       </div>
     );
   }
@@ -166,7 +210,11 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
   },
-  letterCompileTime: {
+  letterCompileTime: { 
+       type: String,
+    optional: true,
+  },
+ letterFolderPath: {
     type: String,
     optional: true,
   }

@@ -11,7 +11,7 @@ import Rules from "/imports/api/rules/collection.js";
 import AccountsCollection from "/imports/api/accounts/collection";
 import Escalations from "/imports/api/escalations/collection";
 import { createFolderStructure } from "/imports/startup/server/folders";
-
+import UserRoles from '/imports/api/users/enums/roles';
 Meteor.methods({
   "admin.createUser"({ firstName, lastName, email, phoneNumber, password }) {
     Security.checkAdmin(this.userId);
@@ -25,6 +25,9 @@ Meteor.methods({
         phoneNumber
       }
     });
+  },
+  "admin.checkAdmin"(userId) {
+    return Security.checkIfAdmin(userId);
   },
 
   "admin.editUser"(userId, { email, profile, tagIds }) {
@@ -127,8 +130,8 @@ Meteor.methods({
     );
   },
 
-  "admin.updateRootFolder"({ rootFolder }) {
-    debugger
+  "admin.updateRootFolder"({ rootFolder, letterFolderPath }) {
+    /** Root Folder Directory */
     rootFolder = rootFolder.trim();
     if (rootFolder[0] !== "/") {
       rootFolder = "/" + rootFolder;
@@ -136,15 +139,23 @@ Meteor.methods({
     if (rootFolder[rootFolder.length - 1] !== "/") {
       rootFolder += "/";
     }
+
+    /** PDF Folder Directory */
+    letterFolderPath = letterFolderPath.trim();
+    if (letterFolderPath[0] !== "/") {
+      letterFolderPath = "/" + letterFolderPath;
+    }
+
     Settings.update(
-      {
-        rootFolder: {
-          $ne: null
-        }
+      { 
+        // rootFolder: {
+        //    $ne: null
+        // }    
       },
       {
         $set: {
-          rootFolder
+          rootFolder,
+          letterFolderPath
         }
       },
       {
@@ -157,9 +168,18 @@ Meteor.methods({
 
   "admin.getRootFolder"() {
     return Settings.findOne({
-      rootFolder: {
-        $exists: true
-      }
+      $or:[
+        { 
+            rootFolder: {
+            $exists: true
+          } 
+        },
+        {
+          letterFolderPath: {
+            $exists: true
+          }
+        }
+      ]
     });
   },
 
@@ -180,8 +200,25 @@ Meteor.methods({
     });
   },
 
-  "admin.mailSettingUpdate"({ mailSetting }) {
+
+  "admin.mailSettingUpdate"({mailSetting}) {
     Security.checkAdmin(this.userId);
+    
+   if(mailSetting.ssl === 'true'){
+     mailSetting = {
+       ...mailSetting,
+       ssl: true
+     }
+   }else{
+     mailSetting = {
+      ...mailSetting,
+      ssl: false
+    }
+   }
+   if(mailSetting.authentication == "Anonymous Account") {
+     delete mailSetting.username;
+     delete mailSetting.password;
+   }
 
     Settings.update(
       {},
@@ -197,7 +234,6 @@ Meteor.methods({
   },
 
   "admin.getMailSetting"() {
-    debugger
     return Settings.findOne({
       mailSetting: {
         $exists: true

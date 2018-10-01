@@ -1,9 +1,8 @@
-import S3Uploader from "./s3";
 import middleware from "./extensions/busboy.middleware";
 import { Accounts } from "meteor/accounts-base";
 import fs from "fs";
-import Uploader from "/imports/api/s3-uploads/server/s3";
-import UploadedFile from "/imports/api/s3-uploads/server/UploadedFile";
+import Uploader from "/imports/api/uploads/server/uploader";
+import UploadedFile from "/imports/api/uploads/server/UploadedFile";
 import Uploads from "../uploads/collection";
 import AccountsCollection from "/imports/api/accounts/collection";
 import Settings from "/imports/api/settings/collection.js";
@@ -70,7 +69,7 @@ export function createRoute(path, handler) {
         return _.map(req.filenames, function(filename) {
           const { resourceType, resourceId } = req.postData;
           uploadId = resourceId;
-          const uploadedFile = S3Uploader.upload(filename);
+          const uploadedFile = Uploader.upload(filename);
 
           return uploadedFile.save({
             resourceType,
