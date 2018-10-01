@@ -52,7 +52,7 @@ export default class RouteService {
       {
         name: "rules/list",
         label: "Rules",
-        icon: "pencil"
+        icon: "file-text-o"
       },
       {
         name: "code/list",
@@ -88,8 +88,7 @@ export default class RouteService {
         name: "module-tags/list",
         label: "Tags",
         icon: "tags"
-      }
-      ];
+      }];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
       return [{
         name: "dashboard",
