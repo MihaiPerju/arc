@@ -76,13 +76,6 @@ export default class ClientSingle extends Component {
         <div className="check-item">
           <input checked={bgYellow} type="checkbox" className="hidden" />
           <label onClick={this.onSelectClient.bind(this)} />
-          <TagItem
-            title="Tag Client"
-            tagIds={client.tagIds}
-            moduleTags={moduleTags}
-            onSubmitTags={this.onSubmitTags.bind(this)}
-            entityName={moduleNames.CLIENTS}
-          />
         </div>
         <div className="row__item margin-top-10">
           <div className="info">
@@ -96,6 +89,7 @@ export default class ClientSingle extends Component {
                 tagIds={client.tagIds}
                 moduleTags={moduleTags}
                 onSubmitTags={this.onSubmitTags.bind(this)}
+                entityName={moduleNames.CLIENTS}
               />
             </div>
           </div>

@@ -68,13 +68,6 @@ export default class AccountSingle extends Component {
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
           <label onClick={this.onCheck.bind (this)} />
-          <TagItem
-            title="Tag Account"
-            tagIds={account.tagIds}
-            moduleTags={moduleTags}
-            onSubmitTags={this.onSubmitTags.bind (this)}
-            entityName={moduleNames.ACCOUNT}
-          />
         </div>
 
         <div onClick={this.onFreeze} className="mark-task">
@@ -112,6 +105,7 @@ export default class AccountSingle extends Component {
             tagIds={account.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.ACCOUNT}
           />
         </div>
       </div>
