@@ -5,15 +5,17 @@ import PlacementService from "../services/PlacementService";
 import ReuploadService from "../services/ReuploadService";
 import InventoryService from "../services/InventoryService";
 import PaymentService from "../services/PaymentService";
+import Settings from "/imports/api/settings/collection";
+import moment from 'moment/moment';
 
 // Job for running reports
 SyncedCron.add({
   name: "Run Report",
-  schedule: function(parser) {
+  schedule: function (parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function() {
+  job: function () {
     ReportsManagement.run();
   }
 });
@@ -22,8 +24,14 @@ SyncedCron.add({
 SyncedCron.add({
   name: "Send Letters",
   schedule: function (parser) {
+    const { letterCompileTime } = Settings.findOne({
+      letterCompileTime: {
+        $ne: null
+      }
+    });
+    let letterTime = letterCompileTime ? `at ${moment(letterCompileTime).format('h:mm a')}` : "at 1:00 am";
     // parser is a later.parse object
-    return parser.text("at 1:00 am on Wednesday");
+    return parser.text(letterTime);
   },
   job: function () {
     LettersManagement.run();
