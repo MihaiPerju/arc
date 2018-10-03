@@ -27,7 +27,6 @@ var _filterDOMProps = _interopRequireDefault(
 
 var Radio = function Radio(_ref) {
   var allowedValues = _ref.allowedValues,
-    checkboxes = _ref.checkboxes,
     disabled = _ref.disabled,
     id = _ref.id,
     label = !_ref.labelHidden && _ref.label,

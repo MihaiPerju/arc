@@ -1,6 +1,6 @@
 import { Email } from "meteor/email";
 
-export default (sendEmailForAttachment = ({
+export default ({
   to,
   clientName,
   from = `admin@app.in`,
@@ -8,4 +8,4 @@ export default (sendEmailForAttachment = ({
 }) => {
   const text = `A new file has been uploaded for the client ${clientName}`;
   Email.send({ to, from, subject, text });
-});
+};

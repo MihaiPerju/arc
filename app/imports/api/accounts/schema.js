@@ -1,7 +1,6 @@
 import SimpleSchema from "simpl-schema";
 import StateEnum from "./enums/states";
 import { Substates } from "./enums/substates";
-import ActionSchema from "./schemas/actionSchema.js";
 import insuranceSchema from "/imports/api/facilities/schemas/insuranceSchema";
 
 export default new SimpleSchema({
@@ -97,7 +96,7 @@ export default new SimpleSchema({
   state: {
     type: String,
     defaultValue: StateEnum.ACTIVE,
-    allowedValues: _.map(StateEnum, (value, key) => value)
+    allowedValues: _.map(StateEnum, (value) => value)
   },
   substate: {
     type: String,

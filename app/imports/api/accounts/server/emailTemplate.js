@@ -1,6 +1,6 @@
 import { Email } from "meteor/email";
 
-export default (sendEmail = ({
+export default ({
   userEmail,
   accName,
   reason,
@@ -10,4 +10,4 @@ export default (sendEmail = ({
 }) => {
   const text = `${repData} has escalated ${accName} for you and the reason behind this is ${reason} Kindly have a look.`;
   Email.send({ to: userEmail, from, subject, text });
-});
+};
