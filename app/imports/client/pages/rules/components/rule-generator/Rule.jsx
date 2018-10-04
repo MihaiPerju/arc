@@ -40,7 +40,6 @@ class Rule extends React.Component {
     for (let field of fields) {
       if (field.name === node.field) {
         return this.generateRuleObject (field, node);
-        break;
       }
     }
   };

@@ -13,7 +13,7 @@ class TagContent extends Component {
         }
     }
 
-    componentWillReceiveProps(newProps) {
+    componentWillReceiveProps() {
         this.setState({ edit: false });
     }
 
@@ -39,7 +39,7 @@ class TagContent extends Component {
 
     render() {
         const { edit } = this.state;
-        const { tag, clients, data: users, loading, error } = this.props;
+        const { tag, clients, data: users, error } = this.props;
         if (error) {
             return <div>Error: {error.reason}</div>;
         }
@@ -65,7 +65,7 @@ class TagContent extends Component {
     }
 }
 
-export default withQuery((props) => {
+export default withQuery(() => {
     const params = {
         filters: { roles: { $in: ['rep'] } }
     }

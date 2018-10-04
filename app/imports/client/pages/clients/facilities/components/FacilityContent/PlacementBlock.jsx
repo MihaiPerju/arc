@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import UploadItem from './UploadItem';
 import Notifier from "../../../../../lib/Notifier";
 import DropzoneComponent from 'react-dropzone-component';
 import ImportingRules from '../ImportingRules';

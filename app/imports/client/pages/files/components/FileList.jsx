@@ -4,7 +4,7 @@ import FileSingle from "./FileSingle";
 export default class FileList extends Component {
   render() {
     const { files } = this.props;
-    const fileList = files.map(function(file, index) {
+    const fileList = files.map(function(file) {
       const {
         setFile,
         selectFile,
