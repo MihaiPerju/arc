@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import moment from "moment/moment";
-import AccountActioning from "./AccountActioning";
-import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
-import EditInfoDialog from "./EditInfoDialog";
-import commaNumber from "comma-number";
-import Countdown from "react-countdown-now";
+import React, { Component } from 'react';
+import moment from 'moment/moment';
+import AccountActioning from './AccountActioning';
+import RolesEnum, { roleGroups } from '/imports/api/users/enums/roles';
+import EditInfoDialog from './EditInfoDialog';
+import commaNumber from 'comma-number';
+import Countdown from 'react-countdown-now';
 
 export default class AccountContentHeader extends Component {
   getOptions(users = []) {
