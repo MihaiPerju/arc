@@ -6,7 +6,7 @@ export default class AccountContent extends Component {
   }
 
   render() {
-    const { closeRightPanel, accountsSelected } = this.props;
+    const {  accountsSelected } = this.props;
     return (
       <div className="main-content">
         <div className="header-block header-account">

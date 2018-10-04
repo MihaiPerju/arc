@@ -14,7 +14,7 @@ export default class ClientSingle extends Component {
     this.changeTaskBg = this.changeTaskBg.bind(this);
   }
 
-  onSetClient(_id) {
+  onSetClient() {
     const { id, setClient } = this.props;
     this.setState({
       fontNormal: true

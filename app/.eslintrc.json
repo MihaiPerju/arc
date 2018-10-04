@@ -1,11 +1,13 @@
 {
-    "plugins": ["meteor"],
+    "plugins": ["meteor","react"],
     "extends": ["plugin:meteor/recommended", "eslint:recommended","plugin:react/recommended"],
     "parserOptions": {
-      "ecmaVersion": 6,
+      "ecmaVersion": 2017,
       "sourceType": "module",
       "ecmaFeatures": {
-          "jsx": true
+          "jsx": true,
+          "modules": true,
+           "experimentalObjectRestSpread": true
       }
        
       },
@@ -26,15 +28,24 @@
         "Meteor":false,
         "test":false,
         "SyncedCron":false,
-        "Counter": false
+        "Counter": false,
+        "Promise":false,
+        "Image":false
     },
+    "parser": "babel-eslint",
     "rules":{
       "rest-spread-spacing": ["error", "never"],
-      "meteor/audit-argument-checks": 0
+      "meteor/audit-argument-checks": 0,
+      "global-require": "off",
+      "allowEmptyReject": true,
+      "react/prop-types":0,
+      "react/no-string-refs":0
     },
     "settings": {
       "react": {
+        "pragma": "React",
         "version": "15.6.2"
       }
     }
+  
   }

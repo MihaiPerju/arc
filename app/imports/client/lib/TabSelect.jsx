@@ -21,7 +21,7 @@ export default class TabSelect extends React.Component {
         const {options, header} = this.props;
         const {activeTab} = this.state;
 
-        const panes = options.map((tab, index) => {
+        const panes = options.map((tab) => {
             return {
                 menuItem: tab.label,
                 render: () => <Tab.Pane>

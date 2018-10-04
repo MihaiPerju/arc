@@ -180,8 +180,8 @@ class BtnGroup extends Component {
                 {
                     icons
                         ?
-                        icons.map((element) => {
-                            return <button onClick={element.method}><i className={"icon-" + element.icon}/></button>
+                        icons.map((element,index) => {
+                            return <button onClick={element.method} key={index}><i className={"icon-" + element.icon}/></button>
                         })
                         :
                         <button><i className="icon-archive"/></button>

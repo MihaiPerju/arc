@@ -22,7 +22,7 @@ export default class EditLetterTemplate extends React.Component {
   }
 
   getCategories = categories => {
-    return categories.map((category, key) => ({
+    return categories.map((category) => ({
       value: category,
       label: category
     }));

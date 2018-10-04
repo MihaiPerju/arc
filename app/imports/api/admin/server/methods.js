@@ -11,7 +11,6 @@ import Rules from "/imports/api/rules/collection.js";
 import AccountsCollection from "/imports/api/accounts/collection";
 import Escalations from "/imports/api/escalations/collection";
 import { createFolderStructure } from "/imports/startup/server/folders";
-import UserRoles from '/imports/api/users/enums/roles';
 Meteor.methods({
   "admin.createUser"({ firstName, lastName, email, phoneNumber, password }) {
     Security.checkAdmin(this.userId);

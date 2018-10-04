@@ -2,10 +2,10 @@
 // Don't forget to add me to index.js
 
 import React from 'react';
-import { Dispatcher, Events } from '/imports/api/events';
+import { Dispatcher } from '/imports/api/events';
 import send from '../send.js';
 
-Dispatcher.on('sample', ({}) => {
+Dispatcher.on('sample', () => {
     const url = Meteor.absoluteUrl();
 
     send({

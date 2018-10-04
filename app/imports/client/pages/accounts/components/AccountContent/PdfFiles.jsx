@@ -64,12 +64,11 @@ export default class ActionBlock extends Component {
 
   render () {
     const {account} = this.props;
-    const {pageNumber, numPages, pdfIndex} = this.state;
+    const { pdfIndex} = this.state;
     const accountId = account && account._id;
     const componentConfig = {
       postUrl: `/uploads/account-pdf/` + accountId + '/' + getToken (),
     };
-    const that = this;
     const djsConfig = {
       complete (file) {
         Notifier.success ('Added');

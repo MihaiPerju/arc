@@ -35,7 +35,7 @@ class LetterTemplateListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (
       queryParams.letterTemplateName &&
