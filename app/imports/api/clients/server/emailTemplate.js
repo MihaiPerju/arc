@@ -1,6 +1,6 @@
 import { Email } from "meteor/email";
 
-export default (sendEmail = ({
+export default ({
   to,
   email,
   from = `admin@app.in`,
@@ -8,4 +8,4 @@ export default (sendEmail = ({
 }) => {
   const text = `A new client has been assigned to you ${email}`;
   Email.send({ to, from, subject, text });
-});
+};

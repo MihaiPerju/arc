@@ -1,1 +1,1 @@
-export default MAIL_URL="smtp://"
+// export default MAIL_URL="smtp://"

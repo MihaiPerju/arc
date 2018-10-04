@@ -1,6 +1,5 @@
 import UploadedFile from './UploadedFile';
 import config from '../config';
-import moment from 'moment';
 
 export default class Uploader {
     static isImage(filename) {
@@ -41,4 +40,4 @@ export default class Uploader {
 
         return uploadedFile;
     }
-};
+}

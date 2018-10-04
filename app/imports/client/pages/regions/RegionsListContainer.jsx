@@ -32,7 +32,7 @@ class RegionListContainer extends Pager {
     this.nextPage(0);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const {queryParams} = FlowRouter.current();
     if (queryParams.regionName && queryParams.regionName == "") {
       this.setPagerInitial();

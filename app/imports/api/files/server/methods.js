@@ -1,9 +1,6 @@
 import Files from "/imports/api/files/collection.js";
 import RevertService from "../services/RevertService";
 import UploadStatuses from "/imports/api/files/enums/statuses";
-import FileTypes from "/imports/api/files/enums/fileTypes";
-import FileService from "./services/FileService";
-import Facilities from "/imports/api/facilities/collection";
 import JobQueue from "../../jobQueue/collection";
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
 

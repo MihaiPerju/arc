@@ -46,7 +46,7 @@ Meteor.startup(function() {
   ];
 
   //generate random order for importing rules
-  generateOrder = () => {
+  const generateOrder = () => {
     //generate output based on input and importingRules
     output = ParseService.return;
     shuffle([
@@ -73,7 +73,7 @@ Meteor.startup(function() {
   };
 
   //generate importing rules based on random order generated before
-  generateImportingRules = () => {
+  const generateImportingRules = () => {
     let newImportingRules = {};
     for (let i in orders) {
       newImportingRules[rules[i]] = orders[i];
@@ -82,7 +82,7 @@ Meteor.startup(function() {
   };
 
   //generate fake array that normally is received by csv parser.
-  generateInput = () => {
+  const generateInput = () => {
     let newInput = [];
     for (let i = 0; i < 19; i++) {
       newInput.push(faker.lorem.word());
@@ -92,11 +92,10 @@ Meteor.startup(function() {
 
   //generate order of rules, importing rules and input test value
   orders = generateOrder();
-  importingRules = generateImportingRules();
+ let importingRules = generateImportingRules();
   input = generateInput();
 
   //generate output based on input and importingRules
   output = CsvParseService.createAccount(input, importingRules);
 
-  console.log("[ok] client fixtures have been loaded.");
 });

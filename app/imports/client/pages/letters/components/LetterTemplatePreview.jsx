@@ -41,8 +41,7 @@ export default class LetterTemplatePreview extends React.Component {
       currentComponent,
       selectedLetter,
       keywordsValues,
-      keywords,
-      parentState
+      keywords
     } = this.props;
     const letterBody = this.tagParser();
 

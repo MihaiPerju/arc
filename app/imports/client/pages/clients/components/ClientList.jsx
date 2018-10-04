@@ -11,7 +11,7 @@ export default class ClientList extends Component {
       setClient,
       moduleTags
     } = this.props;
-    const clientList = clients.map(function(client, index) {
+    const clientList = clients.map(function(client) {
       return (
         <ClientSingle
           currentClient={currentClient}

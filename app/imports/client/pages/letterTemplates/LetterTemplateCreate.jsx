@@ -33,7 +33,7 @@ export default class CreateLetterTemplate extends Component {
   };
 
   getCategories = categories => {
-    return categories.map((category, key) => ({
+    return categories.map((category) => ({
       value: category,
       label: category
     }));

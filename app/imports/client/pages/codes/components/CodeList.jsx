@@ -4,7 +4,7 @@ import CodeSingle from "./CodeSingle";
 export default class CodeList extends Component {
   render() {
     const { codes } = this.props;
-    const codeList = codes.map(function(code, index) {
+    const codeList = codes.map(function(code) {
       const {
         setCode,
         selectCode,

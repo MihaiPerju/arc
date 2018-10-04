@@ -1,7 +1,6 @@
 import Security from "/imports/api/security/security.js";
 import LetterTemplates from "/imports/api/letterTemplates/collection";
 import LetterTemplateService from "./service.letterTemplate.js";
-import { roleGroups } from "/imports/api/users/enums/roles";
 
 Meteor.methods({
   "letterTemplates.get"() {

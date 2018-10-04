@@ -36,7 +36,7 @@ class SubstatesListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (
       Object.keys(queryParams).length > 1 &&
@@ -170,7 +170,6 @@ class SubstatesListContainer extends Pager {
             moduleTags={moduleTags}
             hideSort
             hideFilter
-            moduleTags={moduleTags}
           />
           <SubstatesList
             class={filter ? "task-list decreased" : "task-list"}

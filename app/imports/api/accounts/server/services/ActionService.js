@@ -90,7 +90,6 @@ export default class ActionService {
 
   //Adding a system action
   static createSystemAction(_id, accountId) {
-    const { substateId, title, state } = Actions.findOne({ _id });
     const { clientId } = Accounts.findOne({ _id: accountId });
     const action = Actions.findOne({ _id });
 
