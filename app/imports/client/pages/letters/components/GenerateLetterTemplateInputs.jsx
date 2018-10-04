@@ -75,7 +75,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
   };
 
   getAttachmentOptions = enums => {
-    return _.map(enums, (value, key) => {
+    return _.map(enums, (value) => {
       return { value: value._id, label: AccountViewService.getPdfName(value) };
     });
   };

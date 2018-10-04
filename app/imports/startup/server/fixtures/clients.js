@@ -36,5 +36,4 @@ Meteor.startup(function () {
         })
     }
 
-    console.log('[ok] client fixtures have been loaded.');
 });

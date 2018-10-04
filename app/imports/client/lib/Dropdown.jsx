@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 export default class Dropdown extends Component {
 
     onFilterAssignee = (filter) => {
-        const {getProperAccounts, toggleDropdown} = this.props;
+        const {getProperAccounts} = this.props;
         getProperAccounts(filter);
     };
 

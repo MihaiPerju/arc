@@ -4,7 +4,7 @@ import LetterSingle from "./LetterSingle";
 export default class LetterList extends Component {
   render() {
     const { letters, moduleTags } = this.props;
-    const letterList = letters.map(function(letter, index) {
+    const letterList = letters.map(function(letter) {
       return (
         <LetterSingle
           key={letter._id}
@@ -14,6 +14,6 @@ export default class LetterList extends Component {
       );
     }, this);
 
-    return <div className="task-list">{letterList}</div>;
+    return <div className="task-list letters">{letterList}</div>;
   }
 }

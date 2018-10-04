@@ -1,4 +1,4 @@
-import AccountService from "/imports/api/facilities/server/services/AccountImportingService";
+/* import AccountService from "/imports/api/facilities/server/services/AccountImportingService";
 import { chai } from "meteor/practicalmeteor:chai";
 import Accounts from "/imports/api/accounts/collection";
 import { resetDatabase } from "meteor/xolvio:cleaner";
@@ -132,3 +132,4 @@ describe("Import inventory files", function() {
     chai.assert(test() === true);
   });
 });
+ */

@@ -3,7 +3,7 @@ import { getImagePath } from "../../../../api/utils";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 export default class ClientSingle extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +14,7 @@ export default class ClientSingle extends Component {
     this.changeTaskBg = this.changeTaskBg.bind(this);
   }
 
-  onSetClient(_id) {
+  onSetClient() {
     const { id, setClient } = this.props;
     this.setState({
       fontNormal: true
@@ -81,18 +81,30 @@ export default class ClientSingle extends Component {
             tagIds={client.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.CLIENTS}
           />
         </div>
-        <div className="row__block align-center">
+        <div className="row__item margin-top-10">
           <div className="info">
             <div className="person-name">{name}</div>
-            <div className="item-name text-blue">{mail}</div>
+            <div className="row__item margin-top-10">
+              <div className="item-name text-blue">{mail}</div>
+            </div>
+            <div className="row__item margin-top-10">
+              <TagItem
+                title="Tag Client"
+                tagIds={client.tagIds}
+                moduleTags={moduleTags}
+                onSubmitTags={this.onSubmitTags.bind(this)}
+              />
+            </div>
           </div>
           <img
             className="md-avatar img-circle"
             src={avatar ? getImagePath(avatar) : "/assets/img/user.svg"}
           />
         </div>
+
       </div>
     );
   }

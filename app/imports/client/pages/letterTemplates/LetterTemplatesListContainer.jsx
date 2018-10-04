@@ -11,7 +11,7 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class LetterTemplateListContainer extends Pager {
@@ -35,7 +35,7 @@ class LetterTemplateListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (
       queryParams.letterTemplateName &&
@@ -124,9 +124,9 @@ class LetterTemplateListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.TEMPLATES] } }
+        filters: { entities: { $in: [moduleNames.TEMPLATES] } }
       })
       .fetch((err, moduleTags) => {
         if (!err) {
@@ -171,7 +171,7 @@ class LetterTemplateListContainer extends Pager {
             moduleTags={moduleTags}
           />
           <LetterTemplatesList
-            class={this.state.filter ? "task-list decreased" : "task-list"}
+            class={this.state.filter ? "task-list templates decreased" : "task-list templates"}
             templatesSelected={templatesSelected}
             selectTemplate={this.selectTemplate}
             currentTemplate={currentTemplate}

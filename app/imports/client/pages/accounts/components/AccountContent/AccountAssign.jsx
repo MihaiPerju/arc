@@ -38,7 +38,9 @@ export default class AccountAssign extends React.Component {
   };
 
   componentWillMount() {
-    workQueueQuery.clone().fetch((err, res) => {
+    workQueueQuery.clone( {filters: {
+      workQueueStatus: true,
+    },}).fetch((err, res) => {
       if (!err) {
         const workQueueOptions = WorkQueueService.createOptions(res);
         this.setState({

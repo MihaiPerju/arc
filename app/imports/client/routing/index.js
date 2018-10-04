@@ -1,9 +1,5 @@
-import React from "react";
 import {mount} from 'react-mounter';
 
-import {
-  render
-} from "react-dom";
 
 import route from "./router";
 import "./logoutRoute";

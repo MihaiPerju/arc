@@ -440,6 +440,19 @@
   }
 }
 
+.create-tag-button{
+  background-color: #ebf5ff;
+  background-color: rgba(0, 126, 255, 0.08);
+  border-radius: 2px;
+  border: 1px solid #c2e0ff;
+  border: 1px solid rgba(0, 126, 255, 0.24);
+  color: #007eff;
+  display: inline-block;
+  font-size: 0.9em;
+  padding: 5px 8px;
+  margin-left: 5px;
+  vertical-align: middle;
+}
 // Main Content
 .main-content {
   .header-block {

@@ -3,7 +3,7 @@ class Notifier {
         this.notifier = null;
     }
 
-    errorDefault(err) {
+    errorDefault() {
         // TODO: send log to our server
         this.error('An error occured. Try again later or contact our team.');
     }

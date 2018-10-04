@@ -1,5 +1,5 @@
 import SimpleSchema from "simpl-schema";
-import CATEGORIES, {
+import  {
   CategoryList
 } from "/imports/api/letterTemplates/enums/categories.js";
 

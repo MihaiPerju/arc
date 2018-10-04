@@ -4,6 +4,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
 import Dialog from '../../../lib/ui/Dialog';
 import classNames from 'classnames';
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+
 export default class LetterSingle extends Component {
   constructor() {
     super();
@@ -85,22 +87,23 @@ export default class LetterSingle extends Component {
             tagIds={letter.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.LETTERS}
           />
         </div>
-        <div className="row__block align-center">
+        <div className="row__item margin-top-10">
           {letter.isManuallyMailed ? (
             <div className="item-name text-blue">
               {letter && letter.letterTemplateName}
             </div>
           ) : (
-            <div className="item-name text-dark-grey">
-              {letter && letter.letterTemplateName}
-            </div>
-          )}
+              <div className="item-name text-dark-grey">
+                {letter && letter.letterTemplateName}
+              </div>
+            )}
           <div className={statusClasses}>{letter.status}</div>
           {letter.status == Statuses.NEW && (
             <button
-              className="btn-text--green"
+              className="btn-text--green p-0"
               onClick={this.markedManual.bind(this)}
             >
               Manual Mailing
@@ -130,6 +133,14 @@ export default class LetterSingle extends Component {
               </div>
             </Dialog>
           )}
+        </div>
+        <div className="row__item m-t--5">
+          <TagItem
+            title="Tag Letter"
+            tagIds={letter.tagIds}
+            moduleTags={moduleTags}
+            onSubmitTags={this.onSubmitTags.bind(this)}
+          />
         </div>
       </div>
     );

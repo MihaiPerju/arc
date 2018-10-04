@@ -1,5 +1,4 @@
 import RolesEnum from "../../../api/users/enums/roles";
-import moment from "moment";
 
 export default class RouteService {
   static getRoutesByRole() {
@@ -52,7 +51,7 @@ export default class RouteService {
       {
         name: "rules/list",
         label: "Rules",
-        icon: "pencil"
+        icon: "file-text-o"
       },
       {
         name: "code/list",
@@ -88,8 +87,7 @@ export default class RouteService {
         name: "module-tags/list",
         label: "Tags",
         icon: "tags"
-      }
-      ];
+      }];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
       return [{
         name: "dashboard",
@@ -289,91 +287,91 @@ export default class RouteService {
     switch (path) {
       case "/dashboard":
         return "Dashboard";
-        break;
+        
       case "/accounts/active": {
         return "Active Accounts";
-        break;
+        
       }
       case "/accounts/review": {
         return "Accounts In Review";
-        break;
+        
       }
       case "/accounts/hold": {
         return "Accounts on Hold";
-        break;
+        
       }
       case "/accounts/archived": {
         return "Archived Accounts";
-        break;
+        
       }
       case "/accounts/tickles": {
         return "Tickled Accounts";
-        break;
+        
       }
       case "/accounts/escalated": {
         return "Escalated Accounts";
-        break;
+        
       }
       case "/flagged": {
         return "Escalated Accounts";
-        break;
+        
       }
       case "/accounts/unassigned": {
         return "Unassigned Accounts";
-        break;
+        
       }
       case "/client/list": {
         return "Clients";
-        break;
+        
       }
       case "/admin/user/list": {
         return "Users";
-        break;
+        
       }
       case "/code/list": {
         return "Reason Codes";
-        break;
+        
       }
       case "/reports/list": {
         return "Reports";
-        break;
+        
       }
       case "/letter-templates/list": {
         return "Letter Templates";
-        break;
+        
       }
       case "/letters/list": {
         return "Letters";
-        break;
+        
       }
       case "/action/list": {
         return "Actions";
-        break;
+        
       }
       case "/substate/list": {
         return "Substates";
-        break;
+        
       }
       case "/module-tags/list": {
         return "Tags";
-        break;
+        
       }
       case "/tag/list": {
         return "Work Queues";
-        break;
+        
       }
       case "/file/list": {
         return "Files";
-        break;
+        
 
       }
       case "/admin/settings": {
         return "Settings";
-        break;
+        
 
       }
       default:
-        break;
+      break;
     }
   }
 }

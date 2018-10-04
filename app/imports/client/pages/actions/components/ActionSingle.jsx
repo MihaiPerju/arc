@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 
 export default class ActionSingle extends Component {
   constructor(props) {
@@ -51,15 +52,18 @@ export default class ActionSingle extends Component {
         <div className="check-item">
           <input checked={checked} type="checkbox" className="hidden" />
           <label onClick={this.onSelectAction.bind(this)} />
+        </div>
+        <div className="row__item margin-top-10">
+          <div className="item-name">{action.title}</div>
+        </div>
+        <div className="row__item margin-top-10">
           <TagItem
             title="Tag Action"
             tagIds={action.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.ACTIONS}
           />
-        </div>
-        <div className="row__block align-center">
-          <div className="item-name">{action.title}</div>
         </div>
       </div>
     );

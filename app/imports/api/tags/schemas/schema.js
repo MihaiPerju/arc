@@ -23,5 +23,9 @@ export default new SimpleSchema({
   },
   "entities.$": {
     type: String
-  }
+  },
+  workQueueStatus: {
+    type: Boolean,
+    defaultValue: false
+  },
 });

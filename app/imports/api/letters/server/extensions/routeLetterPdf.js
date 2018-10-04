@@ -6,8 +6,8 @@ import Business from "/imports/api/business";
 Picker.route("/letters/pdf/:accountId/:letterId/:token", function(
   params,
   req,
-  res,
-  next
+  res
+  
 ) {
   const user = getUserByToken(params.token);
   const { letterId } = params;
@@ -30,7 +30,7 @@ Picker.route("/letters/pdf/:accountId/:letterId/:token", function(
     res.write("File Not Found");
     res.end();
   }
-  data = fs.readFileSync(letterLocation);
+  const data = fs.readFileSync(letterLocation);
 
   res.writeHead(200, {
     "Content-Type": "application/pdf",

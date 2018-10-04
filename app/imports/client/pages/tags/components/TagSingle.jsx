@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-
+import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
 export default class TagSingle extends Component {
   constructor(props) {
     super(props);
@@ -49,15 +49,18 @@ export default class TagSingle extends Component {
         <div className="check-item">
           <input checked={checked} type="checkbox" className="hidden" />
           <label onClick={this.onSelectTag.bind(this)} />
+        </div>
+        <div className="row__item margin-top-10">
+          <div className="item-name">{tag.name}</div>
+        </div>
+        <div className="row__item margin-top-10">
           <TagItem
             title="Tag:"
             tagIds={tag.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.TAGS}
           />
-        </div>
-        <div className="row__block align-center">
-          <div className="item-name">{tag.name}</div>
         </div>
       </div>
     );

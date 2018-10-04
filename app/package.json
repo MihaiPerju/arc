@@ -5,7 +5,8 @@
     "start": "MONGO_URL='mongodb://arcc:12345@pms-shard-00-00-tuhpo.mongodb.net:27017,pms-shard-00-01-tuhpo.mongodb.net:27017,pms-shard-00-02-tuhpo.mongodb.net:27017/test?ssl=true&replicaSet=PMS-shard-0&authSource=admin' meteor run --settings .deploy/local.json",
     "debug": "MONGO_URL='mongodb://arcc:12345@pms-shard-00-00-tuhpo.mongodb.net:27017,pms-shard-00-01-tuhpo.mongodb.net:27017,pms-shard-00-02-tuhpo.mongodb.net:27017/test?ssl=true&replicaSet=PMS-shard-0&authSource=admin' meteor run --inspect --settings .deploy/local.json",
     "deploy:qa": "meteor npm i ; cd .deploy/qa && mup deploy",
-    "pms-test": "MONGO_URL=mongodb+srv://arccTester:sZ5zViNL1jJBBD7v@arcc-testing-bxsso.mongodb.net/arcc meteor run --settings .deploy/pms/local.json"
+    "pms-test": "MONGO_URL=mongodb+srv://arccTester:sZ5zViNL1jJBBD7v@arcc-testing-bxsso.mongodb.net/arcc meteor run --settings .deploy/pms/local.json",
+    "eslint":"eslint . **/*.jsx || exit 0"
   },
   "dependencies": {
     "@babel/runtime": "7.0.0-beta.55",
@@ -76,8 +77,17 @@
     "uuid": "^3.2.1"
   },
   "devDependencies": {
+    "@meteorjs/eslint-config-meteor": "^1.0.5",
     "autoprefixer": "^7.1.2",
+    "babel-eslint": "^10.0.1",
     "css-mqpacker": "^6.0.1",
+    "eslint": "^5.6.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-import-resolver-meteor": "^0.4.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-meteor": "^5.1.0",
+    "eslint-plugin-react": "^7.11.1",
     "gulp": "^3.9.1",
     "gulp-load-plugins": "^1.5.0",
     "gulp-svgmin": "^1.2.4",

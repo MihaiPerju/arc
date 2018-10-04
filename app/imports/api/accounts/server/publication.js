@@ -12,7 +12,6 @@ Meteor.publish("unassignedAccounts", () => {
 });
 
 Meteor.publish("escalatedAccounts", userId => {
-  let filters = {};
   let escalationsCount;
   if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
     escalationsCount = new Counter(

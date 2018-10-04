@@ -11,7 +11,7 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "/imports/client/lib/PagerService";
 import Pager from "../../lib/Pager";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class SubstatesListContainer extends Pager {
@@ -36,7 +36,7 @@ class SubstatesListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (
       Object.keys(queryParams).length > 1 &&
@@ -124,9 +124,9 @@ class SubstatesListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.SUBSTATES] } }
+        filters: { entities: { $in: [moduleNames.SUBSTATES] } }
       })
       .fetch((err, moduleTags) => {
         if (!err) {
@@ -170,7 +170,6 @@ class SubstatesListContainer extends Pager {
             moduleTags={moduleTags}
             hideSort
             hideFilter
-            moduleTags={moduleTags}
           />
           <SubstatesList
             class={filter ? "task-list decreased" : "task-list"}

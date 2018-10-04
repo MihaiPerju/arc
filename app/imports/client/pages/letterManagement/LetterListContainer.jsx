@@ -8,7 +8,7 @@ import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
 import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
-import moduleTagsQuery from "/imports/api/moduleTags/queries/listModuleTags";
+import TagsListQuery from '/imports/api/tags/queries/listTags';
 import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
 
 class LetterListContainer extends Pager {
@@ -78,9 +78,9 @@ class LetterListContainer extends Pager {
   };
 
   getModuleTags = () => {
-    moduleTagsQuery
+    TagsListQuery
       .clone({
-        filters: { moduleNames: { $in: [moduleNames.LETTERS] } }
+        filters: { entities: { $in: [moduleNames.LETTERS] } }
       })
       .fetch((err, moduleTags) => {
         if (!err) {
