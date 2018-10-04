@@ -16,7 +16,7 @@ const account = {
 };
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality  on Account Number ", function() {
+  it("Should Recognise  Starts With  on Account Number ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -36,7 +36,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on Patient Type ", function() {
+  it("Should Recognise  Starts With on Patient Type ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -56,7 +56,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on Patient Name ", function() {
+  it("Should Recognise  Starts With on Patient Name ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -76,7 +76,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on Financial Class ", function() {
+  it("Should Recognise  Starts With on Financial Class ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -96,7 +96,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on State ", function() {
+  it("Should Recognise  Starts With on State ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -116,7 +116,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on Substate ", function() {
+  it("Should Recognise  Starts With on Substate ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -136,7 +136,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on Active Insurance Name ", function() {
+  it("Should Recognise  Starts With on Active Insurance Name ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -156,7 +156,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on Tickle Reason ", function() {
+  it("Should Recognise  Starts With on Tickle Reason ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -176,7 +176,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on WorkQueue ", function() {
+  it("Should Recognise  Starts With on WorkQueue ", function() {
     const rule = {
       data: {
         combinator: "AND",
@@ -196,7 +196,7 @@ describe("Rules Engine", function() {
 });
 
 describe("Rules Engine", function() {
-  it("Should Recognise  Equality on Facility Code ", function() {
+  it("Should Recognise  Starts With on Facility Code ", function() {
     const rule = {
       data: {
         combinator: "AND",
