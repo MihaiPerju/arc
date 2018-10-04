@@ -86,7 +86,8 @@ var Num_ = function Num_(_ref) {
       "onChange",
       "placeholder",
       "step",
-      "value"
+      "value",
+      "labelHidden"
     ]);
   return _react.default.createElement(
     "div",

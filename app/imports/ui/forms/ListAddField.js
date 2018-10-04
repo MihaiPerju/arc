@@ -26,7 +26,7 @@ var ListAdd = function ListAdd(_ref) {
       showListField = _ref.showListField,
       parent = _ref.parent,
       value = _ref.value,
-      props = (0, _objectWithoutProperties2.default)(_ref, ["disabled", "parent", "value"]);
+      props = (0, _objectWithoutProperties2.default)(_ref, ["disabled", "parent", "value","showListField","labelHidden"]);
   var limitNotReached = !disabled && !(parent.maxCount <= value.length);
   return _react.default.createElement("span", (0, _extends2.default)({}, (0, _filterDOMProps.default)(props), {
     onClick: function onClick() {

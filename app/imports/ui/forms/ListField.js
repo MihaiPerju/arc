@@ -54,7 +54,9 @@ var List = function List(_ref) {
       "itemProps",
       "label",
       "name",
-      "value"
+      "value",
+      "showListField",
+      "labelHidden"
     ]);
 
   return _react.default.createElement(

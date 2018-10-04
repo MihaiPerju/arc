@@ -151,7 +151,9 @@ var Select = function Select(_ref3) {
       "placeholder",
       "required",
       "transform",
-      "value"
+      "value",
+      "labelHidden",
+      "options"
     ]);
   return _react.default.createElement(
     "div",

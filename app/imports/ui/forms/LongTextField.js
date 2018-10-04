@@ -40,7 +40,8 @@ var LongText = function LongText(_ref) {
       "name",
       "onChange",
       "placeholder",
-      "value"
+      "value",
+      "labelHidden"
     ]);
   return _react.default.createElement(
     "div",
