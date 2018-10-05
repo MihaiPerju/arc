@@ -106,6 +106,7 @@ export default class AccountSingle extends Component {
             tagIds={account.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.ACCOUNT}
           />
         </div>
       </div>

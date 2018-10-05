@@ -81,15 +81,6 @@ export default class LetterSingle extends Component {
 
     return (
       <div className={itemClasses}>
-        <div className="check-item">
-          <TagItem
-            title="Tag Letter"
-            tagIds={letter.tagIds}
-            moduleTags={moduleTags}
-            onSubmitTags={this.onSubmitTags.bind(this)}
-            entityName={moduleNames.LETTERS}
-          />
-        </div>
         <div className="row__item margin-top-10">
           {letter.isManuallyMailed ? (
             <div className="item-name text-blue">
@@ -140,6 +131,7 @@ export default class LetterSingle extends Component {
             tagIds={letter.tagIds}
             moduleTags={moduleTags}
             onSubmitTags={this.onSubmitTags.bind(this)}
+            entityName={moduleNames.LETTERS}
           />
         </div>
       </div>
