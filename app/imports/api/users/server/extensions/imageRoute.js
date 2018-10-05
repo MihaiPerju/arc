@@ -3,7 +3,7 @@ import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection.js";
 import Uploads from "/imports/api/uploads/uploads/collection";
 
-Picker.route("/image/:path", function (params, req, res, next) {
+Picker.route("/image/:path", function (params, req, res) {
   const {
     rootFolder
   } = Settings.findOne({

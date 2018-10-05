@@ -105,7 +105,7 @@ Meteor.methods ({
     }
   },
 
-  'account.attachment.remove' (_id, attachmentId, key) {
+  'account.attachment.remove' (_id, attachmentId) {
     const {rootFolder} = Settings.findOne ({
       rootFolder: {
         $ne: null,
@@ -283,7 +283,7 @@ Meteor.methods ({
     let facility = Facilities.findOne ({_id: data.facilityId});
 
     let ids = facility.allowedUsers;
-    for (i of ids) {
+    for (let i of ids) {
       if (i !== repData) {
         let userEmail = User.findOne ({_id: i}).getEmail ();
         sendEmail ({userEmail, accName: data.ptName, reason, repData});

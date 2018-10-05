@@ -29,7 +29,7 @@ export default class SelectBlock extends Component {
         }
 
         this.openSelect();
-    };
+    }
 
     nodeRef(node) {
         this.node = node;

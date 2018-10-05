@@ -13,7 +13,6 @@ import actionQuery from '/imports/api/actions/queries/actionList';
 import RolesEnum from '/imports/api/users/enums/roles';
 import fieldsOptions from '/imports/api/rules/enums/accountFields';
 import RuleQuery from '/imports/api/rules/queries/listRules';
-import moment from 'moment';
 
 export default class RuleCreate extends React.Component {
   constructor () {
@@ -143,7 +142,7 @@ export default class RuleCreate extends React.Component {
   };
 
   onSubmit = data => {
-    Meteor.call('rule.create', data, (err, res) => {
+    Meteor.call('rule.create', data, (err) => {
       if (!err) {
         Notifier.success('Rule added!');
       } else {

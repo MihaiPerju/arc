@@ -4,7 +4,7 @@ import RuleSingle from './RuleSingle';
 export default class RulesList extends Component {
     render() {
         const {rules,setRule, selectRule, rulesSelected, currentRule} = this.props;
-        const ruleList = rules.map(function (rule, index) {
+        const ruleList = rules.map(function (rule) {
             return (
                 <RuleSingle
                     rulesSelected={rulesSelected}

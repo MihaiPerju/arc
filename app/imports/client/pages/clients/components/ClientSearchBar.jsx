@@ -5,7 +5,6 @@ import Dropdown from '/imports/client/lib/Dropdown';
 import Tags from '/imports/client/lib/Tags';
 import classNames from 'classnames';
 import moment from 'moment';
-import _ from 'underscore';
 import Dialog from '/imports/client/lib/ui/Dialog';
 import DatePicker from 'react-datepicker';
 import Notifier from '/imports/client/lib/Notifier';
@@ -28,7 +27,7 @@ export default class ClientSearchBar extends Component {
     this.getFilterParams();
   }
 
-  onSubmit(params) {
+  onSubmit() {
     const { createdAtMin, createdAtMax } = this.state;
     if (FlowRouter.current().queryParams.page != '1') {
       this.props.setPagerInitial();
@@ -160,7 +159,6 @@ export default class ClientSearchBar extends Component {
       model,
     } = this.state;
     const {
-      options,
       btnGroup,
       deleteAction,
       dropdownOptions,
@@ -333,9 +331,9 @@ class BtnGroup extends Component {
     return (
       <div className={btnClasses}>
         {icons
-          ? icons.map(element => {
+          ? icons.map((element,index) => {
             return (
-              <button onClick={element.method}>
+              <button onClick={element.method} key={index}>
                 <i className={'icon-' + element.icon} />
               </button>
             );

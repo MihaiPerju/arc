@@ -7,6 +7,7 @@ import moment from 'moment/moment';
 import {AutoForm, SelectField} from '/imports/ui/forms';
 import accountsQuery from '/imports/api/accounts/queries/accountList';
 import reportGraphEnum, {graphTypeEnum} from '../../enums/reportGraph';
+import Notifier from '/imports/client/lib/Notifier'
 
 export default class ReportGraph extends React.Component {
   constructor () {

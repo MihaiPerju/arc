@@ -58,7 +58,7 @@ export default class TagItem extends Component {
 
   handleCreateTagButton = () => {
     const entities=[this.props.entityName];
-    const {moduleTags, tagIds, passedValue} = this.state;
+    const {moduleTags, passedValue} = this.state;
     let data={entities,name: passedValue}
     Meteor.call("tag.create", { data}, (err,result) => {
       if (!err) {

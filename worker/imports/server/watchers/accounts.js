@@ -1,5 +1,5 @@
 import Accounts from "/imports/api/accounts/collection";
-import RulesEngine from "../services/RulesEngine";
+import RulesEngine from "../../services/RulesEngine";
 
 Meteor.startup(function() {
   //Launch Change Stream

@@ -113,7 +113,7 @@ export default class LetterService {
         });
       })
       .catch(err => {
-        console.error(err);
+      throw err;
       });
 
     const { filename } = future.wait();
@@ -145,6 +145,7 @@ export default class LetterService {
         renameSync(newFilename, filename);
       })
       .catch(function(error) {
+        throw error;
         //returns error
       });
   }

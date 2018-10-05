@@ -10,12 +10,12 @@ Facilities.expose({
     },
 });
 FacilityListQuery.expose({
-    firewall(userId, params) {
+    firewall(userId) {
         Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
     },
 });
 FacilityListNamesQuery.expose({
-    firewall(userId, params) {
+    firewall(userId) {
         Security.isAllowed(userId, roleGroups.ADMIN_TECH_MANAGER);
     },
 });

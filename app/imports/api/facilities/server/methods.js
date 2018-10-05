@@ -4,7 +4,6 @@ import Security from "/imports/api/security/security.js";
 import FacilitySchema from "../schema.js";
 import Regions from "/imports/api/regions/collection";
 import fs from "fs";
-import os from "os";
 import Business from "/imports/api/business";
 import Uploads from "../../uploads/uploads/collection";
 import bcrypt from "bcrypt";

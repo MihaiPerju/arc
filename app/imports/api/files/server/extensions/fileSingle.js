@@ -4,7 +4,7 @@ import fs from "fs";
 import Settings from "/imports/api/settings/collection.js";
 import Business from "/imports/api/business";
 
-Picker.route("/file/:_id/:token", function(params, req, res, next) {
+Picker.route("/file/:_id/:token", function(params, req, res) {
   //Checking user rights
   const user = getUserByToken(params.token);
   if (!user) {

@@ -19,5 +19,4 @@ Meteor.startup(function () {
         })
     }
 
-    console.log('[ok] letterTemplate fixtures have been loaded.');
 });

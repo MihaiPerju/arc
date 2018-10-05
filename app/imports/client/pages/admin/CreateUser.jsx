@@ -11,7 +11,7 @@ export default class CreateUser extends Component {
 
   onSubmit = data => {
     this.setState({ isDisabled: true });
-    Meteor.call("admin.createUser", data, (err, userId) => {
+    Meteor.call("admin.createUser", data, (err) => {
       if (!err) {
         Notifier.success("User created !");
         this.onClose();

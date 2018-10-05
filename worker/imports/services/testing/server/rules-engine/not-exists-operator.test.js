@@ -1,0 +1,309 @@
+import { chai } from "meteor/practicalmeteor:chai";
+import RulesEngine from "../../../RulesEngine";
+
+//An account object without any fields
+const account = {};
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance  of Account Number ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "acctNum",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Patient Type ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "ptType",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Patient Name ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "ptName",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Discharge Date ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "dischrgDate",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Last Bill Date ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "fbDate",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Account Balance ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "acctBal",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Financial Class ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "finClass",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Admit Date ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "admitDate",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of State ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "state",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Substate ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "substate",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Active Insurance Name ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "activeInsName",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Tickle Date ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "tickleDate",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Tickle Reason ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "tickleReason",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of WorkQueue ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "workQueueId",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Facility Code ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "facCode",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
+
+describe("Rules Engine", function() {
+  it("Should Recognise No Existance of Medical Number ", function() {
+    const rule = {
+      data: {
+        combinator: "AND",
+        nodeName: "1",
+        rules: [
+          {
+            field: "medNo",
+            operator: "!"
+          }
+        ]
+      }
+    };
+
+    chai.assert(RulesEngine.evaluate(account, rule));
+  });
+});
