@@ -18,7 +18,6 @@ export default class LetterSettings extends Component {
 
   componentWillMount() {
     Meteor.call('admin.getLetterSettings', (err, model) => {
-      debugger
       if (!err) {
         let selectedTime = model && model.letterCompileTime != undefined ? moment(model.letterCompileTime) : '';
         this.setState({ model, letterCompileTime: selectedTime });
@@ -30,7 +29,6 @@ export default class LetterSettings extends Component {
 
   onSubmitLetterSettings = (data) => {
     data.letterCompileTime = this.state.letterCompileTime.toISOString();
-    debugger
     Meteor.call('admin.updateLetterSettings', data, err => {
       if (!err) {
         Notifier.success('Settings updated!');
