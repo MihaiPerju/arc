@@ -6,12 +6,12 @@ import Statuses from "/imports/api/letters/enums/statuses.js";
 
 createRoute(
   "/uploads/letter-sent/:token",
-  ({ user, error, filenames, success }) => {
+  ({  error, filenames, success }) => {
     if (filenames.length != 1) {
       return error("Invalid number of files");
     }
 
-    for (index in filenames) {
+    for (let index in filenames) {
       const stream = fs.readFileSync(filenames[index]);
       const csvString = stream.toString();
 

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
-import TagItem from "/imports/client/lib/TagItem";
 
 export default class FileSingle extends Component {
   constructor(props) {

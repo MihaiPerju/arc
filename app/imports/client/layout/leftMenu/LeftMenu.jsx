@@ -6,7 +6,7 @@ import { withTracker } from "meteor/react-meteor-data";
 
 
 class LeftMenu extends Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       collapse: false

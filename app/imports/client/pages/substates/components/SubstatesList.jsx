@@ -94,7 +94,7 @@ export default class SubstatesList extends Component {
                 Actions
               </div>
             </div>
-            {substates.map((substate, index) => (
+            {substates.map((substate) => (
               <SubstateSingle
                 substateSelected={substateSelected}
                 currentSubstate={currentSubstate}

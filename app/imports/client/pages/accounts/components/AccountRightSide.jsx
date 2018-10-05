@@ -46,8 +46,7 @@ class AccountRightSide extends Component {
       accountsSelected,
       removeLock,
       data,
-      isLoading,
-      error
+      isLoading
     } = this.props;
 
     const account = data;

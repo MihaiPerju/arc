@@ -3,7 +3,6 @@ import CodeHeader from './components/CodeContent/CodeHeader';
 import DescriptionBlock from './components/CodeContent/DescriptionBlock';
 import Note from './components/CodeContent/Note';
 import ActionBlock from './components/CodeContent/ActionBlock';
-import NewAction from '/imports/client/pages/accounts/components/AccountContent/NewAction';
 import CodeEdit from './CodeEdit';
 
 export default class CodeContent extends Component {

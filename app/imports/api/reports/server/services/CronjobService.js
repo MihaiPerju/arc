@@ -10,6 +10,8 @@ import { Container, Table } from "semantic-ui-react";
 import pdf from "html-pdf";
 import Users from "/imports/api/users/collection";
 import Clients from "/imports/api/clients/collection";
+import PropTypes from 'prop-types';
+import { Email } from "meteor/email";
 
 const AccountData = ({ account }) => {
   return (
@@ -108,7 +110,9 @@ const AccountData = ({ account }) => {
     </Container>
   );
 };
-
+AccountData.propTypes = {
+  account: PropTypes.objectOf(Object).isRequired
+}
 export default class CronjobService {
   static checkTime() {
     const now = moment();
@@ -246,4 +250,7 @@ export default class CronjobService {
       Email.send({ to, from, subject, text, attachments });
     }
   }
+}
+CronjobService.propTypes = {
+  account: PropTypes.objectOf(Object).isRequired
 }

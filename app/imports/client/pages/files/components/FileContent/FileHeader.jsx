@@ -104,8 +104,8 @@ export default class ReportHeader extends Component {
             <div>
               <div>Encountered problems with following rows: </div>
               <ul>
-                {file.corruptRows.map(row => {
-                  return <li>{row}</li>;
+                {file.corruptRows.map((row,index) => {
+                  return <li key={index}>{row}</li>;
                 })}
               </ul>
             </div>

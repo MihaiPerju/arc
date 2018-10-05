@@ -1,5 +1,4 @@
 import Tags from "../collection.js";
-import Security from "/imports/api/security/security.js";
 import Users from "/imports/api/users/collection.js";
 import RolesEnum from "/imports/api/users/enums/roles";
 import TagService from "/imports/api/tags/server/services/TagService";

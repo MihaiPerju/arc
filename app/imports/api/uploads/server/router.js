@@ -7,7 +7,7 @@ import Uploads from "../uploads/collection";
 import AccountsCollection from "/imports/api/accounts/collection";
 import Settings from "/imports/api/settings/collection.js";
 
-let postRoutes = Picker.filter(function(req, res) {
+let postRoutes = Picker.filter(function(req) {
   return req.method == "POST";
 });
 
@@ -68,7 +68,6 @@ export function createRoute(path, handler) {
       upload() {
         return _.map(req.filenames, function(filename) {
           const { resourceType, resourceId } = req.postData;
-          uploadId = resourceId;
           const uploadedFile = Uploader.upload(filename);
 
           return uploadedFile.save({

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import moment from "moment/moment";
 import ScheduleBlock from "./../../ScheduleBlock.jsx";
 import Notifier from "../../../../lib/Notifier";
 import accountsQuery from "/imports/api/accounts/queries/accountList";
@@ -128,12 +127,12 @@ class ReportHeader extends Component {
 
   downloadReport = () => {
     const { data } = this.props;
-    const { reportId, _id } = data[0];
+    const { reportId } = data[0];
     window.open("/report/" + reportId);
   };
   downloadReportpdf=()=>{
     const { data } = this.props;
-    const { reportId, _id } = data[0];
+    const { reportId } = data[0];
     window.open("/reportpdf/" + reportId);
   }
   getRunButton = status => {

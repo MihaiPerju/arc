@@ -1,5 +1,4 @@
 import Rules from '/imports/api/rules/collection.js';
-import triggerTypes, {triggerOptions} from '/imports/api/rules/enums/triggers';
 
 Meteor.methods ({
   'rule.create' (data) {

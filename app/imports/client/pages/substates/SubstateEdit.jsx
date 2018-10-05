@@ -17,7 +17,7 @@ export default class EditSubstate extends Component {
   }
 
   getStates = stateList => {
-    return stateList.map((state, key) => ({ value: state, label: state }));
+    return stateList.map((state) => ({ value: state, label: state }));
   };
 
   onSubmit = data => {

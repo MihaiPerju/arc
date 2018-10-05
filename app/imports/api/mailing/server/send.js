@@ -27,8 +27,7 @@ export default function (mailConfig, Component, props) {
         html: ReactDOM.renderToString(Element)
     }, mailConfig);
 
-    if (debug) {
-    } else {
+    if (!debug) {
         Email.send(options);
-    }
+    } 
 }

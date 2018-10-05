@@ -35,7 +35,7 @@ class ClientContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.clientName && queryParams.clientName == "") {
       this.setPagerInitial();

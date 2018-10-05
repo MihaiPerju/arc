@@ -52,5 +52,4 @@ Meteor.startup(function () {
         }
     }
 
-    console.log('[ok] user fixtures have been loaded.');
 });

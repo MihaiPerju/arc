@@ -9,7 +9,7 @@ import Dialog from '/imports/client/lib/ui/Dialog';
 
 export default class AccountContentHeader extends Component {
 
-  state = {
+state = {
     showRefreshTimePopup: false,
     lockTime: 60000,
     refreshTime: 40000,
@@ -21,15 +21,16 @@ export default class AccountContentHeader extends Component {
     let options = [];
     for (let user of users) {
       let item = {
-        label: user &&
+        label:
+          user &&
           user.profile &&
-          user.profile.firstName +
-          ' ' +
+          user.profile.firstName + ' ' +
           user.profile.lastName +
           '(' +
           user.roles[0] +
           ')',
         value: user && user._id,
+
       };
       options.push(item);
     }
@@ -50,14 +51,14 @@ export default class AccountContentHeader extends Component {
         return (
           <div className="label label--grey">
             <a href={`/${account.assigneeId}/activity`}>
-              {profile.firstName + ' ' + profile.lastName}
+              {profile.firstName + " " + profile.lastName}
             </a>
           </div>
         );
       } else {
         return (
           <div className="label label--grey">
-            {profile.firstName + ' ' + profile.lastName}
+            {profile.firstName + " " + profile.lastName}
           </div>
         );
       }
@@ -75,10 +76,11 @@ export default class AccountContentHeader extends Component {
         }
       }
     }
+
     return [{ label: 'Unassigned' }];
   }
 
-  getOthersData = data => {
+   getOthersData = data => {
     if (typeof data === 'object') {
       return moment(data).format('MM/DD/YYYY');
     } else {
@@ -91,6 +93,7 @@ export default class AccountContentHeader extends Component {
       FlowRouter.setQueryParams({ medNo: value });
     }
   };
+
 
   restartTimer = () => {
     const { account } = this.props;
@@ -111,9 +114,11 @@ export default class AccountContentHeader extends Component {
     if (this.state.showRefreshTimePopup) {
       this.setState({ showRefreshTimePopup: false });
     }
+
     removeLock();
     closeRightPanel();
   };
+
 
   hiddenTimerOnComplete = () => {
     this.setState({ showRefreshTimePopup: true });
@@ -134,13 +139,13 @@ export default class AccountContentHeader extends Component {
   }
 
   render() {
-    console.log("test: " + Meteor.status().connected);
-
     const { account, openMetaData, closeRightPanel } = this.props;
     const { lockTime, refreshTime, showRefreshTimePopup } = this.state;
+    
     const options = this.getOptions(
       account && account.facility && account.facility.users
     );
+    
     let userOptions = this.getFirstOption(account, options).concat(options);
     return (
       <div className="header-block header-account">
@@ -150,7 +155,6 @@ export default class AccountContentHeader extends Component {
             Restart timer
           </a>
         }
-
         {
           account.lockTimestamp &&
           <div>
@@ -161,8 +165,6 @@ export default class AccountContentHeader extends Component {
             />
           </div>
         }
-
-
         {
           !showRefreshTimePopup &&
           <div style={{ display: 'none' }}>
@@ -172,7 +174,6 @@ export default class AccountContentHeader extends Component {
             />
           </div>
         }
-
         <div className="main-info">
           <div className="left__side">
             <div className="name">
@@ -194,12 +195,11 @@ export default class AccountContentHeader extends Component {
               <div className="location">
                 {account && account.facility
                   ? account.facility.name
-                  : 'No facility name'}
-                {' '}
-                -{' '}
+                  : "No facility name"}{" "}
+                -{" "}
                 {account && account.client
                   ? account.client.clientName
-                  : 'No client name'}
+                  : "No client name"}
               </div>
               <div className="label-group">
                 <div className="label label--green">158 points(TBM)</div>
@@ -233,8 +233,8 @@ export default class AccountContentHeader extends Component {
 
           <div className="btn-group">
             <AccountActioning
-              type={'Assign'}
-              title={'Assign account:'}
+              type={"Assign"}
+              title={"Assign account:"}
               model={account}
               accountId={account && account._id}
               options={userOptions}
@@ -251,6 +251,7 @@ export default class AccountContentHeader extends Component {
                 escalationId={account && account.escalationId}
                 closeRightPanel={closeRightPanel}
               />}
+
             <AccountActioning
               metaData={true}
               type="View Meta Data"
@@ -284,7 +285,7 @@ export default class AccountContentHeader extends Component {
               />
 
               <div className="text-dark-grey text-uppercase">
-                {account && account.finClass ? account.finClass : 'None'}
+                {account && account.finClass ? account.finClass : "None"}
               </div>
             </li>
             <li className="text-center">
@@ -295,8 +296,7 @@ export default class AccountContentHeader extends Component {
                 editField="dischrgDate"
               />
               <div className="text-dark-grey">
-                {account && account.dischrgDate
-                  ? moment(account.dischrgDate).format('MM/DD/YYYY')
+                {account && account.dischrgDate? moment(account.dischrgDate).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
@@ -309,8 +309,7 @@ export default class AccountContentHeader extends Component {
               />
 
               <div className="text-dark-grey">
-                {account && account.createdAt
-                  ? moment(account.createdAt).format('MM/DD/YYYY')
+                {account && account.createdAt? moment(account.createdAt).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
@@ -327,10 +326,9 @@ export default class AccountContentHeader extends Component {
               />
 
               <div className="text-dark-grey">
-                {account && account.admitDate
-                  ? moment(account.admitDate).format('MM/DD/YYYY')
+                {account && account.admitDate? moment(account.admitDate).format('MM/DD/YYYY')
                   : 'None'}
-              </div>
+             </div>
             </li>
 
             <li className="text-center">
@@ -365,10 +363,8 @@ export default class AccountContentHeader extends Component {
                 editField="fbDate"
               />
               <div className="text-dark-grey">
-                {account && account.fbDate
-                  ? moment(account.fbDate).format('MM/DD/YYYY')
-                  : 'None'}
-              </div>
+                {account && account.fbDate? moment(account.fbDate).format('MM/DD/YYYY')
+                  : 'None'} </div>
             </li>
             <li className="text-center">
               <div className="text-light-grey">Medical Number</div>

@@ -16,10 +16,8 @@ export default AccountActions.createQuery("accountActionList", {
   letterTemplate: {
     name: 1
   },
-  type: 1,
   flagReason: 1,
   flagResponse: 1,
-  createdAt: 1,
   userId: 1,
   managerId: 1,
   manager: {
@@ -29,7 +27,6 @@ export default AccountActions.createQuery("accountActionList", {
   actionId: 1,
   isOpen: 1,
   commentId: 1,
-  content: 1,
   user: {
     $filter({ filters, params }) {
       if (!_.isEmpty(params.userFilter)) {
