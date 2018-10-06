@@ -118,7 +118,9 @@ export default class RunReports {
 
   static async saveReport({ reportId, _id }) {
     const { rootFolder } = Settings.findOne({
-      rootFolder: { $ne: null }
+      rootFolder: {
+        $ne: null
+      }
     });
     //Path to new file
     const pathToSave = rootFolder + FoldersEnum.REPORTS_FOLDER;
@@ -137,47 +139,52 @@ export default class RunReports {
     const AccountsNative = Accounts.rawCollection(filters);
 
     let columns = this.getColumns(reportId);
-  
+
     const stringifier = stringify({
       columns,
       header: true,
       delimiter: ","
     });
-    const AccountsRaw = Accounts.rawCollection ();
-    AccountsRaw.aggregateSync = Meteor.wrapAsync (AccountsRaw.aggregate);
 
-    const metaData= await AccountsRaw.aggregateSync ([
+    const AccountsRaw = Accounts.rawCollection();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+
+    const metaData = await AccountsRaw.aggregateSync([
       {
-        $match: filters,
+        $match: filters
       },
       {
         $sample: {
-          size: 20,
-        },
-      },
-    ]).toArray ()
+          size: 20
+        }
+      }
+    ]).toArray();
     // Render HTML
     const renderHtml = meta => {
-      const data = <Container>
-        <Table textAlign="center" celled>
-          <Table.Body>
-            <Table.Row>
-              {Object.keys(columns).map(item => (
-                <Table.Cell key={item}>{item}</Table.Cell>
+      const data = (
+        <Container>
+          <Table textAlign="center" celled>
+            <Table.Body>
+              <Table.Row>
+                {Object.keys(columns).map(item => (
+                  <Table.Cell key={item}>{item}</Table.Cell>
+                ))}
+              </Table.Row>
+              {meta.map(d => (
+                <Table.Row>
+                  {Object.keys(columns).map(item => (
+                    <Table.Cell>{d[item]}</Table.Cell>
+                  ))}
+                </Table.Row>
               ))}
-            </Table.Row>
-            {meta.map(d => <Table.Row>
-              {Object.keys(columns).map(item => (
-                <Table.Cell>{d[item]}</Table.Cell>
-              ))}
-            </Table.Row>)}
-          </Table.Body>
-        </Table>
-      </Container>;
-      return ReactDOMServer.renderToString(data)
-    }
-    
-    const reportContent = renderHtml(metaData); 
+            </Table.Body>
+          </Table>
+        </Container>
+      );
+      return ReactDOMServer.renderToString(data);
+    };
+
+    const reportContent = renderHtml(metaData);
 
     pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
       if (err) {
@@ -192,10 +199,16 @@ export default class RunReports {
     stringifier.on(
       "finish",
       Meteor.bindEnvironment(() => {
-        const { reportId } = JobQueue.findOne({ _id });
-        const { authorId } = Reports.findOne({ _id: reportId });
+        const { reportId } = JobQueue.findOne({
+          _id
+        });
+        const { authorId } = Reports.findOne({
+          _id: reportId
+        });
         JobQueue.update(
-          { _id },
+          {
+            _id
+          },
           {
             $set: {
               status: StatusEnum.FINISHED
@@ -207,6 +220,9 @@ export default class RunReports {
     );
 
     AccountsNative.aggregate([
+      {
+        $match: filters
+      },
       {
         $lookup: {
           from: "tags",
@@ -225,5 +241,16 @@ export default class RunReports {
     ])
       .pipe(stringifier)
       .pipe(file);
+
+    // AccountsNative.aggregate([
+    //   {
+    //     $match: filters
+
+    //   }
+
+    // ]).toArray(function(err, docs) {
+    //   console.log(err);
+    //   console.log(err);
+    // });
   }
 }
