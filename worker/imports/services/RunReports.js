@@ -86,7 +86,6 @@ export default class RunReports {
         }
       });
     });
-
     return columns;
   }
 
@@ -241,16 +240,5 @@ export default class RunReports {
     ])
       .pipe(stringifier)
       .pipe(file);
-
-    // AccountsNative.aggregate([
-    //   {
-    //     $match: filters
-
-    //   }
-
-    // ]).toArray(function(err, docs) {
-    //   console.log(err);
-    //   console.log(err);
-    // });
   }
 }
