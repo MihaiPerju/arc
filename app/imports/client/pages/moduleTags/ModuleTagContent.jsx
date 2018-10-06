@@ -10,7 +10,7 @@ export default class ModuleTagContent extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     this.setState({ edit: false });
   }
 

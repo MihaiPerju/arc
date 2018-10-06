@@ -4,7 +4,7 @@ import ReportSingle from "./ReportSingle";
 export default class ReportList extends Component {
   render() {
     const { reports } = this.props;
-    const reportList = reports.map(function(report, index) {
+    const reportList = reports.map(function(report) {
       const {
         setReport,
         selectReport,

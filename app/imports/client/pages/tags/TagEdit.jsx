@@ -43,7 +43,7 @@ export default class TagEdit extends React.Component {
   };
 
   getOptions = enums => {
-    return _.map(enums, (value, key) => {
+    return _.map(enums, (value) => {
       return { value: value._id, label: value.clientName };
     });
   };

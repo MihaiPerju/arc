@@ -64,7 +64,7 @@ export default class AccountContent extends Component {
     });
   };
 
-  getInsuranceValues = (insuranceRules, insurance, index) => {
+  getInsuranceValues = (insuranceRules, insurance) => {
     return _.map(insuranceRules, (value, key) => {
       if (value) {
         return (

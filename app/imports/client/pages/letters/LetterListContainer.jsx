@@ -3,7 +3,7 @@ import LetterList from './components/LetterList.jsx';
 import Pager from '/imports/client/lib/Pager.jsx';
 import {createQueryContainer} from 'meteor/cultofcoders:grapher-react';
 import LetterListQuery from '/imports/api/letters/queries/letterList.js';
-import {Button, Container, Divider, Header} from 'semantic-ui-react';
+import {Button, Divider} from 'semantic-ui-react';
 
 export default class LetterListContainer extends Pager {
     constructor(props) {
