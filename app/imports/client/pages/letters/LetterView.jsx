@@ -43,7 +43,7 @@ export default class LetterView extends React.Component {
                 <div dangerouslySetInnerHTML={{__html: letter.body}}/>
                 <h3>Attachments</h3>
                 {
-                    letter.attachments && _.map(letter.attachments, (letter, idx) => {
+                    letter.attachments && _.map(letter.attachments, (letter) => {
                         return <li>{AccountViewService.getPdfName(letter)}</li>;
                     })
                 }

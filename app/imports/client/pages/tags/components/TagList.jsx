@@ -4,7 +4,7 @@ import TagSingle from './TagSingle';
 export default class TagList extends Component {
     render() {
         const {tags, moduleTags} = this.props;
-        const tagList = tags.map(function (tag, index) {
+        const tagList = tags.map(function (tag) {
             const {setTag, selectTag, tagsSelected, currentTag} = this.props;
             return (
                 <TagSingle

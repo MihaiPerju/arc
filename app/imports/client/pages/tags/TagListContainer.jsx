@@ -46,7 +46,7 @@ class TagListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.tagName && queryParams.tagName == "") {
       this.setPagerInitial();
@@ -182,7 +182,6 @@ class TagListContainer extends Pager {
             moduleTags={moduleTags}
             hideSort
             hideFilter
-            moduleTags={moduleTags}
           />
           <TagList
             class={this.state.filter ? "task-list work-queues decreased" : "task-list work-queues"}
@@ -245,8 +244,6 @@ class RightSide extends Component {
 
 export default withQuery(
   props => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
     const params = {
       filters: {workQueueStatus:true}
   }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Notifier from '/imports/client/lib/Notifier';
-import {Icon, Label, Menu, Table} from 'semantic-ui-react'
+import { Table} from 'semantic-ui-react'
 import {Button, Dropdown} from 'semantic-ui-react'
 
 export default class ReasonCodeSingle extends Component {

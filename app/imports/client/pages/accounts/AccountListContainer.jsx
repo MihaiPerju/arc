@@ -429,7 +429,6 @@ class AccountListContainer extends Pager {
       currentAccount,
       range,
       total,
-      filter,
       assignUser,
       assignWQ,
       showMetaData,

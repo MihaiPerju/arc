@@ -53,7 +53,7 @@ class ReportListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.name && queryParams.name == "") {
       this.setPagerInitial();

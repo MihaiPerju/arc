@@ -98,13 +98,10 @@ class LetterCreateContainer extends React.Component {
     const { account, selectedTemplate, reset } = this.props;
     const { keywords, body, _id: letterId, name } = selectedTemplate;
     const {
-      letterTemplates,
       pdfAttachments,
       selectedAttachments,
       keywordsValues
     } = this.state;
-    const model = { letterTemplate: null };
-    const options = this.getSelectOptions(letterTemplates);
 
     return (
       <div>

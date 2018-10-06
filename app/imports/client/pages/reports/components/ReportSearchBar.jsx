@@ -122,7 +122,6 @@ export default class ReportSearchBar extends Component {
   render() {
     const {
       filter,
-      active,
       dropdown,
       selectAll,
       model,
@@ -298,9 +297,9 @@ class BtnGroup extends Component {
     return (
       <div className={btnClasses}>
         {icons ? (
-          icons.map(element => {
+          icons.map((element,index) => {
             return (
-              <button onClick={element.method}>
+              <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon}/>
               </button>
             );

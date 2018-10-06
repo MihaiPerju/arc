@@ -30,7 +30,7 @@ class LetterListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.letterIds && queryParams.letterIds == "") {
       this.setPagerInitial();
@@ -139,7 +139,7 @@ class RightSide extends Component {
   }
 
   render() {
-    const { create, close } = this.props;
+    const {  close } = this.props;
     const { fade } = this.state;
 
     return (
