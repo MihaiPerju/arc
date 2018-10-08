@@ -15,12 +15,6 @@ import EscalationService
 import AccountActions from '/imports/api/accountActions/collection';
 import Settings from '/imports/api/settings/collection.js';
 import TickleService from '/imports/api/tickles/server/services/TickleService';
-import sendEmail from './emailTemplate';
-import User from '/imports/api/users/collection.js';
-import MAIL_URL from '../../../../config';
-Meteor.startup (function () {
-  process.env.MAIL_URL = MAIL_URL;
-});
 
 Meteor.methods ({
   'account.freeze' (_id) {
@@ -278,17 +272,6 @@ Meteor.methods ({
         },
       }
     );
-    let data = Accounts.findOne ({_id: accountId});
-    let repData = User.findOne ({_id: data.assigneeId}).getEmail ();
-    let facility = Facilities.findOne ({_id: data.facilityId});
-
-    let ids = facility.allowedUsers;
-    for (let i of ids) {
-      if (i !== repData) {
-        let userEmail = User.findOne ({_id: i}).getEmail ();
-        sendEmail ({userEmail, accName: data.ptName, reason, repData});
-      }
-    }
   },
 
   'accounts.getSample' (filters) {
