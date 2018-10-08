@@ -39,7 +39,7 @@ export default class EditInfoDialog extends Component {
     this.setState ({selectedDate: moment (newDate), isEnabled: true});
   };
 
-  openDialog = editField => {
+  openDialog = () => {
     this.setState ({
       dialogIsActive: true,
     });

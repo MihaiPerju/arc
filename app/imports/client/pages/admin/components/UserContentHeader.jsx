@@ -1,6 +1,5 @@
 import React from "react";
 import { getImagePath } from "../../../../api/utils";
-import { Label } from "semantic-ui-react";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class UserContentHeader extends React.Component {

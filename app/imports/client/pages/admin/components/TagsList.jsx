@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import { Table } from 'semantic-ui-react';
-import TagsService from '../services/TagsService';
-import { Button } from 'semantic-ui-react';
 import Notifier from '/imports/client/lib/Notifier';
 
 export default class TagsList extends Component {

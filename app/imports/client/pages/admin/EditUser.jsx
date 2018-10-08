@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import { createQueryContainer } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/users/queries/singleUser.js";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
@@ -49,7 +47,7 @@ class EditUser extends Component {
   getTagList = () => {
     const { data } = this.props;
 
-    return data.map((tag, key) => ({
+    return data.map((tag) => ({
       value: tag._id,
       label: TagsService.getTagName(tag)
     }));
@@ -69,7 +67,6 @@ class EditUser extends Component {
     const { data, user } = this.props;
     const { clients, isDisabled } = this.state;
     user.email = user.emails[0].address;
-    const tags = this.getTagList();
 
     return (
       <div className="create-form">

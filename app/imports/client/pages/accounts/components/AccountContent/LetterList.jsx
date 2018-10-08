@@ -33,7 +33,7 @@ class LetterList extends Component {
     });
   }
 
-  componentWillReceiveProps (newProps) {
+  componentWillReceiveProps () {
     this.setState ({editLetter: false, createLetter: false});
   }
 
@@ -54,12 +54,6 @@ class LetterList extends Component {
     });
   };
 
-  toggleLetter () {
-    this.setState ({
-      createLetter: !this.state.createLetter,
-      editLetter: false,
-    });
-  }
 
   toggleEditLetter () {
     this.setState ({

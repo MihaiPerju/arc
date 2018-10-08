@@ -243,7 +243,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     const params = {
       filters: {workQueueStatus:true}
   }

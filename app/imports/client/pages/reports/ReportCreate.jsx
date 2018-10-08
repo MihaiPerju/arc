@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Roles from "../../../api/users/enums/roles";
 import schema from "/imports/api/reports/schema";
 import {
   AutoForm,

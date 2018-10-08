@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {getImagePath} from "/imports/api/utils";
 import UserContentHeader from './components/UserContentHeader';
 import EditUser from './EditUser';
 

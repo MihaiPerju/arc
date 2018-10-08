@@ -7,13 +7,7 @@ import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import ActionDropdown from "./ActionDropdown";
 import {
   AutoForm,
-  AutoField,
   ErrorField,
-  ListField,
-  ListItemField,
-  NestField,
-  TextField,
-  LongTextField
 } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import managersListQuery from "/imports/api/users/queries/listUsers";
@@ -79,7 +73,7 @@ export default class ClientContentHeader extends Component {
 
   onToggleClientStatus = () => {
     const { _id, status } = this.state;
-    Meteor.call("client.switchStatus", _id, status, (err, res) => {
+    Meteor.call("client.switchStatus", _id, status, (err) => {
       if (!err) {
         const message = status ? "Client disabled!" : "Client enabled!";
         Notifier.success(message);

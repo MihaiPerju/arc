@@ -46,7 +46,7 @@ export default class ActionEdit extends React.Component {
   }
 
   getOptions = enums => {
-    return _.map(enums, (value, key) => {
+    return _.map(enums, (value) => {
       const label = `${value.stateName}: ${value.name}`;
       return { value: value._id, label: label };
     });

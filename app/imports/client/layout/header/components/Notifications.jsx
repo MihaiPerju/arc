@@ -201,7 +201,7 @@ class NotificationItem extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     return NotificationQuery.clone({
       filters: {
         receiverId: Meteor.userId(),

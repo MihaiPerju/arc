@@ -1,13 +1,12 @@
 import React, { Component } from "react";
-import { AutoForm, SelectField, ErrorField } from "/imports/ui/forms";
+import { AutoForm, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import TagContentSingle from "./TagContentSingle";
 import Notifier from "/imports/client/lib/Notifier";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import ReportsEnum from "../../../../../api/schedules/enums/reports";
 
 export default class TagContentDescription extends Component {
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
       selectedUser: [],
@@ -30,7 +29,7 @@ export default class TagContentDescription extends Component {
     Meteor.call(
       "user.addTag",
       { userIds, tagId: currentTag._id },
-      (err, res) => {
+      (err) => {
         if (!err) {
           Notifier.success("Successfully added !");
           this.refs.form.reset();
@@ -72,7 +71,7 @@ export default class TagContentDescription extends Component {
       Meteor.call(
         "user.removeTags",
         { userIds, tagId: currentTag._id },
-        (err, res) => {
+        (err) => {
           if (!err) {
             Notifier.success("Removed successfully !");
             this.setState({ selectAllChkBox: false, selectedUser: [] });
@@ -85,7 +84,7 @@ export default class TagContentDescription extends Component {
   };
 
   render() {
-    const { users, currentTag, untaggedUsers, taggedUsers } = this.props;
+    const {  untaggedUsers, taggedUsers } = this.props;
     const options = this.getOptions(untaggedUsers);
     const { selectedUser, selectAllChkBox, isDisabled } = this.state;
 

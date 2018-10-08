@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SimpleSchema from "simpl-schema";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import { AutoForm, ErrorField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 
 const ActionSchema = new SimpleSchema({
@@ -32,7 +32,7 @@ export default class NewAction extends Component {
     }, 1);
   }
 
-  onHide = e => {
+  onHide = () => {
     const { hide } = this.props;
     hide();
   };
