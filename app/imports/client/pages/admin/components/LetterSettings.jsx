@@ -31,7 +31,6 @@ export default class LetterSettings extends Component {
 
   onSubmitLetterSettings = data => {
     data.letterCompileTime = this.state.letterCompileTime.toISOString();
-    debugger;
     Meteor.call("admin.updateLetterSettings", data, err => {
       if (!err) {
         Notifier.success("Settings updated!");
