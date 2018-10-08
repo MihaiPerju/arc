@@ -101,7 +101,7 @@ export default class ImportingRules extends React.Component {
   };
 
   render() {
-    const { schema, loading, collapse, showListField, isDisabled } = this.state;
+    const { schema, loading, collapse, isDisabled } = this.state;
     const { model, rules, copyRules } = this.props;
     const fields = RulesService.getSchemaFields(rules);
     const options = [
@@ -154,8 +154,8 @@ export default class ImportingRules extends React.Component {
 
             <div className="upload-list">
               {fieldGroups &&
-                fieldGroups.map(fields => {
-                  return <UploadItem fields={fields} />;
+                fieldGroups.map((fields,index) => {
+                  return <UploadItem fields={fields} key={index}/>;
                 })}
             </div>
 

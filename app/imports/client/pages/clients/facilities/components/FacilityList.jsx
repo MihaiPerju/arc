@@ -7,7 +7,7 @@ export default class Facility extends Component {
         return (
             <div className={this.props.class}>
                 {
-                    facilities.map(function (facility, index) {
+                    facilities.map(function (facility) {
                         return (
                             <FacilitySingle
                                 facilitiesSelected={facilitiesSelected}

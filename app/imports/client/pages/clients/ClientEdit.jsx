@@ -10,7 +10,6 @@ import {
   TextField,
   LongTextField
 } from "/imports/ui/forms";
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "/imports/api/uploads/utils";

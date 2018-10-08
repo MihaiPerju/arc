@@ -71,11 +71,10 @@ export default class AccountActioning extends React.Component {
   };
 
   showDialog = () => {
-    const { model, options, assignToUser, title } = this.props;
+    const {  options, assignToUser } = this.props;
 
     const {
       workQueueOptions,
-      assignToWorkQueue,
       loadingWorkQueues,
       isDisabled
     } = this.state;
@@ -146,7 +145,6 @@ export default class AccountActioning extends React.Component {
   };
 
   render() {
-    const { dialogIsActive } = this.state;
     const { type, title, closeDialog } = this.props;
 
     return (

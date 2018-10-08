@@ -63,9 +63,9 @@ class DescriptionValue extends React.Component {
 
         return (
             <div className="Select-value" title={value.description}>
-				        <span className="Select-value-label">
+                <span className="Select-value-label">
                     {children}
-				        </span>
+                </span>
             </div>
         );
     }

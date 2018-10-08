@@ -365,7 +365,6 @@ class FlaggedAccountListContainer extends Pager {
       currentAccount,
       range,
       total,
-      filter,
       assignUser,
       assignWQ,
       showMetaData,
@@ -499,7 +498,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     const params = PagerService.getAccountQueryParams();
     return PagerService.setQuery(query, params);
   },

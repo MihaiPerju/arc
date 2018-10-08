@@ -92,7 +92,6 @@ class LetterListContainer extends Pager {
   render() {
     const { data, isLoading, error } = this.props;
     const { total, range, create, moduleTags } = this.state;
-
     if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
       return <Loading />;
     }
@@ -151,7 +150,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
     return PagerService.setQuery(query, { page, perPage, filters: {} });

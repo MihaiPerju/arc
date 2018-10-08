@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { Button } from 'semantic-ui-react';
-import Dialog from '/imports/client/lib/ui/Dialog';
 import { AutoForm, AutoField, ErrorField, SelectField } from '/imports/ui/forms';
 import TagsSchema from '/imports/api/tags/schemas/schema';
 import Notifier from '/imports/client/lib/Notifier';
@@ -37,9 +35,9 @@ export default class CreateEditTags extends Component {
     };
 
     onSubmitForm = (data) => {
-        const {tags, user} = this.props;
+        const { user} = this.props;
         data.workQueueStatus=true;
-        Meteor.call('tag.create', {data, _id: user._id}, (err, tagId) => {
+        Meteor.call('tag.create', {data, _id: user._id}, (err) => {
             if (!err) {
                 Notifier.success('Tag successfully created!');
                 this.refs.tagForm.reset();
@@ -50,22 +48,17 @@ export default class CreateEditTags extends Component {
     };
 
     getOptions = (enums) => {
-        return _.map(enums, (value, key) => {
+        return _.map(enums, (value) => {
             return {value: value._id, label: value.clientName};
         })
     };
 
     render () {
-        const {cancelDialogActive, showSpecificRoles} = this.state;
+        const {cancelDialogActive} = this.state;
         const {tags, clients} = this.props;
 
         const clientOptns = this.getOptions(clients);
 
-        const actions = [
-            <Button onClick={this.dialogToggle}>Cancel</Button>,
-            <Button onClick={this.saveTags}>Save</Button>,
-        ];
-        const visibilitySelect = [{value: 0, label: 'Select visibility'}, {value: 1, label: 'Public'}];
 
         return (
             <div>

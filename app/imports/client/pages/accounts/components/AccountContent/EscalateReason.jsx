@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import moment from "moment/moment";
-import Dialog from "/imports/client/lib/ui/Dialog";
-import classNames from "classnames";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import { withQuery } from "meteor/cultofcoders:grapher-react";

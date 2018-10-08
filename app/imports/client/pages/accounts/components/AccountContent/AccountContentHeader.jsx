@@ -5,6 +5,7 @@ import RolesEnum, { roleGroups } from '/imports/api/users/enums/roles';
 import EditInfoDialog from './EditInfoDialog';
 import commaNumber from 'comma-number';
 import Countdown from 'react-countdown-now';
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class AccountContentHeader extends Component {
   getOptions(users = []) {

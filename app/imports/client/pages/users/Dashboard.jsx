@@ -1,7 +1,8 @@
 import React from 'react';
 import {Container, Header} from 'semantic-ui-react'
 
-export default () => {
+export default class Dashboard extends React.Component {
+    render() { 
     return (
         <main className="cc-main">
             <Container className="page-container">
@@ -9,4 +10,5 @@ export default () => {
             </Container>
         </main>
     )
+    }
 }

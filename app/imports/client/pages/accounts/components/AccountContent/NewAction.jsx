@@ -51,9 +51,6 @@ export default class NewAction extends Component {
     });
   }
 
-  componentWillReceiveProps(props) {
-    const { actionId } = this.state;
-  }
 
   componentDidMount() {
     setTimeout(() => {
@@ -100,7 +97,7 @@ export default class NewAction extends Component {
     });
   };
 
-  onHide(e) {
+  onHide() {
     const { hide } = this.props;
     hide();
   }

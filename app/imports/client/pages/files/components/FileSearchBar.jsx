@@ -3,9 +3,7 @@ import { AutoForm, AutoField, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
-import moment from "moment";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import Notifier from "/imports/client/lib/Notifier";
 import FilterService from "/imports/client/lib/FilterService";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
@@ -157,7 +155,6 @@ export default class FileSearchBar extends Component {
       statusOptions
     } = this.state;
     const {
-      options,
       btnGroup,
       deleteAction,
       dropdownOptions,
@@ -328,9 +325,9 @@ class BtnGroup extends Component {
     return (
       <div className={btnClasses}>
         {icons ? (
-          icons.map(element => {
+          icons.map((element,index) => {
             return (
-              <button onClick={element.method}>
+              <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon} />
               </button>
             );

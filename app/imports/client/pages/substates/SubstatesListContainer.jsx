@@ -232,7 +232,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
     return PagerService.setQuery(query, { page, perPage, filters: {status:true }});

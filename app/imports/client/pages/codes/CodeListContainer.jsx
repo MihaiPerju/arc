@@ -35,7 +35,7 @@ class CodeListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.code && queryParams.code == "") {
       this.setPagerInitial();
@@ -229,7 +229,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
     return PagerService.setQuery(query, { page, perPage, filters: {} });
