@@ -66,69 +66,6 @@ Meteor.methods({
     );
   },
 
-  "admin.suspendUser"(userId) {
-    Security.checkAdmin(this.userId);
-
-    if (!userId) {
-      throw new Meteor.Error("No user");
-    }
-
-    const settings = Settings.findOne();
-
-    Settings.update(
-      {
-        _id: settings._id
-      },
-      {
-        $addToSet: {
-          suspendedUserIds: userId
-        }
-      }
-    );
-
-    Users.update(
-      {
-        _id: userId
-      },
-      {
-        $set: {
-          "profile.suspended": true
-        }
-      }
-    );
-  },
-
-  "admin.resumeUser"(userId) {
-    Security.checkAdmin(this.userId);
-    if (!userId) {
-      throw new Meteor.Error("No user");
-    }
-
-    const settings = Settings.findOne();
-
-    Settings.update(
-      {
-        _id: settings._id
-      },
-      {
-        $pull: {
-          suspendedUserIds: userId
-        }
-      }
-    );
-
-    Users.update(
-      {
-        _id: userId
-      },
-      {
-        $set: {
-          "profile.suspended": false
-        }
-      }
-    );
-  },
-
   "admin.updateRootFolder"({ rootFolder, letterFolderPath }) {
     /** Root Folder Directory */
     rootFolder = rootFolder.trim();

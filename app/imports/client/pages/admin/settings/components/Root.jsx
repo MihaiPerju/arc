@@ -2,24 +2,50 @@ import React, { Component } from "react";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import pages from "/imports/api/settings/enums/settings";
+import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class Root extends Component {
   constructor() {
     super();
     this.state = {
-      isDisabled: false
+      isDisabled: false,
+      isLoading: true,
+      model: {}
     };
   }
   submit = () => {
     this.refs.form.onSubmit();
   };
 
+  componentDidMount() {
+    Meteor.call("settings.get", pages.ROOT, (err, model) => {
+      if (!err) {
+        this.setState({ model });
+      } else {
+        Notifier.error(err.reason);
+      }
+      this.setState({ isLoading: false });
+    });
+  }
+
   onSubmit = data => {
-    console.log(data);
+    data.name = pages.ROOT;
+    Meteor.call("settings.update", data, err => {
+      if (!err) {
+        Notifier.success("Settings Updated!");
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   };
 
   render() {
-    const { isDisabled } = this.state;
+    const { isDisabled, model, isLoading } = this.state;
+    if (isLoading) {
+      return <Loading />;
+    }
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -39,14 +65,19 @@ export default class Root extends Component {
         <div className="create-form__wrapper">
           <div className="action-block">
             <AutoForm
+              model={model}
               onSubmit={this.onSubmit}
               ref="form"
               className="settings-form"
               schema={schema}
             >
               <div className="form-wrapper">
-                <AutoField name="rootFolder" placeholder="Root Directory" />
-                <ErrorField name="rootFolder" />
+                <AutoField
+                  labelHidden={true}
+                  name="root"
+                  placeholder="Root Directory"
+                />
+                <ErrorField name="root" />
               </div>
             </AutoForm>
           </div>
@@ -57,7 +88,7 @@ export default class Root extends Component {
 }
 
 const schema = new SimpleSchema({
-  rootFolder: {
+  root: {
     type: String
   }
 });
