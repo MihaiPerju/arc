@@ -59,6 +59,10 @@ export default class Root extends Component {
     }
   };
 
+  onClose = () => {
+    this.props.onClose();
+  };
+
   render() {
     const { isDisabled, authenticationType, isLoading, model } = this.state;
 

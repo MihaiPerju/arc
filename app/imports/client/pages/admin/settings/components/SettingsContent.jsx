@@ -28,9 +28,9 @@ export default class SettingsContent extends Component {
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         {page === pages.ROOT && <Root onClose={this.props.onClose} />}
-        {page === pages.LETTERS_DIRECTORY && <LetterDirectory />}
-        {page === pages.COMPILE_TIME && <CompileTime />}
-        {page === pages.SMTP && <SMTP />}
+        {page === pages.LETTERS_DIRECTORY && <LetterDirectory onClose={this.props.onClose} />}
+        {page === pages.COMPILE_TIME && <CompileTime onClose={this.props.onClose}/>}
+        {page === pages.SMTP && <SMTP onClose={this.props.onClose}/>}
       </div>
     );
   }

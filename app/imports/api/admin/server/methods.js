@@ -10,7 +10,7 @@ import Letters from "/imports/api/letters/collection.js";
 import Rules from "/imports/api/rules/collection.js";
 import AccountsCollection from "/imports/api/accounts/collection";
 import Escalations from "/imports/api/escalations/collection";
-import { createFolderStructure } from "/imports/startup/server/folders";
+
 Meteor.methods({
   "admin.createUser"({ firstName, lastName, email, phoneNumber, password }) {
     Security.checkAdmin(this.userId);
@@ -66,45 +66,7 @@ Meteor.methods({
     );
   },
 
-  "admin.updateRootFolder"({ rootFolder, letterFolderPath }) {
-    /** Root Folder Directory */
-    rootFolder = rootFolder.trim();
-    if (rootFolder[0] !== "/") {
-      rootFolder = "/" + rootFolder;
-    }
-    if (rootFolder[rootFolder.length - 1] !== "/") {
-      rootFolder += "/";
-    }
-
-    /** PDF Folder Directory */
-    letterFolderPath = letterFolderPath.trim();
-    if (letterFolderPath[0] !== "/") {
-      letterFolderPath = "/" + letterFolderPath;
-    }
-    if (letterFolderPath[letterFolderPath.length - 1] !== "/") {
-      letterFolderPath += "/";
-    }
-
-    Settings.update(
-      { 
-        // rootFolder: {
-        //    $ne: null
-        // }    
-      },
-      {
-        $set: {
-          rootFolder,
-          letterFolderPath
-        }
-      },
-      {
-        upsert: true
-      }
-    );
-
-    createFolderStructure();
-  },
-
+ 
   "admin.getRootFolder"() {
     return Settings.findOne({
       $or:[

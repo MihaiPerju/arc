@@ -41,6 +41,10 @@ export default class Root extends Component {
     });
   };
 
+  onClose = () => {
+    this.props.onClose();
+  };
+
   render() {
     const { isDisabled, model, isLoading } = this.state;
     if (isLoading) {

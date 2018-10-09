@@ -44,23 +44,9 @@ route('/dashboard', Dashboard);
 import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx';
 import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
 import EditUser from '/imports/client/pages/admin/EditUser.jsx';
-import Settings2 from "/imports/client/pages/admin/Settings";
 import Settings from "/imports/client/pages/admin/settings/Settings";
-import App from '/imports/client/App.jsx';
 
-
-FlowRouter.route("/admin/settings2", {
-  action(params) {
-    Meteor.call('admin.checkAdmin', Meteor.userId(), (err, res) => {
-      if(err) FlowRouter.go('/dashboard', params);
-      res 
-        ? mount(App, {main: Settings2, routeProps: {}})
-        : FlowRouter.go('/dashboard', params)
-      })
-  }
-});
-
-route("/settings",Settings);
+route("/admin/settings",Settings);
 
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
