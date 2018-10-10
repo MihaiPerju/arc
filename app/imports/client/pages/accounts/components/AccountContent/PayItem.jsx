@@ -50,14 +50,28 @@ export default class PayItem extends Component {
       expandedView: !state.expandedView
     }))
   }
+
+
+  checkInsuranceActive = () => {
+    const { insurance, activeInsCode, activeInsName } = this.props;
+   
+      if (activeInsName) {
+        return (
+          insurance.insCode === activeInsCode &&
+          insurance.insName === activeInsName
+        );
+      }
+      return insurance.insCode === activeInsCode;  
+  }
+
   render () {
     const {insurance, index, indexActiveInsCode} = this.props;
     const {dialogIsActive, expandedView} = this.state;
     const classes = classNames ({
       'pay-item': true,
-      active: indexActiveInsCode === index,
+      active: this.checkInsuranceActive(),
     });
-    
+
     return (
       <div className={classes}>
         <div

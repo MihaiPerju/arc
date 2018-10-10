@@ -69,6 +69,8 @@ export default class PayerBlock extends Component {
                           indexActiveInsCode={indexActiveInsCode}
                           index={index}
                           accountId={account._id}
+                          activeInsCode = {account.activeInsCode}
+                          activeInsName = {account.activeInsName}
                           insurance={insurance}
                         />
                       </div>
