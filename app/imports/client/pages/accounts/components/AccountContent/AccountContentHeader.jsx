@@ -4,18 +4,8 @@ import AccountActioning from './AccountActioning';
 import RolesEnum, { roleGroups } from '/imports/api/users/enums/roles';
 import EditInfoDialog from './EditInfoDialog';
 import commaNumber from 'comma-number';
-import Countdown from 'react-countdown-now';
-import Dialog from '/imports/client/lib/ui/Dialog';
 
 export default class AccountContentHeader extends Component {
-
-state = {
-    showRefreshTimePopup: false,
-    lockTime: 60000,
-    refreshTime: 40000,
-    defaultLockTime: 60000,
-    defaultRefreshTime: 40000
-  };
 
   getOptions(users = []) {
     let options = [];
@@ -80,7 +70,7 @@ state = {
     return [{ label: 'Unassigned' }];
   }
 
-   getOthersData = data => {
+  getOthersData = data => {
     if (typeof data === 'object') {
       return moment(data).format('MM/DD/YYYY');
     } else {
@@ -95,85 +85,31 @@ state = {
   };
 
 
-  restartTimer = () => {
-    const { account } = this.props;
-    Meteor.call('account.restartLockTimer', account._id, err => {
-      if (err) {
-        Notifier.error(err.reason);
-      }
-    });
-  };
-
-  resetTime = () => {
-    this.setState({ lockTime: this.state.defaultLockTime, refreshTime: this.state.defaultRefreshTime });
-    this.restartTimer();
-  }
+  // restartTimer = () => {
+  //   const { account } = this.props;
+  //   Meteor.call('account.restartLockTimer', account._id, err => {
+  //     if (err) {
+  //       Notifier.error(err.reason);
+  //     }
+  //   });
+  // };
 
   onComplete = () => {
     const { removeLock, closeRightPanel } = this.props;
-    if (this.state.showRefreshTimePopup) {
-      this.setState({ showRefreshTimePopup: false });
-    }
-
     removeLock();
     closeRightPanel();
   };
 
-
-  hiddenTimerOnComplete = () => {
-    this.setState({ showRefreshTimePopup: true });
-  }
-
-  closeDialog = () => {
-    this.setState({ showRefreshTimePopup: false });
-  }
-
-  continueTimer = () => {
-    let defaultLockTime = this.state.defaultLockTime;
-    let defaultRefreshTime = this.state.defaultRefreshTime;
-    let timeDifference = defaultLockTime - defaultRefreshTime;
-    let lockTime = defaultLockTime + timeDifference;
-    let refreshTime = defaultRefreshTime + timeDifference;
-    this.setState({ showRefreshTimePopup: false, lockTime: lockTime, refreshTime: refreshTime });
-    this.restartTimer();
-  }
-
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
-    const { lockTime, refreshTime, showRefreshTimePopup } = this.state;
-    
+
     const options = this.getOptions(
       account && account.facility && account.facility.users
     );
-    
+
     let userOptions = this.getFirstOption(account, options).concat(options);
     return (
       <div className="header-block header-account">
-        {
-          account.lockOwnerId === Meteor.userId() &&
-          <a href="" onClick={this.resetTime}>
-            Restart timer
-          </a>
-        }
-        {
-          account.lockTimestamp &&
-          <div>
-
-            <Countdown
-              date={new Date(account.lockTimestamp).getTime() + lockTime} //1800000
-              onComplete={this.onComplete}
-            />
-          </div>
-        }
-        {
-          !showRefreshTimePopup &&
-          <div style={{ display: 'none' }}>
-            <Countdown
-              date={new Date(account.lockTimestamp).getTime() + refreshTime}
-              onComplete={this.hiddenTimerOnComplete}
-            />
-          </div>
-        }
         <div className="main-info">
           <div className="left__side">
             <div className="name">
@@ -296,7 +232,7 @@ state = {
                 editField="dischrgDate"
               />
               <div className="text-dark-grey">
-                {account && account.dischrgDate? moment(account.dischrgDate).format('MM/DD/YYYY')
+                {account && account.dischrgDate ? moment(account.dischrgDate).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
@@ -309,7 +245,7 @@ state = {
               />
 
               <div className="text-dark-grey">
-                {account && account.createdAt? moment(account.createdAt).format('MM/DD/YYYY')
+                {account && account.createdAt ? moment(account.createdAt).format('MM/DD/YYYY')
                   : 'None'}
               </div>
             </li>
@@ -326,9 +262,9 @@ state = {
               />
 
               <div className="text-dark-grey">
-                {account && account.admitDate? moment(account.admitDate).format('MM/DD/YYYY')
+                {account && account.admitDate ? moment(account.admitDate).format('MM/DD/YYYY')
                   : 'None'}
-             </div>
+              </div>
             </li>
 
             <li className="text-center">
@@ -363,7 +299,7 @@ state = {
                 editField="fbDate"
               />
               <div className="text-dark-grey">
-                {account && account.fbDate? moment(account.fbDate).format('MM/DD/YYYY')
+                {account && account.fbDate ? moment(account.fbDate).format('MM/DD/YYYY')
                   : 'None'} </div>
             </li>
             <li className="text-center">
@@ -398,26 +334,6 @@ state = {
             </li>
           </ul>
         </div>
-        {
-          this.state.showRefreshTimePopup ?
-            <Dialog
-              title="Confirm"
-              className="account-dialog"
-              closePortal={this.closeDialog}
-            >
-              <div className="form-wrapper">
-                Do you want to continue this account?
-            </div>
-              <div className="btn-group">
-                <button className="btn-cancel" onClick={this.closeDialog}>
-                  Cancel
-              </button>
-                <button className="btn--light-blue" onClick={this.continueTimer}>
-                  Continue
-              </button>
-              </div>
-            </Dialog> : null
-        }
       </div>
     );
   }
