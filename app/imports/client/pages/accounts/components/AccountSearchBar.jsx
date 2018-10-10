@@ -820,11 +820,7 @@ class BtnGroup extends Component {
               </button>
             );
           })
-        ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
+        ) : null }
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
