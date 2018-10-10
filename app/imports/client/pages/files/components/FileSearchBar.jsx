@@ -335,7 +335,11 @@ class BtnGroup extends Component {
               </button>
             );
           })
-        ) : null }
+        ) : (
+          <button>
+            <i className="icon-archive" />
+          </button>
+        )}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             Meteor.call("reset")
