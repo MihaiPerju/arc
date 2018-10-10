@@ -217,11 +217,6 @@ export default class RouteService {
         icon: "question-circle-o"
       },
       {
-        name: "flagged",
-        label: "Flagged",
-        icon: "flag"
-      },
-      {
         name: "client/list",
         label: "Clients",
         icon: "users"
@@ -287,91 +282,91 @@ export default class RouteService {
     switch (path) {
       case "/dashboard":
         return "Dashboard";
-        
+
       case "/accounts/active": {
         return "Active Accounts";
-        
+
       }
       case "/accounts/review": {
         return "Accounts In Review";
-        
+
       }
       case "/accounts/hold": {
         return "Accounts on Hold";
-        
+
       }
       case "/accounts/archived": {
         return "Archived Accounts";
-        
+
       }
       case "/accounts/tickles": {
         return "Tickled Accounts";
-        
+
       }
       case "/accounts/escalated": {
         return "Escalated Accounts";
-        
+
       }
       case "/flagged": {
         return "Escalated Accounts";
-        
+
       }
       case "/accounts/unassigned": {
         return "Unassigned Accounts";
-        
+
       }
       case "/client/list": {
         return "Clients";
-        
+
       }
       case "/admin/user/list": {
         return "Users";
-        
+
       }
       case "/code/list": {
         return "Reason Codes";
-        
+
       }
       case "/reports/list": {
         return "Reports";
-        
+
       }
       case "/letter-templates/list": {
         return "Letter Templates";
-        
+
       }
       case "/letters/list": {
         return "Letters";
-        
+
       }
       case "/action/list": {
         return "Actions";
-        
+
       }
       case "/substate/list": {
         return "Substates";
-        
+
       }
       case "/module-tags/list": {
         return "Tags";
-        
+
       }
       case "/tag/list": {
         return "Work Queues";
-        
+
       }
       case "/file/list": {
         return "Files";
-        
+
 
       }
       case "/admin/settings": {
         return "Settings";
-        
+
 
       }
       default:
-      break;
+        break;
     }
   }
 }
