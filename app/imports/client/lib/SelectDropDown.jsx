@@ -18,7 +18,7 @@ export default class SelectDropDown extends React.Component {
         const {name, enums, defaultValue, regionOptions} = this.props;
         const model = {options: defaultValue ? defaultValue : {}};
         const placeholder = defaultValue ? defaultValue : `Select a ${name.toLowerCase()}`;
-        const options = regionOptions ? regionOptions : _.map(enums, (value, key) => ({value, label: value}));
+        const options = regionOptions ? regionOptions : _.map(enums, (value) => ({value, label: value}));
         const label = name ? name : false;
 
         return (

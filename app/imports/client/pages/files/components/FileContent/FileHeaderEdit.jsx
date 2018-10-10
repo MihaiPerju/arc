@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import FileTypes from "/imports/api/files/enums/fileTypes";
 import { SimpleSchema } from "simpl-schema/dist/SimpleSchema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";

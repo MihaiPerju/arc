@@ -17,7 +17,6 @@ export default class Settings extends React.Component {
   }
 
   closePanel = () => {
-    const { openRightPanel } = this.state;
     this.setState({ openRightPanel: null });
   }
 

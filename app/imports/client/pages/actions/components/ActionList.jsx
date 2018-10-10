@@ -15,7 +15,7 @@ export default class ActionList extends Component {
       currentAction,
       moduleTags
     } = this.props;
-    const actionList = actions.map(function(action, index) {
+    const actionList = actions.map(function(action) {
       return (
         <ActionSingle
           actionsSelected={actionsSelected}

@@ -74,7 +74,7 @@ export default class FacilityContentHeader extends Component {
 
   onToggleFacilityStatus = () => {
     const { _id, status } = this.state;
-    Meteor.call("facility.switchStatus", _id, status, (err, res) => {
+    Meteor.call("facility.switchStatus", _id, status, (err) => {
       if (!err) {
         const message = status ? "Facility disabled !" : "Facility enabled !";
         Notifier.success(message);

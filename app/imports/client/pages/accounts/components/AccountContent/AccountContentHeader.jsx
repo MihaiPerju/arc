@@ -5,6 +5,7 @@ import RolesEnum, { roleGroups } from '/imports/api/users/enums/roles';
 import EditInfoDialog from './EditInfoDialog';
 import commaNumber from 'comma-number';
 
+
 export default class AccountContentHeader extends Component {
 
   getOptions(users = []) {

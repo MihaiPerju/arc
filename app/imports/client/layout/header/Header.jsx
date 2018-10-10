@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { createContainer } from "meteor/react-meteor-data";
-import { getImagePath } from "../../../api/utils";
-import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import RolesEnum from "/imports/api/users/enums/roles";
 import Notifications from "./components/Notifications";
 import RoutesService from "../leftMenu/RoutesService";
+import PropTypes from 'prop-types';
 
 class Header extends Component {
   constructor() {
@@ -117,7 +117,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  user: React.PropTypes.object
+  user: PropTypes.object
 };
 Header.defaultProps = {};
 

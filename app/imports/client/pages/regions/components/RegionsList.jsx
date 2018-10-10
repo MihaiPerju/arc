@@ -4,7 +4,7 @@ import RegionSingle from './RegionSingle';
 export default class RegionsList extends Component {
     render() {
         const {regions,setRegion, selectRegion, regionsSelected, currentRegion} = this.props;
-        const regionList = regions.map(function (region, index) {
+        const regionList = regions.map(function (region) {
             return (
                 <RegionSingle
                     regionsSelected={regionsSelected}

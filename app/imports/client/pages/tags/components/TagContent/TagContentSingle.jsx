@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Notifier from "/imports/client/lib/Notifier";
 
 export default class TagContentSingle extends Component {
   removeTag = _id => {
@@ -18,7 +17,7 @@ export default class TagContentSingle extends Component {
   };
 
   render() {
-    const { userName, userId, selectedUser } = this.props;
+    const { userName, userId } = this.props;
 
     return (
       <div className="action-table__row flex--helper">

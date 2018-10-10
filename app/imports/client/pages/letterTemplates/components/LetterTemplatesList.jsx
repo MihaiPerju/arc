@@ -4,7 +4,7 @@ import LetterTemplateSingle from "./LetterTemplateSingle";
 export default class LetterTemplatesList extends Component {
   render() {
     const { templates, moduleTags } = this.props;
-    const letterList = templates.map(function(template, index) {
+    const letterList = templates.map(function(template) {
       const {
         setTemplate,
         selectTemplate,

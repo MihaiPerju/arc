@@ -63,7 +63,7 @@ export default class ActivityStream extends React.Component {
     this.getActions(userId, limit, skip);
   };
 
-  componentWillReceiveProps(props) {
+  componentWillReceiveProps() {
     // set the limit to initial value
     this.setState({ limit: 20, skip: 0, accountActions: [] });
     const { userId } = FlowRouter.current().params;

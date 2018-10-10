@@ -43,7 +43,7 @@ export default class FacilityCreate extends Component {
   }
 
   getRegionOptions = regions => {
-    return regions.map((region, key) => ({
+    return regions.map((region) => ({
       value: region._id,
       label: region.name
     }));
@@ -87,7 +87,7 @@ export default class FacilityCreate extends Component {
   };
 
   render() {
-    const { newContact, regions, loading, isDisabled } = this.state;
+    const { regions, loading, isDisabled } = this.state;
     const regionIds = this.getRegionOptions(regions);
     const schema = FacilitySchema.omit("clientId");
 

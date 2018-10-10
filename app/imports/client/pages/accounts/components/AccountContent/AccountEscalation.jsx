@@ -25,7 +25,6 @@ export default class AccountEscalation extends React.Component {
   };
 
   render() {
-    const { escalationId } = this.props;
     return (
       <AutoForm onSubmit={this.escalate} schema={escalateSchema}>
         <div className="form-wrapper">

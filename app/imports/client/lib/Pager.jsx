@@ -2,7 +2,7 @@ import React from "react";
 import Pagination from "react-js-pagination";
 import PagerService from "./PagerService";
 
-export default class extends React.Component {
+export default class Pager extends React.Component {
   constructor() {
     super();
     this.state = {

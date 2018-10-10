@@ -2,8 +2,6 @@ import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import LetterTemplatePreview from "./components/LetterTemplatePreview";
 import GenerateLetterTemplateInputs from "./components/GenerateLetterTemplateInputs";
-import accountAttachmentsQuery from "/imports/api/accounts/queries/accountAttachmentsList";
-import AccountViewService from "/imports/client/pages/accounts/services/AccountViewService";
 import { variablesEnum } from "/imports/api/letterTemplates/enums/variablesEnum";
 import Loading from "/imports/client/lib/ui/Loading";
 
@@ -73,7 +71,7 @@ class LetterEditContainer extends React.Component {
   getKeywordsValues = (selectedTemplate = {}) => {
     const { keywords } = selectedTemplate;
     const keywordsValues = {};
-    _.each(keywords, (value, index) => {
+    _.each(keywords, (value) => {
       if (variablesEnum[value]) {
         keywordsValues[variablesEnum[value].field] = this.state[
           variablesEnum[value].field
@@ -100,14 +98,11 @@ class LetterEditContainer extends React.Component {
     const { account, selectedTemplate, reset, selectedLetter } = this.props;
     const { keywords, body, _id: letterId } = selectedTemplate;
     const {
-      letterTemplates,
       pdfAttachments,
       selectedAttachments,
       keywordsValues,
       loading
     } = this.state;
-    const model = { letterTemplate: null };
-    const options = this.getSelectOptions(letterTemplates);
 
     const clonedAccount = _.clone(account);
     const { letterValues, attachmentIds } = selectedLetter;

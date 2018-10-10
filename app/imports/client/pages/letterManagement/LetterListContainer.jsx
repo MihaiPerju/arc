@@ -30,7 +30,7 @@ class LetterListContainer extends Pager {
     this.getModuleTags();
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.letterIds && queryParams.letterIds == "") {
       this.setPagerInitial();
@@ -92,7 +92,6 @@ class LetterListContainer extends Pager {
   render() {
     const { data, isLoading, error } = this.props;
     const { total, range, create, moduleTags } = this.state;
-
     if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
       return <Loading />;
     }
@@ -139,7 +138,7 @@ class RightSide extends Component {
   }
 
   render() {
-    const { create, close } = this.props;
+    const {  close } = this.props;
     const { fade } = this.state;
 
     return (
@@ -151,7 +150,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
     return PagerService.setQuery(query, { page, perPage, filters: {} });

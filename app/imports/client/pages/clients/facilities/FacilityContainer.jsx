@@ -23,7 +23,6 @@ class FacilityContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      filter: false
     });
     this.query = query;
   }
@@ -32,7 +31,7 @@ class FacilityContainer extends Pager {
     this.nextPage(0);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.facilityName && queryParams.facilityName == "") {
       this.setPagerInitial();

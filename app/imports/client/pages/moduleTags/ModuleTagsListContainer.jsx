@@ -104,8 +104,7 @@ class ModuleTagsListContainer extends Pager {
       currentTag,
       create,
       range,
-      total,
-      clients
+      total
     } = this.state;
     
     const tag = objectFromArray(data, currentTag);
@@ -183,9 +182,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
+  () => {
     const params = {
       filters: {workQueueStatus:false}
   }

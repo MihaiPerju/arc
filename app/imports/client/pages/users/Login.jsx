@@ -91,8 +91,8 @@ const LoginSchema = new SimpleSchema({
 });
 
 Login.propTypes = {
-  user: React.PropTypes.object,
-  loggingIn: React.PropTypes.bool
+  user: PropTypes.object,
+  loggingIn: PropTypes.bool
 };
 Login.defaultProps = {};
 

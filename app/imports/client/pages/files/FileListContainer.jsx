@@ -29,7 +29,7 @@ class FileListContainer extends Pager {
     this.nextPage(0);
   }
 
-  componentWillReceiveProps(newProps) {
+  componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
     if (queryParams.file && queryParams.file == "") {
       this.setPagerInitial();
@@ -203,7 +203,7 @@ class RightSide extends Component {
 
   render() {
     const { fade } = this.state;
-    const { file, create, close } = this.props;
+    const { file } = this.props;
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         <FileContent file={file} />
@@ -213,7 +213,7 @@ class RightSide extends Component {
 }
 
 export default withQuery(
-  props => {
+  () => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
     return PagerService.setQuery(query, { page, perPage, filters: {} });

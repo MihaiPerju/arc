@@ -3,6 +3,7 @@ import DropzoneComponent from 'react-dropzone-component';
 import {getToken} from '/imports/api/uploads/utils';
 import {Notifier} from '/imports/client/utils';
 import {getImagePath} from '/imports/api/utils';
+import PropTypes from 'prop-types';
 
 class MyAvatar extends Component {
     constructor() {
@@ -83,7 +84,7 @@ class MyAvatar extends Component {
 }
 
 MyAvatar.propTypes = {
-    user: React.PropTypes.object
+    user: PropTypes.object
 };
 
 export default MyAvatar;

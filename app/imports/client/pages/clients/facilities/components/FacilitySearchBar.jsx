@@ -28,7 +28,7 @@ export default class FacilitySearchBar extends Component {
     this.getFilterParams();
   }
 
-  onSubmit(params) {
+  onSubmit() {
     const { createdAtMin, createdAtMax } = this.state;
     if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
@@ -311,9 +311,9 @@ class BtnGroup extends Component {
     return (
       <div className={btnClasses}>
         {icons ? (
-          icons.map(element => {
+          icons.map((element,index) => {
             return (
-              <button onClick={element.method}>
+              <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon} />
               </button>
             );

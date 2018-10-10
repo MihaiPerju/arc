@@ -1,5 +1,5 @@
 import React from 'react';
-import {AutoForm, AutoField, ErrorField, LongTextField} from 'uniforms-unstyled';
+import {AutoForm, AutoField, ErrorField} from 'uniforms-unstyled';
 import reasonCodeSchema from '/imports/api/reasonCodes/schema';
 import Notifier from '/imports/client/lib/Notifier';
 import {Button} from 'semantic-ui-react'
