@@ -15,6 +15,7 @@ import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import Business from "/imports/api/business";
 
 export default class LetterService {
   static createLetter(data) {
@@ -114,11 +115,11 @@ export default class LetterService {
 
     const { filename } = future.wait();
     if (filename) {
-      this.attachPdfs(filename, attachmentIds);
+      this.attachPdfs(filename, attachmentIds, accountId);
     }
   }
 
-  static attachPdfs(filename, attachmentIds) {
+  static attachPdfs(filename, attachmentIds, accountId) {
     let { root } = SettingsService.getSettings(settings.ROOT);
     let { letterDirectory } = SettingsService.getSettings(settings.ROOT);
 
@@ -128,7 +129,8 @@ export default class LetterService {
       const { path } = Uploads.findOne({
         _id
       });
-      const attachmentPath = (root + letterDirectory).replace("//", "/") + path;
+      const attachmentPath =
+        root + Business.ACCOUNTS_FOLDER + accountId + "/" + path;
       files.push(attachmentPath);
     }
 
@@ -139,6 +141,7 @@ export default class LetterService {
         (root + letterDirectory).replace("//", "/") + Random.id() + ".pdf";
     }
 
+    console.log(files);
     PDFMerge(files, newFilename)
       .then(function() {
         renameSync(newFilename, filename);

@@ -1,5 +1,4 @@
 import Settings from "../collection.js";
-import settings from "/imports/api/settings/enums/settings";
 import os from "os";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
