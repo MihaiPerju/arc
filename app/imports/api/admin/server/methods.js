@@ -1,7 +1,6 @@
 import { Accounts } from "meteor/accounts-base";
 import Users from "/imports/api/users/collection.js";
 import Security from "/imports/api/security/security.js";
-import Settings from "/imports/api/settings/collection.js";
 import AccountActions from "/imports/api/accountActions/collection";
 import Substates from "/imports/api/substates/collection";
 import Backup from "/imports/api/backup/collection";
@@ -66,24 +65,6 @@ Meteor.methods({
     );
   },
 
- 
-  "admin.getRootFolder"() {
-    return Settings.findOne({
-      $or:[
-        { 
-            rootFolder: {
-            $exists: true
-          } 
-        },
-        {
-          letterFolderPath: {
-            $exists: true
-          }
-        }
-      ]
-    });
-  },
-
   "admin.deleteUser"(userId) {
     Security.checkAdmin(this.userId);
 
@@ -100,71 +81,6 @@ Meteor.methods({
       }
     });
   },
-
-
-  "admin.mailSettingUpdate"({mailSetting}) {
-    Security.checkAdmin(this.userId);
-    
-   if(mailSetting.ssl === 'true'){
-     mailSetting = {
-       ...mailSetting,
-       ssl: true
-     }
-   }else{
-     mailSetting = {
-      ...mailSetting,
-      ssl: false
-    }
-   }
-   if(mailSetting.authentication == "Anonymous Account") {
-     delete mailSetting.username;
-     delete mailSetting.password;
-   }
-
-    Settings.update(
-      {},
-      {
-        $set: {
-          mailSetting
-        }
-      },
-      {
-        upsert: true
-      }
-    );
-  },
-
-  "admin.getMailSetting"() {
-    return Settings.findOne({
-      mailSetting: {
-        $exists: true
-      }
-    });
-  },
-
-  "admin.getLetterSettings"() {
-    return Settings.findOne({
-      letterCompileTime: {
-        $exists: true
-      }
-    });
-  },
-
-  "admin.updateLetterSettings"({ letterCompileTime }) {
-    Security.checkAdmin(this.userId);
-    Settings.update(
-      {},
-      {
-        $set: {
-          letterCompileTime
-        }
-      },
-      {
-        upsert: true
-      }
-    );
-  },
-
 
   //Testing purpose only, delete in production
   reset(entity) {

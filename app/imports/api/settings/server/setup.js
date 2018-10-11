@@ -1,38 +1,33 @@
 import Settings from "../collection.js";
 import settings from "/imports/api/settings/enums/settings";
 import os from "os";
-import SettingsService from "./SettingsService.js";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 Meteor.startup(function() {
   //Check root settings
-  let root = Settings.findOne({ name: settings.ROOT });
+  let root = SettingsService.getSettings(settings.ROOT);
   if (!root) {
     root = os.tmpdir() + "/";
     Settings.insert({ name: settings.ROOT, root });
   }
 
   //Check letter directory settings
-  let letterDirectory = Settings.findOne({
-    name: settings.LETTERS_DIRECTORY
-  });
+  let letterDirectory = SettingsService.getSettings(settings.LETTERS_DIRECTORY);
   if (!letterDirectory) {
     letterDirectory = "letters/";
     Settings.insert({ name: settings.LETTERS_DIRECTORY, letterDirectory });
   }
 
   //Check letter compile time settings
-  let letterCompileTime = Settings.findOne({
-    name: settings.COMPILE_TIME
-  });
+  let letterCompileTime = SettingsService.getSettings(settings.COMPILE_TIME);
   if (!letterCompileTime) {
     letterCompileTime = new Date();
     Settings.insert({ name: settings.COMPILE_TIME, letterCompileTime });
   }
 
   //Check SMTP Settings
-  let smtp = Settings.findOne({
-    name: settings.SMTP
-  });
+  let smtp = SettingsService.getSettings(settings.SMTP);
   if (!smtp) {
     Settings.insert({ name: settings.SMTP });
   }

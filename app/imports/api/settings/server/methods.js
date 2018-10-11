@@ -31,6 +31,7 @@ Meteor.methods({
     Settings.update({ name }, { $set: data });
     SettingsService.createDirectories();
   },
+  
   "settings.get"(name) {
     Security.checkAdmin(this.userId);
     return Settings.findOne({ name });

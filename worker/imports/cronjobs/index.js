@@ -6,16 +6,18 @@ import ReuploadService from "../services/ReuploadService";
 import InventoryService from "../services/InventoryService";
 import PaymentService from "../services/PaymentService";
 import Settings from "/imports/api/settings/collection";
-import moment from 'moment/moment';
+import moment from "moment/moment";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 // Job for running reports
 SyncedCron.add({
   name: "Run Report",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     ReportsManagement.run();
   }
 });
@@ -23,17 +25,16 @@ SyncedCron.add({
 //Job for sending letters
 SyncedCron.add({
   name: "Send Letters",
-  schedule: function (parser) {
-    const { letterCompileTime } = Settings.findOne({
-      letterCompileTime: {
-        $ne: null
-      }
-    });
-    let letterTime = letterCompileTime ? `at ${moment(letterCompileTime).format('h:mm a')}` : "at 1:00 am";
+  schedule: function(parser) {
+    const { compileTime } = SettingsService.getSettings(settings.COMPILE_TIME);
+
+    let letterTime = compileTime
+      ? `at ${moment(compileTime).format("h:mm a")}`
+      : "at 1:00 am";
     // parser is a later.parse object
     return parser.text(letterTime);
   },
-  job: function () {
+  job: function() {
     LettersManagement.run();
   }
 });
@@ -53,11 +54,11 @@ SyncedCron.add({
 //Job for importing accounts from placement file
 SyncedCron.add({
   name: "Import Accounts from Placement",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     PlacementService.run();
   }
 });
@@ -65,11 +66,11 @@ SyncedCron.add({
 //Job for importing accounts from inventory file
 SyncedCron.add({
   name: "Import Accounts from Inventory",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     InventoryService.run();
   }
 });
@@ -89,11 +90,11 @@ SyncedCron.add({
 //Job for importing re-uploading files with changed header
 SyncedCron.add({
   name: "Reupload Files",
-  schedule: function (parser) {
+  schedule: function(parser) {
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
-  job: function () {
+  job: function() {
     ReuploadService.run();
   }
 });
