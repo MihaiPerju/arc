@@ -117,12 +117,20 @@ export default class AccountSearchBar extends Component {
 
   componentWillReceiveProps() {
     const { query } = FlowRouter.current().params;
+    const { data, accountsSelected } = this.props;
     if (query && query.medNo) {
       let model = FilterService.getFilterParams();
       this.setState({
         model
       });
     }
+    
+    accountsSelected.length>0 && this.setState({ selectAll: true });
+    _.map(data, account => { 
+      if (accountsSelected.indexOf(account._id) == -1) {
+        return this.setState({ selectAll: false })
+      } 
+    });
   }
 
   onSubmit(params) {
@@ -324,6 +332,13 @@ export default class AccountSearchBar extends Component {
     }));
   };
 
+  checkAllAccount = () => {
+    const { checkAllAccount } = this.props;
+    this.setState({ selectAll: !this.state.selectAll }, ()=>{
+      checkAllAccount(this.state.selectAll);
+    });
+  }
+
   resetFilters = () => {
     let appliedFilters = FlowRouter.current().queryParams;
     appliedFilters = _.omit(appliedFilters, "page", "tagIds");
@@ -423,7 +438,7 @@ export default class AccountSearchBar extends Component {
       >
         <div className="search-bar">
           <div className={classes} ref={this.nodeRef}>
-            <div className={btnSelectClasses} onClick={this.selectAll} />
+            <div className={btnSelectClasses} onClick={this.checkAllAccount} />
             <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
               <i className="icon-angle-down" />
             </div>
@@ -472,14 +487,14 @@ export default class AccountSearchBar extends Component {
                           Meteor.userId(),
                           RolesEnum.MANAGER
                         ) && (
-                          <div className="select-form">
-                            <SelectField
-                              label="Tickle:"
-                              name="tickleUserId"
-                              options={tickleUserIdOptions}
-                            />
-                          </div>
-                        )}
+                            <div className="select-form">
+                              <SelectField
+                                label="Tickle:"
+                                name="tickleUserId"
+                                options={tickleUserIdOptions}
+                              />
+                            </div>
+                          )}
                         <div className="flex--helper form-group__pseudo--3">
                           <div className="select-form">
                             <SelectField
@@ -677,8 +692,8 @@ export default class AccountSearchBar extends Component {
                   {sort ? (
                     <i className="icon-angle-up" />
                   ) : (
-                    <i className="icon-angle-down" />
-                  )}
+                      <i className="icon-angle-down" />
+                    )}
                 </button>
               </div>
             )}
@@ -821,10 +836,10 @@ class BtnGroup extends Component {
             );
           })
         ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
+            <button>
+              <i className="icon-archive" />
+            </button>
+          )}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />

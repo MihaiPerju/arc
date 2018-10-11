@@ -104,6 +104,7 @@ class AccountListContainer extends Pager {
       this.closeRightPanel();
       this.setState({
         currentRouteState: state,
+        accountsSelected: []
       });
       this.setPagerInitial();
 
@@ -229,6 +230,33 @@ class AccountListContainer extends Pager {
       showMetaData: false,
     });
   };
+
+  checkAllAccount = (selectAll) => {
+    const { data } = this.props;
+    let accountsSelected = this.state.accountsSelected;
+    this.closeRightPanel();
+
+    if (data.length > 0 && selectAll) {
+      _.map(data, account => { 
+          if (accountsSelected.indexOf(account._id) == -1) {
+            accountsSelected.push(account._id) 
+          }
+        });
+    }
+
+    if(!selectAll) {
+      _.map(data, account => { 
+        if (accountsSelected.includes(account._id)) {
+          accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
+        } 
+      });
+    }
+
+    this.setState({
+      accountsSelected,
+      showMetaData: false,
+    });
+  }
 
   changeFilters(filters) {
     this.updateFilters({ filters });
@@ -483,6 +511,9 @@ class AccountListContainer extends Pager {
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
             moduleTags={moduleTags}
+            checkAllAccount={this.checkAllAccount}
+            accountsSelected={accountsSelected}
+            data={data}
           />
           {assignUser &&
             <AccountAssigning

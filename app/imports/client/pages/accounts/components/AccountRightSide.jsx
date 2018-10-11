@@ -48,7 +48,7 @@ class AccountRightSide extends Component {
       data,
       isLoading
     } = this.props;
-
+    
     const account = data;
 
     if (isLoading) {
