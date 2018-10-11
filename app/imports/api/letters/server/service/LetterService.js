@@ -141,12 +141,12 @@ export default class LetterService {
         (root + letterDirectory).replace("//", "/") + Random.id() + ".pdf";
     }
 
-    console.log(files);
     PDFMerge(files, newFilename)
       .then(function() {
         renameSync(newFilename, filename);
       })
       .catch(function(error) {
+        console.log(error);
         throw error;
         //returns error
       });
