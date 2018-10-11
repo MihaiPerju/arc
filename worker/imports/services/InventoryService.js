@@ -13,6 +13,8 @@ import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 export default class InventoryService {
   static run() {
@@ -39,11 +41,7 @@ export default class InventoryService {
   }
 
   static processInventory({ facilityId, filePath, userId, _id }) {
-    const { rootFolder } = Settings.findOne({
-      rootFolder: {
-        $ne: null
-      }
-    });
+    const { root } = SettingsService.getSettings(settings.ROOT);
 
     const importRules = ParseService.getImportRules(
       facilityId,
@@ -51,9 +49,7 @@ export default class InventoryService {
     );
 
     //Parsing and getting the CSV like a string
-    const stream = fs.readFileSync(
-      rootFolder + Business.ACCOUNTS_FOLDER + filePath
-    );
+    const stream = fs.readFileSync(root + Business.ACCOUNTS_FOLDER + filePath);
     const csvString = stream.toString();
 
     //Keep reference to previous file

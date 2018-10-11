@@ -2,8 +2,6 @@ import Papa from "papaparse";
 import fs from "fs";
 import AccountService from "/imports/api/facilities/server/services/AccountImportingService";
 import ParseService from "/imports/api/facilities/server/services/CsvParseService";
-import Files from "/imports/api/files/collection";
-import os from "os";
 import Facilities from "/imports/api/facilities/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import AccountActions from "/imports/api/accountActions/collection";
@@ -13,6 +11,8 @@ import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 export default class ReuploadService {
   static run() {
@@ -39,17 +39,13 @@ export default class ReuploadService {
     }
   }
   static reuploadFile({ facilityId, filePath, fileId, fileType, userId, _id }) {
-    const { rootFolder } = Settings.findOne({
-      rootFolder: {
-        $ne: null
-      }
-    });
+    const { root } = SettingsService.getSettings(settings.ROOT);
 
     const ruleType = fileType + "Rules";
     const importRules = ParseService.getImportRules(facilityId, ruleType);
     //Parsing and getting the CSV like a string
     const stream = fs.readFileSync(
-      rootFolder + Business.ACCOUNTS_FOLDER + filePath
+      root + Business.ACCOUNTS_FOLDER + filePath
     );
     const csvString = stream.toString();
 

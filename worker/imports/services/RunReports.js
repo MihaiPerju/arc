@@ -16,6 +16,8 @@ import Future from "fibers/future";
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import { Container, Table } from "semantic-ui-react";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 export default class RunReports {
   static run() {
@@ -116,13 +118,10 @@ export default class RunReports {
   }
 
   static async saveReport({ reportId, _id }) {
-    const { rootFolder } = Settings.findOne({
-      rootFolder: {
-        $ne: null
-      }
-    });
+    const { root } = SettingsService.getSettings(settings.ROOT);
+
     //Path to new file
-    const pathToSave = rootFolder + FoldersEnum.REPORTS_FOLDER;
+    const pathToSave = root + FoldersEnum.REPORTS_FOLDER;
     //Check and see if folder for saving is missing
     this.checkFolder(pathToSave);
 

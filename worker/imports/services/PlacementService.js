@@ -13,6 +13,8 @@ import Business from "/imports/api/business";
 import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 export default class PlacementService {
   static run() {
@@ -39,11 +41,8 @@ export default class PlacementService {
   }
 
   static processPlacement({ facilityId, filePath, userId, _id }) {
-    const { rootFolder } = Settings.findOne({
-      rootFolder: {
-        $ne: null
-      }
-    });
+    const { root } = SettingsService.getSettings(settings.ROOT);
+
     const importRules = ParseService.getImportRules(
       facilityId,
       "placementRules"
@@ -51,12 +50,17 @@ export default class PlacementService {
 
     //Parsing and getting the CSV like a string
     const stream = fs.readFileSync(
-      rootFolder + Business.ACCOUNTS_FOLDER + filePath
+      root + Business.ACCOUNTS_FOLDER + filePath
     );
     const csvString = stream.toString();
 
     //Keep reference to previous file
-    const { fileId, clientId, placementRules,allowedUsers } = Facilities.findOne({
+    const {
+      fileId,
+      clientId,
+      placementRules,
+      allowedUsers
+    } = Facilities.findOne({
       _id: facilityId
     });
 
@@ -65,7 +69,6 @@ export default class PlacementService {
         "The Facility Doesn't Have Configured Importing Rules"
       );
     }
-    
 
     const newFileId = Files.insert({
       fileName: filePath,
@@ -102,7 +105,7 @@ export default class PlacementService {
     const links = {
       facilityId,
       fileId: newFileId,
-      managerIds:allowedUsers
+      managerIds: allowedUsers
     };
 
     Papa.parse(csvString, {

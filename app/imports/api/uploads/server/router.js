@@ -5,7 +5,8 @@ import Uploader from "/imports/api/uploads/server/uploader";
 import UploadedFile from "/imports/api/uploads/server/UploadedFile";
 import Uploads from "../uploads/collection";
 import AccountsCollection from "/imports/api/accounts/collection";
-import Settings from "/imports/api/settings/collection.js";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 let postRoutes = Picker.filter(function(req) {
   return req.method == "POST";
@@ -110,19 +111,14 @@ export function createRoute(path, handler) {
             }
           }
 
-          const { rootFolder } = Settings.findOne({
-            rootFolder: { $ne: null }
-          });
+          const { root } = SettingsService.getSettings(settings.ROOT);
 
-          let movePath = rootFolder + fileName;
+          let movePath = root + fileName;
           movePath = movePath.replace(/\s+/g, "-");
-          //If there is no local folder
-          if (!fs.existsSync(rootFolder)) {
-            fs.mkdirSync(rootFolder);
-          }
+        
           //Move file to specified storage folder
           fs.renameSync(filePath, movePath);
-          filePath = movePath.replace(rootFolder, "");
+          filePath = movePath.replace(root, "");
 
           const mimeType = Uploader.guessMimeType(fileName);
           const uploadFile = new UploadedFile(

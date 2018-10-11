@@ -7,7 +7,8 @@ import fs from "fs";
 import Business from "/imports/api/business";
 import Uploads from "../../uploads/uploads/collection";
 import bcrypt from "bcrypt";
-import Settings from "/imports/api/settings/collection.js";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 Meteor.methods({
   "facility.create"(data) {
@@ -70,16 +71,12 @@ Meteor.methods({
   },
 
   "facility.removeLogo"(_id) {
-    const { rootFolder } = Settings.findOne({
-      rootFolder: {
-        $ne: null
-      }
-    });
+    const { root } = SettingsService.getSettings(settings.ROOT);
 
     const { logoPath } = Facilities.findOne({
       _id
     });
-    const filePath = rootFolder + Business.CLIENTS_FOLDER + logoPath;
+    const filePath = root + Business.CLIENTS_FOLDER + logoPath;
 
     Facilities.update(
       {
