@@ -1,2 +1,1 @@
 import "./RunReports";
-import "./setup";

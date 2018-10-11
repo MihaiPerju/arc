@@ -13,8 +13,9 @@ import Business from '/imports/api/business';
 import EscalationService
   from '/imports/api/escalations/server/services/EscalationService';
 import AccountActions from '/imports/api/accountActions/collection';
-import Settings from '/imports/api/settings/collection.js';
 import TickleService from '/imports/api/tickles/server/services/TickleService';
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 Meteor.methods ({
   'account.freeze' (_id) {
@@ -100,11 +101,8 @@ Meteor.methods ({
   },
 
   'account.attachment.remove' (_id, attachmentId) {
-    const {rootFolder} = Settings.findOne ({
-      rootFolder: {
-        $ne: null,
-      },
-    });
+    const {root} = SettingsService.getSettings(settings.ROOT);
+
     AccountSecurity.hasRightsOnAccount (this.userId, _id);
     Accounts.update (
       {
@@ -122,7 +120,7 @@ Meteor.methods ({
     Uploads.remove ({
       _id: attachmentId,
     });
-    const filePath = rootFolder + Business.ACCOUNTS_FOLDER + _id + '/' + path;
+    const filePath = root + Business.ACCOUNTS_FOLDER + _id + '/' + path;
     if (fs.existsSync (filePath)) {
       fs.unlinkSync (filePath);
     }

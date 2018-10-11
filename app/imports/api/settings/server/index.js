@@ -1,1 +1,2 @@
-import './setup.js';
+import "./setup.js";
+import "./methods";

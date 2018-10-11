@@ -1,50 +1,51 @@
-import SimpleSchema from 'simpl-schema';
+import SimpleSchema from "simpl-schema";
+import settings from "/imports/api/settings/enums/settings";
 
 export default new SimpleSchema({
-
-    suspendedUserIds: {
-        type: Array,
-        optional: true
-    },
-    'suspendedUserIds.$': {
-        type: String
-    },
-    rootFolder:{
-        type:String,
-        optional:true
-    },
-    mailSetting: { type: Object, optional: true },
-    "mailSetting.serverAddress": {
-      type: String,
-      optional: true,
-    },
-    "mailSetting.ssl": {
-      type: Boolean,
-      optional: true,
-    },
-    "mailSetting.port": {
-        type: String,
-        optional: true,
-      },
-    "mailSetting.authentication": {
-      type: String,
-      optional: true,
-    },
-    "mailSetting.username": {
-        type: String,
-        optional: true,
-    },
-    "mailSetting.password": {
+  name: {
     type: String,
-    optional: true,
-    },
-    letterFolderPath:{
-        type:String,
-        optional:true
-    },
-    letterCompileTime: {
+    allowedValues: [
+      settings.ROOT,
+      settings.SMTP,
+      settings.LETTERS_DIRECTORY,
+      settings.COMPILE_TIME
+    ]
+  },
+  root: {
     type: String,
-    optional: true,
-    }
-
+    optional: true
+  },
+  smtp: { type: Object, optional: true },
+  "smtp.serverAddress": {
+    type: String,
+    optional: true
+  },
+  "smtp.ssl": {
+    type: Boolean,
+    optional: true
+  },
+  "smtp.port": {
+    type: String,
+    optional: true
+  },
+  "smtp.authentication": {
+    type: String,
+    optional: true
+  },
+  "smtp.username": {
+    type: String,
+    optional: true
+  },
+  "smtp.password": {
+    type: String,
+    optional: true
+  },
+  letterDirectory: {
+    type: String,
+    optional: true
+  },
+  letterCompileTime: {
+    type: String,
+    optional: true
+  }
 });

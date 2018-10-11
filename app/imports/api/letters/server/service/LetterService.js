@@ -5,7 +5,6 @@ import QRCode from "qrcode";
 import ReactDOMServer from "react-dom/server";
 import Accounts from "/imports/api/accounts/collection";
 import Clients from "/imports/api/clients/collection";
-import Settings from "/imports/api/settings/collection";
 import { Random } from "meteor/random";
 import { existsSync, renameSync, unlinkSync } from "fs";
 import PDFMerge from "pdfmerge";
@@ -14,22 +13,9 @@ import Letters from "/imports/api/letters/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import Statuses from "/imports/api/letters/enums/statuses.js";
-
-const { rootFolder, letterFolderPath } =
-  Settings.findOne({
-    $and:[
-      {
-    rootFolder: {
-      $ne: null
-    }
-      },
-      {
-        letterFolderPath : {
-          $ne: null
-        }
-      }
-    ]
-  }) || {};
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
+import Business from "/imports/api/business";
 
 export default class LetterService {
   static createLetter(data) {
@@ -80,8 +66,13 @@ export default class LetterService {
   }
 
   static deleteLetter(_id) {
+    let { root } = SettingsService.getSettings(settings.ROOT);
+    let { letterDirectory } = SettingsService.getSettings(
+      settings.LETTERS_DIRECTORY
+    );
+
     const { status } = Letters.findOne({ _id });
-    const filePath = (rootFolder + letterFolderPath).replace('//','/') + _id + ".pdf";
+    const filePath = (root + letterDirectory).replace("//", "/") + _id + ".pdf";
     if (status !== Statuses.NEW) {
       throw new Meteor.Error(
         "cannot edit",
@@ -95,10 +86,16 @@ export default class LetterService {
   }
 
   static createPdf(letterId) {
+    let { root } = SettingsService.getSettings(settings.ROOT);
+    let { letterDirectory } = SettingsService.getSettings(
+      settings.LETTERS_DIRECTORY
+    );
+
     let { attachmentIds, body, accountId } = Letters.findOne({ _id: letterId });
     const { clientId } = Accounts.findOne({ _id: accountId });
     const { clientName } = Clients.findOne({ _id: clientId });
-    const filePath = (rootFolder + letterFolderPath).replace('//','/') + letterId + ".pdf";
+    const filePath =
+      (root + letterDirectory).replace("//", "/") + letterId + ".pdf";
     const future = new Future();
 
     QRCode.toDataURL(clientName)
@@ -113,31 +110,35 @@ export default class LetterService {
         });
       })
       .catch(err => {
-      throw err;
+        throw err;
       });
 
     const { filename } = future.wait();
     if (filename) {
-      this.attachPdfs(filename, attachmentIds);
+      this.attachPdfs(filename, attachmentIds, accountId);
     }
   }
 
-  static attachPdfs(filename, attachmentIds) {
+  static attachPdfs(filename, attachmentIds, accountId) {
+    let { root } = SettingsService.getSettings(settings.ROOT);
+    let { letterDirectory } = SettingsService.getSettings(settings.ROOT);
+
     let files = [filename];
 
     for (let _id of attachmentIds) {
       const { path } = Uploads.findOne({
         _id
       });
-      const attachmentPath = (rootFolder + letterFolderPath).replace('//','/') + path;
+      const attachmentPath =
+        root + Business.ACCOUNTS_FOLDER + accountId + "/" + path;
       files.push(attachmentPath);
     }
 
     let newFilename =
-      (rootFolder + letterFolderPath).replace('//','/') + Random.id() + ".pdf";
+      (root + letterDirectory).replace("//", "/") + Random.id() + ".pdf";
     while (existsSync(newFilename)) {
       newFilename =
-        (rootFolder + letterFolderPath).replace('//','/') + Random.id() + ".pdf";
+        (root + letterDirectory).replace("//", "/") + Random.id() + ".pdf";
     }
 
     PDFMerge(files, newFilename)
