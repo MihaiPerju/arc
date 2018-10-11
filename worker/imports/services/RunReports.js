@@ -21,6 +21,7 @@ import settings from "/imports/api/settings/enums/settings";
 
 export default class RunReports {
   static run() {
+
     const job = JobQueue.findOne({
       workerId: null,
       type: JobQueueEnum.RUN_REPORT
@@ -35,7 +36,6 @@ export default class RunReports {
           }
         }
       );
-
       //Create & Save .csv file
       this.saveReport(job);
     }
@@ -55,6 +55,7 @@ export default class RunReports {
   static getColumns(reportId) {
     const { reportColumns } = Reports.findOne({ _id: reportId });
     const columns = {};
+
 
     _.map(reportColumns, (value, key) => {
       if (value && key !== fields.INSURANCES) {
@@ -118,6 +119,7 @@ export default class RunReports {
   }
 
   static async saveReport({ reportId, _id }) {
+    console.log("Save Report");
     const { root } = SettingsService.getSettings(settings.ROOT);
 
     //Path to new file
@@ -145,11 +147,28 @@ export default class RunReports {
     });
 
     const AccountsRaw = Accounts.rawCollection();
+
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    const metaData = await AccountsRaw.aggregateSync([
+    const metaData2 = await AccountsRaw.aggregateSync([
       {
         $match: filters
+      },
+      {
+        $lookup: {
+          from: "tags",
+          localField: "workQueueId",
+          foreignField: "_id",
+          as: "tag"
+        }
+      },
+      {
+        $unwind: "$tag"
+      },
+      {
+        $project: {
+          'tag.name': 1
+        }
       },
       {
         $sample: {
@@ -157,6 +176,38 @@ export default class RunReports {
         }
       }
     ]).toArray();
+
+    let metaData = await AccountsRaw.aggregateSync([
+      {
+        $match: filters
+      },
+      {
+        $lookup: {
+          from: "tags",
+          localField: "workQueueId",
+          foreignField: "_id",
+          as: "tag"
+        }
+      },
+      {
+        $unwind: "$tag"
+      },
+      {
+        $sample: {
+          size: 20
+        }
+      }
+    ]).toArray();
+    
+    metaData = metaData.map(m => {
+      console.log(m);
+      if (m.tag && m.workQueueId)
+        m.workQueueId = m.tag.name;
+      return m;
+    });
+
+    console.log(metaData);
+
     // Render HTML
     const renderHtml = meta => {
       const data = (
@@ -224,7 +275,7 @@ export default class RunReports {
       {
         $lookup: {
           from: "tags",
-          localField: "workQueue",
+          localField: "workQueueId",
           foreignField: "_id",
           as: "tag"
         }
