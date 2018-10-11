@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SimpleSchema from "simpl-schema";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import { AutoForm, ErrorField } from "/imports/ui/forms";
 import pages from "/imports/api/settings/enums/settings";
 import TimePicker from "/imports/client/lib/uniforms/TimePicker";
 import Notifier from "/imports/client/lib/Notifier";

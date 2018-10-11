@@ -2,15 +2,15 @@ import Settings from "../collection";
 import fs from "fs";
 import settings from "/imports/api/settings/enums/settings";
 import Business from "/imports/api/business";
-
+ 
 export default class SettingsService {
-  static getSetting(name) {
+  static getSettings(name) {
     return Settings.findOne({ name });
   }
 
   static createDirectories() {
     //create directory for root
-    let { root } = this.getSetting(settings.ROOT);
+    let { root } = this.getSettings(settings.ROOT);
     this.createDirectory(root);
 
     //Once the root folder was changed, create the other directories as well
@@ -28,7 +28,7 @@ export default class SettingsService {
     this.createDirectory(reportsFolder);
 
     //Create letter directory
-    let { letterDirectory } = this.getSetting(settings.LETTERS_DIRECTORY);
+    let { letterDirectory } = this.getSettings(settings.LETTERS_DIRECTORY);
     letterDirectory = root + letterDirectory;
     this.createDirectory(letterDirectory);
   }
