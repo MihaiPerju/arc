@@ -146,7 +146,6 @@ export default class LetterService {
         renameSync(newFilename, filename);
       })
       .catch(function(error) {
-        console.log(error);
         throw error;
         //returns error
       });
