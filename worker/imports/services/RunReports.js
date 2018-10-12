@@ -9,7 +9,6 @@ import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
 import { fields } from "/imports/api/reports/enums/reportColumn";
-import Settings from "/imports/api/settings/collection.js";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 import pdf from "html-pdf";
 import Future from "fibers/future";
@@ -55,7 +54,6 @@ export default class RunReports {
   static getColumns(reportId) {
     const { reportColumns } = Reports.findOne({ _id: reportId });
     const columns = {};
-
 
     _.map(reportColumns, (value, key) => {
       if (value && key !== fields.INSURANCES) {
@@ -119,7 +117,6 @@ export default class RunReports {
   }
 
   static async saveReport({ reportId, _id }) {
-    console.log("Save Report");
     const { root } = SettingsService.getSettings(settings.ROOT);
 
     //Path to new file
@@ -139,6 +136,8 @@ export default class RunReports {
     const AccountsNative = Accounts.rawCollection(filters);
 
     let columns = this.getColumns(reportId);
+    columns = { ...columns, name: columns.workQueueId };
+    delete columns.workQueueId;
 
     const stringifier = stringify({
       columns,
@@ -149,33 +148,6 @@ export default class RunReports {
     const AccountsRaw = Accounts.rawCollection();
 
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
-
-    const metaData2 = await AccountsRaw.aggregateSync([
-      {
-        $match: filters
-      },
-      {
-        $lookup: {
-          from: "tags",
-          localField: "workQueueId",
-          foreignField: "_id",
-          as: "tag"
-        }
-      },
-      {
-        $unwind: "$tag"
-      },
-      {
-        $project: {
-          'tag.name': 1
-        }
-      },
-      {
-        $sample: {
-          size: 20
-        }
-      }
-    ]).toArray();
 
     let metaData = await AccountsRaw.aggregateSync([
       {
@@ -190,7 +162,9 @@ export default class RunReports {
         }
       },
       {
-        $unwind: "$tag"
+        $addFields: {
+          "tag": { $arrayElemAt: ["$tag", 0] }
+        }
       },
       {
         $sample: {
@@ -198,15 +172,14 @@ export default class RunReports {
         }
       }
     ]).toArray();
-    
+
+    let headers = this.getColumns(reportId);
+
     metaData = metaData.map(m => {
-      console.log(m);
       if (m.tag && m.workQueueId)
         m.workQueueId = m.tag.name;
       return m;
     });
-
-    console.log(metaData);
 
     // Render HTML
     const renderHtml = meta => {
@@ -215,13 +188,13 @@ export default class RunReports {
           <Table textAlign="center" celled>
             <Table.Body>
               <Table.Row>
-                {Object.keys(columns).map(item => (
+                {Object.keys(headers).map(item => (
                   <Table.Cell key={item}>{item}</Table.Cell>
                 ))}
               </Table.Row>
               {meta.map(d => (
                 <Table.Row>
-                  {Object.keys(columns).map(item => (
+                  {Object.keys(headers).map(item => (
                     <Table.Cell>{d[item]}</Table.Cell>
                   ))}
                 </Table.Row>
