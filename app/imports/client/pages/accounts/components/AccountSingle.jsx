@@ -15,7 +15,7 @@ export default class AccountSingle extends Component {
   }
 
   onCheck(e) {
-   // e.stopPropagation();
+    e.stopPropagation();
     const { checkAccount, account } = this.props;
     checkAccount(account);
   }

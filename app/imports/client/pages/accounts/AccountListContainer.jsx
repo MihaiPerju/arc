@@ -234,7 +234,6 @@ class AccountListContainer extends Pager {
   checkAllAccount = (selectAll) => {
     const { data } = this.props;
     let accountsSelected = this.state.accountsSelected;
-    this.closeRightPanel();
 
     if (data.length > 0 && selectAll) {
       _.map(data, account => { 
@@ -553,7 +552,7 @@ class AccountListContainer extends Pager {
           <RightSide
             openMetaData={this.openMetaDataSlider}
             currentAccount={currentAccount}
-            accountsSelected={accountsSelected}
+            accountsSelected={[...accountsSelected]}
             closeRightPanel={this.closeRightPanel}
             removeLock={this.removeLock}
           />}
