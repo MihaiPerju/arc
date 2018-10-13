@@ -11,6 +11,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import { objectFromArray } from "/imports/api/utils";
+import TagContent from "/imports/client/pages/tags//TagContent";
 
 class ModuleTagsListContainer extends Pager {
   constructor() {
@@ -22,7 +23,7 @@ class ModuleTagsListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
+      range: {}
     });
     this.query = TagsListQuery;
   }
@@ -99,14 +100,8 @@ class ModuleTagsListContainer extends Pager {
 
   render() {
     const { data, isLoading, error } = this.props;
-    const {
-      tagsSelected,
-      currentTag,
-      create,
-      range,
-      total
-    } = this.state;
-    
+    const { tagsSelected, currentTag, create, range, total } = this.state;
+
     const tag = objectFromArray(data, currentTag);
 
     if (isLoading) {
@@ -116,7 +111,6 @@ class ModuleTagsListContainer extends Pager {
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
-
 
     return (
       <div className="cc-container">
@@ -133,7 +127,11 @@ class ModuleTagsListContainer extends Pager {
             hideFilter
           />
           <ModuleTagList
-            class={this.state.filter ? "task-list module-tags decreased" : "task-list module-tags"}
+            class={
+              this.state.filter
+                ? "task-list module-tags decreased"
+                : "task-list module-tags"
+            }
             tagsSelected={tagsSelected}
             selectTag={this.selectTag}
             currentTag={currentTag}
@@ -175,7 +173,11 @@ class RightSide extends Component {
     const { tag, create, close } = this.props;
     return (
       <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <ModuleTagCreate close={close} /> : <ModuleTagContent tag={tag} />}
+        {create ? (
+          <ModuleTagCreate close={close} />
+        ) : (
+          <TagContent clients={[]} tag={tag} />
+        )}
       </div>
     );
   }
@@ -184,11 +186,9 @@ class RightSide extends Component {
 export default withQuery(
   () => {
     const params = {
-      filters: {workQueueStatus:false}
-  }
-  return TagsListQuery.clone(params);
+      filters: { workQueueStatus: false }
+    };
+    return TagsListQuery.clone(params);
   },
   { reactive: true }
 )(ModuleTagsListContainer);
-
-
