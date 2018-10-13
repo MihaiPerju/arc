@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import ModuleTagList from "./components/ModuleTagList";
 import ModuleTagSearchBar from "./components/ModuleTagSearchBar";
 import PaginationBar from "/imports/client/lib/PaginationBar";
-import ModuleTagContent from "./ModuleTagContent";
-import ModuleTagCreate from "./ModuleTagCreate";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
@@ -11,7 +9,6 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import { objectFromArray } from "/imports/api/utils";
-import TagContent from "/imports/client/pages/tags//TagContent";
 import TagPanel from "./components/TagPanel";
 
 class ModuleTagsListContainer extends Pager {

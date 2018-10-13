@@ -1,4 +1,6 @@
-import {mount} from 'react-mounter';
+import {
+  mount
+} from 'react-mounter';
 
 
 import route from "./router";
@@ -16,7 +18,7 @@ import Dashboard from '/imports/client/pages/users/Dashboard';
 
 route('/dashboard', Home, {}, {
   name: 'dashboard',
-  
+
 });
 route('/', Login, {}, {
   name: 'login',
@@ -46,7 +48,7 @@ import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
 import EditUser from '/imports/client/pages/admin/EditUser.jsx';
 import Settings from "/imports/client/pages/admin/settings/Settings";
 
-route("/admin/settings",Settings);
+route("/admin/settings", Settings);
 
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
@@ -182,11 +184,6 @@ import RuleEdit from "/imports/client/pages/rules/RuleEdit";
 route("/rules/list", RulesContainer);
 route("/rule/create", RuleCreate);
 route("/rule/:id/edit", RuleEdit);
-
-//Tags
-import TagListContainer from "/imports/client/pages/tags/TagListContainer.jsx";
-
-route("/tag/list", TagListContainer);
 
 //Substates
 import SubstatesListContainer from "/imports/client/pages/substates/SubstatesListContainer";
