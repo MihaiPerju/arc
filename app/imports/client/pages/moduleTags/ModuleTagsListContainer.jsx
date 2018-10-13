@@ -12,6 +12,7 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import { objectFromArray } from "/imports/api/utils";
 import TagContent from "/imports/client/pages/tags//TagContent";
+import TagPanel from "./components/TagPanel";
 
 class ModuleTagsListContainer extends Pager {
   constructor() {
@@ -147,36 +148,7 @@ class ModuleTagsListContainer extends Pager {
           />
         </div>
         {(currentTag || create) && (
-          <RightSide tag={tag} create={create} close={this.closeForm} />
-        )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { tag, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <ModuleTagCreate close={close} />
-        ) : (
-          <TagContent clients={[]} tag={tag} />
+          <TagPanel tag={tag} create={create} close={this.closeForm} />
         )}
       </div>
     );
