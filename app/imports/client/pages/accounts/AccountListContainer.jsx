@@ -12,7 +12,7 @@ import userTagsQuery from "/imports/api/users/queries/userTags.js";
 import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import RightSide from "./components/AccountRightSide";
 

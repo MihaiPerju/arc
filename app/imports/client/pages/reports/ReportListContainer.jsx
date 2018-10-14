@@ -13,8 +13,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substatesQuery from "/imports/api/substates/queries/listSubstates";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class ReportListContainer extends Pager {
   constructor() {
@@ -154,15 +154,13 @@ class ReportListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.REPORTS] } }
-      })
-      .fetch((err, tags) => {
-        if (!err) {
-          this.setState({ tags });
-        }
-      });
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.REPORTS] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
@@ -203,7 +201,11 @@ class ReportListContainer extends Pager {
             hideFilter={false}
           />
           <ReportList
-            class={this.state.filter ? "task-list reports decreased" : "task-list reports"}
+            class={
+              this.state.filter
+                ? "task-list reports decreased"
+                : "task-list reports"
+            }
             reportsSelected={reportsSelected}
             selectReport={this.selectReport}
             currentReport={currentReport}

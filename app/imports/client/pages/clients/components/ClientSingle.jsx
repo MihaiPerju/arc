@@ -3,7 +3,7 @@ import { getImagePath } from "../../../../api/utils";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import { moduleNames }  from '/imports/client/pages/tags/enums/moduleList'
+import { moduleNames } from "/imports/api/tags/enums/tags";
 export default class ClientSingle extends Component {
   constructor(props) {
     super(props);
@@ -55,15 +55,7 @@ export default class ClientSingle extends Component {
 
   render() {
     const { bgYellow } = this.state;
-    const {
-      id,
-      mail,
-      avatar,
-      name,
-      currentClient,
-      tags,
-      client
-    } = this.props;
+    const { id, mail, avatar, name, currentClient, tags, client } = this.props;
     const classes = classNames({
       "list-item": true,
       "user-item": true,
@@ -98,7 +90,6 @@ export default class ClientSingle extends Component {
             src={avatar ? getImagePath(avatar) : "/assets/img/user.svg"}
           />
         </div>
-
       </div>
     );
   }

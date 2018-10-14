@@ -6,7 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import WorkQueueService from "./../../services/WorkQueueService";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
-import moduleListEnum from "/import/client/pages/enums/moduleList";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class AccountActioning extends React.Component {
   constructor() {

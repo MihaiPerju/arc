@@ -10,8 +10,8 @@ import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class ClientContainer extends Pager {
   constructor() {
@@ -130,15 +130,13 @@ class ClientContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery
-      .clone({
-        filters: {entities: {$in: [moduleNames.CLIENTS]}},
-      })
-      .fetch((err, tags) => {
-        if (!err) {
-          this.setState({tags });
-        }
-      });
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.CLIENTS] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
@@ -179,7 +177,11 @@ class ClientContainer extends Pager {
             hideSort
           />
           <ClientList
-            class={this.state.filter ? "task-list clients decreased" : "task-list clients"}
+            class={
+              this.state.filter
+                ? "task-list clients decreased"
+                : "task-list clients"
+            }
             setClient={this.setClient.bind(this)}
             selectClient={this.selectClient}
             currentClient={currentClient}

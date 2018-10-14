@@ -11,8 +11,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class LetterTemplateListContainer extends Pager {
   constructor() {
@@ -124,15 +124,13 @@ class LetterTemplateListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.TEMPLATES] } }
-      })
-      .fetch((err, tags) => {
-        if (!err) {
-          this.setState({ tags });
-        }
-      });
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.TEMPLATES] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
@@ -171,7 +169,11 @@ class LetterTemplateListContainer extends Pager {
             tags={tags}
           />
           <LetterTemplatesList
-            class={this.state.filter ? "task-list templates decreased" : "task-list templates"}
+            class={
+              this.state.filter
+                ? "task-list templates decreased"
+                : "task-list templates"
+            }
             templatesSelected={templatesSelected}
             selectTemplate={this.selectTemplate}
             currentTemplate={currentTemplate}

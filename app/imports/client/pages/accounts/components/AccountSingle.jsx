@@ -4,7 +4,7 @@ import moment from "moment/moment";
 import commaNumber from "comma-number";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 export default class AccountSingle extends Component {
   constructor(props) {
     super(props);

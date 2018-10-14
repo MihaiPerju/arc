@@ -8,9 +8,8 @@ import {
 import TagsSchema from "/imports/api/tags/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
-import moduleListEnum from "./enums/moduleList";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import { moduleNames } from "./enums/moduleList";
+import moduleListEnum , { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class TagEdit extends React.Component {
   constructor() {

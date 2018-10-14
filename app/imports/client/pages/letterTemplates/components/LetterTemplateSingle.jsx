@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import { moduleNames }  from '/imports/client/pages/tags/enums/moduleList'
+import { moduleNames } from "/imports/api/tags/enums/tags";
 export default class LetterTemplateSingle extends Component {
   constructor(props) {
     super(props);
@@ -36,12 +36,7 @@ export default class LetterTemplateSingle extends Component {
   };
 
   render() {
-    const {
-      template,
-      templatesSelected,
-      currentTemplate,
-      tags
-    } = this.props;
+    const { template, templatesSelected, currentTemplate, tags } = this.props;
     const checked = templatesSelected.includes(template._id);
     const classes = classNames({
       "list-item": true,

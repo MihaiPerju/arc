@@ -5,7 +5,7 @@ import WorkQueueService from "../../services/WorkQueueService";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Notifier from "../../../../lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
-import moduleListEnum from "/imports/client/pages/tags/enums/moduleList";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class AccountAssign extends React.Component {
   constructor() {

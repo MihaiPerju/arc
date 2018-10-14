@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import { moduleNames }  from '/imports/client/pages/tags/enums/moduleList'
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class ActionSingle extends Component {
   constructor(props) {

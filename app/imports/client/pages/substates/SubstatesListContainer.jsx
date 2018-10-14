@@ -11,8 +11,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "/imports/client/lib/PagerService";
 import Pager from "../../lib/Pager";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class SubstatesListContainer extends Pager {
   constructor() {
@@ -124,15 +124,13 @@ class SubstatesListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.SUBSTATES] } }
-      })
-      .fetch((err, tags) => {
-        if (!err) {
-          this.setState({ tags });
-        }
-      });
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.SUBSTATES] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
@@ -235,7 +233,11 @@ export default withQuery(
   () => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {status:true }});
+    return PagerService.setQuery(query, {
+      page,
+      perPage,
+      filters: { status: true }
+    });
   },
   { reactive: true }
 )(SubstatesListContainer);

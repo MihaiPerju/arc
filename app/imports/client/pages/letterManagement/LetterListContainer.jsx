@@ -8,8 +8,8 @@ import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
 import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class LetterListContainer extends Pager {
   constructor() {
@@ -78,20 +78,18 @@ class LetterListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.LETTERS] } }
-      })
-      .fetch((err,tags) => {
-        if (!err) {
-          this.setState({ tags });
-        }
-      });
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.LETTERS] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
     const { data, isLoading, error } = this.props;
-    const { total, range, create,tags } = this.state;
+    const { total, range, create, tags } = this.state;
     if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
       return <Loading />;
     }
@@ -138,7 +136,7 @@ class RightSide extends Component {
   }
 
   render() {
-    const {  close } = this.props;
+    const { close } = this.props;
     const { fade } = this.state;
 
     return (

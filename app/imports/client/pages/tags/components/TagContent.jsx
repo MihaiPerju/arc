@@ -4,7 +4,7 @@ import TagContentHeader from "./TagContentHeader";
 import TagEdit from "../TagEdit";
 import TagContentDescription from "./TagContentDescription";
 import usersQuery from "/imports/api/users/queries/listUsers";
-import { moduleNames } from "../enums/moduleList";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class TagContent extends Component {
   constructor() {

@@ -13,7 +13,7 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class ActionListContainer extends Pager {
   constructor() {

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import TagsSchema from '/imports/api/tags/schemas/schema';
+import TagsSchema from "/imports/api/tags/schemas/schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import moduleListEnum from "./enums/moduleList";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class TagCreate extends Component {
   constructor() {
