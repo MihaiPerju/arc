@@ -85,16 +85,6 @@ export default class AccountContentHeader extends Component {
     }
   };
 
-
-  // restartTimer = () => {
-  //   const { account } = this.props;
-  //   Meteor.call('account.restartLockTimer', account._id, err => {
-  //     if (err) {
-  //       Notifier.error(err.reason);
-  //     }
-  //   });
-  // };
-
   onComplete = () => {
     const { removeLock, closeRightPanel } = this.props;
     removeLock();

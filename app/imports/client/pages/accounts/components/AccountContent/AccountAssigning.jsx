@@ -6,6 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import WorkQueueService from "./../../services/WorkQueueService";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
+import moduleListEnum from "/import/client/pages/enums/moduleList";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -21,15 +22,21 @@ export default class AccountActioning extends React.Component {
   }
 
   componentWillMount() {
-    workQueueQuery.clone().fetch((err, res) => {
-      if (!err) {
-        const workQueueOptions = WorkQueueService.createOptions(res);
-        this.setState({
-          workQueueOptions,
-          loadingWorkQueues: false
-        });
-      }
-    });
+    workQueueQuery
+      .clone({
+        filters: {
+          entities: { $in: [moduleListEnum.USERS] }
+        }
+      })
+      .fetch((err, res) => {
+        if (!err) {
+          const workQueueOptions = WorkQueueService.createOptions(res);
+          this.setState({
+            workQueueOptions,
+            loadingWorkQueues: false
+          });
+        }
+      });
   }
 
   closeDialog = () => {
@@ -71,13 +78,9 @@ export default class AccountActioning extends React.Component {
   };
 
   showDialog = () => {
-    const {  options, assignToUser } = this.props;
+    const { options, assignToUser } = this.props;
 
-    const {
-      workQueueOptions,
-      loadingWorkQueues,
-      isDisabled
-    } = this.state;
+    const { workQueueOptions, loadingWorkQueues, isDisabled } = this.state;
 
     if (loadingWorkQueues) {
       return <Loading />;
@@ -108,7 +111,15 @@ export default class AccountActioning extends React.Component {
                 type="submit"
                 className="btn--light-blue"
               >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Confirm"
+                )}
               </button>
             </div>
           </AutoForm>
@@ -135,7 +146,15 @@ export default class AccountActioning extends React.Component {
                 type="submit"
                 className="btn--light-blue"
               >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Confirm"
+                )}
               </button>
             </div>
           </AutoForm>

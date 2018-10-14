@@ -2,9 +2,10 @@ import React from "react";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import WorkQueueService from "../../services/WorkQueueService";
-import workQueueQuery from "../../../../../api/tags/queries/listTags";
+import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Notifier from "../../../../lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
+import moduleListEnum from "/imports/client/pages/tags/enums/moduleList";
 
 export default class AccountAssign extends React.Component {
   constructor() {
@@ -38,17 +39,21 @@ export default class AccountAssign extends React.Component {
   };
 
   componentWillMount() {
-    workQueueQuery.clone( {filters: {
-      workQueueStatus: true,
-    },}).fetch((err, res) => {
-      if (!err) {
-        const workQueueOptions = WorkQueueService.createOptions(res);
-        this.setState({
-          workQueueOptions,
-          loadingWorkQueues: false
-        });
-      }
-    });
+    workQueueQuery
+      .clone({
+        filters: {
+          entities: { $in: [moduleListEnum.USERS] }
+        }
+      })
+      .fetch((err, res) => {
+        if (!err) {
+          const workQueueOptions = WorkQueueService.createOptions(res);
+          this.setState({
+            workQueueOptions,
+            loadingWorkQueues: false
+          });
+        }
+      });
   }
 
   assignToUser = ({ assigneeId }) => {
@@ -144,7 +149,15 @@ export default class AccountAssign extends React.Component {
                 type="submit"
                 className="btn--light-blue"
               >
-               {isDisabled?<div> Loading<i className="icon-cog" /></div>:"Confirm"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Confirm"
+                )}
               </button>
             </div>
           </AutoForm>
@@ -172,7 +185,15 @@ export default class AccountAssign extends React.Component {
                 type="submit"
                 className="btn--light-blue"
               >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Confirm"
+                )}
               </button>
             </div>
           </AutoForm>

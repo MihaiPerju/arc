@@ -198,7 +198,7 @@ route("/letters/list", LetterListContainer);
 //Tags management
 import TagsListContainer from "/imports/client/pages/tags/TagsListContainer.jsx";
 
-route("/module-tags/list",TagsListContainer);
+route("/tags/list", TagsListContainer);
 
 
 //Flagged accounts

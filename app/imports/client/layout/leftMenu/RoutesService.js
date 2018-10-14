@@ -83,13 +83,9 @@ export default class RouteService {
           label: "Substates",
           icon: "tasks"
         },
+       
         {
-          name: "tag/list",
-          label: "Work Queues",
-          icon: "tags"
-        },
-        {
-          name: "module-tags/list",
+          name: "tags/list",
           label: "Tags",
           icon: "tags"
         }
@@ -176,7 +172,7 @@ export default class RouteService {
           icon: "thumb-tack"
         },
         {
-          name: "module-tags/list",
+          name: "tags/list",
           label: "Tags",
           icon: "tags"
         }
@@ -369,7 +365,7 @@ export default class RouteService {
           return "Substates";
 
         }
-      case "/module-tags/list":
+      case "/tags/list":
         {
           return "Tags";
 
