@@ -14,7 +14,7 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substatesQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class ReportListContainer extends Pager {
   constructor() {
@@ -28,7 +28,7 @@ class ReportListContainer extends Pager {
       total: 0,
       range: {},
       substates: [],
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
@@ -50,7 +50,7 @@ class ReportListContainer extends Pager {
           this.setState({ substates });
         }
       });
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -153,14 +153,14 @@ class ReportListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
         filters: { entities: { $in: [moduleNames.REPORTS] } }
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err, tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({ tags });
         }
       });
   };
@@ -174,7 +174,7 @@ class ReportListContainer extends Pager {
       total,
       range,
       substates,
-      moduleTags
+      tags
     } = this.state;
     const report = objectFromArray(data, currentReport);
 
@@ -198,7 +198,7 @@ class ReportListContainer extends Pager {
             btnGroup={reportsSelected.length}
             deleteAction={this.deleteAction}
             closeRightPanel={this.closeRightPanel}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
             hideFilter={false}
           />
@@ -209,7 +209,7 @@ class ReportListContainer extends Pager {
             currentReport={currentReport}
             setReport={this.setReport}
             reports={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             module="Report"

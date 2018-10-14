@@ -12,7 +12,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class CodeListContainer extends Pager {
   constructor() {
@@ -25,14 +25,14 @@ class CodeListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -132,14 +132,14 @@ class CodeListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
         filters: { entities: { $in: [moduleNames.CODES] } }
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err, tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({ tags });
         }
       });
   };
@@ -152,7 +152,7 @@ class CodeListContainer extends Pager {
       create,
       range,
       total,
-      moduleTags
+      tags
     } = this.state;
     const code = objectFromArray(data, currentCode);
 
@@ -174,7 +174,7 @@ class CodeListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
             hideFilter
           />
@@ -185,7 +185,7 @@ class CodeListContainer extends Pager {
             currentCode={currentCode}
             setCode={this.setCode}
             codes={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             create={this.createForm}

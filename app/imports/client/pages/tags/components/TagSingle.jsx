@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 
-export default class ModuleTagSingle extends Component {
+export default class TagSingle extends Component {
   constructor(props) {
     super(props);
   }

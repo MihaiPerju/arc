@@ -12,7 +12,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "../../lib/PagerService";
 import Pager from "../../lib/Pager";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class LetterTemplateListContainer extends Pager {
   constructor() {
@@ -25,14 +25,14 @@ class LetterTemplateListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -123,14 +123,14 @@ class LetterTemplateListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
         filters: { entities: { $in: [moduleNames.TEMPLATES] } }
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err, tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({ tags });
         }
       });
   };
@@ -143,7 +143,7 @@ class LetterTemplateListContainer extends Pager {
       create,
       range,
       total,
-      moduleTags
+      tags
     } = this.state;
     const template = objectFromArray(data, currentTemplate);
 
@@ -168,7 +168,7 @@ class LetterTemplateListContainer extends Pager {
             deleteAction={this.deleteAction}
             hideSort
             hideFilter
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <LetterTemplatesList
             class={this.state.filter ? "task-list templates decreased" : "task-list templates"}
@@ -177,7 +177,7 @@ class LetterTemplateListContainer extends Pager {
             currentTemplate={currentTemplate}
             setTemplate={this.setTemplate}
             templates={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             module="Template"

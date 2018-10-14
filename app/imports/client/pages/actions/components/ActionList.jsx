@@ -13,7 +13,7 @@ export default class ActionList extends Component {
       selectAction,
       actionsSelected,
       currentAction,
-      moduleTags
+      tags
     } = this.props;
     const actionList = actions.map(function(action) {
       return (
@@ -24,7 +24,7 @@ export default class ActionList extends Component {
           setAction={setAction}
           action={action}
           key={action._id}
-          moduleTags={moduleTags}
+          tags={tags}
         />
       );
     }, this);

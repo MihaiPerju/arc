@@ -9,7 +9,7 @@ import Pager from "../../lib/Pager";
 import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class LetterListContainer extends Pager {
   constructor() {
@@ -20,14 +20,14 @@ class LetterListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -77,21 +77,21 @@ class LetterListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
         filters: { entities: { $in: [moduleNames.LETTERS] } }
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err,tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({ tags });
         }
       });
   };
 
   render() {
     const { data, isLoading, error } = this.props;
-    const { total, range, create, moduleTags } = this.state;
+    const { total, range, create,tags } = this.state;
     if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
       return <Loading />;
     }
@@ -104,10 +104,10 @@ class LetterListContainer extends Pager {
         <div className={create ? "left__side" : "left__side full__width"}>
           <LetterSearchBar
             setPagerInitial={this.setPagerInitial}
-            moduleTags={moduleTags}
+            tags={tags}
             hideFilter
           />
-          <LetterList letters={data} moduleTags={moduleTags} />
+          <LetterList letters={data} tags={tags} />
           <PaginationBar
             create={this.createForm}
             closeForm={this.closeForm}

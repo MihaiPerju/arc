@@ -4,7 +4,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
 import Dialog from '../../../lib/ui/Dialog';
 import classNames from 'classnames';
-import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+import { moduleNames }  from '/imports/client/pages/tags/enums/moduleList'
 
 export default class LetterSingle extends Component {
   constructor() {
@@ -69,7 +69,7 @@ export default class LetterSingle extends Component {
   };
 
   render() {
-    const { letter, moduleTags } = this.props;
+    const { letter, tags } = this.props;
     const { dialogIsActive } = this.state;
     const itemClasses = classNames('list-item user-item', {
       'letter-item': letter.status == Statuses.NEW
@@ -129,7 +129,7 @@ export default class LetterSingle extends Component {
           <TagItem
             title="Tag Letter"
             tagIds={letter.tagIds}
-            moduleTags={moduleTags}
+            tags={tags}
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.LETTERS}
           />

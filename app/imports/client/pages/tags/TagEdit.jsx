@@ -8,6 +8,9 @@ import {
 import TagsSchema from "/imports/api/tags/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
 import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import moduleListEnum from "./enums/moduleList";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import { moduleNames } from "./enums/moduleList";
 
 export default class TagEdit extends React.Component {
   constructor() {
@@ -57,9 +60,17 @@ export default class TagEdit extends React.Component {
     setEdit();
   };
 
+  getOptions = () => {
+    return _.map(moduleListEnum, entities => ({
+      value: entities,
+      label: entities
+    }));
+  };
+
   render() {
     const { tag } = this.props;
     const { isDisabled, clientOptions } = this.state;
+    const options = this.getOptions();
 
     return (
       <div className="create-form">
@@ -87,8 +98,8 @@ export default class TagEdit extends React.Component {
           </div>
         </div>
 
-        <div className="create-form__wrapper">
-          <div className="action-block">
+        <div>
+          <div className="action-block m-t--20">
             <div className="header__block">
               <div className="title-block text-uppercase">Tag information</div>
             </div>
@@ -105,15 +116,32 @@ export default class TagEdit extends React.Component {
 
               <div className="select-group">
                 <div className="form-wrapper">
-                  <SelectField
-                    placeholder="Select Client"
+                  <SelectMulti
+                    className="form-select__multi select-tag__multi"
+                    placeholder="Select modules"
                     labelHidden={true}
-                    options={clientOptions}
-                    name="clientId"
+                    name="entities"
+                    options={options}
                   />
-                  <ErrorField name="clientId" />
+                  <ErrorField name="entities" />
                 </div>
               </div>
+
+              {tag &&
+                tag.entities &&
+                tag.entities.includes(moduleNames.USERS) && (
+                  <div className="select-group">
+                    <div className="form-wrapper">
+                      <SelectField
+                        placeholder="Select Client"
+                        labelHidden={true}
+                        options={clientOptions}
+                        name="clientId"
+                      />
+                      <ErrorField name="clientId" />
+                    </div>
+                  </div>
+                )}
             </AutoForm>
           </div>
         </div>

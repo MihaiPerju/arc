@@ -5,7 +5,7 @@ import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import moduleListEnum from "./enums/moduleList";
 
-export default class ModuleTagCreate extends Component {
+export default class TagCreate extends Component {
   constructor() {
     super();
 

@@ -13,7 +13,7 @@ import userTagsQuery from "/imports/api/users/queries/userTags.js";
 import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class FlaggedAccountListContainer extends Pager {
   constructor() {
@@ -33,7 +33,7 @@ class FlaggedAccountListContainer extends Pager {
       tags: [],
       dropdownOptions: [],
       currentRouteState: null,
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
@@ -78,7 +78,7 @@ class FlaggedAccountListContainer extends Pager {
 
     const { state } = this.props;
     this.setState({ currentRouteState: state });
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps(newProps) {
@@ -346,14 +346,14 @@ class FlaggedAccountListContainer extends Pager {
     });
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
          filters: {entities: {$in: [moduleNames.ACCOUNT]}},
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err, tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({ tags });
         }
       });
   };
@@ -370,7 +370,7 @@ class FlaggedAccountListContainer extends Pager {
       showMetaData,
       assignFilterArr,
       dropdownOptions,
-      moduleTags
+      tags
     } = this.state;
     const options = this.getData(data);
     const account = this.getAccount(currentAccount);
@@ -405,7 +405,7 @@ class FlaggedAccountListContainer extends Pager {
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           {assignUser && (
             <AccountAssigning
@@ -433,7 +433,7 @@ class FlaggedAccountListContainer extends Pager {
             checkAccount={this.checkAccount}
             currentAccount={currentAccount}
             data={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             nextPage={this.nextPage}

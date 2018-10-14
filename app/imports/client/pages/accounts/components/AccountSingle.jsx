@@ -4,7 +4,7 @@ import moment from "moment/moment";
 import commaNumber from "comma-number";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 export default class AccountSingle extends Component {
   constructor(props) {
     super(props);
@@ -55,7 +55,7 @@ export default class AccountSingle extends Component {
       active,
       currentAccount,
       expiredTickle,
-      moduleTags
+      tags
     } = this.props;
 
     const classes = classNames("list-item task-item", {
@@ -104,7 +104,7 @@ export default class AccountSingle extends Component {
           <TagItem
             title="Tag Account"
             tagIds={account.tagIds}
-            moduleTags={moduleTags}
+            tags={tags}
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.ACCOUNT}
           />

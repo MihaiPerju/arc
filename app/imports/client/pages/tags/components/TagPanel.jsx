@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ModuleTagCreate from "../ModuleTagCreate";
+import TagCreate from "../TagCreate";
 import TagContent from "./TagContent";
 
 export default class TagPanel extends Component {
@@ -22,7 +22,7 @@ export default class TagPanel extends Component {
     if (create) {
       return (
         <div className={fade ? "right__side in" : "right__side"}>
-          <ModuleTagCreate close={close} />
+          <TagCreate close={close} />
         </div>
       );
     }

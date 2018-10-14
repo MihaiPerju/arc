@@ -5,7 +5,7 @@ import TagItem from "/imports/client/lib/TagItem";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+import { moduleNames }  from '/imports/client/pages/tags/enums/moduleList'
 export default class SubstateSingle extends Component {
   constructor(props) {
     super(props);
@@ -93,7 +93,7 @@ export default class SubstateSingle extends Component {
       substate,
       substateSelected,
       currentSubstate,
-      moduleTags
+      tags
     } = this.props;
     const { actions, dialogIsActive } = this.state;
     const checked = substateSelected.includes(substate._id);
@@ -139,7 +139,7 @@ export default class SubstateSingle extends Component {
           <TagItem
             title="Tag Substate"
             tagIds={substate.tagIds}
-            moduleTags={moduleTags}
+            tags={tags}
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.SUBSTATES}
           />

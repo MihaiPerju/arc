@@ -10,7 +10,7 @@ export default class ReportList extends Component {
         selectReport,
         reportsSelected,
         currentReport,
-        moduleTags
+        tags
       } = this.props;
       return (
         <ReportSingle
@@ -20,7 +20,7 @@ export default class ReportList extends Component {
           setReport={setReport}
           report={report}
           key={report._id}
-          moduleTags={moduleTags}
+          tags={tags}
         />
       );
     }, this);

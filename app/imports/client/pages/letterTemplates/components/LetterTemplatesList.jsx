@@ -3,7 +3,7 @@ import LetterTemplateSingle from "./LetterTemplateSingle";
 
 export default class LetterTemplatesList extends Component {
   render() {
-    const { templates, moduleTags } = this.props;
+    const { templates, tags } = this.props;
     const letterList = templates.map(function(template) {
       const {
         setTemplate,
@@ -19,7 +19,7 @@ export default class LetterTemplatesList extends Component {
           setTemplate={setTemplate}
           template={template}
           key={template._id}
-          moduleTags={moduleTags}
+          tags={tags}
         />
       );
     }, this);

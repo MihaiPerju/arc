@@ -9,7 +9,7 @@ export default class ClientList extends Component {
       renderContent,
       selectClient,
       setClient,
-      moduleTags
+      tags
     } = this.props;
     const clientList = clients.map(function(client) {
       return (
@@ -23,7 +23,7 @@ export default class ClientList extends Component {
           mail={client.email}
           id={client._id}
           key={client._id}
-          moduleTags={moduleTags}
+          tags={tags}
           client={client}
         />
       );

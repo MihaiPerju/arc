@@ -11,7 +11,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class ClientContainer extends Pager {
   constructor() {
@@ -25,14 +25,14 @@ class ClientContainer extends Pager {
       total: 0,
       range: {},
       filter: false,
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -129,14 +129,14 @@ class ClientContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
         filters: {entities: {$in: [moduleNames.CLIENTS]}},
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err, tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({tags });
         }
       });
   };
@@ -149,7 +149,7 @@ class ClientContainer extends Pager {
       create,
       range,
       total,
-      moduleTags
+      tags
     } = this.state;
     const client = this.getClient();
 
@@ -175,7 +175,7 @@ class ClientContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={clientsSelected.length}
             deleteAction={this.deleteAction}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
           />
           <ClientList
@@ -184,7 +184,7 @@ class ClientContainer extends Pager {
             selectClient={this.selectClient}
             currentClient={currentClient}
             clients={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             module="Client"

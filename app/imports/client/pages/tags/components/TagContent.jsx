@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import TagContentHeader from "./TagContentHeader";
-import TagEdit from "./TagEdit";
+import TagEdit from "../TagEdit";
 import TagContentDescription from "./TagContentDescription";
 import usersQuery from "/imports/api/users/queries/listUsers";
+import { moduleNames } from "../enums/moduleList";
 
 class TagContent extends Component {
   constructor() {
@@ -41,7 +42,7 @@ class TagContent extends Component {
   render() {
     const { edit } = this.state;
     const { tag, data: users, error } = this.props;
-
+    console.log(tag);
     if (error) {
       return <div>Error: {error.reason}</div>;
     }
@@ -55,12 +56,16 @@ class TagContent extends Component {
         ) : (
           <div>
             <TagContentHeader setEdit={this.setEdit} tag={tag} />
-            <TagContentDescription
-              taggedUsers={taggedUsers}
-              untaggedUsers={untaggedUsers}
-              users={users}
-              currentTag={tag}
-            />
+            {tag &&
+              tag.entities &&
+              tag.entities.includes(moduleNames.USERS) && (
+                <TagContentDescription
+                  taggedUsers={taggedUsers}
+                  untaggedUsers={untaggedUsers}
+                  users={users}
+                  currentTag={tag}
+                />
+              )}
           </div>
         )}
       </div>

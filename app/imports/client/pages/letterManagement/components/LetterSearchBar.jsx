@@ -39,7 +39,7 @@ export default class LetterSearchBar extends Component {
 
   render() {
     const { model } = this.state;
-    const { hideFilter, moduleTags } = this.props;
+    const { hideFilter, tags } = this.props;
 
     return (
       <AutoForm
@@ -62,7 +62,7 @@ export default class LetterSearchBar extends Component {
                 <i className="icon-filter" />
               </button>
             )}
-            {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
+            {tags.length ? <Tags tags={tags} /> : <div />}
           </div>
         </div>
       </AutoForm>

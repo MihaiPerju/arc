@@ -195,10 +195,10 @@ import LetterListContainer from "/imports/client/pages/letterManagement/LetterLi
 
 route("/letters/list", LetterListContainer);
 
-//Module tagging
-import ModuleTagsListContainer from "/imports/client/pages/moduleTags/ModuleTagsListContainer.jsx";
+//Tags management
+import TagsListContainer from "/imports/client/pages/tags/TagsListContainer.jsx";
 
-route("/module-tags/list", ModuleTagsListContainer);
+route("/module-tags/list",TagsListContainer);
 
 
 //Flagged accounts

@@ -1,6 +1,6 @@
 import React from "react";
-import ModuleTagList from "./components/ModuleTagList";
-import ModuleTagSearchBar from "./components/ModuleTagSearchBar";
+import TagList from "./components/TagList";
+import TagSearchBar from "./components/TagSearchBar";
 import PaginationBar from "/imports/client/lib/PaginationBar";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
@@ -11,7 +11,7 @@ import PagerService from "../../lib/PagerService";
 import { objectFromArray } from "/imports/api/utils";
 import TagPanel from "./components/TagPanel";
 
-class ModuleTagsListContainer extends Pager {
+class TagsListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -117,14 +117,14 @@ class ModuleTagsListContainer extends Pager {
             currentTag || create ? "left__side" : "left__side full__width"
           }
         >
-          <ModuleTagSearchBar
+          <TagSearchBar
             setPagerInitial={this.setPagerInitial}
             btnGroup={tagsSelected.length}
             deleteAction={this.deleteAction}
             hideSort
             hideFilter
           />
-          <ModuleTagList
+          <TagList
             class={
               this.state.filter
                 ? "task-list module-tags decreased"
@@ -160,4 +160,4 @@ export default withQuery(
     return TagsListQuery.clone(params);
   },
   { reactive: true }
-)(ModuleTagsListContainer);
+)(TagsListContainer);

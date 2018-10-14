@@ -12,7 +12,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "/imports/client/lib/PagerService";
 import Pager from "../../lib/Pager";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class SubstatesListContainer extends Pager {
   constructor() {
@@ -26,14 +26,14 @@ class SubstatesListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -123,14 +123,14 @@ class SubstatesListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
         filters: { entities: { $in: [moduleNames.SUBSTATES] } }
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err, tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({ tags });
         }
       });
   };
@@ -144,7 +144,7 @@ class SubstatesListContainer extends Pager {
       filter,
       range,
       total,
-      moduleTags
+      tags
     } = this.state;
     const substate = objectFromArray(data, currentSubstate);
 
@@ -167,7 +167,7 @@ class SubstatesListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={substateSelected.length}
             deleteAction={this.deleteAction}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
             hideFilter
           />
@@ -178,7 +178,7 @@ class SubstatesListContainer extends Pager {
             currentSubstate={currentSubstate}
             setSubstate={this.setSubstate}
             substates={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             module="Substate"

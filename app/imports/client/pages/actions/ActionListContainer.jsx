@@ -13,7 +13,7 @@ import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import { moduleNames } from "/imports/client/pages/tags/enums/moduleList";
 
 class ActionListContainer extends Pager {
   constructor() {
@@ -28,7 +28,7 @@ class ActionListContainer extends Pager {
       range: {},
       substates: [],
       loadingSubstates: true,
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
@@ -51,7 +51,7 @@ class ActionListContainer extends Pager {
     if (id) {
       this.setAction(id);
     }
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -139,14 +139,14 @@ class ActionListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
+  getTags = () => {
     TagsListQuery
       .clone({
         filters: {entities: {$in: [moduleNames.ACTIONS]}},
       })
-      .fetch((err, moduleTags) => {
+      .fetch((err, tags) => {
         if (!err) {
-          this.setState({ moduleTags });
+          this.setState({ tags });
         }
       });
   };
@@ -161,7 +161,7 @@ class ActionListContainer extends Pager {
       range,
       substates,
       loadingSubstates,
-      moduleTags
+      tags
     } = this.state;
     const action = objectFromArray(data, currentAction);
 
@@ -183,7 +183,7 @@ class ActionListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={actionsSelected.length}
             deleteAction={this.deleteAction}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
             hideFilter
           />
@@ -194,7 +194,7 @@ class ActionListContainer extends Pager {
             currentAction={currentAction}
             setAction={this.setAction}
             actions={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             module="Action"
