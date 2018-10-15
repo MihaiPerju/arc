@@ -15,6 +15,7 @@ import workQueueQuery from "/imports/api/tags/queries/listTags";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class RuleEdit extends React.Component {
   constructor() {
@@ -94,17 +95,23 @@ export default class RuleEdit extends React.Component {
       });
 
     //Filling the work queue options
-    workQueueQuery.clone().fetch((err, res) => {
-      if (!err) {
-        res.map(workQueue => {
-          workQueueOptions.push({
-            label: workQueue.name,
-            value: workQueue._id
+    workQueueQuery
+      .clone({
+        filters: {
+          entities: { $in: [moduleListEnum.USERS] }
+        }
+      })
+      .fetch((err, res) => {
+        if (!err) {
+          res.map(workQueue => {
+            workQueueOptions.push({
+              label: workQueue.name,
+              value: workQueue._id
+            });
           });
-        });
-        this.setState({ workQueueOptions });
-      }
-    });
+          this.setState({ workQueueOptions });
+        }
+      });
 
     //Filling the action options
     actionQuery.clone().fetch((err, res) => {

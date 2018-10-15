@@ -488,7 +488,7 @@ export default class PagerService {
       letterName = FlowRouter.getQueryParam("letterTemplateName");
     }
 
-    if (currentPath.indexOf("module-tags/list") > -1) {
+    if (currentPath.indexOf("tags/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
     }
 

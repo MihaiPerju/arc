@@ -368,7 +368,7 @@ export default class AccountSearchBar extends Component {
       icons,
       getProperAccounts,
       assignFilterArr,
-      moduleTags
+      tags
     } = this.props;
 
     const classes = classNames({
@@ -389,21 +389,21 @@ export default class AccountSearchBar extends Component {
       "manager-search":
         !btnGroup &&
         Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
-        moduleTags.length === 0,
+        tags.length === 0,
       "tag-btn--true":
         !btnGroup &&
         Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
-        moduleTags.length,
+        tags.length,
       "btn-groups":
         btnGroup &&
         Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
-        moduleTags.length,
+        tags.length,
       sort__width:
         btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      "tag-btn": btnGroup && moduleTags.length,
+      "tag-btn": btnGroup && tags.length,
       "account-search": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      "tag--none": moduleTags.length === 0,
-      "account-tag--none": btnGroup && moduleTags.length === 0
+      "tag--none": tags.length === 0,
+      "account-tag--none": btnGroup && tags.length === 0
     });
 
     const currentStateName = FlowRouter.current().params.state;
@@ -666,7 +666,7 @@ export default class AccountSearchBar extends Component {
                   </Dialog>
                 )}
               </button>
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : null}
+              {tags.length ? <Tags tags={tags} /> : null}
             </div>
             {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
               <div

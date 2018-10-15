@@ -11,8 +11,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class CodeListContainer extends Pager {
   constructor() {
@@ -25,14 +25,14 @@ class CodeListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -132,16 +132,14 @@ class CodeListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.CODES] } }
-      })
-      .fetch((err, moduleTags) => {
-        if (!err) {
-          this.setState({ moduleTags });
-        }
-      });
+  getTags = () => {
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.CODES] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
@@ -152,7 +150,7 @@ class CodeListContainer extends Pager {
       create,
       range,
       total,
-      moduleTags
+      tags
     } = this.state;
     const code = objectFromArray(data, currentCode);
 
@@ -174,18 +172,22 @@ class CodeListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={codesSelected.length}
             deleteAction={this.deleteAction}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
             hideFilter
           />
           <CodeList
-            class={this.state.filter ? "task-list codes decreased" : "task-list codes"}
+            class={
+              this.state.filter
+                ? "task-list codes decreased"
+                : "task-list codes"
+            }
             codesSelected={codesSelected}
             selectCode={this.selectCode}
             currentCode={currentCode}
             setCode={this.setCode}
             codes={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             create={this.createForm}

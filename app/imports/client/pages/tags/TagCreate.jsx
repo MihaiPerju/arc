@@ -1,12 +1,9 @@
 import React, { Component } from "react";
-import Notifier from "../../lib/Notifier";
+import Notifier from "/imports/client/lib/Notifier";
 import TagsSchema from "/imports/api/tags/schemas/schema";
-import {
-  AutoForm,
-  AutoField,
-  ErrorField,
-  SelectField
-} from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class TagCreate extends Component {
   constructor() {
@@ -17,7 +14,6 @@ export default class TagCreate extends Component {
 
   onSubmit(data) {
     this.setState({ isDisabled: true });
-    data.workQueueStatus=true;
     Meteor.call("tag.create", { data }, err => {
       if (!err) {
         Notifier.success("Tag added!");
@@ -39,16 +35,16 @@ export default class TagCreate extends Component {
     close();
   };
 
-  getOptions = enums => {
-    return _.map(enums, (value) => {
-      return { value: value._id, label: value.clientName };
-    });
+  getOptions = () => {
+    return _.map(moduleListEnum, entities => ({
+      value: entities,
+      label: entities
+    }));
   };
 
   render() {
-    const { clients } = this.props;
     const { isDisabled } = this.state;
-    const clientOptns = this.getOptions(clients);
+    const options = this.getOptions();
 
     return (
       <div className="create-form">
@@ -89,13 +85,14 @@ export default class TagCreate extends Component {
 
               <div className="select-group">
                 <div className="form-wrapper">
-                  <SelectField
-                    placeholder="Select Client"
+                  <SelectMulti
+                    className="form-select__multi select-tag__multi"
+                    placeholder="Select modules"
                     labelHidden={true}
-                    options={clientOptns}
-                    name="clientId"
+                    name="entities"
+                    options={options}
                   />
-                  <ErrorField name="clientId" />
+                  <ErrorField name="entities" />
                 </div>
               </div>
             </AutoForm>

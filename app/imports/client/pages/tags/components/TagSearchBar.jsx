@@ -1,27 +1,33 @@
 import React, { Component } from "react";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
+import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import Tags from "/imports/client/lib/Tags";
 
 export default class TagSearchBar extends Component {
   constructor() {
     super();
     this.state = {
+      active: false,
+      filter: false,
       dropdown: false,
-      selectAll: false,
-      model: {}
+      selectAll: false
     };
   }
 
-  componentWillMount() {
-    this.getFilterParams();
+  manageFilterBar() {
+    const { active, filter } = this.state;
+    this.setState({
+      active: !active,
+      filter: !filter
+    });
+    this.props.decrease();
   }
 
   onSubmit(params) {
-    if (FlowRouter.current().queryParams.page != "1") {
+    if (FlowRouter.current().queryParams.page != "1" && "tagName" in params) {
       this.props.setPagerInitial();
     }
     if ("tagName" in params) {
@@ -59,28 +65,17 @@ export default class TagSearchBar extends Component {
     });
   };
 
-  getFilterParams = () => {
-    const queryParams = FlowRouter.current().queryParams;
-    const model = {};
-
-    if ("tagName" in queryParams) {
-      model.tagName = queryParams.tagName;
-    }
-
-    this.setState({ model });
-  };
-
   render() {
-    const { dropdown, selectAll, model } = this.state;
+    const { filter, active, dropdown, selectAll } = this.state;
     const {
+      options,
       btnGroup,
       deleteAction,
       dropdownOptions,
       icons,
       getProperAccounts,
       hideSort,
-      hideFilter,
-      moduleTags
+      hideFilter
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -102,7 +97,6 @@ export default class TagSearchBar extends Component {
         ref="filters"
         onSubmit={this.onSubmit.bind(this)}
         schema={schema}
-        model={model}
       >
         <div className="search-bar">
           {!hideSort && (
@@ -138,16 +132,19 @@ export default class TagSearchBar extends Component {
               </div>
             </div>
 
-            <div className="filter-block">
-              {!hideFilter && (
+            {!hideFilter && (
+              <div
+                className={active ? "filter-block active" : "filter-block"}
+                onClick={this.manageFilterBar.bind(this)}
+              >
                 <button>
                   <i className="icon-filter" />
                 </button>
-              )}
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
-            </div>
+              </div>
+            )}
           </div>
         </div>
+        {filter && <FilterBar options={options} />}
       </AutoForm>
     );
   }
@@ -197,7 +194,7 @@ class BtnGroup extends Component {
     return (
       <div className={btnClasses}>
         {icons ? (
-          icons.map((element,index) => {
+          icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon} />
