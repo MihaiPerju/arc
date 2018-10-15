@@ -19,7 +19,7 @@ export default class SubstatesList extends Component {
       selectSubstate,
       substateSelected,
       currentSubstate,
-      moduleTags
+      tags
     } = this.props;
 
     const state = FlowRouter.getQueryParam("sortState");
@@ -102,7 +102,7 @@ export default class SubstatesList extends Component {
                 setSubstate={setSubstate}
                 substate={substate}
                 key={substate._id}
-                moduleTags={moduleTags}
+              tags={tags}
               />
             ))}
           </div>

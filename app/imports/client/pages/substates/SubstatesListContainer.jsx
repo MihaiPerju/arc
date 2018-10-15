@@ -11,8 +11,8 @@ import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import PagerService from "/imports/client/lib/PagerService";
 import Pager from "../../lib/Pager";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class SubstatesListContainer extends Pager {
   constructor() {
@@ -26,14 +26,14 @@ class SubstatesListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
 
   componentWillMount() {
     this.nextPage(0);
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -123,16 +123,14 @@ class SubstatesListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.SUBSTATES] } }
-      })
-      .fetch((err, moduleTags) => {
-        if (!err) {
-          this.setState({ moduleTags });
-        }
-      });
+  getTags = () => {
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.SUBSTATES] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
@@ -144,7 +142,7 @@ class SubstatesListContainer extends Pager {
       filter,
       range,
       total,
-      moduleTags
+      tags
     } = this.state;
     const substate = objectFromArray(data, currentSubstate);
 
@@ -167,7 +165,7 @@ class SubstatesListContainer extends Pager {
             setPagerInitial={this.setPagerInitial}
             btnGroup={substateSelected.length}
             deleteAction={this.deleteAction}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
             hideFilter
           />
@@ -178,7 +176,7 @@ class SubstatesListContainer extends Pager {
             currentSubstate={currentSubstate}
             setSubstate={this.setSubstate}
             substates={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             module="Substate"
@@ -235,7 +233,11 @@ export default withQuery(
   () => {
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {status:true }});
+    return PagerService.setQuery(query, {
+      page,
+      perPage,
+      filters: { status: true }
+    });
   },
   { reactive: true }
 )(SubstatesListContainer);

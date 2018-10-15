@@ -1,4 +1,6 @@
-import {mount} from 'react-mounter';
+import {
+  mount
+} from 'react-mounter';
 
 
 import route from "./router";
@@ -16,7 +18,7 @@ import Dashboard from '/imports/client/pages/users/Dashboard';
 
 route('/dashboard', Home, {}, {
   name: 'dashboard',
-  
+
 });
 route('/', Login, {}, {
   name: 'login',
@@ -46,7 +48,7 @@ import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
 import EditUser from '/imports/client/pages/admin/EditUser.jsx';
 import Settings from "/imports/client/pages/admin/settings/Settings";
 
-route("/admin/settings",Settings);
+route("/admin/settings", Settings);
 
 route('/admin/user/list', UserListContainer);
 route('/admin/user/create', CreateUser);
@@ -183,11 +185,6 @@ route("/rules/list", RulesContainer);
 route("/rule/create", RuleCreate);
 route("/rule/:id/edit", RuleEdit);
 
-//Tags
-import TagListContainer from "/imports/client/pages/tags/TagListContainer.jsx";
-
-route("/tag/list", TagListContainer);
-
 //Substates
 import SubstatesListContainer from "/imports/client/pages/substates/SubstatesListContainer";
 
@@ -198,10 +195,10 @@ import LetterListContainer from "/imports/client/pages/letterManagement/LetterLi
 
 route("/letters/list", LetterListContainer);
 
-//Module tagging
-import ModuleTagsListContainer from "/imports/client/pages/moduleTags/ModuleTagsListContainer.jsx";
+//Tags management
+import TagsListContainer from "/imports/client/pages/tags/TagsListContainer.jsx";
 
-route("/module-tags/list", ModuleTagsListContainer);
+route("/tags/list", TagsListContainer);
 
 
 //Flagged accounts

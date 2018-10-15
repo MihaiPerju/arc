@@ -87,7 +87,7 @@ export default class ActionSearchBar extends Component {
       getProperAccounts,
       hideSort,
       hideFilter,
-      moduleTags
+      tags
     } = this.props;
     const classes = classNames({
       "select-type": true,
@@ -152,7 +152,7 @@ export default class ActionSearchBar extends Component {
                 </button>
               )}
               {
-                moduleTags.length ? <Tags moduleTags={moduleTags}/> : <div />
+                tags.length ? <Tags tags={tags}/> : <div />
               }
             </div>
           </div>

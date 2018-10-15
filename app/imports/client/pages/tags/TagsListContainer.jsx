@@ -1,9 +1,7 @@
-import React, { Component } from "react";
-import ModuleTagList from "./components/ModuleTagList";
-import ModuleTagSearchBar from "./components/ModuleTagSearchBar";
+import React from "react";
+import TagList from "./components/TagList";
+import TagSearchBar from "./components/TagSearchBar";
 import PaginationBar from "/imports/client/lib/PaginationBar";
-import ModuleTagContent from "./ModuleTagContent";
-import ModuleTagCreate from "./ModuleTagCreate";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
@@ -11,8 +9,9 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import { objectFromArray } from "/imports/api/utils";
+import TagPanel from "./components/TagPanel";
 
-class ModuleTagsListContainer extends Pager {
+class TagsListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -22,7 +21,7 @@ class ModuleTagsListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
+      range: {}
     });
     this.query = TagsListQuery;
   }
@@ -99,14 +98,8 @@ class ModuleTagsListContainer extends Pager {
 
   render() {
     const { data, isLoading, error } = this.props;
-    const {
-      tagsSelected,
-      currentTag,
-      create,
-      range,
-      total
-    } = this.state;
-    
+    const { tagsSelected, currentTag, create, range, total } = this.state;
+
     const tag = objectFromArray(data, currentTag);
 
     if (isLoading) {
@@ -117,7 +110,6 @@ class ModuleTagsListContainer extends Pager {
       return <div>Error: {error.reason}</div>;
     }
 
-
     return (
       <div className="cc-container">
         <div
@@ -125,15 +117,19 @@ class ModuleTagsListContainer extends Pager {
             currentTag || create ? "left__side" : "left__side full__width"
           }
         >
-          <ModuleTagSearchBar
+          <TagSearchBar
             setPagerInitial={this.setPagerInitial}
             btnGroup={tagsSelected.length}
             deleteAction={this.deleteAction}
             hideSort
             hideFilter
           />
-          <ModuleTagList
-            class={this.state.filter ? "task-list module-tags decreased" : "task-list module-tags"}
+          <TagList
+            class={
+              this.state.filter
+                ? "task-list module-tags decreased"
+                : "task-list module-tags"
+            }
             tagsSelected={tagsSelected}
             selectTag={this.selectTag}
             currentTag={currentTag}
@@ -149,33 +145,8 @@ class ModuleTagsListContainer extends Pager {
           />
         </div>
         {(currentTag || create) && (
-          <RightSide tag={tag} create={create} close={this.closeForm} />
+          <TagPanel tag={tag} create={create} close={this.closeForm} />
         )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { tag, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <ModuleTagCreate close={close} /> : <ModuleTagContent tag={tag} />}
       </div>
     );
   }
@@ -183,12 +154,7 @@ class RightSide extends Component {
 
 export default withQuery(
   () => {
-    const params = {
-      filters: {workQueueStatus:false}
-  }
-  return TagsListQuery.clone(params);
+    return TagsListQuery.clone();
   },
   { reactive: true }
-)(ModuleTagsListContainer);
-
-
+)(TagsListContainer);

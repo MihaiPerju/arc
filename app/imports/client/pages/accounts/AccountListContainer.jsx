@@ -1,22 +1,20 @@
-import React, { Component } from 'react';
-import AccountList from './components/AccountList.jsx';
-import PaginationBar from '/imports/client/lib/PaginationBar.jsx';
-import Pager from '/imports/client/lib/Pager.jsx';
-import query from '/imports/api/accounts/queries/accountList';
-import { withQuery } from 'meteor/cultofcoders:grapher-react';
-import Loading from '/imports/client/lib/ui/Loading';
-import PagerService from '/imports/client/lib/PagerService';
-import AccountAssigning
-  from '/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx';
-import AccountSearchBar from './components/AccountSearchBar';
-import userTagsQuery from '/imports/api/users/queries/userTags.js';
-import Notifier from '/imports/client/lib/Notifier';
-import MetaDataSlider
-  from '/imports/client/pages/accounts/components/AccountContent/MetaData';
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from '/imports/client/pages/moduleTags/enums/moduleList';
-import Dialog from '/imports/client/lib/ui/Dialog';
-import RightSide from './components/AccountRightSide';
+import React from "react";
+import AccountList from "./components/AccountList.jsx";
+import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
+import Pager from "/imports/client/lib/Pager.jsx";
+import query from "/imports/api/accounts/queries/accountList";
+import { withQuery } from "meteor/cultofcoders:grapher-react";
+import Loading from "/imports/client/lib/ui/Loading";
+import PagerService from "/imports/client/lib/PagerService";
+import AccountAssigning from "/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx";
+import AccountSearchBar from "./components/AccountSearchBar";
+import userTagsQuery from "/imports/api/users/queries/userTags.js";
+import Notifier from "/imports/client/lib/Notifier";
+import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
+import Dialog from "/imports/client/lib/ui/Dialog";
+import RightSide from "./components/AccountRightSide";
 
 class AccountListContainer extends Pager {
   constructor() {
@@ -31,14 +29,14 @@ class AccountListContainer extends Pager {
       assignUser: false,
       assignWQ: false,
       showMetaData: false,
-      assignFilterArr: ['assigneeId'],
+      assignFilterArr: ["assigneeId"],
       tags: [],
       dropdownOptions: [],
       currentRouteState: null,
-      moduleTags: [],
+      tags: [],
       isLockedDialogActive: false,
       lockOwnerName: null,
-      lockedAccountId: null,
+      lockedAccountId: null
     });
     this.query = query;
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
@@ -49,15 +47,15 @@ class AccountListContainer extends Pager {
     userTagsQuery
       .clone({
         filters: {
-          _id: Meteor.userId(),
-        },
+          _id: Meteor.userId()
+        }
       })
       .fetchOne((err, user) => {
         if (!err) {
           const tags = user.tags;
-          let assignFilterArr = ['assigneeId'];
+          let assignFilterArr = ["assigneeId"];
           let dropdownOptions = [
-            { label: 'Personal Accounts', filter: 'assigneeId' },
+            { label: "Personal Accounts", filter: "assigneeId" }
           ];
 
           _.each(tags, tag => {
@@ -66,25 +64,25 @@ class AccountListContainer extends Pager {
           });
           this.setState({ tags, assignFilterArr, dropdownOptions });
         } else {
-          let assignFilterArr = ['assigneeId', 'workQueueId'];
+          let assignFilterArr = ["assigneeId", "workQueueId"];
           let dropdownOptions = [
-            { label: 'Personal Accounts', filter: 'assigneeId' },
-            { label: 'Work Queue Accounts', filter: 'workQueueId' },
+            { label: "Personal Accounts", filter: "assigneeId" },
+            { label: "Work Queue Accounts", filter: "workQueueId" }
           ];
           this.setState({ assignFilterArr, dropdownOptions });
         }
       });
 
-    const accountId = FlowRouter.getQueryParam('accountId');
+    const accountId = FlowRouter.getQueryParam("accountId");
     if (accountId) {
       this.setState({
-        currentAccount: accountId,
+        currentAccount: accountId
       });
     }
 
     const { state } = this.props;
     this.setState({ currentRouteState: state });
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentDidMount() {
@@ -94,7 +92,7 @@ class AccountListContainer extends Pager {
   handleBrowserClose(e) {
     this.removeLock();
     this.closeRightPanel();
-    e.returnValue = 'Are you sure you want to close?';
+    e.returnValue = "Are you sure you want to close?";
   }
 
   componentWillReceiveProps(newProps) {
@@ -113,23 +111,23 @@ class AccountListContainer extends Pager {
     }
     this.updatePager();
 
-    const accountId = FlowRouter.getQueryParam('accountId');
+    const accountId = FlowRouter.getQueryParam("accountId");
     if (accountId) {
       this.setState({
-        currentAccount: accountId,
+        currentAccount: accountId
       });
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.handleBrowserClose);
+    window.removeEventListener("beforeunload", this.handleBrowserClose);
     // remove any locked account
     this.removeLock();
   }
 
   uncheckAccountList = () => {
     this.setState({
-      accountsSelected: [],
+      accountsSelected: []
     });
   };
 
@@ -138,7 +136,7 @@ class AccountListContainer extends Pager {
       {
         page: 1,
         perPage: 13,
-        total: 0,
+        total: 0
       },
       () => {
         this.nextPage(0);
@@ -161,7 +159,7 @@ class AccountListContainer extends Pager {
           let item = {
             key: facility._id,
             value: facility._id,
-            label: facility.name,
+            label: facility.name
           };
           if (!_.findWhere(facilities, item)) {
             facilities.push(item);
@@ -173,8 +171,8 @@ class AccountListContainer extends Pager {
 
               let item = {
                 key: user._id,
-                label: profile.firstName + ' ' + profile.lastName,
-                value: user._id,
+                label: profile.firstName + " " + profile.lastName,
+                value: user._id
               };
               //get assignee options
               if (!_.findWhere(assignees, item)) {
@@ -199,10 +197,10 @@ class AccountListContainer extends Pager {
       } else {
         this.setState({
           currentAccount: newAccount._id,
-          showMetaData: false,
+          showMetaData: false
         });
         const { state } = FlowRouter.current().params;
-        if (state === 'active') {
+        if (state === "active") {
           this.incrementViewCount(newAccount._id);
         }
         this.addLock(newAccount._id);
@@ -211,7 +209,7 @@ class AccountListContainer extends Pager {
   };
 
   incrementViewCount = _id => {
-    Meteor.call('accounts.increment_view_count', _id, err => {
+    Meteor.call("accounts.increment_view_count", _id, err => {
       if (err) {
         Notifier.error(err.reason);
       }
@@ -227,35 +225,35 @@ class AccountListContainer extends Pager {
     }
     this.setState({
       accountsSelected,
-      showMetaData: false,
+      showMetaData: false
     });
   };
 
-  checkAllAccount = (selectAll) => {
+  checkAllAccount = selectAll => {
     const { data } = this.props;
     let accountsSelected = this.state.accountsSelected;
 
     if (data.length > 0 && selectAll) {
-      _.map(data, account => { 
-          if (accountsSelected.indexOf(account._id) == -1) {
-            accountsSelected.push(account._id) 
-          }
-        });
+      _.map(data, account => {
+        if (accountsSelected.indexOf(account._id) == -1) {
+          accountsSelected.push(account._id);
+        }
+      });
     }
 
-    if(!selectAll) {
-      _.map(data, account => { 
+    if (!selectAll) {
+      _.map(data, account => {
         if (accountsSelected.includes(account._id)) {
           accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
-        } 
+        }
       });
     }
 
     this.setState({
       accountsSelected,
-      showMetaData: false,
+      showMetaData: false
     });
-  }
+  };
 
   changeFilters(filters) {
     this.updateFilters({ filters });
@@ -264,7 +262,7 @@ class AccountListContainer extends Pager {
   getFirstOption(accounts, options) {
     for (let account of accounts) {
       if (!account.assigneeId) {
-        return [{ label: 'Unassigned' }];
+        return [{ label: "Unassigned" }];
       }
     }
     return [options[0]];
@@ -281,25 +279,25 @@ class AccountListContainer extends Pager {
     let userOptions = this.getFirstOption(accounts, options).concat(options);
     this.setState({
       assignUser: true,
-      userOptions,
+      userOptions
     });
   };
   closeAssignUser = () => {
     this.setState({
-      assignUser: false,
+      assignUser: false
     });
     this.closeRightPanel();
   };
 
   assignToWorkQueue = () => {
     this.setState({
-      assignWQ: true,
+      assignWQ: true
     });
   };
 
   closeAssignWQ = () => {
     this.setState({
-      assignWQ: false,
+      assignWQ: false
     });
     this.closeRightPanel();
   };
@@ -319,15 +317,16 @@ class AccountListContainer extends Pager {
       if (account.facility) {
         for (let user of account.facility.users) {
           let item = {
-            label: user &&
+            label:
+              user &&
               user.profile &&
               user.profile.firstName +
-              ' ' +
-              user.profile.lastName +
-              '(' +
-              user.roles[0] +
-              ')',
-            value: user && user._id,
+                " " +
+                user.profile.lastName +
+                "(" +
+                user.roles[0] +
+                ")",
+            value: user && user._id
           };
           if (!userOptions.includes(item)) {
             userOptions.push(item);
@@ -335,7 +334,7 @@ class AccountListContainer extends Pager {
         }
       }
     }
-    const uniqueOptions = _.unique(userOptions, false, function (item) {
+    const uniqueOptions = _.unique(userOptions, false, function(item) {
       return item.value;
     });
     return uniqueOptions;
@@ -362,7 +361,7 @@ class AccountListContainer extends Pager {
       if (assignFilterArr.length === tags.length + 1) {
         FlowRouter.setQueryParams({ assign: null });
       } else if (assignFilterArr.length === 0) {
-        FlowRouter.setQueryParams({ assign: 'none' });
+        FlowRouter.setQueryParams({ assign: "none" });
       } else {
         FlowRouter.setQueryParams({ assign: assignFilterArr.toString() });
       }
@@ -370,7 +369,7 @@ class AccountListContainer extends Pager {
       if (assignFilterArr.length === tags.length + 2) {
         FlowRouter.setQueryParams({ assign: null });
       } else if (assignFilterArr.length === 0) {
-        FlowRouter.setQueryParams({ assign: 'none' });
+        FlowRouter.setQueryParams({ assign: "none" });
       } else {
         FlowRouter.setQueryParams({ assign: assignFilterArr.toString() });
       }
@@ -379,13 +378,13 @@ class AccountListContainer extends Pager {
 
   openMetaDataSlider = () => {
     this.setState({
-      showMetaData: true,
+      showMetaData: true
     });
   };
 
   closeMetaDataSlider = () => {
     this.setState({
-      showMetaData: false,
+      showMetaData: false
     });
   };
 
@@ -393,20 +392,18 @@ class AccountListContainer extends Pager {
     this.setState({ currentAccount: null, showMetaData: false });
   };
 
-  getModuleTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.ACCOUNT] } },
-      })
-      .fetch((err, moduleTags) => {
-        if (!err) {
-          this.setState({ moduleTags });
-        }
-      });
+  getTags = () => {
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.ACCOUNT] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   addLock = _id => {
-    Meteor.call('account.addLock', _id, err => {
+    Meteor.call("account.addLock", _id, err => {
       if (err) {
         Notifier.error(err.reason);
       }
@@ -414,7 +411,7 @@ class AccountListContainer extends Pager {
   };
 
   removeLock = () => {
-    Meteor.call('account.removeLock', err => {
+    Meteor.call("account.removeLock", err => {
       if (err) {
         Notifier.error(err.reason);
       }
@@ -430,11 +427,13 @@ class AccountListContainer extends Pager {
       Meteor.userId() !== lockOwnerId &&
       lockBreakUsers.indexOf(Meteor.userId()) === -1
     ) {
-      const lockOwnerName = `${lockOwner.profile.firstName} ${lockOwner.profile.lastName}`;
+      const lockOwnerName = `${lockOwner.profile.firstName} ${
+        lockOwner.profile.lastName
+      }`;
       this.setState({
         isLockedDialogActive: true,
         lockOwnerName,
-        lockedAccountId: _id,
+        lockedAccountId: _id
       });
       return false;
     }
@@ -445,13 +444,13 @@ class AccountListContainer extends Pager {
     this.setState({
       isLockedDialogActive: false,
       lockOwnerName: null,
-      lockedAccountId: null,
+      lockedAccountId: null
     });
   };
 
   breakLock = () => {
     const { lockedAccountId } = this.state;
-    Meteor.call('account.breakLock', lockedAccountId, err => {
+    Meteor.call("account.breakLock", lockedAccountId, err => {
       if (err) {
         Notifier.error(err.reason);
       } else {
@@ -473,17 +472,17 @@ class AccountListContainer extends Pager {
       showMetaData,
       assignFilterArr,
       dropdownOptions,
-      moduleTags,
+      tags,
       isLockedDialogActive,
-      lockOwnerName,
+      lockOwnerName
     } = this.state;
     const options = this.getData(data);
     const icons = [
-      { icon: 'user', method: this.assignToUser },
-      { icon: 'users', method: this.assignToWorkQueue },
+      { icon: "user", method: this.assignToUser },
+      { icon: "users", method: this.assignToWorkQueue }
     ];
 
-    if (isLoading && !FlowRouter.getQueryParam('acctNum')) {
+    if (isLoading && !FlowRouter.getQueryParam("acctNum")) {
       return <Loading />;
     }
 
@@ -496,8 +495,8 @@ class AccountListContainer extends Pager {
         <div
           className={
             currentAccount || accountsSelected.length
-              ? 'left__side'
-              : 'left__side full__width'
+              ? "left__side"
+              : "left__side full__width"
           }
         >
           <AccountSearchBar
@@ -509,28 +508,30 @@ class AccountListContainer extends Pager {
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
-            moduleTags={moduleTags}
             checkAllAccount={this.checkAllAccount}
             accountsSelected={accountsSelected}
             data={data}
+            tags={tags}
           />
-          {assignUser &&
+          {assignUser && (
             <AccountAssigning
               assignToUser={true}
               accountIds={accountsSelected}
               closeDialog={this.closeAssignUser}
-              title={''}
+              title={""}
               options={this.state.userOptions}
               uncheckAccountList={this.uncheckAccountList}
-            />}
-          {assignWQ &&
+            />
+          )}
+          {assignWQ && (
             <AccountAssigning
               assignToUser={false}
               accountIds={accountsSelected}
               closeDialog={this.closeAssignWQ}
-              title={''}
+              title={""}
               uncheckAccountList={this.uncheckAccountList}
-            />}
+            />
+          )}
           <AccountList
             classes={"task-list accounts"}
             accountsSelected={accountsSelected}
@@ -538,7 +539,7 @@ class AccountListContainer extends Pager {
             checkAccount={this.checkAccount}
             currentAccount={currentAccount}
             data={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             nextPage={this.nextPage}
@@ -548,20 +549,22 @@ class AccountListContainer extends Pager {
           />
         </div>
         {(currentAccount || accountsSelected.length) &&
-          !showMetaData &&
-          <RightSide
-            openMetaData={this.openMetaDataSlider}
-            currentAccount={currentAccount}
-            accountsSelected={[...accountsSelected]}
-            closeRightPanel={this.closeRightPanel}
-            removeLock={this.removeLock}
-          />}
-        {showMetaData &&
+          !showMetaData && (
+            <RightSide
+              openMetaData={this.openMetaDataSlider}
+              currentAccount={currentAccount}
+              accountsSelected={[...accountsSelected]}
+              closeRightPanel={this.closeRightPanel}
+              removeLock={this.removeLock}
+            />
+          )}
+        {showMetaData && (
           <MetaDataSlider
             accountId={currentAccount}
             closeMetaData={this.closeMetaDataSlider}
-          />}
-        {isLockedDialogActive &&
+          />
+        )}
+        {isLockedDialogActive && (
           <Dialog
             title="Confirm"
             className="account-dialog"
@@ -579,7 +582,8 @@ class AccountListContainer extends Pager {
                 Confirm & break
               </button>
             </div>
-          </Dialog>}
+          </Dialog>
+        )}
       </div>
     );
   }

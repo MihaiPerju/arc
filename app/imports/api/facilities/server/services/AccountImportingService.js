@@ -13,6 +13,9 @@ import fs from "fs";
 import FoldersEnum from "/imports/api/business";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import main from "simpl-schema";
+
+// ! Rewrite this entire thing one day when ARCC works okay and we have spare time
 
 export default class AccountService {
   //For placement file
@@ -227,7 +230,7 @@ export default class AccountService {
 
     //Extract insurances first
     account.insurances = [];
-    importRules.insurances.map(
+    importRules.insurances.forEach(
       ({
         insName,
         insCode,
@@ -255,27 +258,11 @@ export default class AccountService {
         );
 
         account.insurances.push({
-          insName: this.convertToType(
-            "insName",
-            data[insName - 1],
-            uploadErrors
-          ),
-          insCode: this.convertToType(
-            "insCode",
-            data[insCode - 1],
-            uploadErrors
-          ),
+          insName: this.convertToType("insName", data[insName - 1], uploadErrors),
+          insCode: this.convertToType("insCode", data[insCode - 1], uploadErrors),
           insBal: this.convertToType("insBal", data[insBal - 1], uploadErrors),
-          address1: this.convertToType(
-            "address1",
-            data[address1 - 1],
-            uploadErrors
-          ),
-          address2: this.convertToType(
-            "address2",
-            data[address2 - 1],
-            uploadErrors
-          ),
+          address1: this.convertToType("address1", data[address1 - 1], uploadErrors),
+          address2: this.convertToType("address2", data[address2 - 1], uploadErrors),
           city: this.convertToType("city", data[city - 1], uploadErrors),
           state: this.convertToType("state", data[state - 1], uploadErrors),
           zip: this.convertToType("zip", data[zip - 1], uploadErrors),
@@ -321,7 +308,7 @@ export default class AccountService {
 
   static convertToType(rule, value, uploadErrors) {
     const { types } = RulesEnum;
-    if (types.dates.includes(rule)) {
+    if (types.dates.includes(rule) && value) {
       const date = new Date(value);
       const dateString =
         ("0" + (date.getMonth() + 1)).slice(-2) +
@@ -335,7 +322,7 @@ export default class AccountService {
         uploadErrors.dates++;
       }
       return parsed.isValid() ? parsed.toDate() : null;
-    } else if (types.numbers.includes(rule)) {
+    } else if (types.numbers.includes(rule) && value) {
       const parsed = parseInt(value, 10);
 
       //If the number isn't valid add an exception

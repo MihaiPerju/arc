@@ -165,7 +165,7 @@ export default class ClientSearchBar extends Component {
       icons,
       getProperAccounts,
       hideSort,
-      moduleTags,
+      tags,
     } = this.props;
     const classes = classNames({
       'select-type': true,
@@ -278,7 +278,7 @@ export default class ClientSearchBar extends Component {
                     </div>
                   </Dialog>}
               </button>
-              {moduleTags.length ? <Tags moduleTags={moduleTags} /> : <div />}
+              {tags.length ? <Tags tags={tags} /> : <div />}
             </div>
           </div>
         </div>

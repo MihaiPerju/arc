@@ -3,13 +3,13 @@ import LetterSingle from "./LetterSingle";
 
 export default class LetterList extends Component {
   render() {
-    const { letters, moduleTags } = this.props;
+    const { letters, tags } = this.props;
     const letterList = letters.map(function(letter) {
       return (
         <LetterSingle
           key={letter._id}
           letter={letter}
-          moduleTags={moduleTags}
+          tags={tags}
         />
       );
     }, this);

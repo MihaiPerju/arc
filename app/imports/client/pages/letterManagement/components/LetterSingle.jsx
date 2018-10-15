@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import Dialog from '../../../lib/ui/Dialog';
-import classNames from 'classnames';
-import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+import Dialog from "../../../lib/ui/Dialog";
+import classNames from "classnames";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class LetterSingle extends Component {
   constructor() {
@@ -69,14 +69,14 @@ export default class LetterSingle extends Component {
   };
 
   render() {
-    const { letter, moduleTags } = this.props;
+    const { letter, tags } = this.props;
     const { dialogIsActive } = this.state;
-    const itemClasses = classNames('list-item user-item', {
-      'letter-item': letter.status == Statuses.NEW
+    const itemClasses = classNames("list-item user-item", {
+      "letter-item": letter.status == Statuses.NEW
     });
-    const statusClasses = classNames('status', {
-      'pending': letter.status == Statuses.NEW,
-      'manually': letter.status == Statuses.MANUALLY_MAILED
+    const statusClasses = classNames("status", {
+      pending: letter.status == Statuses.NEW,
+      manually: letter.status == Statuses.MANUALLY_MAILED
     });
 
     return (
@@ -87,10 +87,10 @@ export default class LetterSingle extends Component {
               {letter && letter.letterTemplateName}
             </div>
           ) : (
-              <div className="item-name text-dark-grey">
-                {letter && letter.letterTemplateName}
-              </div>
-            )}
+            <div className="item-name text-dark-grey">
+              {letter && letter.letterTemplateName}
+            </div>
+          )}
           <div className={statusClasses}>{letter.status}</div>
           {letter.status == Statuses.NEW && (
             <button
@@ -129,7 +129,7 @@ export default class LetterSingle extends Component {
           <TagItem
             title="Tag Letter"
             tagIds={letter.tagIds}
-            moduleTags={moduleTags}
+            tags={tags}
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.LETTERS}
           />

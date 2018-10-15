@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class ActionSingle extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ export default class ActionSingle extends Component {
   };
 
   render() {
-    const { action, actionsSelected, currentAction, moduleTags } = this.props;
+    const { action, actionsSelected, currentAction, tags } = this.props;
     const checked = actionsSelected.includes(action._id);
     const classes = classNames({
       "list-item": true,
@@ -60,7 +60,7 @@ export default class ActionSingle extends Component {
           <TagItem
             title="Tag Action"
             tagIds={action.tagIds}
-            moduleTags={moduleTags}
+            tags={tags}
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.ACTIONS}
           />
