@@ -10,6 +10,8 @@ import Settings from "/imports/api/settings/collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import PaymentsService from "/imports/api/facilities/server/services/PaymentService";
 import Facilities from "/imports/api/facilities/collection";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
 
 export default class PaymentService {
   static run() {
@@ -35,16 +37,13 @@ export default class PaymentService {
   }
 
   static processPayment({ facilityId, filePath, userId, _id }) {
-    const { rootFolder } = Settings.findOne({
-      rootFolder: {
-        $ne: null
-      }
-    });
+    const { root } = SettingsService.getSettings(settings.ROOT);
+
     const importRules = ParseService.getImportRules(facilityId, "paymentRules");
 
     //Parsing and getting the CSV like a string
     const stream = fs.readFileSync(
-      rootFolder + Business.ACCOUNTS_FOLDER + filePath
+      root + Business.ACCOUNTS_FOLDER + filePath
     );
     const csvString = stream.toString();
 

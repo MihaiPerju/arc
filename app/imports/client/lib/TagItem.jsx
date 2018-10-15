@@ -11,15 +11,15 @@ export default class TagItem extends Component {
     this.state = {
       dialogIsActive: false,
       passedValue: '',
-      moduleTags: props.moduleTags,
+      tags: props.tags,
       tagIds: props.tagIds,
       
     };
   }
   componentWillReceiveProps(props){
-    const {moduleTags, tagIds} = props;
-    if(this.state.moduleTags !== moduleTags){
-      this.setState(()=>({moduleTags: moduleTags}))
+    const {tags, tagIds} = props;
+    if(this.state.tags !== tags){
+      this.setState(()=>({tags: tags}))
     }
     if(this.state.tagIds !== tagIds){
       this.setState(()=>({tagIds: tagIds}))
@@ -58,14 +58,14 @@ export default class TagItem extends Component {
 
   handleCreateTagButton = () => {
     const entities=[this.props.entityName];
-    const {moduleTags, passedValue} = this.state;
+    const {tags, passedValue} = this.state;
     let data={entities,name: passedValue}
     Meteor.call("tag.create", { data}, (err,result) => {
       if (!err) {
         data._id=result
-        moduleTags.push(data)
+        tags.push(data)
         Notifier.success("Tag added!");
-        this.setState(()=>({moduleTags}))
+        this.setState(()=>({tags}))
       } else {
         Notifier.error(err.reason);
       }
@@ -92,12 +92,12 @@ export default class TagItem extends Component {
   
 
   render() {
-    const { tagIds, moduleTags, dialogIsActive,passedValue } = this.state;
+    const { tagIds, tags, dialogIsActive,passedValue } = this.state;
     const { title } = this.props;
 
     const noResultText =  <a className="create-tag-button" href='javascript:void(0);' onClick={this.handleCreateTagButton}>Create tag</a>
 
-    const options = this.getOptions(moduleTags);
+    const options = this.getOptions(tags);
     let selectedOptions = options.filter(p => tagIds.includes(p.value));
 
 

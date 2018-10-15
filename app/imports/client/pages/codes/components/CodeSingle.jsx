@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+import { moduleNames } from "/imports/api/tags/enums/tags";
 export default class CodeSingle extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +33,7 @@ export default class CodeSingle extends Component {
   };
 
   render() {
-    const { code, codesSelected, currentCode, moduleTags } = this.props;
+    const { code, codesSelected, currentCode, tags } = this.props;
     const checked = codesSelected.includes(code._id);
     const classes = classNames({
       "list-item": true,
@@ -54,7 +54,7 @@ export default class CodeSingle extends Component {
           <TagItem
             title="Tag Code"
             tagIds={code.tagIds}
-            moduleTags={moduleTags}
+            tags={tags}
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.CODES}
           />

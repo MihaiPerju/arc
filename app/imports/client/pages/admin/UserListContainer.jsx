@@ -24,7 +24,7 @@ class UserListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }

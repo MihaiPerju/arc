@@ -13,8 +13,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import PagerService from "../../lib/PagerService";
 import substatesQuery from "/imports/api/substates/queries/listSubstates";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
-import { moduleNames } from "/imports/client/pages/moduleTags/enums/moduleList";
+import TagsListQuery from "/imports/api/tags/queries/listTags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class ReportListContainer extends Pager {
   constructor() {
@@ -28,7 +28,7 @@ class ReportListContainer extends Pager {
       total: 0,
       range: {},
       substates: [],
-      moduleTags: []
+      tags: []
     });
     this.query = query;
   }
@@ -50,7 +50,7 @@ class ReportListContainer extends Pager {
           this.setState({ substates });
         }
       });
-    this.getModuleTags();
+    this.getTags();
   }
 
   componentWillReceiveProps() {
@@ -153,16 +153,14 @@ class ReportListContainer extends Pager {
     this.recount(queryParams);
   };
 
-  getModuleTags = () => {
-    TagsListQuery
-      .clone({
-        filters: { entities: { $in: [moduleNames.REPORTS] } }
-      })
-      .fetch((err, moduleTags) => {
-        if (!err) {
-          this.setState({ moduleTags });
-        }
-      });
+  getTags = () => {
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.REPORTS] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
@@ -174,7 +172,7 @@ class ReportListContainer extends Pager {
       total,
       range,
       substates,
-      moduleTags
+      tags
     } = this.state;
     const report = objectFromArray(data, currentReport);
 
@@ -198,18 +196,22 @@ class ReportListContainer extends Pager {
             btnGroup={reportsSelected.length}
             deleteAction={this.deleteAction}
             closeRightPanel={this.closeRightPanel}
-            moduleTags={moduleTags}
+            tags={tags}
             hideSort
             hideFilter={false}
           />
           <ReportList
-            class={this.state.filter ? "task-list reports decreased" : "task-list reports"}
+            class={
+              this.state.filter
+                ? "task-list reports decreased"
+                : "task-list reports"
+            }
             reportsSelected={reportsSelected}
             selectReport={this.selectReport}
             currentReport={currentReport}
             setReport={this.setReport}
             reports={data}
-            moduleTags={moduleTags}
+            tags={tags}
           />
           <PaginationBar
             module="Report"

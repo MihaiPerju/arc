@@ -1,6 +1,5 @@
 import "./env";
 import "./fixtures";
-import "./folders";
 import "/imports/api/mailing/server";
 import "/imports/api/uploads/server";
 import "/imports/api/users/server";

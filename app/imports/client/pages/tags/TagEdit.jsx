@@ -7,6 +7,9 @@ import {
 } from "/imports/ui/forms";
 import TagsSchema from "/imports/api/tags/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
+import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import moduleListEnum , { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class TagEdit extends React.Component {
   constructor() {
@@ -14,8 +17,22 @@ export default class TagEdit extends React.Component {
 
     this.state = {
       error: null,
-      isDisabled: false
+      isDisabled: false,
+      clientOptions: []
     };
+  }
+
+  componentDidMount() {
+    clientsQuery.fetch((err, clients) => {
+      if (!err) {
+        const clientOptions = clients.map(client => {
+          return { label: client.clientName, value: client._id };
+        });
+        this.setState({ clientOptions });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   onSubmit(formData) {
@@ -42,16 +59,17 @@ export default class TagEdit extends React.Component {
     setEdit();
   };
 
-  getOptions = enums => {
-    return _.map(enums, (value) => {
-      return { value: value._id, label: value.clientName };
-    });
+  getOptions = () => {
+    return _.map(moduleListEnum, entities => ({
+      value: entities,
+      label: entities
+    }));
   };
 
   render() {
-    const { tag, clients } = this.props;
-    const { isDisabled } = this.state;
-    const clientOptns = this.getOptions(clients);
+    const { tag } = this.props;
+    const { isDisabled, clientOptions } = this.state;
+    const options = this.getOptions();
 
     return (
       <div className="create-form">
@@ -79,8 +97,8 @@ export default class TagEdit extends React.Component {
           </div>
         </div>
 
-        <div className="create-form__wrapper">
-          <div className="action-block">
+        <div>
+          <div className="action-block m-t--20">
             <div className="header__block">
               <div className="title-block text-uppercase">Tag information</div>
             </div>
@@ -97,15 +115,32 @@ export default class TagEdit extends React.Component {
 
               <div className="select-group">
                 <div className="form-wrapper">
-                  <SelectField
-                    placeholder="Select Client"
+                  <SelectMulti
+                    className="form-select__multi select-tag__multi"
+                    placeholder="Select modules"
                     labelHidden={true}
-                    options={clientOptns}
-                    name="clientId"
+                    name="entities"
+                    options={options}
                   />
-                  <ErrorField name="clientId" />
+                  <ErrorField name="entities" />
                 </div>
               </div>
+
+              {tag &&
+                tag.entities &&
+                tag.entities.includes(moduleNames.USERS) && (
+                  <div className="select-group">
+                    <div className="form-wrapper">
+                      <SelectField
+                        placeholder="Select Client"
+                        labelHidden={true}
+                        options={clientOptions}
+                        name="clientId"
+                      />
+                      <ErrorField name="clientId" />
+                    </div>
+                  </div>
+                )}
             </AutoForm>
           </div>
         </div>

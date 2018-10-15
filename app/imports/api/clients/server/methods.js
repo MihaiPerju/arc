@@ -4,7 +4,9 @@ import Uploads from "/imports/api/uploads/uploads/collection";
 import Facilities from "/imports/api/facilities/collection.js";
 import fs from "fs";
 import Business from "/imports/api/business";
-import Settings from "/imports/api/settings/collection.js";
+import SettingsService from "/imports/api/settings/server/SettingsService";
+import settings from "/imports/api/settings/enums/settings";
+
 Meteor.methods({
   "client.create"(data) {
     Security.isAdminOrTech(this.userId);
@@ -27,7 +29,7 @@ Meteor.methods({
 
   "client.update"(_id, data) {
     Security.isAdminOrTech(this.userId);
-   Clients.update(
+    Clients.update(
       { _id },
       {
         $set: data
@@ -42,9 +44,8 @@ Meteor.methods({
 
     if (client) {
       const { logoPath } = client;
-      const { rootFolder } = Settings.findOne({
-        rootFolder: { $ne: null }
-      });
+      const { root } = SettingsService.getSettings(settings.ROOT);
+
       //Delete from local storage
       Uploads.remove({ path: logoPath });
 
@@ -56,7 +57,7 @@ Meteor.methods({
           }
         }
       );
-      const filePath = rootFolder + Business.CLIENTS_FOLDER + logoPath;
+      const filePath = root + Business.CLIENTS_FOLDER + logoPath;
       if (logoPath && fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
       }
@@ -128,5 +129,5 @@ Meteor.methods({
         }
       }
     );
-  },
+  }
 });

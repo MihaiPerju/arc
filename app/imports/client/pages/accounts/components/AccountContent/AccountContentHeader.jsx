@@ -4,10 +4,10 @@ import AccountActioning from './AccountActioning';
 import RolesEnum, { roleGroups } from '/imports/api/users/enums/roles';
 import EditInfoDialog from './EditInfoDialog';
 import commaNumber from 'comma-number';
-import Countdown from 'react-countdown-now';
-import Notifier from "/imports/client/lib/Notifier";
+
 
 export default class AccountContentHeader extends Component {
+
   getOptions(users = []) {
     let options = [];
     for (let user of users) {
@@ -15,13 +15,13 @@ export default class AccountContentHeader extends Component {
         label:
           user &&
           user.profile &&
-          user.profile.firstName +
-            " " +
-            user.profile.lastName +
-            "(" +
-            user.roles[0] +
-            ")",
-        value: user && user._id
+          user.profile.firstName + ' ' +
+          user.profile.lastName +
+          '(' +
+          user.roles[0] +
+          ')',
+        value: user && user._id,
+
       };
       options.push(item);
     }
@@ -67,12 +67,13 @@ export default class AccountContentHeader extends Component {
         }
       }
     }
-    return [{ label: "Unassigned" }];
+
+    return [{ label: 'Unassigned' }];
   }
 
   getOthersData = data => {
-    if (typeof data === "object") {
-      return moment(data).format("MM/DD/YYYY");
+    if (typeof data === 'object') {
+      return moment(data).format('MM/DD/YYYY');
     } else {
       return data;
     }
@@ -82,16 +83,6 @@ export default class AccountContentHeader extends Component {
     if (value) {
       FlowRouter.setQueryParams({ medNo: value });
     }
-  };
-
-  restartTimer = e => {
-    e.preventDefault();
-    const { account } = this.props;
-    Meteor.call("account.restartLockTimer", account._id, err => {
-      if (err) {
-        Notifier.error(err.reason);
-      }
-    });
   };
 
   onComplete = () => {
@@ -106,20 +97,10 @@ export default class AccountContentHeader extends Component {
     const options = this.getOptions(
       account && account.facility && account.facility.users
     );
+
     let userOptions = this.getFirstOption(account, options).concat(options);
     return (
       <div className="header-block header-account">
-        {account.lockOwnerId === Meteor.userId() && (
-          <a href="" onClick={this.restartTimer}>
-            Restart timer
-          </a>
-        )}
-        {account.lockTimestamp && (
-          <Countdown
-            date={new Date(account.lockTimestamp).getTime() + 60000} //1800000
-            onComplete={this.onComplete}
-          />
-        )}
         <div className="main-info">
           <div className="left__side">
             <div className="name">
@@ -188,16 +169,16 @@ export default class AccountContentHeader extends Component {
             />
             {account &&
               Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
-              !account.escalationId && (
-                <AccountActioning
-                  escalate
-                  accountId={account && account._id}
-                  type="Escalate"
-                  title="Escalate"
-                  escalationId={account && account.escalationId}
-                  closeRightPanel={closeRightPanel}
-                />
-              )}
+              !account.escalationId &&
+              <AccountActioning
+                escalate
+                accountId={account && account._id}
+                type="Escalate"
+                title="Escalate"
+                escalationId={account && account.escalationId}
+                closeRightPanel={closeRightPanel}
+              />}
+
             <AccountActioning
               metaData={true}
               type="View Meta Data"
@@ -242,9 +223,8 @@ export default class AccountContentHeader extends Component {
                 editField="dischrgDate"
               />
               <div className="text-dark-grey">
-                {account && account.dischrgDate
-                  ? moment(account.dischrgDate).format("MM/DD/YYYY")
-                  : "None"}
+                {account && account.dischrgDate ? moment(account.dischrgDate).format('MM/DD/YYYY')
+                  : 'None'}
               </div>
             </li>
             <li className="text-center">
@@ -256,9 +236,8 @@ export default class AccountContentHeader extends Component {
               />
 
               <div className="text-dark-grey">
-                {account && account.createdAt
-                  ? moment(account.createdAt).format("MM/DD/YYYY")
-                  : "None"}
+                {account && account.createdAt ? moment(account.createdAt).format('MM/DD/YYYY')
+                  : 'None'}
               </div>
             </li>
           </ul>
@@ -274,9 +253,8 @@ export default class AccountContentHeader extends Component {
               />
 
               <div className="text-dark-grey">
-                {account && account.admitDate
-                  ? moment(account.admitDate).format("MM/DD/YYYY")
-                  : "None"}
+                {account && account.admitDate ? moment(account.admitDate).format('MM/DD/YYYY')
+                  : 'None'}
               </div>
             </li>
 
@@ -312,10 +290,8 @@ export default class AccountContentHeader extends Component {
                 editField="fbDate"
               />
               <div className="text-dark-grey">
-                {account && account.fbDate
-                  ? moment(account.fbDate).format("MM/DD/YYYY")
-                  : "None"}
-              </div>
+                {account && account.fbDate ? moment(account.fbDate).format('MM/DD/YYYY')
+                  : 'None'} </div>
             </li>
             <li className="text-center">
               <div className="text-light-grey">Medical Number</div>

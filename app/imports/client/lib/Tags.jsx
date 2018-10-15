@@ -64,7 +64,7 @@ export default class TagItem extends Component {
   };
 
   render() {
-    const { moduleTags } = this.props;
+    const { tags } = this.props;
     const { selectedTags, isOpenedDropdown } = this.state;
     const btnToggleClasses = classNames('js-toggle-dropdown', {
       'active': isOpenedDropdown
@@ -83,7 +83,7 @@ export default class TagItem extends Component {
                 <div className="tag-caret__inner"/>
               </div>
               <ul className="tag-list">
-                {moduleTags.map((tag, index) => {
+                {tags.map((tag, index) => {
                   const { _id, name } = tag;
                   const tagClass = classNames('tag-item', {
                     "tag-item__active": selectedTags.includes(_id)

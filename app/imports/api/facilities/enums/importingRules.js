@@ -1,7 +1,7 @@
 let commonRules = [
     {value: 'acctNum', label: 'Account Number', optional: false},
     {value: 'facCode', label: 'Facility Code', optional: true},
-    {value: 'ptType', label: 'Patient Type', optional: false},
+    {value: 'ptType', label: 'Patient Type', optional: true},
     {value: 'ptName', label: 'Patient Name', optional: false},
     {value: 'dischrgDate', label: 'Discharge Date', optional: false},
     {value: 'fbDate', label: 'Last Bill Date', optional: true},
@@ -34,8 +34,8 @@ export default {
     ],
     types: {
         dates: ['dischrgDate', 'fbDate', 'admitDate', 'transDate'],
-        numbers: ['zip', 'acctBal', 'medNo', 'insBal', 'newAcctBal', 'ptBal', 'transAmount', 'invoiceNo'],
-        strings: ['address1', 'address2', 'insCode', 'city', 'state', 'policy', 'phone', 'transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode','activeInsCode'],
+        numbers: ['acctBal', 'medNo', 'insBal', 'newAcctBal', 'ptBal', 'transAmount'],
+        strings: ['zip', 'address1', 'address2', 'insCode', 'city', 'state', 'policy', 'phone', 'transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode','activeInsCode', 'invoiceNo'],
         others:['other1','other2']
     }
 }
