@@ -10,7 +10,7 @@ export default class CodeList extends Component {
         selectCode,
         codesSelected,
         currentCode,
-        moduleTags
+        tags
       } = this.props;
       return (
         <CodeSingle
@@ -20,7 +20,7 @@ export default class CodeList extends Component {
           setCode={setCode}
           code={code}
           key={code._id}
-          moduleTags={moduleTags}
+          tags={tags}
         />
       );
     }, this);

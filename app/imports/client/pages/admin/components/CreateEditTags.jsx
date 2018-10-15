@@ -36,7 +36,6 @@ export default class CreateEditTags extends Component {
 
     onSubmitForm = (data) => {
         const { user} = this.props;
-        data.workQueueStatus=true;
         Meteor.call('tag.create', {data, _id: user._id}, (err) => {
             if (!err) {
                 Notifier.success('Tag successfully created!');

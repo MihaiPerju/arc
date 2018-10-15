@@ -1,22 +1,25 @@
-import React from 'react';
-import RuleSchema from '/imports/api/rules/schemas/schema';
-import {AutoForm, AutoField, ErrorField} from '/imports/ui/forms';
-import Notifier from '/imports/client/lib/Notifier';
-import RuleGenerator from './components/RuleGenerator';
-import clientsQuery from '/imports/api/clients/queries/clientsWithFacilites';
-import facilityQuery from '/imports/api/facilities/queries/facilityList';
-import FacilitySelector from '/imports/api/facilities/enums/selectors';
-import triggerTypes, {triggerOptions} from '/imports/api/rules/enums/triggers';
-import userQuery from '/imports/api/users/queries/listUsers.js';
-import workQueueQuery from '/imports/api/tags/queries/listTags';
-import actionQuery from '/imports/api/actions/queries/actionList';
-import RolesEnum from '/imports/api/users/enums/roles';
-import fieldsOptions from '/imports/api/rules/enums/accountFields';
-import RuleQuery from '/imports/api/rules/queries/listRules';
+import React from "react";
+import RuleSchema from "/imports/api/rules/schemas/schema";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import Notifier from "/imports/client/lib/Notifier";
+import RuleGenerator from "./components/RuleGenerator";
+import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
+import facilityQuery from "/imports/api/facilities/queries/facilityList";
+import FacilitySelector from "/imports/api/facilities/enums/selectors";
+import triggerTypes, {
+  triggerOptions
+} from "/imports/api/rules/enums/triggers";
+import userQuery from "/imports/api/users/queries/listUsers.js";
+import workQueueQuery from "/imports/api/tags/queries/listTags";
+import actionQuery from "/imports/api/actions/queries/actionList";
+import RolesEnum from "/imports/api/users/enums/roles";
+import fieldsOptions from "/imports/api/rules/enums/accountFields";
+import RuleQuery from "/imports/api/rules/queries/listRules";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class RuleCreate extends React.Component {
-  constructor () {
-    super ();
+  constructor() {
+    super();
 
     this.state = {
       clientOptions: [],
@@ -25,126 +28,133 @@ export default class RuleCreate extends React.Component {
       triggerType: null,
       userOptions: [],
       workQueueOptions: [],
-      actionOptions: [],
+      actionOptions: []
     };
   }
 
-  componentDidMount () {
+  componentDidMount() {
     let userOptions = [];
     let workQueueOptions = [];
     let actionOptions = [];
     let clientOptions = [];
-    let facilityOptions = [{label: 'All', value: 'all'}];
+    let facilityOptions = [{ label: "All", value: "all" }];
 
     //Filling the client options
-    clientsQuery.fetch ((err, res) => {
+    clientsQuery.fetch((err, res) => {
       if (!err) {
-        res.map (client => {
-          clientOptions.push ({label: client.clientName, value: client._id});
+        res.map(client => {
+          clientOptions.push({ label: client.clientName, value: client._id });
         });
-        this.setState ({clientOptions});
+        this.setState({ clientOptions });
       }
     });
 
     //Filling the facility options
-    facilityQuery.fetch ((err, res) => {
+    facilityQuery.fetch((err, res) => {
       if (!err) {
-        res.map (facility => {
-          facilityOptions.push ({label: facility.name, value: facility._id});
+        res.map(facility => {
+          facilityOptions.push({ label: facility.name, value: facility._id });
         });
-        this.setState ({facilityOptions});
+        this.setState({ facilityOptions });
       }
     });
 
     //Filling the user options
     userQuery
-      .clone ({filters: {roles: {$in: [RolesEnum.REP]}}})
-      .fetch ((err, res) => {
+      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
+      .fetch((err, res) => {
         if (!err) {
-          res.map (user => {
-            userOptions.push ({
-              label: user.profile &&
-                user.profile.lastName + ' ' + user.profile.firstName,
-              value: user._id,
+          res.map(user => {
+            userOptions.push({
+              label:
+                user.profile &&
+                user.profile.lastName + " " + user.profile.firstName,
+              value: user._id
             });
           });
-          this.setState ({userOptions});
+          this.setState({ userOptions });
         }
       });
 
     //Filling the work queue options
-    workQueueQuery.clone ().fetch ((err, res) => {
-      if (!err) {
-        res.map (workQueue => {
-          workQueueOptions.push ({
-            label: workQueue.name,
-            value: workQueue._id,
+    workQueueQuery
+      .clone({
+        filters: {
+          entities: { $in: [moduleListEnum.USERS] }
+        }
+      })
+      .fetch((err, res) => {
+        if (!err) {
+          res.map(workQueue => {
+            workQueueOptions.push({
+              label: workQueue.name,
+              value: workQueue._id
+            });
           });
-        });
-        this.setState ({workQueueOptions});
-      }
-    });
+          this.setState({ workQueueOptions });
+        }
+      });
 
     //Filling the action options
-    actionQuery.clone ().fetch ((err, res) => {
+    actionQuery.clone().fetch((err, res) => {
       if (!err) {
-        res.map (action => {
-          actionOptions.push ({
+        res.map(action => {
+          actionOptions.push({
             label: action.title,
-            value: action._id,
+            value: action._id
           });
         });
-        this.setState ({actionOptions});
+        this.setState({ actionOptions });
       }
     });
   }
 
   onChange = (key, value) => {
-    let {model} = this.state;
+    let { model } = this.state;
     model[key] = value;
 
-    if (key === 'clientId') {
+    if (key === "clientId") {
       let clientId = value;
-      let facilityOptions = [{label: 'All', value: FacilitySelector.ALL}];
-      _.extend (model, {priority: 1, clientId});
-      this.setState ({model});
-      facilityQuery.clone ({filters: {clientId}}).fetch ((err, res) => {
+      let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
+      _.extend(model, { priority: 1, clientId });
+      this.setState({ model });
+      facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
         if (!err) {
-          res.map (facility => {
-            facilityOptions.push ({label: facility.name, value: facility._id});
+          res.map(facility => {
+            facilityOptions.push({ label: facility.name, value: facility._id });
           });
-          this.setState ({facilityOptions});
+          this.setState({ facilityOptions });
         }
       });
 
-      this.getPriority (clientId);
-    } else if (key === 'triggerType') {
-      this.setState ({triggerType: value});
+      this.getPriority(clientId);
+    } else if (key === "triggerType") {
+      this.setState({ triggerType: value });
     }
   };
 
   getPriority = clientId => {
-    let {model} = this.state;
-    RuleQuery.clone ({
+    let { model } = this.state;
+    RuleQuery.clone({
       options: {
-        sort: {priority: -1},
+        sort: { priority: -1 }
       },
-      filters: {clientId},
-    }).fetchOne ((err, rule) => {
+      filters: { clientId }
+    }).fetchOne((err, rule) => {
       if (!err) {
         let priority = rule ? rule.priority + 1 : 1;
-        _.extend (model, {priority});
-        this.setState ({model});
+        _.extend(model, { priority });
+        this.setState({ model });
       } else {
-        Notifier.error (err.reason);
+        Notifier.error(err.reason);
       }
     });
   };
 
   onSubmit = data => {
-    Meteor.call('rule.create', data, (err) => {
+    Meteor.call("rule.create", data, err => {
       if (!err) {
-        Notifier.success('Rule added!');
+        Notifier.success("Rule added!");
       } else {
         Notifier.error(err.reason);
       }
@@ -152,16 +162,16 @@ export default class RuleCreate extends React.Component {
   };
 
   onCreateRule = () => {
-    const {form} = this.refs;
-    form.submit ();
+    const { form } = this.refs;
+    form.submit();
   };
 
   onClose = () => {
-    const {close} = this.props;
-    close ();
+    const { close } = this.props;
+    close();
   };
 
-  render () {
+  render() {
     const {
       clientOptions,
       facilityOptions,
@@ -169,7 +179,7 @@ export default class RuleCreate extends React.Component {
       triggerType,
       userOptions,
       workQueueOptions,
-      actionOptions,
+      actionOptions
     } = this.state;
     return (
       <div className="create-form">
@@ -215,7 +225,7 @@ export default class RuleCreate extends React.Component {
                 </div>
               </div>
 
-              {model.clientId &&
+              {model.clientId && (
                 <div className="form-wrapper">
                   <AutoField
                     value={model.priority}
@@ -224,7 +234,8 @@ export default class RuleCreate extends React.Component {
                     name="priority"
                   />
                   <ErrorField name="priority" />
-                </div>}
+                </div>
+              )}
 
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
@@ -253,7 +264,7 @@ export default class RuleCreate extends React.Component {
                 </div>
               </div>
 
-              {triggerType === triggerTypes.ACTION &&
+              {triggerType === triggerTypes.ACTION && (
                 <div className="select-wrapper">
                   <div className="select-form">
                     <AutoField
@@ -264,9 +275,10 @@ export default class RuleCreate extends React.Component {
                     />
                     <ErrorField name="actionId" />
                   </div>
-                </div>}
+                </div>
+              )}
 
-              {triggerType === triggerTypes.ASSIGN_USER &&
+              {triggerType === triggerTypes.ASSIGN_USER && (
                 <div className="select-wrapper">
                   <div className="select-form">
                     <AutoField
@@ -277,9 +289,10 @@ export default class RuleCreate extends React.Component {
                     />
                     <ErrorField name="assigneeId" />
                   </div>
-                </div>}
+                </div>
+              )}
 
-              {triggerType === triggerTypes.ASSIGN_WORK_QUEUE &&
+              {triggerType === triggerTypes.ASSIGN_WORK_QUEUE && (
                 <div className="select-wrapper">
                   <div className="select-form">
                     <AutoField
@@ -290,9 +303,10 @@ export default class RuleCreate extends React.Component {
                     />
                     <ErrorField name="workQueueId" />
                   </div>
-                </div>}
+                </div>
+              )}
 
-              {triggerType === triggerTypes.EDIT &&
+              {triggerType === triggerTypes.EDIT && (
                 <div>
                   <div className="select-wrapper">
                     <div className="select-form">
@@ -315,7 +329,8 @@ export default class RuleCreate extends React.Component {
                       <ErrorField name="editValue" />
                     </div>
                   </div>
-                </div>}
+                </div>
+              )}
 
               <div className="form-wrapper">
                 <AutoField

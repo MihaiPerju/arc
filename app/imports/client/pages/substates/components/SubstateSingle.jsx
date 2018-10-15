@@ -5,7 +5,7 @@ import TagItem from "/imports/client/lib/TagItem";
 import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { moduleNames }  from '/imports/client/pages/moduleTags/enums/moduleList'
+import { moduleNames } from "/imports/api/tags/enums/tags";
 export default class SubstateSingle extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +53,7 @@ export default class SubstateSingle extends Component {
 
   deleteSubstate = () => {
     const { selectedSubstateId } = this.state;
-    Meteor.call("substate.delete", selectedSubstateId, (err) => {
+    Meteor.call("substate.delete", selectedSubstateId, err => {
       if (!err) {
         Notifier.success("Deleted Successfully !");
       }
@@ -89,12 +89,7 @@ export default class SubstateSingle extends Component {
   };
 
   render() {
-    const {
-      substate,
-      substateSelected,
-      currentSubstate,
-      moduleTags
-    } = this.props;
+    const { substate, substateSelected, currentSubstate, tags } = this.props;
     const { actions, dialogIsActive } = this.state;
     const checked = substateSelected.includes(substate._id);
     const classes = classNames("substates-table__row flex--helper", {
@@ -139,7 +134,7 @@ export default class SubstateSingle extends Component {
           <TagItem
             title="Tag Substate"
             tagIds={substate.tagIds}
-            moduleTags={moduleTags}
+            tags={tags}
             onSubmitTags={this.onSubmitTags.bind(this)}
             entityName={moduleNames.SUBSTATES}
           />
