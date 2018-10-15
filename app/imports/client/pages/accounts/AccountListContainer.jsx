@@ -101,7 +101,8 @@ class AccountListContainer extends Pager {
     if (currentRouteState !== state) {
       this.closeRightPanel();
       this.setState({
-        currentRouteState: state
+        currentRouteState: state,
+        accountsSelected: []
       });
       this.setPagerInitial();
 
@@ -222,6 +223,32 @@ class AccountListContainer extends Pager {
     } else {
       accountsSelected.push(account._id);
     }
+    this.setState({
+      accountsSelected,
+      showMetaData: false
+    });
+  };
+
+  checkAllAccount = selectAll => {
+    const { data } = this.props;
+    let accountsSelected = this.state.accountsSelected;
+
+    if (data.length > 0 && selectAll) {
+      _.map(data, account => {
+        if (accountsSelected.indexOf(account._id) == -1) {
+          accountsSelected.push(account._id);
+        }
+      });
+    }
+
+    if (!selectAll) {
+      _.map(data, account => {
+        if (accountsSelected.includes(account._id)) {
+          accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
+        }
+      });
+    }
+
     this.setState({
       accountsSelected,
       showMetaData: false
@@ -481,6 +508,9 @@ class AccountListContainer extends Pager {
             dropdownOptions={dropdownOptions}
             btnGroup={accountsSelected.length}
             assignFilterArr={assignFilterArr}
+            checkAllAccount={this.checkAllAccount}
+            accountsSelected={accountsSelected}
+            data={data}
             tags={tags}
           />
           {assignUser && (
@@ -523,7 +553,7 @@ class AccountListContainer extends Pager {
             <RightSide
               openMetaData={this.openMetaDataSlider}
               currentAccount={currentAccount}
-              accountsSelected={accountsSelected}
+              accountsSelected={[...accountsSelected]}
               closeRightPanel={this.closeRightPanel}
               removeLock={this.removeLock}
             />
