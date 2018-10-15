@@ -9,7 +9,6 @@ import stringify from "csv-stringify";
 import Headers from "/imports/api/reports/enums/Headers";
 import NotificationService from "../api/notifications/server/services/NotificationService";
 import { fields } from "/imports/api/reports/enums/reportColumn";
-import Settings from "/imports/api/settings/collection.js";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 import pdf from "html-pdf";
 import Future from "fibers/future";
@@ -21,6 +20,7 @@ import settings from "/imports/api/settings/enums/settings";
 
 export default class RunReports {
   static run() {
+
     const job = JobQueue.findOne({
       workerId: null,
       type: JobQueueEnum.RUN_REPORT
@@ -35,7 +35,6 @@ export default class RunReports {
           }
         }
       );
-
       //Create & Save .csv file
       this.saveReport(job);
     }
@@ -137,6 +136,8 @@ export default class RunReports {
     const AccountsNative = Accounts.rawCollection(filters);
 
     let columns = this.getColumns(reportId);
+    columns = { ...columns, name: columns.workQueueId };
+    delete columns.workQueueId;
 
     const stringifier = stringify({
       columns,
@@ -145,11 +146,25 @@ export default class RunReports {
     });
 
     const AccountsRaw = Accounts.rawCollection();
+
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    const metaData = await AccountsRaw.aggregateSync([
+    let metaData = await AccountsRaw.aggregateSync([
       {
         $match: filters
+      },
+      {
+        $lookup: {
+          from: "tags",
+          localField: "workQueueId",
+          foreignField: "_id",
+          as: "tag"
+        }
+      },
+      {
+        $addFields: {
+          "tag": { $arrayElemAt: ["$tag", 0] }
+        }
       },
       {
         $sample: {
@@ -157,6 +172,15 @@ export default class RunReports {
         }
       }
     ]).toArray();
+
+    let headers = this.getColumns(reportId);
+
+    metaData = metaData.map(m => {
+      if (m.tag && m.workQueueId)
+        m.workQueueId = m.tag.name;
+      return m;
+    });
+
     // Render HTML
     const renderHtml = meta => {
       const data = (
@@ -164,13 +188,13 @@ export default class RunReports {
           <Table textAlign="center" celled>
             <Table.Body>
               <Table.Row>
-                {Object.keys(columns).map(item => (
+                {Object.keys(headers).map(item => (
                   <Table.Cell key={item}>{item}</Table.Cell>
                 ))}
               </Table.Row>
               {meta.map(d => (
                 <Table.Row>
-                  {Object.keys(columns).map(item => (
+                  {Object.keys(headers).map(item => (
                     <Table.Cell>{d[item]}</Table.Cell>
                   ))}
                 </Table.Row>
@@ -224,7 +248,7 @@ export default class RunReports {
       {
         $lookup: {
           from: "tags",
-          localField: "workQueue",
+          localField: "workQueueId",
           foreignField: "_id",
           as: "tag"
         }

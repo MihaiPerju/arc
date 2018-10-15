@@ -130,11 +130,13 @@ class ReportHeader extends Component {
     const { reportId } = data[0];
     window.open("/report/" + reportId);
   };
-  downloadReportpdf=()=>{
+
+  downloadReportpdf = () => {
     const { data } = this.props;
     const { reportId } = data[0];
     window.open("/reportpdf/" + reportId);
   }
+
   getRunButton = status => {
     const { isDisabled } = this.state;
     switch (status) {
@@ -158,12 +160,12 @@ class ReportHeader extends Component {
             </a>
             </li>
             <li className="action-item">
-            <a
-              style={isDisabled ? { pointerEvents: "none" } : {}}
-              href="javascript:;"
-              onClick={this.onRunReport}
-            >
-              Run report
+              <a
+                style={isDisabled ? { pointerEvents: "none" } : {}}
+                href="javascript:;"
+                onClick={this.onRunReport}
+              >
+                Run report
             </a>
             </li>
           </ul>
@@ -196,11 +198,11 @@ class ReportHeader extends Component {
               accounts={accounts}
             />
           ) : (
-            <AccountActionContent
-              tableHeader={tableHeader}
-              accountActions={accountActions}
-            />
-          )}
+              <AccountActionContent
+                tableHeader={tableHeader}
+                accountActions={accountActions}
+              />
+            )}
         </div>
       </div>
     );
@@ -235,7 +237,7 @@ class ReportHeader extends Component {
       selectedReportColumns,
       isDisabled
     } = this.state;
-    const job = data[data.length-1];
+    const job = data[data.length - 1];
     let tableHeader = [];
     if (report.type === reportTypes.ACCOUNT_ACTIONS) {
       tableHeader = [
@@ -256,66 +258,66 @@ class ReportHeader extends Component {
         {schedule ? (
           <ScheduleBlock report={report} />
         ) : (
-          <div className="main-content__header header-block header-reports">
-            <div className="row__header">
-              <div className="text-light-grey">Report name</div>
-              <div className="title">{report.name}</div>
-            </div>
-            <div className="row__header">
-              <div className="placement-block">
-                <div className="text-light-grey">Placement date</div>
-                <div className="time">11:20</div>
+            <div className="main-content__header header-block header-reports">
+              <div className="row__header">
+                <div className="text-light-grey">Report name</div>
+                <div className="title">{report.name}</div>
               </div>
-              <ActionDropdown
-                openDialog={this.openDialog}
-                openSchedule={this.openSchedule}
-                onEdit={this.onEdit}
-                onSetGraph={this.onSetGraph.bind(this)}
-              >
-                {Meteor.userId() !== report.authorId && (
-                  <li className="action-item">
-                    <a href="javascript:;" onClick={this.openDialog}>
-                      Copy Report
+              <div className="row__header">
+                <div className="placement-block">
+                  <div className="text-light-grey">Placement date</div>
+                  <div className="time">11:20</div>
+                </div>
+                <ActionDropdown
+                  openDialog={this.openDialog}
+                  openSchedule={this.openSchedule}
+                  onEdit={this.onEdit}
+                  onSetGraph={this.onSetGraph.bind(this)}
+                >
+                  {Meteor.userId() !== report.authorId && (
+                    <li className="action-item">
+                      <a href="javascript:;" onClick={this.openDialog}>
+                        Copy Report
                     </a>
-                  </li>
-                )}
-                {this.getRunButton(job && job.status)}
-              </ActionDropdown>
-            </div>
-            {dialogIsActive && (
-              <Dialog
-                className="account-dialog"
-                title="Confirm"
-                closePortal={this.closeDialog}
-              >
-                <div className="form-wrapper">
-                  Are you sure you want to copy this report ?
+                    </li>
+                  )}
+                  {this.getRunButton(job && job.status)}
+                </ActionDropdown>
+              </div>
+              {dialogIsActive && (
+                <Dialog
+                  className="account-dialog"
+                  title="Confirm"
+                  closePortal={this.closeDialog}
+                >
+                  <div className="form-wrapper">
+                    Are you sure you want to copy this report ?
                 </div>
-                <div className="btn-group">
-                  <button className="btn-cancel" onClick={this.closeDialog}>
-                    Cancel
+                  <div className="btn-group">
+                    <button className="btn-cancel" onClick={this.closeDialog}>
+                      Cancel
                   </button>
-                  <button
-                    style={isDisabled ? { cursor: "not-allowed" } : {}}
-                    disabled={isDisabled}
-                    className="btn--light-blue"
-                    onClick={this.copyReport}
-                  >
-                    {isDisabled ? (
-                      <div>
-                        {" "}
-                        Loading
+                    <button
+                      style={isDisabled ? { cursor: "not-allowed" } : {}}
+                      disabled={isDisabled}
+                      className="btn--light-blue"
+                      onClick={this.copyReport}
+                    >
+                      {isDisabled ? (
+                        <div>
+                          {" "}
+                          Loading
                         <i className="icon-cog" />
-                      </div>
-                    ) : (
-                      "Confirm & Copy"
-                    )}
-                  </button>
-                </div>
-              </Dialog>
-            )}
-          </div>
-        )}
+                        </div>
+                      ) : (
+                          "Confirm & Copy"
+                        )}
+                    </button>
+                  </div>
+                </Dialog>
+              )}
+            </div>
+          )}
         {!schedule &&
           (loading ? <Loading /> : this.getReportContent(tableHeader))}
       </div>
@@ -327,5 +329,5 @@ export default withQuery(
   props => {
     return jobQueueQuery.clone({ filters: { reportId: props.report._id } });
   },
-  {  reactive: true }
+  { reactive: true }
 )(ReportHeader);
