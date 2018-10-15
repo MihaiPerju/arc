@@ -154,10 +154,7 @@ class TagsListContainer extends Pager {
 
 export default withQuery(
   () => {
-    const params = {
-      filters: { workQueueStatus: false }
-    };
-    return TagsListQuery.clone(params);
+    return TagsListQuery.clone();
   },
   { reactive: true }
 )(TagsListContainer);

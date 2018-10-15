@@ -1,7 +1,11 @@
 import Tags from '../collection';
 
 export default Tags.createQuery('listTags', {
-    $filter({filters, options, params}) {
+    $filter({
+        filters,
+        options,
+        params
+    }) {
         _.extend(filters, params.filters);
         _.extend(options, params.options);
     },
@@ -10,8 +14,5 @@ export default Tags.createQuery('listTags', {
     clientId: 1,
     _id: 1,
     tagIds: 1,
-    entities:1,
-    workQueueStatus:1
-  
-    
+    entities: 1,
 });
