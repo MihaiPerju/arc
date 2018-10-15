@@ -42,7 +42,6 @@ class TagContent extends Component {
   render() {
     const { edit } = this.state;
     const { tag, data: users, error } = this.props;
-    console.log(tag);
     if (error) {
       return <div>Error: {error.reason}</div>;
     }

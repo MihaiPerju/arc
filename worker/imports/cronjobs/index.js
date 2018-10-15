@@ -14,12 +14,10 @@ import settings from "/imports/api/settings/enums/settings";
 SyncedCron.add({
   name: "Run Report",
   schedule: function(parser) {
-    console.log("schdule test");
     // parser is a later.parse object
     return parser.text("every 10 seconds");
   },
   job: function() {
-    console.log("test");
     ReportsManagement.run();
   }
 });

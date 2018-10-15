@@ -230,7 +230,6 @@ class ReportHeader extends Component {
 
   render() {
     const { report, data } = this.props;
-    console.log(report);
     const {
       schedule,
       loading,

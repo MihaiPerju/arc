@@ -78,7 +78,6 @@ export default class AccountContent extends Component {
 
   render() {
     const { tableHeader, accounts, report } = this.props;
-    console.log(accounts);
     const { reportColumns } = report;
     const metadataHeaders = this.getMetadataHeaders();
     return (
