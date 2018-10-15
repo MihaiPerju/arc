@@ -83,7 +83,7 @@ export default class RouteService {
           label: "Substates",
           icon: "tasks"
         },
-       
+
         {
           name: "tags/list",
           label: "Tags",
@@ -217,6 +217,11 @@ export default class RouteService {
           name: "accounts/unassigned",
           label: "Unassigned",
           icon: "question-circle-o"
+        },
+        {
+          name: "flagged",
+          label: "Flagged",
+          icon: "flag"
         },
         {
           name: "client/list",
