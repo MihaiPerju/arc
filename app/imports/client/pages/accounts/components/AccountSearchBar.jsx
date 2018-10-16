@@ -825,7 +825,6 @@ class BtnGroup extends Component {
   render() {
     const { deleteAction, icons } = this.props;
     const { dialogIsActive } = this.state;
-    console.log(icons);
     return (
       <div className={this.state.in ? "btn-group in" : "btn-group"}>
         {icons ? (
