@@ -578,7 +578,7 @@ export default class AccountSearchBar extends Component {
                             />
                           </div>
                           <div>
-                            <label>From Discharge Date:</label>
+                            <label>To Discharge Date:</label>
                             <DatePicker
                               calendarClassName="cc-datepicker"
                               showMonthDropdown
@@ -825,6 +825,7 @@ class BtnGroup extends Component {
   render() {
     const { deleteAction, icons } = this.props;
     const { dialogIsActive } = this.state;
+    console.log(icons);
     return (
       <div className={this.state.in ? "btn-group in" : "btn-group"}>
         {icons ? (
