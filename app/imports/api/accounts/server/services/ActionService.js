@@ -3,10 +3,17 @@ import Actions from "/imports/api/actions/collection";
 import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
 import GeneralEnums from "/imports/api/general/enums";
-import { StatesSubstates } from "/imports/api/accounts/enums/states.js";
-import { Dispatcher, Events } from "/imports/api/events";
+import {
+  StatesSubstates
+} from "/imports/api/accounts/enums/states.js";
+import {
+  Dispatcher,
+  Events
+} from "/imports/api/events";
 import stateEnum from "../../enums/states";
-import { Substates } from "../../enums/substates";
+import {
+  Substates
+} from "../../enums/substates";
 import Accounts from "../../collection";
 import SubstatesCollection from "/imports/api/substates/collection";
 import actionTypesEnum from "../../enums/actionTypesEnum";
@@ -20,28 +27,45 @@ import RolesEnum from "/imports/api/users/enums/roles";
 export default class ActionService {
   //Freezing account to be processed by the rules engine
   static freezeAccount(_id) {
-    Accounts.update(
-      { _id },
-      {
-        $set: {
-          isPending: true
-        }
+    Accounts.update({
+      _id
+    }, {
+      $set: {
+        isPending: true
       }
-    );
+    });
   }
 
   //Adding action to account
   static createAction(data) {
-    const { accountId, actionId, reasonCode, userId, addedBy } = data;
+    const {
+      accountId,
+      actionId,
+      reasonCode,
+      userId,
+      addedBy
+    } = data;
     const action = Actions.findOne({
       _id: actionId.value ? actionId.value : actionId
     });
-    const { inputs } = action;
+    const {
+      inputs
+    } = action;
     const createdAt = new Date();
-    const { value: reasonId } = reasonCode || {};
+    const {
+      value: reasonId
+    } = reasonCode || {};
 
-    const { reason } = reasonId ? ReasonCodes.findOne({ _id: reasonId }) : {};
-    const { clientId } = Accounts.findOne({ _id: accountId });
+    const {
+      reason
+    } = reasonId ? ReasonCodes.findOne({
+      _id: reasonId
+    }) : {};
+    const {
+      clientId
+    } = Accounts.findOne({
+      _id: accountId
+    });
     const accountActionData = {
       userId,
       actionId: actionId.value,
@@ -62,18 +86,22 @@ export default class ActionService {
     }
 
     const accountActionId = AccountActions.insert(accountActionData);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $set: {
-          hasLastSysAction: false
-        },
-        $push: {
-          actionsLinkData: accountActionId
-        }
+    Accounts.update({
+      _id: accountId
+    }, {
+      $set: {
+        hasLastSysAction: false,
+        lastUserAction: accountActionId
+      },
+      $push: {
+        actionsLinkData: accountActionId
       }
-    );
-    Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, { accountId, action });
+    });
+
+    Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, {
+      accountId,
+      action
+    });
 
     this.changeState(accountId, action);
 
@@ -90,8 +118,14 @@ export default class ActionService {
 
   //Adding a system action
   static createSystemAction(_id, accountId) {
-    const { clientId } = Accounts.findOne({ _id: accountId });
-    const action = Actions.findOne({ _id });
+    const {
+      clientId
+    } = Accounts.findOne({
+      _id: accountId
+    });
+    const action = Actions.findOne({
+      _id
+    });
 
     const accountAction = {
       actionId: _id,
@@ -102,17 +136,16 @@ export default class ActionService {
     };
 
     const accountActionId = AccountActions.insert(accountAction);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $set: {
-          hasLastSysAction: true
-        },
-        $push: {
-          actionsLinkData: accountActionId
-        }
+    Accounts.update({
+      _id: accountId
+    }, {
+      $set: {
+        hasLastSysAction: true
+      },
+      $push: {
+        actionsLinkData: accountActionId
       }
-    );
+    });
     this.changeState(accountId, action);
 
     const actionsSubState = _.flatten([
@@ -134,7 +167,11 @@ export default class ActionService {
         systemAction: true
       };
 
-      const { clientId } = Facilities.findOne({ _id: facilityId });
+      const {
+        clientId
+      } = Facilities.findOne({
+        _id: facilityId
+      });
 
       const actionId = Actions.insert(action);
       const accountActionId = AccountActions.insert({
@@ -146,78 +183,102 @@ export default class ActionService {
         clientId
       });
 
-      Accounts.update(
-        { acctNum: accountId, state: { $ne: stateEnum.ARCHIVED }, facilityId },
-        {
-          hasLastSysAction: true,
-          $set: {
-            state: stateEnum.ARCHIVED,
-            substate: Substates.SELF_RETURNED,
-            fileId
-          },
-          $push: {
-            actionsLinkData: accountActionId
-          }
+      Accounts.update({
+        acctNum: accountId,
+        state: {
+          $ne: stateEnum.ARCHIVED
+        },
+        facilityId
+      }, {
+        hasLastSysAction: true,
+        $set: {
+          state: stateEnum.ARCHIVED,
+          substate: Substates.SELF_RETURNED,
+          fileId
+        },
+        $push: {
+          actionsLinkData: accountActionId
         }
-      );
+      });
     });
   }
 
   //Change account state if action has a state
-  static changeState(accountId, { state, substateId }) {
-    const { escalationId } = Accounts.findOne({ _id: accountId }) || null;
+  static changeState(accountId, {
+    state,
+    substateId
+  }) {
+    const {
+      escalationId
+    } = Accounts.findOne({
+      _id: accountId
+    }) || null;
     if (escalationId) {
       // remove previous escalated comments
-      Escalations.remove({ _id: escalationId });
+      Escalations.remove({
+        _id: escalationId
+      });
     }
 
     // remove previous tickles history
-    Tickles.remove({ accountId });
+    Tickles.remove({
+      accountId
+    });
 
     // when substateId is present
     if (substateId && substateId !== GeneralEnums.NA) {
-      const substate = SubstatesCollection.findOne({ _id: substateId });
-      const { name } = substate || {};
-      Accounts.update(
-        { _id: accountId },
-        {
-          $set: {
-            substate: name
-          }
+      const substate = SubstatesCollection.findOne({
+        _id: substateId
+      });
+      const {
+        name
+      } = substate || {};
+      Accounts.update({
+        _id: accountId
+      }, {
+        $set: {
+          substate: name
         }
-      );
+      });
     }
 
-    Accounts.update(
-      { _id: accountId },
-      {
-        $set: {
-          state
-        },
-        $unset: {
-          tickleDate: null,
-          employeeToRespond: null,
-          tickleUserId: null,
-          tickleReason: null
-        }
+    Accounts.update({
+      _id: accountId
+    }, {
+      $set: {
+        state
+      },
+      $unset: {
+        tickleDate: null,
+        employeeToRespond: null,
+        tickleUserId: null,
+        tickleReason: null
       }
-    );
+    });
   }
 
   static removeAssignee(_id) {
-    Accounts.update(
-      { _id },
-      {
-        $unset: {
-          workQueueId: null,
-          assigneeId: null
-        }
+    Accounts.update({
+      _id
+    }, {
+      $unset: {
+        workQueueId: null,
+        assigneeId: null
       }
-    );
+    });
   }
 
-  static addComment({ content, accountId, isCorrectNote, userId }) {
-    const { clientId } = Accounts.findOne({ _id: accountId });
+  static addComment({
+    content,
+    accountId,
+    isCorrectNote,
+    userId
+  }) {
+    const {
+      clientId
+    } = Accounts.findOne({
+      _id: accountId
+    });
     const commentData = {
       userId,
       type: actionTypesEnum.COMMENT,
@@ -228,29 +289,37 @@ export default class ActionService {
       clientId
     };
     const accountActionId = AccountActions.insert(commentData);
-    Accounts.update(
-      { _id: accountId },
-      {
-        $push: {
-          commentIds: accountActionId
-        }
+    Accounts.update({
+      _id: accountId
+    }, {
+      $push: {
+        commentIds: accountActionId
       }
-    );
+    });
     if (isCorrectNote) {
       this.sendNotification(accountId);
     }
   }
 
   static sendNotification(accountId) {
-    const { assigneeId, workQueueId } = Accounts.findOne({ _id: accountId });
+    const {
+      assigneeId,
+      workQueueId
+    } = Accounts.findOne({
+      _id: accountId
+    });
 
     if (assigneeId && Roles.userIsInRole(assigneeId, RolesEnum.REP)) {
       NotificationService.createGlobal(assigneeId);
       NotificationService.createCommentNotification(assigneeId, accountId);
     } else if (workQueueId) {
-      const users = Users.find({ tagIds: workQueueId }).fetch();
+      const users = Users.find({
+        tagIds: workQueueId
+      }).fetch();
       for (let user of users) {
-        const { _id } = user;
+        const {
+          _id
+        } = user;
         NotificationService.createGlobal(_id);
         NotificationService.createCommentNotification(_id, accountId);
       }
@@ -278,7 +347,9 @@ export default class ActionService {
 
   static updateAccount(_id, data, userId) {
     const key = Object.keys(data)[0];
-    const account = Accounts.findOne({ _id });
+    const account = Accounts.findOne({
+      _id
+    });
     if (key) {
       const editData = {
         clientId: account["clientId"],
@@ -292,54 +363,53 @@ export default class ActionService {
       };
 
       AccountActions.insert(editData);
-      Accounts.update(
-        { _id },
-        {
-          $set: data
-        }
-      );
+      Accounts.update({
+        _id
+      }, {
+        $set: data
+      });
     }
   }
 
   static addLockToAccount(_id, userId) {
     // remove previous lock from the account by logged-in user
-    const account = Accounts.findOne({ lockOwnerId: userId });
+    const account = Accounts.findOne({
+      lockOwnerId: userId
+    });
 
     if (account) {
       this.removeLockFromAccount(account._id, userId);
     }
 
-    Accounts.update(
-      {
-        _id,
-        lockOwnerId: null
-      },
-      {
-        $set: {
-          lockOwnerId: userId,
-          lockTimestamp: new Date()
-        }
+    Accounts.update({
+      _id,
+      lockOwnerId: null
+    }, {
+      $set: {
+        lockOwnerId: userId,
+        lockTimestamp: new Date()
       }
-    );
+    });
   }
 
   static removeLockFromAccount(userId) {
-    Accounts.update(
-      {
-        lockOwnerId: userId
-      },
-      {
-        $set: {
-          lockOwnerId: null,
-          lockTimestamp: null,
-          lockBreakUsers: []
-        }
+    Accounts.update({
+      lockOwnerId: userId
+    }, {
+      $set: {
+        lockOwnerId: null,
+        lockTimestamp: null,
+        lockBreakUsers: []
       }
-    );
+    });
   }
 
   static breakLockFromAccount(_id, userId) {
-    const { clientId } = Accounts.findOne({ _id });
+    const {
+      clientId
+    } = Accounts.findOne({
+      _id
+    });
     const data = {
       userId,
       type: actionTypesEnum.LOCK_BREAK,
@@ -349,15 +419,12 @@ export default class ActionService {
     };
 
     AccountActions.insert(data);
-    Accounts.update(
-      {
-        _id
-      },
-      {
-        $push: {
-          lockBreakUsers: userId
-        }
+    Accounts.update({
+      _id
+    }, {
+      $push: {
+        lockBreakUsers: userId
       }
-    );
+    });
   }
 }
