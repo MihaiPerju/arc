@@ -46,7 +46,6 @@ export default class AccountAssign extends React.Component {
         }
       })
       .fetch((err, res) => {
-        console.log(res);
         if (!err) {
           const workQueueOptions = WorkQueueService.createOptions(res);
           this.setState({
