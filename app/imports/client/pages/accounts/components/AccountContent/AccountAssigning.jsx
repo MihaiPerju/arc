@@ -6,7 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import WorkQueueService from "./../../services/WorkQueueService";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
-import moduleListEnum from "/imports/api/tags/enums/tags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -25,7 +25,7 @@ export default class AccountActioning extends React.Component {
     workQueueQuery
       .clone({
         filters: {
-          entities: { $in: [moduleListEnum.USERS] }
+          entities: { $in: [moduleNames.USERS] }
         }
       })
       .fetch((err, res) => {

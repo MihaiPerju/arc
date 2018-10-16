@@ -15,7 +15,7 @@ import actionQuery from "/imports/api/actions/queries/actionList";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
 import RuleQuery from "/imports/api/rules/queries/listRules";
-import moduleListEnum from "/imports/api/tags/enums/tags";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class RuleCreate extends React.Component {
   constructor() {
@@ -80,7 +80,7 @@ export default class RuleCreate extends React.Component {
     workQueueQuery
       .clone({
         filters: {
-          entities: { $in: [moduleListEnum.USERS] }
+          entities: { $in: [moduleNames.USERS] }
         }
       })
       .fetch((err, res) => {
