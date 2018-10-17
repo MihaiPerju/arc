@@ -86,8 +86,6 @@ export default class ActionService {
     }
 
     const accountActionId = AccountActions.insert(accountActionData);
-    console.log(action._id);
-    console.log(accountId);
     Accounts.update({
       _id: accountId
     }, {

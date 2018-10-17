@@ -31,7 +31,6 @@ class RuleGenerator extends Component {
     const query = this.props.value && this.props.value.query;
     const config = { query };
     const { fields, isLoading } = this.state;
-    console.log(fields);
 
     if (isLoading) {
       return <Loading />;
