@@ -201,7 +201,7 @@ export default new SimpleSchema({
     }
   },
   "invoiceNo.$": {
-    type: SimpleSchema.Integer
+    type: String
   },
   letterIds: {
     type: Array,
