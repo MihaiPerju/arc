@@ -19,24 +19,43 @@ import main from "simpl-schema";
 
 export default class AccountService {
   //For placement file
-  static upload(results, rules, { fileId, facilityId }) {
+  static upload(results, rules, {
+    fileId,
+    facilityId
+  }) {
     //Get the root directory
-    const { root } = SettingsService.getSettings(settings.ROOT);
+    const {
+      root
+    } = SettingsService.getSettings(settings.ROOT);
 
     //Update the file headers;
-    const { header } = Files.findOne({
+    const {
+      header
+    } = Files.findOne({
       _id: fileId
     });
     if (!header) {
-      Files.update({ _id: fileId }, { $set: { header: results[0] } });
+      Files.update({
+        _id: fileId
+      }, {
+        $set: {
+          header: results[0]
+        }
+      });
     } else {
       results[0] = header;
     }
-    const { labels, importRules } = this.standardize(results, rules);
+    const {
+      labels,
+      importRules
+    } = this.standardize(results, rules);
 
     const clientId = this.getClientIdByFacilityId(facilityId);
 
-    const { accounts, corruptRows } = this.convertToAccounts(
+    const {
+      accounts,
+      corruptRows
+    } = this.convertToAccounts(
       results,
       importRules,
       labels
@@ -44,14 +63,21 @@ export default class AccountService {
 
     //If there are no accounts or we have broken ones, file is not valid and nothing should take effect
     if (!accounts.length || corruptRows.length) {
-      FileService.update(fileId, { corruptRows, status: UploadStatuses.FAIL });
+      FileService.update(fileId, {
+        corruptRows,
+        status: UploadStatuses.FAIL
+      });
       return;
     }
 
     //Other case - file upload was a success
-    FileService.update(fileId, { status: UploadStatuses.SUCCESS });
+    FileService.update(fileId, {
+      status: UploadStatuses.SUCCESS
+    });
 
-    const existentAccounts = Accounts.find({ facilityId }).fetch();
+    const existentAccounts = Accounts.find({
+      facilityId
+    }).fetch();
 
     //Find account numbers of all created accounts and existent accounts
     const currAcctIds = this.getAcctNumbers(accounts);
@@ -65,19 +91,25 @@ export default class AccountService {
 
     //Backup accounts
     let accountsToBackup = Accounts.find({
-      acctNum: { $in: toUpdateAccountIds }
+      acctNum: {
+        $in: toUpdateAccountIds
+      }
     }).fetch();
     this.backupAccounts(accountsToBackup);
 
     _.map(toUpdateAccountIds, toUpdateAccountId => {
       const toUpdateAccount = this.getAccount(accounts, toUpdateAccountId);
-      Object.assign(toUpdateAccount, { fileId });
+      Object.assign(toUpdateAccount, {
+        fileId
+      });
 
-      const { invoiceNo } =
-        Accounts.find({
-          acctNum: toUpdateAccountId,
-          facilityId
-        }).fetch()[0] || {};
+      const {
+        invoiceNo
+      } =
+      Accounts.find({
+        acctNum: toUpdateAccountId,
+        facilityId
+      }).fetch()[0] || {};
 
       if (toUpdateAccount.invoiceNo) {
         toUpdateAccount.invoiceNo = _.union(
@@ -88,10 +120,12 @@ export default class AccountService {
         toUpdateAccount.invoiceNo = [];
       }
 
-      Accounts.update(
-        { acctNum: toUpdateAccountId, facilityId },
-        { $set: toUpdateAccount }
-      );
+      Accounts.update({
+        acctNum: toUpdateAccountId,
+        facilityId
+      }, {
+        $set: toUpdateAccount
+      });
     });
 
     //Find account numbers of all old accounts that need to be archived and archive
@@ -102,8 +136,12 @@ export default class AccountService {
 
     //Select only unarchived accounts and store this in backup
     accountsToBackup = Accounts.find({
-      acctNum: { $in: oldAccountIds },
-      state: { $ne: stateEnum.ARCHIVED },
+      acctNum: {
+        $in: oldAccountIds
+      },
+      state: {
+        $ne: stateEnum.ARCHIVED
+      },
       facilityId
     }).fetch();
 
@@ -120,7 +158,11 @@ export default class AccountService {
 
     _.map(newAccountIds, newAccountId => {
       const newAccount = this.getAccount(accounts, newAccountId);
-      Object.assign(newAccount, { facilityId, clientId, fileId });
+      Object.assign(newAccount, {
+        facilityId,
+        clientId,
+        fileId
+      });
       let accountId = Accounts.insert(newAccount);
 
       //Create a directory for every account to store attachments
@@ -144,19 +186,19 @@ export default class AccountService {
   }
 
   static getAccount(accounts, acctNum) {
-    return _.find(accounts, function(account) {
+    return _.find(accounts, function (account) {
       return account.acctNum === acctNum;
     });
   }
 
   static getCommonElements(arr1, arr2) {
-    return _.filter(arr1, function(id) {
+    return _.filter(arr1, function (id) {
       return arr2.indexOf(id) > -1;
     });
   }
 
   static getDifferentElements(arr1, arr2) {
-    return _.filter(arr1, function(id) {
+    return _.filter(arr1, function (id) {
       return arr2.indexOf(id) === -1;
     });
   }
@@ -169,7 +211,9 @@ export default class AccountService {
 
   static standardize(results, rules) {
     //Convert all the rules to lower case to not be case-sensitive
-    const { types } = RulesEnum;
+    const {
+      types
+    } = RulesEnum;
 
     for (let rule in rules) {
       if (rule !== "insurances" && rule !== "hasHeader") {
@@ -199,7 +243,10 @@ export default class AccountService {
       results.splice(0, 1);
     }
     delete importRules.hasHeader;
-    return { labels, importRules };
+    return {
+      labels,
+      importRules
+    };
   }
 
   static convertToAccounts(results, importRules, labels) {
@@ -215,11 +262,15 @@ export default class AccountService {
       }
     }
 
-    return { accounts, corruptRows };
+    return {
+      accounts,
+      corruptRows
+    };
   }
 
   static createAccount(data, rules, labels) {
-    let importRules = { ...rules };
+    let importRules = { ...rules
+    };
     let account = {};
     let mainFields = [];
 
@@ -298,7 +349,9 @@ export default class AccountService {
         metaData[label] = value;
       }
     });
-    Object.assign(account, { metaData });
+    Object.assign(account, {
+      metaData
+    });
     if (uploadErrors.numbers || uploadErrors.dates) {
       return null;
     }
@@ -307,7 +360,9 @@ export default class AccountService {
   }
 
   static convertToType(rule, value, uploadErrors) {
-    const { types } = RulesEnum;
+    const {
+      types
+    } = RulesEnum;
     if (types.dates.includes(rule) && value) {
       const date = new Date(value);
       const dateString =
@@ -381,20 +436,37 @@ export default class AccountService {
   }
 
   //For inventory file
-  static update(results, rules, { fileId, facilityId }) {
+  static update(results, rules, {
+    fileId,
+    facilityId
+  }) {
     //Update the file headers;
-    const { header } = Files.findOne({
+    const {
+      header
+    } = Files.findOne({
       _id: fileId
     });
     if (!header) {
-      Files.update({ _id: fileId }, { $set: { header: results[0] } });
+      Files.update({
+        _id: fileId
+      }, {
+        $set: {
+          header: results[0]
+        }
+      });
     } else {
       results[0] = header;
     }
 
-    const { labels, importRules } = this.standardize(results, rules);
+    const {
+      labels,
+      importRules
+    } = this.standardize(results, rules);
 
-    const { accounts, corruptRows } = this.convertToAccounts(
+    const {
+      accounts,
+      corruptRows
+    } = this.convertToAccounts(
       results,
       importRules,
       labels
@@ -402,41 +474,60 @@ export default class AccountService {
 
     //If there are no accounts, file is not valid and nothing should take effect
     if (!accounts.length) {
-      FileService.update(fileId, { status: UploadStatuses.FAIL });
+      FileService.update(fileId, {
+        status: UploadStatuses.FAIL
+      });
       return;
     } else {
-      FileService.update(fileId, { status: UploadStatuses.SUCCESS });
-      FileService.update(fileId, { corruptRows });
+      FileService.update(fileId, {
+        status: UploadStatuses.SUCCESS
+      });
+      FileService.update(fileId, {
+        corruptRows
+      });
     }
 
     const clientId = this.getClientIdByFacilityId(facilityId);
 
-    const { oldAccountIds, newAccountIds } = this.filterAccounts(accounts);
+    const {
+      oldAccountIds,
+      newAccountIds
+    } = this.filterAccounts(accounts);
 
     //Creating new accounts
     _.map(newAccountIds, accountId => {
       const newAccount = this.getAccount(accounts, accountId);
-      Object.assign(newAccount, { facilityId, fileId, clientId });
+      Object.assign(newAccount, {
+        facilityId,
+        fileId,
+        clientId
+      });
 
       Accounts.insert(newAccount);
     });
 
     //Backup old accounts
     let accountsToBackup = Accounts.find({
-      acctNum: { $in: oldAccountIds }
+      acctNum: {
+        $in: oldAccountIds
+      }
     }).fetch();
     this.backupAccounts(accountsToBackup);
 
     //Updating old accounts
     _.map(oldAccountIds, accountId => {
       const toUpdateAccount = this.getAccount(accounts, accountId);
-      Object.assign(toUpdateAccount, { fileId });
+      Object.assign(toUpdateAccount, {
+        fileId
+      });
 
-      const { invoiceNo } =
-        Accounts.find({
-          acctNum: accountId,
-          facilityId
-        }).fetch()[0] || {};
+      const {
+        invoiceNo
+      } =
+      Accounts.find({
+        acctNum: accountId,
+        facilityId
+      }).fetch()[0] || {};
 
       if (toUpdateAccount.invoiceNo) {
         toUpdateAccount.invoiceNo = _.union(
@@ -447,12 +538,12 @@ export default class AccountService {
         toUpdateAccount.invoiceNo = [];
       }
 
-      Accounts.update(
-        { acctNum: accountId, facilityId },
-        {
-          $set: toUpdateAccount
-        }
-      );
+      Accounts.update({
+        acctNum: accountId,
+        facilityId
+      }, {
+        $set: toUpdateAccount
+      });
     });
   }
 
@@ -461,14 +552,21 @@ export default class AccountService {
     let newAccountIds = [];
 
     accounts.map(account => {
-      const { acctNum } = account;
-      if (Accounts.findOne({ acctNum })) {
+      const {
+        acctNum
+      } = account;
+      if (Accounts.findOne({
+          acctNum
+        })) {
         oldAccountIds.push(acctNum);
       } else {
         newAccountIds.push(acctNum);
       }
     });
-    return { oldAccountIds, newAccountIds };
+    return {
+      oldAccountIds,
+      newAccountIds
+    };
   }
 
   // Get client id by facility
