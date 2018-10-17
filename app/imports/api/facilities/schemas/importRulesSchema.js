@@ -90,5 +90,25 @@ export default new SimpleSchema({
   other2: {
     type: SimpleSchema.oneOf(Number, Date, String),
     optional: true
-  }
+  },
+  account: {
+    type: Object,
+    label: "Account Placement Date",
+    optional: true
+  },
+  'account.placementDate': {
+    type: Date,
+    optional: true,
+    label: 'Placement Date'
+  },
+  'account.reactivationDate': {
+      type: Date,
+      optional: true,
+      label: 'Reactivation Date'
+  },
+  'account.refreshDate': {
+      type: Date,
+      optional: true,
+      label: 'Refresh Date'
+  },
 });

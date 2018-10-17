@@ -15,11 +15,13 @@ import Loading from "/imports/client/lib/ui/Loading";
 import UploadItem from "./FacilityContent/UploadItem";
 import InsuranceRules from "./InsuranceRules";
 import classNames from "classnames";
+import DatePicker from "react-datepicker";
+import moment from "moment";
 
 export default class ImportingRules extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, collapse: false, isDisabled: false };
+    this.state = { loading: true, collapse: false, isDisabled: false, placementDate: null, inventoryDate: null };
   }
 
   componentWillMount() {
@@ -44,8 +46,10 @@ export default class ImportingRules extends React.Component {
   }
 
   onSubmitImportingRules = importRules => {
-    this.setState({ isDisabled: true });
-    const facilityId = this.props.model._id;
+    this.setState({ isDisabled: true })
+    importRules['account.placementDate'] =  moment(this.state.placementDate).format("MM/DD/YYYY hh:mm");
+   
+     const facilityId = this.props.model._id;
     const { rules } = this.props;
     const newFacility = { _id: facilityId };
     newFacility[rules] = importRules;
@@ -57,17 +61,17 @@ export default class ImportingRules extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    });
+    }); 
   };
 
   onChange(field, value) {
     const { rules } = this.props;
-    if (field === "hasHeader") {
+     if (field === "hasHeader") {
       //Change schema
       const newSchema = RulesService.createSchema(rules, value);
-
+      
       this.setState({ schema: newSchema });
-    }
+    }     
   }
 
   groupFields(fields) {
@@ -100,10 +104,21 @@ export default class ImportingRules extends React.Component {
     }
   };
 
+  onDateSelect = (selectedDate, field) => { 
+    const { rules } = this.props
+    if (field === "placementDate") 
+      this.setState({ placementDate: selectedDate });     
+
+    if (field === "inventoryDate") 
+      this.setState({ inventoryDate: selectedDate });
+
+  }
+
   render() {
-    const { schema, loading, collapse, isDisabled } = this.state;
+    const { schema, loading, collapse, isDisabled, placementDate, inventoryDate } = this.state;
     const { model, rules, copyRules } = this.props;
     const fields = RulesService.getSchemaFields(rules);
+    console.log(schema);
     const options = [
       { value: true, label: "True" },
       { value: false, label: "False" }
@@ -114,7 +129,7 @@ export default class ImportingRules extends React.Component {
       "btn-collapse": true,
       rotate: collapse
     });
-
+    
     return (
       <div>
         {loading ? (
@@ -140,6 +155,45 @@ export default class ImportingRules extends React.Component {
                   />
                   <ErrorField name="hasHeader" />
                 </div>
+                {rules == "placementRules" && (
+                  <div className="radio-group flex--helper flex-align--center">
+                    <label>Account Placement Date:</label>
+                    <DatePicker
+                        calendarClassName="cc-datepicker"
+                        showMonthDropdown
+                        showYearDropdown
+                        yearDropdownItemNumber={4}
+                        todayButton={"Today"}
+                        placeholderText="Account Placement Date"
+                        selected={placementDate}
+                        name="account.placementDate"
+                        onChange={date =>
+                          this.onDateSelect(date, "placementDate")
+                        }
+                      />
+                  </div>
+                  )
+                }
+                {rules == "inventoryRules" && (
+                  <div className="radio-group flex--helper flex-align--center">
+                    <label>Account Placement Date:</label>
+                    <DatePicker
+                        calendarClassName="cc-datepicker"
+                        showMonthDropdown
+                        showYearDropdown
+                        yearDropdownItemNumber={4}
+                        name="account.inventoryDate"
+                        todayButton={"Today"}
+                        placeholderText="Account Inventory Date"
+                        selected={inventoryDate}
+                        onChange={date =>
+                          this.onDateSelect(date, "inventoryDate")
+                        }
+                      />
+                  </div>
+                  )
+                }
+
                 {rules != "paymentRules" && (
                   <button
                     type="button"
