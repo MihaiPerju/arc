@@ -91,7 +91,7 @@ export default class ActionService {
     }, {
       $set: {
         hasLastSysAction: false,
-        lastUserAction: accountActionId
+        lastUserAction: action._id
       },
       $push: {
         actionsLinkData: accountActionId

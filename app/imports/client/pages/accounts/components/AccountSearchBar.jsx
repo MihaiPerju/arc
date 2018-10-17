@@ -578,7 +578,7 @@ export default class AccountSearchBar extends Component {
                             />
                           </div>
                           <div>
-                            <label>From Discharge Date:</label>
+                            <label>To Discharge Date:</label>
                             <DatePicker
                               calendarClassName="cc-datepicker"
                               showMonthDropdown

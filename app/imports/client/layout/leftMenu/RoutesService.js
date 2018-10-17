@@ -250,8 +250,8 @@ export default class RouteService {
           icon: "thumb-tack"
         },
         {
-          name: "tag/list",
-          label: "Work Queues",
+          name: "tags/list",
+          label: "Tags",
           icon: "tags"
         }
       ];
@@ -373,11 +373,6 @@ export default class RouteService {
       case "/tags/list":
         {
           return "Tags";
-
-        }
-      case "/tag/list":
-        {
-          return "Work Queues";
 
         }
       case "/file/list":

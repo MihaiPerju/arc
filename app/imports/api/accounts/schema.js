@@ -257,5 +257,9 @@ export default new SimpleSchema({
   isPending: {
     type: Boolean,
     defaultValue: true
+  },
+  lastUserAction: {
+    type: String,
+    optional: true
   }
 });

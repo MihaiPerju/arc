@@ -1,52 +1,70 @@
 import Rules from '/imports/api/rules/collection.js';
+import FieldsGenerator from './FieldsGenerator';
 
-Meteor.methods ({
-  'rule.create' (data) {
-    const {priority, clientId} = data;
-    Rules.update (
-      {
-        priority: {$gte: priority},
-        clientId,
+Meteor.methods({
+  'rule.create'(data) {
+    const {
+      priority,
+      clientId
+    } = data;
+    Rules.update({
+      priority: {
+        $gte: priority
       },
-      {
-        $inc: {priority: 1},
+      clientId,
+    }, {
+      $inc: {
+        priority: 1
       },
-      {multi: true}
-    );
-    Rules.insert (data);
+    }, {
+      multi: true
+    });
+    Rules.insert(data);
   },
 
-  'rule.update' (data) {
-    const {priority, clientId} = data;
+  'rule.update'(data) {
+    const {
+      priority,
+      clientId
+    } = data;
     //Increase priority for all the rules that have a priority greater than or equal to the new one
-    Rules.update (
-      {
-        priority: {$gte: priority},
-        clientId,
+    Rules.update({
+      priority: {
+        $gte: priority
       },
-      {
-        $inc: {priority: 1},
+      clientId,
+    }, {
+      $inc: {
+        priority: 1
       },
-      {multi: true}
-    );
+    }, {
+      multi: true
+    });
 
     //Update the rule itself
-    Rules.update (
-      {
-        _id: data._id,
-      },
-      {
-        $set: data,
-      }
-    );
+    Rules.update({
+      _id: data._id,
+    }, {
+      $set: data,
+    });
   },
-  'rule.delete' (_id) {
+  'rule.delete'(_id) {
     //Take care of the security
-    Rules.remove ({_id});
+    Rules.remove({
+      _id
+    });
   },
 
-  'rules.delete' (ids) {
+  'rules.delete'(ids) {
     //Take care of the security
-    Rules.remove ({_id: {$in: ids}});
+    Rules.remove({
+      _id: {
+        $in: ids
+      }
+    });
+  },
+
+  'rules.getFields'() {
+    return FieldsGenerator.getFields();
   },
 });
