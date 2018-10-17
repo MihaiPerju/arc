@@ -60,7 +60,6 @@ export default class AccountService {
       importRules,
       labels
     );
-    console.log(accounts);
 
     //If there are no accounts or we have broken ones, file is not valid and nothing should take effect
     if (!accounts.length || corruptRows.length) {

@@ -57,7 +57,6 @@ export default class PlacementService {
       root + Business.ACCOUNTS_FOLDER + filePath
     );
     const csvString = stream.toString();
-    console.log(csvString);
     
     //Keep reference to previous file
     const {
