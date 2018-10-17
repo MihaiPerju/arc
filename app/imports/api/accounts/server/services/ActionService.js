@@ -97,6 +97,7 @@ export default class ActionService {
         actionsLinkData: accountActionId
       }
     });
+
     Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, {
       accountId,
       action

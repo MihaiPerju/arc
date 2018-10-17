@@ -62,6 +62,10 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
+  lastUserAction: {
+    type: String,
+    optional: true
+  },
   insurances: {
     type: Array,
     optional: true,
