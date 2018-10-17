@@ -20,7 +20,7 @@ export default class AccountContent extends Component {
     if(this.props.account && this.props.account.isPending) {
       let customWarning = {
         title: 'Warning!',
-        message: 'You are not suppose to modify the account until the rule engine is set',
+        message: 'This account is under processing',
         level: 'warning',
       };
       Notifier.addNotification(customWarning);
