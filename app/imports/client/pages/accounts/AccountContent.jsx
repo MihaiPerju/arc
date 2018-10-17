@@ -20,7 +20,7 @@ export default class AccountContent extends Component {
     if(this.props.account && this.props.account.isPending) {
       let customWarning = {
         title: 'Warning!',
-        message: 'This account is under processing',
+        message: 'Account is currently being processed',
         level: 'warning',
       };
       Notifier.addNotification(customWarning);
