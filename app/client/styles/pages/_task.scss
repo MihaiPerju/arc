@@ -367,6 +367,7 @@
   }
 
   .left__side {
+
     .name {
       span {
         position: relative;
@@ -529,14 +530,6 @@
 
     .person {
       font-weight: 700;
-    }
-    &.open {
-      .person {
-        max-width: 245px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
     }
 
     .price {
@@ -1516,5 +1509,18 @@
 .select-width {
   select {
     padding-right: 26px;
+  }
+}
+
+.cc-container {
+  > .left__side:not(.full__width) {
+    .list-item {
+      .person {
+        max-width: 245px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
   }
 }
