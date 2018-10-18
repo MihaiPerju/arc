@@ -3,6 +3,7 @@ import Users from "../collection";
 import Uploads from "/imports/api/uploads/uploads/collection";
 import fs from "fs";
 import Business from "/imports/api/business";
+import RolesEnum from '/imports/api/users/enums/roles';
 
 Meteor.methods({
   "users.remove_avatar"() {
@@ -31,5 +32,8 @@ Meteor.methods({
     const { tagIds } = Users.findOne({ _id: userId });
 
     return tagIds;
+  },
+  "users.getReps"() {
+    return Users.find({ roles: RolesEnum.REP }).fetch();
   }
 });
