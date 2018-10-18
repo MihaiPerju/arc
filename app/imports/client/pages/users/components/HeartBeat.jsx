@@ -1,5 +1,4 @@
 import React from "react";
-
 import Highcharts from "highcharts";
 import ReactHighcharts from "highcharts-react-official";
 import Notifier from "/imports/client/lib/Notifier";
@@ -8,10 +7,8 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import Loading from "/imports/client/lib/ui/Loading";
-import RolesEnum from "../../../api/users/enums/roles";
 
-export default class Home extends React.Component {
-
+export default class HeartBeat extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -27,6 +24,8 @@ export default class Home extends React.Component {
   componentDidMount() {
     this.getRepresentatives();
   }
+
+ 
 
   getRepresentatives() {
     Meteor.call("users.getReps", (err, repsData) => {
@@ -96,57 +95,51 @@ export default class Home extends React.Component {
         }
       ]
     };
-    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      return (
-        <div className="cc-container home-container flex-align--start">
-          <div className="heart-beat">
-            {
-              !this.state.isLoading ?
-                <AutoForm schema={heartBeatSchema} onSubmit={this.submitData}>
-                  <div className="flex--helper form-group__pseudo--3">
-                    <div className="select-form">
-                      <AutoField
-                        label="Reps:"
-                        name="userId"
-                        options={reps}
-                      />
-                    </div>
-                    <div className="m-l-15">
-                      <label>Select Date:</label>
-                      <div className="border-style">
-                        <DatePicker
-                          calendarClassName="cc-datepicker"
-                          showMonthDropdown
-                          showYearDropdown
-                          yearDropdownItemNumber={4}
-                          todayButton={"Today"}
-                          selected={selectedDate}
-                          onChange={this.onChange}
-                          placeholderText="Selected Date"
-                          fixedHeight
-                        />
-                      </div>
-                    </div>
-                    <button type="submit" className="custom-submit-btn" onClick={this.submit}>
-                      Submit
-                    </button>
-                  </div>
-                </AutoForm> : <Loading />
-            }
-            {
-              !this.state.isLoadingGraph ? <div className="m-t--20">
-                <div>
-                  <ReactHighcharts highcharts={Highcharts} options={options} />
+    return (
+      <div className="heart-beat">
+        {
+          !this.state.isLoading ?
+            <AutoForm schema={heartBeatSchema} onSubmit={this.submitData}>
+              <div className="flex--helper form-group__pseudo--3">
+                <div className="select-form">
+                  <AutoField
+                    label="Reps:"
+                    name="userId"
+                    options={reps}
+                  />
                 </div>
-              </div> : <Loading />
-            }
+                <div className="m-l-15">
+                  <label>Select Date:</label>
+                  <div className="border-style">
+                    <DatePicker
+                      calendarClassName="cc-datepicker"
+                      showMonthDropdown
+                      showYearDropdown
+                      yearDropdownItemNumber={4}
+                      todayButton={"Today"}
+                      selected={selectedDate}
+                      onChange={this.onChange}
+                      placeholderText="Selected Date"
+                      fixedHeight
+                    />
+                  </div>
+                </div>
+                <button type="submit" className="custom-submit-btn" onClick={this.submit}>
+                  Submit
+              </button>
+              </div>
+            </AutoForm> : <Loading />
+        }
+        {
+          !this.state.isLoadingGraph ? <div className="m-t--20">
+            <div>
+              <ReactHighcharts highcharts={Highcharts} options={options} />
+            </div>
+          </div> : <Loading />
+        }
 
-          </div>
-        </div>
-      );
-    }
-    else
-      return null;
+      </div>
+    );
   }
 }
 
