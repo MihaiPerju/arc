@@ -28,6 +28,7 @@ export default Accounts.createQuery("accountList", {
   insBal: 1,
   insBal2: 1,
   insBal3: 1,
+  isPending: 1,
   state: 1,
   substate: 1,
   facilityId: 1,
