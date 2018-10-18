@@ -9,10 +9,22 @@ import EscalateReason from "./components/AccountContent/EscalateReason";
 import CommentsListContainer from "/imports/client/pages/comments/CommentsListContainer.jsx";
 import Statistics from "/imports/client/pages/accounts/components/Statistics";
 import TickleBlock from "./components/AccountContent/TickleBlock";
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class AccountContent extends Component {
   constructor() {
     super();
+  }
+
+  componentWillMount() {
+    if(this.props.account && this.props.account.isPending) {
+      let customWarning = {
+        title: 'Warning!',
+        message: 'Account is currently being processed',
+        level: 'warning',
+      };
+      Notifier.addNotification(customWarning);
+    }
   }
 
   escalateReason() {
@@ -54,8 +66,11 @@ export default class AccountContent extends Component {
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;
     }
+    let main_class = ( account && account.isPending ) ? 'main-content position_style' : 'main-content';
     return (
-      <div className="main-content">
+   
+      <div className={main_class} >
+      
         {account && (
           <div>
             <AccountContentHeader
@@ -81,6 +96,8 @@ export default class AccountContent extends Component {
             />
           </div>
         )}
+        
+      { account && account.isPending && <div className="overlay"></div> }
       </div>
     );
   }

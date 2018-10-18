@@ -54,7 +54,7 @@ class AccountRightSide extends Component {
     if (isLoading) {
       return <Loading />;
     }
-
+    
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         <AccountContent
