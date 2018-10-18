@@ -146,7 +146,7 @@ export default class ImportingRules extends React.Component {
                     className="btn--white"
                     onClick={copyRules}
                   >
-                    {this.props.rules !== 'placementRules' ? 'Copy Placement File Headers' : 'Copy Inventory File Headers'}
+                    {this.props.rules !== 'placementRulesplacementRules' ? 'Copy Placement File Headers' : 'Copy Inventory File Headers'}
                   </button>
                 )}
               </div>
