@@ -15,11 +15,12 @@ import Loading from "/imports/client/lib/ui/Loading";
 import UploadItem from "./FacilityContent/UploadItem";
 import InsuranceRules from "./InsuranceRules";
 import classNames from "classnames";
+import DatePicker from "react-datepicker";
 
 export default class ImportingRules extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, collapse: false, isDisabled: false };
+    this.state = { loading: true, collapse: false, isDisabled: false, placementDate: null };
   }
 
   componentWillMount() {
@@ -45,6 +46,9 @@ export default class ImportingRules extends React.Component {
 
   onSubmitImportingRules = importRules => {
     this.setState({ isDisabled: true });
+
+    importRules['placementDate'] = this.state.placementDate.toISOString();
+    
     const facilityId = this.props.model._id;
     const { rules } = this.props;
     const newFacility = { _id: facilityId };
@@ -57,7 +61,7 @@ export default class ImportingRules extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    });
+    }); 
   };
 
   onChange(field, value) {
@@ -100,8 +104,10 @@ export default class ImportingRules extends React.Component {
     }
   };
 
+  onDateSelect = (selectedDate) => { this.setState({ placementDate: selectedDate }); }
+
   render() {
-    const { schema, loading, collapse, isDisabled } = this.state;
+    const { schema, loading, collapse, isDisabled, placementDate } = this.state;
     const { model, rules, copyRules } = this.props;
     const fields = RulesService.getSchemaFields(rules);
     const options = [
@@ -140,6 +146,31 @@ export default class ImportingRules extends React.Component {
                   />
                   <ErrorField name="hasHeader" />
                 </div>
+
+                {
+                  rules == "placementRules" && (
+                   <div className="radio-group flex--helper flex-align--center">
+                     <label>Account Placement Date:</label>
+                    <DatePicker
+                         calendarClassName="cc-datepicker"
+                         showMonthDropdown
+                         showYearDropdown
+                         todayButton={"Today"}
+                         placeholderText="Account Placement Date"
+                         selected={placementDate}
+                        name="account.placementDate"
+                        name="placementDate"
+                         onChange={date =>
+                           this.onDateSelect(date, "placementDate")
+                         }
+                     />
+                     
+                   </div>
+                   )
+
+                 }
+
+ 
                 {rules != "paymentRules" && (
                   <button
                     type="button"

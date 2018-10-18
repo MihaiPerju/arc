@@ -251,5 +251,9 @@ export default new SimpleSchema({
   isPending: {
     type: Boolean,
     defaultValue: true
-  }
+  },
+  placementDate: {
+    type: Date,
+    optional: true
+  },
 });

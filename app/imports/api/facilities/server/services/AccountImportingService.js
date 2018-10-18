@@ -39,7 +39,8 @@ export default class AccountService {
     const { accounts, corruptRows } = this.convertToAccounts(
       results,
       importRules,
-      labels
+      labels,
+      facilityId
     );
 
     //If there are no accounts or we have broken ones, file is not valid and nothing should take effect
@@ -172,7 +173,7 @@ export default class AccountService {
     const { types } = RulesEnum;
 
     for (let rule in rules) {
-      if (rule !== "insurances" && rule !== "hasHeader") {
+      if (rule !== "insurances" && rule !== "hasHeader" && rule !== "placementDate") {
         if (types.others.includes(rule)) {
           rules[rule] = rules[rule].toString();
         }
@@ -199,15 +200,16 @@ export default class AccountService {
       results.splice(0, 1);
     }
     delete importRules.hasHeader;
+    delete importRules.placementDate;
     return { labels, importRules };
   }
 
-  static convertToAccounts(results, importRules, labels) {
+  static convertToAccounts(results, importRules, labels, facilityId) {
     let accounts = [];
     let corruptRows = [];
 
     for (let i = 0; i < results.length - 1; i++) {
-      let account = this.createAccount(results[i], importRules, labels);
+      let account = this.createAccount(results[i], importRules, labels, facilityId);
       if (!account) {
         corruptRows.push(i + 1);
       } else {
@@ -218,7 +220,7 @@ export default class AccountService {
     return { accounts, corruptRows };
   }
 
-  static createAccount(data, rules, labels) {
+  static createAccount(data, rules, labels, facilityId ) {
     let importRules = { ...rules };
     let account = {};
     let mainFields = [];
@@ -284,6 +286,10 @@ export default class AccountService {
       account[rule] = value;
     }
 
+    //adding placement date
+    let placementRules = this.getPlacementDateByFacilityId(facilityId);
+    account.placementDate = placementRules.placementDate;
+    
     //Getting meta fields
     let metaData = {};
     let count = 1;
@@ -350,6 +356,9 @@ export default class AccountService {
     if (rule === "ptName") {
       return value ? value.replace(/,/g, ", ") : null;
     }
+    if (rule === "invoiceNo") {
+      return value ? parseInt(value) : null;
+    }
     return value;
   }
 
@@ -357,6 +366,7 @@ export default class AccountService {
     let newRules = {};
 
     //Removing unnecessary rules
+    delete rules.placementDate;
     delete rules.hasHeader;
 
     //Trim spaces for errors
@@ -397,7 +407,8 @@ export default class AccountService {
     const { accounts, corruptRows } = this.convertToAccounts(
       results,
       importRules,
-      labels
+      labels,
+      facilityId
     );
 
     //If there are no accounts, file is not valid and nothing should take effect
@@ -474,5 +485,10 @@ export default class AccountService {
   // Get client id by facility
   static getClientIdByFacilityId(facilityId) {
     return Facilities.findOne(facilityId).clientId;
+  }
+
+  // Get placement Date by facility
+  static getPlacementDateByFacilityId(facilityId) {
+    return Facilities.findOne(facilityId).placementRules;
   }
 }
