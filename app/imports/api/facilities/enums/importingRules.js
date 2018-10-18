@@ -136,8 +136,8 @@ export default {
     ],
     types: {
         dates: ['dischrgDate', 'fbDate', 'admitDate', 'transDate'],
-        numbers: ['acctBal', 'medNo', 'insBal', 'newAcctBal', 'ptBal', 'transAmount', ],
-        strings: ['zip', 'address1', 'address2', 'insCode', 'city', 'state', 'policy', 'phone', 'transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode', 'activeInsCode', 'invoiceNo'],
+        numbers: ['acctBal', 'insBal', 'newAcctBal', 'ptBal', 'transAmount', ],
+        strings: ['medNo', 'zip', 'address1', 'address2', 'insCode', 'city', 'state', 'policy', 'phone', 'transType', 'acctNum', 'payorCode', 'ptType', 'ptName', 'finClass', 'insName', 'facCode', 'activeInsCode', 'invoiceNo'],
         others: ['other1', 'other2']
     }
 }

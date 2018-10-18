@@ -51,7 +51,7 @@ export default new SimpleSchema({
     optional: true
   },
   medNo: {
-    type: SimpleSchema.Integer,
+    type: String,
     optional: true
   },
   activeInsCode: {

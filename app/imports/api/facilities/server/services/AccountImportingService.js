@@ -374,6 +374,7 @@ export default class AccountService {
       const parsed = moment(dateString, "MM/DD/YYYY", true);
       // If the date isn't valid add an exception
       if (parsed.isValid() === false) {
+        console.log(rule, value)
         uploadErrors.dates++;
       }
       return parsed.isValid() ? parsed.toDate() : null;
@@ -382,10 +383,11 @@ export default class AccountService {
 
       //If the number isn't valid add an exception
       if (isNaN(parsed)) {
+        console.log(rule, value)
         uploadErrors.numbers++;
       }
       return isNaN(parsed) ? null : parsed;
-    } else if (types.others.includes(rule)) {
+    } else if (types.others.includes(rule) && value) {
       const date = new Date(value);
       const dateString =
         ("0" + (date.getMonth() + 1)).slice(-2) +
@@ -395,6 +397,7 @@ export default class AccountService {
         date.getFullYear();
       const parsed = moment(dateString, "MM/DD/YYYY", true);
       if (parsed.isValid()) {
+        console.log(rule, value)
         return parsed.toDate();
       } else if (!isNaN(parseInt(value, 10))) {
         const parsed = parseInt(value, 10);
