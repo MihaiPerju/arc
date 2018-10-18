@@ -54,6 +54,7 @@ export default class ActionDropdown extends Component {
     return (
       <div className="action-dropdown" ref={this.nodeRef}>
         <div className="action-dropdown__btn" onClick={this.openDropdown}>
+          Options
           <i className="icon-angle-down" />
         </div>
         {isOpenedDropdown && (
