@@ -28,7 +28,6 @@ export default class PagerService {
       this.getFilters(params, filters);
     }
     this.queryParams = params;
-    console.log(params)
     return query.clone(params);
   }
 
