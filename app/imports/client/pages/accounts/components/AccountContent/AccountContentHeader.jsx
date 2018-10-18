@@ -115,10 +115,10 @@ export default class AccountContentHeader extends Component {
             </div>
 
             <div className="row__block">
-              <div className="pacient-id text-blue">
+              <div className="patient-id text-blue">
                 {account && account.acctNum}
               </div>
-              <div className="financial-class">O/D</div>
+              <div className="substate">{account.substate}</div>
               <div className="location">
                 {account && account.facility
                   ? account.facility.name

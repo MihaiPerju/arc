@@ -183,6 +183,7 @@ export default class FacilityCreate extends Component {
                     <div>
                       <SelectField
                         labelHidden={true}
+                        placeholder={true}
                         name="regionId"
                         options={regionIds}
                       />

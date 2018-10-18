@@ -23,7 +23,13 @@
     list-style: none;
   }
   .menu__item {
+    border-bottom: 1px solid #ccc;
+
     &.cc--active {
+      box-shadow: 0px 0px 3px rgba(0,0,0,0.45);
+      -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.45);
+      -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.45);
+
       > a {
         background: $color-white;
         color: $dark-grey;
@@ -35,6 +41,7 @@
         }
       }
     }
+
     > a {
       height: 34px;
       display: block;
