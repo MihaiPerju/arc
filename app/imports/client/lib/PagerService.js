@@ -1,13 +1,24 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
-import  { roleGroups } from "/imports/api/users/enums/roles";
+import {
+  roleGroups
+} from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
-  
-  static setQuery(query, { page, perPage, state, assign, filters, options }) {
+
+  static setQuery(query, {
+    page,
+    perPage,
+    state,
+    assign,
+    filters,
+    options
+  }) {
     let params = this.getPagerOptions(page, perPage);
-    const { route } = FlowRouter.current();
+    const {
+      route
+    } = FlowRouter.current();
 
     if (state || state === "" || route.path.indexOf("flagged") > -1) {
       this.getAccountFilters(params, state, filters, options);
@@ -17,6 +28,7 @@ export default class PagerService {
       this.getFilters(params, filters);
     }
     this.queryParams = params;
+    console.log(params)
     return query.clone(params);
   }
 
@@ -118,30 +130,42 @@ export default class PagerService {
   static getProperAccounts(params, assign) {
     if (assign === "none") {
       _.extend(params.filters, {
-        assigneeId: { $exists: true },
-        workQueueId: { $exists: true }
+        assigneeId: {
+          $exists: true
+        },
+        workQueueId: {
+          $exists: true
+        }
       });
     } else if (assign) {
       const filterArr = assign.split(",");
       if (_.contains(filterArr, "assigneeId")) {
         _.extend(params.filters, {
-          $or: [
-            { workQueueId: { $in: filterArr } },
+          $or: [{
+              workQueueId: {
+                $in: filterArr
+              }
+            },
             {
-              assigneeId: { $exists: true }
+              assigneeId: {
+                $exists: true
+              }
             }
           ]
         });
       } else {
-        _.extend(params.filters, { workQueueId: { $in: filterArr } });
+        _.extend(params.filters, {
+          workQueueId: {
+            $in: filterArr
+          }
+        });
       }
     }
   }
 
   static getAccountFilters(
     params,
-    state,
-    {
+    state, {
       acctNum,
       facilityId,
       clientId,
@@ -161,8 +185,7 @@ export default class PagerService {
       tickleUserId,
       tagIds,
       medNo
-    },
-    {
+    }, {
       sortAcctBal,
       sortTickleDate,
       sortCreatedAt,
@@ -183,7 +206,12 @@ export default class PagerService {
       });
     } else if (state === "tickles") {
       _.extend(params, {
-        filters: { tickleDate: { $exists: true }, employeeToRespond: null }
+        filters: {
+          tickleDate: {
+            $exists: true
+          },
+          employeeToRespond: null
+        }
       });
       _.extend(params.options, {
         sort: {
@@ -191,63 +219,101 @@ export default class PagerService {
         }
       });
       if (tickleUserId) {
-        _.extend(params.filters, { tickleUserId: tickleUserId });
+        _.extend(params.filters, {
+          tickleUserId: tickleUserId
+        });
       } else if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
-        _.extend(params.filters, { tickleUserId: Meteor.userId() });
+        _.extend(params.filters, {
+          tickleUserId: Meteor.userId()
+        });
       }
     } else if (state === "escalated") {
       _.extend(params, {
         filters: {
           tickleDate: null,
-          employeeToRespond: { $exists: true }
+          employeeToRespond: {
+            $exists: true
+          }
         }
       });
     } else if (state && state !== "all") {
       state = stateEnum[state.toUpperCase()];
       _.extend(params, {
-        filters: { state, tickleDate: null, employeeToRespond: null }
+        filters: {
+          state,
+          tickleDate: null,
+          employeeToRespond: null
+        }
       });
     } else {
       // state undefined
       _.extend(params, {
-        filters: { state: { $exists: true } }
+        filters: {
+          state: {
+            $exists: true
+          }
+        }
       });
     }
 
     //adding filter query options
     if (acctNum) {
-      _.extend(params.filters, { acctNum: { $regex: acctNum, $options: "i" } });
+      _.extend(params.filters, {
+        acctNum: {
+          $regex: acctNum,
+          $options: "i"
+        }
+      });
     }
     if (facilityId) {
-      _.extend(params.filters, { facilityId });
+      _.extend(params.filters, {
+        facilityId
+      });
     }
     if (clientId) {
-      _.extend(params.filters, { clientId });
+      _.extend(params.filters, {
+        clientId
+      });
     }
     if (facCode) {
-      _.extend(params.filters, { facCode });
+      _.extend(params.filters, {
+        facCode
+      });
     }
     if (ptType) {
-      _.extend(params.filters, { ptType });
+      _.extend(params.filters, {
+        ptType
+      });
     }
     if (acctBalMin && acctBalMax) {
       _.extend(params.filters, {
-        acctBal: { $gte: +acctBalMin, $lte: +acctBalMax }
+        acctBal: {
+          $gte: +acctBalMin,
+          $lte: +acctBalMax
+        }
       });
     } else if (acctBalMin) {
       _.extend(params.filters, {
-        acctBal: { $gte: +acctBalMin }
+        acctBal: {
+          $gte: +acctBalMin
+        }
       });
     } else if (acctBalMax) {
       _.extend(params.filters, {
-        acctBal: { $lte: +acctBalMax }
+        acctBal: {
+          $lte: +acctBalMax
+        }
       });
     }
     if (finClass) {
-      _.extend(params.filters, { finClass });
+      _.extend(params.filters, {
+        finClass
+      });
     }
     if (substate) {
-      _.extend(params.filters, { substate });
+      _.extend(params.filters, {
+        substate
+      });
     }
     if (dischrgDateMin && dischrgDateMax) {
       _.extend(params.filters, {
@@ -255,8 +321,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(dischrgDateMax))
-              .startOf("day")
-              .add(1, "day")
+            .startOf("day")
+            .add(1, "day")
           )
         }
       });
@@ -271,8 +337,8 @@ export default class PagerService {
         dischrgDate: {
           $lt: new Date(
             moment(new Date(dischrgDateMax))
-              .startOf("day")
-              .add(1, "day")
+            .startOf("day")
+            .add(1, "day")
           )
         }
       });
@@ -283,8 +349,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(fbDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(fbDateMax))
-              .startOf("day")
-              .add(1, "day")
+            .startOf("day")
+            .add(1, "day")
           )
         }
       });
@@ -299,14 +365,16 @@ export default class PagerService {
         fbDate: {
           $lt: new Date(
             moment(new Date(fbDateMax))
-              .startOf("day")
-              .add(1, "day")
+            .startOf("day")
+            .add(1, "day")
           )
         }
       });
     }
     if (activeInsCode) {
-      _.extend(params.filters, { activeInsCode });
+      _.extend(params.filters, {
+        activeInsCode
+      });
     }
 
     if (admitDateMin && admitDateMax) {
@@ -315,8 +383,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(admitDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(admitDateMax))
-              .startOf("day")
-              .add(1, "day")
+            .startOf("day")
+            .add(1, "day")
           )
         }
       });
@@ -331,31 +399,41 @@ export default class PagerService {
         admitDate: {
           $lt: new Date(
             moment(new Date(admitDateMax))
-              .startOf("day")
-              .add(1, "day")
+            .startOf("day")
+            .add(1, "day")
           )
         }
       });
     }
 
     if (tagIds) {
-      _.extend(params.filters, { tagIds: { $in: tagIds } });
+      _.extend(params.filters, {
+        tagIds: {
+          $in: tagIds
+        }
+      });
     }
 
     if (medNo) {
-      _.extend(params.filters, { medNo: +medNo });
+      _.extend(params.filters, {
+        medNo: +medNo
+      });
     }
 
     if (FlowRouter.current().route.path.indexOf("/flagged") > -1) {
-      _.extend(params, {
-        flagged: true
+      _.extend(params.filters, {
+        flagCounter: {
+          $gt: 0
+        }
       });
     }
 
     //adding sort query options
 
     _.extend(params, {
-      options: { sort: {} }
+      options: {
+        sort: {}
+      }
     });
 
     if (sortCreatedAt) {
@@ -422,8 +500,8 @@ export default class PagerService {
     _.extend(params, {
       filters: {}
     });
-    if(filters&&filters.status){
-      status=filters.status
+    if (filters && filters.status) {
+      status = filters.status
     }
     let currentPath = FlowRouter.current().route.path;
 
@@ -443,8 +521,8 @@ export default class PagerService {
 
     if (currentPath.indexOf("reports/list") > -1) {
       name = FlowRouter.getQueryParam("name");
-      facCode=FlowRouter.getQueryParam("facCode")
-      ptType=FlowRouter.getQueryParam("ptType")
+      facCode = FlowRouter.getQueryParam("facCode")
+      ptType = FlowRouter.getQueryParam("ptType")
     }
 
     if (currentPath.indexOf("letter-templates/list") > -1) {
@@ -504,97 +582,147 @@ export default class PagerService {
     // client search
     if (clientName) {
       _.extend(params.filters, {
-        clientName: { $regex: clientName, $options: "i" }
+        clientName: {
+          $regex: clientName,
+          $options: "i"
+        }
       });
     }
 
     // user search
     if (email) {
       _.extend(params.filters, {
-        "emails.address": { $regex: email, $options: "i" }
+        "emails.address": {
+          $regex: email,
+          $options: "i"
+        }
       });
     }
 
     // action search
     if (title) {
       _.extend(params.filters, {
-        title: { $regex: title, $options: "i" }
+        title: {
+          $regex: title,
+          $options: "i"
+        }
       });
     }
 
     // reports search
     if (name) {
       _.extend(params.filters, {
-        name: { $regex: name, $options: "i" }
+        name: {
+          $regex: name,
+          $options: "i"
+        }
       });
     }
-if(facCode){
-  _.extend(params.filters, {
-    "filterBuilderData.facCode": {$regex:`${facCode}.*`,$options:"i"}
-  });
-  
-}
-if(ptType){
-  _.extend(params.filters, {
-    "filterBuilderData.ptType":{ $regex: `${ptType}.*`,$options:"i"}
-  });
-  
-}
+    if (facCode) {
+      _.extend(params.filters, {
+        "filterBuilderData.facCode": {
+          $regex: `${facCode}.*`,
+          $options: "i"
+        }
+      });
+
+    }
+    if (ptType) {
+      _.extend(params.filters, {
+        "filterBuilderData.ptType": {
+          $regex: `${ptType}.*`,
+          $options: "i"
+        }
+      });
+
+    }
     // letter-templates search
     if (letterTemplateName) {
       _.extend(params.filters, {
-        name: { $regex: letterTemplateName, $options: "i" }
+        name: {
+          $regex: letterTemplateName,
+          $options: "i"
+        }
       });
     }
 
     // code search
     if (code) {
       _.extend(params.filters, {
-        code: { $regex: code, $options: "i" }
+        code: {
+          $regex: code,
+          $options: "i"
+        }
       });
     }
 
     // substate search
     if (stateName) {
       _.extend(params.filters, {
-        stateName: { $regex: stateName, $options: "i" }
+        stateName: {
+          $regex: stateName,
+          $options: "i"
+        }
       });
     }
 
     // tag search && module-tag
     if (tagName) {
       _.extend(params.filters, {
-        name: { $regex: tagName, $options: "i" }
+        name: {
+          $regex: tagName,
+          $options: "i"
+        }
       });
     }
 
     // common filter query for tags filtering
     if (tagIds) {
-      _.extend(params.filters, { tagIds: { $in: tagIds } });
+      _.extend(params.filters, {
+        tagIds: {
+          $in: tagIds
+        }
+      });
     }
 
     // substates sorts
     if (sortState) {
       _.extend(params, {
-        options: { sort: { stateName: sortState === "ASC" ? 1 : -1 } }
+        options: {
+          sort: {
+            stateName: sortState === "ASC" ? 1 : -1
+          }
+        }
       });
     }
     if (sortSubstate) {
       _.extend(params, {
-        options: { sort: { name: sortSubstate === "ASC" ? 1 : -1 } }
+        options: {
+          sort: {
+            name: sortSubstate === "ASC" ? 1 : -1
+          }
+        }
       });
     }
 
     // facility search
     if (facilityName) {
       _.extend(params.filters, {
-        name: { $regex: facilityName, $options: "i" }
+        name: {
+          $regex: facilityName,
+          $options: "i"
+        }
       });
     }
 
     // region search
     if (regionName) {
-      _.extend(params.filters, { name: { $regex: regionName, $options: "i" } });
+      _.extend(params.filters, {
+        name: {
+          $regex: regionName,
+          $options: "i"
+        }
+      });
     }
 
     // created at search
@@ -604,8 +732,8 @@ if(ptType){
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(createdAtMax))
-              .add(1, "day")
-              .startOf("day")
+            .add(1, "day")
+            .startOf("day")
           )
         }
       });
@@ -614,14 +742,20 @@ if(ptType){
     // letters search
     if (letterName) {
       _.extend(params.filters, {
-        letterTemplateName: { $regex: letterName, $options: "i" }
+        letterTemplateName: {
+          $regex: letterName,
+          $options: "i"
+        }
       });
     }
 
     // file search
     if (fileName) {
       _.extend(params.filters, {
-        fileName: { $regex: fileName, $options: "i" }
+        fileName: {
+          $regex: fileName,
+          $options: "i"
+        }
       });
     }
     if (clientId) {
@@ -634,14 +768,16 @@ if(ptType){
         facilityId: facilityId
       });
     }
-    
+
     if (status) {
       _.extend(params.filters, {
         status
       });
     } else {
       _.extend(params.filters, {
-        status: { $ne: statuses.DISMISS }
+        status: {
+          $ne: statuses.DISMISS
+        }
       });
     }
   }
@@ -649,7 +785,10 @@ if(ptType){
   static getRange(page, perPage) {
     const lowest = (page - 1) * perPage + 1;
     const highest = lowest + perPage - 1;
-    return { lowest, highest };
+    return {
+      lowest,
+      highest
+    };
   }
 
   static getPagerOptions(page, perPage) {
@@ -659,7 +798,11 @@ if(ptType){
     };
   }
 
-  static setPage({ page, perPage, total }, inc) {
+  static setPage({
+    page,
+    perPage,
+    total
+  }, inc) {
     const maxPage = this.getMaxPage(total, perPage);
     if (page + inc <= maxPage && page + inc >= 1) {
       return page + inc;

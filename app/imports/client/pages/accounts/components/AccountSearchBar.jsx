@@ -124,12 +124,14 @@ export default class AccountSearchBar extends Component {
         model
       });
     }
-    
-    accountsSelected.length>0 && this.setState({ selectAll: true });
-    _.map(data, account => { 
+
+    accountsSelected &&
+      accountsSelected.length > 0 &&
+      this.setState({ selectAll: true });
+    _.map(data, account => {
       if (accountsSelected.indexOf(account._id) == -1) {
-        return this.setState({ selectAll: false })
-      } 
+        return this.setState({ selectAll: false });
+      }
     });
   }
 
@@ -334,10 +336,10 @@ export default class AccountSearchBar extends Component {
 
   checkAllAccount = () => {
     const { checkAllAccount } = this.props;
-    this.setState({ selectAll: !this.state.selectAll }, ()=>{
+    this.setState({ selectAll: !this.state.selectAll }, () => {
       checkAllAccount(this.state.selectAll);
     });
-  }
+  };
 
   resetFilters = () => {
     let appliedFilters = FlowRouter.current().queryParams;
@@ -487,14 +489,14 @@ export default class AccountSearchBar extends Component {
                           Meteor.userId(),
                           RolesEnum.MANAGER
                         ) && (
-                            <div className="select-form">
-                              <SelectField
-                                label="Tickle:"
-                                name="tickleUserId"
-                                options={tickleUserIdOptions}
-                              />
-                            </div>
-                          )}
+                          <div className="select-form">
+                            <SelectField
+                              label="Tickle:"
+                              name="tickleUserId"
+                              options={tickleUserIdOptions}
+                            />
+                          </div>
+                        )}
                         <div className="flex--helper form-group__pseudo--3">
                           <div className="select-form">
                             <SelectField
@@ -692,8 +694,8 @@ export default class AccountSearchBar extends Component {
                   {sort ? (
                     <i className="icon-angle-up" />
                   ) : (
-                      <i className="icon-angle-down" />
-                    )}
+                    <i className="icon-angle-down" />
+                  )}
                 </button>
               </div>
             )}
@@ -836,10 +838,10 @@ class BtnGroup extends Component {
             );
           })
         ) : (
-            <button>
-              <i className="icon-archive" />
-            </button>
-          )}
+          <button>
+            <i className="icon-archive" />
+          </button>
+        )}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
