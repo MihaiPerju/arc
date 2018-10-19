@@ -11,18 +11,21 @@ AccountAttachmentsQuery.expose({});
 AccountListQuery.expose({
   firewall(userId, params) {
     //Don't get the pending accounts
-    if(params.filters.acctNum == undefined) {
+    if (params.filters.acctNum == undefined) {
       _.extend(params.filters, {
         isPending: false
       });
     }
 
-    const userFacilities = Facilities.find(
-      {
-        allowedUsers: { $in: [userId] }
-      },
-      { fields: { _id: 1 } }
-    ).fetch();
+    const userFacilities = Facilities.find({
+      allowedUsers: {
+        $in: [userId]
+      }
+    }, {
+      fields: {
+        _id: 1
+      }
+    }).fetch();
 
     let userFacilitiesArr = [];
     for (let element of userFacilities) {
@@ -30,43 +33,61 @@ AccountListQuery.expose({
     }
 
     if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
-      if (params.flagged) {
+      if (params.filters.flagCounter) {
         _.extend(params.filters, {
           $and: [{
             flagCounter: {
               $gt: 0
-              ,
+            },
+          }, {
+            managerIds: {
+              $in: [userId]
             }
-          },
-        {managerIds:userId}]
+          }]
         });
       } else {
         _.extend(params.filters, {
           facilityId: {
             $in: userFacilitiesArr
           },
-          $or: [
-            { employeeToRespond: null },
-            { employeeToRespond: RolesEnum.MANAGER }
+          $or: [{
+              employeeToRespond: null
+            },
+            {
+              employeeToRespond: RolesEnum.MANAGER
+            }
           ]
         });
       }
     }
     if (Roles.userIsInRole(userId, RolesEnum.REP)) {
       //Getting tags and accounts from within the work queue
-      let { tagIds } = Users.findOne({ _id: userId });
+      let {
+        tagIds
+      } = Users.findOne({
+        _id: userId
+      });
 
       //Getting only the escalated accounts that are open and the rep is the author
       if (!tagIds) {
         tagIds = [];
       }
       _.extend(params.filters, {
-        $and: [
-          {
-            $or: [{ assigneeId: userId }, { workQueueId: { $in: tagIds } }]
+        $and: [{
+            $or: [{
+              assigneeId: userId
+            }, {
+              workQueueId: {
+                $in: tagIds
+              }
+            }]
           },
           {
-            $or: [{ employeeToRespond: null }, { employeeToRespond: userId }]
+            $or: [{
+              employeeToRespond: null
+            }, {
+              employeeToRespond: userId
+            }]
           }
         ]
       });

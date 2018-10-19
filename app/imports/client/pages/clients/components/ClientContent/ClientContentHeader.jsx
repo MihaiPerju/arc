@@ -82,8 +82,6 @@ export default class ClientContentHeader extends Component {
   };
 
   onSubmit = ({ managerIds }) => {
-    console.log(managerIds);
-    console.log(this.props);
     const { client } = this.props;
     const { _id } = client;
     this.setState({ isDisabled: true });
