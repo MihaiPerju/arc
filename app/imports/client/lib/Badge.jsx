@@ -35,9 +35,11 @@ export default (BadgeCountContainer = withTracker(({ label }) => {
     counter = Counter.get("escalatedAccounts");
   }
   if (label === "Flagged") {
+    console.log("OK!");
     countHandle = Meteor.subscribe("flaggedAccounts", Meteor.userId());
     loading = !countHandle.ready();
     counter = Counter.get("flaggedAccounts");
+    console.log(counter);
   }
   return {
     loading,
