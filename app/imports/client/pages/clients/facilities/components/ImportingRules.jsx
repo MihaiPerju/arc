@@ -15,11 +15,13 @@ import Loading from "/imports/client/lib/ui/Loading";
 import UploadItem from "./FacilityContent/UploadItem";
 import InsuranceRules from "./InsuranceRules";
 import classNames from "classnames";
+import DatePicker from "react-datepicker";
+import moment from "moment";
 
 export default class ImportingRules extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, collapse: false, isDisabled: false };
+    this.state = { loading: true, collapse: false, isDisabled: false, placementDate: moment() };
   }
 
   componentWillMount() {
@@ -32,6 +34,14 @@ export default class ImportingRules extends React.Component {
       loading: false,
       schema
     });
+    
+    if(model && model[rules]){
+      let res = model[rules];
+      if(res){
+        this.setState({ placementDate: moment(res.placementDate) })
+      }
+    }
+    
   }
 
   componentWillReceiveProps(newProps) {
@@ -45,8 +55,13 @@ export default class ImportingRules extends React.Component {
 
   onSubmitImportingRules = importRules => {
     this.setState({ isDisabled: true });
-    const facilityId = this.props.model._id;
     const { rules } = this.props;
+    
+    if(rules != "paymentRules") 
+      importRules['placementDate'] = this.state.placementDate ? this.state.placementDate.toISOString() : new Date();
+    
+    const facilityId = this.props.model._id;
+    
     const newFacility = { _id: facilityId };
     newFacility[rules] = importRules;
     Meteor.call("facility.update", newFacility, err => {
@@ -57,7 +72,7 @@ export default class ImportingRules extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    });
+    }); 
   };
 
   onChange(field, value) {
@@ -100,8 +115,10 @@ export default class ImportingRules extends React.Component {
     }
   };
 
+  onDateSelect = (selectedDate) => {  this.setState({ placementDate: selectedDate }); }
+
   render() {
-    const { schema, loading, collapse, isDisabled } = this.state;
+    const { schema, loading, collapse, isDisabled, placementDate } = this.state;
     const { model, rules, copyRules } = this.props;
     const fields = RulesService.getSchemaFields(rules);
     const options = [
@@ -140,6 +157,30 @@ export default class ImportingRules extends React.Component {
                   />
                   <ErrorField name="hasHeader" />
                 </div>
+
+                {
+                  rules !== "paymentRules" && (
+                   <div className="radio-group flex--helper flex-align--center">
+                     <label>Account Placement Date:</label>
+                    <DatePicker
+                         calendarClassName="cc-datepicker"
+                         showMonthDropdown
+                         showYearDropdown
+                         todayButton={"Today"}
+                         placeholderText="Account Placement Date"
+                         selected={placementDate}
+                        name="placementDate"
+                         onChange={date =>
+                           this.onDateSelect(date, "placementDate")
+                         }
+                     />
+                     
+                   </div>
+                   )
+
+                 }
+
+ 
                 {rules != "paymentRules" && (
                   <button
                     type="button"

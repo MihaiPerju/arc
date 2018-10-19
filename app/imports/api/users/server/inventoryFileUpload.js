@@ -21,7 +21,7 @@ createRoute(
     let fileName = filenames[0].replace(os.tmpdir() + "/", "");
 
     fs.renameSync(filenames[0], root + Business.ACCOUNTS_FOLDER + fileName);
-
+    
     const job = {
       type: jobTypes.IMPORT_DATA,
       status: jobStatuses.NEW,

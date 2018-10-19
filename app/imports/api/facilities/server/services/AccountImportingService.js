@@ -120,12 +120,18 @@ export default class AccountService {
         toUpdateAccount.invoiceNo = [];
       }
 
+
+       //refresh placement date
+      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+      toUpdateAccount.refreshDate = rulesDate.placementRules.placementDate;
+     
       Accounts.update({
         acctNum: toUpdateAccountId,
         facilityId
       }, {
         $set: toUpdateAccount
       });
+
     });
 
     //Find account numbers of all old accounts that need to be archived and archive
@@ -158,11 +164,16 @@ export default class AccountService {
 
     _.map(newAccountIds, newAccountId => {
       const newAccount = this.getAccount(accounts, newAccountId);
+
+      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+      newAccount.placementDate = rulesDate.placementRules.placementDate;
+   
       Object.assign(newAccount, {
         facilityId,
         clientId,
         fileId
       });
+
       let accountId = Accounts.insert(newAccount);
 
       //Create a directory for every account to store attachments
@@ -216,7 +227,7 @@ export default class AccountService {
     } = RulesEnum;
 
     for (let rule in rules) {
-      if (rule !== "insurances" && rule !== "hasHeader") {
+      if (rule !== "insurances" && rule !== "hasHeader" && rule !== "placementDate") {
         if (types.others.includes(rule)) {
           rules[rule] = rules[rule].toString();
         }
@@ -243,6 +254,7 @@ export default class AccountService {
       results.splice(0, 1);
     }
     delete importRules.hasHeader;
+    delete importRules.placementDate;
     return {
       labels,
       importRules
@@ -267,6 +279,7 @@ export default class AccountService {
       corruptRows
     };
   }
+
 
   static createAccount(data, rules, labels) {
     let importRules = { ...rules
@@ -334,7 +347,7 @@ export default class AccountService {
       );
       account[rule] = value;
     }
-
+ 
     //Getting meta fields
     let metaData = {};
     let count = 1;
@@ -405,6 +418,9 @@ export default class AccountService {
     if (rule === "ptName") {
       return value ? value.replace(/,/g, ", ") : null;
     }
+    if (rule === "invoiceNo") {
+      return value ? parseInt(value) : null;
+    }
     return value;
   }
 
@@ -412,6 +428,7 @@ export default class AccountService {
     let newRules = {};
 
     //Removing unnecessary rules
+    delete rules.placementDate;
     delete rules.hasHeader;
 
     //Trim spaces for errors
@@ -497,6 +514,10 @@ export default class AccountService {
     //Creating new accounts
     _.map(newAccountIds, accountId => {
       const newAccount = this.getAccount(accounts, accountId);
+
+      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+      newAccount.placementDate = rulesDate.inventoryRules.placementDate;
+   
       Object.assign(newAccount, {
         facilityId,
         fileId,
@@ -538,6 +559,12 @@ export default class AccountService {
         toUpdateAccount.invoiceNo = [];
       }
 
+
+       //refresh placement date
+       let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+       toUpdateAccount.refreshDate = rulesDate.inventoryRules.placementDate;
+
+   
       Accounts.update({
         acctNum: accountId,
         facilityId
@@ -573,4 +600,10 @@ export default class AccountService {
   static getClientIdByFacilityId(facilityId) {
     return Facilities.findOne(facilityId).clientId;
   }
+
+  // Get placement Date by facility
+  static getPlacementDateByFacilityId(facilityId) {
+    return Facilities.findOne(facilityId);
+  }
 }
+

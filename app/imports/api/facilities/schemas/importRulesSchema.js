@@ -90,5 +90,10 @@ export default new SimpleSchema({
   other2: {
     type: SimpleSchema.oneOf(Number, Date, String),
     optional: true
-  }
+  },
+  placementDate: {
+    type: String,
+    optional: true,
+    label: "Placement Date"
+  },
 });

@@ -258,8 +258,21 @@ export default new SimpleSchema({
     type: Boolean,
     defaultValue: true
   },
+  placementDate: {
+    type: Date,
+    optional: true
+  },
+  reactivationDate: {
+    type: Date,
+    optional: true
+  },
+  refreshDate: {
+    type: Date,
+    optional: true
+  },
   lastUserAction: {
     type: String,
     optional: true
   }
 });
+
