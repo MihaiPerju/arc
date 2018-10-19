@@ -65,7 +65,7 @@ export default class RuleContent extends Component {
             </div>
           </div>
           <button onClick={this.setEdit} className="btn-edit btn--white">
-            Edit action
+            Edit Rule
           </button>
         </div>
       </div>
