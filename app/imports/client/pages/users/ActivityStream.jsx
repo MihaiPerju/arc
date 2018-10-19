@@ -6,7 +6,8 @@ import moment from "moment";
 import UserService from "./services/UserService";
 import { AutoForm, SelectField } from "/imports/ui/forms";
 import actionTypesEnum, {
-  typeList
+  typeList,
+  labels
 } from "/imports/api/accounts/enums/actionTypesEnum";
 import Loading from "/imports/client/lib/ui/Loading";
 import ActivityStreamGraph from "./ActivityStreamGraph";
@@ -30,7 +31,9 @@ export default class ActivityStream extends React.Component {
     const { limit, skip } = this.state;
 
     typeList.map(type => {
-      actionTypes.push({ label: type, value: type });
+      if (!typeList.includes(["System Action"])) {
+        actionTypes.push({ label: labels[type], value: type });
+      }
     });
     this.getActions(userId, limit, skip);
     this.setState({ actionTypes });
@@ -94,8 +97,6 @@ export default class ActivityStream extends React.Component {
     switch (type) {
       case actionTypesEnum.USER_ACTION:
         return <i className="icon-thumb-tack" />;
-      case actionTypesEnum.SYSTEM_ACTION:
-        return <i className="icon-alert" />;
       case actionTypesEnum.COMMENT:
         return <i className="icon-comments-o" />;
       case actionTypesEnum.LETTER:

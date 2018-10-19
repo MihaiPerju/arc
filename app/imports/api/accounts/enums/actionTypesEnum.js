@@ -9,7 +9,21 @@ const typeList = [
   "edit",
   "lockBreak"
 ];
-export { typeList };
+const labels = {
+  "userAction": "User Action",
+  "systemAction": "System Action",
+  "comment": "Comment",
+  "letter": "Letter",
+  "file": "File Upload",
+  "revert": "Revert Action",
+  "flag": "Flagging Action",
+  "edit": "Edit Action",
+  "lockBreak": "Lock Break Action"
+}
+export {
+  typeList,
+  labels
+};
 
 export default {
   USER_ACTION: "userAction",
