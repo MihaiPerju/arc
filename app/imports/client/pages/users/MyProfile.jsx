@@ -35,7 +35,9 @@ class MyProfile extends React.Component {
             >
               <div className="text-block">
                 <div className="text-light-grey text-label">Email</div>
-                <div className="status">{user.getEmail()}</div>
+                <div className="status">
+                  {user && _.first(user.emails).address}
+                </div>
               </div>
               <div className="text-block">
                 <div className="text-light-grey text-label">Phone number</div>
