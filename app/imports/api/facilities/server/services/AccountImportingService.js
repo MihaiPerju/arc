@@ -39,8 +39,7 @@ export default class AccountService {
     const { accounts, corruptRows } = this.convertToAccounts(
       results,
       importRules,
-      labels,
-      facilityId
+      labels
     );
 
     //If there are no accounts or we have broken ones, file is not valid and nothing should take effect
@@ -89,6 +88,10 @@ export default class AccountService {
         toUpdateAccount.invoiceNo = [];
       }
 
+       //refresh placement date
+      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+      toUpdateAccount.refreshDate = rulesDate.placementRules.placementDate;
+      
       Accounts.update(
         { acctNum: toUpdateAccountId, facilityId },
         { $set: toUpdateAccount }
@@ -121,6 +124,8 @@ export default class AccountService {
 
     _.map(newAccountIds, newAccountId => {
       const newAccount = this.getAccount(accounts, newAccountId);
+      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+      newAccount.placementDate = rulesDate.placementRules.placementDate;
       Object.assign(newAccount, { facilityId, clientId, fileId });
       let accountId = Accounts.insert(newAccount);
 
@@ -204,12 +209,12 @@ export default class AccountService {
     return { labels, importRules };
   }
 
-  static convertToAccounts(results, importRules, labels, facilityId) {
+  static convertToAccounts(results, importRules, labels) {
     let accounts = [];
     let corruptRows = [];
 
     for (let i = 0; i < results.length - 1; i++) {
-      let account = this.createAccount(results[i], importRules, labels, facilityId);
+      let account = this.createAccount(results[i], importRules, labels);
       if (!account) {
         corruptRows.push(i + 1);
       } else {
@@ -220,7 +225,7 @@ export default class AccountService {
     return { accounts, corruptRows };
   }
 
-  static createAccount(data, rules, labels, facilityId ) {
+  static createAccount(data, rules, labels ) {
     let importRules = { ...rules };
     let account = {};
     let mainFields = [];
@@ -285,11 +290,7 @@ export default class AccountService {
       );
       account[rule] = value;
     }
-
-    //adding placement date
-    let placementRules = this.getPlacementDateByFacilityId(facilityId);
-    account.placementDate = placementRules.placementDate;
-    
+ 
     //Getting meta fields
     let metaData = {};
     let count = 1;
@@ -407,8 +408,7 @@ export default class AccountService {
     const { accounts, corruptRows } = this.convertToAccounts(
       results,
       importRules,
-      labels,
-      facilityId
+      labels
     );
 
     //If there are no accounts, file is not valid and nothing should take effect
@@ -427,6 +427,8 @@ export default class AccountService {
     //Creating new accounts
     _.map(newAccountIds, accountId => {
       const newAccount = this.getAccount(accounts, accountId);
+      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+      newAccount.placementDate = rulesDate.inventoryRules.placementDate;
       Object.assign(newAccount, { facilityId, fileId, clientId });
 
       Accounts.insert(newAccount);
@@ -457,6 +459,10 @@ export default class AccountService {
       } else {
         toUpdateAccount.invoiceNo = [];
       }
+
+       //refresh placement date
+       let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+       toUpdateAccount.refreshDate = rulesDate.inventoryRules.placementDate;
 
       Accounts.update(
         { acctNum: accountId, facilityId },
@@ -489,6 +495,6 @@ export default class AccountService {
 
   // Get placement Date by facility
   static getPlacementDateByFacilityId(facilityId) {
-    return Facilities.findOne(facilityId).placementRules;
+    return Facilities.findOne(facilityId);
   }
 }

@@ -171,6 +171,9 @@ export default class ActionService {
       Escalations.remove({ _id: escalationId });
     }
 
+    let prevState = Accounts.findOne({ _id: accountId }).state || null;
+    let reactivationDate = (prevState && prevState === stateEnum.ARCHIVED) ? new Date() : null;
+     
     // remove previous tickles history
     Tickles.remove({ accountId });
 
@@ -192,7 +195,8 @@ export default class ActionService {
       { _id: accountId },
       {
         $set: {
-          state
+          state,
+          reactivationDate
         },
         $unset: {
           tickleDate: null,

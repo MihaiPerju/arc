@@ -256,4 +256,12 @@ export default new SimpleSchema({
     type: Date,
     optional: true
   },
+  reactivationDate: {
+    type: Date,
+    optional: true
+  },
+  refreshDate: {
+    type: Date,
+    optional: true
+  },
 });
