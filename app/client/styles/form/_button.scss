@@ -172,3 +172,11 @@ button,
     color: $color-white;
   }
 }
+
+/* A Different Kind of Button */
+body .insurance-btn__add {
+  width: auto;
+  height: auto;
+  margin: 15px;
+  padding: 10px 15px;
+}

@@ -1,0 +1,18 @@
+body {
+    .action-dropdown__btn {
+        width: 95px;
+        font-size: 0.95em;
+        font-weight: bold;
+        background-color: orange;
+        padding-right: 5px;
+        color: #fff;
+
+        &:hover {
+            background-color: lighten(orange, 20%);
+        }
+    }
+
+    .icon-angle-down {
+        margin-left: 5px;
+    }
+}

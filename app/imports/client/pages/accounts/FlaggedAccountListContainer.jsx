@@ -12,7 +12,7 @@ import AccountSearchBar from "./components/AccountSearchBar";
 import userTagsQuery from "/imports/api/users/queries/userTags.js";
 import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
+import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 
 class FlaggedAccountListContainer extends Pager {
@@ -347,15 +347,13 @@ class FlaggedAccountListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery
-      .clone({
-         filters: {entities: {$in: [moduleNames.ACCOUNT]}},
-      })
-      .fetch((err, tags) => {
-        if (!err) {
-          this.setState({ tags });
-        }
-      });
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.ACCOUNT] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {

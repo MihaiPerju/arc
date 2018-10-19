@@ -26,22 +26,26 @@ export default class PlacementService {
     });
     if (job) {
       //Update the job as taken
-      JobQueue.update(
-        {
-          _id: job._id
-        },
-        {
-          $set: {
-            workerId
-          }
+      JobQueue.update({
+        _id: job._id
+      }, {
+        $set: {
+          workerId
         }
-      );
+      });
       this.processPlacement(job);
     }
   }
 
-  static processPlacement({ facilityId, filePath, userId, _id }) {
-    const { root } = SettingsService.getSettings(settings.ROOT);
+  static processPlacement({
+    facilityId,
+    filePath,
+    userId,
+    _id
+  }) {
+    const {
+      root
+    } = SettingsService.getSettings(settings.ROOT);
 
     const importRules = ParseService.getImportRules(
       facilityId,
@@ -53,7 +57,7 @@ export default class PlacementService {
       root + Business.ACCOUNTS_FOLDER + filePath
     );
     const csvString = stream.toString();
-
+    
     //Keep reference to previous file
     const {
       fileId,
@@ -90,16 +94,13 @@ export default class PlacementService {
     };
 
     //Add reference to facility
-    Facilities.update(
-      {
-        _id: facilityId
-      },
-      {
-        $set: {
-          fileId: newFileId
-        }
+    Facilities.update({
+      _id: facilityId
+    }, {
+      $set: {
+        fileId: newFileId
       }
-    );
+    });
 
     //Pass links to accounts to link them too
     const links = {
@@ -114,16 +115,13 @@ export default class PlacementService {
         this.createFileAction(results.data, fileData);
       },
       complete: () => {
-        JobQueue.update(
-          {
-            _id
-          },
-          {
-            $set: {
-              status: jobStatuses.FINISHED
-            }
+        JobQueue.update({
+          _id
+        }, {
+          $set: {
+            status: jobStatuses.FINISHED
           }
-        );
+        });
         // executed after all files are complete
       }
     });
@@ -136,7 +134,9 @@ export default class PlacementService {
       records.pop();
       numberOfRecords = records.length;
     }
-    Object.assign(fileData, { numberOfRecords });
+    Object.assign(fileData, {
+      numberOfRecords
+    });
     AccountActions.insert(fileData);
   }
 }

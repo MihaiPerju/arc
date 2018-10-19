@@ -163,6 +163,10 @@ h6 {
   margin-bottom: 0!important;
 }
 
+.m-b--10 {
+  margin-bottom: 10px;
+}
+
 .m-t--0 {
   margin-top: 0!important;
 }
@@ -207,4 +211,33 @@ h6 {
     top: -1px;
     left: 0;
   }
+}
+
+
+.border-style{
+  border: 1px solid #d3d3d3;
+  border-radius: 5px;
+}
+
+.m-l-15{
+  margin-left: 15px;
+}
+
+.custom-submit-btn{
+  background: #f7941d;
+  height: 40px;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+
+.overlay {
+height: 100%;
+background-color:rgba(242,241,245,0.42);
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+}
+.position_style {
+  position: relative;
 }
