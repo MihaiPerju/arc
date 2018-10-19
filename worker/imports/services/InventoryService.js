@@ -53,11 +53,11 @@ export default class InventoryService {
     const csvString = stream.toString();
 
     //Keep reference to previous file
-    const { fileId, clientId, placementRules } = Facilities.findOne({
+    const { fileId, clientId, inventoryRules } = Facilities.findOne({
       _id: facilityId
     });
 
-    if (!placementRules) {
+    if (!inventoryRules) {
       throw new Meteor.Error(
         "The Facility Doesn't Have Configured Importing Rules"
       );
@@ -69,7 +69,7 @@ export default class InventoryService {
       clientId,
       previousFileId: fileId,
       type: fileTypes.INVENTORY,
-      hasHeader: placementRules.hasHeader
+      hasHeader: inventoryRules.hasHeader
     });
 
     const fileData = {
