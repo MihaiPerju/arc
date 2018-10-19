@@ -5,10 +5,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import ActionDropdown from "./ActionDropdown";
-import {
-  AutoForm,
-  ErrorField,
-} from "/imports/ui/forms";
+import { AutoForm, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import managersListQuery from "/imports/api/users/queries/listUsers";
 import RolesEnum from "/imports/api/users/enums/roles";
@@ -73,7 +70,7 @@ export default class ClientContentHeader extends Component {
 
   onToggleClientStatus = () => {
     const { _id, status } = this.state;
-    Meteor.call("client.switchStatus", _id, status, (err) => {
+    Meteor.call("client.switchStatus", _id, status, err => {
       if (!err) {
         const message = status ? "Client disabled!" : "Client enabled!";
         Notifier.success(message);
@@ -84,12 +81,11 @@ export default class ClientContentHeader extends Component {
     });
   };
 
-  onSubmit = managerIds => {
+  onSubmit = ({ managerIds }) => {
     const { client } = this.props;
-    const data = { ...managerIds };
     const { _id } = client;
     this.setState({ isDisabled: true });
-    Meteor.call("client.update", _id, data, err => {
+    Meteor.call("client.updateManagers", _id, managerIds, err => {
       if (err) {
         Notifier.error(err.reason);
       } else {
@@ -204,7 +200,15 @@ export default class ClientContentHeader extends Component {
                   disabled={isDisabled}
                   className="btn--light-blue"
                 >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm"}
+                  {isDisabled ? (
+                    <div>
+                      {" "}
+                      Loading
+                      <i className="icon-cog" />
+                    </div>
+                  ) : (
+                    "Confirm"
+                  )}
                 </button>
               </div>
             </AutoForm>
