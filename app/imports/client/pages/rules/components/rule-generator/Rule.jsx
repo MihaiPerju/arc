@@ -198,7 +198,6 @@ class Rule extends React.Component {
       }
     }
     rule.operators = ruleOperators;
-    console.log(rule);
     return rule;
   };
 
