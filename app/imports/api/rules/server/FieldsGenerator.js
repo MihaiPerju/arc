@@ -18,10 +18,10 @@ export default class FieldsGenerator {
                 name: workQueue.name
             }
         });
-        
+
         return [{
                 name: 'lastUserAction',
-                operators: ['=', '!=', 'contains', 'startsWith', 'endsWith', '!!', '!'],
+                operators: ['=', '!=', '!!', '!'],
                 label: 'Last Action',
                 input: {
                     type: 'select',
@@ -126,7 +126,7 @@ export default class FieldsGenerator {
             },
             {
                 name: 'workQueueId',
-                operators: ['=', '!=', 'contains', 'startsWith', 'endsWith', '!!', '!'],
+                operators: ['=', '!=', '!!', '!'],
                 label: 'Work Queue',
                 input: {
                     type: 'select',
