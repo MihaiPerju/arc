@@ -4,6 +4,8 @@ import TreeHelper from "./helpers/TreeHelper";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 const defaultErrorMsg = "Input value is not correct";
+import Select from "react-select";
+import "react-select/dist/react-select.css";
 
 const isValueCorrect = (pattern, value) => {
   const newPattern = new RegExp(pattern);
@@ -83,6 +85,21 @@ class Rule extends React.Component {
     this.props.onChange();
   };
 
+  onSelectChanged = ({ value }) => {
+    const pattern = this.state.currField.input.pattern;
+    if (pattern) {
+      this.setState({
+        validationError: isValueCorrect(pattern, value)
+      });
+    }
+    this.node.value = value;
+    const field = this.getFieldByName(this.node.field);
+
+    const rule = this.generateRuleObject(field, this.node);
+    this.setState({ currField: rule });
+    this.props.onChange();
+  };
+
   onDateChange = date => {
     this.node.value = moment(date).toDate();
     const field = this.getFieldByName(this.node.field);
@@ -115,25 +132,11 @@ class Rule extends React.Component {
         );
       case "select":
         return (
-          <select className={this.styles.select} onChange={this.onInputChanged}>
-            <option value="" disabled selected>
-              Select option
-            </option>
-            {this.state.currField.input.options.map((option, index) => {
-              if (option.value === this.node.value && "selected") {
-                return (
-                  <option selected value={option.value} key={index}>
-                    {option.name}
-                  </option>
-                );
-              } else
-                return (
-                  <option value={option.value} key={index}>
-                    {option.name}
-                  </option>
-                );
-            })}
-          </select>
+          <Select
+            options={this.state.currField.input.options}
+            onChange={this.onSelectChanged}
+            value={this.node.value}
+          />
         );
       case "date":
         return (
@@ -195,6 +198,7 @@ class Rule extends React.Component {
       }
     }
     rule.operators = ruleOperators;
+    console.log(rule);
     return rule;
   };
 

@@ -7,7 +7,7 @@ export default class FieldsGenerator {
         const actionOptions = actions.map((action) => {
             return {
                 value: action._id,
-                name: action.title
+                label: action.title
             }
         });
 
@@ -15,7 +15,7 @@ export default class FieldsGenerator {
         const workQueueOptions = workQueues.map((workQueue) => {
             return {
                 value: workQueue._id,
-                name: workQueue.name
+                label: workQueue.name
             }
         });
 
