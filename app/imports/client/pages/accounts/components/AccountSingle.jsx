@@ -43,20 +43,15 @@ export default class AccountSingle extends Component {
     const { _id } = this.props.account;
     Meteor.call("account.freeze", _id, err => {
       if (!err) {
-        Notifier.error (err.error);
+        Notifier.success("Account Sent to be Processed!");
+      } else {
+        Notifier.error(err.reason);
       }
-      Notifier.success("Account Sent to be Processed!");
     });
   };
 
   render() {
-    const {
-      account,
-      active,
-      currentAccount,
-      expiredTickle,
-      tags
-    } = this.props;
+    const { account, active, currentAccount, expiredTickle, tags } = this.props;
 
     const classes = classNames("list-item task-item", {
       "bg--yellow": active,
