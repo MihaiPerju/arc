@@ -137,25 +137,6 @@ class Rule extends React.Component {
             onChange={this.onSelectChanged}
             value={this.node.value}
           />
-          // <select className={this.styles.select} onChange={this.onInputChanged}>
-          //   <option value="" disabled selected>
-          //     Select option
-          //   </option>
-          //   {this.state.currField.input.options.map((option, index) => {
-          //     if (option.value === this.node.value && "selected") {
-          //       return (
-          //         <option selected value={option.value} key={index}>
-          //           {option.name}
-          //         </option>
-          //       );
-          //     } else
-          //       return (
-          //         <option value={option.value} key={index}>
-          //           {option.name}
-          //         </option>
-          //       );
-          //   })}
-          // </select>
         );
       case "date":
         return (
