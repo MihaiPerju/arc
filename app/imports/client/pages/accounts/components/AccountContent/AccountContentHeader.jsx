@@ -8,26 +8,6 @@ import commaNumber from 'comma-number';
 
 export default class AccountContentHeader extends Component {
 
-  getOptions(users = []) {
-    let options = [];
-    for (let user of users) {
-      let item = {
-        label:
-          user &&
-          user.profile &&
-          user.profile.firstName + ' ' +
-          user.profile.lastName +
-          '(' +
-          user.roles[0] +
-          ')',
-        value: user && user._id,
-
-      };
-      options.push(item);
-    }
-    return options;
-  }
-
   getAssignee() {
     const { account } = this.props;
     if (account && account.assignee) {
@@ -59,18 +39,6 @@ export default class AccountContentHeader extends Component {
     return <div className="label label--red">Unassigned</div>;
   }
 
-  getFirstOption(account, options) {
-    if (account && account.assigneeId) {
-      for (let option of options) {
-        if (option.value === account.assigneeId) {
-          return [option];
-        }
-      }
-    }
-
-    return [{ label: 'Unassigned' }];
-  }
-
   getOthersData = data => {
     if (typeof data === 'object') {
       return moment(data).format('MM/DD/YYYY');
@@ -94,11 +62,6 @@ export default class AccountContentHeader extends Component {
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
 
-    const options = this.getOptions(
-      account && account.facility && account.facility.users
-    );
-
-    let userOptions = this.getFirstOption(account, options).concat(options);
     return (
       <div className="header-block header-account">
         <div className="main-info">
@@ -164,7 +127,6 @@ export default class AccountContentHeader extends Component {
               title={"Assign account:"}
               model={account}
               accountId={account && account._id}
-              options={userOptions}
               closeRightPanel={closeRightPanel}
             />
             {account &&

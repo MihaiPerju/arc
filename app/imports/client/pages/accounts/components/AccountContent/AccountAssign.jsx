@@ -6,6 +6,7 @@ import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Notifier from "../../../../lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import OptionsGenerator from "/imports/api/users/helpers/OptionsGenerator";
 
 export default class AccountAssign extends React.Component {
   constructor() {
@@ -15,6 +16,7 @@ export default class AccountAssign extends React.Component {
       assignToWorkQueue: false,
       workQueueOptions: [],
       loadingWorkQueues: true,
+      userOptions: [],
       isDisabled: false
     };
   }
@@ -39,6 +41,17 @@ export default class AccountAssign extends React.Component {
   };
 
   componentWillMount() {
+    //Get the user options
+    const { accountId } = this.props;
+
+    Meteor.call("users.getRepsByFacility", accountId, (err, users) => {
+      const userOptions = OptionsGenerator.getUserOptions(users);
+      if (!err) {
+        this.setState({ userOptions });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
     workQueueQuery
       .clone({
         filters: {
@@ -99,9 +112,10 @@ export default class AccountAssign extends React.Component {
       workQueueOptions,
       assignToUser,
       loadingWorkQueues,
-      isDisabled
+      isDisabled,
+      userOptions
     } = this.state;
-    const { model, userOptions } = this.props;
+    const { model } = this.props;
 
     if (loadingWorkQueues) {
       return <Loading />;

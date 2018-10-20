@@ -1,31 +1,31 @@
-import React from 'react';
-import Dialog from '/imports/client/lib/ui/Dialog';
-import AccountTickle from './AccountTickle';
-import AccountEscalation from './AccountEscalation';
-import AccountAssign from './AccountAssign';
-import classNames from 'classnames';
+import React from "react";
+import Dialog from "/imports/client/lib/ui/Dialog";
+import AccountTickle from "./AccountTickle";
+import AccountEscalation from "./AccountEscalation";
+import AccountAssign from "./AccountAssign";
+import classNames from "classnames";
 
 export default class AccountActioning extends React.Component {
-  constructor () {
-    super ();
+  constructor() {
+    super();
     this.state = {
-      dialogIsActive: false,
+      dialogIsActive: false
     };
   }
 
   openDialog = () => {
     if (!this.props.metaData) {
-      this.setState ({
-        dialogIsActive: true,
+      this.setState({
+        dialogIsActive: true
       });
     } else {
-      this.props.openMetaData ();
+      this.props.openMetaData();
     }
   };
 
   closeDialog = () => {
-    this.setState ({
-      dialogIsActive: false,
+    this.setState({
+      dialogIsActive: false
     });
   };
 
@@ -33,14 +33,13 @@ export default class AccountActioning extends React.Component {
     const {
       model,
       accountId,
-      options,
       title,
       escalate,
       metaData,
       tickle,
       openMetaData,
       closeRightPanel,
-      escalationId,
+      escalationId
     } = this.props;
 
     if (tickle) {
@@ -53,7 +52,7 @@ export default class AccountActioning extends React.Component {
       );
     }
     if (metaData) {
-      openMetaData ();
+      openMetaData();
     }
     if (escalate) {
       return (
@@ -70,7 +69,6 @@ export default class AccountActioning extends React.Component {
         <AccountAssign
           accountId={accountId}
           title={title}
-          userOptions={options}
           close={this.closeDialog}
           model={model}
           closeRightPanel={closeRightPanel}
@@ -79,24 +77,25 @@ export default class AccountActioning extends React.Component {
     }
   };
 
-  render () {
-    const {dialogIsActive} = this.state;
-    const {type, title, tickle} = this.props;
-    const dialogClasses = classNames ('account-dialog', {
-      'tickle-dialog': tickle,
+  render() {
+    const { dialogIsActive } = this.state;
+    const { type, title, tickle } = this.props;
+    const dialogClasses = classNames("account-dialog", {
+      "tickle-dialog": tickle
     });
 
     return (
       <button className="btn--white" onClick={this.openDialog}>
         <span>{type}</span>
-        {dialogIsActive &&
+        {dialogIsActive && (
           <Dialog
             className={dialogClasses}
             closePortal={this.closeDialog}
             title={title}
           >
-            {this.showDialog ()}
-          </Dialog>}
+            {this.showDialog()}
+          </Dialog>
+        )}
       </button>
     );
   }

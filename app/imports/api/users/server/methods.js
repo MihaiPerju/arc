@@ -1,16 +1,26 @@
-import { Meteor } from "meteor/meteor";
+import {
+  Meteor
+} from "meteor/meteor";
 import Users from "../collection";
 import Uploads from "/imports/api/uploads/uploads/collection";
 import fs from "fs";
 import Business from "/imports/api/business";
 import RolesEnum from '/imports/api/users/enums/roles';
+import Accounts from "/imports/api/accounts/collection";
+import Facilities from "/imports/api/facilities/collection";
 
 Meteor.methods({
   "users.remove_avatar"() {
     const user = Users.findOne(this.userId);
-    const { _id } = user.avatar;
-    const avatar = Uploads.findOne({ _id });
-    const { path } = avatar;
+    const {
+      _id
+    } = user.avatar;
+    const avatar = Uploads.findOne({
+      _id
+    });
+    const {
+      path
+    } = avatar;
 
     Users.update(this.userId, {
       $unset: {
@@ -25,15 +35,56 @@ Meteor.methods({
   },
 
   "users.get"(userIds) {
-    return Users.find({ _id: { $in: userIds } }).fetch();
+    return Users.find({
+      _id: {
+        $in: userIds
+      }
+    }).fetch();
   },
   "user.tags.get"() {
     const userId = Meteor.userId();
-    const { tagIds } = Users.findOne({ _id: userId });
+    const {
+      tagIds
+    } = Users.findOne({
+      _id: userId
+    });
 
     return tagIds;
   },
   "users.getReps"() {
-    return Users.find({ roles: RolesEnum.REP }).fetch();
+    return Users.find({
+      roles: RolesEnum.REP
+    }).fetch();
+  },
+
+  "users.getRepsByFacility"(_id) {
+    const account = Accounts.findOne({
+      _id
+    });
+
+    if (account) {
+      const {
+        facilityId
+      } = account;
+      const facility = Facilities.findOne({
+        _id: facilityId
+      })
+
+      if (facility) {
+        const {
+          allowedUsers
+        } = facility;
+
+        const users = Users.find({
+          _id: {
+            $in: allowedUsers
+          },
+          roles: RolesEnum.REP
+        }).fetch();
+
+        return users;
+      }
+    }
+    return [];
   }
 });
