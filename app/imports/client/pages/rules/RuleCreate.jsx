@@ -16,6 +16,7 @@ import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
 import RuleQuery from "/imports/api/rules/queries/listRules";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 
 export default class RuleCreate extends React.Component {
   constructor() {
@@ -204,7 +205,7 @@ export default class RuleCreate extends React.Component {
             >
               <div className="select-wrapper">
                 <div className="select-form">
-                  <AutoField
+                  <SelectSimple
                     labelHidden={true}
                     placeholder="Select Client"
                     name="clientId"
@@ -215,7 +216,7 @@ export default class RuleCreate extends React.Component {
               </div>
               <div className="select-wrapper">
                 <div className="select-form">
-                  <AutoField
+                  <SelectSimple
                     labelHidden={true}
                     placeholder="Select Facility"
                     name="facilityId"
@@ -267,7 +268,7 @@ export default class RuleCreate extends React.Component {
               {triggerType === triggerTypes.ACTION && (
                 <div className="select-wrapper">
                   <div className="select-form">
-                    <AutoField
+                    <SelectSimple
                       labelHidden={true}
                       placeholder="Select Action"
                       options={actionOptions}
@@ -281,7 +282,7 @@ export default class RuleCreate extends React.Component {
               {triggerType === triggerTypes.ASSIGN_USER && (
                 <div className="select-wrapper">
                   <div className="select-form">
-                    <AutoField
+                    <SelectSimple
                       labelHidden={true}
                       placeholder="Select User"
                       name="assigneeId"
@@ -295,7 +296,7 @@ export default class RuleCreate extends React.Component {
               {triggerType === triggerTypes.ASSIGN_WORK_QUEUE && (
                 <div className="select-wrapper">
                   <div className="select-form">
-                    <AutoField
+                    <SelectSimple
                       labelHidden={true}
                       placeholder="Select Work Queue"
                       options={workQueueOptions}
