@@ -9,7 +9,6 @@ export default class AccountList extends Component {
   }
 
   accountIsActive(account) {
-    console.log("tyest");
     const { accountsSelected } = this.props;
     return _.includes(accountsSelected, account._id);
   }
