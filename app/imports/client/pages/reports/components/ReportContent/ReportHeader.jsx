@@ -165,7 +165,7 @@ class ReportHeader extends Component {
                 href="javascript:;"
                 onClick={this.onRunReport}
               >
-                Run report
+                Run report (again)
             </a>
             </li>
           </ul>
