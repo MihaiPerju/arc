@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class ActionDropdown extends Component {
   constructor() {
@@ -70,19 +71,36 @@ export default class ActionDropdown extends Component {
               <li className="action-item">
                 <a href={facilityHref}>Manage facilities</a>
               </li>
-              <li className="action-item">
-                <a style={style} onClick={onEdit}>
-                  Edit client
-                </a>
-              </li>
-              <li className="action-item">
-                <a style={style} onClick={disableAction}>
-                  {status ? "Disable client" : "Enable client"}
-                </a>
-              </li>
-              <li className="action-item">
-                <a style={style} onClick={onOpenAssignDialog}>Assign Manager</a>
-              </li>
+              {Roles.userIsInRole(
+                Meteor.userId(),
+                roleGroups.ADMIN_TECH
+              ) && (
+                <li className="action-item">
+                  <a style={style} onClick={onEdit}>
+                    Edit client
+                  </a>
+                </li>
+              )}
+              {Roles.userIsInRole(
+                Meteor.userId(),
+                roleGroups.ADMIN_TECH
+              ) && (
+                <li className="action-item">
+                  <a style={style} onClick={disableAction}>
+                    {status ? "Disable client" : "Enable client"}
+                  </a>
+                </li>
+              )}
+              {Roles.userIsInRole(
+                Meteor.userId(),
+                roleGroups.ADMIN_TECH
+              ) && (
+                <li className="action-item">
+                  <a style={style} onClick={onOpenAssignDialog}>
+                    Assign Manager
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         )}

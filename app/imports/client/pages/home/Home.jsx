@@ -46,7 +46,6 @@ export default class Home extends React.Component {
 
   getAccountActions = () => {
     let userId = this.state.selectedRepId;
-    console.log(userId);
     let date = new Date(this.state.selectedDate);
     this.setState({ isLoadingGraph: true });
     setTimeout(() => {
@@ -55,7 +54,6 @@ export default class Home extends React.Component {
           this.setState({
             chartData, isLoadingGraph: false
           });
-          console.log(chartData);
         } else {
           Notifier.error(err.reason);
         }

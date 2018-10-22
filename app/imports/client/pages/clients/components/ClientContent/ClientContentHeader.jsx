@@ -130,7 +130,7 @@ export default class ClientContentHeader extends Component {
               <span className="text-light-grey">Email</span>
               <span className="text text-blue">{client.email}</span>
             </div>
-            {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
+            {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH_MANAGER) && (
               <ActionDropdown
                 facilityHref={"/client/" + client._id + "/manage-facilities"}
                 regionHref={FlowRouter.url("region.list", { id: client._id })}
