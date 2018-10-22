@@ -46,35 +46,42 @@ export default class Home extends React.Component {
 
   getAccountActions = () => {
     let userId = this.state.selectedRepId;
+    console.log(userId);
     let date = new Date(this.state.selectedDate);
     this.setState({ isLoadingGraph: true });
-    Meteor.call("account.getActionPerHour", userId, date, (err, chartData) => {
-      if (!err) {
-        this.setState({
-          chartData, isLoadingGraph: false
-        });
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
+    setTimeout(() => {
+      Meteor.call("account.getActionPerHour", userId, date, (err, chartData) => {
+        if (!err) {
+          this.setState({
+            chartData, isLoadingGraph: false
+          });
+          console.log(chartData);
+        } else {
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1500);
   };
 
-  submitData = ({ userId }) => {
-    this.setState({ selectedRepId: userId }, () => {
+  onSubmit(params) {
+    if (params) {
+      this.setState({ selectedRepId: params.userId }, () => {
+        this.getAccountActions();
+      });
+    } else {
       this.getAccountActions();
-    });
+    }
   }
 
-  submit = () => {
-    this.getAccountActions();
+  addGraphFilters = () => {
+    this.onSubmit();
   }
 
   onChange = newDate => {
     this.setState({ selectedDate: moment(newDate) });
   };
 
-  render() {
-    const { chartData, reps, selectedDate } = this.state;
+  renderGraph() {
     const options = {
       chart: {
         type: "line",
@@ -92,17 +99,33 @@ export default class Home extends React.Component {
       series: [
         {
           name: "Actions per hour",
-          data: chartData
+          data: this.state.chartData
         }
       ]
     };
+
+    if (!this.state.isLoadingGraph) {
+      return (
+        <div className="m-t--20">
+          <div>
+            <ReactHighcharts highcharts={Highcharts} options={options} />
+          </div>
+        </div>
+      );
+    } else {
+      return <Loading />;
+    }
+  }
+
+  render() {
+    const { reps, selectedDate } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return (
         <div className="cc-container home-container flex-align--start">
           <div className="heart-beat">
             {
               !this.state.isLoading ?
-                <AutoForm schema={heartBeatSchema} onSubmit={this.submitData}>
+                <AutoForm ref="graphFilters" schema={heartBeatSchema} onSubmit={this.onSubmit.bind(this)}>
                   <div className="flex--helper form-group__pseudo--3">
                     <div className="select-form">
                       <AutoField
@@ -127,20 +150,13 @@ export default class Home extends React.Component {
                         />
                       </div>
                     </div>
-                    <button type="submit" className="custom-submit-btn" onClick={this.submit}>
+                    <button className="custom-submit-btn" onClick={this.addGraphFilters}>
                       Submit
                     </button>
                   </div>
                 </AutoForm> : <Loading />
             }
-            {
-              !this.state.isLoadingGraph ? <div className="m-t--20">
-                <div>
-                  <ReactHighcharts highcharts={Highcharts} options={options} />
-                </div>
-              </div> : <Loading />
-            }
-
+            {this.renderGraph()}
           </div>
         </div>
       );
