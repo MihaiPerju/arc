@@ -22,10 +22,7 @@ export default class PagerService {
 
     if (state || state === "" || route.path.indexOf("flagged") > -1) {
       this.getAccountFilters(params, state, filters, options);
-      console.log(params);
       this.getProperAccounts(params, assign);
-      console.log(params);
-
     } else {
       // common method for filtering
       this.getFilters(params, filters);
