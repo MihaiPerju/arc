@@ -22,7 +22,10 @@ export default class PagerService {
 
     if (state || state === "" || route.path.indexOf("flagged") > -1) {
       this.getAccountFilters(params, state, filters, options);
+      console.log(params);
       this.getProperAccounts(params, assign);
+      console.log(params);
+
     } else {
       // common method for filtering
       this.getFilters(params, filters);
@@ -193,7 +196,9 @@ export default class PagerService {
       sortAdmitDate
     }
   ) {
-    params.options = {};
+    params.options = {
+      sort: {}
+    };
     if (state === "unassigned") {
       _.extend(params, {
         filters: {
@@ -210,7 +215,7 @@ export default class PagerService {
             $exists: true
           },
           employeeToRespond: null
-        }
+        },
       });
       _.extend(params.options, {
         sort: {
@@ -426,14 +431,6 @@ export default class PagerService {
         }
       });
     }
-
-    //adding sort query options
-
-    _.extend(params, {
-      options: {
-        sort: {}
-      }
-    });
 
     if (sortCreatedAt) {
       _.extend(params.options.sort, {
