@@ -44,7 +44,10 @@ Meteor.publish("tickledAccounts", tickleUserId => {
   let ticklesCount = new Counter(
     "tickledAccounts",
     Accounts.find({
-      tickleUserId
+      tickleUserId,
+      tickleDate: {
+        $lte: new Date()
+      }
     }),
     1000
   );

@@ -193,7 +193,9 @@ export default class PagerService {
       sortAdmitDate
     }
   ) {
-    params.options = {};
+    params.options = {
+      sort: {}
+    };
     if (state === "unassigned") {
       _.extend(params, {
         filters: {
@@ -210,7 +212,7 @@ export default class PagerService {
             $exists: true
           },
           employeeToRespond: null
-        }
+        },
       });
       _.extend(params.options, {
         sort: {
@@ -426,14 +428,6 @@ export default class PagerService {
         }
       });
     }
-
-    //adding sort query options
-
-    _.extend(params, {
-      options: {
-        sort: {}
-      }
-    });
 
     if (sortCreatedAt) {
       _.extend(params.options.sort, {
