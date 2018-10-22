@@ -59,6 +59,18 @@ export default class AccountContentHeader extends Component {
     closeRightPanel();
   };
 
+  renderAssignButton = (account, closeRightPanel) => {
+    return (
+        <AccountActioning
+          type={"Assign"}
+          title={"Assign account:"}
+          model={account}
+          accountId={account && account._id}
+          closeRightPanel={closeRightPanel}
+      />
+    )
+  }
+
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
 
@@ -122,13 +134,8 @@ export default class AccountContentHeader extends Component {
           </div>
 
           <div className="btn-group">
-            <AccountActioning
-              type={"Assign"}
-              title={"Assign account:"}
-              model={account}
-              accountId={account && account._id}
-              closeRightPanel={closeRightPanel}
-            />
+            {!Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) ? this.renderAssignButton(account, closeRightPanel) : null}
+
             {account &&
               Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
               !account.escalationId &&
