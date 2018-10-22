@@ -685,7 +685,6 @@ export default class AccountSearchBar extends Component {
               </button>
               {tags.length ? <Tags tags={tags} /> : null}
             </div>
-            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
               <div
                 className={sort ? "filter-block active" : "filter-block"}
                 onClick={this.manageSortBar}
@@ -698,7 +697,6 @@ export default class AccountSearchBar extends Component {
                   )}
                 </button>
               </div>
-            )}
           </div>
         </div>
         {sort && (
