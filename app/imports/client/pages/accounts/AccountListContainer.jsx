@@ -36,7 +36,8 @@ class AccountListContainer extends Pager {
       tags: [],
       isLockedDialogActive: false,
       lockOwnerName: null,
-      lockedAccountId: null
+      lockedAccountId: null,
+      selectAllAccount : false
     });
     this.query = query;
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
@@ -218,11 +219,19 @@ class AccountListContainer extends Pager {
 
   checkAccount = account => {
     const { accountsSelected } = this.state;
+    const { data } = this.props;
     if (accountsSelected.includes(account._id)) {
       accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
     } else {
       accountsSelected.push(account._id);
     }
+
+    _.map(data, account => { 
+      if (accountsSelected.indexOf(account._id) == -1) {
+       return this.setState({ selectAllAccount: false });
+      }
+    });
+    
     this.setState({
       accountsSelected,
       showMetaData: false
@@ -242,16 +251,13 @@ class AccountListContainer extends Pager {
     }
 
     if (!selectAll) {
-      _.map(data, account => {
-        if (accountsSelected.includes(account._id)) {
-          accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
-        }
-      });
+      accountsSelected = [];
     }
 
     this.setState({
       accountsSelected,
-      showMetaData: false
+      showMetaData: false,
+      selectAllAccount: selectAll
     });
   };
 
@@ -474,7 +480,8 @@ class AccountListContainer extends Pager {
       dropdownOptions,
       tags,
       isLockedDialogActive,
-      lockOwnerName
+      lockOwnerName,
+      selectAllAccount
     } = this.state;
     const options = this.getData(data);
     const icons = [
@@ -510,6 +517,7 @@ class AccountListContainer extends Pager {
             assignFilterArr={assignFilterArr}
             checkAllAccount={this.checkAllAccount}
             accountsSelected={accountsSelected}
+            selectAllAccount={selectAllAccount}
             data={data}
             tags={tags}
           />
@@ -521,6 +529,7 @@ class AccountListContainer extends Pager {
               title={""}
               options={this.state.userOptions}
               uncheckAccountList={this.uncheckAccountList}
+              selectAllAccount={selectAllAccount}
             />
           )}
           {assignWQ && (
@@ -530,6 +539,7 @@ class AccountListContainer extends Pager {
               closeDialog={this.closeAssignWQ}
               title={""}
               uncheckAccountList={this.uncheckAccountList}
+              selectAllAccount={selectAllAccount}
             />
           )}
           <AccountList

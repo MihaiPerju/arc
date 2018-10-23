@@ -117,7 +117,7 @@ export default class AccountSearchBar extends Component {
 
   componentWillReceiveProps() {
     const { query } = FlowRouter.current().params;
-    const { data, accountsSelected } = this.props;
+    const { data, accountsSelected, selectAllAccount } = this.props;
     if (query && query.medNo) {
       let model = FilterService.getFilterParams();
       this.setState({
@@ -125,12 +125,18 @@ export default class AccountSearchBar extends Component {
       });
     }
     
-    accountsSelected.length>0 && this.setState({ selectAll: true });
-    _.map(data, account => { 
-      if (accountsSelected.indexOf(account._id) == -1) {
-        return this.setState({ selectAll: false })
-      } 
-    });
+    selectAllAccount && this.setState({ selectAll: true });
+    if(selectAllAccount) {
+      _.map(data, account => { 
+        if (accountsSelected.indexOf(account._id) == -1) {
+          accountsSelected.push(account._id);
+        }
+      });
+      this.setState({
+        accountsSelected
+      });
+    }
+
   }
 
   onSubmit(params) {

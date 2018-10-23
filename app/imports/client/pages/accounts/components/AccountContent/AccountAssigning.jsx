@@ -7,8 +7,11 @@ import WorkQueueService from "./../../services/WorkQueueService";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import PagerService from "/imports/client/lib/PagerService";
+import query from "/imports/api/accounts/queries/accountList";
+import { withQuery } from "meteor/cultofcoders:grapher-react";
 
-export default class AccountActioning extends React.Component {
+class AccountActioning extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -45,7 +48,15 @@ export default class AccountActioning extends React.Component {
   };
 
   assignToUser = ({ assigneeId }) => {
-    const { accountIds, uncheckAccountList } = this.props;
+    const { uncheckAccountList, data, selectAllAccount  } = this.props;
+    let { accountIds } = this.props;
+   if(selectAllAccount === true) {
+    let accountIdsList = [];
+     _.map(data, rec => {
+      accountIdsList.push(rec._id);
+     });
+     accountIds = accountIdsList;
+   }
     this.setState({ isDisabled: true });
     Meteor.call("account.assignUser.bulk", { accountIds, assigneeId }, err => {
       if (!err) {
@@ -56,10 +67,18 @@ export default class AccountActioning extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    });
+    }); 
   };
   assignToWorkQueue = ({ workQueueId }) => {
-    const { accountIds, uncheckAccountList } = this.props;
+    const { uncheckAccountList, data, selectAllAccount } = this.props;
+    let { accountIds } = this.props;
+    if(selectAllAccount === true) {
+      let accountIdsList = [];
+       _.map(data, rec => {
+        accountIdsList.push(rec._id);
+       });
+       accountIds = accountIdsList;
+     }
     this.setState({ isDisabled: true });
     Meteor.call(
       "account.assignWorkQueue.bulk",
@@ -182,6 +201,15 @@ export default class AccountActioning extends React.Component {
     );
   }
 }
+
+export default withQuery(
+  props => {
+    const params = PagerService.getAccountQueryParams();
+    params.perPage = 0;
+    return PagerService.setQuery(query, params);
+  },
+  { reactive: true }
+)(AccountActioning);
 
 const assignSchema = new SimpleSchema({
   assigneeId: {
