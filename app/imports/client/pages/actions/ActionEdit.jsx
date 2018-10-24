@@ -94,7 +94,6 @@ export default class ActionEdit extends React.Component {
     const { action, substates } = this.props;
     const { checked, isDisabled } = this.state;
     const substatesOptions = this.getOptions(substates);
-
     const { id } = FlowRouter.current().params;
 
     return (
