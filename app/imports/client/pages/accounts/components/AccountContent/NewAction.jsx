@@ -1,23 +1,19 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField, ErrorField,SelectField } from "/imports/ui/forms";
+import {
+  AutoForm,
+  AutoField,
+  ErrorField,
+  SelectField
+} from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
-import DatePicker from "react-datepicker";
 import query from "/imports/api/actions/queries/actionList";
 import Notifier from "../../../../lib/Notifier";
 import reasonCodesQuery from "/imports/api/reasonCodes/queries/reasonCodesList";
 import Loading from "/imports/client/lib/ui/Loading";
-
-const ActionSchema = new SimpleSchema({
-  actionId: {
-    type: String,
-    optional: true
-  },
-  reasonCode: {
-    type: String,
-    optional: true
-  }
-});
+import ActionsHelper from "/imports/api/actions/helpers/OptionsGenerator";
+import ReasonCodesHelper from "/imports/api/reasonCodes/helpers/OptionsGenerator";
+import DateField from "/imports/client/lib/uniforms/DateField";
 
 export default class NewAction extends Component {
   constructor() {
@@ -27,17 +23,9 @@ export default class NewAction extends Component {
       actions: [],
       reasonCodes: [],
       loading: true,
-      selectedAction: {},
-      dateLabelKeys: [],
+      selectedActionId: null,
       isDisabled: false
     };
-  }
-
-  getActionOptions(actions) {
-    return _.map(actions, ({ _id, title }) => {
-      const value = title;
-      return { value: _id, label: value };
-    });
   }
 
   componentWillMount() {
@@ -51,22 +39,14 @@ export default class NewAction extends Component {
     });
   }
 
-
   componentDidMount() {
     setTimeout(() => {
       this.setState({ fade: true });
     }, 1);
   }
 
-  getReasonOptions(reasons) {
-    return _.map(reasons, ({ _id, reason }) => {
-      return { value: _id, label: reason };
-    });
-  }
-
   onSubmit = data => {
     const { account, hide, freezeAccount } = this.props;
-    const { dateLabelKeys } = this.state;
     data.accountId = account._id;
     if (account.assignee) {
       data.addedBy = `${account.assignee.profile.firstName} ${
@@ -75,15 +55,10 @@ export default class NewAction extends Component {
     } else if (account.workQueueId) {
       data.addedBy = account.tag.name;
     }
-    for (let i = 0; i < dateLabelKeys.length; i++) {
-      if (!this.state[dateLabelKeys[i]]) {
-        return;
-      }
-      data[dateLabelKeys[i]] = new Date(this.state[dateLabelKeys[i]]);
-    }
 
     this.setState({ isDisabled: true });
-    Meteor.call("account.actions.add", data, err => {
+
+    Meteor.call("account.addAction", data, err => {
       if (!err) {
         Notifier.success("Data saved");
         //Clear inputs
@@ -97,86 +72,45 @@ export default class NewAction extends Component {
     });
   };
 
-  onHide() {
+  onHide = () => {
     const { hide } = this.props;
     hide();
-  }
+  };
 
   onHandleChange = (field, value) => {
     if (field == "actionId") {
-      if (value) {
-        reasonCodesQuery
-          .clone({
-            filters: {
-              actionId: value
-            }
-          })
-          .fetch((err, reasonCodes) => {
-            if (!err) {
-              this.setState({
-                reasonCodes
-              });
-            }
-          });
-        this.getAction(value);
-      }
+      const actionId = value;
+      reasonCodesQuery
+        .clone({
+          filters: {
+            actionId: actionId.value
+          }
+        })
+        .fetch((err, reasonCodes) => {
+          if (!err) {
+            this.setState({
+              reasonCodes
+            });
+          }
+        });
+      this.setState({ selectedActionId: actionId });
     }
   };
 
-  getAction = actionId => {
-    const { actions } = this.state;
-    const action = _.filter(actions, action => action._id === actionId);
-    this.setState({ selectedAction: action });
-    const { inputs } = action[0] || {};
-    const dateLabelKeys = [];
-    if (inputs && inputs.length > 0) {
-      _.map(inputs, input => {
-        let { label, type } = input;
-
-        if (type === "date") {
-          dateLabelKeys.push(label);
-          ActionSchema.extend({
-            [label]: {
-              type: Date,
-              optional: true
-            }
-          });
-        } else {
-          type = type === "number" ? Number : String;
-          ActionSchema.extend({
-            [label]: {
-              type
-            }
-          });
-        }
-      });
-      this.setState({ dateLabelKeys });
-    }
+  setAction = selectedActionId => {
+    this.setState({ selectedActionId });
   };
 
   onChange = (date, label) => {
     this.setState({ [label]: date });
   };
 
-  renderInputs = (input, index) => {
+  getInputSingle = (input, index) => {
     if (input.type === "date") {
       return (
         <div className="custom-inputs" key={index}>
-          <DatePicker
-            showMonthDropdown
-            showYearDropdown
-            yearDropdownItemNumber={4}
-            todayButton={"Today"}
-            placeholderText={input.label}
-            selected={this.state[input.label]}
-            onChange={date => {
-              this.onChange(date, input.label);
-            }}
-            fixedHeight
-          />
-          {!this.state[input.label] && (
-            <div className="alert-notice">{input.label} is required</div>
-          )}
+          <DateField label={input.label} name={input.label} />
+          <ErrorField name={input.label} />
         </div>
       );
     }
@@ -192,12 +126,64 @@ export default class NewAction extends Component {
     );
   };
 
+  getSchema(action) {
+    const schema = {
+      actionId: {
+        type: String,
+        optional: true
+      },
+      reasonCode: {
+        type: String,
+        optional: true
+      }
+    };
+
+    //Extend schema for inputs
+    if (action && action.inputs) {
+      for (let input of action.inputs) {
+        let optional = !input.isRequired;
+        if (input.type === "date") {
+          _.extend(schema, {
+            [input.label]: {
+              type: Date,
+              optional
+            }
+          });
+        } else if (input.type === "number") {
+          _.extend(schema, {
+            [input.label]: {
+              type: SimpleSchema.Integer,
+              optional
+            }
+          });
+        } else {
+          _.extend(schema, {
+            [input.label]: {
+              type: String,
+              optional
+            }
+          });
+        }
+      }
+    }
+    return new SimpleSchema(schema);
+  }
+
   render() {
-    const { selectedAction, loading, isDisabled } = this.state;
-    const actions = this.getActionOptions(this.state.actions);
-    const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
-    const { inputs } = selectedAction[0] || {};
-    const customInputs = _.map(inputs, this.renderInputs);
+    const {
+      selectedActionId,
+      loading,
+      isDisabled,
+      actions,
+      reasonCodes
+    } = this.state;
+    const actionOptions = ActionsHelper.generateOptions(actions);
+    const reasonCodeOptions = ReasonCodesHelper.generateOptions(reasonCodes);
+    const selectedAction = ActionsHelper.selectAction(
+      selectedActionId,
+      actions
+    );
+    const schema = this.getSchema(selectedAction);
 
     if (loading) {
       return <Loading />;
@@ -207,27 +193,37 @@ export default class NewAction extends Component {
       <div className={this.state.fade ? "new-action in" : "new-action"}>
         <div className="action-form">
           <AutoForm
-            schema={ActionSchema}
+            schema={schema}
             onSubmit={this.onSubmit.bind(this)}
             onChange={this.onHandleChange}
             ref="form"
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectField  name="actionId" labelHidden={false} options={actions}  placeholder="actions" />
+                <SelectField
+                  name="actionId"
+                  labelHidden={false}
+                  options={actionOptions}
+                  placeholder="actions"
+                />
                 <ErrorField name="actionId" />
               </div>
-              {reasonCodes.length > 0 && (
+              {reasonCodeOptions.length > 0 && (
                 <div className="select-group">
                   <SelectSimple
                     labelHidden={true}
                     name="reasonCode"
-                    options={reasonCodes}
+                    options={reasonCodeOptions}
                   />
                   <ErrorField name="reasonCode" />
                 </div>
               )}
-              <div className="custom-wrapper">{customInputs}</div>
+              <div className="custom-wrapper">
+                {selectedAction &&
+                  selectedAction.inputs.map((input, index) => {
+                    return this.getInputSingle(input, index);
+                  })}
+              </div>
             </div>
             <div className="btn-group">
               <button

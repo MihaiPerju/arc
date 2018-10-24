@@ -6,5 +6,9 @@ export default new SimpleSchema({
     },
     label: {
         type: String
+    },
+    isRequired: {
+        type: Boolean,
+        defaultValue: false
     }
 })
