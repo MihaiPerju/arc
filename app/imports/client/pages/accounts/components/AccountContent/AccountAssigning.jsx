@@ -7,6 +7,7 @@ import WorkQueueService from "./../../services/WorkQueueService";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import PagerService from "/imports/client/lib/PagerService";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -56,14 +57,15 @@ export default class AccountActioning extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    });
+    });  
   };
   assignToWorkQueue = ({ workQueueId }) => {
-    const { accountIds, uncheckAccountList } = this.props;
+    const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
+    const params = bulkAssign ? PagerService.getParams().filters : false;
     Meteor.call(
       "account.assignWorkQueue.bulk",
-      { accountIds, workQueueId },
+      { accountIds, workQueueId, params },
       err => {
         if (!err) {
           Notifier.success("Account assigned to Work Queue!");

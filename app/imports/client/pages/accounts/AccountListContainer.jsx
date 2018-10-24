@@ -36,7 +36,8 @@ class AccountListContainer extends Pager {
       tags: [],
       isLockedDialogActive: false,
       lockOwnerName: null,
-      lockedAccountId: null
+      lockedAccountId: null,
+      bulkAssign: false
     });
     this.query = query;
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
@@ -127,7 +128,8 @@ class AccountListContainer extends Pager {
 
   uncheckAccountList = () => {
     this.setState({
-      accountsSelected: []
+      accountsSelected: [],
+      bulkAssign: false
     });
   };
 
@@ -231,26 +233,11 @@ class AccountListContainer extends Pager {
 
   checkAllAccount = selectAll => {
     const { data } = this.props;
-    let accountsSelected = this.state.accountsSelected;
-
-    if (data.length > 0 && selectAll) {
-      _.map(data, account => {
-        if (accountsSelected.indexOf(account._id) == -1) {
-          accountsSelected.push(account._id);
-        }
-      });
-    }
-
-    if (!selectAll) {
-      _.map(data, account => {
-        if (accountsSelected.includes(account._id)) {
-          accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
-        }
-      });
-    }
-
+   
     this.setState({
-      accountsSelected,
+      bulkAssign: selectAll,
+      accountsSelected:[],
+      currentAccount: null,
       showMetaData: false
     });
   };
@@ -440,7 +427,7 @@ class AccountListContainer extends Pager {
     return true;
   };
 
-  closeDialog = () => {
+  closeDialog = () => { 
     this.setState({
       isLockedDialogActive: false,
       lockOwnerName: null,
@@ -474,7 +461,8 @@ class AccountListContainer extends Pager {
       dropdownOptions,
       tags,
       isLockedDialogActive,
-      lockOwnerName
+      lockOwnerName,
+      bulkAssign
     } = this.state;
     const options = this.getData(data);
     const icons = [
@@ -506,12 +494,13 @@ class AccountListContainer extends Pager {
             getProperAccounts={this.getProperAccounts}
             changeFilters={this.changeFilters}
             dropdownOptions={dropdownOptions}
-            btnGroup={accountsSelected.length}
+            btnGroup={accountsSelected.length || bulkAssign}
             assignFilterArr={assignFilterArr}
-            checkAllAccount={this.checkAllAccount}
+            checkAll={this.checkAllAccount}
             accountsSelected={accountsSelected}
             data={data}
             tags={tags}
+            bulkAssign={bulkAssign}
           />
           {assignUser && (
             <AccountAssigning
@@ -521,6 +510,7 @@ class AccountListContainer extends Pager {
               title={""}
               options={this.state.userOptions}
               uncheckAccountList={this.uncheckAccountList}
+              bulkAssign={bulkAssign}
             />
           )}
           {assignWQ && (
@@ -530,6 +520,7 @@ class AccountListContainer extends Pager {
               closeDialog={this.closeAssignWQ}
               title={""}
               uncheckAccountList={this.uncheckAccountList}
+              bulkAssign={bulkAssign}
             />
           )}
           <AccountList
@@ -540,6 +531,7 @@ class AccountListContainer extends Pager {
             currentAccount={currentAccount}
             data={data}
             tags={tags}
+            bulkAssign={bulkAssign}
           />
           <PaginationBar
             nextPage={this.nextPage}

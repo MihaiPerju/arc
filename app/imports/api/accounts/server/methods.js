@@ -53,7 +53,7 @@ Meteor.methods({
     accountIds,
     assigneeId
   }) {
-    for (let accountId of accountIds) {
+     for (let accountId of accountIds) {
       AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
       Accounts.update({
@@ -66,7 +66,7 @@ Meteor.methods({
           workQueueId: null,
         },
       });
-    }
+    } 
   },
   'account.assignWorkQueue'({
     _id,
@@ -87,8 +87,18 @@ Meteor.methods({
   },
   'account.assignWorkQueue.bulk'({
     accountIds,
-    workQueueId
+    workQueueId,
+    params
   }) {
+
+    if(params){
+      accountIds = [];
+      let accountIdList = Accounts.find(params).fetch();
+       _.map(accountIdList, account => {
+        accountIds.push(account._id);
+      });
+    }
+    
     for (let accountId of accountIds) {
       AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);

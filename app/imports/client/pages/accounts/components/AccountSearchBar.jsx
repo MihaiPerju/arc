@@ -115,24 +115,16 @@ export default class AccountSearchBar extends Component {
     });
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(props) {
     const { query } = FlowRouter.current().params;
-    const { data, accountsSelected } = this.props;
     if (query && query.medNo) {
       let model = FilterService.getFilterParams();
       this.setState({
         model
       });
     }
-
-    accountsSelected &&
-      accountsSelected.length > 0 &&
-      this.setState({ selectAll: true });
-    _.map(data, account => {
-      if (accountsSelected.indexOf(account._id) == -1) {
-        return this.setState({ selectAll: false });
-      }
-    });
+   
+    this.setState({ selectAll: props.bulkAssign });
   }
 
   onSubmit(params) {
@@ -202,7 +194,7 @@ export default class AccountSearchBar extends Component {
 
     FlowRouter.setQueryParams({
       fbDateMax: FilterService.formatDate(fbDateMax)
-    });ah
+    });
 
     FlowRouter.setQueryParams({
       admitDateMin: FilterService.formatDate(admitDateMin)
@@ -335,9 +327,10 @@ export default class AccountSearchBar extends Component {
   };
 
   checkAllAccount = () => {
-    const { checkAllAccount } = this.props;
-    this.setState({ selectAll: !this.state.selectAll }, () => {
-      checkAllAccount(this.state.selectAll);
+    const { checkAll } = this.props;
+    let selectAll = !this.state.selectAll;
+    this.setState({selectAll}, () => {
+      checkAll(selectAll);
     });
   };
 
