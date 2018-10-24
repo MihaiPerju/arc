@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField, ErrorField,SelectField } from "/imports/ui/forms";
+import {
+  AutoForm,
+  AutoField,
+  ErrorField,
+  SelectField
+} from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import DatePicker from "react-datepicker";
@@ -27,7 +32,7 @@ export default class NewAction extends Component {
       actions: [],
       reasonCodes: [],
       loading: true,
-      selectedAction: {},
+      selectedActionId: null,
       dateLabelKeys: [],
       isDisabled: false
     };
@@ -50,7 +55,6 @@ export default class NewAction extends Component {
       }
     });
   }
-
 
   componentDidMount() {
     setTimeout(() => {
@@ -119,16 +123,24 @@ export default class NewAction extends Component {
               });
             }
           });
-        this.getAction(actionId.value);
+        this.setState({ selectedActionId: actionId });
       }
     }
   };
 
   getAction = actionId => {
     const { actions } = this.state;
-    const action = _.filter(actions, action => action._id === actionId);
-    this.setState({ selectedAction: action });
-    const { inputs } = action[0] || {};
+    console.log(actions);
+    for (let action in actions) {
+      if (action._id === actionId) {
+        this.extendSchema(action);
+        return action;
+      }
+    }
+  };
+
+  extendSchema = action => {
+    const { inputs } = action || {};
     const dateLabelKeys = [];
     if (inputs && inputs.length > 0) {
       _.map(inputs, input => {
@@ -155,11 +167,15 @@ export default class NewAction extends Component {
     }
   };
 
+  setAction = selectedActionId => {
+    this.setState({ selectedActionId });
+  };
+
   onChange = (date, label) => {
     this.setState({ [label]: date });
   };
 
-  renderInputs = (input, index) => {
+  getInputSingle = (input, index) => {
     if (input.type === "date") {
       return (
         <div className="custom-inputs" key={index}>
@@ -193,12 +209,22 @@ export default class NewAction extends Component {
     );
   };
 
+  getInputs = actionId => {
+    const action = this.getAction(actionId);
+    console.log(action);
+    if (action.inputs) {
+      _.each(action.inputs, (input, index) => {
+        console.log(input);
+        this.getInputSingle(input, index);
+      });
+    }
+  };
+
   render() {
-    const { selectedAction, loading, isDisabled } = this.state;
+    const { selectedActionId, loading, isDisabled } = this.state;
     const actions = this.getActionOptions(this.state.actions);
     const reasonCodes = this.getReasonOptions(this.state.reasonCodes);
-    const { inputs } = selectedAction[0] || {};
-    const customInputs = _.map(inputs, this.renderInputs);
+    console.log(selectedActionId);
 
     if (loading) {
       return <Loading />;
@@ -215,7 +241,12 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectField  name="actionId" labelHidden={false} options={actions}  placeholder="actions" />
+                <SelectField
+                  name="actionId"
+                  labelHidden={false}
+                  options={actions}
+                  placeholder="actions"
+                />
                 <ErrorField name="actionId" />
               </div>
               {reasonCodes.length > 0 && (
@@ -228,7 +259,9 @@ export default class NewAction extends Component {
                   <ErrorField name="reasonCode" />
                 </div>
               )}
-              <div className="custom-wrapper">{customInputs}</div>
+              <div className="custom-wrapper">
+                {this.getInputs(selectedActionId)}
+              </div>
             </div>
             <div className="btn-group">
               <button

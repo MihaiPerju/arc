@@ -46,7 +46,7 @@ export default class ActionEdit extends React.Component {
   }
 
   getOptions = enums => {
-    return _.map(enums, (value) => {
+    return _.map(enums, value => {
       const label = `${value.stateName}: ${value.name}`;
       return { value: value._id, label: label };
     });
@@ -115,7 +115,15 @@ export default class ActionEdit extends React.Component {
               onClick={this.onEditAction}
               className="btn--green"
             >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm & Save"}
+              {isDisabled ? (
+                <div>
+                  {" "}
+                  Loading
+                  <i className="icon-cog" />
+                </div>
+              ) : (
+                "Confirm & Save"
+              )}
             </button>
           </div>
         </div>
@@ -197,6 +205,13 @@ export default class ActionEdit extends React.Component {
                           placeholder="label"
                         />
                         <ErrorField name="label" />
+                      </div>
+                      <div className="form-wrapper">
+                        <AutoField
+                          labelHidden={true}
+                          name="isRequired"
+                          label="Mandatory"
+                        />
                       </div>
                     </NestField>
                   </ListItemField>
