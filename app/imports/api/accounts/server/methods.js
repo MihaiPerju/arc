@@ -25,7 +25,6 @@ Meteor.methods({
   },
 
   'account.addAction'(data) {
-    console.log(data);
     data.userId = this.userId;
     ActionService.createAction(data);
   },
