@@ -23,7 +23,6 @@ class DatePickerCustom extends React.Component {
   }
 
   handleChange = date => {
-    console.log(date);
     if (date) {
       this.setState({
         startDate: date
