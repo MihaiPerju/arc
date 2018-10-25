@@ -32,6 +32,11 @@ export default class ActionService {
     }, {
       $set: {
         isPending: true
+      },
+      $unset: {
+        workQueueId: null,
+        assigneeId: null,
+        escalationId: null
       }
     });
   }
@@ -92,6 +97,9 @@ export default class ActionService {
       $set: {
         hasLastSysAction: false,
         lastUserAction: action._id
+      },
+      $unset: {
+        escalationId: null
       },
       $push: {
         actionsLinkData: accountActionId
@@ -220,9 +228,11 @@ export default class ActionService {
       });
     }
 
-    let prevState = Accounts.findOne({ _id: accountId }).state || null;
+    let prevState = Accounts.findOne({
+      _id: accountId
+    }).state || null;
     let reactivationDate = (prevState && prevState === stateEnum.ARCHIVED) ? new Date() : null;
-     
+
     // remove previous tickles history
     Tickles.remove({
       accountId
@@ -245,7 +255,7 @@ export default class ActionService {
       });
     }
 
-Accounts.update({
+    Accounts.update({
       _id: accountId
     }, {
       $set: {

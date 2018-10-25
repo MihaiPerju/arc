@@ -18,17 +18,19 @@ import AccountActions from '/imports/api/accountActions/collection';
 import TickleService from '/imports/api/tickles/server/services/TickleService';
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+
 import actionTypesEnum, {
   typeList,
 } from '/imports/api/accounts/enums/actionTypesEnum';
 import Users from '/imports/api/users/collection';
+
 
 Meteor.methods({
   'account.freeze'(_id) {
     ActionService.freezeAccount(_id);
   },
 
-  'account.actions.add'(data) {
+  'account.addAction'(data) {
     data.userId = this.userId;
     ActionService.createAction(data);
   },
