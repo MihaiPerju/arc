@@ -67,7 +67,9 @@ export default class AccountFilterBuilder extends React.Component {
           facilities.map(facility => {
             facilityOptions.push({
               value: facility._id,
-              label: facility.name + " - " + facility.client.clientName
+              label:
+                facility.name + " - " + facility.client &&
+                facility.client.clientName
             });
             this.setState({ facilityOptions });
           });
