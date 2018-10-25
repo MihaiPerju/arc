@@ -79,11 +79,10 @@ export default class NewAction extends Component {
 
   onHandleChange = (field, value) => {
     if (field == "actionId") {
-      const actionId = value;
       reasonCodesQuery
         .clone({
           filters: {
-            actionId: actionId.value
+            actionId: value
           }
         })
         .fetch((err, reasonCodes) => {
@@ -93,7 +92,7 @@ export default class NewAction extends Component {
             });
           }
         });
-      this.setState({ selectedActionId: actionId });
+      this.setState({ selectedActionId: value });
     }
   };
 
