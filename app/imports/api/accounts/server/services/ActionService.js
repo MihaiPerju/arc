@@ -32,6 +32,11 @@ export default class ActionService {
     }, {
       $set: {
         isPending: true
+      },
+      $unset: {
+        workQueueId: null,
+        assigneeId: null,
+        escalationId: null
       }
     });
   }
