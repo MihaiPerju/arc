@@ -21,6 +21,7 @@ import settings from "/imports/api/settings/enums/settings";
 import actionTypesEnum, {
   typeList,
 } from '/imports/api/accounts/enums/actionTypesEnum';
+import Users from '/imports/api/users/collection';
 
 Meteor.methods({
   'account.freeze'(_id) {
@@ -51,8 +52,18 @@ Meteor.methods({
   },
   'account.assignUser.bulk'({
     accountIds,
-    assigneeId
+    assigneeId,
+    params
   }) {
+
+    if(params){
+      accountIds = [];
+      let accountIdList = Accounts.find(params).fetch();
+       _.map(accountIdList, account => {
+        accountIds.push(account._id);
+      });
+    }
+
      for (let accountId of accountIds) {
       AccountSecurity.hasRightsOnAccount(this.userId, accountId);
       Security.isAllowed(this.userId, roleGroups.ADMIN_TECH_MANAGER);
@@ -383,4 +394,47 @@ Meteor.methods({
       },
     });
   },
+
+  'account.facility'(params){
+    let accountList = Accounts.find(params).fetch();
+    let facilityList = []
+    let facilityObj = []
+    _.map(accountList, account => {
+      if(!facilityList.includes(account.facilityId)){
+        facilityList.push(account.facilityId);
+      }
+    });
+    
+
+    if(facilityList.length > 0){
+      _.map(facilityList, facilityId => {
+        let facilityDetails = Facilities.find({_id: facilityId}).fetch()[0];
+         let res = {
+          label : facilityDetails.name,
+          value : facilityDetails._id
+        }
+        facilityObj.push(res)  
+        
+      });
+      return facilityObj;
+    }
+  },
+
+  'account.facility.user'(facilityId) {
+    let facilityDetails = Facilities.find({_id: facilityId}).fetch()[0];
+    if(facilityDetails && facilityDetails.allowedUsers) {
+      let usersId = facilityDetails.allowedUsers;
+      let userOption = [];
+      _.map(usersId, user => {
+        let userDetail = Users.find({_id:user}).fetch()[0];
+        let res = {
+          label: userDetail.profile.firstName + " " + userDetail.profile.lastName + "(" + userDetail.roles[0] + ")",
+          value: user
+        }
+        userOption.push(res);
+      })
+      return userOption;
+    }
+  }
+
 });

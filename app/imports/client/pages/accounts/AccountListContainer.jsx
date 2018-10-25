@@ -37,7 +37,8 @@ class AccountListContainer extends Pager {
       isLockedDialogActive: false,
       lockOwnerName: null,
       lockedAccountId: null,
-      bulkAssign: false
+      bulkAssign: false,
+      facilitiesOption: false
     });
     this.query = query;
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
@@ -80,7 +81,7 @@ class AccountListContainer extends Pager {
         currentAccount: accountId
       });
     }
-
+    
     const { state } = this.props;
     this.setState({ currentRouteState: state });
     this.getTags();
@@ -94,6 +95,21 @@ class AccountListContainer extends Pager {
     this.removeLock();
     this.closeRightPanel();
     e.returnValue = "Are you sure you want to close?";
+  }
+
+  getFacilityByAccount = () => {
+    const queryParams = PagerService.getParams().filters;
+    //get facility based on account number
+     Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
+      if (!err) {
+        this.setState({
+          assignUser: true,
+          facilitiesOption
+        });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });   
   }
 
   componentWillReceiveProps(newProps) {
@@ -261,13 +277,19 @@ class AccountListContainer extends Pager {
   };
 
   assignToUser = () => {
-    const accounts = this.getAccounts(this.state.accountsSelected);
-    const options = this.getUserOptions(accounts);
-    let userOptions = this.getFirstOption(accounts, options).concat(options);
-    this.setState({
-      assignUser: true,
-      userOptions
-    });
+    //check bulk assign
+    if(this.state.bulkAssign) { 
+      this.getFacilityByAccount(); 
+    } else {
+      //if not bulk assign  
+      const accounts = this.getAccounts(this.state.accountsSelected);
+      const options = this.getUserOptions(accounts);
+      let userOptions = this.getFirstOption(accounts, options).concat(options);
+      this.setState({
+        assignUser: true,
+        userOptions
+      }); 
+    }
   };
   closeAssignUser = () => {
     this.setState({
@@ -462,7 +484,8 @@ class AccountListContainer extends Pager {
       tags,
       isLockedDialogActive,
       lockOwnerName,
-      bulkAssign
+      bulkAssign,
+      facilitiesOption
     } = this.state;
     const options = this.getData(data);
     const icons = [
@@ -511,6 +534,7 @@ class AccountListContainer extends Pager {
               options={this.state.userOptions}
               uncheckAccountList={this.uncheckAccountList}
               bulkAssign={bulkAssign}
+              facilitiesOption={facilitiesOption}
             />
           )}
           {assignWQ && (
@@ -521,6 +545,7 @@ class AccountListContainer extends Pager {
               title={""}
               uncheckAccountList={this.uncheckAccountList}
               bulkAssign={bulkAssign}
+              facilitiesOption={false}
             />
           )}
           <AccountList
