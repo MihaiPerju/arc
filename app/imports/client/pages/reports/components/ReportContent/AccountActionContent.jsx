@@ -62,7 +62,9 @@ export default class AccountActionContent extends Component {
 
   render() {
     const { tableHeader, accountActions } = this.props;
-
+    if (accountActions && !accountActions.length) {
+      return <div>No Actions</div>;
+    }
     return (
       <ScrollSync>
         <div className="table-container flex--helper">
