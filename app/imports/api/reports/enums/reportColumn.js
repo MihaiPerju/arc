@@ -115,7 +115,7 @@ const insuranceColumnEnum = [{
 ];
 
 const types = {
-  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt", "tickleDate", "other1", "other2"]
+  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt", "tickleDate"]
 };
 
 const fields = {
