@@ -64,7 +64,6 @@ var List = function List(_ref) {
       _react.default.createElement(
         "label",
         null,
-        label,
         _react.default.createElement(_ListAddField.default, {
           name: "".concat(name, ".$"),
           initialCount: initialCount,

@@ -26,7 +26,7 @@ var _AutoField = _interopRequireDefault(require("./AutoField"));
 var _ListDelField = _interopRequireDefault(require("./ListDelField"));
 
 var ListItem = function ListItem(props) {
-  return _react.default.createElement("div", null, _react.default.createElement(_ListDelField.default, {
+  return _react.default.createElement("div", {className: 'chris-list-item'}, _react.default.createElement(_ListDelField.default, {
     name: props.name
   }), props.children ? _react.Children.map(props.children, function (child) {
     return _react.default.cloneElement(child, {
