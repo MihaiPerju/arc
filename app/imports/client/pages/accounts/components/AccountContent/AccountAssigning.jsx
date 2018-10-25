@@ -48,7 +48,7 @@ export default class AccountActioning extends React.Component {
     closeDialog();
   };
 
-  assignToUser = ({ assigneeId }) => {  console.log('in');
+  assignToUser = ({ assigneeId }) => {
     const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
     const params = bulkAssign ? PagerService.getParams().filters : false;
