@@ -84,18 +84,6 @@ export default class AccountContent extends Component {
       <ScrollSync>
         <div className="table-container flex--helper">
           <ScrollSyncPane>
-            <div className="table-container__left">
-              <div className="table-header truncate text-left table-field text-light-grey">
-                Account name
-              </div>
-              {accounts.map((account, index) => (
-                <div key={index} className="table-field truncate">
-                  {"Account No." + (index + 1)}
-                </div>
-              ))}
-            </div>
-          </ScrollSyncPane>
-          <ScrollSyncPane>
             <div className="table-container__right">
               <div className="table-row">
                 {tableHeader.map((header, index) => {
