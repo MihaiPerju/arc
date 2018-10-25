@@ -237,7 +237,7 @@
   }
 
   .search-input {
-    width: calc(100% - 140px);
+    width: calc(100% - 155px);
     transition: width $transition300;
 
     &.account-search {
@@ -340,7 +340,7 @@
       position: absolute;
       color: $extra-light-grey;
       top: 4px;
-      left: 35px;
+      left: 30px;
       line-height: 1.4rem;
       padding: 5px;
     }
@@ -407,7 +407,7 @@
     }
 
     button {
-      padding: 8px 15px;
+      padding: 8px 10px;
       font-size: 1.6rem;
       color: $extra-light-grey;
     }
