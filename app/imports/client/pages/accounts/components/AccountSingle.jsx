@@ -15,12 +15,14 @@ export default class AccountSingle extends Component {
   }
 
   onCheck(e) {
+    if(this.props.bulkAssign) {  e.stopPropagation(); return false; }  
     e.stopPropagation();
     const { checkAccount, account } = this.props;
     checkAccount(account);
   }
 
   onSelectAccount = () => {
+    if(this.props.bulkAssign) { return false; }  
     const { selectAccount, account } = this.props;
     selectAccount(account);
   };

@@ -1,12 +1,13 @@
 import React from "react";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
 import WorkQueueService from "./../../services/WorkQueueService";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import PagerService from "/imports/client/lib/PagerService";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -17,7 +18,8 @@ export default class AccountActioning extends React.Component {
       assignToWorkQueue: false,
       workQueueOptions: [],
       loadingWorkQueues: true,
-      isDisabled: false
+      isDisabled: false,
+      userOptions: false
     };
   }
 
@@ -37,6 +39,8 @@ export default class AccountActioning extends React.Component {
           });
         }
       });
+
+      this.props.bulkAssign ? this.setState({ userOptions: [] }) : this.setState({ userOptions: this.props.options });
   }
 
   closeDialog = () => {
@@ -45,9 +49,10 @@ export default class AccountActioning extends React.Component {
   };
 
   assignToUser = ({ assigneeId }) => {
-    const { accountIds, uncheckAccountList } = this.props;
+    const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
-    Meteor.call("account.assignUser.bulk", { accountIds, assigneeId }, err => {
+    const params = bulkAssign ? PagerService.getParams().filters : false;
+    Meteor.call("account.assignUser.bulk", { accountIds, assigneeId, params }, err => {
       if (!err) {
         Notifier.success("Account assigned to user!");
         uncheckAccountList();
@@ -56,14 +61,15 @@ export default class AccountActioning extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    });
+    });  
   };
   assignToWorkQueue = ({ workQueueId }) => {
-    const { accountIds, uncheckAccountList } = this.props;
+    const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
+    const params = bulkAssign ? PagerService.getParams().filters : false;
     Meteor.call(
       "account.assignWorkQueue.bulk",
-      { accountIds, workQueueId },
+      { accountIds, workQueueId, params },
       err => {
         if (!err) {
           Notifier.success("Account assigned to Work Queue!");
@@ -77,10 +83,27 @@ export default class AccountActioning extends React.Component {
     );
   };
 
-  showDialog = () => {
-    const { options, assignToUser } = this.props;
+  onHandleChange(field, value) {
+    if(field == 'facilityId') {
+      Meteor.call(
+        "account.facility.user",
+         value ,
+        (err, userOptions) => {
+          if (!err) {
+            this.setState({userOptions});
+          } else {
+            this.setState({userOptions: []});
+          }
+        }
+      );
+     
+    }
+  }
 
-    const { workQueueOptions, loadingWorkQueues, isDisabled } = this.state;
+  showDialog = () => {
+    const { options, assignToUser, bulkAssign, facilitiesOption } = this.props;
+
+    const { workQueueOptions, loadingWorkQueues, isDisabled, userOptions } = this.state;
 
     if (loadingWorkQueues) {
       return <Loading />;
@@ -92,12 +115,20 @@ export default class AccountActioning extends React.Component {
           <AutoForm //model={model}
             schema={assignSchema}
             onSubmit={this.assignToUser}
+            onChange={this.onHandleChange.bind(this)}
           >
+            {bulkAssign && 
+                <div className="form-wrapper select-item">
+                <SelectField  name="facilityId" labelHidden={true} options={facilitiesOption}  placeholder="Select Facility" />
+                <ErrorField name="facilityId" />
+                </div>
+            }
             <div className="form-wrapper select-item">
-              <AutoField
+              <SelectField
                 labelHidden={true}
                 name="assigneeId"
-                options={options}
+                placeholder="Select Users"
+                options={userOptions}
               />
               <ErrorField name="assigneeId" />
             </div>
@@ -186,6 +217,10 @@ export default class AccountActioning extends React.Component {
 const assignSchema = new SimpleSchema({
   assigneeId: {
     type: String
+  },
+  facilityId: {
+    type: String,
+    optional: true
   }
 });
 

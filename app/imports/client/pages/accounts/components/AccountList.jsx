@@ -9,7 +9,10 @@ export default class AccountList extends Component {
   }
 
   accountIsActive(account) {
-    const { accountsSelected } = this.props;
+    const { accountsSelected, bulkAssign } = this.props;
+    if(bulkAssign) {
+      return true;
+    }
     return _.includes(accountsSelected, account._id);
   }
 
@@ -32,7 +35,8 @@ export default class AccountList extends Component {
       selectAccount,
       currentAccount,
       classes,
-      tags
+      tags,
+      bulkAssign
     } = this.props;
     return (
       <div className={classes}>
@@ -49,6 +53,7 @@ export default class AccountList extends Component {
                 key={account._id}
                 account={account}
                 tags={tags}
+                bulkAssign={bulkAssign}
               />
             );
           })}
