@@ -36,7 +36,9 @@ class AccountListContainer extends Pager {
       tags: [],
       isLockedDialogActive: false,
       lockOwnerName: null,
-      lockedAccountId: null
+      lockedAccountId: null,
+      bulkAssign: false,
+      facilitiesOption: false
     });
     this.query = query;
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
@@ -79,7 +81,7 @@ class AccountListContainer extends Pager {
         currentAccount: accountId
       });
     }
-
+    
     const { state } = this.props;
     this.setState({ currentRouteState: state });
     this.getTags();
@@ -93,6 +95,21 @@ class AccountListContainer extends Pager {
     this.removeLock();
     this.closeRightPanel();
     e.returnValue = "Are you sure you want to close?";
+  }
+
+  getFacilityByAccount = () => {
+    const queryParams = PagerService.getParams().filters;
+    //get facility based on account number
+     Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
+      if (!err) {
+        this.setState({
+          assignUser: true,
+          facilitiesOption
+        });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });   
   }
 
   componentWillReceiveProps(newProps) {
@@ -127,7 +144,8 @@ class AccountListContainer extends Pager {
 
   uncheckAccountList = () => {
     this.setState({
-      accountsSelected: []
+      accountsSelected: [],
+      bulkAssign: false
     });
   };
 
@@ -231,26 +249,11 @@ class AccountListContainer extends Pager {
 
   checkAllAccount = selectAll => {
     const { data } = this.props;
-    let accountsSelected = this.state.accountsSelected;
-
-    if (data.length > 0 && selectAll) {
-      _.map(data, account => {
-        if (accountsSelected.indexOf(account._id) == -1) {
-          accountsSelected.push(account._id);
-        }
-      });
-    }
-
-    if (!selectAll) {
-      _.map(data, account => {
-        if (accountsSelected.includes(account._id)) {
-          accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
-        }
-      });
-    }
-
+   
     this.setState({
-      accountsSelected,
+      bulkAssign: selectAll,
+      accountsSelected:[],
+      currentAccount: null,
       showMetaData: false
     });
   };
@@ -274,13 +277,19 @@ class AccountListContainer extends Pager {
   };
 
   assignToUser = () => {
-    const accounts = this.getAccounts(this.state.accountsSelected);
-    const options = this.getUserOptions(accounts);
-    let userOptions = this.getFirstOption(accounts, options).concat(options);
-    this.setState({
-      assignUser: true,
-      userOptions
-    });
+    //check bulk assign
+    if(this.state.bulkAssign) { 
+      this.getFacilityByAccount(); 
+    } else {
+      //if not bulk assign  
+      const accounts = this.getAccounts(this.state.accountsSelected);
+      const options = this.getUserOptions(accounts);
+      let userOptions = this.getFirstOption(accounts, options).concat(options);
+      this.setState({
+        assignUser: true,
+        userOptions
+      }); 
+    }
   };
   closeAssignUser = () => {
     this.setState({
@@ -440,7 +449,7 @@ class AccountListContainer extends Pager {
     return true;
   };
 
-  closeDialog = () => {
+  closeDialog = () => { 
     this.setState({
       isLockedDialogActive: false,
       lockOwnerName: null,
@@ -474,7 +483,9 @@ class AccountListContainer extends Pager {
       dropdownOptions,
       tags,
       isLockedDialogActive,
-      lockOwnerName
+      lockOwnerName,
+      bulkAssign,
+      facilitiesOption
     } = this.state;
     const options = this.getData(data);
     const icons = [
@@ -506,12 +517,13 @@ class AccountListContainer extends Pager {
             getProperAccounts={this.getProperAccounts}
             changeFilters={this.changeFilters}
             dropdownOptions={dropdownOptions}
-            btnGroup={accountsSelected.length}
+            btnGroup={accountsSelected.length || bulkAssign}
             assignFilterArr={assignFilterArr}
-            checkAllAccount={this.checkAllAccount}
+            checkAll={this.checkAllAccount}
             accountsSelected={accountsSelected}
             data={data}
             tags={tags}
+            bulkAssign={bulkAssign}
           />
           {assignUser && (
             <AccountAssigning
@@ -521,6 +533,8 @@ class AccountListContainer extends Pager {
               title={""}
               options={this.state.userOptions}
               uncheckAccountList={this.uncheckAccountList}
+              bulkAssign={bulkAssign}
+              facilitiesOption={facilitiesOption}
             />
           )}
           {assignWQ && (
@@ -530,6 +544,8 @@ class AccountListContainer extends Pager {
               closeDialog={this.closeAssignWQ}
               title={""}
               uncheckAccountList={this.uncheckAccountList}
+              bulkAssign={bulkAssign}
+              facilitiesOption={false}
             />
           )}
           <AccountList
@@ -540,6 +556,7 @@ class AccountListContainer extends Pager {
             currentAccount={currentAccount}
             data={data}
             tags={tags}
+            bulkAssign={bulkAssign}
           />
           <PaginationBar
             nextPage={this.nextPage}
