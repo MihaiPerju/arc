@@ -1,6 +1,6 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
-import {
+import UserRoles, {
   roleGroups
 } from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
@@ -229,12 +229,17 @@ export default class PagerService {
         });
       }
     } else if (state === "escalated") {
+      let employeeToRespond = null;
+      if (Roles.userIsInRole(Meteor.userId(), UserRoles.MANAGER)) {
+        employeeToRespond = "manager";
+      } else if (Roles.userIsInRole(Meteor.userId(), UserRoles.REP)) {
+        employeeToRespond = Meteor.userId();
+      }
+
       _.extend(params, {
         filters: {
           tickleDate: null,
-          employeeToRespond: {
-            $exists: true
-          }
+          employeeToRespond
         }
       });
     } else if (state && state !== "all") {
@@ -259,10 +264,12 @@ export default class PagerService {
 
     //adding filter query options
     if (acctNum) {
-      _.extend(params.filters, {
-        acctNum: {
-          $regex: acctNum,
-          $options: "i"
+      _.extend(params, {
+        filters: {
+          acctNum: {
+            $regex: acctNum,
+            $options: "i"
+          }
         }
       });
     }

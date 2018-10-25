@@ -49,14 +49,7 @@ AccountListQuery.expose({
         _.extend(params.filters, {
           facilityId: {
             $in: userFacilitiesArr
-          },
-          $or: [{
-              employeeToRespond: null
-            },
-            {
-              employeeToRespond: RolesEnum.MANAGER
-            }
-          ]
+          }
         });
       }
     }
@@ -74,22 +67,14 @@ AccountListQuery.expose({
       }
       _.extend(params.filters, {
         $and: [{
-            $or: [{
-              assigneeId: userId
-            }, {
-              workQueueId: {
-                $in: tagIds
-              }
-            }]
-          },
-          {
-            $or: [{
-              employeeToRespond: null
-            }, {
-              employeeToRespond: userId
-            }]
-          }
-        ]
+          $or: [{
+            assigneeId: userId
+          }, {
+            workQueueId: {
+              $in: tagIds
+            }
+          }]
+        }]
       });
     }
   }
