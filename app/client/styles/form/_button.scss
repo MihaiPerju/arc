@@ -173,11 +173,29 @@ button,
   }
 }
 
-/* A Different Kind of Button */
-body .insurance-btn__del,
-body .insurance-btn__add {
+.insurance-btn__del,
+.insurance-btn__add {
   width: auto;
   height: auto;
   margin: 15px 0;
   padding: 10px 15px;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  border-radius: 3px;
+  color: $color-white;
+  line-height: 2.1rem;
+}
+
+.insurance-btn {
+  &__add {
+    background: $green;
+    margin-left: 15px;
+  }
+  &__del {
+    background: $red;
+    margin: 0;
+  }
 }
