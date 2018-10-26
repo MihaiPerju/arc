@@ -14,7 +14,13 @@ export default [
   { value: "facilityId", label: "Facility Id" },
   { value: "assigneeId", label: "Assignee Id" },
   { value: "clientId", label: "ClientId" },
-  { value: "activeInsCode", label: "Active Insurance Code" }
+  { value: "activeInsCode", label: "Active Insurance Code" },
+  { value: "lastActionDate", label: "Last Action Date" },
+  { value: "reactivationDate", label: "Reactivation Date" },
+  { value: "refreshDate", label: "Refresh Date" },
+  { value: "placementDate", label: "Placement Date" },
+  { value: "other1", label: "Other 1" },
+  { value: "other2", label: "Other 2" },
 ];
 
 const accountActionsFields = [

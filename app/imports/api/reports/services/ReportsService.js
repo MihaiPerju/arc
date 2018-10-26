@@ -146,7 +146,6 @@ export default class ReportsService {
 
   static getFilters(data, components) {
     const requiredFields = [];
-
     for (let component in components) {
       if (components[component].isActive) {
         if (ReportsService.isLink(component)) {

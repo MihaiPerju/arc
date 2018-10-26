@@ -46,7 +46,6 @@ export default class AccountFilterBuilder extends React.Component {
     const { substates } = this.props;
     const schema = ReportsService.createSchema(substates);
     let fullSchemaOptions = ReportsService.getOptions();
-
     //Creating set of Components based on schema field types
     let { components } = this.props;
     if (!components) {
@@ -133,7 +132,7 @@ export default class AccountFilterBuilder extends React.Component {
       data,
       components
     );
-
+    
     if (error) {
       Notifier.error(error);
     } else {
@@ -221,39 +220,39 @@ export default class AccountFilterBuilder extends React.Component {
         {loading ? (
           <Loading />
         ) : (
-          <div>
-            <AutoForm
-              model={filterBuilderData}
-              schema={schema}
-              onSubmit={this.onSubmit}
-              ref="filters"
-              onChange={this.onHandleChange}
-            >
-              {_.map(components, item => {
-                return (
-                  item.isActive && (
-                    <FilterSingle
-                      assigneeIdOptions={assigneeOptions}
-                      facilityIdOptions={facilityOptions}
-                      clientIdOptions={clientOptions}
-                      deleteFilter={this.deleteFilter}
-                      name={item.name}
-                    />
-                  )
-                );
-              })}
-            </AutoForm>
-            <div className="add-report-filter">
+            <div>
               <AutoForm
-                ref="filterSelect"
-                onChange={this.createFilter}
-                schema={filterSchema}
+                model={filterBuilderData}
+                schema={schema}
+                onSubmit={this.onSubmit}
+                ref="filters"
+                onChange={this.onHandleChange}
               >
-                <SelectField options={schemaOptions} name="filter" />
+                {_.map(components, item => {
+                  return (
+                    item.isActive && (
+                      <FilterSingle
+                        assigneeIdOptions={assigneeOptions}
+                        facilityIdOptions={facilityOptions}
+                        clientIdOptions={clientOptions}
+                        deleteFilter={this.deleteFilter}
+                        name={item.name}
+                      />
+                    )
+                  );
+                })}
               </AutoForm>
+              <div className="add-report-filter">
+                <AutoForm
+                  ref="filterSelect"
+                  onChange={this.createFilter}
+                  schema={filterSchema}
+                >
+                  <SelectField options={schemaOptions} name="filter" />
+                </AutoForm>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </main>
     );
   }
