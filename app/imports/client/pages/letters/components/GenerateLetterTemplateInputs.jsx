@@ -84,7 +84,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     const { templateKeywords } = this.props;
     if (templateKeywords) {
       const fields = [];
-
+ 
       templateKeywords.forEach((keyword, index) => {
         if (variablesEnum[keyword]) {
           fields.push(
