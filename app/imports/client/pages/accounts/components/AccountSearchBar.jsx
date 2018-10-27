@@ -683,11 +683,7 @@ export default class AccountSearchBar extends Component {
                 onClick={this.manageSortBar}
               >
                 <button>
-                  {sort ? (
-                    <i className="icon-angle-up" />
-                  ) : (
-                    <i className="icon-angle-down" />
-                  )}
+                    <i className="icon-sort-alpha-asc" />
                 </button>
               </div>
           </div>
