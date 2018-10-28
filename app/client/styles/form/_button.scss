@@ -4,7 +4,7 @@ button,
 .cc-button {
   display: inline-block;
   position: relative;
-  border: none;
+  border: 1px solid #ccc;
   outline: none;
   text-align: center;
   text-decoration: none;
@@ -12,11 +12,9 @@ button,
   user-select: none;
   line-height: inherit;
   font-family: $font-arial;
-  background: transparent;
   font-size: 1.4rem;
   padding: 12px 20px;
   border-radius: 3px;
-  color: $color-white;
 
   &:after,
   &:before {
