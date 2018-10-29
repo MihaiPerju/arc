@@ -80,7 +80,7 @@ export default class TagItem extends Component {
 
   renderTag(option) {
     return (
-      <div className="tag-item">
+      <div className="tag-item-with-bg">
         {option.label}
       </div>
     );
