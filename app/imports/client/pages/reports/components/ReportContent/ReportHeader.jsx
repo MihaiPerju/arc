@@ -24,7 +24,8 @@ class ReportHeader extends Component {
       dialogIsActive: false,
       selectedReportColumns: [],
       accountActions: [],
-      isDisabled: false
+      isDisabled: false,
+      isOpenedDropdown: false
     };
   }
 
@@ -48,6 +49,18 @@ class ReportHeader extends Component {
       selectedReportColumns
     });
   }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.outsideClick, false);
+  }
+
+  outsideClick = e => {
+    if (this.node && this.node.contains(e.target)) {
+      return;
+    }
+
+    this.openDropdown();
+  };
 
   openDialog = () => {
     this.setState({
@@ -185,6 +198,58 @@ class ReportHeader extends Component {
     }
   };
 
+  renderRunReportButton = status => {
+    switch (status) {
+      case JobQueueStatuses.IN_PROGRESS:
+        return (
+          <div className="action-dropdown" >
+            <div className="action-dropdown__btn" style={{ width: 110 }}>
+              Running...
+          </div>
+          </div>
+        );
+      case JobQueueStatuses.FINISHED:
+        return (
+          <div className="action-dropdown">
+            <div className="action-dropdown__btn" style={{ width: 110 }} onClick={this.onRunReport}>
+              Run report (again)
+             <i className="icon-angle-down" />
+            </div>
+            {
+              this.state.isOpenedDropdown && (
+                <div className="action-dropdown__container">
+                  <div className="action-caret">
+                    <div className="action-caret__outer" />
+                    <div className="action-caret__inner" />
+                  </div>
+                  <ul className="action-list">
+                    <li className="action-item">
+                      <a href="javascript:;" onClick={this.downloadReportpdf}>
+                        Download report pdf
+                   </a>
+                    </li>
+                    <li className="action-item">
+                      <a href="javascript:;" onClick={this.downloadReport}>
+                        Download report csv
+                   </a>
+                    </li>
+                  </ul>
+                </div>
+              )
+            }
+          </div>
+        );
+      default:
+        return (
+          <div className="action-dropdown" >
+            <div className="action-dropdown__btn" style={{ width: 110 }} onClick={this.onRunReport}>
+              Run Report
+            </div>
+          </div>
+        );
+    }
+  }
+
   getReportContent = tableHeader => {
     const { accounts, accountActions } = this.state;
     const { report } = this.props;
@@ -228,6 +293,20 @@ class ReportHeader extends Component {
     setGraph();
   };
 
+  openDropdown = () => {
+    const { isOpenedDropdown } = this.state;
+
+    if (!isOpenedDropdown) {
+      document.addEventListener("click", this.outsideClick, false);
+    } else {
+      document.removeEventListener("click", this.outsideClick, false);
+    }
+
+    this.setState({
+      isOpenedDropdown: !isOpenedDropdown
+    })
+  };
+
   render() {
     const { report, data } = this.props;
     const {
@@ -259,9 +338,12 @@ class ReportHeader extends Component {
           <ScheduleBlock report={report} />
         ) : (
             <div className="main-content__header header-block header-reports">
-              <div className="row__header">
+              <div className="row__header report-row-header">
                 <div className="text-light-grey">Report name</div>
-                <div className="title">{report.name}</div>
+                <div className="title float-left">{report.name}</div>
+                <div className="btn-run-report">
+                  {this.renderRunReportButton(job && job.status)}
+                </div>
               </div>
               <div className="row__header">
                 <div className="placement-block">
@@ -281,7 +363,7 @@ class ReportHeader extends Component {
                     </a>
                     </li>
                   )}
-                  {this.getRunButton(job && job.status)}
+                  {/* {this.getRunButton(job && job.status)} */}
                 </ActionDropdown>
               </div>
               {dialogIsActive && (
