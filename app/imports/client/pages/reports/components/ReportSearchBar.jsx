@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {AutoForm, AutoField} from "/imports/ui/forms";
+import React, { Component } from "react";
+import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import FilterBar from "/imports/client/lib/FilterBar.jsx";
 import Dropdown from "/imports/client/lib/Dropdown";
@@ -29,7 +29,7 @@ export default class ReportSearchBar extends Component {
       this.props.setPagerInitial();
     }
     if ("name" in params) {
-      FlowRouter.setQueryParams({name: params.name});
+      FlowRouter.setQueryParams({ name: params.name });
     }
     if ("facCode" in params) {
       FlowRouter.setQueryParams({ facCode: params.facCode });
@@ -39,8 +39,8 @@ export default class ReportSearchBar extends Component {
       FlowRouter.setQueryParams({ ptType: params.ptType });
     }
     if (reportIdQueryParams) {
-      const {closeRightPanel} = this.props;
-      FlowRouter.setQueryParams({reportId: null});
+      const { closeRightPanel } = this.props;
+      FlowRouter.setQueryParams({ reportId: null });
       closeRightPanel();
     }
   }
@@ -68,11 +68,11 @@ export default class ReportSearchBar extends Component {
     this.node = node;
   };
   closeDialog = () => {
-    this.setState(() => ({ dialogIsActive: false }) );
+    this.setState(() => ({ dialogIsActive: false }));
   };
 
   selectAll = () => {
-    const {selectAll} = this.state;
+    const { selectAll } = this.state;
     this.setState({
       selectAll: !selectAll
     });
@@ -93,11 +93,11 @@ export default class ReportSearchBar extends Component {
     if ("ptType" in queryParams) {
       model.ptType = queryParams.ptType;
     }
-    this.setState({model});
+    this.setState({ model });
   };
 
   showDialog = () => {
-    this.setState(() => ({dialogIsActive : true}))
+    this.setState(() => ({ dialogIsActive: true }))
   }
   resetFilters = () => {
     let appliedFilters = FlowRouter.current().queryParams;
@@ -165,7 +165,7 @@ export default class ReportSearchBar extends Component {
             <div className={classes} ref={this.nodeRef}>
               <div className={btnSelectClasses} onClick={this.selectAll} />
               <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
-                <i className="icon-angle-down"/>
+                <i className="icon-angle-down" />
               </div>
               {dropdown && (
                 <Dropdown
@@ -193,17 +193,17 @@ export default class ReportSearchBar extends Component {
                 />
               </div>
             </div>
-            <div className="filter-block">
+            <div className="filter-block flex--helper">
               {!hideFilter && (
                 <button onClick={this.showDialog}>
-                  <i className="icon-filter"/>
+                  <i className="icon-filter" />
                   {dialogIsActive && (
                     <Dialog
                       className="account-dialog filter-dialog filter-dialog__account"
                       title="Filter by"
                       closePortal={this.closeDialog}
                     >
-                      <button className="close-dialog" onClick={this.closeDialog}>     
+                      <button className="close-dialog" onClick={this.closeDialog}>
                         <i className="icon-close" />
                       </button>
                       <div className="filter-bar">
@@ -241,13 +241,13 @@ export default class ReportSearchBar extends Component {
                 </button>
               )}
               {
-                tags.length ? <Tags tags={tags}/> : <div />
-                }
+                tags.length ? <Tags tags={tags} /> : null
+              }
             </div>
 
           </div>
         </div>
-        {filter && <FilterBar options={options}/>}
+        {filter && <FilterBar options={options} />}
       </AutoForm>
     );
   }
@@ -264,7 +264,7 @@ class BtnGroup extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({in: true});
+      this.setState({ in: true });
     }, 1);
   }
 
@@ -288,8 +288,8 @@ class BtnGroup extends Component {
   };
 
   render() {
-    const {deleteAction, icons} = this.props;
-    const {dialogIsActive} = this.state;
+    const { deleteAction, icons } = this.props;
+    const { dialogIsActive } = this.state;
     const btnClasses = classNames("btn-group flex--helper", {
       in: this.state.in
     });
@@ -297,21 +297,21 @@ class BtnGroup extends Component {
     return (
       <div className={btnClasses}>
         {icons ? (
-          icons.map((element,index) => {
+          icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
-                <i className={"icon-" + element.icon}/>
+                <i className={"icon-" + element.icon} />
               </button>
             );
           })
         ) : (
-          <button>
-            <i className="icon-archive"/>
-          </button>
-        )}
+            <button>
+              <i className="icon-archive" />
+            </button>
+          )}
         {deleteAction && (
           <button onClick={this.deleteAction}>
-            <i className="icon-trash-o"/>
+            <i className="icon-trash-o" />
           </button>
         )}
         {dialogIsActive && (

@@ -121,10 +121,10 @@ export default class AccountService {
       }
 
 
-       //refresh placement date
+      //refresh placement date
       let rulesDate = this.getPlacementDateByFacilityId(facilityId);
       toUpdateAccount.refreshDate = rulesDate.placementRules.placementDate;
-     
+
       Accounts.update({
         acctNum: toUpdateAccountId,
         facilityId
@@ -167,7 +167,7 @@ export default class AccountService {
 
       let rulesDate = this.getPlacementDateByFacilityId(facilityId);
       newAccount.placementDate = rulesDate.placementRules.placementDate;
-   
+
       Object.assign(newAccount, {
         facilityId,
         clientId,
@@ -222,15 +222,10 @@ export default class AccountService {
 
   static standardize(results, rules) {
     //Convert all the rules to lower case to not be case-sensitive
-    const {
-      types
-    } = RulesEnum;
 
     for (let rule in rules) {
       if (rule !== "insurances" && rule !== "hasHeader" && rule !== "placementDate") {
-        if (types.others.includes(rule)) {
-          rules[rule] = rules[rule].toString();
-        }
+        rules[rule] = rules[rule].toString();
         rules[rule] = rules[rule].toLowerCase();
       }
     }
@@ -347,7 +342,7 @@ export default class AccountService {
       );
       account[rule] = value;
     }
- 
+
     //Getting meta fields
     let metaData = {};
     let count = 1;
@@ -398,21 +393,7 @@ export default class AccountService {
         uploadErrors.numbers++;
       }
       return isNaN(parsed) ? null : parsed;
-    } else if (types.others.includes(rule) && value) {
-      const date = new Date(value);
-      const dateString =
-        ("0" + (date.getMonth() + 1)).slice(-2) +
-        "/" +
-        ("0" + date.getDate()).slice(-2) +
-        "/" +
-        date.getFullYear();
-      const parsed = moment(dateString, "MM/DD/YYYY", true);
-      if (parsed.isValid()) {
-        return parsed.toDate();
-      } else if (!isNaN(parseInt(value, 10))) {
-        const parsed = parseInt(value, 10);
-        return parsed;
-      }
+    } else if (value) {
       return value;
     }
     if (rule === "ptName") {
@@ -517,7 +498,7 @@ export default class AccountService {
 
       let rulesDate = this.getPlacementDateByFacilityId(facilityId);
       newAccount.placementDate = rulesDate.inventoryRules.placementDate;
-   
+
       Object.assign(newAccount, {
         facilityId,
         fileId,
@@ -560,11 +541,11 @@ export default class AccountService {
       }
 
 
-       //refresh placement date
-       let rulesDate = this.getPlacementDateByFacilityId(facilityId);
-       toUpdateAccount.refreshDate = rulesDate.inventoryRules.placementDate;
+      //refresh placement date
+      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+      toUpdateAccount.refreshDate = rulesDate.inventoryRules.placementDate;
 
-   
+
       Accounts.update({
         acctNum: accountId,
         facilityId
@@ -606,4 +587,3 @@ export default class AccountService {
     return Facilities.findOne(facilityId);
   }
 }
-
