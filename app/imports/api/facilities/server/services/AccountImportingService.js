@@ -88,7 +88,7 @@ export default class AccountService {
       currAcctIds,
       existentAcctIds
     );
-
+    
     //Backup accounts
     let accountsToBackup = Accounts.find({
       acctNum: {
@@ -104,7 +104,8 @@ export default class AccountService {
       });
 
       const {
-        invoiceNo
+        invoiceNo,
+        state
       } =
       Accounts.find({
         acctNum: toUpdateAccountId,
@@ -120,6 +121,11 @@ export default class AccountService {
         toUpdateAccount.invoiceNo = [];
       }
 
+      //Archived Date
+      if(state === stateEnum.ARCHIVED) {
+        let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+        toUpdateAccount.reactivationDate = rulesDate.placementRules.placementDate;
+      }
 
       //refresh placement date
       let rulesDate = this.getPlacementDateByFacilityId(facilityId);
@@ -524,7 +530,8 @@ export default class AccountService {
       });
 
       const {
-        invoiceNo
+        invoiceNo,
+        state
       } =
       Accounts.find({
         acctNum: accountId,
@@ -538,6 +545,12 @@ export default class AccountService {
         );
       } else {
         toUpdateAccount.invoiceNo = [];
+      }
+
+      //Archived Date
+      if(state === stateEnum.ARCHIVED) {
+        let rulesDate = this.getPlacementDateByFacilityId(facilityId);
+        toUpdateAccount.reactivationDate = rulesDate.placementRules.placementDate;
       }
 
 
