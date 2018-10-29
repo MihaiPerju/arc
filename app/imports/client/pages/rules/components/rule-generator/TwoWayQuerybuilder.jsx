@@ -29,7 +29,7 @@ function buildDefaultConfig (config) {
   defConfig.styles = defConfig.styles
     ? defConfig.styles
     : {
-        primaryBtn: 'queryButtonPrimary',
+        primaryBtn: 'btn-edit btn--white queryButtonPrimary',
         deleteBtn: 'queryButtonDelete',
         rule: 'rule',
         condition: 'condition',
@@ -43,8 +43,8 @@ function buildDefaultConfig (config) {
 
 function fillDefaultButtonsText (buttonsText) {
   const defBtnText = buttonsText || {};
-  defBtnText.addRule = defBtnText.addRule ? defBtnText.addRule : 'Add rule';
-  defBtnText.addGroup = defBtnText.addGroup ? defBtnText.addGroup : 'Add group';
+  defBtnText.addRule = defBtnText.addRule ? defBtnText.addRule : '+ Add Rule';
+  defBtnText.addGroup = defBtnText.addGroup ? defBtnText.addGroup : '+ Add Group';
   defBtnText.clear = defBtnText.clear ? defBtnText.clear : 'Clear';
   defBtnText.delete = defBtnText.delete ? defBtnText.delete : 'Delete';
   return defBtnText;
