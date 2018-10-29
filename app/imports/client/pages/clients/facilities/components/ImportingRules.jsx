@@ -126,6 +126,17 @@ export default class ImportingRules extends React.Component {
     this.setState({ placementDate: selectedDate });
   };
 
+  getFileName(ruleType) {
+    switch(ruleType) {
+      case 'placementRules':
+        return 'Placement'
+      case 'inventoryRules':
+        return 'Inventory'
+      case 'paymentRules':
+        return 'Payment'
+    }
+  }
+
   render() {
     const disabled = !Roles.userIsInRole(
       Meteor.userId(),
@@ -196,7 +207,7 @@ export default class ImportingRules extends React.Component {
                     className="btn--white"
                     onClick={copyRules}
                   >
-                    {this.props.rules !== "placementRulesplacementRules"
+                    {this.props.rules !== "placementRules"
                       ? "Copy Placement File Headers"
                       : "Copy Inventory File Headers"}
                   </button>
@@ -252,7 +263,7 @@ export default class ImportingRules extends React.Component {
                     <i className="icon-cog" />
                   </div>
                 ) : (
-                  "Submit"
+                  `Save ${this.getFileName(this.props.rules)} Mappings`
                 )}
               </button>
             </div>

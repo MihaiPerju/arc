@@ -82,28 +82,10 @@
   }
   .upload-list {
     background: rgba($color-white, 0.8);
-    margin-top: 2px;
+    margin-bottom: 15px;
     border-radius: 3px;
-    .add-insurance-item {
-      .upload-item {
-        border-top: 0;
-      }
-      .insurance-item__wrapper {
-        padding: 0 5px;
-        flex-basis: 33.3%;
-      }
-      .text-light-grey {
 
-        label {
-          display: block;
-          margin-bottom: 5px;
-        }
-        input {
-          text-align: center;
-          background: #f2f2f2;
-        }
-      }
-    }
+    
     .upload-item {
       list-style: none;
       display: flex;
@@ -139,9 +121,8 @@
 
   .upload-section {
     margin-top: 2px;
-    background: $color-white;
     border-radius: 3px;
-    padding: 15px;
+    padding: 0;
 
     &.placement-header {
       width: 100%;
@@ -356,28 +337,5 @@
 .create-facility {
   .insurance-block {
     margin-top: 20px;
-  }
-}
-
-.insurance-btn {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  text-align: center;
-  font-size: 1.6rem;
-  font-weight: bold;
-  border-radius: 3px;
-  color: $color-white;
-
-  &__add {
-    background: $green;
-    line-height: 2.1rem;
-    margin-left: 5px;
-  }
-
-  &__del {
-    background: $red;
-    line-height: 1.8rem;
   }
 }
