@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+.idea
+npm-debug.log
+\bash.exe.stackdump
+\package-lock.json
+.vscode/typings/meteor.d.ts
+.vscode
