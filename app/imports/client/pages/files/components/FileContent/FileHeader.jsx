@@ -3,6 +3,7 @@ import UploadStatus from "/imports/api/files/enums/statuses";
 import { getToken } from "../../../../../api/uploads/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import HeaderEdit from "./FileHeaderEdit";
+import moment from "moment/moment";
 
 export default class ReportHeader extends Component {
   constructor() {
@@ -68,6 +69,7 @@ export default class ReportHeader extends Component {
         <div className="row__header">
           <div className="text-light-grey">File name</div>
           <div className="title">{this.getFileName(file && file.fileName)}</div>
+          <div className="text-light-grey margin-top-10">Processed At : {file && moment(file.createdAt).format("MMMM Do YYYY, hh:mm a")}</div>
         </div>
         <div className="row__header">
           <div className="placement-block">
