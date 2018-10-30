@@ -73,6 +73,10 @@ AccountListQuery.expose({
             workQueueId: {
               $in: tagIds
             }
+          }, {
+            facilityId: {
+              $in: userFacilitiesArr
+            }
           }]
         }]
       });
