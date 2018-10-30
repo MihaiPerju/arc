@@ -36,6 +36,8 @@ export default class ReportCreate extends Component {
       isDisabled: true
     });
 
+    console.log(filters);
+
     const { generalInformation, shareReport } = this.state;
     _.extend(generalInformation, {
       mongoFilters: EJSON.stringify(filters),
@@ -43,15 +45,15 @@ export default class ReportCreate extends Component {
       shareReport
     });
 
-    Meteor.call("report.create", generalInformation, err => {
-      if (!err) {
-        Notifier.success("Report created");
-        this.onClose();
-      } else {
-        Notifier.error(err.reason);
-      }
-      this.setState({ isDisabled: false });
-    });
+    // Meteor.call("report.create", generalInformation, err => {
+    //   if (!err) {
+    //     Notifier.success("Report created");
+    //     this.onClose();
+    //   } else {
+    //     Notifier.error(err.reason);
+    //   }
+    //   this.setState({ isDisabled: false });
+    // });
   };
 
   finish = () => {

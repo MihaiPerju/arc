@@ -1,6 +1,5 @@
 import SimpleSchema from "simpl-schema";
 import FieldsType from "../../accounts/config/accounts";
-import { StateList } from "/imports/api/accounts/enums/states";
 import ReportFields from "/imports/api/reports/enums/ReportFields";
 
 const stringMatchOptions = ["Contains", "Not Contains", "Is Exact"];
@@ -18,10 +17,18 @@ export default class ReportsService {
   }
 
   static getOptions() {
-    let schemaOptions = [{ label: "+ Add Filter" }];
+    let schemaOptions = [{
+      label: "+ Add Filter"
+    }];
     ReportFields.map(rule => {
-      const { value, label } = rule;
-      schemaOptions.push({ label, value });
+      const {
+        value,
+        label
+      } = rule;
+      schemaOptions.push({
+        label,
+        value
+      });
     });
     return schemaOptions;
   }
@@ -68,7 +75,9 @@ export default class ReportsService {
       //Field not completed
       if (field.indexOf("Start") === -1 && field.indexOf("End") === -1) {
         if (!data[field]) {
-          return { error: "Filters uncomplete!" };
+          return {
+            error: "Filters uncomplete!"
+          };
         }
       }
 
@@ -85,7 +94,9 @@ export default class ReportsService {
       //Check type and create filter based on specific type information
       if (ReportsService.isEnum(field)) {
         //If is Enum
-        filters[field] = data[field];
+        filters[field] = {
+          $in: data[field]
+        };
       }
       if (ReportsService.isNumber(field)) {
         //If is Number
@@ -103,7 +114,9 @@ export default class ReportsService {
             $lt: data[field + "End"]
           };
         } else {
-          return { error: "Atleast one field is required!" };
+          return {
+            error: "Atleast one field is required!"
+          };
         }
       }
       if (ReportsService.isDate(field)) {
@@ -122,13 +135,18 @@ export default class ReportsService {
             $lt: data[field + "End"]
           };
         } else {
-          return { error: "Atleast one field is required!" };
+          return {
+            error: "Atleast one field is required!"
+          };
         }
       }
       if (ReportsService.isString(field)) {
         //If is a string
         if (data[field + "Match"] === stringMatchOptions[0]) {
-          filters[field] = { $regex: data[field], $options: "i" };
+          filters[field] = {
+            $regex: data[field],
+            $options: "i"
+          };
         } else if (data[field + "Match"] === stringMatchOptions[1]) {
           filters[field] = {
             $regex: `^((?!${data[field]}).)*$`,
@@ -138,10 +156,15 @@ export default class ReportsService {
           filters[field] = data[field];
         }
       } else if (ReportsService.isLink(field)) {
-        filters[field] = { $in: data[field] };
+        filters[field] = {
+          $in: data[field]
+        };
       }
     }
-    return { result: filters, filterBuilderData };
+    return {
+      result: filters,
+      filterBuilderData
+    };
   }
 
   static getFilters(data, components) {
@@ -165,25 +188,40 @@ export default class ReportsService {
 
     //If we don't have filters
     if (requiredFields.length === 0) {
-      return { result: "", error: "Select at least one filter!" };
+      return {
+        result: "",
+        error: "Select at least one filter!"
+      };
     }
 
-    const { result, filterBuilderData, error } = ReportsService._createFilters(
+    const {
+      result,
+      filterBuilderData,
+      error
+    } = ReportsService._createFilters(
       requiredFields,
       data
     );
 
     if (error) {
-      return { error };
+      return {
+        error
+      };
     }
 
-    return { result, filterBuilderData };
+    return {
+      result,
+      filterBuilderData
+    };
   }
 
   static createSchema(substates) {
     const fields = {};
     ReportFields.map(rule => {
-      const { value, label } = rule;
+      const {
+        value,
+        label
+      } = rule;
 
       if (ReportsService.isString(value, FieldsType)) {
         fields[value] = {
@@ -226,19 +264,10 @@ export default class ReportsService {
           optional: true
         };
       } else if (ReportsService.isEnum(value, FieldsType)) {
-        let allowedValues;
-
-        if (value === "state") {
-          allowedValues = _.map(StateList, value => value);
-        } else {
-          allowedValues = _.map(substates, value => value.name);
-        }
-
         fields[value] = {
-          type: String,
-          allowedValues,
+          type: SimpleSchema.oneOf(String, Array),
           optional: true,
-          label
+          label,
         };
       }
     });
