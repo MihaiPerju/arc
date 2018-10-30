@@ -160,13 +160,6 @@ export default class ActionBlock extends Component {
               account={account}
             />
           ) : null}
-          <input
-            type="number"
-            id="height"
-            name="height"
-            placeholder="10cm increments"
-            step="0.1"
-          />
           <div className="action-list">
             {actionsPerformed &&
               actionsPerformed.map((actionPerformed, key) => {
