@@ -30,6 +30,7 @@ export default class FiltersSingle extends React.Component {
   }
 
   renderWidget(name) {
+    const { substateOptions } = this.props;
     if (ReportsService.isEnum(name)) {
       return (
         <div className="select-wrapper m-t--0">
@@ -37,7 +38,7 @@ export default class FiltersSingle extends React.Component {
             labelHidden={true}
             placeholder="Select filter"
             name={name}
-            options={name === "state" ? stateOptions : stateOptions}
+            options={name === "state" ? stateOptions : substateOptions}
           />
           <ErrorField name={name} />
         </div>

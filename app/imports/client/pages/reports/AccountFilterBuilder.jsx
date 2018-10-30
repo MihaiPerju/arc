@@ -17,6 +17,7 @@ export default class AccountFilterBuilder extends React.Component {
       facilityOptions: [],
       assigneeOptions: [],
       clientOptions: [],
+      substateOptions: [],
       components: {},
       loading: true,
       filters: {},
@@ -52,6 +53,14 @@ export default class AccountFilterBuilder extends React.Component {
     if (!components) {
       components = ReportsService.getComponents();
     }
+
+    //Generating substate options
+    let substateOptions = _.map(substates, substate => ({
+      label: substate.name,
+      value: substate.name
+    }));
+
+    this.setState({ substateOptions });
 
     //Getting assignee and facility options
     let facilityOptions = [],
@@ -214,7 +223,8 @@ export default class AccountFilterBuilder extends React.Component {
       assigneeOptions,
       components,
       schema,
-      clientOptions
+      clientOptions,
+      substateOptions
     } = this.state;
     const { filterBuilderData } = this.props;
     const schemaOptions = this.clearSchemaOptions();
@@ -238,6 +248,7 @@ export default class AccountFilterBuilder extends React.Component {
                       assigneeIdOptions={assigneeOptions}
                       facilityIdOptions={facilityOptions}
                       clientIdOptions={clientOptions}
+                      substateOptions={substateOptions}
                       deleteFilter={this.deleteFilter}
                       name={item.name}
                     />
