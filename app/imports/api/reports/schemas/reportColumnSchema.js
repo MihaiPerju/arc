@@ -95,5 +95,15 @@ export default new SimpleSchema({
     type: Boolean,
     optional: true,
     defaultValue: false
-  }
+  },
+  other1: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
+  },
+  other2: {
+    type: Boolean,
+    optional: true,
+    defaultValue: false
+  },
 });

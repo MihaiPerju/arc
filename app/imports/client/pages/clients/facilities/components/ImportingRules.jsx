@@ -17,11 +17,17 @@ import InsuranceRules from "./InsuranceRules";
 import classNames from "classnames";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class ImportingRules extends React.Component {
   constructor() {
     super();
-    this.state = { loading: true, collapse: false, isDisabled: false, placementDate: moment() };
+    this.state = {
+      loading: true,
+      collapse: false,
+      isDisabled: false,
+      placementDate: moment()
+    };
   }
 
   componentWillMount() {
@@ -34,14 +40,13 @@ export default class ImportingRules extends React.Component {
       loading: false,
       schema
     });
-    
-    if(model && model[rules]){
+
+    if (model && model[rules]) {
       let res = model[rules];
-      if(res){
-        this.setState({ placementDate: moment(res.placementDate) })
+      if (res) {
+        this.setState({ placementDate: moment(res.placementDate) });
       }
     }
-    
   }
 
   componentWillReceiveProps(newProps) {
@@ -56,12 +61,14 @@ export default class ImportingRules extends React.Component {
   onSubmitImportingRules = importRules => {
     this.setState({ isDisabled: true });
     const { rules } = this.props;
-    
-    if(rules != "paymentRules") 
-      importRules['placementDate'] = this.state.placementDate ? this.state.placementDate.toISOString() : new Date();
-    
+
+    if (rules != "paymentRules")
+      importRules["placementDate"] = this.state.placementDate
+        ? this.state.placementDate.toISOString()
+        : new Date();
+
     const facilityId = this.props.model._id;
-    
+
     const newFacility = { _id: facilityId };
     newFacility[rules] = importRules;
     Meteor.call("facility.update", newFacility, err => {
@@ -72,7 +79,7 @@ export default class ImportingRules extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    }); 
+    });
   };
 
   onChange(field, value) {
@@ -115,9 +122,26 @@ export default class ImportingRules extends React.Component {
     }
   };
 
-  onDateSelect = (selectedDate) => {  this.setState({ placementDate: selectedDate }); }
+  onDateSelect = selectedDate => {
+    this.setState({ placementDate: selectedDate });
+  };
+
+  getFileName(ruleType) {
+    switch(ruleType) {
+      case 'placementRules':
+        return 'Placement'
+      case 'inventoryRules':
+        return 'Inventory'
+      case 'paymentRules':
+        return 'Payment'
+    }
+  }
 
   render() {
+    const disabled = !Roles.userIsInRole(
+      Meteor.userId(),
+      roleGroups.ADMIN_TECH
+    );
     const { schema, loading, collapse, isDisabled, placementDate } = this.state;
     const { model, rules, copyRules } = this.props;
     const fields = RulesService.getSchemaFields(rules);
@@ -138,6 +162,7 @@ export default class ImportingRules extends React.Component {
           <Loading />
         ) : (
           <AutoForm
+            disabled={disabled}
             model={model[rules]}
             schema={schema}
             onChange={this.onChange.bind(this)}
@@ -158,36 +183,33 @@ export default class ImportingRules extends React.Component {
                   <ErrorField name="hasHeader" />
                 </div>
 
-                {
-                  rules !== "paymentRules" && (
-                   <div className="radio-group flex--helper flex-align--center">
-                     <label>Account Placement Date:</label>
+                {rules !== "paymentRules" && (
+                  <div className="radio-group flex--helper flex-align--center">
+                    <label>Account Placement Date:</label>
                     <DatePicker
-                         calendarClassName="cc-datepicker"
-                         showMonthDropdown
-                         showYearDropdown
-                         todayButton={"Today"}
-                         placeholderText="Account Placement Date"
-                         selected={placementDate}
-                        name="placementDate"
-                         onChange={date =>
-                           this.onDateSelect(date, "placementDate")
-                         }
-                     />
-                     
-                   </div>
-                   )
+                      calendarClassName="cc-datepicker"
+                      showMonthDropdown
+                      showYearDropdown
+                      todayButton={"Today"}
+                      placeholderText="Account Placement Date"
+                      selected={placementDate}
+                      name="placementDate"
+                      onChange={date =>
+                        this.onDateSelect(date, "placementDate")
+                      }
+                    />
+                  </div>
+                )}
 
-                 }
-
- 
                 {rules != "paymentRules" && (
                   <button
                     type="button"
                     className="btn--white"
                     onClick={copyRules}
                   >
-                    {this.props.rules !== 'placementRulesplacementRules' ? 'Copy Placement File Headers' : 'Copy Inventory File Headers'}
+                    {this.props.rules !== "placementRules"
+                      ? "Copy Placement File Headers"
+                      : "Copy Inventory File Headers"}
                   </button>
                 )}
               </div>
@@ -195,8 +217,8 @@ export default class ImportingRules extends React.Component {
 
             <div className="upload-list">
               {fieldGroups &&
-                fieldGroups.map((fields,index) => {
-                  return <UploadItem fields={fields} key={index}/>;
+                fieldGroups.map((fields, index) => {
+                  return <UploadItem fields={fields} key={index} />;
                 })}
             </div>
 
@@ -241,7 +263,7 @@ export default class ImportingRules extends React.Component {
                     <i className="icon-cog" />
                   </div>
                 ) : (
-                  "Submit"
+                  `Save ${this.getFileName(this.props.rules)} Mappings`
                 )}
               </button>
             </div>

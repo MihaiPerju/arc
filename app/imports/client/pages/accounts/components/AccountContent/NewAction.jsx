@@ -79,11 +79,10 @@ export default class NewAction extends Component {
 
   onHandleChange = (field, value) => {
     if (field == "actionId") {
-      const actionId = value;
       reasonCodesQuery
         .clone({
           filters: {
-            actionId: actionId.value
+            actionId: value
           }
         })
         .fetch((err, reasonCodes) => {
@@ -93,7 +92,7 @@ export default class NewAction extends Component {
             });
           }
         });
-      this.setState({ selectedActionId: actionId });
+      this.setState({ selectedActionId: value });
     }
   };
 
@@ -105,11 +104,32 @@ export default class NewAction extends Component {
     this.setState({ [label]: date });
   };
 
+  onChangeNumber = e => {
+    e = e || window.event;
+    var charCode = typeof e.which == "undefined" ? e.keyCode : e.which;
+    var charStr = String.fromCharCode(charCode);
+
+    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+  };
+
   getInputSingle = (input, index) => {
     if (input.type === "date") {
       return (
         <div className="custom-inputs" key={index}>
           <DateField label={input.label} name={input.label} />
+          <ErrorField name={input.label} />
+        </div>
+      );
+    } else if (input.type === "number") {
+      return (
+        <div className="custom-inputs" key={index}>
+          <AutoField
+            labelHidden={true}
+            placeholder={input.label}
+            name={input.label}
+            pattern="[0-9]"
+            onKeyPress={this.onChangeNumber}
+          />
           <ErrorField name={input.label} />
         </div>
       );

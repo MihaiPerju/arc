@@ -75,18 +75,23 @@
       }
     }
   }
+
   &__wrapper {
     height: calc(100% - 61px);
     overflow-y: auto;
     margin-top: 20px;
-    padding: 0 15px;
     width: 100%;
   }
+
   .action-block {
     width: 100%;
+    margin-bottom: 15px;
+    background-color: #fff;
+
     .form-wrapper {
       padding-top: 8px;
     }
+
   }
   .form-wrapper {
     input, textarea {
@@ -226,6 +231,29 @@
       transform: translateX(-50%);
       top: 40px;
       margin-left: 0;
+    }
+  }
+}
+
+.uniform-list-item {
+      padding: 15px;
+      border-bottom: 10px solid #eae9e9;
+      .upload-item {
+        border-top: 0;
+      }
+      .uniform-list-item__wrapper {
+        padding: 0 5px;
+        flex-basis: 33.3%;
+      }
+      .text-light-grey {
+
+        label {
+          display: block;
+          margin-bottom: 5px;
+        }
+        input {
+          text-align: center;
+          background: #f2f2f2;
     }
   }
 }

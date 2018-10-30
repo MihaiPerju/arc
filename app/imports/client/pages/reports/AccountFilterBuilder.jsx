@@ -17,6 +17,7 @@ export default class AccountFilterBuilder extends React.Component {
       facilityOptions: [],
       assigneeOptions: [],
       clientOptions: [],
+      substateOptions: [],
       components: {},
       loading: true,
       filters: {},
@@ -52,6 +53,14 @@ export default class AccountFilterBuilder extends React.Component {
       components = ReportsService.getComponents();
     }
 
+    //Generating substate options
+    let substateOptions = _.map(substates, substate => ({
+      label: substate.name,
+      value: substate.name
+    }));
+
+    this.setState({ substateOptions });
+
     //Getting assignee and facility options
     let facilityOptions = [],
       assigneeOptions = [],
@@ -66,7 +75,9 @@ export default class AccountFilterBuilder extends React.Component {
           facilities.map(facility => {
             facilityOptions.push({
               value: facility._id,
-              label: facility.name + " - " + facility.client.clientName
+              label:
+                facility.name + " - " + facility.client &&
+                facility.client.clientName
             });
             this.setState({ facilityOptions });
           });
@@ -211,7 +222,8 @@ export default class AccountFilterBuilder extends React.Component {
       assigneeOptions,
       components,
       schema,
-      clientOptions
+      clientOptions,
+      substateOptions
     } = this.state;
     const { filterBuilderData } = this.props;
     const schemaOptions = this.clearSchemaOptions();
@@ -220,30 +232,32 @@ export default class AccountFilterBuilder extends React.Component {
         {loading ? (
           <Loading />
         ) : (
-            <div>
-              <AutoForm
-                model={filterBuilderData}
-                schema={schema}
-                onSubmit={this.onSubmit}
-                ref="filters"
-                onChange={this.onHandleChange}
-              >
-                {_.map(components, item => {
-                  return (
-                    item.isActive && (
-                      <FilterSingle
-                        assigneeIdOptions={assigneeOptions}
-                        facilityIdOptions={facilityOptions}
-                        clientIdOptions={clientOptions}
-                        deleteFilter={this.deleteFilter}
-                        name={item.name}
-                      />
-                    )
-                  );
-                })}
-              </AutoForm>
-              <div className="add-report-filter">
-                <AutoForm
+
+          <div>
+            <AutoForm
+              model={filterBuilderData}
+              schema={schema}
+              onSubmit={this.onSubmit}
+              ref="filters"
+              onChange={this.onHandleChange}
+            >
+              {_.map(components, item => {
+                return (
+                  item.isActive && (
+                    <FilterSingle
+                      assigneeIdOptions={assigneeOptions}
+                      facilityIdOptions={facilityOptions}
+                      clientIdOptions={clientOptions}
+                      substateOptions={substateOptions}
+                      deleteFilter={this.deleteFilter}
+                      name={item.name}
+                    />
+                  )
+                );
+              })}
+            </AutoForm>
+            <div className="add-report-filter">
+               <AutoForm
                   ref="filterSelect"
                   onChange={this.createFilter}
                   schema={filterSchema}

@@ -1,13 +1,11 @@
-import React, { Component } from 'react';
-import moment from 'moment/moment';
-import AccountActioning from './AccountActioning';
-import RolesEnum, { roleGroups } from '/imports/api/users/enums/roles';
-import EditInfoDialog from './EditInfoDialog';
-import commaNumber from 'comma-number';
-
+import React, { Component } from "react";
+import moment from "moment/moment";
+import AccountActioning from "./AccountActioning";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import EditInfoDialog from "./EditInfoDialog";
+import commaNumber from "comma-number";
 
 export default class AccountContentHeader extends Component {
-
   getAssignee() {
     const { account } = this.props;
     if (account && account.assignee) {
@@ -40,8 +38,8 @@ export default class AccountContentHeader extends Component {
   }
 
   getOthersData = data => {
-    if (typeof data === 'object') {
-      return moment(data).format('MM/DD/YYYY');
+    if (typeof data === "object") {
+      return moment(data).format("MM/DD/YYYY");
     } else {
       return data;
     }
@@ -61,19 +59,18 @@ export default class AccountContentHeader extends Component {
 
   renderAssignButton = (account, closeRightPanel) => {
     return (
-        <AccountActioning
-          type={"Assign"}
-          title={"Assign account:"}
-          model={account}
-          accountId={account && account._id}
-          closeRightPanel={closeRightPanel}
+      <AccountActioning
+        type={"Assign"}
+        title={"Assign account:"}
+        model={account}
+        accountId={account && account._id}
+        closeRightPanel={closeRightPanel}
       />
-    )
-  }
+    );
+  };
 
   render() {
     const { account, openMetaData, closeRightPanel } = this.props;
-
     return (
       <div className="header-block header-account">
         <div className="main-info">
@@ -134,19 +131,22 @@ export default class AccountContentHeader extends Component {
           </div>
 
           <div className="btn-group">
-            {!Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) ? this.renderAssignButton(account, closeRightPanel) : null}
+            {!Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)
+              ? this.renderAssignButton(account, closeRightPanel)
+              : null}
 
             {account &&
               Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) &&
-              !account.escalationId &&
-              <AccountActioning
-                escalate
-                accountId={account && account._id}
-                type="Escalate"
-                title="Escalate"
-                escalationId={account && account.escalationId}
-                closeRightPanel={closeRightPanel}
-              />}
+              !account.escalationId && (
+                <AccountActioning
+                  escalate
+                  accountId={account && account._id}
+                  type="Escalate"
+                  title="Escalate"
+                  escalationId={account && account.escalationId}
+                  closeRightPanel={closeRightPanel}
+                />
+              )}
 
             <AccountActioning
               metaData={true}
@@ -192,8 +192,9 @@ export default class AccountContentHeader extends Component {
                 editField="dischrgDate"
               />
               <div className="text-dark-grey">
-                {account && account.dischrgDate ? moment(account.dischrgDate).format('MM/DD/YYYY')
-                  : 'None'}
+                {account && account.dischrgDate
+                  ? moment(account.dischrgDate).format("MM/DD/YYYY")
+                  : "None"}
               </div>
             </li>
             <li className="text-center">
@@ -205,8 +206,9 @@ export default class AccountContentHeader extends Component {
               />
 
               <div className="text-dark-grey">
-                {account && account.createdAt ? moment(account.createdAt).format('MM/DD/YYYY')
-                  : 'None'}
+                {account && account.createdAt
+                  ? moment(account.createdAt).format("MM/DD/YYYY")
+                  : "None"}
               </div>
             </li>
           </ul>
@@ -222,8 +224,9 @@ export default class AccountContentHeader extends Component {
               />
 
               <div className="text-dark-grey">
-                {account && account.admitDate ? moment(account.admitDate).format('MM/DD/YYYY')
-                  : 'None'}
+                {account && account.admitDate
+                  ? moment(account.admitDate).format("MM/DD/YYYY")
+                  : "None"}
               </div>
             </li>
 
@@ -259,8 +262,10 @@ export default class AccountContentHeader extends Component {
                 editField="fbDate"
               />
               <div className="text-dark-grey">
-                {account && account.fbDate ? moment(account.fbDate).format('MM/DD/YYYY')
-                  : 'None'} </div>
+                {account && account.fbDate
+                  ? moment(account.fbDate).format("MM/DD/YYYY")
+                  : "None"}{" "}
+              </div>
             </li>
             <li className="text-center">
               <div className="text-light-grey">Medical Number</div>

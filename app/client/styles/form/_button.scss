@@ -4,7 +4,7 @@ button,
 .cc-button {
   display: inline-block;
   position: relative;
-  border: none;
+  border: 1px solid #ccc;
   outline: none;
   text-align: center;
   text-decoration: none;
@@ -12,11 +12,9 @@ button,
   user-select: none;
   line-height: inherit;
   font-family: $font-arial;
-  background: transparent;
   font-size: 1.4rem;
   padding: 12px 20px;
   border-radius: 3px;
-  color: $color-white;
 
   &:after,
   &:before {
@@ -70,6 +68,7 @@ button,
 
   &.btn--green {
     background: $green;
+    color: $color-white;
   }
 
   &.btn--blue {
@@ -173,10 +172,29 @@ button,
   }
 }
 
-/* A Different Kind of Button */
-body .insurance-btn__add {
+.insurance-btn__del,
+.insurance-btn__add {
   width: auto;
   height: auto;
-  margin: 15px;
+  margin: 15px 0;
   padding: 10px 15px;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: bold;
+  border-radius: 3px;
+  color: $color-white;
+  line-height: 2.1rem;
+}
+
+.insurance-btn {
+  &__add {
+    background: $green;
+    margin-left: 15px;
+  }
+  &__del {
+    background: $red;
+    margin: 0;
+  }
 }

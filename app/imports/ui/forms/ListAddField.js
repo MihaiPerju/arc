@@ -26,6 +26,7 @@ var ListAdd = function ListAdd(_ref) {
       showListField = _ref.showListField,
       parent = _ref.parent,
       value = _ref.value,
+      label = _ref.label,
       props = (0, _objectWithoutProperties2.default)(_ref, ["disabled", "parent", "value"]);
   var limitNotReached = !disabled && !(parent.maxCount <= value.length);
   return _react.default.createElement("span", (0, _extends2.default)({}, (0, _filterDOMProps.default)(props), {
@@ -34,7 +35,7 @@ var ListAdd = function ListAdd(_ref) {
       return limitNotReached && parent.onChange(parent.value.concat([(0, _cloneDeep.default)(value)]));
     },
     className: 'insurance-btn insurance-btn__add'
-  }), "+");
+  }), `${label} +`);
 };
 
 var _default = (0, _connectField.default)(ListAdd, {

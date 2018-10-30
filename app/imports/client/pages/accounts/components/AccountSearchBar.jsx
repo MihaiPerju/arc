@@ -115,9 +115,8 @@ export default class AccountSearchBar extends Component {
     });
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(props) {
     const { query } = FlowRouter.current().params;
-    const { data, accountsSelected } = this.props;
     if (query && query.medNo) {
       let model = FilterService.getFilterParams();
       this.setState({
@@ -125,14 +124,7 @@ export default class AccountSearchBar extends Component {
       });
     }
 
-    accountsSelected &&
-      accountsSelected.length > 0 &&
-      this.setState({ selectAll: true });
-    _.map(data, account => {
-      if (accountsSelected.indexOf(account._id) == -1) {
-        return this.setState({ selectAll: false });
-      }
-    });
+    this.setState({ selectAll: props.bulkAssign });
   }
 
   onSubmit(params) {
@@ -202,7 +194,7 @@ export default class AccountSearchBar extends Component {
 
     FlowRouter.setQueryParams({
       fbDateMax: FilterService.formatDate(fbDateMax)
-    });ah
+    });
 
     FlowRouter.setQueryParams({
       admitDateMin: FilterService.formatDate(admitDateMin)
@@ -335,9 +327,10 @@ export default class AccountSearchBar extends Component {
   };
 
   checkAllAccount = () => {
-    const { checkAllAccount } = this.props;
-    this.setState({ selectAll: !this.state.selectAll }, () => {
-      checkAllAccount(this.state.selectAll);
+    const { checkAll } = this.props;
+    let selectAll = !this.state.selectAll;
+    this.setState({ selectAll }, () => {
+      checkAll(selectAll);
     });
   };
 
@@ -402,23 +395,14 @@ export default class AccountSearchBar extends Component {
       full__width:
         (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) ||
         (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) ||
-        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)),
+        (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)),
       "manager-search":
         !btnGroup &&
         Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
         tags.length === 0,
-      "tag-btn--true":
-        !btnGroup &&
-        Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
-        tags.length,
-      "btn-groups":
-        btnGroup &&
-        Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) &&
-        tags.length,
       sort__width:
         btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
-      "tag-btn": btnGroup && tags.length,
-      "account-search": Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER),
+      "tag-btn": btnGroup && tags.length && !Roles.userIsInRole(Meteor.userId(), RolesEnum.REP),
       "tag--none": tags.length === 0,
       "account-tag--none": btnGroup && tags.length === 0
     });
@@ -489,14 +473,14 @@ export default class AccountSearchBar extends Component {
                           Meteor.userId(),
                           RolesEnum.MANAGER
                         ) && (
-                          <div className="select-form">
-                            <SelectField
-                              label="Tickle:"
-                              name="tickleUserId"
-                              options={tickleUserIdOptions}
-                            />
-                          </div>
-                        )}
+                            <div className="select-form">
+                              <SelectField
+                                label="Tickle:"
+                                name="tickleUserId"
+                                options={tickleUserIdOptions}
+                              />
+                            </div>
+                          )}
                         <div className="flex--helper form-group__pseudo--3">
                           <div className="select-form">
                             <SelectField
@@ -685,18 +669,18 @@ export default class AccountSearchBar extends Component {
               </button>
               {tags.length ? <Tags tags={tags} /> : null}
             </div>
-              <div
-                className={sort ? "filter-block active" : "filter-block"}
-                onClick={this.manageSortBar}
-              >
-                <button>
-                  {sort ? (
-                    <i className="icon-angle-up" />
-                  ) : (
+            <div
+              className={sort ? "filter-block active" : "filter-block"}
+              onClick={this.manageSortBar}
+            >
+              <button>
+                {sort ? (
+                  <i className="icon-angle-up" />
+                ) : (
                     <i className="icon-angle-down" />
                   )}
-                </button>
-              </div>
+              </button>
+            </div>
           </div>
         </div>
         {sort && (
@@ -827,7 +811,7 @@ class BtnGroup extends Component {
     const { dialogIsActive } = this.state;
     return (
       <div className={this.state.in ? "btn-group in" : "btn-group"}>
-        {icons ? (
+        {!Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) && icons ? (
           icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
@@ -835,11 +819,7 @@ class BtnGroup extends Component {
               </button>
             );
           })
-        ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
+        ) : null}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />

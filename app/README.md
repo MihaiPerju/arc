@@ -33,3 +33,8 @@ npm set strict-ssl false
 touch /root/.npmrc
 echo "phantomjs_cdnurl=https://cnpmjs.org/downloads" > /root/.npmrc
 ```
+
+### Understanding ARCC Fonts
+
+Fonts were generated with [IcoMoon](https://icomoon.io/app/#/select).  To modify this, import arcc_font_set.svg into
+the tool.

@@ -7,7 +7,7 @@ export default class TagContentHeader extends Component {
   };
 
   renderTag(moduleName) {
-    return <div className="tag-item">{moduleName}</div>;
+    return <div className="tag-item-with-bg">{moduleName}</div>;
   }
 
   render() {
