@@ -31,7 +31,6 @@ MongoClient.connect(config.databaseSettings.mongoURI, config.databaseSettings.op
 
     // Start web server
     const server = app.listen(config.appSettings.port || 3050, () => {
-        const { address, port } = server.address();
-        console.log(`Listening at http://${address}:${port}`);
+        startupFn.postStart(server)
     });
 })

@@ -40,11 +40,14 @@ exports.postDB = function() {
 
 /**
  * This function runs after the express server is running.
+ * @param {Object} server This is what is returned from app.listen()
  */
-exports.postStart = function() {
-    console.log('+-------------------------+');
-    console.log('|  Express is now running |');
-    console.log('+-------------------------+');
+exports.postStart = function(server) {
+    const {address, port} = server.address();
+    console.log('+---------------------------+');
+    console.log('|   Express is now running  |');
+    console.log(`|   http://${address}:${port}          |`);
+    console.log('+---------------------------+');
 
     try {
         console.log(figlet.textSync('Feel The Code!', 'Big Money-ne'));
