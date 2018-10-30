@@ -47,7 +47,6 @@ export default class AccountFilterBuilder extends React.Component {
     const { substates } = this.props;
     const schema = ReportsService.createSchema(substates);
     let fullSchemaOptions = ReportsService.getOptions();
-
     //Creating set of Components based on schema field types
     let { components } = this.props;
     if (!components) {
@@ -144,7 +143,7 @@ export default class AccountFilterBuilder extends React.Component {
       data,
       components
     );
-
+    
     if (error) {
       Notifier.error(error);
     } else {
@@ -233,6 +232,7 @@ export default class AccountFilterBuilder extends React.Component {
         {loading ? (
           <Loading />
         ) : (
+
           <div>
             <AutoForm
               model={filterBuilderData}
@@ -257,16 +257,16 @@ export default class AccountFilterBuilder extends React.Component {
               })}
             </AutoForm>
             <div className="add-report-filter">
-              <AutoForm
-                ref="filterSelect"
-                onChange={this.createFilter}
-                schema={filterSchema}
-              >
-                <SelectField options={schemaOptions} name="filter" />
-              </AutoForm>
+               <AutoForm
+                  ref="filterSelect"
+                  onChange={this.createFilter}
+                  schema={filterSchema}
+                >
+                  <SelectField options={schemaOptions} name="filter" />
+                </AutoForm>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </main>
     );
   }
