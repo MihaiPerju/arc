@@ -46,7 +46,6 @@ MongoClient.connect(config.databaseSettings.mongoURI, config.databaseSettings.op
     // Post DB hook
     startupFn.postDB();
     
-
     // Start web server
     const server = app.listen(config.appSettings.port || 3050, () => {
         startupFn.postStart(server)
