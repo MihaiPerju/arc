@@ -10,6 +10,19 @@ exports.preStart = function() {
 }
 
 /**
+ * Runs if the connection to the DB failed
+ * @param {String} err Error return from DB connection attempt
+ */
+exports.failedDB = function(err) {
+    console.log('+-------------------------+')
+    console.log('| Failed to connect to DB |')
+    console.log('+-------------------------+')
+    console.log('')
+    console.log(err)
+    process.exit(0)
+}
+
+/**
  * This function runs after the DB has been connected, but before express starts.
  */
 exports.postDB = function() {

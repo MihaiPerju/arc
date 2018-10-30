@@ -1,8 +1,8 @@
 {
   "scripts": {
-    "dev": "NODE_ENV=development nodemon ./start.js",
-    "winDev": "set NODE_ENV=development&& nodemon ./start.js",
-    "start": "NODE_ENV=production CONFIG=config.js node ./start.js"
+    "dev": "NODE_ENV=development nodemon ./server.js",
+    "winDev": "set NODE_ENV=development&& nodemon ./server.js",
+    "start": "NODE_ENV=production CONFIG=config.js node ./server.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

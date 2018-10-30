@@ -19,11 +19,12 @@ exports.preStart = function() {
  */
 exports.failedDB = function(err) {
     console.log('+-------------------------+')
-    console.log('| DB is failed to connect |')
+    console.log('| Failed to connect to DB |')
     console.log('|      ¯\\_(⊙︿⊙)_/¯       |')
     console.log('+-------------------------+')
     console.log('')
     console.log(err)
+    process.exit(0)
 }
 
 /**

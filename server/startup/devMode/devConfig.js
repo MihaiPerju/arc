@@ -30,6 +30,7 @@ exports.adServer = {
  */
 exports.databaseSettings = {
     mongoURI: 'mongodb://localhost:27017/arcc',
+    databaseName: 'arcc',
     options: { // Optional
         useNewUrlParser: true
     //     ssl: false,
