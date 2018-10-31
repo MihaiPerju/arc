@@ -8,7 +8,8 @@ export default class ReportHeader extends Component {
   constructor() {
     super();
     this.state = {
-      isEditingHeaders: false
+      isEditingHeaders: false,
+      showDetail: false
     };
   }
 
@@ -59,9 +60,13 @@ export default class ReportHeader extends Component {
       });
   };
 
+  showMore = () => {
+    this.setState({ showDetail: !this.state.showDetail });
+  }
+
   render() {
     const { file } = this.props;
-    const { isEditingHeaders } = this.state;
+    const { isEditingHeaders, showDetail } = this.state;
 
     const styles = {
       backgroundColor:
@@ -104,14 +109,32 @@ export default class ReportHeader extends Component {
           {isEditingHeaders && (
             <HeaderEdit file={file} onCloseDialog={this.onCloseDialog} />
           )}
+          
           {file && file.corruptRows && file.corruptRows.length ? (
-            <div>
-              <div>Encountered problems with following rows: </div>
-              <ul>
-                {file.corruptRows.map((row,index) => {
-                  return <li key={index}>{row}</li>;
-                })}
-              </ul>
+            <div style={{width:'100%'}} >
+              <div className="placement-block" style={{alignItems: 'center'}} >
+                <div className="text-light-grey">The Number of error rows: {file.corruptRows.length} </div>
+                  <button style={{ margin: '5px', padding: '6px' }} onClick={this.showMore}>
+                    {showDetail ? 'Show Less' : 'Show More' }
+                    <i style={{ margin : '0px 5px'}} className={showDetail ? 'icon-angle-up' : 'icon-angle-down' } />
+                  </button>
+              </div>
+                { showDetail && 
+                  (
+                    <div className="placement-block report-content" style={{height:'400px'}} >
+                      <div>Encountered problems with following rows: </div>
+                        <div className="table-list margin-top-20">
+                          <div className="table-container flex--helper" >
+                            <div className="table-container__left" style={{height: '100%', 'overflow-y': 'scroll'}} >
+                              {file.corruptRows.map((row) => {
+                                  return  <div className="table-field truncate" style={{border: '1px #d7d7d7 solid'}}> Row: {row}</div>
+                                })}
+                            </div>
+                          </div>
+                      </div>  
+                    </div>
+                  )
+                }
             </div>
           ) : null}
         </div>
