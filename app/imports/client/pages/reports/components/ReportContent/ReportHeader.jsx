@@ -78,6 +78,7 @@ class ReportHeader extends Component {
     const { report } = props;
     const filters = EJSON.parse(report.mongoFilters);
     const options = { limit: 20 };
+    this.setState({ loading: true });
     if (report.type === reportTypes.ACCOUNT_ACTIONS) {
       accountActionsQuery
         .clone({ filters, options })
@@ -88,6 +89,7 @@ class ReportHeader extends Component {
               loading: false
             });
           } else {
+            this.setState({ loading: false });
             Notifier.error("Couldn't get sample account actions");
           }
         });
@@ -99,6 +101,7 @@ class ReportHeader extends Component {
             loading: false
           });
         } else {
+          this.setState({ loading: false });
           Notifier.error("Couldn't get sample accounts");
         }
       });
@@ -150,60 +153,13 @@ class ReportHeader extends Component {
     window.open("/reportpdf/" + reportId);
   }
 
-  getRunButton = status => {
+  renderRunReportButton = status => {
     const { isDisabled } = this.state;
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
         return (
-          <li className="action-item">
-            <a href="javascript:;">Running...</a>
-          </li>
-        );
-      case JobQueueStatuses.FINISHED:
-        return (
-          <ul>
-            <li className="action-item">
-              <a href="javascript:;" onClick={this.downloadReport}>
-                Download report csv
-            </a>
-            </li>
-            <li className="action-item">
-              <a href="javascript:;" onClick={this.downloadReportpdf}>
-                Download report pdf
-            </a>
-            </li>
-            <li className="action-item">
-              <a
-                style={isDisabled ? { pointerEvents: "none" } : {}}
-                href="javascript:;"
-                onClick={this.onRunReport}
-              >
-                Run report (again)
-            </a>
-            </li>
-          </ul>
-        );
-      default:
-        return (
-          <li className="action-item">
-            <a
-              style={isDisabled ? { pointerEvents: "none" } : {}}
-              href="javascript:;"
-              onClick={this.onRunReport}
-            >
-              Run report
-            </a>
-          </li>
-        );
-    }
-  };
-
-  renderRunReportButton = status => {
-    switch (status) {
-      case JobQueueStatuses.IN_PROGRESS:
-        return (
           <div className="action-dropdown p-0" >
-            <div className="action-dropdown__btn" style={{ width: 110 }}>
+            <div className="action-dropdown__btn btn-disable-color" style={isDisabled ? { pointerEvents: "none", width: 110 } : { width: 110 }}>
               Running...
           </div>
           </div>
@@ -211,7 +167,7 @@ class ReportHeader extends Component {
       case JobQueueStatuses.FINISHED:
         return (
           <div className="action-dropdown">
-            <div className="action-dropdown__btn" style={{ width: 110 }} onClick={this.openDropdown}>
+            <div className="action-dropdown__btn" style={isDisabled ? { pointerEvents: "none", width: 110 } : { width: 110 }} onClick={this.openDropdown}>
               Run report
              <i className="icon-angle-down" />
             </div>
@@ -224,7 +180,7 @@ class ReportHeader extends Component {
                   </div>
                   <ul className="action-list">
                     <li className="action-item">
-                      <a href="javascript:;" onClick={this.onRunReport}>
+                      <a href="javascript:;" onClick={this.onRunReport} style={isDisabled ? { pointerEvents: "none" } : {}}>
                         Run report (again)
                    </a>
                     </li>
@@ -368,7 +324,6 @@ class ReportHeader extends Component {
                     </a>
                     </li>
                   )}
-                  {/* {this.getRunButton(job && job.status)} */}
                 </ActionDropdown>
               </div>
               {dialogIsActive && (
