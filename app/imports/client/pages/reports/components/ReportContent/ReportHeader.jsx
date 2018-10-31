@@ -156,7 +156,7 @@ class ReportHeader extends Component {
   renderRunReportButton = status => {
     const { isDisabled } = this.state;
     switch (status) {
-      case JobQueueStatuses.IN_PROGRESS:
+      case JobQueueStatuses.IN_PROGRESS:  
         return (
           <div className="action-dropdown p-0" >
             <div className="action-dropdown__btn btn-disable-color" style={isDisabled ? { pointerEvents: "none", width: 110 } : { width: 110 }}>

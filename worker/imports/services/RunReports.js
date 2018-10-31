@@ -205,7 +205,7 @@ export default class RunReports {
       );
       return ReactDOMServer.renderToString(data);
     };
-    console.log("Test content");
+    
     const reportContent = renderHtml(metaData);
 
 
