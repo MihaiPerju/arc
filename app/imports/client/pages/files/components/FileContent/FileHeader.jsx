@@ -45,14 +45,18 @@ export default class ReportHeader extends Component {
   };
 
   onRetryUpload = () => {
-    const { file } = this.props;
-    Meteor.call("file.retryUpload", file.fileName, file._id, err => {
-      if (!err) {
-        Notifier.success("Job Created");
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
+     const { file } = this.props;
+      Meteor.call("file.retryUpload", file.fileName, file._id, (err, ret) => {
+        if (!err) {
+          if(ret === 'FILE_NOT_AVAILABLE'){
+            Notifier.success("File not availble");
+          }else{
+            Notifier.success("Job Created");
+          }
+        } else {
+          Notifier.error(err.reason);
+        }
+      });
   };
 
   render() {
