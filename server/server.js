@@ -3,7 +3,7 @@ const config = process.env.CONFIG ? require(process.env.CONFIG) : require('./sta
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
-const { buildSchema } = require('graphql');
+const schemas = require('./graphQL/schemaExports');
 
 // * Pre app setup hook
 startupFn.preStart();
@@ -12,20 +12,10 @@ startupFn.preStart();
 const app = express();
 app.disable('x-powered-by');
 
-
-// Tmp schema test
-const schema = buildSchema(`
-  type Query {
-    hello: String
-    test: String
-  }
-`);
-
-const root = { hello: () => 'Hello world!' };
 app.use('/graphql', graphqlHTTP({
-    schema: schema,
+    schema: schemas.accountSchema,
     graphiql: true,
-    rootValue: root
+    rootValue: schemas.accountRoots
 }));
 
 // Final error handle, for whatever else may have gone wrong

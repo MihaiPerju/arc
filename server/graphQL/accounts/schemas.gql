@@ -1,0 +1,11 @@
+exports.accountSchema = `
+type Query {
+  account(accountNumber: String!): Account
+  accountList: String
+}
+
+type Account {
+  accountNumber: String
+  accountBalance: Float
+}
+`
