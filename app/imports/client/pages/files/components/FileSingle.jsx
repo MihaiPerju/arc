@@ -39,7 +39,7 @@ export default class FileSingle extends Component {
     const { file, filesSelected, currentFile } = this.props;
     const checked = filesSelected.includes(file._id);
     const classes = classNames({
-      "list-item": true,
+      "list-item task-item": true,
       "bg--yellow": checked,
       open: currentFile === file._id
     });
@@ -52,6 +52,29 @@ export default class FileSingle extends Component {
         </div>
         <div className="row__block align-center">
           <div className="item-name">{this.getFileName(file.fileName)}</div>
+        </div>
+
+        <div className="row__item margin-top-10 ">
+          <div className="left__side">
+            <div
+              className={
+                this.state && this.state.fontNormal
+                  ? "person font-normal"
+                  : "person"
+              }
+            >
+              {/* {account.ptName} */}
+              ok
+            </div>
+          </div>
+          <div className="right__side">
+            <div className="patient-id text-blue">1</div>
+            <div className="substate">text</div>
+            <div className="time">
+              ok
+              {/* {account && moment(account.createdAt).format(" hh:mm")} */}
+            </div>
+          </div>
         </div>
       </div>
     );

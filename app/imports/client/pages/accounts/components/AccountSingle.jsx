@@ -85,7 +85,7 @@ export default class AccountSingle extends Component {
           <div className="right__side">
             <div className="patient-id text-blue">{account.acctNum}</div>
             <div className="substate">{account.substate}</div>
-            <div className="time">
+            <div className="time"> 
               {account && moment(account.createdAt).format(" hh:mm")}
             </div>
           </div>
