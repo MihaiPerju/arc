@@ -1,0 +1,48 @@
+exports.accountSchema = `
+type Query {
+  # Return a single acct
+  account(acctNum: String!): Account
+  accountList(state: State!): [Account]
+}
+
+type Account {
+  _id: ID
+  acctNum: String
+  accountBalance: Float
+  insurances: [Insurance]
+  medNo: String
+  ptType: String
+  ptName: String
+  fbDate: String
+  other1: String
+  activeInsCode: String
+  acctBal: Float
+  facCode: String
+  finClass: String
+  facilityId: String
+  clientId: String
+  fileId: String
+  collectedAmount: Float
+  state: State
+  # createdAt TODO
+  # meta: Object TODO
+  # admitDate: Date TODO
+  # dischrgDate : Date TODO
+}
+
+type Insurance {
+  insName: String
+  insCode: String
+  insBal: Float
+  zip: String
+  policy: String
+}
+
+enum State{
+  Active
+  Review
+  Hold
+  Escalated
+  Archived
+}
+`

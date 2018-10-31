@@ -15,7 +15,8 @@ app.disable('x-powered-by');
 app.use('/graphql', graphqlHTTP({
     schema: schemas.accountSchema,
     graphiql: true,
-    rootValue: schemas.accountRoots
+    rootValue: schemas.accountRoots,
+    context: app.locals
 }));
 
 // Final error handle, for whatever else may have gone wrong
@@ -35,6 +36,7 @@ MongoClient.connect(config.databaseSettings.mongoURI, config.databaseSettings.op
 
     // Post DB hook
     startupFn.postDB();
+    app.locals.db = client.db(config.databaseSettings.databaseName);
     
     // Start web server
     const server = app.listen(config.appSettings.port || 3050, () => {
