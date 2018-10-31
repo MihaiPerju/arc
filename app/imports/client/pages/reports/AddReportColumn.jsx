@@ -12,6 +12,7 @@ import {
   BoolField
 } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
+import classNames from "classnames";
 
 export default class AddReportColumn extends Component {
   constructor() {
@@ -19,7 +20,9 @@ export default class AddReportColumn extends Component {
     this.state = {
       accountSimpleColumn: [],
       insuranceColumn: [],
-      reportColumnSchema: null
+      reportColumnSchema: null,
+      reportColumns: null,
+      isSelectedAll: false
     };
   }
 
@@ -27,6 +30,19 @@ export default class AddReportColumn extends Component {
     this.setState({
       reportColumnSchema: schema
     });
+  }
+
+  componentDidMount() {
+    const { report } = this.props;
+    this.bindReportColums(report);
+  }
+
+  bindReportColums(report) {
+    let isSelectAll = false;
+    let reportColumns = report.reportColumns;
+    let reportColumnString = JSON.stringify(reportColumns);
+    isSelectAll = !reportColumnString.includes('false');
+    this.setState({ reportColumns: report.reportColumns, isSelectedAll: isSelectAll })
   }
 
   closeDialog = () => {
@@ -41,7 +57,6 @@ export default class AddReportColumn extends Component {
   onSubmit = data => {
     const { closeDialog, report } = this.props;
     const { _id, name } = report;
-
     Meteor.call("report.updateColumns", _id, name, data, err => {
       if (!err) {
         closeDialog();
@@ -51,9 +66,56 @@ export default class AddReportColumn extends Component {
     });
   };
 
+  checkAllColumns = () => {
+
+    const { isSelectedAll, reportColumns } = this.state;
+    let selectAll = !isSelectedAll;
+    var selectedColumns = Object.keys(reportColumns).map(key => {
+      if (key != 'insurances')
+        return ({ key, value: selectAll });
+      else
+        return ({
+          key, value: reportColumns[key].map((ins) => {
+            let insObject = {};
+            let insColumns = Object.keys(ins).map(insKey => ({ insKey, value: selectAll }));
+            insColumns.map((c) => {
+              insObject[c.insKey] = c.value;
+            });
+            return insObject;
+          })
+        });
+    });
+    let reportColumnObject = {};
+    selectedColumns.map((column) => {
+      reportColumnObject[column.key] = column.value;
+    });
+    this.setState({ isSelectedAll: selectAll, reportColumns: reportColumnObject });
+
+  }
+
+  addInsuranceColumns = () => {
+    let reportColumns = this.state.reportColumns;
+    let newInsuranceObj = {};
+    insuranceColumnEnum.map((column) => {
+      newInsuranceObj[column.value] = this.state.isSelectedAll;
+    });
+    reportColumns.insurances.push(newInsuranceObj);
+    this.setState({ reportColumns });
+  }
+
+  removeInsuranceColumns = (index) => {
+    let reportColumns = this.state.reportColumns;
+    reportColumns.insurances.splice(index, 1);
+    this.setState({ reportColumns });
+  }
+
   render() {
-    const { report } = this.props;
-    const { reportColumnSchema } = this.state;
+    const btnSelectClasses = classNames({
+      "btn-select-all": true,
+      active: this.state.isSelectedAll
+    });
+    // const { report } = this.props;
+    const { reportColumnSchema, reportColumns } = this.state;
 
     if (!reportColumnSchema) {
       return <div />;
@@ -64,18 +126,18 @@ export default class AddReportColumn extends Component {
         <Dialog
           title="Confirm"
           className="account-dialog"
-          closePortal={this.closeDialog}
-        >
+          closePortal={this.closeDialog}>
           <div
             style={{ height: "350px", overflowY: "scroll" }}
-            className="form-wrapper"
-          >
+            className="form-wrapper">
+            <div className="m-b--10">
+              <div className={btnSelectClasses} onClick={this.checkAllColumns} /> <label>Select All</label>
+            </div>
             <AutoForm
               schema={reportColumnSchema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
-              model={report.reportColumns}
-            >
+              model={reportColumns}>
               {reportColumnEnum.map((cols, index) => {
                 const { value, label } = cols;
                 return (
@@ -86,8 +148,8 @@ export default class AddReportColumn extends Component {
                   />
                 );
               })}
-              <ListField name="insurances" showListField={() => {}}>
-                <ListItemField name="$">
+              <ListField name="insurances" showListField={() => this.addInsuranceColumns()}>
+                <ListItemField name="$" hideListField={(index) => { this.removeInsuranceColumns(index) }}>
                   <NestField className="upload-item text-center">
                     {insuranceColumnEnum.map((data, index) => {
                       const { value, label } = data;
@@ -113,7 +175,9 @@ export default class AddReportColumn extends Component {
             </button>
           </div>
         </Dialog>
-      </div>
+      </div >
     );
   }
 }
+
+
