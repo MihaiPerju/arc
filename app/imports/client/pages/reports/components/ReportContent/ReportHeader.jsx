@@ -119,7 +119,7 @@ class ReportHeader extends Component {
 
   onRunReport = () => {
     const { report } = this.props;
-    this.setState({ isDisabled: true });
+    this.setState({ isDisabled: true, isOpenedDropdown: false });
     Meteor.call(
       "jobQueue.create",
       {
@@ -202,7 +202,7 @@ class ReportHeader extends Component {
     switch (status) {
       case JobQueueStatuses.IN_PROGRESS:
         return (
-          <div className="action-dropdown" >
+          <div className="action-dropdown p-0" >
             <div className="action-dropdown__btn" style={{ width: 110 }}>
               Running...
           </div>
@@ -211,8 +211,8 @@ class ReportHeader extends Component {
       case JobQueueStatuses.FINISHED:
         return (
           <div className="action-dropdown">
-            <div className="action-dropdown__btn" style={{ width: 110 }} onClick={this.onRunReport}>
-              Run report (again)
+            <div className="action-dropdown__btn" style={{ width: 110 }} onClick={this.openDropdown}>
+              Run report
              <i className="icon-angle-down" />
             </div>
             {
@@ -223,6 +223,11 @@ class ReportHeader extends Component {
                     <div className="action-caret__inner" />
                   </div>
                   <ul className="action-list">
+                    <li className="action-item">
+                      <a href="javascript:;" onClick={this.onRunReport}>
+                        Run report (again)
+                   </a>
+                    </li>
                     <li className="action-item">
                       <a href="javascript:;" onClick={this.downloadReportpdf}>
                         Download report pdf
