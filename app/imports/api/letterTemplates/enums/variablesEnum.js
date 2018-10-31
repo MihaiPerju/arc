@@ -20,7 +20,17 @@ export default [
   { label: "User First Name", value: "User First Name" },
   { label: "User Phone", value: "User Phone" },
   { label: "Facility Zip", value: "Facility Zip" },
-  { label: "Facility State", value: "Facility State" }
+  { label: "Facility State", value: "Facility State" },
+  { label: "To Address 1", value: "To Address 1" },
+  { label: "To Address 2", value: "To Address 2" },
+  { label: "To City", value: "To City" },
+  { label: "To State", value: "To State" },
+  { label: "To Zip", value: "To Zip" }, 
+  { label: "From Address 1", value: "From Address 1" },
+  { label: "From Address 2", value: "From Address 2" },
+  { label: "From City", value: "From City" },
+  { label: "From State", value: "From State" },
+  { label: "From Zip", value: "From Zip" }, 
 ];
 export const variablesEnum = {
   "Account Number": {
@@ -111,5 +121,35 @@ export const variablesEnum = {
   "Facility Zip": {
     field: "FacilityZip",
     scope: "account"
-  }
+  },
+  "To Address 1": {
+    field: "toAddress1"
+  },
+  "To Address 2": {
+    field: "toAddress2"
+  },
+  "To City": {
+    field: "toCity"
+  },
+  "To State": {
+    field: "toState"
+  },
+  "To Zip": {
+    field: "toZip"
+  },
+  "From Address 1": {
+    field: "fromAddress1"
+  },
+  "From Address 2": {
+    field: "fromAddress2"
+  },
+  "From City": {
+    field: "fromCity"
+  },
+  "From State": {
+    field: "fromState"
+  },
+  "From Zip": {
+    field: "fromZip"
+  },  
 };

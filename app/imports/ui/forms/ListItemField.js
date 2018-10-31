@@ -27,7 +27,7 @@ var _ListDelField = _interopRequireDefault(require("./ListDelField"));
 
 var ListItem = function ListItem(props) {
   var hideListField = props.hideListField;
-  return _react.default.createElement("div", null, _react.default.createElement(_ListDelField.default, {
+  return _react.default.createElement("div", {className: 'uniform-list-item'}, _react.default.createElement(_ListDelField.default, {
     name: props.name,
     hideListField: hideListField
   }), props.children ? _react.Children.map(props.children, function (child) {

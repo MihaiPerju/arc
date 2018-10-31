@@ -26,6 +26,7 @@ var _filterDOMProps = _interopRequireDefault(require("uniforms/filterDOMProps"))
 var ListDel = function ListDel(_ref) {
   var disabled = _ref.disabled,
       name = _ref.name,
+      label = _ref.label,
       parent = _ref.parent,
       hideListField=_ref.hideListField,
       props = (0, _objectWithoutProperties2.default)(_ref, ["disabled", "name", "parent"]);
@@ -37,7 +38,7 @@ var ListDel = function ListDel(_ref) {
       return limitNotReached && parent.onChange([].concat(parent.value.slice(0, fieldIndex)).concat(parent.value.slice(1 + fieldIndex)));
     },
     className: 'insurance-btn insurance-btn__del'
-  }), "-");
+  }), `Remove ${label}`);
 };
 
 var _default = (0, _connectField.default)(ListDel, {

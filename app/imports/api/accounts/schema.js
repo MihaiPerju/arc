@@ -273,6 +273,10 @@ export default new SimpleSchema({
   lastUserAction: {
     type: String,
     optional: true
+  },
+  lastActionDate: {
+    type: Date,
+    optional: true
   }
 });
 
