@@ -1,14 +1,10 @@
-const { gqlDate } = require('../customScalars/date');
-
-exports.accountSchema = `
-  scalar gqlDate
-
-  type Query {
+exports.queries = `
     # Return a single acct
     account(acctNum: String!): Account
     accountList(facilityIds: [String!], state: State!): [Account]
-  }
+`
 
+exports.baseSchema = `
   type Account {
     _id: ID
     acctNum: String
