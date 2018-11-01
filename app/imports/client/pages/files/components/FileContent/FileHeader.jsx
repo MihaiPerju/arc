@@ -111,23 +111,23 @@ export default class ReportHeader extends Component {
           )}
           
           {file && file.corruptRows && file.corruptRows.length ? (
-            <div style={{width:'100%'}} >
+            <div>
               <div className="placement-block" style={{alignItems: 'center'}} >
-                <div className="text-light-grey">The Number of error rows: {file.corruptRows.length} </div>
-                  <button style={{ margin: '5px', padding: '6px' }} onClick={this.showMore}>
+                <div className="text-light-grey">The Number of error rows: <span style={styles} className="label label--grey" >{file.corruptRows.length} </span> </div>
+                  <button className="showMore-tag" onClick={this.showMore}>
                     {showDetail ? 'Show Less' : 'Show More' }
-                    <i style={{ margin : '0px 5px'}} className={showDetail ? 'icon-angle-up' : 'icon-angle-down' } />
+                    <i className={showDetail ? 'showMore-arrow icon-angle-up' : 'showMore-arrow icon-angle-down' } />
                   </button>
               </div>
                 { showDetail && 
                   (
-                    <div className="placement-block report-content" style={{height:'400px'}} >
-                      <div>Encountered problems with following rows: </div>
-                        <div className="table-list margin-top-20">
+                    <div className="placement-block report-content" >
+                      <div className="text-light-grey">Encountered problems with following rows: </div>
+                        <div className="table-list margin-top-10">
                           <div className="table-container flex--helper" >
-                            <div className="table-container__left" style={{height: '100%', 'overflow-y': 'scroll'}} >
+                            <div className="table-container__left file-table-tag"  >
                               {file.corruptRows.map((row) => {
-                                  return  <div className="table-field truncate" style={{border: '1px #d7d7d7 solid'}}> Row: {row}</div>
+                                  return  <div className="table-field truncate box-border" > Row: {row}</div>
                                 })}
                             </div>
                           </div>
