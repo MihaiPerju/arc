@@ -6,7 +6,7 @@ exports.accountSchema = `
   type Query {
     # Return a single acct
     account(acctNum: String!): Account
-    accountList(state: State!): [Account]
+    accountList(facilityIds: [String!], state: State!): [Account]
   }
 
   type Account {
