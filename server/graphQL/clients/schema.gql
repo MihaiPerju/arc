@@ -1,0 +1,16 @@
+exports.queries = `
+    # Return a single acct
+    clientByID(_id: ID!): Client
+    clientsList(clientIDs: [ID!], status: Boolean!): [Client]
+`
+
+exports.baseSchema = `
+  type Client {
+    _id: ID!
+    clientName: String!
+    email: String
+    createdAt: gqlDate!
+    status: Boolean!
+    contacts: [Contact]
+  }
+`

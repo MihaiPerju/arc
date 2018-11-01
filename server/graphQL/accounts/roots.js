@@ -5,7 +5,7 @@
  * @param {Object} args The arguments passed to GraphQL
  * @param {*} info AST of the incoming GraphQL query
  */
-exports.account = function(obj, context, args, info) {
+exports.getAccount = function(obj, context, args, info) {
     return context.db.collection('accounts').findOne({acctNum: obj.acctNum})
 }
 

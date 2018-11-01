@@ -1,6 +1,6 @@
 exports.queries = `
     # Return a single acct
-    account(acctNum: String!): Account
+    getAccount(acctNum: String!): Account
     accountList(facilityIds: [String!], state: State!): [Account]
 `
 
@@ -19,7 +19,7 @@ exports.baseSchema = `
     acctBal: Float
     facCode: String
     finClass: String
-    facilityId: String
+    facilityId: Facility
     clientId: String
     fileId: String
     collectedAmount: Float

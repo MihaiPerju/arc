@@ -1,6 +1,6 @@
 exports.queries = `
     # Return a single acct
-    facilityByID(_id: ID!): Facility
+    facilityId(_id: ID!): Facility
     facilityList(clientIDs: [ID!], status: Boolean!): [Facility]
 `
 
@@ -10,13 +10,13 @@ exports.baseSchema = `
     name: String!
     sftpPath: String
     allowedUsers: [String!] #TODO : User IDs type
-    clientId: ID!
-    Status: Boolean!
+    clientId: Client!
+    status: Boolean!
     createdAt: gqlDate!
     placementRules: PlacementRules
     fileId: String # ! What is this for?
     fileIds: [String]
-    contacts: [FacilityContacts]
+    contacts: [Contact]
   }
 
   type PlacementRules {
@@ -47,14 +47,5 @@ exports.baseSchema = `
     state: String
     policy: String
     phone: String
-  }
-
-  type FacilityContacts {
-    firstName: String
-    lastName: String
-    phone: String
-    email: String
-    contactType: String
-    notes: String
   }
 `
