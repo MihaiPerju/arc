@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import UploadStatuses from "/imports/api/files/enums/statuses";
+import moment from "moment/moment";
 
 export default class FileSingle extends Component {
   constructor(props) {
@@ -54,8 +55,11 @@ export default class FileSingle extends Component {
           <input checked={checked} type="checkbox" className="hidden" />
           <label onClick={this.onSelectFile.bind(this)} />
         </div>
-        <div className="row__block align-center">
-          <div className="item-name">{this.getFileName(file.fileName)}</div>
+        <div className="row__item margin-top-10">
+          <div className="person">{this.getFileName(file.fileName)}</div>
+        </div>
+        <div className="row__item margin-top-10 timestamp_tag">
+          Processed At : {file && moment(file.createdAt).format("MMMM Do YYYY, hh:mm a")}
         </div>
 
         <div className="row__item margin-top-10 ">

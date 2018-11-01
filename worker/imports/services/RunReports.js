@@ -195,7 +195,7 @@ export default class RunReports {
               {meta.map(d => (
                 <Table.Row>
                   {Object.keys(headers).map(item => (
-                    <Table.Cell>{d[item]}</Table.Cell>
+                    <Table.Cell>{`${d[item]}`}</Table.Cell>
                   ))}
                 </Table.Row>
               ))}
@@ -205,8 +205,9 @@ export default class RunReports {
       );
       return ReactDOMServer.renderToString(data);
     };
-
+    
     const reportContent = renderHtml(metaData);
+
 
     pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
       if (err) {

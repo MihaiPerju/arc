@@ -28,11 +28,13 @@ var ListDel = function ListDel(_ref) {
       name = _ref.name,
       label = _ref.label,
       parent = _ref.parent,
+      hideListField=_ref.hideListField,
       props = (0, _objectWithoutProperties2.default)(_ref, ["disabled", "name", "parent"]);
   var fieldIndex = +name.slice(1 + name.lastIndexOf('.'));
   var limitNotReached = !disabled && !(parent.minCount >= parent.value.length);
   return _react.default.createElement("span", (0, _extends2.default)({}, (0, _filterDOMProps.default)(props), {
     onClick: function onClick() {
+      hideListField(fieldIndex);
       return limitNotReached && parent.onChange([].concat(parent.value.slice(0, fieldIndex)).concat(parent.value.slice(1 + fieldIndex)));
     },
     className: 'insurance-btn insurance-btn__del'
