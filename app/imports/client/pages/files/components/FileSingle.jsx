@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
+import UploadStatuses from "/imports/api/files/enums/statuses";
 
 export default class FileSingle extends Component {
   constructor(props) {
@@ -43,6 +44,9 @@ export default class FileSingle extends Component {
       "bg--yellow": checked,
       open: currentFile === file._id
     });
+    const statusStyles = {
+      color: file.status === UploadStatuses.SUCCESS ? "green" : "red"
+    };
 
     return (
       <div className={classes} onClick={this.onSetFile.bind(this)}>
@@ -62,17 +66,11 @@ export default class FileSingle extends Component {
                   ? "person font-normal"
                   : "person"
               }
-            >
-              {/* {account.ptName} */}
-              ok
-            </div>
+            />
           </div>
           <div className="right__side">
-            <div className="patient-id text-blue">1</div>
-            <div className="substate">text</div>
-            <div className="time">
-              ok
-              {/* {account && moment(account.createdAt).format(" hh:mm")} */}
+            <div style={statusStyles} className="substate">
+              {file.status}
             </div>
           </div>
         </div>
