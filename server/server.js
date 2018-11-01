@@ -3,7 +3,7 @@ const config = process.env.CONFIG ? require(process.env.CONFIG) : require('./sta
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
-const schemas = require('./graphQL/schemaExports');
+const graphqlIndex = require('./graphQL/index');
 
 // * Pre app setup hook
 startupFn.preStart();
@@ -13,9 +13,9 @@ const app = express();
 app.disable('x-powered-by');
 
 app.use('/graphql', graphqlHTTP({
-    schema: schemas.accountSchema,
+    schema: graphqlIndex.schema,
     graphiql: true,
-    rootValue: schemas.accountRoots,
+    rootValue: graphqlIndex.resolvers,
     context: app.locals
 }));
 

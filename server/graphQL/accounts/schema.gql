@@ -1,48 +1,64 @@
+const { gqlDate } = require('../customScalars/date');
+
 exports.accountSchema = `
-type Query {
-  # Return a single acct
-  account(acctNum: String!): Account
-  accountList(state: State!): [Account]
-}
+  scalar gqlDate
 
-type Account {
-  _id: ID
-  acctNum: String
-  accountBalance: Float
-  insurances: [Insurance]
-  medNo: String
-  ptType: String
-  ptName: String
-  fbDate: String
-  other1: String
-  activeInsCode: String
-  acctBal: Float
-  facCode: String
-  finClass: String
-  facilityId: String
-  clientId: String
-  fileId: String
-  collectedAmount: Float
-  state: State
-  # createdAt TODO
-  # meta: Object TODO
-  # admitDate: Date TODO
-  # dischrgDate : Date TODO
-}
+  type Query {
+    # Return a single acct
+    account(acctNum: String!): Account
+    accountList(state: State!): [Account]
+  }
 
-type Insurance {
-  insName: String
-  insCode: String
-  insBal: Float
-  zip: String
-  policy: String
-}
+  type Account {
+    _id: ID
+    acctNum: String
+    accountBalance: Float
+    insurances: [Insurance]
+    medNo: String
+    ptType: String
+    ptName: String
+    fbDate: String
+    other1: String
+    activeInsCode: String
+    acctBal: Float
+    facCode: String
+    finClass: String
+    facilityId: String
+    clientId: String
+    fileId: String
+    collectedAmount: Float
+    state: State
+    createdAt: gqlDate
+    # meta: Object TODO
+    admitDate: gqlDate
+    dischrgDate: gqlDate
+    substate: String
+    hasLastSysAction: String
+    numberOfViews: String
+    invoiceNo: [String!]
+    letterIds: [String!] #TODO Change this to letter type _id
+    attachmentIds: [String!] #TODO Change this to letter type _id
+    actionsLinkData: [String!] #TODO Change this to letter type _id
+    workQueue: [String!] #TODO Change this to letter type _id
+    flagIds: [String!] #TODO Change this to letter type _id
+    commentIds: [String!] #TODO Change this to letter type _id
+    employeeToRespond: [String!] #TODO Change this to letter type _id
+    escalationId: [String!] #TODO Change this to letter type _id
+  }
 
-enum State{
-  Active
-  Review
-  Hold
-  Escalated
-  Archived
-}
+  type Insurance {
+    insName: String
+    insCode: String
+    insBal: Float
+    zip: String
+    policy: String
+  }
+
+  enum State{
+    Active
+    Review
+    Hold
+    Escalated
+    Archived
+  }
 `
