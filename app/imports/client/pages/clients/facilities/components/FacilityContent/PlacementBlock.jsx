@@ -11,7 +11,7 @@ export default class PlacementBlock extends Component {
     constructor() {
         super();
         this.state = {
-          placementDate: moment()
+          placementDate: new Date()
         };
       }
 
@@ -27,6 +27,9 @@ export default class PlacementBlock extends Component {
         };
 
         const djsConfig = {
+            params: {
+                placementDate: this.state.placementDate
+            },
             complete(file) {
                 Notifier.success('Added');
                 this.removeFile(file);
@@ -48,7 +51,7 @@ export default class PlacementBlock extends Component {
                         showYearDropdown
                         todayButton={"Today"}
                         placeholderText="Account Placement Date"
-                        selected={placementDate}
+                        selected={moment(placementDate)}
                         name="placementDate"
                         onChange={date =>
                             this.onDateSelect(date, "placementDate")

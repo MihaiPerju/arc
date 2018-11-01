@@ -21,7 +21,8 @@ export default class AccountService {
   //For placement file
   static upload(results, rules, {
     fileId,
-    facilityId
+    facilityId,
+    placementDate
   }) {
     //Get the root directory
     const {
@@ -120,16 +121,14 @@ export default class AccountService {
       } else {
         toUpdateAccount.invoiceNo = [];
       }
-
+    
       //Archived Date
       if(state === stateEnum.ARCHIVED) {
-        let rulesDate = this.getPlacementDateByFacilityId(facilityId);
-        toUpdateAccount.reactivationDate = rulesDate.placementRules.placementDate;
+        toUpdateAccount.reactivationDate = placementDate;
       }
 
       //refresh placement date
-      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
-      toUpdateAccount.refreshDate = rulesDate.placementRules.placementDate;
+      toUpdateAccount.refreshDate = placementDate;
 
       Accounts.update({
         acctNum: toUpdateAccountId,
@@ -171,8 +170,8 @@ export default class AccountService {
     _.map(newAccountIds, newAccountId => {
       const newAccount = this.getAccount(accounts, newAccountId);
 
-      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
-      newAccount.placementDate = rulesDate.placementRules.placementDate;
+      //Implementing the placement date
+      newAccount.placementDate = placementDate;
 
       Object.assign(newAccount, {
         facilityId,
@@ -230,7 +229,7 @@ export default class AccountService {
     //Convert all the rules to lower case to not be case-sensitive
 
     for (let rule in rules) {
-      if (rule !== "insurances" && rule !== "hasHeader" && rule !== "placementDate") {
+      if (rule !== "insurances" && rule !== "hasHeader") {
         rules[rule] = rules[rule].toString();
         rules[rule] = rules[rule].toLowerCase();
       }
@@ -255,7 +254,6 @@ export default class AccountService {
       results.splice(0, 1);
     }
     delete importRules.hasHeader;
-    delete importRules.placementDate;
     return {
       labels,
       importRules
@@ -415,7 +413,6 @@ export default class AccountService {
     let newRules = {};
 
     //Removing unnecessary rules
-    delete rules.placementDate;
     delete rules.hasHeader;
 
     //Trim spaces for errors
@@ -442,7 +439,8 @@ export default class AccountService {
   //For inventory file
   static update(results, rules, {
     fileId,
-    facilityId
+    facilityId,
+    placementDate
   }) {
     //Update the file headers;
     const {
@@ -502,8 +500,8 @@ export default class AccountService {
     _.map(newAccountIds, accountId => {
       const newAccount = this.getAccount(accounts, accountId);
 
-      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
-      newAccount.placementDate = rulesDate.inventoryRules.placementDate;
+     //implmenting the placementDate
+      newAccount.placementDate = placementDate;
 
       Object.assign(newAccount, {
         facilityId,
@@ -549,14 +547,12 @@ export default class AccountService {
 
       //Archived Date
       if(state === stateEnum.ARCHIVED) {
-        let rulesDate = this.getPlacementDateByFacilityId(facilityId);
-        toUpdateAccount.reactivationDate = rulesDate.placementRules.placementDate;
+        toUpdateAccount.reactivationDate = placementDate;
       }
 
 
       //refresh placement date
-      let rulesDate = this.getPlacementDateByFacilityId(facilityId);
-      toUpdateAccount.refreshDate = rulesDate.inventoryRules.placementDate;
+      toUpdateAccount.refreshDate = placementDate;
 
 
       Accounts.update({
@@ -595,8 +591,4 @@ export default class AccountService {
     return Facilities.findOne(facilityId).clientId;
   }
 
-  // Get placement Date by facility
-  static getPlacementDateByFacilityId(facilityId) {
-    return Facilities.findOne(facilityId);
-  }
 }
