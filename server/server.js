@@ -1,9 +1,12 @@
 const startupFn = process.env.NODE_ENV === 'production' ? require('./startup/productionMode/startUp') : require('./startup/devMode/startUp');
-const config = './config.js' ? require('./config.js') : require('./startup/devMode/devConfig');
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const graphqlIndex = require('./graphQL/index');
+const { existsSync } = require('fs');
+
+// Use user custom config or switch to default dev one
+const config = existsSync('config.js') ? require('./config.js') : require('./startup/devMode/devConfig');
 
 // * Pre app setup hook
 startupFn.preStart();

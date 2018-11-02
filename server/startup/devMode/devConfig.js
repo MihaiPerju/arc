@@ -29,19 +29,19 @@ exports.adServer = {
  * MongoDB connection settings
  */
 exports.databaseSettings = {
-    mongoURI: 'mongodb://localhost:27017/arcc',
+    mongoURI: 'mongodb+srv://arcc-testing-bxsso.mongodb.net/arcc',
     databaseName: 'arcc',
     options: { // Optional
-        useNewUrlParser: true
-    //     ssl: false,
-    //     checkServerIdentity: false,
-    //     connectTimeoutMS: 30000,
-    //     socketTimeoutMS: 360000,
-    //     authSource: 'arcc',
-    //     auth: {
-    //         user: 'username',
-    //         password: 'password'
-    //     }
+        useNewUrlParser: true,
+        ssl: true,
+        checkServerIdentity: true,
+        connectTimeoutMS: 30000,
+        socketTimeoutMS: 360000,
+        authSource: 'admin',
+        auth: {
+            user: 'arccTester',
+            password: 'sZ5zViNL1jJBBD7v'
+        }
     }
 };
 
