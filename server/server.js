@@ -1,5 +1,5 @@
 const startupFn = process.env.NODE_ENV === 'production' ? require('./startup/productionMode/startUp') : require('./startup/devMode/startUp');
-const config = process.env.CONFIG ? require(process.env.CONFIG) : require('./startup/devMode/devConfig');
+const config = './config.js' ? require('./config.js') : require('./startup/devMode/devConfig');
 const MongoClient = require('mongodb').MongoClient;
 const express = require('express');
 const graphqlHTTP = require('express-graphql');
