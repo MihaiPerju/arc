@@ -3,6 +3,10 @@ import RevertService from "../services/RevertService";
 import UploadStatuses from "/imports/api/files/enums/statuses";
 import JobQueue from "../../jobQueue/collection";
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
+import Settings from "../../settings/collection";
+import settings from "/imports/api/settings/enums/settings";
+import fs from "fs";
+import Business from "/imports/api/business";
 
 Meteor.methods({
   "file.rollback"(_id) {
@@ -33,14 +37,19 @@ Meteor.methods({
   },
 
   "file.retryUpload"(filePath, fileId) {
-    const job = JobQueue.findOne({ filePath });
-
-    //Remove unnecessary data
-    delete job.workerId;
-    delete job._id;
-    delete job.status;
-    delete job.status;
-    job.fileId = fileId;
-    (job.type = jobTypes.RETRY_UPLOAD), JobQueue.insert(job);
-  }
+    const { root } = Settings.findOne({ name: settings.ROOT });
+    //Check the file is exist or not.
+    if( fs.existsSync(root + Business.ACCOUNTS_FOLDER + filePath) ) {
+      const job = JobQueue.findOne({ filePath });
+      //Remove unnecessary data
+      delete job.workerId;
+      delete job._id;
+      delete job.status;
+      delete job.status;
+      job.fileId = fileId;
+      (job.type = jobTypes.RETRY_UPLOAD), JobQueue.insert(job);
+    }else{
+      return 'FILE_NOT_AVAILABLE';
+    }
+  },
 });
