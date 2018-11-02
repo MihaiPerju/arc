@@ -1,3 +1,5 @@
+const accountQueries = require('../../dataSources/arcc/accounts');
+
 /**
  * Takes in an account number and returns the account matching it.
  * @param {obj} obj Should be {accountNumber: '123'}
@@ -6,10 +8,10 @@
  * @param {*} info AST of the incoming GraphQL query
  */
 exports.getAccount = function(obj, context, args, info) {
-    return context.db.collection('accounts').findOne({acctNum: obj.acctNum})
+    return accountQueries.getByAcctNum(obj.acctNum, context.db);
 }
 
 //TODO: This needs limiter and paging added - current version is only for testing
 exports.accountList = function(obj, context, args, info) {
-    return context.db.collection('accounts').find({facilityId: {$in: obj.facilityIds},state: obj.state}).toArray()
+    return accountQueries.getAccountList(obj.facilityIds, obj.state, context.db)
 }

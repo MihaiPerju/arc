@@ -1,6 +1,6 @@
 exports.queries = `
     # Return a single acct
-    facilityId(_id: ID!): Facility
+    getFacility(id: ID!): Facility
     facilityList(clientIDs: [ID!], status: Boolean!): [Facility]
 `
 
@@ -17,6 +17,9 @@ exports.baseSchema = `
     fileId: String # ! What is this for?
     fileIds: [String]
     contacts: [Contact]
+    addressOne: String!
+    city: String!
+    state: String!
   }
 
   type PlacementRules {
