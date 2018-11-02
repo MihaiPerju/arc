@@ -181,6 +181,27 @@ export default class RunReports {
       return m;
     });
 
+    const bindColumn = (d, key) => {
+      if (key.includes('metaData')) {
+        var metaDataKeys = key.split('[');
+        var metaDataKey = metaDataKeys[0];
+        var subKey = metaDataKeys[1].slice(0, -1);
+        var value = d[metaDataKey][subKey];
+        return `${value != undefined ? value : ''}`;
+      }
+      else if (key.includes('insurances')) {
+        var insKeys = key.split('.');
+        var objectKeys = insKeys[0].split('[');
+        var propKey = insKeys[1];
+        var insuranceKey = objectKeys[0];
+        var indexKey = objectKeys[1].slice(0, -1);
+        var value = d[insuranceKey][indexKey][propKey];
+        return `${value != undefined ? value : ''}`;
+      }
+      else
+        return `${d[key]}`;
+    }
+    
     // Render HTML
     const renderHtml = meta => {
       const data = (
@@ -195,7 +216,7 @@ export default class RunReports {
               {meta.map(d => (
                 <Table.Row>
                   {Object.keys(headers).map(item => (
-                    <Table.Cell>{`${d[item]}`}</Table.Cell>
+                    <Table.Cell>{bindColumn(d, item)}</Table.Cell>
                   ))}
                 </Table.Row>
               ))}
@@ -205,11 +226,11 @@ export default class RunReports {
       );
       return ReactDOMServer.renderToString(data);
     };
-    
+
     const reportContent = renderHtml(metaData);
 
-
-    pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+    var options = { "zoomFactor": "1" };
+    pdf.create(reportContent, options).toFile(pdfFilePath, (err, res) => {
       if (err) {
         future.return(err);
       } else {
