@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "dev": "NODE_ENV=development nodemon ./server.js",
-    "winDev": "set NODE_ENV=development&& nodemon ./server.js",
+    "dev": "nodemon ./server.js",
     "start": "NODE_ENV=production CONFIG=config.js node ./server.js"
   },
   "dependencies": {
