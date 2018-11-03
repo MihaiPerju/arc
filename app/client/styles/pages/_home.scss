@@ -6,28 +6,35 @@
 .dashboard-container{
   padding: 15px 10px;
 }
- .graph-container{
+
+.graph-container{
  width:50%;
  border-right:1px solid #d3d3d3;
 }
- .timeline-container{
+
+.timeline-container{
 width: 50%;
- }
- .line-chart{
+
+}
+
+.line-chart{
   margin:20px 15px;
 }
- .d-header{
+
+.d-header{
   display: inline-block;
   width:100%;
   padding: 5px;
 }
- .d-header-left{
+
+.d-header-left{
   float: left;
   h2{
     margin-left: 10px;
   }
 }
- .d-header-right{
+
+.d-header-right{
   float:right;
   padding-right: 10px;
   h2{

@@ -17,7 +17,6 @@ export default class ActivityStream extends React.Component {
     super();
     this.state = {
       accountActions: [],
-      filter: false,
       model: {},
       limit: 20,
       skip: 0,
@@ -148,7 +147,7 @@ export default class ActivityStream extends React.Component {
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
-                    }`}
+                      }`}
                   >
                     {account.acctNum}
                   </a>
@@ -183,7 +182,7 @@ export default class ActivityStream extends React.Component {
                 className="text-blue"
                 href={`/accounts/${account.state.toLowerCase()}?accountId=${
                   account._id
-                }`}
+                  }`}
               >
                 {account.acctNum}
               </a>
@@ -207,7 +206,7 @@ export default class ActivityStream extends React.Component {
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
-                    }`}
+                      }`}
                   >
                     {account.acctNum}
                   </a>
@@ -230,7 +229,7 @@ export default class ActivityStream extends React.Component {
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
-                    }`}
+                      }`}
                   >
                     {account.acctNum}
                   </a>
@@ -251,37 +250,37 @@ export default class ActivityStream extends React.Component {
                 )}
               </div>
             ) : (
-              <div>
-                <b>
-                  {user.profile.firstName} {user.profile.lastName}
-                </b>{" "}
-                flagged a comment on account with account number{" "}
-                {account && (
-                  <a
-                    className="text-blue"
-                    href={`/accounts/${account.state.toLowerCase()}?accountId=${
-                      account._id
-                    }`}
-                  >
-                    {account.acctNum}
-                  </a>
-                )}
-                {!isOpen && (
-                  <div>
-                    <br />
-                    Manager{" "}
-                    {manager && (
-                      <b>
-                        {manager.profile.firstName} {manager.profile.lastName}
-                      </b>
-                    )}{" "}
-                    has responsed to a comment and{" "}
-                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+                <div>
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>{" "}
+                  flagged a comment on account with account number{" "}
+                  {account && (
+                    <a
+                      className="text-blue"
+                      href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                        account._id
+                        }`}
+                    >
+                      {account.acctNum}
+                    </a>
+                  )}
+                  {!isOpen && (
+                    <div>
+                      <br />
+                      Manager{" "}
+                      {manager && (
+                        <b>
+                          {manager.profile.firstName} {manager.profile.lastName}
+                        </b>
+                      )}{" "}
+                      has responsed to a comment and{" "}
+                      {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
-                  </div>
-                )}
-              </div>
-            )}
+                    </div>
+                  )}
+                </div>
+              )}
           </div>
         );
       case actionTypesEnum.EDIT:
@@ -297,15 +296,15 @@ export default class ActivityStream extends React.Component {
                 in the field <b>{accountField}</b>.
               </div>
             ) : (
-              <div>
-                <b>
-                  {user.profile.firstName} {user.profile.lastName}
-                </b>{" "}
-                updated the account <b>{account && account.acctNum}</b> and
+                <div>
+                  <b>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </b>{" "}
+                  updated the account <b>{account && account.acctNum}</b> and
                 added the value <b>{fieldUpdatedValue}</b> in the field{" "}
-                <b>{accountField}</b>.
+                  <b>{accountField}</b>.
               </div>
-            )}
+              )}
           </div>
         );
       case actionTypesEnum.LOCK_BREAK:
@@ -322,7 +321,7 @@ export default class ActivityStream extends React.Component {
                 className="text-blue"
                 href={`/accounts/${account.state.toLowerCase()}?accountId=${
                   account._id
-                }`}
+                  }`}
               >
                 {account.acctNum}
               </a>
@@ -332,13 +331,6 @@ export default class ActivityStream extends React.Component {
       default:
         return "";
     }
-  };
-
-  manageFilterBar = () => {
-    const { filter } = this.state;
-    this.setState({
-      filter: !filter
-    });
   };
 
   onSubmit = params => {
@@ -353,73 +345,66 @@ export default class ActivityStream extends React.Component {
   render() {
     const {
       accountActions,
-      filter,
       model,
       actionTypes,
       isScrollLoading
     } = this.state;
 
     return (
-      <div className="cc-container settings-container">
-        <div>
+      <div className="cc-container settings-container dashboard-container">
+        <div className="graph-container">
           <ActivityStreamGraph />
         </div>
-        <div ref="isScroll" style={{ width: "200%", overflowY: "scroll" }}>
-          <div className="header__block">
-            <div className="actions_filter__bar">
-              <div
-                className={filter ? "filter-block active" : "filter-block"}
-                onClick={this.manageFilterBar}
-              >
-                <button>
-                  <i className="icon-filter" />
-                </button>
-              </div>
+        <div className="timeline-container">
+          <div className="d-header">
+            <div className="d-header-left">
+              <h2>Activity Timeline</h2>
             </div>
-          </div>
-          {filter && (
-            <AutoForm
-              autosave
-              autosaveDelay={500}
-              ref="filters"
-              onSubmit={this.onSubmit}
-              schema={schema}
-              model={model}
-            >
-              <div className="filter-bar">
-                <div className="select-wrapper">
-                  <div className="flex--helper form-group__pseudo">
-                    <div className="select-form">
+            <div className="d-header-right" style={{ width: '30%' }}>
+              <AutoForm
+                autosave
+                autosaveDelay={500}
+                ref="filters"
+                onSubmit={this.onSubmit}
+                schema={schema}
+                model={model} style={{ width: '100%' }}
+              >
+
+                <div className="select-wrapper full-width">
+                  <div className="flex--helper form-group__pseudo full-width">
+                    <div className="select-form full-width">
                       <SelectField
                         labelHidden={true}
                         name="type"
                         options={actionTypes}
+                        placeholder="Select Action Type"
                       />
                     </div>
                   </div>
                 </div>
-              </div>
-            </AutoForm>
-          )}
-
-          <Timeline>
-            {accountActions &&
-              accountActions.map((actionPerformed, index) => {
-                const { createdAt, type } = actionPerformed;
-                return (
-                  <TimelineEvent
-                    key={index}
-                    title=""
-                    createdAt={moment(createdAt).format(
-                      "MMMM Do YYYY, hh:mm a"
-                    )}
-                    icon={this.getTimelineIcon(type)}
-                  >
-                    {this.getTimelineBody(actionPerformed)}
-                  </TimelineEvent>
-                );
-              })}
-          </Timeline>
+              </AutoForm>
+            </div>
+          </div>
+          <div ref="isScroll" className="m-t--10">
+            <Timeline>
+              {accountActions &&
+                accountActions.map((actionPerformed, index) => {
+                  const { createdAt, type } = actionPerformed;
+                  return (
+                    <TimelineEvent
+                      key={index}
+                      title=""
+                      createdAt={moment(createdAt).format(
+                        "MMMM Do YYYY, hh:mm a"
+                      )}
+                      icon={this.getTimelineIcon(type)}
+                    >
+                      {this.getTimelineBody(actionPerformed)}
+                    </TimelineEvent>
+                  );
+                })}
+            </Timeline>
+          </div>
         </div>
         {isScrollLoading && <Loading />}
       </div>
