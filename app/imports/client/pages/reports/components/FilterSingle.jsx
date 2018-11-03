@@ -4,9 +4,30 @@ import { AutoField, ErrorField, SelectField } from "/imports/ui/forms";
 import DateField from "/imports/client/lib/uniforms/DateField";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import { stateOptions } from "/imports/api/accounts/enums/states";
+
+
 export default class FiltersSingle extends React.Component {
   constructor() {
     super();
+    this.state = { dateSpanOptions: [] };
+  }
+
+  componentDidMount() {
+    this.prepareDateSpanOptions();
+  }
+
+  prepareDateSpanOptions() {
+    let dateSpanOptions = this.state.dateSpanOptions;
+    dateSpanOptions.push({ label: 'Today', value: 1 });
+    dateSpanOptions.push({ label: 'Yesterday', value: 1 });
+    dateSpanOptions.push({ label: 'Week To Date', value: 1 });
+    dateSpanOptions.push({ label: 'Last Week', value: 1 });
+    dateSpanOptions.push({ label: 'Month To Date', value: 1 });
+    dateSpanOptions.push({ label: 'Last Month', value: 1 });
+    dateSpanOptions.push({ label: 'Year To Date', value: 1 });
+    dateSpanOptions.push({ label: 'Last Year', value: 1 });
+    dateSpanOptions.push({ label: 'Custom Range', value: 1 });
+    this.setState({ dateSpanOptions });
   }
 
   deleteFilter = name => {
@@ -119,6 +140,7 @@ export default class FiltersSingle extends React.Component {
   }
 
   render() {
+    const { dateSpanOptions } = this.state;
     const { name } = this.props;
     return (
       <div className="filter-type__wrapper">
@@ -131,7 +153,14 @@ export default class FiltersSingle extends React.Component {
             Delete
           </div>
         </div>
-        {this.renderWidget(name)}
+        <div className="main-container">
+          <div className="float-left">
+            {this.renderWidget(name)}
+          </div>
+          <div className="float-right">
+            <SelectField options={dateSpanOptions} name="filter" />
+          </div>
+        </div>
       </div>
     );
   }
