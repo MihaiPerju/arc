@@ -158,6 +158,7 @@ export default class ActionBlock extends Component {
               closeRightPanel={closeRightPanel}
               hide={this.newAction}
               account={account}
+              bulkAssign = {false}
             />
           ) : null}
           <div className="action-list">
