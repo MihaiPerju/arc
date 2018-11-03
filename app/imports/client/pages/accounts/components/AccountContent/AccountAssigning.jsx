@@ -102,7 +102,7 @@ export default class AccountActioning extends React.Component {
   }
 
   showDialog = () => {
-    const { options, assignToUser, bulkAssign, facilitiesOption, assignToWorkQueue } = this.props;
+    const { options, assignToUser, bulkAssign, facilitiesOption, assignToWorkQueue, accountIds } = this.props;
 
     const { workQueueOptions, loadingWorkQueues, isDisabled, userOptions } = this.state;
 
@@ -192,13 +192,19 @@ export default class AccountActioning extends React.Component {
           </AutoForm>
         ) : 
         (
+          <div className="action-block">
           <NewAction
-          freezeAccount={false}
-          closeRightPanel={false}
-          hide={this.closeDialog}
-          account={false}
-          bulkAssign = {bulkAssign}
-        /> ) }
+            freezeAccount={false}
+            closeRightPanel={false}
+            hide={this.closeDialog}
+            account={false}
+            accountIds = {accountIds}
+            bulkAssign = {bulkAssign}
+            params = { bulkAssign ? PagerService.getParams().filters : false }
+            bulkOption = {true}
+            />
+          </div>
+         ) }
       </div>
     );
   };

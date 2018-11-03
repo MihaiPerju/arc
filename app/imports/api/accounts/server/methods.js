@@ -437,6 +437,34 @@ Meteor.methods({
       })
       return userOption;
     }
+  },
+
+  'account.assignAction.bulk'(data, selectedActionId, reasonCodes, params, accountList) {
+    let accountIdList = []
+       if(accountList) {
+        accountIdList = Accounts.find({ _id: { $in: accountList } }).fetch();
+      }else{
+        accountIdList = Accounts.find(params).fetch();
+      }
+   
+        _.map(accountIdList, account => {
+        selectedActionId ? data.actionId = selectedActionId : null;
+        reasonCodes.length > 0 ? data.reasonCode = reasonCodes : null;
+
+        data.userId = this.userId;
+        data.accountId = account._id;
+
+        if (account.assignee) {
+          data.addedBy = `${account.assignee.profile.firstName} ${
+            account.assignee.profile.lastName
+          }`;
+        } else if (account.workQueueId) {
+          data.addedBy = account.tag.name;
+        }
+
+        ActionService.createAction(data);
+      }); 
+    
   }
 
 });

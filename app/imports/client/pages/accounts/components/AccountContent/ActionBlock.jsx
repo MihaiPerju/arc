@@ -159,6 +159,9 @@ export default class ActionBlock extends Component {
               hide={this.newAction}
               account={account}
               bulkAssign = {false}
+              params = {false}
+              accountIds = {false}
+              bulkOption = {false}
             />
           ) : null}
           <div className="action-list">
