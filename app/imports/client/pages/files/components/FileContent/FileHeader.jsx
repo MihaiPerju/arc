@@ -3,9 +3,11 @@ import UploadStatus from "/imports/api/files/enums/statuses";
 import { getToken } from "../../../../../api/uploads/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import HeaderEdit from "./FileHeaderEdit";
+import { withQuery } from "meteor/cultofcoders:grapher-react";
+import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import moment from "moment/moment";
 
-export default class ReportHeader extends Component {
+class ReportHeader extends Component {
   constructor() {
     super();
     this.state = {
@@ -46,6 +48,7 @@ export default class ReportHeader extends Component {
     });
   };
 
+
   onRetryUpload = () => {
      const { file } = this.props;
       Meteor.call("file.retryUpload", file.fileName, file._id, (err, ret) => {
@@ -61,17 +64,34 @@ export default class ReportHeader extends Component {
       });
   };
 
+ getRetryButton = workerId => {
+  if(this.props.data.length > 0 && !workerId) {
+   return (
+      <button disabled onClick={this.onRetryUpload} style={{cursor: 'not-allowed'}} >
+        Retry Upload
+      </button>
+    );
+  } else {
+   return (
+      <button onClick={this.onRetryUpload} >
+      Retry Upload
+    </button>
+    );
+  }
+}
+    
   showMore = () => {
     this.setState({ showDetail: !this.state.showDetail });
   }
 
   render() {
-    const { file } = this.props;
+    const { file, data } = this.props;
     const { isEditingHeaders, showDetail } = this.state;
+    const job = data[data.length - 1];
 
     const styles = {
       backgroundColor:
-        file && file.status === UploadStatus.SUCCESS ? "green" : "red"
+      (data.length > 0 && !job.workerId) ? 'orange' : file && file.status === UploadStatus.SUCCESS ? "green" : "red"
     };
     return (
       <div className="main-content__header header-block">
@@ -84,7 +104,7 @@ export default class ReportHeader extends Component {
           <div className="placement-block">
             <div className="text-light-grey">Upload Status</div>
             <div style={styles} className="label label--grey text-uppercase">
-              {file && file.status}
+              {(data.length > 0 && !job.workerId) ? UploadStatus.REUPLOAD : file && file.status}
             </div>
           </div>
           <button style={{ color: "black" }} onClick={this.onDownloadFile}>
@@ -104,9 +124,7 @@ export default class ReportHeader extends Component {
               </button>
             )}
 
-          <button style={{ color: "black" }} onClick={this.onRetryUpload}>
-            Retry Upload
-          </button>
+           {this.getRetryButton(job ? job.workerId : false ) }
 
           {isEditingHeaders && (
             <HeaderEdit file={file} onCloseDialog={this.onCloseDialog} />
@@ -144,3 +162,10 @@ export default class ReportHeader extends Component {
     );
   }
 }
+
+export default withQuery(
+  props => {
+    return jobQueueQuery.clone({ filters: { fileId: props.file._id } });
+  },
+  { reactive: true }
+)(ReportHeader);
