@@ -201,7 +201,7 @@ export default class RunReports {
       else
         return `${d[key]}`;
     }
-    
+
     // Render HTML
     const renderHtml = meta => {
       const data = (
@@ -227,9 +227,14 @@ export default class RunReports {
       return ReactDOMServer.renderToString(data);
     };
 
-    const reportContent = renderHtml(metaData);
+    var reportContent = renderHtml(metaData);
+    reportContent = `<div style="font-size:5px !important;">${reportContent}</div>`;
+    console.log(reportContent);
+    
+    var options = {
+      "orientation": "landscape",
+    };
 
-    var options = { "zoomFactor": "1" };
     pdf.create(reportContent, options).toFile(pdfFilePath, (err, res) => {
       if (err) {
         future.return(err);
