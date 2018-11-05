@@ -199,10 +199,12 @@ export default class RunReports {
                   <Table.Cell key={item}>{item}</Table.Cell>
                 ))}
               </Table.Row>
-              {meta.map(d => (
-                <Table.Row>
-                  {Object.keys(headers).map(item => {
-                    return <Table.Cell>{bindColumn(d, item)}</Table.Cell>;
+              {meta.map((d, index) => (
+                <Table.Row key={index}>
+                  {Object.keys(headers).map((item, index) => {
+                    return (
+                      <Table.Cell key={index}>{bindColumn(d, item)}</Table.Cell>
+                    );
                   })}
                 </Table.Row>
               ))}
@@ -239,7 +241,17 @@ export default class RunReports {
 
     //Catching error
     stringifier.on("error", function(err) {
-      console.log(err);
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
     });
 
     stringifier.on(

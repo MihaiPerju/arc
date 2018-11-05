@@ -44,9 +44,5 @@ export default new SimpleSchema({
   placementDate: {
     type: Date,
     optional: true
-  },
-  failReason: {
-    type: String,
-    optional: true
   }
 });
