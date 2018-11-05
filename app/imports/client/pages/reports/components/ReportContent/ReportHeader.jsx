@@ -51,7 +51,7 @@ class ReportHeader extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.outsideClick, false);
+    document.removeEventListener("click", this.outsideClick, false);
   }
 
   outsideClick = e => {
@@ -151,65 +151,86 @@ class ReportHeader extends Component {
     const { data } = this.props;
     const { reportId } = data[0];
     window.open("/reportpdf/" + reportId);
-  }
+  };
 
   renderRunReportButton = status => {
     const { isDisabled } = this.state;
     switch (status) {
-      case JobQueueStatuses.IN_PROGRESS:  
+      case JobQueueStatuses.IN_PROGRESS:
         return (
-          <div className="action-dropdown p-0" >
-            <div className="action-dropdown__btn btn-disable-color" style={isDisabled ? { pointerEvents: "none", width: 110 } : { width: 110 }}>
+          <div className="action-dropdown p-0">
+            <div
+              className="action-dropdown__btn btn-disable-color"
+              style={
+                isDisabled
+                  ? { pointerEvents: "none", width: 110 }
+                  : { width: 110 }
+              }
+            >
               Running...
-          </div>
+            </div>
           </div>
         );
       case JobQueueStatuses.FINISHED:
         return (
           <div className="action-dropdown">
-            <div className="action-dropdown__btn" style={isDisabled ? { pointerEvents: "none", width: 110 } : { width: 110 }} onClick={this.openDropdown}>
+            <div
+              className="action-dropdown__btn"
+              style={
+                isDisabled
+                  ? { pointerEvents: "none", width: 110 }
+                  : { width: 110 }
+              }
+              onClick={this.openDropdown}
+            >
               Run report
-             <i className="icon-angle-down" />
+              <i className="icon-angle-down" />
             </div>
-            {
-              this.state.isOpenedDropdown && (
-                <div className="action-dropdown__container">
-                  <div className="action-caret">
-                    <div className="action-caret__outer" />
-                    <div className="action-caret__inner" />
-                  </div>
-                  <ul className="action-list">
-                    <li className="action-item">
-                      <a href="javascript:;" onClick={this.onRunReport} style={isDisabled ? { pointerEvents: "none" } : {}}>
-                        Run report (again)
-                   </a>
-                    </li>
-                    <li className="action-item">
-                      <a href="javascript:;" onClick={this.downloadReportpdf}>
-                        Download report pdf
-                   </a>
-                    </li>
-                    <li className="action-item">
-                      <a href="javascript:;" onClick={this.downloadReport}>
-                        Download report csv
-                   </a>
-                    </li>
-                  </ul>
+            {this.state.isOpenedDropdown && (
+              <div className="action-dropdown__container">
+                <div className="action-caret">
+                  <div className="action-caret__outer" />
+                  <div className="action-caret__inner" />
                 </div>
-              )
-            }
+                <ul className="action-list">
+                  <li className="action-item">
+                    <a
+                      href="javascript:;"
+                      onClick={this.onRunReport}
+                      style={isDisabled ? { pointerEvents: "none" } : {}}
+                    >
+                      Run report (again)
+                    </a>
+                  </li>
+                  <li className="action-item">
+                    <a href="javascript:;" onClick={this.downloadReportpdf}>
+                      Download report pdf
+                    </a>
+                  </li>
+                  <li className="action-item">
+                    <a href="javascript:;" onClick={this.downloadReport}>
+                      Download report csv
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         );
       default:
         return (
-          <div className="action-dropdown" >
-            <div className="action-dropdown__btn" style={{ width: 110 }} onClick={this.onRunReport}>
+          <div className="action-dropdown">
+            <div
+              className="action-dropdown__btn"
+              style={{ width: 110 }}
+              onClick={this.onRunReport}
+            >
               Run Report
             </div>
           </div>
         );
     }
-  }
+  };
 
   getReportContent = tableHeader => {
     const { accounts, accountActions } = this.state;
@@ -224,11 +245,11 @@ class ReportHeader extends Component {
               accounts={accounts}
             />
           ) : (
-              <AccountActionContent
-                tableHeader={tableHeader}
-                accountActions={accountActions}
-              />
-            )}
+            <AccountActionContent
+              tableHeader={tableHeader}
+              accountActions={accountActions}
+            />
+          )}
         </div>
       </div>
     );
@@ -265,7 +286,7 @@ class ReportHeader extends Component {
 
     this.setState({
       isOpenedDropdown: !isOpenedDropdown
-    })
+    });
   };
 
   render() {
@@ -298,68 +319,72 @@ class ReportHeader extends Component {
         {schedule ? (
           <ScheduleBlock report={report} />
         ) : (
-            <div className="main-content__header header-block header-reports">
-              <div className="row__header report-row-header">
-                <div className="text-light-grey">Report name</div>
-                <div className="title float-left">{report.name}</div>
-                <div className="btn-run-report">
-                  {this.renderRunReportButton(job && job.status)}
-                </div>
-              </div>
-              <div className="row__header">
-                <div className="placement-block">
-                  <div className="text-light-grey">Placement date</div>
-                  <div className="time">11:20</div>
-                </div>
-                <ActionDropdown
-                  openDialog={this.openDialog}
-                  openSchedule={this.openSchedule}
-                  onEdit={this.onEdit}
-                  onSetGraph={this.onSetGraph.bind(this)}
-                >
-                  {Meteor.userId() !== report.authorId && (
-                    <li className="action-item">
-                      <a href="javascript:;" onClick={this.openDialog}>
-                        Copy Report
-                    </a>
-                    </li>
+          <div className="main-content__header header-block header-reports">
+            <div className="row__header report-row-header">
+              <div className="text-light-grey">Report name</div>
+              <div className="title float-left">{report.name}</div>
+              <div className="btn-run-report">
+                {this.renderRunReportButton(job && job.status)}
+                {job &&
+                  job.status === JobQueueStatuses.FAILED && (
+                    <div style={{ color: "red" }}>Report failed</div>
                   )}
-                </ActionDropdown>
               </div>
-              {dialogIsActive && (
-                <Dialog
-                  className="account-dialog"
-                  title="Confirm"
-                  closePortal={this.closeDialog}
-                >
-                  <div className="form-wrapper">
-                    Are you sure you want to copy this report ?
-                </div>
-                  <div className="btn-group">
-                    <button className="btn-cancel" onClick={this.closeDialog}>
-                      Cancel
-                  </button>
-                    <button
-                      style={isDisabled ? { cursor: "not-allowed" } : {}}
-                      disabled={isDisabled}
-                      className="btn--light-blue"
-                      onClick={this.copyReport}
-                    >
-                      {isDisabled ? (
-                        <div>
-                          {" "}
-                          Loading
-                        <i className="icon-cog" />
-                        </div>
-                      ) : (
-                          "Confirm & Copy"
-                        )}
-                    </button>
-                  </div>
-                </Dialog>
-              )}
             </div>
-          )}
+            <div className="row__header">
+              <div className="placement-block">
+                <div className="text-light-grey">Placement date</div>
+                <div className="time">11:20</div>
+              </div>
+              <ActionDropdown
+                openDialog={this.openDialog}
+                openSchedule={this.openSchedule}
+                onEdit={this.onEdit}
+                onSetGraph={this.onSetGraph.bind(this)}
+              >
+                {Meteor.userId() !== report.authorId && (
+                  <li className="action-item">
+                    <a href="javascript:;" onClick={this.openDialog}>
+                      Copy Report
+                    </a>
+                  </li>
+                )}
+              </ActionDropdown>
+            </div>
+            {dialogIsActive && (
+              <Dialog
+                className="account-dialog"
+                title="Confirm"
+                closePortal={this.closeDialog}
+              >
+                <div className="form-wrapper">
+                  Are you sure you want to copy this report ?
+                </div>
+                <div className="btn-group">
+                  <button className="btn-cancel" onClick={this.closeDialog}>
+                    Cancel
+                  </button>
+                  <button
+                    style={isDisabled ? { cursor: "not-allowed" } : {}}
+                    disabled={isDisabled}
+                    className="btn--light-blue"
+                    onClick={this.copyReport}
+                  >
+                    {isDisabled ? (
+                      <div>
+                        {" "}
+                        Loading
+                        <i className="icon-cog" />
+                      </div>
+                    ) : (
+                      "Confirm & Copy"
+                    )}
+                  </button>
+                </div>
+              </Dialog>
+            )}
+          </div>
+        )}
         {!schedule &&
           (loading ? <Loading /> : this.getReportContent(tableHeader))}
       </div>
