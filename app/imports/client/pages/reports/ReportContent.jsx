@@ -33,7 +33,11 @@ export default class ReportContent extends Component {
     const { report, substates, closeRightPanel } = this.props;
 
     if (!report) {
-      return <div />;
+      return (
+        <div className="report-section">
+          This report doesn't exist or was removed
+        </div>
+      );
     }
 
     return (
