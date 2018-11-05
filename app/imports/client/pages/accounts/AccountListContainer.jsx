@@ -39,6 +39,7 @@ class AccountListContainer extends Pager {
       lockedAccountId: null,
       bulkAssign: false,
       facilitiesOption: false,
+      sortOption: false,
       assignActions : false
     });
     this.query = query;
@@ -120,7 +121,8 @@ class AccountListContainer extends Pager {
       this.closeRightPanel();
       this.setState({
         currentRouteState: state,
-        accountsSelected: []
+        accountsSelected: [],
+        sortOption: false
       });
       this.setPagerInitial();
 
@@ -482,6 +484,10 @@ class AccountListContainer extends Pager {
     });
   };
 
+  getSort = () => {
+    this.setState({sortOption: !this.state.sortOption});
+  }
+
   render() {
     const { data, isLoading, error } = this.props;
     const {
@@ -499,6 +505,8 @@ class AccountListContainer extends Pager {
       lockOwnerName,
       bulkAssign,
       facilitiesOption,
+      sortOption,
+      currentRouteState,
       assignActions
     } = this.state;
     const options = this.getData(data);
@@ -539,6 +547,9 @@ class AccountListContainer extends Pager {
             data={data}
             tags={tags}
             bulkAssign={bulkAssign}
+            getSort={this.getSort}
+            sortOption={sortOption}
+            key={currentRouteState}
           />
           {assignUser && (
             <AccountAssigning
