@@ -4,7 +4,7 @@ button,
 .cc-button {
   display: inline-block;
   position: relative;
-  border: 1px solid #ccc;
+  border: 0 none;
   outline: none;
   text-align: center;
   text-decoration: none;
@@ -67,6 +67,7 @@ button,
   }
 
   &.btn--green {
+    color: $color-white;
     background: $green;
     color: $color-white;
   }

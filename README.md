@@ -19,20 +19,6 @@ IMPORTANT: using `npm install` instead of `meteor npm install` can cause issues 
 4) `cd` to every application and run `npm start`
 
 
-## Credentials
-
-We have 4 roles in the system: ADMIN, TECH, MANAGER, REP
-
-These are the credentials for each one:
-
-admin  - admin@app.com
-manager - manager-x@app.com, where x in {1,2,3}
-tech - tech-x@app.com, where x in {1,2,3}
-rep - rep-x@app.com, where x in {1,2,3}
-
-The password is 12345 for all accounts.
-
-
 ## Documents
 
 Official documentation - https://docs.google.com/document/d/1d6iB3vKQXrOSnXWmGpik0F31zmIpJrZgyLOEMsKaU_s/edit?ts=5b7c3d6d

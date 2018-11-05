@@ -670,18 +670,14 @@ export default class AccountSearchBar extends Component {
               </button>
               {tags.length ? <Tags tags={tags} /> : null}
             </div>
-            <div
-              className={sort ? "filter-block active" : "filter-block"}
-              onClick={this.manageSortBar}
-            >
-              <button>
-                {sort ? (
-                  <i className="icon-angle-up" />
-                ) : (
-                    <i className="icon-angle-down" />
-                  )}
-              </button>
-            </div>
+              <div
+                className={sort ? "filter-block active" : "filter-block"}
+                onClick={this.manageSortBar}
+              >
+                <button>
+                    <i className="icon-sort-alpha-asc" />
+                </button>
+              </div>
           </div>
         </div>
         {sort && (

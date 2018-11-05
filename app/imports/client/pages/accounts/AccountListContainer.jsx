@@ -39,7 +39,8 @@ class AccountListContainer extends Pager {
       lockedAccountId: null,
       bulkAssign: false,
       facilitiesOption: false,
-      sortOption: false
+      sortOption: false,
+      assignActions : false
     });
     this.query = query;
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
@@ -306,6 +307,18 @@ class AccountListContainer extends Pager {
     });
   };
 
+  assignAction = () => {
+    this.setState({
+      assignActions: true
+    });
+  };
+
+  closeAssignAction = () => {
+    this.setState({
+      assignActions: false
+    });
+  };
+
   closeAssignWQ = () => {
     this.setState({
       assignWQ: false
@@ -493,12 +506,14 @@ class AccountListContainer extends Pager {
       bulkAssign,
       facilitiesOption,
       sortOption,
-      currentRouteState
+      currentRouteState,
+      assignActions
     } = this.state;
     const options = this.getData(data);
     const icons = [
       { icon: "user", method: this.assignToUser },
-      { icon: "users", method: this.assignToWorkQueue }
+      { icon: "users", method: this.assignToWorkQueue },
+      { icon: "thumb-tack", method: this.assignAction }
     ];
 
     if (isLoading && !FlowRouter.getQueryParam("acctNum")) {
@@ -539,6 +554,8 @@ class AccountListContainer extends Pager {
           {assignUser && (
             <AccountAssigning
               assignToUser={true}
+              assignToWorkQueue={false}
+              assignAction={false}
               accountIds={accountsSelected}
               closeDialog={this.closeAssignUser}
               title={""}
@@ -551,6 +568,8 @@ class AccountListContainer extends Pager {
           {assignWQ && (
             <AccountAssigning
               assignToUser={false}
+              assignToWorkQueue={true}
+              assignAction={false}
               accountIds={accountsSelected}
               closeDialog={this.closeAssignWQ}
               title={""}
@@ -559,6 +578,20 @@ class AccountListContainer extends Pager {
               facilitiesOption={false}
             />
           )}
+           {assignActions && (
+            <AccountAssigning
+              assignToUser={false}
+              assignToWorkQueue={false}
+              assignAction={true}
+              accountIds={accountsSelected}
+              closeDialog={this.closeAssignAction}
+              title={""}
+              uncheckAccountList={this.uncheckAccountList}
+              bulkAssign={bulkAssign}
+              facilitiesOption={false}
+            />
+          )}
+          
           <AccountList
             classes={"task-list accounts"}
             accountsSelected={accountsSelected}
