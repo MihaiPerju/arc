@@ -14,7 +14,7 @@ exports.baseSchema = `
     status: Boolean!
     createdAt: gqlDate!
     placementRules: PlacementRules
-    fileId: String # ! What is this for?
+    fileId: String # TODO: This is relation to the last file processed in the files collection
     fileIds: [String]
     contacts: [Contact]
     addressOne: String!

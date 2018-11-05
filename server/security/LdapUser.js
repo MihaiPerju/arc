@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const isBefore = require('date-fns/is_before');
 
 exports = class LdapUser {
     constructor(user, db){
@@ -10,6 +11,13 @@ exports = class LdapUser {
             email: user.mail,
             guid: user.guid
         }
+
+        // Stored separately to avoid any user obj update issues
+        this.sessions = this.user.sessions || [];
+    }
+
+    validateSession(sessionId) {
+        return this.sessions.some(session => session.sessionId === sessionId && isBefore(new Date, session.expires))
     }
 
     /**
@@ -22,7 +30,7 @@ exports = class LdapUser {
         const tmpUser = {...this.user};
         delete tmpUser._id;
 
-        return this.collection.updateOne({_id: this.user._id}, tmpUser, { upsert });
+        return this.collection.updateOne({_id: this.user._id}, {$set: {tmpUser}}, { upsert });
     }
 
     /**

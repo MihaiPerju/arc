@@ -5,6 +5,8 @@ const graphqlHTTP = require('express-graphql');
 const graphqlIndex = require('./graphQL/index');
 const { existsSync } = require('fs');
 const { ActiveDirectory } = require('node-ad-tools');
+const { sessionCookie, userCookie } = require('./security/cookies');
+const authRoutes = require('./routes/auth');
 
 // Use user custom config or switch to default dev one
 const config = existsSync('config.js') ? require('./config.js') : require('./startup/devMode/devConfig');
@@ -16,7 +18,15 @@ startupFn.preStart();
 const app = express();
 app.disable('x-powered-by');
 
-app.use('/graphql', graphqlHTTP({
+// Decrypt cookies
+app.use(sessionCookie);
+app.use(userCookie);
+
+// Setup routes
+app.use('/api/auth', authRoutes);
+
+// Setup graphQL
+app.use('/api/graphql', graphqlHTTP({
     schema: graphqlIndex.schema,
     graphiql: true,
     rootValue: graphqlIndex.resolvers,
@@ -47,4 +57,4 @@ MongoClient.connect(config.databaseSettings.mongoURI, config.databaseSettings.op
     const server = app.listen(config.appSettings.port || 3050, () => {
         startupFn.postStart(server)
     });
-})
+});

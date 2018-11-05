@@ -11,7 +11,7 @@ const addHours = require('date-fns/add_hours');
  * @param {ActiveDirectory} myAD The ActiveDirectory class object
  * @returns {Object} Returns standard object of {success: Boolean, reason: 'Error' || userId, sessionID, groups}
  */
-async function loginWithAd(username,password, myAD) {
+async function loginWithAd(username, password, myAD) {
     try {
         // Try to authenticate with Active Directory
         const res = await myAD.loginUser(username, password);
@@ -34,9 +34,42 @@ async function loginWithAd(username,password, myAD) {
 
         return {success: true, userId: user._id, sessionId, groups}
     } catch(err) {
-        console.error(err);
+        console.error(err); // TODO Replace w/ logging
         return {success: false, reason: "Backend Error"}
     }
 }
 
+// Session middleware
+const validateSession = function (req,res,next) {
+    // No need to check sessions on login or creation of account
+    if(req.path === '/api/login')
+        return next()
+
+    // If cookies are missing skip
+    if(!req.user.userId || !req.session.sessionId)
+        return next({loggedIn: false})
+
+    // Create a user object from the user cookie
+    app.locals.db.collection('ldapUsers').findOne({_id: req.user.userId})
+        .then(data => {
+            const user = new LdapUser(data, app.locals.db)
+            const validSession = user.validateSession(req.session.sessionId);
+            
+            // If user has valid session proceed in app and attach user to the locals variable
+            if(validSession === true) {
+                req.locals.user = user;
+                return next()
+            }
+
+            return next({loggedIn: false})
+        })
+        .catch(err => {
+            //TODO: Add logging here
+            return next({loggedIn: false})
+        })
+
+    
+};
+
 module.exports.loginWithAd = loginWithAd;
+module.exports.validateSession = validateSession;
