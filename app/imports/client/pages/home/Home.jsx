@@ -9,6 +9,7 @@ import moment from "moment";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
+import RepDashboard from "./components/RepDashboard";
 
 export default class Home extends React.Component {
 
@@ -157,6 +158,11 @@ export default class Home extends React.Component {
             {this.renderGraph()}
           </div>
         </div>
+      );
+    }
+    else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      return (
+        <RepDashboard />
       );
     }
     else

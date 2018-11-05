@@ -70,10 +70,12 @@ export default class ActionEdit extends React.Component {
   }
 
   handleClick() {
-    const currentState = this.state.checked;
-    this.setState({
-      checked: !currentState
-    });
+    if (!Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      const currentState = this.state.checked;
+      this.setState({
+        checked: !currentState
+      });
+    }
   }
 
   onEditAction = () => {
@@ -137,6 +139,10 @@ export default class ActionEdit extends React.Component {
               </div>
 
               <AutoForm
+                disabled={Roles.userIsInRole(
+                  Meteor.userId(),
+                  RolesEnum.MANAGER
+                )}
                 model={action}
                 schema={ActionSchema}
                 onSubmit={this.onSubmit.bind(this)}
@@ -166,7 +172,6 @@ export default class ActionEdit extends React.Component {
                 <div className="check-group">
                   <input checked={checked} type="checkbox" />
                   <label onClick={this.handleClick}>
-                    {" "}
                     Changes the substate of the Account?
                   </label>
                 </div>
@@ -175,6 +180,10 @@ export default class ActionEdit extends React.Component {
                   <div className="select-group">
                     <div className="form-wrapper">
                       <SelectSimple
+                        disabled={Roles.userIsInRole(
+                          Meteor.userId(),
+                          RolesEnum.MANAGER
+                        )}
                         placeholder="Substate"
                         labelHidden={true}
                         name="substateId"

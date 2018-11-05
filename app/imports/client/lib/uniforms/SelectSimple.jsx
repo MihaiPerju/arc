@@ -20,13 +20,14 @@ class SelectSimple extends React.Component {
   };
 
   render() {
-    const { id, label, labelHidden, options, ...props } = this.props;
+    const { id, label, labelHidden, options, disabled, ...props } = this.props;
     const { value } = this.state;
 
     return (
       <div {...filterDOMProps(props)}>
         {!labelHidden && <label htmlFor={id}>{label}</label>}
         <Select
+          disabled={disabled}
           options={options}
           onChange={this.onChange}
           value={value}

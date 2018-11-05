@@ -123,8 +123,8 @@ export default class AccountSearchBar extends Component {
         model
       });
     }
-
-    this.setState({ selectAll: props.bulkAssign });
+    
+    this.setState({ selectAll: props.bulkAssign, sort:props.sortOption  });
   }
 
   onSubmit(params) {
@@ -264,6 +264,7 @@ export default class AccountSearchBar extends Component {
 
   manageSortBar = () => {
     const { sort } = this.state;
+    this.props.getSort();
     this.setState({
       sort: !sort
     });

@@ -189,7 +189,7 @@ export default class RunReports {
         var value = d[metaDataKey][subKey];
         return `${value != undefined ? value : ''}`;
       }
-      else if (key.includes('insurances')) {
+      else if (key.includes('insurances')) {+-
         var insKeys = key.split('.');
         var objectKeys = insKeys[0].split('[');
         var propKey = insKeys[1];
@@ -201,8 +201,6 @@ export default class RunReports {
       else
         return `${d[key]}`;
     }
-
-
 
     // Render HTML
     const renderHtml = meta => {
@@ -217,9 +215,10 @@ export default class RunReports {
               </Table.Row>
               {meta.map(d => (
                 <Table.Row>
-                  {Object.keys(headers).map(item => (
+                 {Object.keys(headers).map(item => (
                     <Table.Cell>{bindColumn(d, item)}</Table.Cell>
                   ))}
+
                 </Table.Row>
               ))}
             </Table.Body>
