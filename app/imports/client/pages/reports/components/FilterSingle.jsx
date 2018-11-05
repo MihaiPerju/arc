@@ -9,26 +9,30 @@ import { stateOptions } from "/imports/api/accounts/enums/states";
 export default class FiltersSingle extends React.Component {
   constructor() {
     super();
-    this.state = { dateSpanOptions: [] };
+    this.state = { 
+        dateSpanOptions: [], 
+        checkedDateSpan: false,
+        disableDateField: false
+        };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.prepareDateSpanOptions();
   }
 
-  prepareDateSpanOptions() {
+   prepareDateSpanOptions() {
     let dateSpanOptions = this.state.dateSpanOptions;
-    dateSpanOptions.push({ label: 'Today', value: 1 });
-    dateSpanOptions.push({ label: 'Yesterday', value: 1 });
-    dateSpanOptions.push({ label: 'Week To Date', value: 1 });
-    dateSpanOptions.push({ label: 'Last Week', value: 1 });
-    dateSpanOptions.push({ label: 'Month To Date', value: 1 });
-    dateSpanOptions.push({ label: 'Last Month', value: 1 });
-    dateSpanOptions.push({ label: 'Year To Date', value: 1 });
-    dateSpanOptions.push({ label: 'Last Year', value: 1 });
-    dateSpanOptions.push({ label: 'Custom Range', value: 1 });
+    dateSpanOptions.push({ value: 1, label: 'Today' });
+    dateSpanOptions.push({ value: 2, label: 'Yesterday' });
+    dateSpanOptions.push({ value: 3, label: 'Week To Date' });
+    dateSpanOptions.push({ value: 4, label: 'Last Week' });
+    dateSpanOptions.push({ value: 5, label: 'Month To Date' });
+    dateSpanOptions.push({ value: 6, label: 'Last Month' });
+    dateSpanOptions.push({ value: 7, label: 'Year To Date' });
+    dateSpanOptions.push({ value: 8, label: 'Last Year' });
+    dateSpanOptions.push({ value: 9, label: 'Custom Range' });
     this.setState({ dateSpanOptions });
-  }
+  } 
 
   deleteFilter = name => {
     this.props.deleteFilter(name);
@@ -50,6 +54,10 @@ export default class FiltersSingle extends React.Component {
     }
   }
 
+  changeState = () => {
+    this.setState({checkedDateSpan: !this.state.checkedDateSpan, disableDateField: !this.state.disableDateField });
+  }
+  
   renderWidget(name) {
     const { substateOptions } = this.props;
     if (ReportsService.isEnum(name)) {
@@ -67,20 +75,42 @@ export default class FiltersSingle extends React.Component {
     }
     if (ReportsService.isDate(name)) {
       return (
-        <div className="input-datetime">
-          <DateField
-            placeholder="Select start date"
-            labelHidden={true}
-            name={`${name}Start`}
-          />
-          <ErrorField name={`${name}Start`} />
+        <div>
+          <div className="float-left">
+            <div className="input-datetime">
+              <DateField
+                placeholder="Select start date"
+                labelHidden={true}
+                name={`${name}Start`}
+                disabled={this.state.disableDateField}
+              />
+              <ErrorField name={`${name}Start`} />
 
-          <DateField
-            placeholder="Select finish date"
-            labelHidden={true}
-            name={`${name}End`}
-          />
-          <ErrorField name={`${name}End`} />
+              <DateField
+                placeholder="Select finish date"
+                labelHidden={true}
+                name={`${name}End`}
+                disabled={this.state.disableDateField}
+              />
+              <ErrorField name={`${name}End`} />
+            </div>
+          </div>
+           <div className="float-right" style={{ paddingLeft: '20px' }}>
+           <div>
+                <input type="checkbox" checked={this.state.checkedDateSpan} onClick={() => { this.changeState() }}/>
+                <label>Relative Date Span</label>
+              </div>
+            <div className="select-wrapper">
+                <SelectField
+                labelHidden={true}
+                name={`${name}DateSpan`}
+                placeholder="Select Date Span"
+                options={this.state.dateSpanOptions}
+                disabled={!this.state.disableDateField}
+                />
+              <ErrorField name={`${name}DateSpan`} />
+            </div>
+          </div> 
         </div>
       );
     }
@@ -156,9 +186,6 @@ export default class FiltersSingle extends React.Component {
         <div className="main-container">
           <div className="float-left">
             {this.renderWidget(name)}
-          </div>
-          <div className="float-right">
-            <SelectField options={dateSpanOptions} name="filter" />
           </div>
         </div>
       </div>

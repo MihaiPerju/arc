@@ -121,7 +121,11 @@ export default class ReportsService {
       }
       if (ReportsService.isDate(field)) {
         //If is Date
-        if (data[field + "Start"] && data[field + "End"]) {
+        if (data[field + "DateSpan"]) {
+          filters[field] = {
+            $eq: data[field + "DateSpan"]
+          };
+        } else if (data[field + "Start"] && data[field + "End"]) {
           filters[field] = {
             $gte: data[field + "Start"],
             $lt: data[field + "End"]
@@ -249,6 +253,10 @@ export default class ReportsService {
           label
         };
         fields[`${value}End`] = {
+          type: Date,
+          optional: true
+        };
+        fields[`${value}DateSpan`] = {
           type: Date,
           optional: true
         };

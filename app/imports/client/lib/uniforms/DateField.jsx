@@ -32,7 +32,7 @@ class DatePickerCustom extends React.Component {
   };
 
   render() {
-    const { label } = this.props;
+    const { label, disabled } = this.props;
     return (
       <div>
         <DatePicker
@@ -43,6 +43,7 @@ class DatePickerCustom extends React.Component {
           selected={this.state.startDate}
           onChange={this.handleChange}
           placeholderText={label}
+          disabled={disabled?disabled:false}
         />
       </div>
     );
