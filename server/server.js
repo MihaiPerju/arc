@@ -4,6 +4,7 @@ const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const graphqlIndex = require('./graphQL/index');
 const { existsSync } = require('fs');
+const { ActiveDirectory } = require('node-ad-tools');
 
 // Use user custom config or switch to default dev one
 const config = existsSync('config.js') ? require('./config.js') : require('./startup/devMode/devConfig');
@@ -40,6 +41,7 @@ MongoClient.connect(config.databaseSettings.mongoURI, config.databaseSettings.op
     // Post DB hook
     startupFn.postDB();
     app.locals.db = client.db(config.databaseSettings.databaseName);
+    app.locals.myAD = new ActiveDirectory(config.adServer);
     
     // Start web server
     const server = app.listen(config.appSettings.port || 3050, () => {
