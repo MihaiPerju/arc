@@ -57,7 +57,7 @@ class TagContent extends Component {
             <TagContentHeader setEdit={this.setEdit} tag={tag} />
             {tag &&
               tag.entities &&
-              tag.entities.includes(moduleNames.USERS) && (
+              tag.entities.includes(moduleNames.WORK_QUEUE) && (
                 <TagContentDescription
                   taggedUsers={taggedUsers}
                   untaggedUsers={untaggedUsers}
