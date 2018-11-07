@@ -12,7 +12,8 @@ export default class FiltersSingle extends React.Component {
     this.state = { 
         dateSpanOptions: [], 
         checkedDateSpan: false,
-        disableDateField: false
+        disableDateField: false,
+        dateSpanValue: ''
         };
   }
 
@@ -22,15 +23,15 @@ export default class FiltersSingle extends React.Component {
 
    prepareDateSpanOptions() {
     let dateSpanOptions = this.state.dateSpanOptions;
-    dateSpanOptions.push({ value: 1, label: 'Today' });
-    dateSpanOptions.push({ value: 2, label: 'Yesterday' });
-    dateSpanOptions.push({ value: 3, label: 'Week To Date' });
-    dateSpanOptions.push({ value: 4, label: 'Last Week' });
-    dateSpanOptions.push({ value: 5, label: 'Month To Date' });
-    dateSpanOptions.push({ value: 6, label: 'Last Month' });
-    dateSpanOptions.push({ value: 7, label: 'Year To Date' });
-    dateSpanOptions.push({ value: 8, label: 'Last Year' });
-    dateSpanOptions.push({ value: 9, label: 'Custom Range' });
+    dateSpanOptions.push({ value: 'today', label: 'Today' });
+    dateSpanOptions.push({ value: 'yesterday', label: 'Yesterday' });
+    dateSpanOptions.push({ value: 'week_to_date', label: 'Week To Date' });
+    dateSpanOptions.push({ value: 'last_week', label: 'Last Week' });
+    dateSpanOptions.push({ value: 'month_to_date', label: 'Month To Date' });
+    dateSpanOptions.push({ value: 'last_month', label: 'Last Month' });
+    dateSpanOptions.push({ value: 'year_to_date', label: 'Year To Date' });
+    dateSpanOptions.push({ value: 'last_year', label: 'Last Year' });
+    dateSpanOptions.push({ value: 'custom_range', label: 'Custom Range' });
     this.setState({ dateSpanOptions });
   } 
 
@@ -55,7 +56,17 @@ export default class FiltersSingle extends React.Component {
   }
 
   changeState = () => {
-    this.setState({checkedDateSpan: !this.state.checkedDateSpan, disableDateField: !this.state.disableDateField });
+    this.setState({
+        checkedDateSpan: !this.state.checkedDateSpan, 
+        disableDateField: !this.state.disableDateField 
+      });
+
+      
+  }
+
+  onChange = (val) => {
+    this.setState({ dateSpanValue: val });
+    console.log(this.state.dateSpanValue);
   }
   
   renderWidget(name) {
@@ -96,8 +107,8 @@ export default class FiltersSingle extends React.Component {
             </div>
           </div>
            <div className="float-right" style={{ paddingLeft: '20px' }}>
-           <div>
-                <input type="checkbox" checked={this.state.checkedDateSpan} onClick={() => { this.changeState() }}/>
+              <div>
+                <input type="checkbox" checked={this.state.checkedDateSpan} onClick={this.changeState}/>
                 <label>Relative Date Span</label>
               </div>
             <div className="select-wrapper">
@@ -107,6 +118,8 @@ export default class FiltersSingle extends React.Component {
                 placeholder="Select Date Span"
                 options={this.state.dateSpanOptions}
                 disabled={!this.state.disableDateField}
+                selected = { this.state.dateSpanValue }
+                onChange = {this.onChange}
                 />
               <ErrorField name={`${name}DateSpan`} />
             </div>

@@ -1,6 +1,7 @@
 import SimpleSchema from "simpl-schema";
 import FieldsType from "../../accounts/config/accounts";
 import ReportFields from "/imports/api/reports/enums/ReportFields";
+import moment from "moment";
 
 const stringMatchOptions = ["Contains", "Not Contains", "Is Exact"];
 
@@ -12,6 +13,8 @@ export default class ReportsService {
       field = field.substring(0, field.indexOf("End"));
     } else if (field.endsWith("Start")) {
       field = field.substring(0, field.indexOf("Start"));
+    } else if (field.endsWith("DateSpan")) {
+      field = field.substring(0, field.indexOf("DateSpan"));
     }
     return field;
   }
@@ -81,14 +84,17 @@ export default class ReportsService {
         }
       }
 
-      filterBuilderData[field] = data[field];
-
+        filterBuilderData[field] = data[field];
+      
       //Removing 'Start' and 'End' prefixes if they are
       if (field.endsWith("Start")) {
         field = field.substr(0, field.indexOf("Start"));
       }
       if (field.endsWith("End")) {
         field = field.substr(0, field.indexOf("End"));
+      }
+      if (field.endsWith("DateSpan")) {
+        field = field.substr(0, field.indexOf("DateSpan"));
       }
 
       //Check type and create filter based on specific type information
@@ -122,9 +128,7 @@ export default class ReportsService {
       if (ReportsService.isDate(field)) {
         //If is Date
         if (data[field + "DateSpan"]) {
-          filters[field] = {
-            $eq: data[field + "DateSpan"]
-          };
+          filters[field] = ReportsService.getQuery(data[field + "DateSpan"])
         } else if (data[field + "Start"] && data[field + "End"]) {
           filters[field] = {
             $gte: data[field + "Start"],
@@ -171,6 +175,22 @@ export default class ReportsService {
     };
   }
 
+static getQuery(getSpan) {
+  let query = {};
+  let now = moment();
+  switch(getSpan) {
+    case 'today':
+      return query = { $eq: now.toISOString() };
+      break;
+    case 'yesterday':
+      return query = { $eq: now.subtract(1, 'days').toISOString() };
+      break;
+    default: 
+      return query = { $eq: now.toISOString() };
+      break;
+  }
+}
+
   static getFilters(data, components) {
     const requiredFields = [];
     for (let component in components) {
@@ -178,7 +198,7 @@ export default class ReportsService {
         if (ReportsService.isLink(component)) {
           requiredFields.push(component);
         } else if (ReportsService.isDate(component)) {
-          requiredFields.push(`${component}Start`, `${component}End`);
+          requiredFields.push(`${component}Start`, `${component}End`, `${component}DateSpan`);
         } else if (ReportsService.isNumber(component)) {
           requiredFields.push(`${component}Start`, `${component}End`);
         } else if (ReportsService.isEnum(component)) {
@@ -257,7 +277,7 @@ export default class ReportsService {
           optional: true
         };
         fields[`${value}DateSpan`] = {
-          type: Date,
+          type: String,
           optional: true
         };
       } else if (ReportsService.isNumber(value, FieldsType)) {
