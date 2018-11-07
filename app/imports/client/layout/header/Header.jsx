@@ -3,7 +3,8 @@ import { createContainer } from "meteor/react-meteor-data";
 import RolesEnum from "/imports/api/users/enums/roles";
 import Notifications from "./components/Notifications";
 import RoutesService from "../leftMenu/RoutesService";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import Notifier from "/imports/client/lib/Notifier";
 
 class Header extends Component {
   constructor() {
@@ -130,6 +131,19 @@ export default (HeaderContainer = createContainer(() => {
 }, Header));
 
 class BtnGroup extends Component {
+  constructor() {
+    super();
+  }
+  onLogOut = () => {
+    Meteor.logout(err => {
+      if (err) {
+        Notifier.error("An error has occurred please try again");
+      } else {
+        FlowRouter.go("/");
+      }
+    });
+  };
+
   render() {
     return (
       <div className="btn-group">
@@ -144,7 +158,7 @@ class BtnGroup extends Component {
           </a>
         )}
 
-        <a href="/logout">
+        <a onClick={this.onLogOut}>
           <i className="icon-sign-out" />
           <span>Log out</span>
         </a>
