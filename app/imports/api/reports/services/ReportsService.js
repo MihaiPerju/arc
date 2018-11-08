@@ -15,6 +15,8 @@ export default class ReportsService {
       field = field.substring(0, field.indexOf("Start"));
     } else if (field.endsWith("DateSpan")) {
       field = field.substring(0, field.indexOf("DateSpan"));
+    } else if (field.endsWith("Chkbox")) {
+      field = field.substring(0, field.indexOf("Chkbox"));
     }
     return field;
   }
@@ -73,10 +75,9 @@ export default class ReportsService {
     //Creating filters
     let filters = {};
     let filterBuilderData = {};
-
     for (let field of requiredFields) {
       //Field not completed
-      if (field.indexOf("Start") === -1 && field.indexOf("End") === -1) {
+      if (field.indexOf("Start") === -1 && field.indexOf("End") === -1 && field.indexOf("DateSpan") === -1 && field.indexOf("Chkbox") === -1) {
         if (!data[field]) {
           return {
             error: "Filters uncomplete!"
@@ -84,7 +85,7 @@ export default class ReportsService {
         }
       }
 
-        filterBuilderData[field] = data[field];
+    filterBuilderData[field] = data[field];
       
       //Removing 'Start' and 'End' prefixes if they are
       if (field.endsWith("Start")) {
@@ -96,7 +97,10 @@ export default class ReportsService {
       if (field.endsWith("DateSpan")) {
         field = field.substr(0, field.indexOf("DateSpan"));
       }
-
+      if (field.endsWith("Chkbox")) {
+        field = field.substr(0, field.indexOf("Chkbox"));
+      }
+      
       //Check type and create filter based on specific type information
       if (ReportsService.isEnum(field)) {
         //If is Enum
@@ -127,7 +131,7 @@ export default class ReportsService {
       }
       if (ReportsService.isDate(field)) {
         //If is Date
-        if (data[field + "DateSpan"]) {
+       if (data[field + "DateSpan"]) {
           filters[field] = ReportsService.getQuery(data[field + "DateSpan"])
         } else if (data[field + "Start"] && data[field + "End"]) {
           filters[field] = {
@@ -198,7 +202,7 @@ static getQuery(getSpan) {
         if (ReportsService.isLink(component)) {
           requiredFields.push(component);
         } else if (ReportsService.isDate(component)) {
-          requiredFields.push(`${component}Start`, `${component}End`, `${component}DateSpan`);
+          requiredFields.push(`${component}Start`, `${component}End`, `${component}DateSpan`, `${component}Chkbox`);
         } else if (ReportsService.isNumber(component)) {
           requiredFields.push(`${component}Start`, `${component}End`);
         } else if (ReportsService.isEnum(component)) {
@@ -277,6 +281,10 @@ static getQuery(getSpan) {
           optional: true
         };
         fields[`${value}DateSpan`] = {
+          type: String,
+          optional: true
+        };
+        fields[`${value}Chkbox`] = {
           type: String,
           optional: true
         };

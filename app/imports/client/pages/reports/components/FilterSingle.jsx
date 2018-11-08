@@ -55,18 +55,15 @@ export default class FiltersSingle extends React.Component {
     }
   }
 
-  changeState = () => {
+  changeState = (e) => {
     this.setState({
         checkedDateSpan: !this.state.checkedDateSpan, 
         disableDateField: !this.state.disableDateField 
       });
-
-      
   }
 
   onChange = (val) => {
     this.setState({ dateSpanValue: val });
-    console.log(this.state.dateSpanValue);
   }
   
   renderWidget(name) {
@@ -108,7 +105,7 @@ export default class FiltersSingle extends React.Component {
           </div>
            <div className="float-right" style={{ paddingLeft: '20px' }}>
               <div>
-                <input type="checkbox" checked={this.state.checkedDateSpan} onClick={this.changeState}/>
+                <input type="checkbox" checked={this.state.checkedDateSpan} value={this.state.checkedDateSpan} onChange={this.changeState} name={`${name}Chkbox`} />
                 <label>Relative Date Span</label>
               </div>
             <div className="select-wrapper">
@@ -118,8 +115,6 @@ export default class FiltersSingle extends React.Component {
                 placeholder="Select Date Span"
                 options={this.state.dateSpanOptions}
                 disabled={!this.state.disableDateField}
-                selected = { this.state.dateSpanValue }
-                onChange = {this.onChange}
                 />
               <ErrorField name={`${name}DateSpan`} />
             </div>
@@ -183,7 +178,6 @@ export default class FiltersSingle extends React.Component {
   }
 
   render() {
-    const { dateSpanOptions } = this.state;
     const { name } = this.props;
     return (
       <div className="filter-type__wrapper">
