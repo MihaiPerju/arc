@@ -14,6 +14,7 @@ import Loading from "/imports/client/lib/ui/Loading";
 import ActionsHelper from "/imports/api/actions/helpers/OptionsGenerator";
 import ReasonCodesHelper from "/imports/api/reasonCodes/helpers/OptionsGenerator";
 import DateField from "/imports/client/lib/uniforms/DateField";
+import requirementTypes from "/imports/api/actions/enums/requirementEnum";
 
 export default class NewAction extends Component {
   constructor() {
@@ -46,24 +47,39 @@ export default class NewAction extends Component {
   }
 
   onSubmit = data => {
-    const { account, hide, freezeAccount, bulkAssign, params, accountIds, bulkOption } = this.props;
+    const {
+      account,
+      hide,
+      freezeAccount,
+      bulkAssign,
+      params,
+      accountIds,
+      bulkOption
+    } = this.props;
     const selectedActionId = this.state.selectedActionId;
     const reasonCodes = this.state.reasonCodes;
-    
-    if(bulkOption) {
+
+    if (bulkOption) {
       this.setState({ isDisabled: true });
       let accountList = bulkAssign ? false : accountIds;
-      Meteor.call("account.assignAction.bulk",  data, selectedActionId, reasonCodes, params, accountList, err => {
-        if (!err) {
-          hide();
-          Notifier.success("Data saved");
-        } else {
-          Notifier.error(err.reason);
+      Meteor.call(
+        "account.assignAction.bulk",
+        data,
+        selectedActionId,
+        reasonCodes,
+        params,
+        accountList,
+        err => {
+          if (!err) {
+            hide();
+            Notifier.success("Data saved");
+          } else {
+            Notifier.error(err.reason);
+          }
+          this.setState({ isDisabled: false });
         }
-        this.setState({ isDisabled: false });
-      }); 
-
-    } else{
+      );
+    } else {
       data.accountId = account._id;
       if (account.assignee) {
         data.addedBy = `${account.assignee.profile.firstName} ${
@@ -87,7 +103,7 @@ export default class NewAction extends Component {
         }
         this.setState({ isDisabled: false });
       });
-    }  
+    }
   };
 
   onHide = () => {
@@ -179,7 +195,7 @@ export default class NewAction extends Component {
     //Extend schema for inputs
     if (action && action.inputs) {
       for (let input of action.inputs) {
-        let optional = !input.isRequired;
+        let optional = input.requirement === requirementTypes.OPTIONAL;
         if (input.type === "date") {
           _.extend(schema, {
             [input.label]: {

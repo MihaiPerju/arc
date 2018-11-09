@@ -13,6 +13,7 @@ import {
 import Notifier from "../../lib/Notifier";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import inputTypesEnum from "/imports/api/actions/enums/inputTypeEnum";
+import requirementTypes from "/imports/api/actions/enums/requirementEnum";
 
 export default class ActionCreate extends Component {
   constructor() {
@@ -66,6 +67,10 @@ export default class ActionCreate extends Component {
     const { substates } = this.props;
     const substatesOptions = this.getOptions(substates);
     const { checked, isDisabled } = this.state;
+    const requirementOptions = [
+      { label: requirementTypes.OPTIONAL, value: requirementTypes.OPTIONAL },
+      { label: requirementTypes.MANDATORY, value: requirementTypes.MANDATORY }
+    ];
 
     return (
       <div className="create-form action-create-form">
@@ -164,9 +169,10 @@ export default class ActionCreate extends Component {
                       <ErrorField name="label" />
                     </div>
                     <div className="form-wrapper">
-                      <AutoField
+                      <SelectField
                         labelHidden={true}
-                        name="isRequired"
+                        options={requirementOptions}
+                        name="requirement"
                         label="Mandatory"
                       />
                     </div>
