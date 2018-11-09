@@ -3,6 +3,7 @@ import FieldsType from "../../accounts/config/accounts";
 import ReportFields from "/imports/api/reports/enums/ReportFields";
 import moment from "moment";
 
+
 const stringMatchOptions = ["Contains", "Not Contains", "Is Exact"];
 
 export default class ReportsService {
@@ -85,8 +86,8 @@ export default class ReportsService {
         }
       }
 
-    filterBuilderData[field] = data[field];
-      
+      filterBuilderData[field] = data[field];
+
       //Removing 'Start' and 'End' prefixes if they are
       if (field.endsWith("Start")) {
         field = field.substr(0, field.indexOf("Start"));
@@ -100,7 +101,7 @@ export default class ReportsService {
       if (field.endsWith("Chkbox")) {
         field = field.substr(0, field.indexOf("Chkbox"));
       }
-      
+
       //Check type and create filter based on specific type information
       if (ReportsService.isEnum(field)) {
         //If is Enum
@@ -130,8 +131,8 @@ export default class ReportsService {
         }
       }
       if (ReportsService.isDate(field)) {
-        //If is Date
-       if (data[field + "DateSpan"]) {
+        let isRelativeDateSpan = data[field + "Chkbox"];
+        if (isRelativeDateSpan) {
           filters[field] = ReportsService.getQuery(data[field + "DateSpan"])
         } else if (data[field + "Start"] && data[field + "End"]) {
           filters[field] = {
@@ -179,21 +180,71 @@ export default class ReportsService {
     };
   }
 
-static getQuery(getSpan) {
-  let query = {};
-  let now = moment();
-  switch(getSpan) {
-    case 'today':
-      return query = { $eq: now.toISOString() };
-      break;
-    case 'yesterday':
-      return query = { $eq: now.subtract(1, 'days').toISOString() };
-      break;
-    default: 
-      return query = { $eq: now.toISOString() };
-      break;
+  static getQuery(getSpan) {
+    let query = {};
+    let dateTimeNow = moment();
+    let today = new Date(dateTimeNow);
+    let yesterday = new Date(dateTimeNow.add(-1, 'days'));
+    switch (getSpan) {
+      case 'today':
+        query = { $eq: today };
+        return query;
+      case 'yesterday':
+        query = { $eq: yesterday };
+        return query;
+      case 'last_week':
+        let lastWeekStartDate = new Date(moment().subtract(1, 'weeks').startOf('isoWeek'));
+        let lastWeekEndDate = new Date(moment().subtract(1, 'weeks').endOf('isoWeek'));
+        query = {
+          $gte: lastWeekStartDate,
+          $lt: lastWeekEndDate
+        };
+        return query;
+      case 'last_month':
+        let lastMonthStartDate = new Date(moment().subtract(1, 'months').startOf('month'));
+        let lastMonthEndDate = new Date(moment().subtract(1, 'months').endOf('month'));
+        query = {
+          $gte: lastMonthStartDate,
+          $lt: lastMonthEndDate
+        };
+        return query;
+      case 'last_year':
+        let lastYearStartDate = new Date(moment().subtract(1, 'years').startOf('year'));
+        let lastYearEndDate = new Date(moment().subtract(1, 'years').endOf('year'));
+        query = {
+          $gte: lastYearStartDate,
+          $lt: lastYearEndDate
+        };
+        return query;
+      case 'week_to_date':
+        let thisWeekStartDate = new Date(moment().subtract(0, 'weeks').startOf('isoWeek'));
+        let thisWeekEndDate = today;
+        query = {
+          $gte: thisWeekStartDate,
+          $lt: thisWeekEndDate
+        };
+        return query;
+      case 'month_to_date':
+        let thisMonthStartDate = new Date(moment().subtract(0, 'months').startOf('month'));
+        let thisMonthEndDate = today;
+        query = {
+          $gte: thisMonthStartDate,
+          $lt: thisMonthEndDate
+        };
+        return query;
+      case 'year_to_date':
+        let thisYearStartDate = new Date(moment().subtract(0, 'years').startOf('year'));
+        let thisYearEndDate = today;
+        query = {
+          $gte: thisYearStartDate,
+          $lt: thisYearEndDate
+        };
+        return query;
+      default:
+        query = { $eq: today };
+        return query;
+    }
   }
-}
 
   static getFilters(data, components) {
     const requiredFields = [];

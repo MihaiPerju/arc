@@ -175,6 +175,14 @@ h6 {
   padding-bottom: 0!important;
 }
 
+.p-l--10{
+  padding-left: 10px;
+}
+
+.p-l--0{
+  padding-left: 0 !important;
+}
+
 .m-t--20 {
   margin-top: 20px;
 }
@@ -254,4 +262,8 @@ cursor: none !important;
 
 .float-right{
   float: right;
+}
+
+.chk-box-label{
+  margin-left: 7px;
 }
