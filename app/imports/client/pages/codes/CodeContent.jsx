@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import CodeHeader from './components/CodeContent/CodeHeader';
 import DescriptionBlock from './components/CodeContent/DescriptionBlock';
-import Note from './components/CodeContent/Note';
 import ActionBlock from './components/CodeContent/ActionBlock';
 import CodeEdit from './CodeEdit';
 
@@ -33,7 +32,6 @@ export default class CodeContent extends Component {
                             <CodeHeader setEdit={this.setEdit} code={code}/>
                             <DescriptionBlock code={code}/>
                             <ActionBlock code={code}/>
-                            <Note code={code}/>
                         </div>
                 }
             </div>

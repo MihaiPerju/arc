@@ -11,7 +11,8 @@ class ReportHeader extends Component {
   constructor() {
     super();
     this.state = {
-      isEditingHeaders: false
+      isEditingHeaders: false,
+      showDetail: false
     };
   }
 
@@ -47,18 +48,23 @@ class ReportHeader extends Component {
     });
   };
 
-  onRetryUpload = () => { 
-    const { file } = this.props;
-    Meteor.call("file.retryUpload", file.fileName, file._id, err => {
-      if (!err) {
-        Notifier.success("Job Created");
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
+
+  onRetryUpload = () => {
+     const { file } = this.props;
+      Meteor.call("file.retryUpload", file.fileName, file._id, (err, ret) => {
+        if (!err) {
+          if(ret === 'FILE_NOT_AVAILABLE'){
+            Notifier.success("File not availble");
+          }else{
+            Notifier.success("Job Created");
+          }
+        } else {
+          Notifier.error(err.reason);
+        }
+      });
   };
 
-getRetryButton = workerId => {
+ getRetryButton = workerId => {
   if(this.props.data.length > 0 && !workerId) {
    return (
       <button disabled onClick={this.onRetryUpload} style={{cursor: 'not-allowed'}} >
@@ -73,11 +79,16 @@ getRetryButton = workerId => {
     );
   }
 }
+    
+  showMore = () => {
+    this.setState({ showDetail: !this.state.showDetail });
+  }
 
   render() {
     const { file, data } = this.props;
-    const { isEditingHeaders } = this.state;
+    const { isEditingHeaders, showDetail } = this.state;
     const job = data[data.length - 1];
+
     const styles = {
       backgroundColor:
       (data.length > 0 && !job.workerId) ? 'orange' : file && file.status === UploadStatus.SUCCESS ? "green" : "red"
@@ -118,14 +129,32 @@ getRetryButton = workerId => {
           {isEditingHeaders && (
             <HeaderEdit file={file} onCloseDialog={this.onCloseDialog} />
           )}
+          
           {file && file.corruptRows && file.corruptRows.length ? (
             <div>
-              <div>Encountered problems with following rows: </div>
-              <ul>
-                {file.corruptRows.map((row,index) => {
-                  return <li key={index}>{row}</li>;
-                })}
-              </ul>
+              <div className="placement-block" style={{alignItems: 'center'}} >
+                <div className="text-light-grey">The Number of error rows: <span style={styles} className="label label--grey" >{file.corruptRows.length} </span> </div>
+                  <button className="showMore-tag" onClick={this.showMore}>
+                    {showDetail ? 'Show Less' : 'Show More' }
+                    <i className={showDetail ? 'showMore-arrow icon-angle-up' : 'showMore-arrow icon-angle-down' } />
+                  </button>
+              </div>
+                { showDetail && 
+                  (
+                    <div className="placement-block report-content" >
+                      <div className="text-light-grey">Encountered problems with following rows: </div>
+                        <div className="table-list margin-top-10">
+                          <div className="table-container flex--helper" >
+                            <div className="table-container__left file-table-tag"  >
+                              {file.corruptRows.map((row) => {
+                                  return  <div className="table-field truncate box-border" > Row: {row}</div>
+                                })}
+                            </div>
+                          </div>
+                      </div>  
+                    </div>
+                  )
+                }
             </div>
           ) : null}
         </div>

@@ -8,6 +8,7 @@ import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import PagerService from "/imports/client/lib/PagerService";
+import NewAction from "./NewAction";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -27,7 +28,7 @@ export default class AccountActioning extends React.Component {
     workQueueQuery
       .clone({
         filters: {
-          entities: { $in: [moduleNames.USERS] }
+          entities: { $in: [moduleNames.WORK_QUEUE] }
         }
       })
       .fetch((err, res) => {
@@ -101,7 +102,7 @@ export default class AccountActioning extends React.Component {
   }
 
   showDialog = () => {
-    const { options, assignToUser, bulkAssign, facilitiesOption } = this.props;
+    const { options, assignToUser, bulkAssign, facilitiesOption, assignToWorkQueue, accountIds } = this.props;
 
     const { workQueueOptions, loadingWorkQueues, isDisabled, userOptions } = this.state;
 
@@ -154,7 +155,7 @@ export default class AccountActioning extends React.Component {
               </button>
             </div>
           </AutoForm>
-        ) : (
+        ) : assignToWorkQueue ? (
           <AutoForm //model={model}
             schema={workQueueSchema}
             onSubmit={this.assignToWorkQueue}
@@ -189,7 +190,21 @@ export default class AccountActioning extends React.Component {
               </button>
             </div>
           </AutoForm>
-        )}
+        ) : 
+        (
+          <div className="action-block">
+          <NewAction
+            freezeAccount={false}
+            closeRightPanel={false}
+            hide={this.closeDialog}
+            account={false}
+            accountIds = {accountIds}
+            bulkAssign = {bulkAssign}
+            params = { bulkAssign ? PagerService.getParams().filters : false }
+            bulkOption = {true}
+            />
+          </div>
+         ) }
       </div>
     );
   };

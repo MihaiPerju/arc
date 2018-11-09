@@ -41,7 +41,8 @@ export default class PlacementService {
     facilityId,
     filePath,
     userId,
-    _id
+    _id,
+    placementDate
   }) {
     const {
       root
@@ -106,7 +107,8 @@ export default class PlacementService {
     const links = {
       facilityId,
       fileId: newFileId,
-      managerIds: allowedUsers
+      managerIds: allowedUsers,
+      placementDate
     };
 
     Papa.parse(csvString, {
