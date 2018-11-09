@@ -20,7 +20,6 @@ export default class FacilityContent extends Component {
   }
 
   componentWillMount() {
-    console.log("Mounted");
     const { facility } = this.props;
     const { placementRules } = facility;
     this.setState({
@@ -30,7 +29,6 @@ export default class FacilityContent extends Component {
   }
 
   componentWillReceiveProps(props) {
-    console.log(props);
     this.setState({ edit: false });
   }
 
@@ -60,7 +58,6 @@ export default class FacilityContent extends Component {
     const { facility, setFacility } = this.props;
     const { edit, inventoryFacility, resetImportForm } = this.state;
     if (!facility) {
-      console.log("Ok");
       return <div>No Facility Selected</div>;
     }
     return (
@@ -97,13 +94,13 @@ export default class FacilityContent extends Component {
               facility={facility}
               setTempRules={this.setTempRules}
             />
-            {/* <InventoryBlock
+            <InventoryBlock
               facility={inventoryFacility}
               copyPlacementRules={this.copyPlacementRules}
               resetImportForm={resetImportForm}
               changeResetStatus={this.changeResetStatus}
             />
-            <PaymentBlock facility={facility} /> */}
+            <PaymentBlock facility={facility} />
           </div>
         )}
       </div>
