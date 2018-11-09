@@ -108,7 +108,7 @@ export default class ClientContentHeader extends Component {
     const { dialogIsActive, isAssigning, managers, isDisabled } = this.state;
 
     const managerIdsOptions = this.getManagerOptions(managers);
-
+   
     return (
       <div className="header-block">
         <img
@@ -130,7 +130,10 @@ export default class ClientContentHeader extends Component {
               <span className="text-light-grey">Email</span>
               <span className="text text-blue">{client.email}</span>
             </div>
-            {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH_MANAGER) && (
+            {Roles.userIsInRole(
+              Meteor.userId(),
+              roleGroups.ADMIN_TECH_MANAGER
+            ) && (
               <ActionDropdown
                 facilityHref={"/client/" + client._id + "/manage-facilities"}
                 regionHref={FlowRouter.url("region.list", { id: client._id })}
