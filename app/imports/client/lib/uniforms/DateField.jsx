@@ -35,6 +35,7 @@ class DatePickerCustom extends React.Component {
     const { label } = this.props;
     return (
       <div>
+        {label}
         <DatePicker
           showMonthDropdown
           showYearDropdown
@@ -42,7 +43,7 @@ class DatePickerCustom extends React.Component {
           todayButton={"Today"}
           selected={this.state.startDate}
           onChange={this.handleChange}
-          placeholderText={label}
+          placeholderText={"Select " + label}
         />
       </div>
     );
