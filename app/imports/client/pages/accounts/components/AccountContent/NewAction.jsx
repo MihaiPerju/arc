@@ -142,8 +142,7 @@ export default class NewAction extends Component {
     e = e || window.event;
     var charCode = typeof e.which == "undefined" ? e.keyCode : e.which;
     var charStr = String.fromCharCode(charCode);
-
-    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+    if (!charStr.match(/^[0-9]+$/) && charStr != ".") e.preventDefault();
   };
 
   getInputSingle = (input, index) => {
@@ -206,7 +205,7 @@ export default class NewAction extends Component {
         } else if (input.type === "number") {
           _.extend(schema, {
             [input.label]: {
-              type: SimpleSchema.Integer,
+              type: Number,
               optional
             }
           });
