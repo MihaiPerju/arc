@@ -157,7 +157,6 @@ export default class NewAction extends Component {
       return (
         <div className="custom-inputs" key={index}>
           <AutoField
-            labelHidden={true}
             placeholder={input.label}
             name={input.label}
             pattern="[0-9]"
@@ -170,7 +169,6 @@ export default class NewAction extends Component {
     return (
       <div className="custom-inputs" key={index}>
         <AutoField
-          labelHidden={true}
           placeholder={input.label}
           name={input.label}
         />
