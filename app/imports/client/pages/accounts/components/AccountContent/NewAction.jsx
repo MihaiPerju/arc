@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  AutoForm,
-  AutoField,
-  ErrorField,
-  SelectField
-} from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import query from "/imports/api/actions/queries/actionList";
@@ -168,10 +163,7 @@ export default class NewAction extends Component {
     }
     return (
       <div className="custom-inputs" key={index}>
-        <AutoField
-          placeholder={input.label}
-          name={input.label}
-        />
+        <AutoField placeholder={input.label} name={input.label} />
         <ErrorField name={input.label} />
       </div>
     );
@@ -252,7 +244,7 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectField
+                <SelectSimple
                   name="actionId"
                   labelHidden={false}
                   options={actionOptions}
