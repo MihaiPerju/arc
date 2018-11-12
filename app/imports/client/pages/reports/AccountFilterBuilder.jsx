@@ -143,7 +143,7 @@ export default class AccountFilterBuilder extends React.Component {
       data,
       components
     );
-    
+
     if (error) {
       Notifier.error(error);
     } else {
@@ -233,31 +233,32 @@ export default class AccountFilterBuilder extends React.Component {
           <Loading />
         ) : (
 
-          <div>
-            <AutoForm
-              model={filterBuilderData}
-              schema={schema}
-              onSubmit={this.onSubmit}
-              ref="filters"
-              onChange={this.onHandleChange}
-            >
-              {_.map(components, item => {
-                return (
-                  item.isActive && (
-                    <FilterSingle
-                      assigneeIdOptions={assigneeOptions}
-                      facilityIdOptions={facilityOptions}
-                      clientIdOptions={clientOptions}
-                      substateOptions={substateOptions}
-                      deleteFilter={this.deleteFilter}
-                      name={item.name}
-                    />
-                  )
-                );
-              })}
-            </AutoForm>
-            <div className="add-report-filter">
-               <AutoForm
+            <div>
+              <AutoForm
+                model={filterBuilderData}
+                schema={schema}
+                onSubmit={this.onSubmit}
+                ref="filters"
+                onChange={this.onHandleChange}
+              >
+                {_.map(components, item => {
+                  return (
+                    item.isActive && (
+                      <FilterSingle
+                        assigneeIdOptions={assigneeOptions}
+                        facilityIdOptions={facilityOptions}
+                        clientIdOptions={clientOptions}
+                        substateOptions={substateOptions}
+                        deleteFilter={this.deleteFilter}
+                        name={item.name}
+                        filterData={filterBuilderData}
+                      />
+                    )
+                  );
+                })}
+              </AutoForm>
+              <div className="add-report-filter">
+                <AutoForm
                   ref="filterSelect"
                   onChange={this.createFilter}
                   schema={filterSchema}
