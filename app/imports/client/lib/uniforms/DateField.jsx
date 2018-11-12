@@ -35,6 +35,7 @@ class DatePickerCustom extends React.Component {
     const { label, disabled } = this.props;
     return (
       <div>
+        {label}
         <DatePicker
           showMonthDropdown
           showYearDropdown
@@ -44,6 +45,7 @@ class DatePickerCustom extends React.Component {
           onChange={this.handleChange}
           placeholderText={label}
           disabled={disabled?disabled:false}
+
         />
       </div>
     );

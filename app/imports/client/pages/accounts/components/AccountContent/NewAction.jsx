@@ -1,10 +1,5 @@
 import React, { Component } from "react";
-import {
-  AutoForm,
-  AutoField,
-  ErrorField,
-  SelectField
-} from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import query from "/imports/api/actions/queries/actionList";
@@ -142,8 +137,7 @@ export default class NewAction extends Component {
     e = e || window.event;
     var charCode = typeof e.which == "undefined" ? e.keyCode : e.which;
     var charStr = String.fromCharCode(charCode);
-
-    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+    if (!charStr.match(/^[0-9]+$/) && charStr != ".") e.preventDefault();
   };
 
   getInputSingle = (input, index) => {
@@ -158,7 +152,6 @@ export default class NewAction extends Component {
       return (
         <div className="custom-inputs" key={index}>
           <AutoField
-            labelHidden={true}
             placeholder={input.label}
             name={input.label}
             pattern="[0-9]"
@@ -170,11 +163,7 @@ export default class NewAction extends Component {
     }
     return (
       <div className="custom-inputs" key={index}>
-        <AutoField
-          labelHidden={true}
-          placeholder={input.label}
-          name={input.label}
-        />
+        <AutoField placeholder={input.label} name={input.label} />
         <ErrorField name={input.label} />
       </div>
     );
@@ -206,7 +195,7 @@ export default class NewAction extends Component {
         } else if (input.type === "number") {
           _.extend(schema, {
             [input.label]: {
-              type: SimpleSchema.Integer,
+              type: Number,
               optional
             }
           });
@@ -255,7 +244,7 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectField
+                <SelectSimple
                   name="actionId"
                   labelHidden={false}
                   options={actionOptions}

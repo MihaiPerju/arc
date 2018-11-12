@@ -28,7 +28,7 @@ export default class FacilityContent extends Component {
     });
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(props) {
     this.setState({ edit: false });
   }
 
@@ -57,6 +57,9 @@ export default class FacilityContent extends Component {
   render() {
     const { facility, setFacility } = this.props;
     const { edit, inventoryFacility, resetImportForm } = this.state;
+    if (!facility) {
+      return <div>No Facility Selected</div>;
+    }
     return (
       <div className="main-content facility-content">
         <div className="breadcrumb">
