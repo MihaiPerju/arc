@@ -577,6 +577,10 @@ export default class PagerService {
       status = FlowRouter.getQueryParam("status");
     }
 
+    if (currentPath.indexOf("rules/list") > -1) {
+      name = FlowRouter.getQueryParam("name");
+    }
+
     tagIds = FlowRouter.getQueryParam("tagIds");
 
     // client search
