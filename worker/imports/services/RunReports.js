@@ -205,11 +205,11 @@ export default class RunReports {
       );
       return ReactDOMServer.renderToString(data);
     };
-    
+
     const reportContent = renderHtml(metaData);
 
-
-    pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+    const optionswidthheight = { "height": "768px", "width": "3000px" };
+    pdf.create(reportContent, optionswidthheight).toFile(pdfFilePath, (err, res) => {
       if (err) {
         future.return(err);
       } else {

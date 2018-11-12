@@ -125,5 +125,11 @@ Meteor.methods({
         $set: { password: hash }
       }
     );
-  }
+  },
+
+  "facilities.get"(clientId) {
+    Security.isAdminOrTech(this.userId);
+    return Facilities.find({ clientId: clientId }).fetch();
+  },
+
 });

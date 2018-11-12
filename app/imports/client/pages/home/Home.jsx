@@ -9,6 +9,7 @@ import moment from "moment";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
+import TechOrAdminDashboard from "./components/TechOrAdminDashboard";
 
 export default class Home extends React.Component {
 
@@ -20,12 +21,46 @@ export default class Home extends React.Component {
       reps: [],
       chartData: [],
       selectedDate: moment(),
-      selectedRep: ''
+      selectedRep: '',
+      clients: [],
+      facilities: [],
+      selectedClient: {}
     };
   }
 
   componentDidMount() {
-    this.getRepresentatives();
+    this.getClients();
+  }
+
+  getClients() {
+    Meteor.call("clients.get", (err, responseData) => {
+      if (!err) {
+        let clients = responseData.map(client => {
+          return { label: client.clientName, value: client._id };
+        });
+        clients.unshift({ label: 'Select Client', value: -1 });
+        this.setState({ clients, selectedClient: clients[0] });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  getFacilities(clientId) {
+    Meteor.call("facilities.get", clientId, (err, responseData) => {
+      if (!err) {
+        let facilities = [];
+        facilities = responseData.map(facility => {
+          return { label: facility.name, value: facility._id };
+        });
+        if (facilities.length > 0) {
+          facilities.unshift({ label: 'Select Facility', value: -1 });
+        }
+        this.setState({ facilities });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   getRepresentatives() {
@@ -79,6 +114,17 @@ export default class Home extends React.Component {
     this.setState({ selectedDate: moment(newDate) });
   };
 
+  onHandleChange = (field, value) => {
+    if (field == "clientId") {
+      if (value != "-1") {
+        this.getFacilities(value);
+      }
+    }
+  }
+
+
+
+
   renderGraph() {
     const options = {
       chart: {
@@ -115,8 +161,12 @@ export default class Home extends React.Component {
     }
   }
 
+  renderAdminDashboard() {
+    return <TechOrAdminDashboard />;
+  }
+
   render() {
-    const { reps, selectedDate } = this.state;
+    const { reps, selectedDate, clients, facilities } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return (
         <div className="cc-container home-container flex-align--start">
@@ -159,6 +209,42 @@ export default class Home extends React.Component {
         </div>
       );
     }
+    else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN))
+      return (
+        <div className="dashboard-container">
+          <div className="dashboard-header-content">
+            <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
+              <div className="flex--helper form-group__pseudo--3">
+                <div className="select-form select-box-width">
+                  <label className="dashboard-label">Clients</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="clientId"
+                      options={clients}
+                     />
+                  </div>
+                </div>
+                {
+                  facilities.length > 0 ?
+                    <div className="select-form select-box-width m-l-15">
+                      <label className="dashboard-label">Facilities</label>
+                      <div className="m-t--5">
+                        <AutoField
+                          labelHidden={true}
+                          name="facilityId"
+                          options={facilities} />
+                      </div>
+                    </div> : null
+                }
+              </div>
+            </AutoForm>
+          </div>
+          {
+            this.renderAdminDashboard()
+          }
+        </div>
+      )
     else
       return null;
   }
@@ -166,6 +252,15 @@ export default class Home extends React.Component {
 
 const heartBeatSchema = new SimpleSchema({
   userId: {
+    type: String
+  }
+});
+
+const dashboardSchema = new SimpleSchema({
+  clientId: {
+    type: String
+  },
+  facilityId: {
     type: String
   }
 });
