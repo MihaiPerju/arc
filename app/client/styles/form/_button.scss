@@ -4,7 +4,7 @@ button,
 .cc-button {
   display: inline-block;
   position: relative;
-  border: 1px solid #ccc;
+  border: 0 none;
   outline: none;
   text-align: center;
   text-decoration: none;
@@ -59,7 +59,11 @@ button,
   }
 
   &.btn--red {
-    background: $orange;
+    background-color: $orange;
+    color: $color-white;
+    &:hover {
+      background-color: lighten($orange, 10%);
+    }
   }
 
   &.btn--pink {
@@ -67,12 +71,17 @@ button,
   }
 
   &.btn--green {
+    color: $color-white;
     background: $green;
     color: $color-white;
   }
 
   &.btn--blue {
     background: $light-blue;
+    color: $color-white;
+    &:hover {
+      background: lighten($light-blue, 10%);
+    }
   }
 
   &.btn--light-blue {

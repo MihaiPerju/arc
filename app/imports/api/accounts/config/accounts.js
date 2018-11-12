@@ -1,6 +1,6 @@
 export default {
   enums: ["state", "substate"],
-  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt"],
+  dates: ["dischrgDate", "fbDate", "admitDate", "createdAt", "lastActionDate", "reactivationDate", "refreshDate", "placementDate"],
   numbers: ["medNo", "insBal", "insBal2", "insBal3", "acctBal"],
   links: ["facilityId", "assigneeId", "clientId"],
   strings: [
@@ -14,7 +14,9 @@ export default {
     "insName2",
     "insName3",
     "activeInsCode",
-    "activeInsName"
+    "activeInsName",
+    "other1",
+    "other2"
   ],
   others: ["other1", "other2"]
 };

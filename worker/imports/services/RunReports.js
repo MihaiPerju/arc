@@ -181,6 +181,17 @@ export default class RunReports {
       return m;
     });
 
+    const bindColumn = (d, key) => {
+      if (key.includes('metaData')) {
+        var metaDataKeys=key.split('[');
+        var metaDataKey=metaDataKeys[0];
+        var subKey=metaDataKeys[1].slice(0, -1);
+        return `${d[metaDataKey][subKey]}`;
+      }
+      else  
+        return `${d[key]}`;
+    }
+
     // Render HTML
     const renderHtml = meta => {
       const data = (
@@ -194,9 +205,9 @@ export default class RunReports {
               </Table.Row>
               {meta.map(d => (
                 <Table.Row>
-                  {Object.keys(headers).map(item => (
-                    <Table.Cell>{d[item]}</Table.Cell>
-                  ))}
+                  {Object.keys(headers).map(item => {
+                    return <Table.Cell>{bindColumn(d, item)}</Table.Cell>
+                  })}
                 </Table.Row>
               ))}
             </Table.Body>
@@ -207,6 +218,7 @@ export default class RunReports {
     };
 
     const reportContent = renderHtml(metaData);
+
 
     pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
       if (err) {

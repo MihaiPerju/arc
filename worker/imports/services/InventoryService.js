@@ -40,7 +40,7 @@ export default class InventoryService {
     }
   }
 
-  static processInventory({ facilityId, filePath, userId, _id }) {
+  static processInventory({ facilityId, filePath, userId, _id, placementDate }) {
     const { root } = SettingsService.getSettings(settings.ROOT);
 
     const importRules = ParseService.getImportRules(
@@ -97,7 +97,8 @@ export default class InventoryService {
     //Pass links to accounts to link them too
     const links = {
       facilityId,
-      fileId: newFileId
+      fileId: newFileId,
+      placementDate
     };
 
     Papa.parse(csvString, {

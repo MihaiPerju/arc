@@ -1,5 +1,6 @@
 export default {
   SUCCESS: "success",
   FAIL: "fail",
-  DISMISS: "dismiss"
+  DISMISS: "dismiss",
+  REUPLOAD: "re-uploading..."
 };

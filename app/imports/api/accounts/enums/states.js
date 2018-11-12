@@ -6,7 +6,9 @@ const States = {
   REVIEW: "Review"
 };
 
-import { Substates } from "./substates";
+import {
+  Substates
+} from "./substates";
 
 export const StatesSubstates = {
   [States.HOLD]: [
@@ -35,7 +37,31 @@ const StateList = [
   States.ESCALATED,
   States.REVIEW
 ];
+const stateOptions = [{
+    label: "Active",
+    value: States.ACTIVE
+  },
+  {
+    label: "Archive",
+    value: States.ARCHIVED
+  },
+  {
+    label: "Hold",
+    value: States.HOLD
+  },
+  {
+    label: "Escalated",
+    value: States.ESCALATED
+  },
+  {
+    label: "Review",
+    value: States.REVIEW
+  },
+]
 
-export { StateList };
+export {
+  StateList,
+  stateOptions
+};
 
 export default States;

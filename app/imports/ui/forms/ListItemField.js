@@ -26,8 +26,10 @@ var _AutoField = _interopRequireDefault(require("./AutoField"));
 var _ListDelField = _interopRequireDefault(require("./ListDelField"));
 
 var ListItem = function ListItem(props) {
+  var hideListField = props.hideListField;
   return _react.default.createElement("div", {className: 'uniform-list-item'}, _react.default.createElement(_ListDelField.default, {
-    name: props.name
+    name: props.name,
+    hideListField: hideListField
   }), props.children ? _react.Children.map(props.children, function (child) {
     return _react.default.cloneElement(child, {
       name: (0, _joinName.default)(props.name, child.props.name),

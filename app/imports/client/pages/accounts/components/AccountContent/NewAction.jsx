@@ -46,30 +46,48 @@ export default class NewAction extends Component {
   }
 
   onSubmit = data => {
-    const { account, hide, freezeAccount } = this.props;
-    data.accountId = account._id;
-    if (account.assignee) {
-      data.addedBy = `${account.assignee.profile.firstName} ${
-        account.assignee.profile.lastName
-      }`;
-    } else if (account.workQueueId) {
-      data.addedBy = account.tag.name;
-    }
+    const { account, hide, freezeAccount, bulkAssign, params, accountIds, bulkOption } = this.props;
+    const selectedActionId = this.state.selectedActionId;
+    const reasonCodes = this.state.reasonCodes;
+    
+    if(bulkOption) {
+      this.setState({ isDisabled: true });
+      let accountList = bulkAssign ? false : accountIds;
+      Meteor.call("account.assignAction.bulk",  data, selectedActionId, reasonCodes, params, accountList, err => {
+        if (!err) {
+          hide();
+          Notifier.success("Data saved");
+        } else {
+          Notifier.error(err.reason);
+        }
+        this.setState({ isDisabled: false });
+      }); 
 
-    this.setState({ isDisabled: true });
-
-    Meteor.call("account.addAction", data, err => {
-      if (!err) {
-        Notifier.success("Data saved");
-        //Clear inputs
-        this.refs.form.reset();
-        hide();
-        freezeAccount();
-      } else {
-        Notifier.error(err.reason);
+    } else{
+      data.accountId = account._id;
+      if (account.assignee) {
+        data.addedBy = `${account.assignee.profile.firstName} ${
+          account.assignee.profile.lastName
+        }`;
+      } else if (account.workQueueId) {
+        data.addedBy = account.tag.name;
       }
-      this.setState({ isDisabled: false });
-    });
+
+      this.setState({ isDisabled: true });
+
+      Meteor.call("account.addAction", data, err => {
+        if (!err) {
+          Notifier.success("Data saved");
+          //Clear inputs
+          this.refs.form.reset();
+          hide();
+          freezeAccount();
+        } else {
+          Notifier.error(err.reason);
+        }
+        this.setState({ isDisabled: false });
+      });
+    }  
   };
 
   onHide = () => {
@@ -104,11 +122,32 @@ export default class NewAction extends Component {
     this.setState({ [label]: date });
   };
 
+  onChangeNumber = e => {
+    e = e || window.event;
+    var charCode = typeof e.which == "undefined" ? e.keyCode : e.which;
+    var charStr = String.fromCharCode(charCode);
+
+    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+  };
+
   getInputSingle = (input, index) => {
     if (input.type === "date") {
       return (
         <div className="custom-inputs" key={index}>
           <DateField label={input.label} name={input.label} />
+          <ErrorField name={input.label} />
+        </div>
+      );
+    } else if (input.type === "number") {
+      return (
+        <div className="custom-inputs" key={index}>
+          <AutoField
+            labelHidden={true}
+            placeholder={input.label}
+            name={input.label}
+            pattern="[0-9]"
+            onKeyPress={this.onChangeNumber}
+          />
           <ErrorField name={input.label} />
         </div>
       );
@@ -196,6 +235,7 @@ export default class NewAction extends Component {
             onSubmit={this.onSubmit.bind(this)}
             onChange={this.onHandleChange}
             ref="form"
+            className="full-width"
           >
             <div className="select-row">
               <div className="select-group">
