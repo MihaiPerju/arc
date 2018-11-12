@@ -8,7 +8,8 @@ export default new SimpleSchema({
       settings.ROOT,
       settings.SMTP,
       settings.LETTERS_DIRECTORY,
-      settings.COMPILE_TIME
+      settings.COMPILE_TIME,
+      settings.THRESHOLDS
     ]
   },
   root: {
@@ -46,6 +47,18 @@ export default new SimpleSchema({
   },
   letterCompileTime: {
     type: String,
+    optional: true
+  },
+  satisfactory: {
+    type: Number,
+    optional: true
+  },
+  unsatisfactory: {
+    type: Number,
+    optional: true
+  },
+  acceptanceRatio: {
+    type: Number,
     optional: true
   }
 });

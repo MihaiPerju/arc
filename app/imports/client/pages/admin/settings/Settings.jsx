@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import pages from "/imports/api/settings/enums/settings";
 import SettingsContent from "./components/SettingsContent";
+import RolesEnum from "../../../../api/users/enums/roles";
 
 export default class SettingsListContainer extends Component {
   constructor() {
@@ -30,47 +31,78 @@ export default class SettingsListContainer extends Component {
     });
   }
 
+  renderAdminSettings() {
+    return (
+      <div>
+        <div
+          className={this.getClassNames(pages.ROOT)}
+          onClick={this.onSelectPage.bind(this, pages.ROOT)}
+        >
+          <div className="row__item margin-top-10">
+            <div className="item-name">Root Directory</div>
+          </div>
+        </div>
+
+        <div
+          className={this.getClassNames(pages.LETTERS_DIRECTORY)}
+          onClick={this.onSelectPage.bind(this, pages.LETTERS_DIRECTORY)}
+        >
+          <div className="row__item margin-top-10">
+            <div className="item-name">Letter Directory</div>
+          </div>
+        </div>
+
+        <div
+          className={this.getClassNames(pages.SMTP)}
+          onClick={this.onSelectPage.bind(this, pages.SMTP)}
+        >
+          <div className="row__item margin-top-10">
+            <div className="item-name">SMTP Settings</div>
+          </div>
+        </div>
+
+        <div
+          className={this.getClassNames(pages.COMPILE_TIME)}
+          onClick={this.onSelectPage.bind(this, pages.COMPILE_TIME)}
+        >
+          <div className="row__item margin-top-10">
+            <div className="item-name">Letter Compilation Time</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderManagerSettings() {
+    return (
+      <div
+        className={this.getClassNames(pages.THRESHOLDS)}
+        onClick={this.onSelectPage.bind(this, pages.THRESHOLDS)}>
+        <div className="row__item margin-top-10">
+          <div className="item-name">Thresholds</div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { pageSelected } = this.state;
-
+   
     return (
+
       <div className="cc-container">
         <div className={pageSelected ? "left__side" : "left__side full__width"}>
-          <div
-            className={this.getClassNames(pages.ROOT)}
-            onClick={this.onSelectPage.bind(this, pages.ROOT)}
-          >
-            <div className="row__item margin-top-10">
-              <div className="item-name">Root Directory</div>
-            </div>
-          </div>
-
-          <div
-            className={this.getClassNames(pages.LETTERS_DIRECTORY)}
-            onClick={this.onSelectPage.bind(this, pages.LETTERS_DIRECTORY)}
-          >
-            <div className="row__item margin-top-10">
-              <div className="item-name">Letter Directory</div>
-            </div>
-          </div>
-
-          <div
-            className={this.getClassNames(pages.SMTP)}
-            onClick={this.onSelectPage.bind(this, pages.SMTP)}
-          >
-            <div className="row__item margin-top-10">
-              <div className="item-name">SMTP Settings</div>
-            </div>
-          </div>
-
-          <div
-            className={this.getClassNames(pages.COMPILE_TIME)}
-            onClick={this.onSelectPage.bind(this, pages.COMPILE_TIME)}
-          >
-            <div className="row__item margin-top-10">
-              <div className="item-name">Letter Compilation Time</div>
-            </div>
-          </div>
+        <div className="task-list templates">
+        {this.renderManagerSettings()}
+        </div>
+          {/* 
+            Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN) ?
+              this.renderAdminSettings() : null */
+          }
+          {
+           /*  Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) ?
+              this.renderManagerSettings() : null */
+          }
         </div>
         {pageSelected && (
           <SettingsContent
