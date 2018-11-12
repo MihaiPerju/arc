@@ -20,7 +20,6 @@ import settings from "/imports/api/settings/enums/settings";
 
 export default class RunReports {
   static run() {
-
     const job = JobQueue.findOne({
       workerId: null,
       type: JobQueueEnum.RUN_REPORT
@@ -163,7 +162,7 @@ export default class RunReports {
       },
       {
         $addFields: {
-          "tag": { $arrayElemAt: ["$tag", 0] }
+          tag: { $arrayElemAt: ["$tag", 0] }
         }
       },
       {
@@ -176,8 +175,7 @@ export default class RunReports {
     let headers = this.getColumns(reportId);
 
     metaData = metaData.map(m => {
-      if (m.tag && m.workQueueId)
-        m.workQueueId = m.tag.name;
+      if (m.tag && m.workQueueId) m.workQueueId = m.tag.name;
       return m;
     });
 
@@ -213,11 +211,13 @@ export default class RunReports {
                   <Table.Cell key={item}>{item}</Table.Cell>
                 ))}
               </Table.Row>
-              {meta.map(d => (
-                <Table.Row>
-                 {Object.keys(headers).map(item => (
-                    <Table.Cell>{bindColumn(d, item)}</Table.Cell>
-                  ))}
+              {meta.map((d, index) => (
+                <Table.Row key={index}>
+                  {Object.keys(headers).map((item, index) => {
+                    return (
+                      <Table.Cell key={index}>{bindColumn(d, item)}</Table.Cell>
+                    );
+                  })}
 
                 </Table.Row>
               ))}
@@ -230,16 +230,42 @@ export default class RunReports {
 
     const reportContent = renderHtml(metaData);
 
+    try {
+      pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+        if (err) {
+          future.return(err);
+        } else {
+          future.return(res);
+        }
+      });
+    } catch (err) {
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
+    }
 
-    pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
-      if (err) {
-        future.return(err);
-      } else {
-        future.return(res);
-      }
+    //Catching error
+    stringifier.on("error", function(err) {
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
     });
-    //Catching
-    // stringifier.on("error", function(err) {});
 
     stringifier.on(
       "finish",

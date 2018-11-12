@@ -5,30 +5,32 @@ import TagService from "/imports/api/tags/server/services/TagService";
 
 Meteor.methods({
   "tag.create"(data) {
-      return TagService.createTag(data);
+    return TagService.createTag(data);
   },
 
   "tag.delete"(_id) {
     if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
       return Tags.remove({ _id });
+    }else{
+      throw new Meteor.Error(
+        "not-allowed",
+        "You do not have the correct roles for this!"
+      );
     }
-    throw new Meteor.Error(
-      "not-allowed",
-      "You do not have the correct roles for this!"
+    
+  },
+
+  "tag.edit"(id, data) {
+    return Tags.update(
+      { _id: id },
+      {
+        $set: data
+      }
     );
   },
 
-  "tag.edit"(id,data) {
-      return Tags.update(
-        { _id: id },
-        {
-          $set: data
-        }
-      );
-  },
-
   "tags.deleteMany"(ids) {
-      Tags.remove({ _id: { $in: ids } });
+    Tags.remove({ _id: { $in: ids } });
   },
 
   "user.addTag"({ userIds, tagId }) {
@@ -36,11 +38,12 @@ Meteor.methods({
       _.each(userIds, _id => {
         return TagService.addTagToUser({ _id, tagId });
       });
+    } else {
+      throw new Meteor.Error(
+        "not-allowed",
+        "You do not have the correct roles for this!"
+      );
     }
-    throw new Meteor.Error(
-      "not-allowed",
-      "You do not have the correct roles for this!"
-    );
   },
 
   "user.removeTags"({ userIds, tagId }) {

@@ -128,7 +128,7 @@ export default class TagEdit extends React.Component {
 
               {tag &&
                 tag.entities &&
-                tag.entities.includes(moduleNames.USERS) && (
+                tag.entities.includes(moduleNames.WORK_QUEUE) && (
                   <div className="select-group">
                     <div className="form-wrapper">
                       <SelectField

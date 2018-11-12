@@ -4,7 +4,6 @@ import {
 
 
 import route from "./router";
-import "./logoutRoute";
 import Home from "/imports/client/pages/home/Home";
 
 //User
