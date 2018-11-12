@@ -2,7 +2,8 @@ import React from "react";
 import ReportsService from "../../../../api/reports/services/ReportsService";
 import { AutoField, ErrorField, SelectField } from "/imports/ui/forms";
 import DateField from "/imports/client/lib/uniforms/DateField";
-
+import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
+import { stateOptions } from "/imports/api/accounts/enums/states";
 export default class FiltersSingle extends React.Component {
   constructor() {
     super();
@@ -29,13 +30,15 @@ export default class FiltersSingle extends React.Component {
   }
 
   renderWidget(name) {
+    const { substateOptions } = this.props;
     if (ReportsService.isEnum(name)) {
       return (
         <div className="select-wrapper m-t--0">
-          <AutoField
-            placeholder="Select filter"
+          <SelectMulti
             labelHidden={true}
+            placeholder="Select filter"
             name={name}
+            options={name === "state" ? stateOptions : substateOptions}
           />
           <ErrorField name={name} />
         </div>

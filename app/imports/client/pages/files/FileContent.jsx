@@ -21,7 +21,7 @@ export default class FileContent extends Component {
       <div className="main-content code-content">
         {
           <div>
-            <FileHeader setEdit={this.setEdit} file={file} />
+            <FileHeader setEdit={this.setEdit} file={file} key={file._id} />
           </div>
         }
       </div>

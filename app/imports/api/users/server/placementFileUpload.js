@@ -11,7 +11,7 @@ import settings from "/imports/api/settings/enums/settings";
 
 createRoute(
   "/uploads/csv/:facilityId/:token",
-  ({ user, facilityId, error, filenames, success }) => {
+  ({ user, facilityId, error, filenames, postData, success }) => {
     if (filenames.length != 1) {
       return error("Invalid number of files");
     }
@@ -27,7 +27,8 @@ createRoute(
       filePath: fileName,
       facilityId,
       fileType: fileTypes.PLACEMENT,
-      userId: user._id
+      userId: user._id,
+      placementDate: postData.placementDate
     };
 
     JobQueue.insert(job);

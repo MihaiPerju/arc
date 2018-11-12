@@ -3,16 +3,17 @@ import SimpleSchema from "simpl-schema";
 import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { Timeline, TimelineEvent } from "react-event-timeline";
 import moment from "moment";
-import UserService from "./services/UserService";
+import UserService from "../../users/services/UserService";
 import { AutoForm, SelectField } from "/imports/ui/forms";
 import actionTypesEnum, {
   typeList,
   labels
 } from "/imports/api/accounts/enums/actionTypesEnum";
 import Loading from "/imports/client/lib/ui/Loading";
-import ActivityStreamGraph from "./ActivityStreamGraph";
+import ActivityGraph from "./ActivityGraph";
 
-export default class ActivityStream extends React.Component {
+
+export default class RepDashboard extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -353,7 +354,7 @@ export default class ActivityStream extends React.Component {
     return (
       <div className="cc-container settings-container dashboard-container">
         <div className="graph-container">
-          <ActivityStreamGraph />
+          <ActivityGraph />
         </div>
         <div className="timeline-container">
           <div className="d-header">

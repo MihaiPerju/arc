@@ -17,6 +17,7 @@ export default class AccountFilterBuilder extends React.Component {
       facilityOptions: [],
       assigneeOptions: [],
       clientOptions: [],
+      substateOptions: [],
       components: {},
       loading: true,
       filters: {},
@@ -46,12 +47,19 @@ export default class AccountFilterBuilder extends React.Component {
     const { substates } = this.props;
     const schema = ReportsService.createSchema(substates);
     let fullSchemaOptions = ReportsService.getOptions();
-
     //Creating set of Components based on schema field types
     let { components } = this.props;
     if (!components) {
       components = ReportsService.getComponents();
     }
+
+    //Generating substate options
+    let substateOptions = _.map(substates, substate => ({
+      label: substate.name,
+      value: substate.name
+    }));
+
+    this.setState({ substateOptions });
 
     //Getting assignee and facility options
     let facilityOptions = [],
@@ -135,7 +143,7 @@ export default class AccountFilterBuilder extends React.Component {
       data,
       components
     );
-
+    
     if (error) {
       Notifier.error(error);
     } else {
@@ -214,7 +222,8 @@ export default class AccountFilterBuilder extends React.Component {
       assigneeOptions,
       components,
       schema,
-      clientOptions
+      clientOptions,
+      substateOptions
     } = this.state;
     const { filterBuilderData } = this.props;
     const schemaOptions = this.clearSchemaOptions();
@@ -223,6 +232,7 @@ export default class AccountFilterBuilder extends React.Component {
         {loading ? (
           <Loading />
         ) : (
+
           <div>
             <AutoForm
               model={filterBuilderData}
@@ -238,6 +248,7 @@ export default class AccountFilterBuilder extends React.Component {
                       assigneeIdOptions={assigneeOptions}
                       facilityIdOptions={facilityOptions}
                       clientIdOptions={clientOptions}
+                      substateOptions={substateOptions}
                       deleteFilter={this.deleteFilter}
                       name={item.name}
                     />
@@ -246,16 +257,16 @@ export default class AccountFilterBuilder extends React.Component {
               })}
             </AutoForm>
             <div className="add-report-filter">
-              <AutoForm
-                ref="filterSelect"
-                onChange={this.createFilter}
-                schema={filterSchema}
-              >
-                <SelectField options={schemaOptions} name="filter" />
-              </AutoForm>
+               <AutoForm
+                  ref="filterSelect"
+                  onChange={this.createFilter}
+                  schema={filterSchema}
+                >
+                  <SelectField options={schemaOptions} name="filter" />
+                </AutoForm>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </main>
     );
   }

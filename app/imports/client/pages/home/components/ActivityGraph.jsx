@@ -6,7 +6,7 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import Loading from "/imports/client/lib/ui/Loading";
 
-export default class ActivityStreamGraph extends React.Component {
+export default class ActivityGraph extends React.Component {
   constructor() {
     super();
     this.state = {

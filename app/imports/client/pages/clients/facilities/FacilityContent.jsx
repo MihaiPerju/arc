@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import FacilityContentHeader from "./components/FacilityContent/FacilityContentHeader";
 import ContactTable from "./components/FacilityContent/ContactTable";
 import FacilityFiles from "./components/FacilityContent/FacilityFiles";
@@ -6,6 +6,7 @@ import PlacementBlock from "./components/FacilityContent/PlacementBlock";
 import InventoryBlock from "./components/FacilityContent/InventoryBlock";
 import PaymentBlock from "./components/FacilityContent/PaymentBlock";
 import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.jsx";
+import { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class FacilityContent extends Component {
   constructor() {
@@ -19,8 +20,8 @@ export default class FacilityContent extends Component {
   }
 
   componentWillMount() {
-    const {facility} = this.props;
-    const {placementRules} = facility;
+    const { facility } = this.props;
+    const { placementRules } = facility;
     this.setState({
       copiedPlacementRules: placementRules,
       inventoryFacility: facility
@@ -28,34 +29,34 @@ export default class FacilityContent extends Component {
   }
 
   componentWillReceiveProps() {
-    this.setState({edit: false});
+    this.setState({ edit: false });
   }
 
   setEdit = () => {
-    const {edit} = this.state;
-    this.setState({edit: !edit});
+    const { edit } = this.state;
+    this.setState({ edit: !edit });
   };
 
   setTempRules = model => {
-    this.setState({copiedPlacementRules: model});
+    this.setState({ copiedPlacementRules: model });
   };
 
   copyPlacementRules = () => {
-    this.setState({resetImportForm: true});
-    const {copiedPlacementRules} = this.state;
-    const {facility} = this.props;
+    this.setState({ resetImportForm: true });
+    const { copiedPlacementRules } = this.state;
+    const { facility } = this.props;
     const tempFacility = _.clone(facility);
     tempFacility.inventoryRules = copiedPlacementRules;
-    this.setState({inventoryFacility: tempFacility});
+    this.setState({ inventoryFacility: tempFacility });
   };
 
   changeResetStatus = () => {
-    this.setState({resetImportForm: false});
+    this.setState({ resetImportForm: false });
   };
 
   render() {
-    const {facility, setFacility} = this.props;
-    const {edit, inventoryFacility, resetImportForm} = this.state;
+    const { facility, setFacility } = this.props;
+    const { edit, inventoryFacility, resetImportForm } = this.state;
     return (
       <div className="main-content facility-content">
         <div className="breadcrumb">
@@ -64,7 +65,7 @@ export default class FacilityContent extends Component {
               <a href={FlowRouter.url("/client/list")}>Clients</a>
             </li>
             <li>
-              <a style={{pointerEvents: "none", cursor: "default"}}>
+              <a style={{ pointerEvents: "none", cursor: "default" }}>
                 {facility.client.clientName}
               </a>
             </li>
@@ -74,7 +75,7 @@ export default class FacilityContent extends Component {
           </ul>
         </div>
         {edit ? (
-          <FacilityEdit facility={facility} close={this.setEdit}/>
+          <FacilityEdit facility={facility} close={this.setEdit} />
         ) : (
           <div>
             <FacilityContentHeader
@@ -82,8 +83,10 @@ export default class FacilityContent extends Component {
               setFacility={setFacility}
               facility={facility}
             />
-            <ContactTable contacts={facility && facility.contacts}/>
-            <FacilityFiles facilityId={facility && facility._id}/>
+            <ContactTable contacts={facility && facility.contacts} />
+            {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
+              <FacilityFiles facilityId={facility && facility._id} />
+            )}
             <PlacementBlock
               facility={facility}
               setTempRules={this.setTempRules}
@@ -92,8 +95,9 @@ export default class FacilityContent extends Component {
               facility={inventoryFacility}
               copyPlacementRules={this.copyPlacementRules}
               resetImportForm={resetImportForm}
-              changeResetStatus={this.changeResetStatus}/>
-            <PaymentBlock facility={facility}/>
+              changeResetStatus={this.changeResetStatus}
+            />
+            <PaymentBlock facility={facility} />
           </div>
         )}
       </div>
