@@ -59,9 +59,10 @@
       justify-content: space-between;
     }
     .btn-cancel {
-      color: #da6363;
+      color: #fff;
+      background-color: #d02121;
       &:hover {
-        color: #d02121
+        background-color: lighten(#d02121, 10%);
       }
     }
     .code {

@@ -40,5 +40,9 @@ export default new SimpleSchema({
   fileId: {
     type: String,
     optional: true
+  },
+  placementDate: {
+    type: Date,
+    optional: true
   }
 });
