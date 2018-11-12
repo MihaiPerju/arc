@@ -15,8 +15,6 @@ import Loading from "/imports/client/lib/ui/Loading";
 import UploadItem from "./FacilityContent/UploadItem";
 import InsuranceRules from "./InsuranceRules";
 import classNames from "classnames";
-import DatePicker from "react-datepicker";
-import moment from "moment";
 import { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class ImportingRules extends React.Component {
@@ -25,7 +23,7 @@ export default class ImportingRules extends React.Component {
     this.state = {
       loading: true,
       collapse: false,
-      isDisabled: false,
+      isDisabled: false
     };
   }
 
@@ -109,15 +107,14 @@ export default class ImportingRules extends React.Component {
     }
   };
 
-
   getFileName(ruleType) {
-    switch(ruleType) {
-      case 'placementRules':
-        return 'Placement'
-      case 'inventoryRules':
-        return 'Inventory'
-      case 'paymentRules':
-        return 'Payment'
+    switch (ruleType) {
+      case "placementRules":
+        return "Placement";
+      case "inventoryRules":
+        return "Inventory";
+      case "paymentRules":
+        return "Payment";
     }
   }
 
@@ -147,7 +144,7 @@ export default class ImportingRules extends React.Component {
         ) : (
           <AutoForm
             disabled={disabled}
-            model={model[rules]}
+            model={model[rules] ? model[rules] : {}}
             schema={schema}
             onChange={this.onChange.bind(this)}
             onSubmit={this.onSubmitImportingRules}

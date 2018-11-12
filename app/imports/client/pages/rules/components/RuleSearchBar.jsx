@@ -143,7 +143,7 @@ export default class RuleSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  labelHidden={true}  
                   name="name"
                   placeholder="Search"
                 />

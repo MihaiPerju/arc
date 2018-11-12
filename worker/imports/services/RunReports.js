@@ -20,7 +20,6 @@ import settings from "/imports/api/settings/enums/settings";
 
 export default class RunReports {
   static run() {
-
     const job = JobQueue.findOne({
       workerId: null,
       type: JobQueueEnum.RUN_REPORT
@@ -163,7 +162,7 @@ export default class RunReports {
       },
       {
         $addFields: {
-          "tag": { $arrayElemAt: ["$tag", 0] }
+          tag: { $arrayElemAt: ["$tag", 0] }
         }
       },
       {
@@ -176,19 +175,28 @@ export default class RunReports {
     let headers = this.getColumns(reportId);
 
     metaData = metaData.map(m => {
-      if (m.tag && m.workQueueId)
-        m.workQueueId = m.tag.name;
+      if (m.tag && m.workQueueId) m.workQueueId = m.tag.name;
       return m;
     });
 
     const bindColumn = (d, key) => {
       if (key.includes('metaData')) {
-        var metaDataKeys=key.split('[');
-        var metaDataKey=metaDataKeys[0];
-        var subKey=metaDataKeys[1].slice(0, -1);
-        return `${d[metaDataKey][subKey]}`;
+        var metaDataKeys = key.split('[');
+        var metaDataKey = metaDataKeys[0];
+        var subKey = metaDataKeys[1].slice(0, -1);
+        var value = d[metaDataKey][subKey];
+        return `${value != undefined ? value : ''}`;
       }
-      else  
+      else if (key.includes('insurances')) {+-
+        var insKeys = key.split('.');
+        var objectKeys = insKeys[0].split('[');
+        var propKey = insKeys[1];
+        var insuranceKey = objectKeys[0];
+        var indexKey = objectKeys[1].slice(0, -1);
+        var value = d[insuranceKey][indexKey][propKey];
+        return `${value != undefined ? value : ''}`;
+      }
+      else
         return `${d[key]}`;
     }
 
@@ -203,11 +211,14 @@ export default class RunReports {
                   <Table.Cell key={item}>{item}</Table.Cell>
                 ))}
               </Table.Row>
-              {meta.map(d => (
-                <Table.Row>
-                  {Object.keys(headers).map(item => {
-                    return <Table.Cell>{bindColumn(d, item)}</Table.Cell>
+              {meta.map((d, index) => (
+                <Table.Row key={index}>
+                  {Object.keys(headers).map((item, index) => {
+                    return (
+                      <Table.Cell key={index}>{bindColumn(d, item)}</Table.Cell>
+                    );
                   })}
+
                 </Table.Row>
               ))}
             </Table.Body>
@@ -219,16 +230,42 @@ export default class RunReports {
 
     const reportContent = renderHtml(metaData);
 
+    try {
+      pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+        if (err) {
+          future.return(err);
+        } else {
+          future.return(res);
+        }
+      });
+    } catch (err) {
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
+    }
 
-    pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
-      if (err) {
-        future.return(err);
-      } else {
-        future.return(res);
-      }
+    //Catching error
+    stringifier.on("error", function(err) {
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
     });
-    //Catching
-    // stringifier.on("error", function(err) {});
 
     stringifier.on(
       "finish",

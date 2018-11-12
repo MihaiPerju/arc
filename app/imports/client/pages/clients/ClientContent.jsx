@@ -21,6 +21,11 @@ export default class ClientContent extends Component {
   render() {
     const { client, setClient } = this.props;
     const { edit } = this.state;
+
+    if (!client) {
+      return <div>No Client Selected</div>;
+    }
+
     return (
       <div className="main-content client-content">
         {edit ? (

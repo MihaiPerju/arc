@@ -99,7 +99,7 @@ export default class RuleEdit extends React.Component {
     workQueueQuery
       .clone({
         filters: {
-          entities: { $in: [moduleNames.USERS] }
+          entities: { $in: [moduleNames.WORK_QUEUE] }
         }
       })
       .fetch((err, res) => {

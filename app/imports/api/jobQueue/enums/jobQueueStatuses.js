@@ -1,5 +1,6 @@
 export default {
   NEW: "New",
   IN_PROGRESS: "In progress",
-  FINISHED: "Finished"
+  FINISHED: "Finished",
+  FAILED: "Failed"
 };
