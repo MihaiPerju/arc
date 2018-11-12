@@ -59,7 +59,11 @@ button,
   }
 
   &.btn--red {
-    background: $orange;
+    background-color: $orange;
+    color: $color-white;
+    &:hover {
+      background-color: lighten($orange, 10%);
+    }
   }
 
   &.btn--pink {
@@ -74,6 +78,10 @@ button,
 
   &.btn--blue {
     background: $light-blue;
+    color: $color-white;
+    &:hover {
+      background: lighten($light-blue, 10%);
+    }
   }
 
   &.btn--light-blue {

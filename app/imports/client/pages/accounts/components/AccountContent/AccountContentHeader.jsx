@@ -87,7 +87,7 @@ export default class AccountContentHeader extends Component {
             </div>
 
             <div className="row__block">
-              <div className="patient-id text-blue">
+              <div className="patient-id text-dark-grey">
                 {account && account.acctNum}
               </div>
               <div className="substate">{account.substate}</div>
