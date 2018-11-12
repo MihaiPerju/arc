@@ -1,0 +1,54 @@
+.substates {
+  &-sort {
+    button {
+      padding: 5px;
+      font-size: 1.6rem;
+    }
+  }
+
+  &-field {
+    min-width: 150px;
+    width: calc((100% - 50px)/6);
+    white-space: nowrap;
+    padding: 15px;
+    position: relative;
+    border-right: 1px #d7d7d7 solid;
+
+    .check-item {
+      left: 50%;
+      top: 50%;
+      transform: $translateXY;
+    }
+
+    &:first-of-type {
+      width: 50px;
+      min-width: 50px;
+    }
+
+    &:last-of-type {
+      border-right: 0;
+    }
+  }
+
+  &-container {
+
+  }
+
+  &-table {
+    display: table;
+    width: 100%;
+
+    &__wrapper {
+      display: table-row;
+    }
+
+    &__header {
+      border-bottom: 1px #d7d7d7 solid;
+      background: $color-white;
+    }
+
+    &__row {
+      border-bottom: 1px #d7d7d7 solid;
+    }
+  }
+}

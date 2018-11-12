@@ -1,0 +1,59 @@
+//Settings Page
+.settings-container {
+  width: 100%;
+  background: $color-white;
+
+  &__wrapper {
+    width: 500px;
+  }
+
+  i {
+    font-size: 2.2rem;
+    color: $extra-light-grey;
+  }
+  
+  h2 {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-weight: 400;
+    font-size: 2.4rem;
+  }
+}
+
+.settings-form {
+  position: relative;
+
+  input {
+    background: #f2f1f1;
+    border: 0;
+    padding: 10px 15px;
+    line-height: 1.4rem;
+    font-family: $font-arial;
+
+  }
+
+  .btn-group {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    color: $light-grey;
+  }
+}
+
+.settings-title{
+  font-size: 16px;
+}
+
+.settings-label{
+  margin-bottom: 5px;
+  font-size: 13px;
+  color: #838383;
+}
+
+.settings-text-box{
+  margin-right: 10px;
+  float: left;
+}
