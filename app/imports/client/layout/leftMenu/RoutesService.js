@@ -382,6 +382,7 @@ export default class RouteService {
 
         }
       case "/admin/settings":
+      case "/manager/settings":
         {
           return "Settings";
 

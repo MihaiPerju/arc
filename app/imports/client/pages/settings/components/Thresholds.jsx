@@ -24,7 +24,7 @@ export default class Thresholds extends Component {
   };
 
   componentDidMount() {
-    Meteor.call("settings.get", pages.THRESHOLDS, (err, model) => {
+    Meteor.call("managerSettings.get", pages.THRESHOLDS, (err, model) => {
       if (!err) {
         this.setState({
           model
@@ -38,7 +38,7 @@ export default class Thresholds extends Component {
 
   onSubmit = data => {
     data.name = pages.THRESHOLDS;
-    Meteor.call("settings.update", data, err => {
+    Meteor.call("managerSettings.update", data, err => {
       if (!err) {
         Notifier.success("Settings Updated!");
       } else {
