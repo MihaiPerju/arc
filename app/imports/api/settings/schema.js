@@ -9,7 +9,8 @@ export default new SimpleSchema({
       settings.SMTP,
       settings.LETTERS_DIRECTORY,
       settings.COMPILE_TIME,
-      settings.THRESHOLDS
+      settings.THRESHOLDS,
+      settings.WIDGET_SETTINGS
     ]
   },
   root: {

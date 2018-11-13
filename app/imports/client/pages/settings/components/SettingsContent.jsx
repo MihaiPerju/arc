@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Thresholds from "./Thresholds";
+import WidgetSettings from "./WidgetSettings";
 import pages from "/imports/api/settings/enums/settings";
 import Loading from "/imports/client/lib/ui/Loading";
 
@@ -25,6 +26,7 @@ export default class SettingsContent extends Component {
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         {page === pages.THRESHOLDS && <Thresholds onClose={this.props.onClose}/>}
+        {page === pages.WIDGET_SETTINGS && <WidgetSettings onClose={this.props.onClose}/>}
       </div>
     );
   }

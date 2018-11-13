@@ -9,6 +9,7 @@ import {
 import pages from "/imports/api/settings/enums/settings";
 import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
+
 export default class Thresholds extends Component {
   constructor() {
     super();

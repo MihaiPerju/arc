@@ -33,13 +33,22 @@ export default class ManagerSettings extends Component {
 
   renderManagerSettings() {
     return (
-      <div
-        className={this.getClassNames(pages.THRESHOLDS)}
-        onClick={this.onSelectPage.bind(this, pages.THRESHOLDS)}>
-        <div className="row__item">
-          <div className="item-name setting_label" >Thresholds</div>
+      <div className="task-list templates">
+        <div
+          className={this.getClassNames(pages.THRESHOLDS)}
+          onClick={this.onSelectPage.bind(this, pages.THRESHOLDS)}>
+          <div className="row__item">
+            <div className="item-name setting_label" >Thresholds</div>
+          </div>
         </div>
-      </div>
+        <div
+          className={this.getClassNames(pages.WIDGET_SETTINGS)}
+          onClick={this.onSelectPage.bind(this, pages.WIDGET_SETTINGS)}>
+          <div className="row__item">
+            <div className="item-name setting_label" >Widget Settings</div>
+          </div>
+        </div>
+        </div>  
     );
   }
 
@@ -48,9 +57,7 @@ export default class ManagerSettings extends Component {
     return (
       <div className="cc-container">
         <div className={pageSelected ? "left__side" : "left__side full__width"}>
-          <div className="task-list templates">
             {this.renderManagerSettings()}
-          </div>
         </div>
         {pageSelected && (
           <SettingsContent

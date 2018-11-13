@@ -3,5 +3,6 @@ export default {
   LETTERS_DIRECTORY: "letters",
   SMTP: "smtp",
   COMPILE_TIME: "compileTime",
-  THRESHOLDS: "thresholds"
+  THRESHOLDS: "thresholds",
+  WIDGET_SETTINGS: "widget_settings"
 };
