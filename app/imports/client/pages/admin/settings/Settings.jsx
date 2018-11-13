@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import pages from "/imports/api/settings/enums/settings";
 import SettingsContent from "./components/SettingsContent";
+import RolesEnum from "../../../../api/users/enums/roles";
 
 export default class SettingsListContainer extends Component {
   constructor() {
@@ -32,7 +33,6 @@ export default class SettingsListContainer extends Component {
 
   render() {
     const { pageSelected } = this.state;
-
     return (
       <div className="cc-container">
         <div className={pageSelected ? "left__side" : "left__side full__width"}>

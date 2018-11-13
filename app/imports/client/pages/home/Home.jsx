@@ -24,7 +24,10 @@ export default class Home extends React.Component {
       selectedRep: '',
       clients: [],
       facilities: [],
-      selectedClient: {}
+      files: [],
+      selectedClientId: '',
+      selectedFacilityId: '',
+      isLoadingFiles: false
     };
   }
 
@@ -39,7 +42,7 @@ export default class Home extends React.Component {
           return { label: client.clientName, value: client._id };
         });
         clients.unshift({ label: 'Select Client', value: -1 });
-        this.setState({ clients, selectedClient: clients[0] });
+        this.setState({ clients });
       } else {
         Notifier.error(err.reason);
       }
@@ -58,6 +61,19 @@ export default class Home extends React.Component {
         }
         this.setState({ facilities });
       } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  getFailedFiles() {
+    let { selectedClientId, selectedFacilityId } = this.state;
+    this.setState({ isLoadingFiles: true });
+    Meteor.call("failedFiles.get", selectedClientId, selectedFacilityId, (err, responseData) => {
+      if (!err) {
+        this.setState({ files: responseData, isLoadingFiles: false });
+      } else {
+        this.setState({ isLoadingFiles: false });
         Notifier.error(err.reason);
       }
     });
@@ -115,13 +131,18 @@ export default class Home extends React.Component {
   };
 
   onHandleChange = (field, value) => {
-    if (field == "clientId") {
-      if (value != "-1") {
-        this.getFacilities(value);
-      }
+    if (field == "clientId" && value != "-1") {
+      this.setState({ selectedClientId: value }, () => {
+        this.getFailedFiles();
+      });
+      this.getFacilities(value);
+    }
+    if (field == "facilityId" && value != "-1") {
+      this.setState({ selectedFacilityId: value }, () => {
+        this.getFailedFiles();
+      });
     }
   }
-
 
 
 
@@ -162,7 +183,8 @@ export default class Home extends React.Component {
   }
 
   renderAdminDashboard() {
-    return <TechOrAdminDashboard />;
+    const { files, isLoadingFiles } = this.state;
+    return <TechOrAdminDashboard files={files} isLoadingFiles={isLoadingFiles} />;
   }
 
   render() {
@@ -222,7 +244,7 @@ export default class Home extends React.Component {
                       labelHidden={true}
                       name="clientId"
                       options={clients}
-                     />
+                    />
                   </div>
                 </div>
                 {

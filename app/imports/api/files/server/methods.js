@@ -3,6 +3,7 @@ import RevertService from "../services/RevertService";
 import UploadStatuses from "/imports/api/files/enums/statuses";
 import JobQueue from "../../jobQueue/collection";
 import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
+import statuses from "../enums/statuses";
 
 Meteor.methods({
   "file.rollback"(_id) {
@@ -42,5 +43,17 @@ Meteor.methods({
     delete job.status;
     job.fileId = fileId;
     (job.type = jobTypes.RETRY_UPLOAD), JobQueue.insert(job);
+  },
+
+  "failedFiles.get"(clientId, facilityId) {
+    let filter = { status: statuses.FAIL };
+
+    if (clientId != '' && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId != '' && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    return Files.find(filter).fetch();
   }
 });
