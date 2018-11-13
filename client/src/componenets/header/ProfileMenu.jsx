@@ -6,6 +6,8 @@ class ProfileMenu extends React.PureComponent {
         this.state = {
             isOpen: false
         }
+
+        this.node = null;
     }
 
     // TODO: Move this to a normal icon on menu bar not in user menu
@@ -38,6 +40,7 @@ class ProfileMenu extends React.PureComponent {
     };
 
     outsideClick = (event) => {
+        console.log(event)
         if (this.node.contains(event.target)) {
           return;
         }
@@ -46,7 +49,7 @@ class ProfileMenu extends React.PureComponent {
     };
 
     openMenu = () => {
-        if (!this.state.dropdown) {
+        if (!this.state.isOpen) {
           document.addEventListener("click", this.outsideClick, false);
         } else {
           document.removeEventListener("click", this.outsideClick, false);
