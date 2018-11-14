@@ -27,7 +27,9 @@ export default class Home extends React.Component {
       files: [],
       selectedClientId: '',
       selectedFacilityId: '',
-      isLoadingFiles: false
+      isLoadingFiles: false,
+      isLoadingBulkActionQueues: false,
+      bulkActionQueues: []
     };
   }
 
@@ -41,7 +43,7 @@ export default class Home extends React.Component {
         let clients = responseData.map(client => {
           return { label: client.clientName, value: client._id };
         });
-        clients.unshift({ label: 'Select Client', value: -1 });
+        clients.unshift({ label: 'All Clients', value: -1 });
         this.setState({ clients });
       } else {
         Notifier.error(err.reason);
@@ -57,7 +59,7 @@ export default class Home extends React.Component {
           return { label: facility.name, value: facility._id };
         });
         if (facilities.length > 0) {
-          facilities.unshift({ label: 'Select Facility', value: -1 });
+          facilities.unshift({ label: 'All Facilities', value: -1 });
         }
         this.setState({ facilities });
       } else {
@@ -69,14 +71,33 @@ export default class Home extends React.Component {
   getFailedFiles() {
     let { selectedClientId, selectedFacilityId } = this.state;
     this.setState({ isLoadingFiles: true });
-    Meteor.call("failedFiles.get", selectedClientId, selectedFacilityId, (err, responseData) => {
-      if (!err) {
-        this.setState({ files: responseData, isLoadingFiles: false });
-      } else {
-        this.setState({ isLoadingFiles: false });
-        Notifier.error(err.reason);
-      }
-    });
+    setTimeout(() => {
+      Meteor.call("failedFiles.get", selectedClientId, selectedFacilityId, (err, responseData) => {
+        if (!err) {
+          this.setState({ files: responseData, isLoadingFiles: false });
+        } else {
+          this.setState({ isLoadingFiles: false });
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1000);
+
+  }
+
+  getBulkActionRequestQueues() {
+    let { selectedClientId } = this.state;
+    this.setState({ isLoadingBulkActionQueues: true });
+    setTimeout(() => {
+      Meteor.call("accountactions.get", selectedClientId, '', (err, responseData) => {
+        if (!err) {
+          debugger;
+          this.setState({ bulkActionQueues: responseData, isLoadingBulkActionQueues: false });
+        } else {
+          this.setState({ isLoadingBulkActionQueues: false });
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1000);
   }
 
   getRepresentatives() {
@@ -131,20 +152,29 @@ export default class Home extends React.Component {
   };
 
   onHandleChange = (field, value) => {
-    if (field == "clientId" && value != "-1") {
+    if (field == "clientId") {
       this.setState({ selectedClientId: value }, () => {
         this.getFailedFiles();
+        this.getBulkActionRequestQueues();
       });
       this.getFacilities(value);
     }
-    if (field == "facilityId" && value != "-1") {
+    else {
+      this.getFailedFiles();
+      this.getBulkActionRequestQueues();
+    }
+
+    if (field == "facilityId") {
       this.setState({ selectedFacilityId: value }, () => {
         this.getFailedFiles();
+        this.getBulkActionRequestQueues();
       });
     }
+    else {
+      this.getFailedFiles();
+      this.getBulkActionRequestQueues();
+    }
   }
-
-
 
   renderGraph() {
     const options = {
@@ -183,8 +213,8 @@ export default class Home extends React.Component {
   }
 
   renderAdminDashboard() {
-    const { files, isLoadingFiles } = this.state;
-    return <TechOrAdminDashboard files={files} isLoadingFiles={isLoadingFiles} />;
+    const { files, isLoadingFiles, isLoadingBulkActionQueues, bulkActionQueues } = this.state;
+    return <TechOrAdminDashboard files={files} isLoadingFiles={isLoadingFiles} isLoadingBulkActionQueues={isLoadingBulkActionQueues} bulkActionQueues={bulkActionQueues} />;
   }
 
   render() {

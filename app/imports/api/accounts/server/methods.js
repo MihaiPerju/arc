@@ -437,6 +437,18 @@ Meteor.methods({
       })
       return userOption;
     }
+  },
+
+  "accountactions.get"(clientId, userId) {
+    let filter = { type : actionTypesEnum.USER_ACTION };
+
+    if (clientId != '' && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (userId != '' && userId != '-1')
+      filter['userId'] = userId;
+
+    return AccountActions.find(filter).fetch();
   }
 
 });
