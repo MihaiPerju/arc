@@ -58,7 +58,8 @@ var Bool = function Bool(_ref) {
       _react.default.createElement(
         "label",
         {
-          htmlFor: id
+          htmlFor: id,
+          className: "chk-box-label"
         },
         label
       )

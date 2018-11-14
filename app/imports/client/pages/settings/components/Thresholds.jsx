@@ -22,6 +22,7 @@ export default class Thresholds extends Component {
 
   submit = () => {
     this.refs.form.onSubmit();
+    this.setState({ isDisabled: true });
   };
 
   componentDidMount() {
@@ -45,6 +46,7 @@ export default class Thresholds extends Component {
       } else {
         Notifier.error(err.reason);
       }
+      this.setState({ isDisabled: false });
     });
   };
 
@@ -75,8 +77,10 @@ export default class Thresholds extends Component {
             </button>
           </div>
         </div>
-        <div className="create-form__wrapper">
-          <div className="action-block">
+
+        <div className="main-content m-t--10">
+          <div className="header-block header-account">
+            <div className="additional-info account-info">
             <AutoForm
               model={model}
               onSubmit={this.onSubmit}
@@ -85,43 +89,47 @@ export default class Thresholds extends Component {
               className="settings-form"
               schema={schema}
             >
-              <div className="select-wrapper">
-                <div className="select-form">
+              <div className="select-wrapper select_div">
+              <div className="select_label">Satisfactory :</div>
+                <div className="select-form border-style">
                   <SelectField
                     labelHidden={true}
                     placeholder="Satisfactory"
                     label="Satisfactory"
                     name="satisfactory"
                     options={[
-                      { value: 75, label: "75%" },
                       { value: 80, label: "80%" },
                       { value: 85, label: "85%" },
                       { value: 90, label: "90%" },
-                      { value: 95, label: "95%" }
+                      { value: 95, label: "95%" },
+                      { value: 100, label: "100%" }
                     ]}
                   />
                   <ErrorField name="satisfactory" />
                 </div>
               </div>
-              <div className="select-wrapper">
-                <div className="select-form">
+              <div className="select-wrapper select_div">
+                <div className="select_label">Unsatisfactory :</div>
+                <div className="select-form border-style">
                   <SelectField
                     labelHidden={true}
                     placeholder="Unsatisfactory"
                     label="Unsatisfactory"
                     name="unsatisfactory"
                     options={[
+                      { value: 0, label: "0%" },
+                      { value: 5, label: "5%" },
                       { value: 10, label: "10%" },
                       { value: 15, label: "15%" },
-                      { value: 20, label: "20%" },
-                      { value: 25, label: "25%" }
+                      { value: 20, label: "20%" }
                     ]}
                   />
                   <ErrorField name="unsatisfactory" />
                 </div>
               </div>
-              <div className="select-wrapper">
-                <div className="select-form">
+              <div className="select-wrapper select_div">
+                <div className="select_label">Acceptance Ratio :</div>
+                <div className="select-form border-style">
                   <SelectField
                     labelHidden={true}
                     placeholder="Acceptance Ratio"
@@ -138,8 +146,16 @@ export default class Thresholds extends Component {
                 </div>
               </div>
             </AutoForm>
+
+            </div>
           </div>
-        </div>
+        </div>    
+
+{/*         <div className="create-form__wrapper">
+          <div className="action-block">
+           
+          </div>
+        </div> */}
       </div>
     );
   }

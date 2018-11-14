@@ -61,5 +61,73 @@ export default new SimpleSchema({
   acceptanceRatio: {
     type: Number,
     optional: true
+  },
+  widgetSetting: {
+    type: Object,
+    optional: true
+  },
+  "widgetSetting.escalation_resolved": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.account_assigned": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.report_generated": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.holds_removed": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.report_sent": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.account_archived": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.manager_rank": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.new_alert": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.reports_built": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.bulkActionRequestQueue": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.failedUploadQueue": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.assignedToMe": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.completed": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.collectedToday": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.closedAccounts": {
+    type: Boolean,
+    optional: true
+  },
+  "widgetSetting.closeAssists": {
+    type: Boolean,
+    optional: true
   }
 });

@@ -33,7 +33,7 @@ export default class ManagerSettings extends Component {
 
   renderManagerSettings() {
     return (
-      <div className="task-list templates">
+      <div className="task-list templates flex_screen">
         <div
           className={this.getClassNames(pages.THRESHOLDS)}
           onClick={this.onSelectPage.bind(this, pages.THRESHOLDS)}>
