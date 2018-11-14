@@ -1,24 +1,26 @@
 import React from 'react';
-import MenuItem from './MenuItem';
+import { NavLink } from 'react-router-dom';
+import history from '../../history';
 
-export default class Menu extends React.PureComponent {
-    // TODO: Add menu item active class (cc--active)
-    renderMenuItems() {
+export default class Menu extends React.Component {
+// ${this.props.path === item.route ? 'cc--active' : ''}
+    renderMenuItems = () => {
         return this.props.menuItems.map((item, index) => {
             if(!item.roles.some(role => role === this.props.role))
                 return null;
 
             return (
-                <MenuItem
-                    key={index}
-                    className={"menu__item"}
-                    name={item.name}
-                    route={item.route}
-                    icon={item.icon}
-                    label={item.label}
-                    badge={item.badge}
-                />
-            )
+                <li className={`menu__item`}>
+                    <NavLink to={item.route} activeClassName={'cc--active'}>
+                        <div className="menu__icon">
+                            <i className={`icon-${item.icon}`} />
+                        </div>
+                        <span className="menu__label">
+                            {item.label}
+                        </span>
+                    </NavLink>
+                </li>
+            );
         })
     }
     

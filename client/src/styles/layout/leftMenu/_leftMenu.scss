@@ -25,9 +25,7 @@
   .menu__item {
     border-bottom: 1px solid #ccc;
 
-    &.cc--active {
-
-      > a {
+      > a.cc--active {
         background: $color-white;
         color: $dark-grey;
         font-weight: bold;
@@ -38,7 +36,6 @@
         i {
           color: $green;
         }
-      }
     }
 
     > a {

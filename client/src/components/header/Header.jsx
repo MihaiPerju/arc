@@ -4,9 +4,8 @@ import ProfileMenu from './ProfileMenu';
 
 export default class Header extends React.PureComponent {
 
-render() {
-    return (
-        <div>
+    render() {
+        return (
             <header className="header-bar">
                 <div className="header-bar__wrapper">
                     <div className="left__side flex--helper flex-align--center">
@@ -22,7 +21,6 @@ render() {
                     />
                 </div>
             </header>
-        </div>
-    );
-  }
+        );
+    }
 }
