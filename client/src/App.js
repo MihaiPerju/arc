@@ -1,14 +1,14 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Router } from 'react-router-dom';
+import history from './history';
 import Header from './components/header/Header';
-import Menu from './components/menu/LeftMenu';
-import './styles/cc-app.scss';
 import LeftMenu from './components/menu/LeftMenu';
+import './styles/cc-app.scss';
 
 class App extends React.Component {
     constructor() {
         super();
-        
+
         this.state = {
             loggedIn: false,
             user: {
@@ -26,9 +26,12 @@ class App extends React.Component {
                     user={this.state.user}
                     loggedIn={this.state.loggedIn}
                 />
-                <LeftMenu 
-                    user={this.state.user}
-                />
+                 <Router history={history}>
+                    <LeftMenu 
+                        user={this.state.user}
+                        history={history}
+                    />
+                </Router>
             </div>
         );
     }
