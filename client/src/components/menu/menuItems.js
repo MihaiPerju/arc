@@ -1,6 +1,6 @@
 import roleEnums from '../../roleEnums'
 
-export default menuItems = [
+export default [
     {
         name: "dashboard",
         label: "Dashboard",
@@ -55,7 +55,7 @@ export default menuItems = [
         label: "Flagged",
         icon: "flag",
         route: "/flagged",
-        riles: [roelsEnums.Manager]
+        roles: [roleEnums.Manager]
     },
     {
         name: "accounts/unassigned",
@@ -82,6 +82,7 @@ export default menuItems = [
         name: "rules/list",
         label: "Rules",
         icon: "file-text-o",
+        route: "#",
         roles: [roleEnums.Admin, roleEnums.Tech, roleEnums.Manager]
     },
     {
@@ -89,7 +90,7 @@ export default menuItems = [
         label: "Codes",
         icon: "code-fork",
         route: "/code/list",
-        roleEnums: [roleEnums.Admin]
+        roles: [roleEnums.Admin]
     },
     {
         name: "reports/list",
@@ -124,7 +125,7 @@ export default menuItems = [
         label: "Substates",
         icon: "tasks",
         route: "/substate/list",
-        roles: [roelsEnums.Admin]
+        roles: [roleEnums.Admin]
     },
     
     {

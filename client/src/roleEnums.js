@@ -1,4 +1,4 @@
-export default roles = Object.freeze({
+export default Object.freeze({
     Admin: "admin",
     Tech: "tech",
     Manager: "manager",
