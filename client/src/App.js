@@ -3,6 +3,7 @@ import { Router, Route } from 'react-router-dom';
 import history from './history';
 import Header from './components/header/Header';
 import LeftMenu from './components/menu/LeftMenu';
+import AccountList from './components/accounts/AccountList';
 import './styles/cc-app.scss';
 
 class App extends React.Component {
@@ -32,16 +33,10 @@ class App extends React.Component {
                                 user={this.state.user}
                             />
                             <Route 
-                                path={'/code/list'}
+                                path={'/accounts'}
                                 render={props => {
                                     return(
-                                        <div className='main-content'>
-                                        <div className="cc-container">
-                                            <div className="left__side full__width">
-                                                Hi
-                                            </div>
-                                        </div>
-                                        </div>
+                                            <AccountList />
                                     )
                                 }}
                             />
