@@ -63,13 +63,20 @@ export default class AccountList extends React.PureComponent {
         this.updateFilters({ filters });
     }
     
-    assignToUser = () => {
-        // TODO: Assign users to accounts
+    toggleBulkAction = () => {
+        console.log('Opened Bulk Action Modal')
+        // TODO: Open Bulk Action Modal
     };
-    
-    assignToWorkQueue = () => {
-        // TODO: Assign to workQueue (user tags)
-    };
+
+    toggleFilters = () => {
+        console.log('Opened Filters Modal')
+        // TODO: Open Filters Modal
+    }
+
+    toggleSort = () => {
+        console.log('Opened Sort Pane')
+        // TODO: Open Sort Pane
+    }
     
     nextPage = inc => {
         // TODO: Fetch next page
@@ -104,12 +111,17 @@ export default class AccountList extends React.PureComponent {
             // return <Loading />;
         }
         
-        // ! Wth?
-        // const icons = [
-        //     { icon: "user", method: this.assignToUser },
-        //     { icon: "users", method: this.assignToWorkQueue },
-        //     { icon: "thumb-tack", method: this.assignAction }
-        // ];
+        // The icons to add to the search bar
+        const icons = {
+            leftIcons: [
+                { className: 'icon-uncheck-box', method: this.selectAll },
+                { className: 'icon-thumb-tack', method: this.toggleBulkAction }
+            ],
+            rightIcons: [
+                { className: 'icon-filter', method: this.toggleFilters},
+                { className: 'icon-sort-alpha-asc', method: this.toggleSort},
+            ]
+        };
         
         
         return (
@@ -119,6 +131,8 @@ export default class AccountList extends React.PureComponent {
                         placeHolder={'Search Account Number'} 
                         currentValue={this.state.searchInput}
                         onChange={this.searchAccountNumber}
+                        leftIcons={icons.leftIcons}
+                        rightIcons={icons.rightIcons}
                     />
                 </div>
             </div>
