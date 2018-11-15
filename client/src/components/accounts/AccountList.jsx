@@ -110,7 +110,7 @@ export default class AccountList extends React.PureComponent {
         return (
             <div className="cc-container">
                 <div className={`left__side ${this.state.openPane ? '' : 'full__width'}`}>
-                    <TopBar />
+                    <TopBar placeHolder={'Search Account Number'} />
                 </div>
             </div>
         )

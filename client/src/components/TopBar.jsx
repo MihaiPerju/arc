@@ -10,7 +10,16 @@ export default class SearchInput extends React.PureComponent {
                 <div className="search-bar__wrapper flex--helper">
                     <div className='search-input full__width sort__width tag-btn'>
                         <div className="form-group">
-                            <input />
+                            <input 
+                                maxLength={this.props.maxLength || null}
+                                minLength={this.props.minLength || null}
+                                pattern={this.props.pattern || null}
+                                placeHolder={this.props.placeHolder || null}
+                                readOnly={this.props.readOnly || false}
+                                size={this.props.size || null}
+                                spellCheck={this.props.spellCheck || false}
+                                className={this.props.className || 'search-input'}
+                            />
                         </div>
                     </div>
                 </div>
