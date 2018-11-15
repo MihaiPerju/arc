@@ -90,7 +90,6 @@ export default class Home extends React.Component {
     setTimeout(() => {
       Meteor.call("accountactions.get", selectedClientId, '', (err, responseData) => {
         if (!err) {
-          debugger;
           this.setState({ bulkActionQueues: responseData, isLoadingBulkActionQueues: false });
         } else {
           this.setState({ isLoadingBulkActionQueues: false });
@@ -261,7 +260,7 @@ export default class Home extends React.Component {
         </div>
       );
     }
-    else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN))
+    else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN) || Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH))
       return (
         <div className="dashboard-container">
           <div className="dashboard-header-content">
