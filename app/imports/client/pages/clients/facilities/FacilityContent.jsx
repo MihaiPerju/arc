@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import FacilityContentHeader from "./components/FacilityContent/FacilityContentHeader";
 import ContactTable from "./components/FacilityContent/ContactTable";
+import FacilityFiles from "./components/FacilityContent/FacilityFiles";
 import PlacementBlock from "./components/FacilityContent/PlacementBlock";
 import InventoryBlock from "./components/FacilityContent/InventoryBlock";
 import PaymentBlock from "./components/FacilityContent/PaymentBlock";
 import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.jsx";
+import { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class FacilityContent extends Component {
   constructor() {
@@ -85,6 +87,9 @@ export default class FacilityContent extends Component {
               facility={facility}
             />
             <ContactTable contacts={facility && facility.contacts} />
+            {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
+              <FacilityFiles facilityId={facility && facility._id} />
+            )}
             <PlacementBlock
               facility={facility}
               setTempRules={this.setTempRules}
