@@ -1,5 +1,6 @@
 import React from 'react';
-import TopBar from '../SearchBar';
+import SearchBar from '../SearchBar';
+import SortBar from '../SortBar';
 
 export default class AccountList extends React.PureComponent {
     constructor() {
@@ -12,6 +13,7 @@ export default class AccountList extends React.PureComponent {
             total: 0,
             showMetaData: false,
             openPane: false,
+            openSort: false,
             searchInput: ''
         };
     }
@@ -75,7 +77,18 @@ export default class AccountList extends React.PureComponent {
 
     toggleSort = () => {
         console.log('Opened Sort Pane')
+        this.setState({openSort: !this.state.openSort})
         // TODO: Open Sort Pane
+    }
+
+    renderSorting = () => {
+        const options = [
+            {label: 'Account Balance', onASC: this.sortAccounts, onDESC: this.sortAccounts}
+        ]
+
+        return (
+            <SortBar options={options}/>
+        )
     }
     
     nextPage = inc => {
@@ -123,17 +136,17 @@ export default class AccountList extends React.PureComponent {
             ]
         };
         
-        
         return (
             <div className="cc-container">
                 <div className={`left__side ${this.state.openPane ? '' : 'full__width'}`}>
-                    <TopBar 
+                    <SearchBar 
                         placeHolder={'Search Account Number'} 
                         currentValue={this.state.searchInput}
                         onChange={this.searchAccountNumber}
                         leftIcons={icons.leftIcons}
                         rightIcons={icons.rightIcons}
                     />
+                    {this.state.openSort && this.renderSorting()}
                 </div>
             </div>
         )

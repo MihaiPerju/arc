@@ -21,7 +21,7 @@ import React from 'react';
  * @param {Array} leftIcons The icons to render to the left of the bar
  * @param {Array} rightIcons This ocons to render to the right of the bar
  */
-export default class SearchInput extends React.PureComponent {
+export default class SearchBar extends React.PureComponent {
     renderIcons(icons) {
         return (
             <div className='filter-block flex--helper'>
