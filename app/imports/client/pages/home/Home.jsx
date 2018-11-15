@@ -10,6 +10,7 @@ import { AutoForm, AutoField } from "/imports/ui/forms";
 import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
 import RepDashboard from "./components/RepDashboard";
+import ManagerDashboard from "./components/ManagerDashboard";
 
 export default class Home extends React.Component {
 
@@ -21,12 +22,45 @@ export default class Home extends React.Component {
       reps: [],
       chartData: [],
       selectedDate: moment(),
-      selectedRep: ''
+      selectedRep: '',
+      clients: [],
+      facilities: [],
     };
   }
 
   componentDidMount() {
-    this.getRepresentatives();
+    this.getClients();
+  }
+
+  getClients() {
+    Meteor.call("clients.get", (err, responseData) => {
+      if (!err) {
+        let clients = responseData.map(client => {
+          return { label: client.clientName, value: client._id };
+        });
+        clients.unshift({ label: 'All Clients', value: -1 });
+        this.setState({ clients });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  getFacilities(clientId) {
+    Meteor.call("facilities.get", clientId, (err, responseData) => {
+      if (!err) {
+        let facilities = [];
+        facilities = responseData.map(facility => {
+          return { label: facility.name, value: facility._id };
+        });
+        if (facilities.length > 0) {
+          facilities.unshift({ label: 'All Facilities', value: -1 });
+        }
+        this.setState({ facilities });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   getRepresentatives() {
@@ -80,6 +114,14 @@ export default class Home extends React.Component {
     this.setState({ selectedDate: moment(newDate) });
   };
 
+  onHandleChange = (field, value) => {
+    if (field == "clientId") {
+      if (value != "-1") {
+        this.getFacilities(value);
+      }
+    }
+  }
+
   renderGraph() {
     const options = {
       chart: {
@@ -117,48 +159,85 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { reps, selectedDate } = this.state;
+    const { clients, facilities } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+
+      // return (
+      //   <div className="cc-container home-container flex-align--start">
+      //     <div className="heart-beat">
+      //       {
+      //         !this.state.isLoading ?
+      //           <AutoForm ref="graphFilters" schema={heartBeatSchema} onSubmit={this.onSubmit.bind(this)}>
+      //             <div className="flex--helper form-group__pseudo--3">
+      //               <div className="select-form">
+      //                 <AutoField
+      //                   label="Reps:"
+      //                   name="userId"
+      //                   options={reps}
+      //                 />
+      //               </div>
+      //               <div className="m-l-15">
+      //                 <label>Select Date:</label>
+      //                 <div className="border-style">
+      //                   <DatePicker
+      //                     calendarClassName="cc-datepicker"
+      //                     showMonthDropdown
+      //                     showYearDropdown
+      //                     yearDropdownItemNumber={4}
+      //                     todayButton={"Today"}
+      //                     selected={selectedDate}
+      //                     onChange={this.onChange}
+      //                     placeholderText="Selected Date"
+      //                     fixedHeight
+      //                   />
+      //                 </div>
+      //               </div>
+      //               <button className="custom-submit-btn" onClick={this.addGraphFilters}>
+      //                 Submit
+      //               </button>
+      //             </div>
+      //           </AutoForm> : <Loading />
+      //       }
+      //       {this.renderGraph()}
+      //     </div>
+      //   </div>
+      // );
+
       return (
-        <div className="cc-container home-container flex-align--start">
-          <div className="heart-beat">
-            {
-              !this.state.isLoading ?
-                <AutoForm ref="graphFilters" schema={heartBeatSchema} onSubmit={this.onSubmit.bind(this)}>
-                  <div className="flex--helper form-group__pseudo--3">
-                    <div className="select-form">
-                      <AutoField
-                        label="Reps:"
-                        name="userId"
-                        options={reps}
-                      />
-                    </div>
-                    <div className="m-l-15">
-                      <label>Select Date:</label>
-                      <div className="border-style">
-                        <DatePicker
-                          calendarClassName="cc-datepicker"
-                          showMonthDropdown
-                          showYearDropdown
-                          yearDropdownItemNumber={4}
-                          todayButton={"Today"}
-                          selected={selectedDate}
-                          onChange={this.onChange}
-                          placeholderText="Selected Date"
-                          fixedHeight
-                        />
-                      </div>
-                    </div>
-                    <button className="custom-submit-btn" onClick={this.addGraphFilters}>
-                      Submit
-                    </button>
+        <div className="dashboard-content-container">
+          <div className="dashboard-header-content">
+            <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
+              <div className="flex--helper form-group__pseudo--3">
+                <div className="select-form select-box-width">
+                  <label className="dashboard-label">Clients</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="clientId"
+                      options={clients}
+                    />
                   </div>
-                </AutoForm> : <Loading />
-            }
-            {this.renderGraph()}
+                </div>
+                {
+                  facilities.length > 0 ?
+                    <div className="select-form select-box-width m-l-15">
+                      <label className="dashboard-label">Facilities</label>
+                      <div className="m-t--5">
+                        <AutoField
+                          labelHidden={true}
+                          name="facilityId"
+                          options={facilities} />
+                      </div>
+                    </div> : null
+                }
+              </div>
+            </AutoForm>
           </div>
+          <ManagerDashboard />
         </div>
       );
+
+
     }
     else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
       return (
@@ -170,8 +249,17 @@ export default class Home extends React.Component {
   }
 }
 
-const heartBeatSchema = new SimpleSchema({
-  userId: {
+// const heartBeatSchema = new SimpleSchema({
+//   userId: {
+//     type: String
+//   }
+// });
+
+const dashboardSchema = new SimpleSchema({
+  clientId: {
+    type: String
+  },
+  facilityId: {
     type: String
   }
 });
