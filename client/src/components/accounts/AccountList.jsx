@@ -14,7 +14,32 @@ export default class AccountList extends React.PureComponent {
             showMetaData: false,
             openPane: false,
             openSort: false,
-            searchInput: ''
+            searchInput: '',
+            activeSort: {
+                label: null,
+                sortDirection: null
+            }
+        };
+
+        // Sort options
+        this.sortOptions = [
+            {label: 'Account Balance', onChange: this.sortAccounts},
+            {label: 'Placement Date', onChange: this.sortAccounts},
+            {label: 'Discharge Date', onChange: this.sortAccounts},
+            {label: 'Admit Date', onChange: this.sortAccounts},
+            {label: 'Last Bill Date', onChange: this.sortAccounts}
+        ]
+        
+        // The icons to add to the search bar
+        this.icons = {
+            leftIcons: [
+                { className: 'icon-uncheck-box', method: this.selectAll },
+                { className: 'icon-thumb-tack', method: this.toggleBulkAction }
+            ],
+            rightIcons: [
+                { className: 'icon-filter', method: this.toggleFilters},
+                { className: 'icon-sort-alpha-asc', method: this.toggleSort},
+            ]
         };
     }
     
@@ -80,16 +105,6 @@ export default class AccountList extends React.PureComponent {
         this.setState({openSort: !this.state.openSort})
         // TODO: Open Sort Pane
     }
-
-    renderSorting = () => {
-        const options = [
-            {label: 'Account Balance', onASC: this.sortAccounts, onDESC: this.sortAccounts}
-        ]
-
-        return (
-            <SortBar options={options}/>
-        )
-    }
     
     nextPage = inc => {
         // TODO: Fetch next page
@@ -118,23 +133,18 @@ export default class AccountList extends React.PureComponent {
     removeLock = () => {
         // TODO: Unlock and account
     };
+
+    sortAccounts = (sortDirection, label) => {
+        console.log(sortDirection)
+        console.log(label)
+
+        this.setState({activeSort: {sortDirection, label}})
+    }
     
     render() {
         if (this.props.isLoading) {
             // return <Loading />;
         }
-        
-        // The icons to add to the search bar
-        const icons = {
-            leftIcons: [
-                { className: 'icon-uncheck-box', method: this.selectAll },
-                { className: 'icon-thumb-tack', method: this.toggleBulkAction }
-            ],
-            rightIcons: [
-                { className: 'icon-filter', method: this.toggleFilters},
-                { className: 'icon-sort-alpha-asc', method: this.toggleSort},
-            ]
-        };
         
         return (
             <div className="cc-container">
@@ -143,10 +153,16 @@ export default class AccountList extends React.PureComponent {
                         placeHolder={'Search Account Number'} 
                         currentValue={this.state.searchInput}
                         onChange={this.searchAccountNumber}
-                        leftIcons={icons.leftIcons}
-                        rightIcons={icons.rightIcons}
+                        leftIcons={this.icons.leftIcons}
+                        rightIcons={this.icons.rightIcons}
                     />
-                    {this.state.openSort && this.renderSorting()}
+                    {   // If sort pane is open render the sort
+                        this.state.openSort &&
+                            <SortBar 
+                                activeSort={this.state.activeSort} 
+                                options={this.sortOptions}
+                            />
+                    }
                 </div>
             </div>
         )
