@@ -171,5 +171,14 @@ Meteor.methods({
         tagIds
       }
     });
-  }
+  },
+  "clients.get"() {
+    Security.checkLoggedIn(this.userId);
+    return Clients.find().fetch();
+  },
+
+  "facilities.get"(clientId) {
+    Security.checkLoggedIn(this.userId);
+    return Facilities.find({ clientId: clientId }).fetch();
+  },
 });
