@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * This is a controlled componenet, it takes in all normal HTML props and a onChange FN.
+ */
 export default class SearchInput extends React.PureComponent {
     
     render() {
@@ -14,11 +17,13 @@ export default class SearchInput extends React.PureComponent {
                                 maxLength={this.props.maxLength || null}
                                 minLength={this.props.minLength || null}
                                 pattern={this.props.pattern || null}
-                                placeHolder={this.props.placeHolder || null}
+                                placeholder={this.props.placeHolder || null}
                                 readOnly={this.props.readOnly || false}
                                 size={this.props.size || null}
                                 spellCheck={this.props.spellCheck || false}
                                 className={this.props.className || 'search-input'}
+                                value={this.props.currentValue || ''}
+                                onChange={this.props.onChange || null}
                             />
                         </div>
                     </div>

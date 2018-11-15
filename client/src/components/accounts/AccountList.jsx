@@ -1,5 +1,5 @@
 import React from 'react';
-import TopBar from '../TopBar';
+import TopBar from '../SearchBar';
 
 export default class AccountList extends React.PureComponent {
     constructor() {
@@ -11,7 +11,8 @@ export default class AccountList extends React.PureComponent {
             perPage: 13,
             total: 0,
             showMetaData: false,
-            openPane: false
+            openPane: false,
+            searchInput: ''
         };
     }
     
@@ -89,6 +90,10 @@ export default class AccountList extends React.PureComponent {
     addLock = _id => {
         // TODO: Lock an account
     };
+
+    searchAccountNumber = (event) => {
+        this.setState({searchInput: event.target.value})
+    }
     
     removeLock = () => {
         // TODO: Unlock and account
@@ -110,7 +115,11 @@ export default class AccountList extends React.PureComponent {
         return (
             <div className="cc-container">
                 <div className={`left__side ${this.state.openPane ? '' : 'full__width'}`}>
-                    <TopBar placeHolder={'Search Account Number'} />
+                    <TopBar 
+                        placeHolder={'Search Account Number'} 
+                        currentValue={this.state.searchInput}
+                        onChange={this.searchAccountNumber}
+                    />
                 </div>
             </div>
         )
