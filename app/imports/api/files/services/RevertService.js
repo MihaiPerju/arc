@@ -9,20 +9,37 @@ import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 export default class RevertService {
   //Main core of reverting
   static revert(fileId) {
-    const { previousFileId, facilityId, fileName } = Files.findOne({
-      _id: fileId
-    });
+    const file = Files.findOne({ _id: fileId });
+    if (file) {
+      const { facilityId, createdAt } = file;
+
+      //Get all the files uploaded earlier
+      const files = Files.find(
+        { createdAt: { $gte: createdAt }, facilityId },
+        { sort: { createdAt: -1 } }
+      );
+      for (let file of files) {
+        this.revertFile(file);
+        Files.remove({ _id: file._id });
+      }
+    } else {
+      throw new Meteor.Error("Could not delete file.");
+    }
+  }
+
+  static revertFile(file) {
+    const { _id, previousFileId, facilityId, fileName } = file;
 
     //Delete all system Actions applied after file upload
-    this.revertSystemActions(fileId);
+    this.revertSystemActions(_id);
     //Update accounts
-    this.revertAccounts(fileId, previousFileId, facilityId, fileName);
+    this.revertAccounts(_id, previousFileId, facilityId, fileName);
 
     //Link facility to previous file
     this.revertFacility(facilityId, previousFileId);
 
     //Remove backups and files
-    this.removeBackup(fileId);
+    this.removeBackup(_id);
   }
 
   static revertSystemActions(fileId) {

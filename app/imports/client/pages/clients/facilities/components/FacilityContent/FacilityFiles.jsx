@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import query from "/imports/api/files/queries/listFiles";
+import query from "/imports/api/files/queries/listSevenDaysFiles";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
@@ -143,10 +143,14 @@ class FacilityFiles extends Component {
 export default withQuery(
   props => {
     const { facilityId } = props;
+
     return query.clone({
-      filters: { facilityId },
-      options: { sort: { createdAt: -1 }, limit: 1 }
+      filters: {
+        facilityId
+      },
+      options: { sort: { createdAt: -1 } }
     });
   },
   { reactive: true }
 )(FacilityFiles);
+

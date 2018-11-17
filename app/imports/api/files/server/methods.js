@@ -11,8 +11,6 @@ import Business from "/imports/api/business";
 Meteor.methods({
   "file.rollback"(_id) {
     RevertService.revert(_id);
-    Files.remove({ _id });
-
     //Need to perform the rest of the logic here, including getting backups and so on.
   },
 
@@ -39,7 +37,7 @@ Meteor.methods({
   "file.retryUpload"(filePath, fileId) {
     const { root } = Settings.findOne({ name: settings.ROOT });
     //Check the file is exist or not.
-    if( fs.existsSync(root + Business.ACCOUNTS_FOLDER + filePath) ) {
+    if (fs.existsSync(root + Business.ACCOUNTS_FOLDER + filePath)) {
       const job = JobQueue.findOne({ filePath });
       //Remove unnecessary data
       delete job.workerId;
@@ -48,8 +46,8 @@ Meteor.methods({
       delete job.status;
       job.fileId = fileId;
       (job.type = jobTypes.RETRY_UPLOAD), JobQueue.insert(job);
-    }else{
-      return 'FILE_NOT_AVAILABLE';
+    } else {
+      return "FILE_NOT_AVAILABLE";
     }
-  },
+  }
 });
