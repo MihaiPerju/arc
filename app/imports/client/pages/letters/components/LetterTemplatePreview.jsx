@@ -1,33 +1,34 @@
 import React from "react";
-import Parser from "simple-text-parser";
 import CreateLetter from "./CreateLetter";
 import LetterEdit from "./LetterEdit";
 import { Divider } from "semantic-ui-react";
 import { variablesEnum } from "/imports/api/letterTemplates/enums/variablesEnum";
 
 export default class LetterTemplatePreview extends React.Component {
-  tagParser = () => {
+  renderText = () => {
     const { parentState } = this.props;
-    const parser = new Parser();
-    const { letterTemplateBody } = this.props;
+    let { letterTemplateBody } = this.props;
     if (!letterTemplateBody) {
       return;
     }
 
-    parser.addRule(/{(.*?)}/g, function(tag) {
-      const word = tag.substring(1).slice(0, -1);
-      if (variablesEnum[word]) {
-        return `${
-          parentState[variablesEnum[word].field]
-            ? parentState[variablesEnum[word].field]
-            : `{${word}}`
-        }`;
-      } else {
-        return `${parentState[word] ? parentState[word] : `{${word}}`}`;
-      }
-    });
+    let result = letterTemplateBody;
+    let regx = /\{([^}]+)\}/g;
+    let m;
 
-    return parser.render(letterTemplateBody);
+    do {
+      m = regx.exec(letterTemplateBody);
+      if (m) {
+        let word = "{" + m[1] + "}";
+
+        let wordToReplace = word;
+        if (variablesEnum[m[1]] && parentState[variablesEnum[m[1]].field]) {
+          wordToReplace = parentState[variablesEnum[m[1]].field];
+        }
+        result = result.replace(word, wordToReplace);
+      }
+    } while (m);
+    return result;
   };
 
   render() {
@@ -43,7 +44,7 @@ export default class LetterTemplatePreview extends React.Component {
       keywordsValues,
       keywords
     } = this.props;
-    const letterBody = this.tagParser();
+    const letterBody = this.renderText();
 
     return (
       <div>
