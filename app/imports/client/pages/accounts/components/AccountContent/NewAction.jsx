@@ -223,9 +223,11 @@ export default class NewAction extends Component {
     const actionOptions = ActionsHelper.generateOptions(actions);
     const reasonCodeOptions = ReasonCodesHelper.generateOptions(reasonCodes);
     const selectedAction = ActionsHelper.selectAction(
-      selectedActionId,
+      selectedActionId && selectedActionId.value,
       actions
     );
+
+
     const schema = this.getSchema(selectedAction);
 
     if (loading) {
