@@ -20,11 +20,11 @@ import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
   "accounts.get"(params) {
-    console.log(params);
     const queryParams = QueryBuilder.getQueryParams(params);
-    console.log(queryParams);
-    // let filters = queryParams.filters;
-    return Accounts.find({}, { limit: 5 }).fetch();
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+
+    return Accounts.find(filters, options).fetch();
   },
 
   "account.freeze"(_id) {

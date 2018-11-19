@@ -96,7 +96,6 @@ export default class AccountListContainer extends Pager {
 
   listAccounts = () => {
     const params = PagerService.getAccountQueryParams();
-    console.log(params);
     Meteor.call("accounts.get", params, (err, accounts) => {
       if (!err) {
         this.setState({ accounts });
@@ -666,12 +665,3 @@ export default class AccountListContainer extends Pager {
     );
   }
 }
-
-// export default withQuery(
-//   props => {
-//     const params = PagerService.getAccountQueryParams();
-//     console.log(params)
-//     return PagerService.setQuery(query, params);
-//   },
-//   { reactive: true }
-// )(AccountListContainer);

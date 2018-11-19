@@ -97,9 +97,11 @@ export default class PagerService {
     },
     route
   ) {
-    params.options = {
+
+    _.extend(params.options, {
       sort: {}
-    };
+    });
+    
     if (state === "unassigned") {
       _.extend(params, {
         filters: {
@@ -379,8 +381,10 @@ export default class PagerService {
 
   static getPagerOptions(page, perPage) {
     return {
-      limit: perPage,
-      skip: perPage * (page - 1)
+      options: {
+        limit: perPage,
+        skip: perPage * (page - 1)
+      }
     };
   }
 
