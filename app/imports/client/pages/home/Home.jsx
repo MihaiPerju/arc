@@ -25,6 +25,9 @@ export default class Home extends React.Component {
       selectedRep: '',
       clients: [],
       facilities: [],
+      selectedClientId: '',
+      selectedFacilityId: '',
+      managerDashboardData: { isLoadingAssignedAccounts: false, assignedAccounts: [], isLoadingArchivedAccounts: false, archivedAccounts: [], isLoadingLineGraph: false, chartData: {} }
     };
   }
 
@@ -61,6 +64,50 @@ export default class Home extends React.Component {
         Notifier.error(err.reason);
       }
     });
+  }
+
+  getManagerDashboardData() {
+    const { selectedClientId, selectedFacilityId } = this.state;
+    this.getAssignedAccounts(selectedClientId, selectedFacilityId);
+    this.getGraphData();
+  }
+
+  getAssignedAccounts(clientId, facilityId) {
+    let managerDashboardData = this.state.managerDashboardData;
+    managerDashboardData.isLoadingAssignedAccounts = true;
+    this.setState({ managerDashboardData });
+    setTimeout(() => {
+      Meteor.call("accountsAssigned.get", clientId, facilityId, '', (err, responseData) => {
+        if (!err) {
+          managerDashboardData.assignedAccounts = responseData;
+          managerDashboardData.isLoadingAssignedAccounts = false;
+          this.setState({ managerDashboardData });
+        } else {
+          managerDashboardData.isLoadingAssignedAccounts = false;
+          this.setState({ managerDashboardData });
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1000);
+  }
+
+  getGraphData() {
+    let managerDashboardData = this.state.managerDashboardData;
+    managerDashboardData.isLoadingLineGraph = true;
+    this.setState({ managerDashboardData });
+    setTimeout(() => {
+      Meteor.call("account.getAssignedPerHour", new Date(moment()), (err, chartData) => {
+        if (!err) {
+          managerDashboardData.chartData = chartData;
+          managerDashboardData.isLoadingLineGraph = false;
+          this.setState({ managerDashboardData });
+        } else {
+          managerDashboardData.isLoadingLineGraph = false;
+          this.setState({ managerDashboardData });
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1000);
   }
 
   getRepresentatives() {
@@ -116,9 +163,19 @@ export default class Home extends React.Component {
 
   onHandleChange = (field, value) => {
     if (field == "clientId") {
-      if (value != "-1") {
-        this.getFacilities(value);
-      }
+      this.setState({ selectedClientId: value }, () => {
+        this.getManagerDashboardData();
+      });
+      this.getFacilities(value);
+    }
+
+    if (field == "facilityId") {
+      this.setState({ selectedFacilityId: value }, () => {
+        this.getManagerDashboardData();
+      });
+    }
+    else {
+      this.getManagerDashboardData();
     }
   }
 
@@ -233,7 +290,7 @@ export default class Home extends React.Component {
               </div>
             </AutoForm>
           </div>
-          <ManagerDashboard />
+          <ManagerDashboard data={this.state.managerDashboardData} />
         </div>
       );
 
