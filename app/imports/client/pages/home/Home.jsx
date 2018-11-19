@@ -11,6 +11,7 @@ import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
 import RepDashboard from "./components/RepDashboard";
 import ManagerDashboard from "./components/ManagerDashboard";
+import CHART_TYPE from './enums/chartType';
 
 export default class Home extends React.Component {
 
@@ -27,12 +28,25 @@ export default class Home extends React.Component {
       facilities: [],
       selectedClientId: '',
       selectedFacilityId: '',
+      chartTypes: [],
+      selectedChartType: '',
       managerDashboardData: { isLoadingAssignedAccounts: false, assignedAccounts: [], isLoadingArchivedAccounts: false, archivedAccounts: [], isLoadingLineGraph: false, chartData: {} }
     };
+  }
+  componentWillMount(){
+    this.prepareChartTypes();
   }
 
   componentDidMount() {
     this.getClients();
+  }
+
+  prepareChartTypes() {
+    let chartTypes = this.state.chartTypes;
+    chartTypes.push({ value: 1, label: 'Line Chart', type: CHART_TYPE.Line });
+    chartTypes.push({ value: 2, label: 'Pie Chart', type: CHART_TYPE.Pie });
+    this.setState({ chartTypes: chartTypes, selectedChartType: chartTypes[0] });
+    this.getManagerDashboardData();
   }
 
   getClients() {
@@ -69,7 +83,8 @@ export default class Home extends React.Component {
   getManagerDashboardData() {
     const { selectedClientId, selectedFacilityId } = this.state;
     this.getAssignedAccounts(selectedClientId, selectedFacilityId);
-    this.getGraphData();
+    this.getArchivedAccounts(selectedClientId, selectedFacilityId);
+    this.getGraphData(selectedClientId, selectedFacilityId);
   }
 
   getAssignedAccounts(clientId, facilityId) {
@@ -91,12 +106,31 @@ export default class Home extends React.Component {
     }, 1000);
   }
 
-  getGraphData() {
+  getArchivedAccounts(clientId, facilityId) {
+    let managerDashboardData = this.state.managerDashboardData;
+    managerDashboardData.isLoadingArchivedAccounts = true;
+    this.setState({ managerDashboardData });
+    setTimeout(() => {
+      Meteor.call("accountsArchived.get", clientId, facilityId, (err, responseData) => {
+        if (!err) {
+          managerDashboardData.archivedAccounts = responseData;
+          managerDashboardData.isLoadingArchivedAccounts = false;
+          this.setState({ managerDashboardData });
+        } else {
+          managerDashboardData.isLoadingArchivedAccounts = false;
+          this.setState({ managerDashboardData });
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1000);
+  }
+
+  getGraphData(clientId, facilityId) {
     let managerDashboardData = this.state.managerDashboardData;
     managerDashboardData.isLoadingLineGraph = true;
     this.setState({ managerDashboardData });
     setTimeout(() => {
-      Meteor.call("account.getAssignedPerHour", new Date(moment()), (err, chartData) => {
+      Meteor.call("account.getAssignedPerHour", clientId, facilityId, '', new Date(moment()), (err, chartData) => {
         if (!err) {
           managerDashboardData.chartData = chartData;
           managerDashboardData.isLoadingLineGraph = false;
@@ -162,20 +196,32 @@ export default class Home extends React.Component {
   };
 
   onHandleChange = (field, value) => {
-    if (field == "clientId") {
-      this.setState({ selectedClientId: value }, () => {
-        this.getManagerDashboardData();
-      });
-      this.getFacilities(value);
-    }
+    switch (field) {
+      case "clientId":
+        this.setState({ selectedClientId: value }, () => {
+          this.getManagerDashboardData();
+        });
+        this.getFacilities(value);
+        break;
+      case "facilityId":
+        this.setState({ selectedFacilityId: value }, () => {
+          this.getManagerDashboardData();
+        });
+        break;
+      case "selectChartTypeId":
+        let chartTypes = this.state.chartTypes;
+        let chartType = chartTypes.find(p => p.value == value);
+        let selectedChartType = chartTypes[0];
+        if (chartType)
+          selectedChartType = chartType;
 
-    if (field == "facilityId") {
-      this.setState({ selectedFacilityId: value }, () => {
+        this.setState({ selectedChartType: selectedChartType }, () => {
+          this.getManagerDashboardData();
+        });
+        break;
+      default:
         this.getManagerDashboardData();
-      });
-    }
-    else {
-      this.getManagerDashboardData();
+        break;
     }
   }
 
@@ -216,7 +262,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { clients, facilities } = this.state;
+    const { clients, facilities, chartTypes, selectedChartType } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
 
       // return (
@@ -287,10 +333,19 @@ export default class Home extends React.Component {
                       </div>
                     </div> : null
                 }
+                <div className="select-form select-box-width m-l-15">
+                  <label className="dashboard-label">Chart Types</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="selectChartTypeId"
+                      options={chartTypes} />
+                  </div>
+                </div>
               </div>
             </AutoForm>
           </div>
-          <ManagerDashboard data={this.state.managerDashboardData} />
+          <ManagerDashboard data={this.state.managerDashboardData} chartType={selectedChartType.type} />
         </div>
       );
 
@@ -317,6 +372,9 @@ const dashboardSchema = new SimpleSchema({
     type: String
   },
   facilityId: {
+    type: String
+  },
+  selectChartTypeId: {
     type: String
   }
 });

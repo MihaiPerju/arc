@@ -1,7 +1,10 @@
 import React from "react";
 import Loading from "../../../../client/lib/ui/Loading";
-import Highcharts from "highcharts";
-import ReactHighcharts from "highcharts-react-official";
+import { ManagerWidgets } from '../enums/widgetType';
+import DashboardListItem from "./DashboardListItem";
+import LineChart from "./LineChart";
+import PieChart from "./PieChart";
+import CHART_TYPE from "../enums/chartType";
 
 export default class ManagerDashboard extends React.Component {
 
@@ -14,16 +17,7 @@ export default class ManagerDashboard extends React.Component {
           {
             data.assignedAccounts.length > 0 ?
               data.assignedAccounts.map(account => {
-                return (<div key={`file-${account._id}`} className="dashboard-list-item">
-                  <div className="dashboard-list-item-left-content">
-                    <div className="dashboard-list-item-title">{account.ptName}</div>
-                    <div className="dashboard-list-item-sub-title">{account.ptType}</div>
-                  </div>
-                  <div className="dashboard-list-item-right-content">
-                    <div className="text--right">{account.state}</div>
-                    <div className="dashboard-list-item-right-label">Status</div>
-                  </div>
-                </div>);
+                return <DashboardListItem key={data._id} data={account} type={ManagerWidgets.ASSIGNED_ACCOUNTS} />;
               })
               : <div className="dashboard-empty-content">
                 No assigned accounts has been found.
@@ -42,22 +36,13 @@ export default class ManagerDashboard extends React.Component {
 
   renderArchivedAccounts() {
     const { data } = this.props;
-    if (!data.isLoadingAssignedAccounts) {
+    if (!data.isLoadingArchivedAccounts) {
       return (
-        <div className={data.assignedAccounts.length > 0 ? '' : 'dashboard-content-center'}>
+        <div className={data.archivedAccounts.length > 0 ? '' : 'dashboard-content-center'}>
           {
-            data.assignedAccounts.length > 0 ?
-              data.assignedAccounts.map(account => {
-                return (<div key={`file-${account._id}`} className="dashboard-list-item">
-                  <div className="dashboard-list-item-left-content">
-                    <div className="dashboard-list-item-title">{account.ptName}</div>
-                    <div className="dashboard-list-item-sub-title">{account.ptType}</div>
-                  </div>
-                  <div className="dashboard-list-item-right-content">
-                    <div className="text--right">{account.state}</div>
-                    <div className="dashboard-list-item-right-label">Status</div>
-                  </div>
-                </div>);
+            data.archivedAccounts.length > 0 ?
+              data.archivedAccounts.map(account => {
+                return <DashboardListItem key={data._id} data={account} type={ManagerWidgets.ARCHIVED_ACCOUNTS} />;
               })
               : <div className="dashboard-empty-content">
                 No archived accounts has been found.
@@ -74,37 +59,29 @@ export default class ManagerDashboard extends React.Component {
     }
   }
 
-  renderLineGraph() {
-    const { data } = this.props;
-    const options = {
-      chart: {
-        type: "line",
-        width: 640
-      },
-      xAxis: {
-        title: { text: "Hours" }
-      },
-      yAxis: {
-        title: { text: "Number of Actions" }
-      },
-      title: {
-        text: "Accounts"
-      },
-      series: [
-        {
-          name: "Actions per hour",
-          data: data.chartData
-        }
-      ]
+  renderAssignedAccountsChart() {
+    const { data, chartType } = this.props;
+
+    let chartOptions = {
+      xAxisTitle: 'Hours',
+      yAxisTitle: 'Number of Accounts',
+      title: 'Accounts',
+      ySeries: 'Accounts per hour'
     };
+
     if (!data.isLoadingLineGraph) {
-      return (
-        // <div className="m-t--20">
-        <div>
-          <ReactHighcharts highcharts={Highcharts} options={options} />
-        </div>
-        // </div>
-      );
+      if (chartType === CHART_TYPE.Pie) {
+        return (
+          <PieChart data={data} chartOptions={chartOptions} />
+        );
+      }
+      else if (chartType === CHART_TYPE.Line) {
+        return (
+          <LineChart data={data} chartOptions={chartOptions} />
+        );
+      }
+      else
+        return null;
     } else {
       return (
         <div className="dashboard-content-center">
@@ -118,12 +95,10 @@ export default class ManagerDashboard extends React.Component {
     return (
       <div>
         <div className="dashboard-row">
+          <div className="dashboard-sub-title">Assigned Accounts</div>
+        </div>
+        <div className="dashboard-row content-height">
           <div className="dashboard-section">
-            <div className="dashboard-section-header m-t--5">
-              <div className="dashboard-section-title">
-                Assigned Accounts List
-            </div>
-            </div>
             <div className="dashboard-section-content">
               {
                 this.renderAssignedAccounts()
@@ -131,25 +106,18 @@ export default class ManagerDashboard extends React.Component {
             </div>
           </div>
           <div className="dashboard-section">
-            <div className="dashboard-section-header m-t--5 m-l-5">
-              <div className="dashboard-section-title">
-                Assigned Accounts Graph
-            </div>
-            </div>
             <div className="dashboard-section-content m-l-5">
               {
-                this.renderLineGraph()
+                this.renderAssignedAccountsChart()
               }
             </div>
           </div>
         </div>
         <div className="dashboard-row">
+          <div className="dashboard-sub-title">Archived Accounts</div>
+        </div>
+        <div className="dashboard-row content-height">
           <div className="dashboard-section">
-            <div className="dashboard-section-header m-t--5">
-              <div className="dashboard-section-title">
-                Archived Accounts List
-            </div>
-            </div>
             <div className="dashboard-section-content">
               {
                 this.renderArchivedAccounts()
@@ -157,14 +125,9 @@ export default class ManagerDashboard extends React.Component {
             </div>
           </div>
           <div className="dashboard-section">
-            <div className="dashboard-section-header m-t--5 m-l-5">
-              <div className="dashboard-section-title">
-                Archived Accounts Graph
-            </div>
-            </div>
             <div className="dashboard-section-content m-l-5">
               {
-                this.renderLineGraph()
+                this.renderAssignedAccountsChart()
               }
             </div>
           </div>
