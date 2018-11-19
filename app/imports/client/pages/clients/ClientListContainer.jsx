@@ -26,7 +26,7 @@ export default class ClientContainer extends Pager {
       tags: [],
       clients: []
     });
-    this.method = "accounts.count";
+    this.method = "clients.count";
     this.pollingMethod = null;
   }
 
@@ -144,9 +144,9 @@ export default class ClientContainer extends Pager {
   };
 
   updatePager = () => {
-    // update the pager count
-    const queryParams = ParamsService.getParams();
-    this.recount(queryParams);
+    // Update the pager count
+    const params = ParamsService.getClientParams();
+    this.recount(params);
   };
 
   getTags = () => {

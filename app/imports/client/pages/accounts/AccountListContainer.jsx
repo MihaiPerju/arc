@@ -292,6 +292,7 @@ export default class AccountListContainer extends Pager {
     }
     return [options[0]];
   }
+  
   updatePager = () => {
     // update the pager count
     const queryParams = ParamsService.getAccountQueryParams();

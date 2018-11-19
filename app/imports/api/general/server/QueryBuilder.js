@@ -65,8 +65,10 @@ export default class PagerService {
 
   static getClientParams({ filters, options }) {
     let { clientName, createdAtMax, createdAtMin } = filters;
+    let { page, perPage } = options;
 
-    let params = { filters: {}, options };
+    let params = this.getPagerOptions(page, perPage);
+    params.filters = {};
 
     if (clientName) {
       _.extend(params.filters, {

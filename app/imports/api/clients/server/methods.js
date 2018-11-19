@@ -33,6 +33,12 @@ Meteor.methods({
     return Clients.find(filters, options).fetch();
   },
 
+  "clients.count"(params) {
+    const queryParams = QueryBuilder.getClientParams(params);
+    let filters = queryParams.filters;
+    return Clients.find(filters).count();
+  },
+
   "client.getLogoPath"(uploadId) {
     Security.isAdminOrTech(this.userId);
 
