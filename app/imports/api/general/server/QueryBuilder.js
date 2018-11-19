@@ -1,137 +1,21 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
-import UserRoles, {
-  roleGroups
-} from "/imports/api/users/enums/roles";
+import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
-
-  static setQuery(query, {
-    page,
-    perPage,
-    state,
-    assign,
-    filters,
-    options
-  }) {
+  static getQueryParams({ page, perPage, state, assign, filters, options,route }) {
     let params = this.getPagerOptions(page, perPage);
-    const {
-      route
-    } = FlowRouter.current();
-
+    
     if (state || state === "" || route.path.indexOf("flagged") > -1) {
       this.getAccountFilters(params, state, filters, options);
       this.getProperAccounts(params, assign);
     } else {
       // common method for filtering
-      this.getFilters(params, filters);
+    //   this.getFilters(params, filters);
     }
-    this.queryParams = params;
-    return query.clone(params);
-  }
-
-  static getPagerOptions(page, perPage) {
-    return {
-      limit: perPage,
-      skip: perPage * (page - 1)
-    };
-  }
-
-  static getParams() {
-    return this.queryParams;
-  }
-
-  static getAccountQueryParams() {
-    const tickleUserId = FlowRouter.getQueryParam("tickleUserId");
-    const page = FlowRouter.getQueryParam("page");
-    const assign = FlowRouter.getQueryParam("assign");
-    const facilityId = FlowRouter.getQueryParam("facilityId");
-    const clientId = FlowRouter.getQueryParam("clientId");
-    const acctNum = FlowRouter.getQueryParam("acctNum");
-    const facCode = FlowRouter.getQueryParam("facCode");
-    const ptType = FlowRouter.getQueryParam("ptType");
-    const acctBalMin = FlowRouter.getQueryParam("acctBalMin");
-    const acctBalMax = FlowRouter.getQueryParam("acctBalMax");
-    const finClass = FlowRouter.getQueryParam("finClass");
-    const substate = FlowRouter.getQueryParam("substate");
-    const dischrgDateMin = FlowRouter.getQueryParam("dischrgDateMin");
-    const dischrgDateMax = FlowRouter.getQueryParam("dischrgDateMax");
-    const fbDateMin = FlowRouter.getQueryParam("fbDateMin");
-    const fbDateMax = FlowRouter.getQueryParam("fbDateMax");
-    const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
-    const admitDateMin = FlowRouter.getQueryParam("admitDateMin");
-    const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
-    const tagIds = FlowRouter.getQueryParam("tagIds");
-    const medNo = FlowRouter.getQueryParam("medNo");
-    // sorting query params
-    const sortAcctBal = FlowRouter.getQueryParam("sortAcctBal");
-    const sortTickleDate = FlowRouter.getQueryParam("sortTickleDate");
-    const sortCreatedAt = FlowRouter.getQueryParam("sortCreatedAt");
-    const sortDischrgDate = FlowRouter.getQueryParam("sortDischrgDate");
-    const sortFbDate = FlowRouter.getQueryParam("sortFbDate");
-    const sortAdmitDate = FlowRouter.getQueryParam("sortAdmitDate");
-    let state = FlowRouter.current().params.state;
-
-    if (stateEnum.ACTIVE.toLowerCase() === state && acctNum) {
-      state = "";
-    }
-
-    const perPage = 13;
-
-    return {
-      filters: {
-        tickleUserId,
-        facilityId,
-        clientId,
-        acctNum,
-        facCode,
-        ptType,
-        acctBalMin,
-        acctBalMax,
-        finClass,
-        substate,
-        dischrgDateMin,
-        dischrgDateMax,
-        fbDateMin,
-        fbDateMax,
-        activeInsCode,
-        admitDateMin,
-        admitDateMax,
-        tagIds,
-        medNo
-      },
-      options: {
-        sortAcctBal,
-        sortTickleDate,
-        sortCreatedAt,
-        sortDischrgDate,
-        sortFbDate,
-        sortAdmitDate
-      },
-      page,
-      perPage,
-      state,
-      assign
-    };
-  }
-
-  static getFilesQueryParams() {
-    const facilityId = FlowRouter.getQueryParam("facilityId");
-    const clientId = FlowRouter.getQueryParam("clientId");
-    const fileName = FlowRouter.getQueryParam("fileName");
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-
-    return {
-      filters: {
-        facilityId,
-        clientId,
-        fileName
-      },
-      page,
-      perPage
-    };
+    // this.queryParams = params;
+    return params;
   }
 
   static getProperAccounts(params, assign) {
@@ -148,7 +32,8 @@ export default class PagerService {
       const filterArr = assign.split(",");
       if (_.contains(filterArr, "assigneeId")) {
         _.extend(params.filters, {
-          $or: [{
+          $or: [
+            {
               workQueueId: {
                 $in: filterArr
               }
@@ -170,9 +55,12 @@ export default class PagerService {
     }
   }
 
+
+
   static getAccountFilters(
     params,
-    state, {
+    state,
+    {
       acctNum,
       facilityId,
       clientId,
@@ -192,7 +80,8 @@ export default class PagerService {
       tickleUserId,
       tagIds,
       medNo
-    }, {
+    },
+    {
       sortAcctBal,
       sortTickleDate,
       sortCreatedAt,
@@ -220,7 +109,7 @@ export default class PagerService {
             $exists: true
           },
           employeeToRespond: null
-        },
+        }
       });
       _.extend(params.options, {
         sort: {
@@ -337,8 +226,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(dischrgDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -353,8 +242,8 @@ export default class PagerService {
         dischrgDate: {
           $lt: new Date(
             moment(new Date(dischrgDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -365,8 +254,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(fbDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(fbDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -381,8 +270,8 @@ export default class PagerService {
         fbDate: {
           $lt: new Date(
             moment(new Date(fbDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -399,8 +288,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(admitDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(admitDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -415,8 +304,8 @@ export default class PagerService {
         admitDate: {
           $lt: new Date(
             moment(new Date(admitDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -481,6 +370,35 @@ export default class PagerService {
     }
   }
 
+  static getPagerOptions(page, perPage) {
+    return {
+      limit: perPage,
+      skip: perPage * (page - 1)
+    };
+  }
+
+  static getParams() {
+    return this.queryParams;
+  }
+
+  static getFilesQueryParams() {
+    const facilityId = FlowRouter.getQueryParam("facilityId");
+    const clientId = FlowRouter.getQueryParam("clientId");
+    const fileName = FlowRouter.getQueryParam("fileName");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        facilityId,
+        clientId,
+        fileName
+      },
+      page,
+      perPage
+    };
+  }
+
   static getFilters(params, filters) {
     let clientName,
       email,
@@ -509,7 +427,7 @@ export default class PagerService {
       filters: {}
     });
     if (filters && filters.status) {
-      status = filters.status
+      status = filters.status;
     }
     let currentPath = FlowRouter.current().route.path;
 
@@ -529,8 +447,8 @@ export default class PagerService {
 
     if (currentPath.indexOf("reports/list") > -1) {
       name = FlowRouter.getQueryParam("name");
-      facCode = FlowRouter.getQueryParam("facCode")
-      ptType = FlowRouter.getQueryParam("ptType")
+      facCode = FlowRouter.getQueryParam("facCode");
+      ptType = FlowRouter.getQueryParam("ptType");
     }
 
     if (currentPath.indexOf("letter-templates/list") > -1) {
@@ -637,7 +555,6 @@ export default class PagerService {
           $options: "i"
         }
       });
-
     }
     if (ptType) {
       _.extend(params.filters, {
@@ -646,7 +563,6 @@ export default class PagerService {
           $options: "i"
         }
       });
-
     }
     // letter-templates search
     if (letterTemplateName) {
@@ -744,8 +660,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(createdAtMax))
-            .add(1, "day")
-            .startOf("day")
+              .add(1, "day")
+              .startOf("day")
           )
         }
       });
@@ -803,11 +719,7 @@ export default class PagerService {
     };
   }
 
-  static setPage({
-    page,
-    perPage,
-    total
-  }, inc) {
+  static setPage({ page, perPage, total }, inc) {
     const maxPage = this.getMaxPage(total, perPage);
     if (page + inc <= maxPage && page + inc >= 1) {
       return page + inc;

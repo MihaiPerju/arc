@@ -3,9 +3,8 @@ import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
 import query from "/imports/api/accounts/queries/accountList";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
 import Loading from "/imports/client/lib/ui/Loading";
-import PagerService from "/imports/client/lib/PagerService";
+import PagerService from "/imports/client/lib/ParamsService";
 import AccountAssigning from "/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx";
 import AccountSearchBar from "./components/AccountSearchBar";
 import userTagsQuery from "/imports/api/users/queries/userTags.js";
@@ -16,10 +15,11 @@ import { moduleNames } from "/imports/api/tags/enums/tags";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import RightSide from "./components/AccountRightSide";
 
-class AccountListContainer extends Pager {
+export default class AccountListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
+      accounts: [],
       accountsSelected: [],
       currentAccount: null,
       page: 1,
@@ -40,13 +40,18 @@ class AccountListContainer extends Pager {
       bulkAssign: false,
       facilitiesOption: false,
       sortOption: false,
-      assignActions : false
+      assignActions: false
     });
     this.query = query;
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
+    this.pollingMethod = setInterval(() => {
+      this.listAccounts();
+    }, 3000);
+
     this.nextPage(0);
     userTagsQuery
       .clone({
@@ -83,11 +88,22 @@ class AccountListContainer extends Pager {
         currentAccount: accountId
       });
     }
-    
+
     const { state } = this.props;
     this.setState({ currentRouteState: state });
     this.getTags();
   }
+
+  listAccounts = () => {
+    // const params = PagerService.getAccountQueryParams();
+    Meteor.call("accounts.get", (err, accounts) => {
+      if (!err) {
+        this.setState({ accounts });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentDidMount() {
     window.addEventListener("beforeunload", this.handleBrowserClose);
@@ -102,7 +118,7 @@ class AccountListContainer extends Pager {
   getFacilityByAccount = () => {
     const queryParams = PagerService.getParams().filters;
     //get facility based on account number
-     Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
+    Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
       if (!err) {
         this.setState({
           assignUser: true,
@@ -111,8 +127,8 @@ class AccountListContainer extends Pager {
       } else {
         Notifier.error(err.reason);
       }
-    });   
-  }
+    });
+  };
 
   componentWillReceiveProps(newProps) {
     const { currentRouteState } = this.state;
@@ -252,10 +268,10 @@ class AccountListContainer extends Pager {
 
   checkAllAccount = selectAll => {
     const { data } = this.props;
-   
+
     this.setState({
       bulkAssign: selectAll,
-      accountsSelected:[],
+      accountsSelected: [],
       currentAccount: null,
       showMetaData: false
     });
@@ -281,17 +297,17 @@ class AccountListContainer extends Pager {
 
   assignToUser = () => {
     //check bulk assign
-    if(this.state.bulkAssign) { 
-      this.getFacilityByAccount(); 
+    if (this.state.bulkAssign) {
+      this.getFacilityByAccount();
     } else {
-      //if not bulk assign  
+      //if not bulk assign
       const accounts = this.getAccounts(this.state.accountsSelected);
       const options = this.getUserOptions(accounts);
       let userOptions = this.getFirstOption(accounts, options).concat(options);
       this.setState({
         assignUser: true,
         userOptions
-      }); 
+      });
     }
   };
   closeAssignUser = () => {
@@ -464,7 +480,7 @@ class AccountListContainer extends Pager {
     return true;
   };
 
-  closeDialog = () => { 
+  closeDialog = () => {
     this.setState({
       isLockedDialogActive: false,
       lockOwnerName: null,
@@ -485,12 +501,13 @@ class AccountListContainer extends Pager {
   };
 
   getSort = () => {
-    this.setState({sortOption: !this.state.sortOption});
-  }
+    this.setState({ sortOption: !this.state.sortOption });
+  };
 
   render() {
     const { data, isLoading, error } = this.props;
     const {
+      accounts,
       accountsSelected,
       currentAccount,
       range,
@@ -578,7 +595,7 @@ class AccountListContainer extends Pager {
               facilitiesOption={false}
             />
           )}
-           {assignActions && (
+          {assignActions && (
             <AccountAssigning
               assignToUser={false}
               assignToWorkQueue={false}
@@ -591,14 +608,14 @@ class AccountListContainer extends Pager {
               facilitiesOption={false}
             />
           )}
-          
+
           <AccountList
             classes={"task-list accounts"}
             accountsSelected={accountsSelected}
             selectAccount={this.selectAccount}
             checkAccount={this.checkAccount}
             currentAccount={currentAccount}
-            data={data}
+            data={accounts}
             tags={tags}
             bulkAssign={bulkAssign}
           />
@@ -609,16 +626,15 @@ class AccountListContainer extends Pager {
             buttonHidden={true}
           />
         </div>
-        {(currentAccount || accountsSelected.length) &&
-          !showMetaData && (
-            <RightSide
-              openMetaData={this.openMetaDataSlider}
-              currentAccount={currentAccount}
-              accountsSelected={[...accountsSelected]}
-              closeRightPanel={this.closeRightPanel}
-              removeLock={this.removeLock}
-            />
-          )}
+        {(currentAccount || accountsSelected.length) && !showMetaData && (
+          <RightSide
+            openMetaData={this.openMetaDataSlider}
+            currentAccount={currentAccount}
+            accountsSelected={[...accountsSelected]}
+            closeRightPanel={this.closeRightPanel}
+            removeLock={this.removeLock}
+          />
+        )}
         {showMetaData && (
           <MetaDataSlider
             accountId={currentAccount}
@@ -650,10 +666,11 @@ class AccountListContainer extends Pager {
   }
 }
 
-export default withQuery(
-  props => {
-    const params = PagerService.getAccountQueryParams();
-    return PagerService.setQuery(query, params);
-  },
-  { reactive: true }
-)(AccountListContainer);
+// export default withQuery(
+//   props => {
+//     const params = PagerService.getAccountQueryParams();
+//     console.log(params)
+//     return PagerService.setQuery(query, params);
+//   },
+//   { reactive: true }
+// )(AccountListContainer);
