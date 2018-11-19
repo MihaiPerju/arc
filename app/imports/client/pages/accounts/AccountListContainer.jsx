@@ -3,7 +3,7 @@ import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
 import Loading from "/imports/client/lib/ui/Loading";
-import PagerService from "/imports/client/lib/ParamsService";
+import ParamsService from "/imports/client/lib/ParamsService";
 import AccountAssigning from "/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx";
 import AccountSearchBar from "./components/AccountSearchBar";
 import userTagsQuery from "/imports/api/users/queries/userTags.js";
@@ -94,7 +94,7 @@ export default class AccountListContainer extends Pager {
   }
 
   listAccounts = () => {
-    const params = PagerService.getAccountQueryParams();
+    const params = ParamsService.getAccountQueryParams();
     Meteor.call("accounts.get", params, (err, accounts) => {
       if (!err) {
         this.setState({ accounts });
@@ -116,7 +116,7 @@ export default class AccountListContainer extends Pager {
   }
 
   getFacilityByAccount = () => {
-    const queryParams = PagerService.getParams().filters;
+    const queryParams = ParamsService.getParams().filters;
     //get facility based on account number
     Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
       if (!err) {
@@ -294,7 +294,7 @@ export default class AccountListContainer extends Pager {
   }
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getAccountQueryParams();
+    const queryParams = ParamsService.getAccountQueryParams();
     this.recount(queryParams);
   };
 
@@ -385,8 +385,8 @@ export default class AccountListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentAccount: null });
   };

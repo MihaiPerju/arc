@@ -4,16 +4,14 @@ import ClientSearchBar from "./components/ClientSearchBar.jsx";
 import ClientList from "./components/ClientList.jsx";
 import ClientContent from "./ClientContent.jsx";
 import ClientCreate from "./ClientCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "../../../api/clients/queries/listClients";
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 
-class ClientContainer extends Pager {
+export default class ClientContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -25,15 +23,38 @@ class ClientContainer extends Pager {
       total: 0,
       range: {},
       filter: false,
-      tags: []
+      tags: [],
+      clients: []
     });
-    this.query = query;
+    this.method = "accounts.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listClients();
+    }, 3000);
   }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
+  listClients = () => {
+    const params = ParamsService.getClientParams();
+    Meteor.call("clients.get", params, (err, clients) => {
+      if (!err) {
+        this.setState({ clients });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
@@ -79,9 +100,8 @@ class ClientContainer extends Pager {
   };
 
   getClient = () => {
-    const { data } = this.props;
-    const { currentClient } = this.state;
-    for (let client of data) {
+    const { currentClient, clients } = this.state;
+    for (let client of clients) {
       if (client._id === currentClient) {
         return client;
       }
@@ -117,15 +137,15 @@ class ClientContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getParams();
     this.recount(queryParams);
   };
 
@@ -140,11 +160,12 @@ class ClientContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
+    const { isLoading, error } = this.props;
     const {
       clientsSelected,
       currentClient,
       create,
+      clients,
       range,
       total,
       tags
@@ -165,8 +186,8 @@ class ClientContainer extends Pager {
             currentClient
               ? "left__side"
               : create
-                ? "left__side"
-                : "left__side full__width"
+              ? "left__side"
+              : "left__side full__width"
           }
         >
           <ClientSearchBar
@@ -185,7 +206,7 @@ class ClientContainer extends Pager {
             setClient={this.setClient.bind(this)}
             selectClient={this.selectClient}
             currentClient={currentClient}
-            clients={data}
+            clients={clients}
             tags={tags}
           />
           <PaginationBar
@@ -239,12 +260,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(ClientContainer);
