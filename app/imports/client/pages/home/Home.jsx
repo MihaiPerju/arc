@@ -24,7 +24,10 @@ export default class Home extends React.Component {
       selectedDate: moment(),
       selectedRep: '',
       clients: [],
-      facilities: []
+      facilities: [],
+      selectedClientId: null,
+      selectedFacilityId: null,
+      isLoadingFiles: false
     };
   }
 
@@ -121,6 +124,14 @@ export default class Home extends React.Component {
         this.getFacilities(value);
       }
     }
+   
+    if (field == "clientId") {
+      this.setState({ selectedClientId: value });
+      this.getFacilities(value);
+    }
+    if (field == "facilityId") {
+      this.setState({ selectedFacilityId: value });
+    }
   }
 
   renderGraph() {
@@ -160,7 +171,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { reps, selectedDate, clients, facilities } = this.state;
+    const { reps, selectedDate, clients, facilities, selectedFacilityId, selectedClientId } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return (
         <div className="cc-container home-container flex-align--start">
@@ -235,7 +246,7 @@ export default class Home extends React.Component {
               </div>
             </AutoForm>
           </div>
-          <UserDashboard />
+          <UserDashboard facilityId={selectedFacilityId} clientId={selectedClientId} />
         </div>
       );
     }

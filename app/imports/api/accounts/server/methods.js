@@ -334,45 +334,45 @@ Meteor.methods({
     });
   },
 
-  async 'account.getActionPerHour'(userId, date) {
-    const AccountsRaw = AccountActions.rawCollection();
-    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+    async 'account.getActionPerHour'(userId, date) {
+      const AccountsRaw = AccountActions.rawCollection();
+      AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    const actionsPerHour = await AccountsRaw.aggregateSync([{
-        $match: {
-          createdAt: {
-            $gte: new Date(moment(date).startOf('day')),
-            $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-          },
-          userId,
-          type: actionTypesEnum.USER_ACTION
-        },
-      },
-      {
-        $group: {
-          _id: {
-            y: {
-              $year: '$createdAt'
+      const actionsPerHour = await AccountsRaw.aggregateSync([{
+          $match: {
+            createdAt: {
+              $gte: new Date(moment(date).startOf('day')),
+              $lt: new Date(moment(date).add(1, 'day').startOf('day')),
             },
-            m: {
-              $month: '$createdAt'
-            },
-            d: {
-              $dayOfMonth: '$createdAt'
-            },
-            h: {
-              $hour: '$createdAt'
-            },
-          },
-          total: {
-            $sum: 1
+            userId,
+            type: actionTypesEnum.USER_ACTION
           },
         },
-      },
-    ]).toArray();
-
-    return ActionService.graphStandardizeData(actionsPerHour);
-  },
+        {
+          $group: {
+            _id: {
+              y: {
+                $year: '$createdAt'
+              },
+              m: {
+                $month: '$createdAt'
+              },
+              d: {
+                $dayOfMonth: '$createdAt'
+              },
+              h: {
+                $hour: '$createdAt'
+              },
+            },
+            total: {
+              $sum: 1
+            },
+          },
+        },
+      ]).toArray();
+      
+      return ActionService.graphStandardizeData(actionsPerHour);
+    },
 
   'account.addLock'(_id) {
     ActionService.addLockToAccount(_id, this.userId);
@@ -465,6 +465,70 @@ Meteor.methods({
         ActionService.createAction(data);
       }); 
     
-  }
+  },
+
+  "accountsAssigned.get"(clientId, facilityId, assigneeId) {
+    let filter = { 'assigneeId': { $ne: null } };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    if (assigneeId && assigneeId != '-1')
+      filter['assigneeId'] = assigneeId;
+    
+    return Accounts.find(filter).fetch();
+  },
+
+  async 'account.getAssignedPerHour'(clientId, facilityId, assigneeId, date) {
+    const AccountsRaw = Accounts.rawCollection();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+    
+    let filter = { 'assigneeId': { $ne: null } };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    if (assigneeId && assigneeId != '-1')
+      filter['assigneeId'] = assigneeId;
+
+     if(date && date != '-1' )
+      filter['createdAt']= {
+         $gte: new Date(moment(date).startOf('day')),
+         $lt: new Date(moment(date).add(1, 'day').startOf('day')),
+      };   
+    
+    const actionsPerHours = await AccountsRaw.aggregateSync([{
+        $match: filter,
+      },
+      {
+        $group: {
+          _id: {
+            y: {
+              $year: '$createdAt'
+            },
+            m: {
+              $month: '$createdAt'
+            },
+            d: {
+              $dayOfMonth: '$createdAt'
+            },
+            h: {
+              $hour: '$createdAt'
+            },
+          },
+          total: {
+            $sum: 1
+          },
+        },
+      },
+    ]).toArray();
+    return ActionService.graphStandardizeData(actionsPerHours);
+  },
 
 });
