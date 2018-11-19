@@ -4,17 +4,25 @@ import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
-  static getQueryParams({ page, perPage, state, assign, filters, options,route }) {
+  static getQueryParams({
+    page,
+    perPage,
+    state,
+    assign,
+    filters,
+    options,
+    route
+  }) {
     let params = this.getPagerOptions(page, perPage);
-    
-    if (state || state === "" || route.path.indexOf("flagged") > -1) {
-      this.getAccountFilters(params, state, filters, options);
+
+    if (state || state === "" || (route && route.indexOf("flagged") > -1)) {
+      this.getAccountFilters(params, state, filters, options, route);
       this.getProperAccounts(params, assign);
     } else {
       // common method for filtering
-    //   this.getFilters(params, filters);
+      this.getFilters(params, filters);
     }
-    // this.queryParams = params;
+    this.queryParams = params;
     return params;
   }
 
@@ -55,8 +63,6 @@ export default class PagerService {
     }
   }
 
-
-
   static getAccountFilters(
     params,
     state,
@@ -88,7 +94,8 @@ export default class PagerService {
       sortDischrgDate,
       sortFbDate,
       sortAdmitDate
-    }
+    },
+    route
   ) {
     params.options = {
       sort: {}
@@ -325,7 +332,7 @@ export default class PagerService {
       });
     }
 
-    if (FlowRouter.current().route.path.indexOf("/flagged") > -1) {
+    if (route && route.indexOf("/flagged") > -1) {
       _.extend(params.filters, {
         flagCounter: {
           $gt: 0

@@ -20,8 +20,9 @@ import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
   "accounts.get"(params) {
-    // const queryParams = QueryBuilder.getQueryParams(params);
-    // console.log(queryParams);
+    console.log(params);
+    const queryParams = QueryBuilder.getQueryParams(params);
+    console.log(queryParams);
     // let filters = queryParams.filters;
     return Accounts.find({}, { limit: 5 }).fetch();
   },

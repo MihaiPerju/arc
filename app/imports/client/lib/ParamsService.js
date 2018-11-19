@@ -11,7 +11,7 @@ export default class PagerService {
     if (state || state === "" || route.path.indexOf("flagged") > -1) {
       this.getAccountFilters(params, state, filters, options);
       this.getProperAccounts(params, assign);
-    } else { 
+    } else {
       // common method for filtering
       this.getFilters(params, filters);
     }
@@ -31,7 +31,8 @@ export default class PagerService {
   }
 
   static getAccountQueryParams() {
-    const { route } = FlowRouter.current();
+    //Filter Params
+    const route = FlowRouter.current().path;
     const tickleUserId = FlowRouter.getQueryParam("tickleUserId");
     const page = FlowRouter.getQueryParam("page");
     const assign = FlowRouter.getQueryParam("assign");
@@ -53,7 +54,8 @@ export default class PagerService {
     const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
     const tagIds = FlowRouter.getQueryParam("tagIds");
     const medNo = FlowRouter.getQueryParam("medNo");
-    // sorting query params
+
+    // Sort Params
     const sortAcctBal = FlowRouter.getQueryParam("sortAcctBal");
     const sortTickleDate = FlowRouter.getQueryParam("sortTickleDate");
     const sortCreatedAt = FlowRouter.getQueryParam("sortCreatedAt");
