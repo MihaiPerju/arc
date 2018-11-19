@@ -35,10 +35,7 @@ export default class Pager extends React.Component {
   }
 
   recount = params => {
-    console.log(params);
-    console.log(this.method)
     Meteor.call(this.method, params, (err, total) => {
-      console.log(total);
       this.setState({ total });
     });
   };
