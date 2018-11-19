@@ -2,7 +2,6 @@ import React from "react";
 import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
-import query from "/imports/api/accounts/queries/accountList";
 import Loading from "/imports/client/lib/ui/Loading";
 import PagerService from "/imports/client/lib/ParamsService";
 import AccountAssigning from "/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx";
@@ -42,7 +41,7 @@ export default class AccountListContainer extends Pager {
       sortOption: false,
       assignActions: false
     });
-    this.query = query;
+    this.method = "accounts.count";
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
     this.pollingMethod = null;
   }

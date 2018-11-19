@@ -168,56 +168,7 @@ Meteor.methods({
   },
 
   "accounts.count"() {
-    const result = [];
-    const facilities = Facilities.find().fetch();
-    for (let count in facilities) {
-      let facility = facilities[count];
-      //if user has rights on facility or is an admin/tech
-
-      if (
-        (facility.allowedUsers &&
-          facility.allowedUsers.includes(this.userId)) ||
-        Roles.userIsInRole(this.userId, roleGroups.ADMIN_TECH)
-      ) {
-        const active = Accounts.find({
-          state: StateEnum.ACTIVE,
-          facilityId: facility._id
-        }).count();
-        const archived = Accounts.find({
-          state: StateEnum.ARCHIVED,
-          facilityId: facility._id
-        }).count();
-        const hold = Accounts.find({
-          state: StateEnum.HOLD,
-          facilityId: facility._id
-        }).count();
-        let currentMonth = 0;
-        let currentWeek = 0;
-        //select accounts this month and week. To be optimized.
-        const accounts = Accounts.find({
-          facilityId: facility._id
-        }).fetch();
-        for (let index in accounts) {
-          const account = accounts[index];
-
-          if (TimeService.sameMonth(moment(account.createdAt), moment())) {
-            currentMonth++;
-          }
-          if (TimeService.sameWeek(moment(account.createdAt), moment())) {
-            currentWeek++;
-          }
-        }
-        result.push({
-          name: facility.name,
-          active,
-          archived,
-          hold,
-          currentMonth,
-          currentWeek
-        });
-      }
-    }
-    return result;
+    return Accounts.find().count();
   },
 
   "accounts.increment_view_count"(_id) {
