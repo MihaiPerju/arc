@@ -63,6 +63,39 @@ export default class PagerService {
     }
   }
 
+  static getClientParams({ filters, options }) {
+    let { clientName, createdAtMax, createdAtMin } = filters;
+    let { page, perPage } = options;
+
+    let params = this.getPagerOptions(page, perPage);
+    params.filters = {};
+
+    if (clientName) {
+      _.extend(params.filters, {
+        clientName: {
+          $regex: clientName,
+          $options: "i"
+        }
+      });
+    }
+
+    // created at search
+    if (createdAtMin && createdAtMax) {
+      _.extend(params.filters, {
+        createdAt: {
+          $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
+          $lt: new Date(
+            moment(new Date(createdAtMax))
+              .add(1, "day")
+              .startOf("day")
+          )
+        }
+      });
+    }
+
+    return params;
+  }
+
   static getAccountFilters(
     params,
     state,
@@ -97,11 +130,10 @@ export default class PagerService {
     },
     route
   ) {
-
     _.extend(params.options, {
       sort: {}
     });
-    
+
     if (state === "unassigned") {
       _.extend(params, {
         filters: {
@@ -408,317 +440,6 @@ export default class PagerService {
       page,
       perPage
     };
-  }
-
-  static getFilters(params, filters) {
-    let clientName,
-      email,
-      title,
-      name,
-      facCode,
-      ptType,
-      letterTemplateName,
-      code,
-      tagName,
-      stateName,
-      sortState,
-      sortSubstate,
-      facilityName,
-      regionName,
-      createdAtMin,
-      createdAtMax,
-      letterName,
-      tagIds,
-      fileName,
-      clientId,
-      facilityId,
-      status;
-
-    _.extend(params, {
-      filters: {}
-    });
-    if (filters && filters.status) {
-      status = filters.status;
-    }
-    let currentPath = FlowRouter.current().route.path;
-
-    if (currentPath.indexOf("client/list") > -1) {
-      clientName = FlowRouter.getQueryParam("clientName");
-      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
-      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
-    }
-
-    if (currentPath.indexOf("user/list") > -1) {
-      email = FlowRouter.getQueryParam("email");
-    }
-
-    if (currentPath.indexOf("action/list") > -1) {
-      title = FlowRouter.getQueryParam("title");
-    }
-
-    if (currentPath.indexOf("reports/list") > -1) {
-      name = FlowRouter.getQueryParam("name");
-      facCode = FlowRouter.getQueryParam("facCode");
-      ptType = FlowRouter.getQueryParam("ptType");
-    }
-
-    if (currentPath.indexOf("letter-templates/list") > -1) {
-      letterTemplateName = FlowRouter.getQueryParam("letterTemplateName");
-      _.extend(params, {
-        expose: true
-      });
-    }
-
-    if (currentPath.indexOf("substate/list") > -1) {
-      stateName = FlowRouter.getQueryParam("stateName");
-      sortState = FlowRouter.getQueryParam("sortState");
-      sortSubstate = FlowRouter.getQueryParam("sortSubstate");
-    }
-
-    if (currentPath.indexOf("code/list") > -1) {
-      code = FlowRouter.getQueryParam("code");
-    }
-
-    if (currentPath.indexOf("tag/list") > -1) {
-      tagName = FlowRouter.getQueryParam("tagName");
-    }
-
-    if (currentPath.indexOf("/client/:_id/manage-facilities") > -1) {
-      facilityName = FlowRouter.getQueryParam("facilityName");
-      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
-      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
-      _.extend(params.filters, {
-        clientId: FlowRouter.current().params._id
-      });
-    }
-
-    if (currentPath.indexOf("/client/:id/region/list") > -1) {
-      regionName = FlowRouter.getQueryParam("regionName");
-      _.extend(params.filters, {
-        clientId: FlowRouter.current().params.id
-      });
-    }
-
-    if (currentPath.indexOf("letters/list") > -1) {
-      letterName = FlowRouter.getQueryParam("letterTemplateName");
-    }
-
-    if (currentPath.indexOf("tags/list") > -1) {
-      tagName = FlowRouter.getQueryParam("tagName");
-    }
-
-    if (currentPath.indexOf("file/list") > -1) {
-      fileName = FlowRouter.getQueryParam("fileName");
-      clientId = FlowRouter.getQueryParam("clientId");
-      facilityId = FlowRouter.getQueryParam("facilityId");
-      status = FlowRouter.getQueryParam("status");
-    }
-
-    if (currentPath.indexOf("rules/list") > -1) {
-      name = FlowRouter.getQueryParam("name");
-    }
-
-    tagIds = FlowRouter.getQueryParam("tagIds");
-
-    // client search
-    if (clientName) {
-      _.extend(params.filters, {
-        clientName: {
-          $regex: clientName,
-          $options: "i"
-        }
-      });
-    }
-
-    // user search
-    if (email) {
-      _.extend(params.filters, {
-        "emails.address": {
-          $regex: email,
-          $options: "i"
-        }
-      });
-    }
-
-    // action search
-    if (title) {
-      _.extend(params.filters, {
-        title: {
-          $regex: title,
-          $options: "i"
-        }
-      });
-    }
-
-    // reports search
-    if (name) {
-      _.extend(params.filters, {
-        name: {
-          $regex: name,
-          $options: "i"
-        }
-      });
-    }
-    if (facCode) {
-      _.extend(params.filters, {
-        "filterBuilderData.facCode": {
-          $regex: `${facCode}.*`,
-          $options: "i"
-        }
-      });
-    }
-    if (ptType) {
-      _.extend(params.filters, {
-        "filterBuilderData.ptType": {
-          $regex: `${ptType}.*`,
-          $options: "i"
-        }
-      });
-    }
-    // letter-templates search
-    if (letterTemplateName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: letterTemplateName,
-          $options: "i"
-        }
-      });
-    }
-
-    // code search
-    if (code) {
-      _.extend(params.filters, {
-        code: {
-          $regex: code,
-          $options: "i"
-        }
-      });
-    }
-
-    // substate search
-    if (stateName) {
-      _.extend(params.filters, {
-        stateName: {
-          $regex: stateName,
-          $options: "i"
-        }
-      });
-    }
-
-    // tag search && module-tag
-    if (tagName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: tagName,
-          $options: "i"
-        }
-      });
-    }
-
-    // common filter query for tags filtering
-    if (tagIds) {
-      _.extend(params.filters, {
-        tagIds: {
-          $in: tagIds
-        }
-      });
-    }
-
-    // substates sorts
-    if (sortState) {
-      _.extend(params, {
-        options: {
-          sort: {
-            stateName: sortState === "ASC" ? 1 : -1
-          }
-        }
-      });
-    }
-    if (sortSubstate) {
-      _.extend(params, {
-        options: {
-          sort: {
-            name: sortSubstate === "ASC" ? 1 : -1
-          }
-        }
-      });
-    }
-
-    // facility search
-    if (facilityName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: facilityName,
-          $options: "i"
-        }
-      });
-    }
-
-    // region search
-    if (regionName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: regionName,
-          $options: "i"
-        }
-      });
-    }
-
-    // created at search
-    if (createdAtMin && createdAtMax) {
-      _.extend(params.filters, {
-        createdAt: {
-          $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(
-            moment(new Date(createdAtMax))
-              .add(1, "day")
-              .startOf("day")
-          )
-        }
-      });
-    }
-
-    // letters search
-    if (letterName) {
-      _.extend(params.filters, {
-        letterTemplateName: {
-          $regex: letterName,
-          $options: "i"
-        }
-      });
-    }
-
-    // file search
-    if (fileName) {
-      _.extend(params.filters, {
-        fileName: {
-          $regex: fileName,
-          $options: "i"
-        }
-      });
-    }
-    if (clientId) {
-      _.extend(params.filters, {
-        clientId: clientId
-      });
-    }
-    if (facilityId) {
-      _.extend(params.filters, {
-        facilityId: facilityId
-      });
-    }
-
-    if (status) {
-      _.extend(params.filters, {
-        status
-      });
-    } else {
-      _.extend(params.filters, {
-        status: {
-          $ne: statuses.DISMISS
-        }
-      });
-    }
   }
 
   static getRange(page, perPage) {

@@ -126,6 +126,26 @@ export default class PagerService {
     };
   }
 
+  static getClientParams() {
+    let clientName = FlowRouter.getQueryParam("clientName");
+    let createdAtMin = FlowRouter.getQueryParam("createdAtMin");
+    let createdAtMax = FlowRouter.getQueryParam("createdAtMax");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        clientName,
+        createdAtMax,
+        createdAtMin
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getProperAccounts(params, assign) {
     if (assign === "none") {
       _.extend(params.filters, {
@@ -503,18 +523,13 @@ export default class PagerService {
     _.extend(params, {
       filters: {}
     });
+    
     if (filters && filters.status) {
       status = filters.status;
     }
     let currentPath = FlowRouter.current().route.path;
 
-    if (currentPath.indexOf("client/list") > -1) {
-      clientName = FlowRouter.getQueryParam("clientName");
-      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
-      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
-    }
-
-    if (currentPath.indexOf("user/list") > -1) {
+    if (currentPath.indexOf("getuser/list") > -1) {
       email = FlowRouter.getQueryParam("email");
     }
 
