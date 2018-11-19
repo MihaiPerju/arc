@@ -98,6 +98,7 @@ export default class AccountListContainer extends Pager {
     Meteor.call("accounts.get", params, (err, accounts) => {
       if (!err) {
         this.setState({ accounts });
+        this.updatePager();
       } else {
         Notifier.error(err.reason);
       }
@@ -158,6 +159,9 @@ export default class AccountListContainer extends Pager {
     window.removeEventListener("beforeunload", this.handleBrowserClose);
     // remove any locked account
     this.removeLock();
+
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   uncheckAccountList = () => {
@@ -290,7 +294,7 @@ export default class AccountListContainer extends Pager {
   }
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = PagerService.getAccountQueryParams();
     this.recount(queryParams);
   };
 

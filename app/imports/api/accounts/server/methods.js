@@ -167,8 +167,10 @@ Meteor.methods({
     );
   },
 
-  "accounts.count"() {
-    return Accounts.find().count();
+  "accounts.count"(params) {
+    const queryParams = QueryBuilder.getQueryParams(params);
+    let filters = queryParams.filters;
+    return Accounts.find(filters).count();
   },
 
   "accounts.increment_view_count"(_id) {

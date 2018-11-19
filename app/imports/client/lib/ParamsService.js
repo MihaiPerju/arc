@@ -15,7 +15,7 @@ export default class PagerService {
       // common method for filtering
       this.getFilters(params, filters);
     }
-    this.queryParams = params;
+    this.params = params;
     return query.clone(params);
   }
 
@@ -27,7 +27,7 @@ export default class PagerService {
   }
 
   static getParams() {
-    return this.queryParams;
+    return this.params;
   }
 
   static getAccountQueryParams() {

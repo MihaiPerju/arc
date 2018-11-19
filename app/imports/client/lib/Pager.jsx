@@ -14,15 +14,15 @@ export default class Pager extends React.Component {
   }
 
   componentDidMount() {
-    const queryParams = ParamsService.getParams();
-    this.handlePageChange(this.state.page, queryParams);
+    const params = ParamsService.getParams();
+    this.handlePageChange(this.state.page, params);
   }
 
-  handlePageChange(page, queryParams) {
+  handlePageChange(page, params) {
     this.setState({ page });
     FlowRouter.setParams({ page });
 
-    this.recount(queryParams);
+    this.recount(params);
   }
 
   updateFilters() {
@@ -34,10 +34,9 @@ export default class Pager extends React.Component {
     });
   }
 
-  recount = queryParams => {
-    const params = ParamsService.getAccountQueryParams();
-    Meteor.call(this.method, (err, res) => {
-      console.log(err, res);
+  recount = params => {
+    Meteor.call(this.method, params, (err, total) => {
+      this.setState({ total });
     });
   };
 
