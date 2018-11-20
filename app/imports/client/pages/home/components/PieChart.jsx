@@ -8,7 +8,7 @@ export default class PieChart extends React.Component {
   preparePieChartData() {
     let chartData = [];
     const { data } = this.props;
-    chartData = data.chartData.map(d => {
+    chartData = data.map(d => {
       return { name: d[0].toString(), y: d[1] };
     });
     return chartData;

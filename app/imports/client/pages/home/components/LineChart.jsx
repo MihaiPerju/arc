@@ -23,7 +23,7 @@ export default class LineChart extends React.Component {
       series: [
         {
           name: chartOptions.ySeries,
-          data: data.chartData
+          data: data
         }
       ]
     };

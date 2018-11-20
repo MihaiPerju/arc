@@ -79,5 +79,19 @@ Meteor.methods({
         }
       }
     );
-  }
+  },
+
+  "reports.getbuilt"(authorId) {
+    let filter = {};
+    if (authorId && authorId != '-1')
+      filter = { authorId: authorId };
+    return Reports.find(filter).fetch();
+  },
+
+  "reports.getgenerated"() {
+    let filter = {};
+    return Reports.find(filter).fetch();
+  },
+
 });
+

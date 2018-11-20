@@ -30,10 +30,24 @@ export default class Home extends React.Component {
       selectedFacilityId: '',
       chartTypes: [],
       selectedChartType: '',
-      managerDashboardData: { isLoadingAssignedAccounts: false, assignedAccounts: [], isLoadingArchivedAccounts: false, archivedAccounts: [], isLoadingLineGraph: false, chartData: {} }
+      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', },
+      managerDashboardData: {
+        isLoadingAssignedAccounts: false,
+        assignedAccounts: [],
+        isLoadingArchivedAccounts: false,
+        archivedAccounts: [],
+        isLoadingAssignedAccountChart: false,
+        assignedAccountsChartData: {},
+        isLoadingArchivedAccountChart: false,
+        archivedAccountsChartData: {},
+        isLoadingBuiltReports: false,
+        builtReports: [],
+        isLoadingReportsBuilt: false,
+        reportsBuiltChartData: []
+      }
     };
   }
-  componentWillMount(){
+  componentWillMount() {
     this.prepareChartTypes();
   }
 
@@ -42,11 +56,12 @@ export default class Home extends React.Component {
   }
 
   prepareChartTypes() {
+    let filters = this.state.filters;
     let chartTypes = this.state.chartTypes;
     chartTypes.push({ value: 1, label: 'Line Chart', type: CHART_TYPE.Line });
     chartTypes.push({ value: 2, label: 'Pie Chart', type: CHART_TYPE.Pie });
-    this.setState({ chartTypes: chartTypes, selectedChartType: chartTypes[0] });
-    this.getManagerDashboardData();
+    filters.selectedChartType = chartTypes[0];
+    this.setState({ chartTypes: chartTypes, filters });
   }
 
   getClients() {
@@ -78,70 +93,6 @@ export default class Home extends React.Component {
         Notifier.error(err.reason);
       }
     });
-  }
-
-  getManagerDashboardData() {
-    const { selectedClientId, selectedFacilityId } = this.state;
-    this.getAssignedAccounts(selectedClientId, selectedFacilityId);
-    this.getArchivedAccounts(selectedClientId, selectedFacilityId);
-    this.getGraphData(selectedClientId, selectedFacilityId);
-  }
-
-  getAssignedAccounts(clientId, facilityId) {
-    let managerDashboardData = this.state.managerDashboardData;
-    managerDashboardData.isLoadingAssignedAccounts = true;
-    this.setState({ managerDashboardData });
-    setTimeout(() => {
-      Meteor.call("accountsAssigned.get", clientId, facilityId, '', (err, responseData) => {
-        if (!err) {
-          managerDashboardData.assignedAccounts = responseData;
-          managerDashboardData.isLoadingAssignedAccounts = false;
-          this.setState({ managerDashboardData });
-        } else {
-          managerDashboardData.isLoadingAssignedAccounts = false;
-          this.setState({ managerDashboardData });
-          Notifier.error(err.reason);
-        }
-      });
-    }, 1000);
-  }
-
-  getArchivedAccounts(clientId, facilityId) {
-    let managerDashboardData = this.state.managerDashboardData;
-    managerDashboardData.isLoadingArchivedAccounts = true;
-    this.setState({ managerDashboardData });
-    setTimeout(() => {
-      Meteor.call("accountsArchived.get", clientId, facilityId, (err, responseData) => {
-        if (!err) {
-          managerDashboardData.archivedAccounts = responseData;
-          managerDashboardData.isLoadingArchivedAccounts = false;
-          this.setState({ managerDashboardData });
-        } else {
-          managerDashboardData.isLoadingArchivedAccounts = false;
-          this.setState({ managerDashboardData });
-          Notifier.error(err.reason);
-        }
-      });
-    }, 1000);
-  }
-
-  getGraphData(clientId, facilityId) {
-    let managerDashboardData = this.state.managerDashboardData;
-    managerDashboardData.isLoadingLineGraph = true;
-    this.setState({ managerDashboardData });
-    setTimeout(() => {
-      Meteor.call("account.getAssignedPerHour", clientId, facilityId, '', new Date(moment()), (err, chartData) => {
-        if (!err) {
-          managerDashboardData.chartData = chartData;
-          managerDashboardData.isLoadingLineGraph = false;
-          this.setState({ managerDashboardData });
-        } else {
-          managerDashboardData.isLoadingLineGraph = false;
-          this.setState({ managerDashboardData });
-          Notifier.error(err.reason);
-        }
-      });
-    }, 1000);
   }
 
   getRepresentatives() {
@@ -196,17 +147,16 @@ export default class Home extends React.Component {
   };
 
   onHandleChange = (field, value) => {
+    let filters = this.state.filters;
     switch (field) {
       case "clientId":
-        this.setState({ selectedClientId: value }, () => {
-          this.getManagerDashboardData();
-        });
+        filters.selectedClientId = value;
+        this.setState({ filters });
         this.getFacilities(value);
         break;
       case "facilityId":
-        this.setState({ selectedFacilityId: value }, () => {
-          this.getManagerDashboardData();
-        });
+        filters.selectedFacilityId = value;
+        this.setState({ filters });
         break;
       case "selectChartTypeId":
         let chartTypes = this.state.chartTypes;
@@ -215,12 +165,10 @@ export default class Home extends React.Component {
         if (chartType)
           selectedChartType = chartType;
 
-        this.setState({ selectedChartType: selectedChartType }, () => {
-          this.getManagerDashboardData();
-        });
+        filters.selectedChartType = selectedChartType;
+        this.setState({ filters });
         break;
       default:
-        this.getManagerDashboardData();
         break;
     }
   }
@@ -345,7 +293,7 @@ export default class Home extends React.Component {
               </div>
             </AutoForm>
           </div>
-          <ManagerDashboard data={this.state.managerDashboardData} chartType={selectedChartType.type} />
+          <ManagerDashboard data={this.state.managerDashboardData} chartType={selectedChartType.type} filters={this.state.filters} />
         </div>
       );
 
