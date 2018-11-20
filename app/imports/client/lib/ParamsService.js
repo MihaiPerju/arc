@@ -180,6 +180,23 @@ export default class PagerService {
     };
   }
 
+  static getCodesParams() {
+    let code = FlowRouter.getQueryParam("code");
+
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        code
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getProperAccounts(params, assign) {
     if (assign === "none") {
       _.extend(params.filters, {
@@ -584,10 +601,6 @@ export default class PagerService {
       stateName = FlowRouter.getQueryParam("stateName");
       sortState = FlowRouter.getQueryParam("sortState");
       sortSubstate = FlowRouter.getQueryParam("sortSubstate");
-    }
-
-    if (currentPath.indexOf("code/list") > -1) {
-      code = FlowRouter.getQueryParam("code");
     }
 
     if (currentPath.indexOf("tag/list") > -1) {
