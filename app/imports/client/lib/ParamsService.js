@@ -146,6 +146,23 @@ export default class PagerService {
     };
   }
 
+  static getUserParams() {
+    let email = FlowRouter.getQueryParam("email");
+
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        email
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getProperAccounts(params, assign) {
     if (assign === "none") {
       _.extend(params.filters, {
@@ -523,15 +540,11 @@ export default class PagerService {
     _.extend(params, {
       filters: {}
     });
-    
+
     if (filters && filters.status) {
       status = filters.status;
     }
     let currentPath = FlowRouter.current().route.path;
-
-    if (currentPath.indexOf("getuser/list") > -1) {
-      email = FlowRouter.getQueryParam("email");
-    }
 
     if (currentPath.indexOf("action/list") > -1) {
       title = FlowRouter.getQueryParam("title");
@@ -601,25 +614,6 @@ export default class PagerService {
 
     tagIds = FlowRouter.getQueryParam("tagIds");
 
-    // client search
-    if (clientName) {
-      _.extend(params.filters, {
-        clientName: {
-          $regex: clientName,
-          $options: "i"
-        }
-      });
-    }
-
-    // user search
-    if (email) {
-      _.extend(params.filters, {
-        "emails.address": {
-          $regex: email,
-          $options: "i"
-        }
-      });
-    }
 
     // action search
     if (title) {

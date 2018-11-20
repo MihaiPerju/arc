@@ -63,37 +63,60 @@ export default class PagerService {
     }
   }
 
-  static getClientParams({ filters, options }) {
-    let { clientName, createdAtMax, createdAtMin } = filters;
-    let { page, perPage } = options;
+  static getClientParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { clientName, createdAtMax, createdAtMin } = params.filters;
+      let { page, perPage } = params.options;
 
-    let params = this.getPagerOptions(page, perPage);
-    params.filters = {};
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
 
-    if (clientName) {
-      _.extend(params.filters, {
-        clientName: {
-          $regex: clientName,
-          $options: "i"
-        }
-      });
+      if (clientName) {
+        _.extend(queryParams.filters, {
+          clientName: {
+            $regex: clientName,
+            $options: "i"
+          }
+        });
+      }
+
+      // created at search
+      if (createdAtMin && createdAtMax) {
+        _.extend(queryParams.filters, {
+          createdAt: {
+            $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
+            $lt: new Date(
+              moment(new Date(createdAtMax))
+                .add(1, "day")
+                .startOf("day")
+            )
+          }
+        });
+      }
     }
+    return queryParams;
+  }
 
-    // created at search
-    if (createdAtMin && createdAtMax) {
-      _.extend(params.filters, {
-        createdAt: {
-          $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(
-            moment(new Date(createdAtMax))
-              .add(1, "day")
-              .startOf("day")
-          )
-        }
-      });
+  static getUserParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { email } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (email) {
+        _.extend(queryParams.filters, {
+          "emails.address": {
+            $regex: email,
+            $options: "i"
+          }
+        });
+      }
     }
-
-    return params;
+    return queryParams;
   }
 
   static getAccountFilters(
