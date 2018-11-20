@@ -1,6 +1,20 @@
 import Codes from "/imports/api/codes/collection.js";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "codes.get"(params) {
+    const queryParams = QueryBuilder.getCodesParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    return Codes.find(filters, options).fetch();
+  },
+
+  "codes.count"(params) {
+    const queryParams = QueryBuilder.getCodesParams(params);
+    let filters = queryParams.filters;
+    return Codes.find(filters).count();
+  },
+
   "code.create"(data) {
     Codes.insert(data);
   },

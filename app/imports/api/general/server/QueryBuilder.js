@@ -139,6 +139,27 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getCodesParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { code } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (code) {
+        _.extend(queryParams.filters, {
+          code: {
+            $regex: code,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getAccountFilters(
     params,
     state,
