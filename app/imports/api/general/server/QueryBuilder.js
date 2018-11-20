@@ -160,6 +160,43 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getReportsParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { name, facCode, ptType } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (name) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: name,
+            $options: "i"
+          }
+        });
+      }
+      if (facCode) {
+        _.extend(queryParams.filters, {
+          "filterBuilderData.facCode": {
+            $regex: `${facCode}.*`,
+            $options: "i"
+          }
+        });
+      }
+      if (ptType) {
+        _.extend(queryParams.filters, {
+          "filterBuilderData.ptType": {
+            $regex: `${ptType}.*`,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getAccountFilters(
     params,
     state,
