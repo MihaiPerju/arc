@@ -224,6 +224,46 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getSubstatesParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { stateName } = params.filters;
+      let { page, perPage, sortState, sortSubstate } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (stateName) {
+        _.extend(queryParams.filters, {
+          stateName: {
+            $regex: stateName,
+            $options: "i"
+          }
+        });
+      }
+
+      if (sortState) {
+        _.extend(queryParams, {
+          options: {
+            sort: {
+              stateName: sortState === "ASC" ? 1 : -1
+            }
+          }
+        });
+      }
+      if (sortSubstate) {
+        _.extend(queryParams, {
+          options: {
+            sort: {
+              name: sortSubstate === "ASC" ? 1 : -1
+            }
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getReportsParams(params) {
     let queryParams = {};
     if (params) {

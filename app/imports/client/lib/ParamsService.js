@@ -229,6 +229,26 @@ export default class PagerService {
     };
   }
 
+  static getSubstatesParams() {
+    let stateName = FlowRouter.getQueryParam("stateName");
+    let sortState = FlowRouter.getQueryParam("sortState");
+    let sortSubstate = FlowRouter.getQueryParam("sortSubstate");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        stateName
+      },
+      options: {
+        page,
+        perPage,
+        sortState,
+        sortSubstate
+      }
+    };
+  }
+
   static getReportsParams() {
     let name = FlowRouter.getQueryParam("name");
     let facCode = FlowRouter.getQueryParam("facCode");
@@ -650,12 +670,6 @@ export default class PagerService {
     }
     let currentPath = FlowRouter.current().route.path;
 
-    if (currentPath.indexOf("substate/list") > -1) {
-      stateName = FlowRouter.getQueryParam("stateName");
-      sortState = FlowRouter.getQueryParam("sortState");
-      sortSubstate = FlowRouter.getQueryParam("sortSubstate");
-    }
-
     if (currentPath.indexOf("tag/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
     }
@@ -689,22 +703,11 @@ export default class PagerService {
 
     tagIds = FlowRouter.getQueryParam("tagIds");
 
-    
     // code search
     if (code) {
       _.extend(params.filters, {
         code: {
           $regex: code,
-          $options: "i"
-        }
-      });
-    }
-
-    // substate search
-    if (stateName) {
-      _.extend(params.filters, {
-        stateName: {
-          $regex: stateName,
           $options: "i"
         }
       });
@@ -725,26 +728,6 @@ export default class PagerService {
       _.extend(params.filters, {
         tagIds: {
           $in: tagIds
-        }
-      });
-    }
-
-    // substates sorts
-    if (sortState) {
-      _.extend(params, {
-        options: {
-          sort: {
-            stateName: sortState === "ASC" ? 1 : -1
-          }
-        }
-      });
-    }
-    if (sortSubstate) {
-      _.extend(params, {
-        options: {
-          sort: {
-            name: sortSubstate === "ASC" ? 1 : -1
-          }
         }
       });
     }
