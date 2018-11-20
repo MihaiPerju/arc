@@ -163,6 +163,23 @@ export default class PagerService {
     };
   }
 
+  static getRulesParams() {
+    let name = FlowRouter.getQueryParam("name");
+
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        name
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getProperAccounts(params, assign) {
     if (assign === "none") {
       _.extend(params.filters, {
@@ -608,12 +625,7 @@ export default class PagerService {
       status = FlowRouter.getQueryParam("status");
     }
 
-    if (currentPath.indexOf("rules/list") > -1) {
-      name = FlowRouter.getQueryParam("name");
-    }
-
     tagIds = FlowRouter.getQueryParam("tagIds");
-
 
     // action search
     if (title) {
