@@ -4,17 +4,15 @@ import LetterSearchBar from "./components/LetterSearchBar.jsx";
 import LetterTemplatesList from "./components/LetterTemplatesList.jsx";
 import LetterTemplateContent from "./LetterTemplateContent.jsx";
 import LetterTemplateCreate from "./LetterTemplateCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/letterTemplates/queries/listLetterTemplates";
 import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 
-class LetterTemplateListContainer extends Pager {
+export default class LetterTemplateListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -25,14 +23,38 @@ class LetterTemplateListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: []
+      tags: [],
+      templates: []
     });
-    this.query = query;
+
+    this.method = "templates.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listTemplates();
+    }, 3000);
+  }
+
+  listTemplates = () => {
+    const params = ParamsService.getTemplatesParams();
+    Meteor.call("templates.get", params, (err, templates) => {
+      if (!err) {
+        this.setState({ templates });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   componentWillReceiveProps() {
@@ -111,15 +133,15 @@ class LetterTemplateListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentTemplate: null });
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getTemplatesParams();
     this.recount(queryParams);
   };
 
@@ -134,24 +156,16 @@ class LetterTemplateListContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       templatesSelected,
       currentTemplate,
       create,
       range,
       total,
-      tags
+      tags,
+      templates
     } = this.state;
-    const template = objectFromArray(data, currentTemplate);
-
-    if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
+    const template = objectFromArray(templates, currentTemplate);
 
     return (
       <div className="cc-container">
@@ -178,7 +192,7 @@ class LetterTemplateListContainer extends Pager {
             selectTemplate={this.selectTemplate}
             currentTemplate={currentTemplate}
             setTemplate={this.setTemplate}
-            templates={data}
+            templates={templates}
             tags={tags}
           />
           <PaginationBar
@@ -230,12 +244,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(LetterTemplateListContainer);

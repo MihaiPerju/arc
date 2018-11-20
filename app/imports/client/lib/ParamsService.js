@@ -218,6 +218,23 @@ export default class PagerService {
     };
   }
 
+  static getTemplatesParams() {
+    let letterTemplateName = FlowRouter.getQueryParam("letterTemplateName");
+
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        letterTemplateName
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getProperAccounts(params, assign) {
     if (assign === "none") {
       _.extend(params.filters, {
@@ -605,13 +622,6 @@ export default class PagerService {
       title = FlowRouter.getQueryParam("title");
     }
 
-    if (currentPath.indexOf("letter-templates/list") > -1) {
-      letterTemplateName = FlowRouter.getQueryParam("letterTemplateName");
-      _.extend(params, {
-        expose: true
-      });
-    }
-
     if (currentPath.indexOf("substate/list") > -1) {
       stateName = FlowRouter.getQueryParam("stateName");
       sortState = FlowRouter.getQueryParam("sortState");
@@ -660,16 +670,6 @@ export default class PagerService {
       _.extend(params.filters, {
         title: {
           $regex: title,
-          $options: "i"
-        }
-      });
-    }
-
-    // letter-templates search
-    if (letterTemplateName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: letterTemplateName,
           $options: "i"
         }
       });

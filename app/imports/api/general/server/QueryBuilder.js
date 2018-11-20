@@ -160,6 +160,27 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getTemplatesParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { letterTemplateName } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (letterTemplateName) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: letterTemplateName,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getReportsParams(params) {
     let queryParams = {};
     if (params) {
