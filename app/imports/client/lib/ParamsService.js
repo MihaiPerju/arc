@@ -197,6 +197,22 @@ export default class PagerService {
     };
   }
 
+  static getLettersParams() {
+    let letterName = FlowRouter.getQueryParam("letterTemplateName");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        letterName
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getReportsParams() {
     let name = FlowRouter.getQueryParam("name");
     let facCode = FlowRouter.getQueryParam("facCode");
@@ -648,10 +664,6 @@ export default class PagerService {
       });
     }
 
-    if (currentPath.indexOf("letters/list") > -1) {
-      letterName = FlowRouter.getQueryParam("letterTemplateName");
-    }
-
     if (currentPath.indexOf("tags/list") > -1) {
       tagName = FlowRouter.getQueryParam("tagName");
     }
@@ -764,16 +776,6 @@ export default class PagerService {
               .add(1, "day")
               .startOf("day")
           )
-        }
-      });
-    }
-
-    // letters search
-    if (letterName) {
-      _.extend(params.filters, {
-        letterTemplateName: {
-          $regex: letterName,
-          $options: "i"
         }
       });
     }
