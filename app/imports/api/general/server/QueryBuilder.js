@@ -202,6 +202,28 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getActionsParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { title } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      // action search
+      if (title) {
+        _.extend(queryParams.filters, {
+          title: {
+            $regex: title,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getReportsParams(params) {
     let queryParams = {};
     if (params) {
