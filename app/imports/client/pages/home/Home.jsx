@@ -11,6 +11,7 @@ import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
 import RepDashboard from "./components/RepDashboard";
 import UserDashboard from "./components/UserDashboard";
+import CHART_TYPE from "./enums/chartType";
 
 export default class Home extends React.Component {
 
@@ -27,11 +28,25 @@ export default class Home extends React.Component {
       facilities: [],
       selectedClientId: null,
       selectedFacilityId: null,
-      isLoadingFiles: false
+      isLoadingFiles: false,
+      chartTypes: [],
+      selectedChartType: '',
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    this.prepareChartTypes();
+  }
+
+  prepareChartTypes() {
+    let chartTypes = this.state.chartTypes;
+    chartTypes.push({ value: 1, label: 'Line Chart', type: CHART_TYPE.Line });
+    chartTypes.push({ value: 2, label: 'Pie Chart', type: CHART_TYPE.Pie });
+    this.setState({ chartTypes: chartTypes, selectedChartType: chartTypes[0] });
+    this.getDashboardData();
+  }
+
+  getDashboardData() {
     this.getRepresentatives();
     this.getClients();
   }
@@ -119,19 +134,49 @@ export default class Home extends React.Component {
   };
 
   onHandleChange = (field, value) => {
-    if (field == "clientId") {
+
+    switch (field) {
+      case "clientId":
+          if(value === '-1')
+            this.setState({ selectedClientId: value, selectedFacilityId: value })
+          else  
+            this.setState({ selectedClientId: value });
+
+          this.getFacilities(value);
+          break;
+      case "facilityId":
+          this.setState({ selectedFacilityId: value });
+          break;
+      case "selectChartTypeId":
+          let chartTypes = this.state.chartTypes;
+          let chartType = chartTypes.find(p => p.value == value);
+          let selectedChartType = chartTypes[0];
+          if (chartType)
+            selectedChartType = chartType;  
+          this.setState({ selectedChartType: selectedChartType }, () => {
+            this.getDashboardData();
+          }); 
+          break;
+      default:    
+        this.getDashboardData();
+        break;
+
+    }
+
+
+/*     if (field == "clientId") {
       if (value != "-1") {
         this.getFacilities(value);
       }
     }
-   
+
     if (field == "clientId") {
       this.setState({ selectedClientId: value });
       this.getFacilities(value);
     }
     if (field == "facilityId") {
       this.setState({ selectedFacilityId: value });
-    }
+    } */
   }
 
   renderGraph() {
@@ -171,7 +216,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { reps, selectedDate, clients, facilities, selectedFacilityId, selectedClientId } = this.state;
+    const { reps, selectedDate, clients, facilities, selectedFacilityId, selectedClientId, chartTypes, selectedChartType } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return (
         <div className="cc-container home-container flex-align--start">
@@ -243,10 +288,20 @@ export default class Home extends React.Component {
                       </div>
                     </div> : null
                 }
+
+                <div className="select-form select-box-width m-l-15">
+                  <label className="dashboard-label">Chart Types</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="selectChartTypeId"
+                      options={chartTypes} />
+                  </div>
+                </div>
               </div>
             </AutoForm>
           </div>
-          <UserDashboard facilityId={selectedFacilityId} clientId={selectedClientId} />
+          <UserDashboard facilityId={selectedFacilityId} clientId={selectedClientId} chartType={selectedChartType} />
         </div>
       );
     }
@@ -266,6 +321,9 @@ const dashboardSchema = new SimpleSchema({
     type: String
   },
   facilityId: {
+    type: String
+  },
+  selectChartTypeId: {
     type: String
   }
 });

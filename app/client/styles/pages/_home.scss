@@ -84,7 +84,8 @@ width: 50%;
   margin-top:1px;
   background-color: white;
   padding: 15px;
-  min-height: 100px;
+  height: 430px;
+  position: relative;
 }
 
 .dashboard-list-item{
@@ -131,4 +132,23 @@ width: 50%;
 
 .dashboard-row{
   margin:0
+}
+
+.dashboard-content-center{
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+} 
+
+.content-height{
+  height: 430px;
+}
+
+.dashboard-sub-title{
+  font-size: 18px;
+  margin: 5px 0;
+  padding: 7px;
+  font-weight: 600;
 }
