@@ -9,6 +9,7 @@ Meteor.methods({
     let options = queryParams.options;
     return Rules.find(filters, options).fetch();
   },
+  
   "rules.count"(params) {
     const queryParams = QueryBuilder.getRulesParams(params);
     let filters = queryParams.filters;

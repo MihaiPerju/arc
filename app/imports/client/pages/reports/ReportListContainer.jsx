@@ -4,19 +4,16 @@ import ReportSearchBar from "./components/ReportSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import ReportContent from "./ReportContent.jsx";
 import ReportCreate from "./ReportCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/reports/queries/reportsList";
-import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import substatesQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 
-class ReportListContainer extends Pager {
+export default class ReportListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -28,9 +25,11 @@ class ReportListContainer extends Pager {
       total: 0,
       range: {},
       substates: [],
-      tags: []
+      tags: [],
+      reports: []
     });
-    this.query = query;
+    this.method = "reports.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
@@ -51,7 +50,23 @@ class ReportListContainer extends Pager {
         }
       });
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listReports();
+    }, 3000);
   }
+
+  listReports = () => {
+    const params = ParamsService.getReportsParams();
+    Meteor.call("reports.get", params, (err, reports) => {
+      if (!err) {
+        this.setState({ reports });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
@@ -134,8 +149,8 @@ class ReportListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentReport: null });
   };
@@ -149,7 +164,7 @@ class ReportListContainer extends Pager {
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getReportsParams();
     this.recount(queryParams);
   };
 
@@ -164,7 +179,6 @@ class ReportListContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       reportsSelected,
       currentReport,
@@ -172,17 +186,10 @@ class ReportListContainer extends Pager {
       total,
       range,
       substates,
-      tags
+      tags,
+      reports
     } = this.state;
-    const report = objectFromArray(data, currentReport);
-
-    if (isLoading && !FlowRouter.getQueryParam("name")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
+    const report = objectFromArray(reports, currentReport);
 
     return (
       <div className="cc-container">
@@ -210,7 +217,7 @@ class ReportListContainer extends Pager {
             selectReport={this.selectReport}
             currentReport={currentReport}
             setReport={this.setReport}
-            reports={data}
+            reports={reports}
             tags={tags}
           />
           <PaginationBar
@@ -272,12 +279,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(ReportListContainer);

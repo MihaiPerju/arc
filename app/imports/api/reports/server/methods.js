@@ -2,8 +2,21 @@ import Reports from "./../collection.js";
 import Security from "/imports/api/reports/security.js";
 import Cronjob from "/imports/api/reports/server/services/CronjobService";
 import reportColumnSchema from "../schemas/reportColumnSchema";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "reports.get"(params) {
+    const queryParams = QueryBuilder.getReportsParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    return Reports.find(filters, options).fetch();
+  },
+
+  "reports.count"(params) {
+    const queryParams = QueryBuilder.getReportsParams(params);
+    let filters = queryParams.filters;
+    return Reports.find(filters).count();
+  },
   "report.delete"(id) {
     Security.hasRightsOnReport(this.userId, id);
     Reports.remove({ _id: id });
