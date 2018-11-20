@@ -181,6 +181,27 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getLettersParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { letterName } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (letterName) {
+        _.extend(queryParams.filters, {
+          letterTemplateName: {
+            $regex: letterName,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getReportsParams(params) {
     let queryParams = {};
     if (params) {
