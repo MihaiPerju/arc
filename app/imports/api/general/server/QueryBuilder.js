@@ -1,7 +1,6 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
-import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
   static getQueryParams({
@@ -111,6 +110,27 @@ export default class PagerService {
         _.extend(queryParams.filters, {
           "emails.address": {
             $regex: email,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
+  static getRulesParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { name } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (name) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: name,
             $options: "i"
           }
         });
