@@ -213,6 +213,22 @@ export default class PagerService {
     };
   }
 
+  static getActionsParams() {
+    let title = FlowRouter.getQueryParam("title");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        title
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getReportsParams() {
     let name = FlowRouter.getQueryParam("name");
     let facCode = FlowRouter.getQueryParam("facCode");
@@ -634,10 +650,6 @@ export default class PagerService {
     }
     let currentPath = FlowRouter.current().route.path;
 
-    if (currentPath.indexOf("action/list") > -1) {
-      title = FlowRouter.getQueryParam("title");
-    }
-
     if (currentPath.indexOf("substate/list") > -1) {
       stateName = FlowRouter.getQueryParam("stateName");
       sortState = FlowRouter.getQueryParam("sortState");
@@ -677,16 +689,7 @@ export default class PagerService {
 
     tagIds = FlowRouter.getQueryParam("tagIds");
 
-    // action search
-    if (title) {
-      _.extend(params.filters, {
-        title: {
-          $regex: title,
-          $options: "i"
-        }
-      });
-    }
-
+    
     // code search
     if (code) {
       _.extend(params.filters, {
