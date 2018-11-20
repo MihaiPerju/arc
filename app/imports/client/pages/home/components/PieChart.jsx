@@ -4,14 +4,25 @@ import ReactHighcharts from "highcharts-react-official";
 
 export default class PieChart extends React.Component {
 
+
+  preparePieChartData() {
+    let chartData = [];
+    const { data } = this.props;
+    chartData = data.chartData.map(d => {
+      return { name: d[0].toString(), y: d[1] };
+    });
+    return chartData;
+  }
+
   render() {
-    const { data, chartOptions } = this.props;
-    console.log(data.chartData);
+    const { chartOptions } = this.props;
+    let chartData = this.preparePieChartData();
     const options = {
       chart: {
         type: "pie",
         width: 640
       },
+      colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
       xAxis: {
         title: { text: chartOptions.xAxisTitle }
       },
@@ -24,34 +35,7 @@ export default class PieChart extends React.Component {
       series: [
         {
           name: chartOptions.ySeries,
-          data: [{
-            name: '1',
-            y: 61.41,
-          }, {
-            name: 'Internet Explorer',
-            y: 11.84
-          }, {
-            name: 'Firefox',
-            y: 10.85
-          }, {
-            name: 'Edge',
-            y: 4.67
-          }, {
-            name: 'Safari',
-            y: 4.18
-          }, {
-            name: 'Sogou Explorer',
-            y: 1.64
-          }, {
-            name: 'Opera',
-            y: 1.6
-          }, {
-            name: 'QQ',
-            y: 1.2
-          }, {
-            name: 'Other',
-            y: 2.61
-          }]
+          data: chartData
         }
       ]
     };
