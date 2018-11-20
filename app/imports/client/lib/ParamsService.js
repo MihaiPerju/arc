@@ -229,6 +229,22 @@ export default class PagerService {
     };
   }
 
+  static getTagsParams() {
+    let tagName = FlowRouter.getQueryParam("tagName");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        tagName
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getSubstatesParams() {
     let stateName = FlowRouter.getQueryParam("stateName");
     let sortState = FlowRouter.getQueryParam("sortState");
@@ -670,10 +686,6 @@ export default class PagerService {
     }
     let currentPath = FlowRouter.current().route.path;
 
-    if (currentPath.indexOf("tag/list") > -1) {
-      tagName = FlowRouter.getQueryParam("tagName");
-    }
-
     if (currentPath.indexOf("/client/:_id/manage-facilities") > -1) {
       facilityName = FlowRouter.getQueryParam("facilityName");
       createdAtMin = FlowRouter.getQueryParam("createdAtMin");
@@ -689,11 +701,6 @@ export default class PagerService {
         clientId: FlowRouter.current().params.id
       });
     }
-
-    if (currentPath.indexOf("tags/list") > -1) {
-      tagName = FlowRouter.getQueryParam("tagName");
-    }
-
     if (currentPath.indexOf("file/list") > -1) {
       fileName = FlowRouter.getQueryParam("fileName");
       clientId = FlowRouter.getQueryParam("clientId");
@@ -708,16 +715,6 @@ export default class PagerService {
       _.extend(params.filters, {
         code: {
           $regex: code,
-          $options: "i"
-        }
-      });
-    }
-
-    // tag search && module-tag
-    if (tagName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: tagName,
           $options: "i"
         }
       });

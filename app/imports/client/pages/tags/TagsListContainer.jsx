@@ -2,16 +2,13 @@ import React from "react";
 import TagList from "./components/TagList";
 import TagSearchBar from "./components/TagSearchBar";
 import PaginationBar from "/imports/client/lib/PaginationBar";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
-import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import { objectFromArray } from "/imports/api/utils";
 import TagPanel from "./components/TagPanel";
 
-class TagsListContainer extends Pager {
+export default class TagsListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -21,14 +18,46 @@ class TagsListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      tags: []
     });
-    this.query = TagsListQuery;
+    this.method = "tags.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
+
+    this.pollingMethod = setInterval(() => {
+      this.listTags();
+    }, 3000);
   }
+
+  setPagerInitial = () => {
+    this.setState(
+      {
+        page: 1,
+        perPage: 13,
+        total: 0
+      },
+      () => {
+        this.nextPage(0);
+      }
+    );
+  };
+
+  listTags = () => {
+    const params = ParamsService.getTagsParams();
+    Meteor.call("tags.get", params, (err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
   showFilterBar() {
     this.setState({
       filter: !this.state.filter
@@ -84,31 +113,22 @@ class TagsListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getTagsParams();
     this.recount(queryParams);
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
-    const { tagsSelected, currentTag, create, range, total } = this.state;
+    const { tagsSelected, currentTag, create, range, total, tags } = this.state;
 
-    const tag = objectFromArray(data, currentTag);
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
+    const tag = objectFromArray(tags, currentTag);
 
     return (
       <div className="cc-container">
@@ -134,7 +154,7 @@ class TagsListContainer extends Pager {
             selectTag={this.selectTag}
             currentTag={currentTag}
             setTag={this.setTag}
-            tags={data}
+            tags={tags}
           />
           <PaginationBar
             create={this.createForm}
@@ -151,10 +171,3 @@ class TagsListContainer extends Pager {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    return TagsListQuery.clone();
-  },
-  { reactive: true }
-)(TagsListContainer);
