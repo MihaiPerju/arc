@@ -2,8 +2,21 @@ import Tags from "../collection.js";
 import Users from "/imports/api/users/collection.js";
 import RolesEnum from "/imports/api/users/enums/roles";
 import TagService from "/imports/api/tags/server/services/TagService";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "tags.get"(params) {
+    const queryParams = QueryBuilder.getTagsParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    return Tags.find(filters, options).fetch();
+  },
+
+  "tags.count"(params) {
+    const queryParams = QueryBuilder.getTagsParams(params);
+    let filters = queryParams.filters;
+    return Tags.find(filters).count();
+  },
   "tag.create"(data) {
     return TagService.createTag(data);
   },
@@ -11,13 +24,12 @@ Meteor.methods({
   "tag.delete"(_id) {
     if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
       return Tags.remove({ _id });
-    }else{
+    } else {
       throw new Meteor.Error(
         "not-allowed",
         "You do not have the correct roles for this!"
       );
     }
-    
   },
 
   "tag.edit"(id, data) {

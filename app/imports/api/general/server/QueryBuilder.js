@@ -118,6 +118,27 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getTagsParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { tagName } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (tagName) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: tagName,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getRulesParams(params) {
     let queryParams = {};
     if (params) {
