@@ -294,7 +294,7 @@ export default class AccountListContainer extends Pager {
   
   updatePager = () => {
     // update the pager count
-    const queryParams = ParamsService.getAccountQueryParams();
+    const queryParams = ParamsService.getAccountParams();
     this.recount(queryParams);
   };
 

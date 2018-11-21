@@ -32,7 +32,7 @@ class FlaggedAccountListContainer extends Pager {
       assignFilterArr: ["assigneeId"],
       tags: [],
       dropdownOptions: [],
-      currentRouteState: null,
+      currentRouteState: null
     });
     this.query = query;
   }
@@ -439,15 +439,14 @@ class FlaggedAccountListContainer extends Pager {
             buttonHidden={true}
           />
         </div>
-        {(currentAccount || accountsSelected.length) &&
-          !showMetaData && (
-            <RightSide
-              account={account}
-              openMetaData={this.openMetaDataSlider}
-              accountsSelected={accountsSelected}
-              closeRightPanel={this.closeRightPanel}
-            />
-          )}
+        {(currentAccount || accountsSelected.length) && !showMetaData && (
+          <RightSide
+            account={account}
+            openMetaData={this.openMetaDataSlider}
+            accountsSelected={accountsSelected}
+            closeRightPanel={this.closeRightPanel}
+          />
+        )}
         {showMetaData && (
           <MetaDataSlider
             account={account}
@@ -496,7 +495,7 @@ class RightSide extends Component {
 
 export default withQuery(
   () => {
-    const params = PagerService.getAccountQueryParams();
+    const params = PagerService.getAccountParams();
     return PagerService.setQuery(query, params);
   },
   { reactive: true }
