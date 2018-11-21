@@ -9,8 +9,20 @@ import Uploads from "../../uploads/uploads/collection";
 import bcrypt from "bcrypt";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "facilities.get"(params) {
+    const queryParams = QueryBuilder.getFacilitiesParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    return Facilities.find(filters, options).fetch();
+  },
+  "facilities.count"(params) {
+    const queryParams = QueryBuilder.getFacilitiesParams(params);
+    let filters = queryParams.filters;
+    return Facilities.find(filters).count();
+  },
   "facility.create"(data) {
     Security.isAdminOrTech(this.userId);
 

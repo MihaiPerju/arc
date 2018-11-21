@@ -246,6 +246,46 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getFacilitiesParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { facilityName, createdAtMax, createdAtMin,clientId } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      if (clientId) {
+        _.extend(queryParams.filters, {
+          clientId
+        });
+      }
+
+      if (facilityName) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: facilityName,
+            $options: "i"
+          }
+        });
+      }
+
+      if (createdAtMin && createdAtMax) {
+        _.extend(queryParams.filters, {
+          createdAt: {
+            $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
+            $lt: new Date(
+              moment(new Date(createdAtMax))
+                .add(1, "day")
+                .startOf("day")
+            )
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getFilesParams(params) {
     let queryParams = {};
     if (params) {
@@ -266,7 +306,7 @@ export default class PagerService {
       }
       if (clientId) {
         _.extend(queryParams.filters, {
-          clientId: clientId
+          clientId
         });
       }
       if (facilityId) {
