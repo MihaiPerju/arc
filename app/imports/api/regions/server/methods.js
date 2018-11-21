@@ -1,7 +1,19 @@
 import Regions from "../collection.js";
 import Security from "/imports/api/security/security.js";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "regions.get"(params) {
+    const queryParams = QueryBuilder.getRegionsParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    return Regions.find(filters, options).fetch();
+  },
+  "regions.count"(params) {
+    const queryParams = QueryBuilder.getRegionsParams(params);
+    let filters = queryParams.filters;
+    return Regions.find(filters).count();
+  },
   "region.create"(data) {
     Security.isAdminOrTech(this.userId);
 
@@ -38,8 +50,4 @@ Meteor.methods({
 
     Regions.remove({ _id: { $in: ids } });
   },
-
-  "regions.get"() {
-    return Regions.find().fetch();
-  }
 });
