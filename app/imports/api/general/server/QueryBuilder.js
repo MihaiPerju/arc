@@ -94,6 +94,9 @@ export default class PagerService {
           }
         });
       }
+
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -115,6 +118,9 @@ export default class PagerService {
           }
         });
       }
+
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -157,6 +163,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -178,6 +186,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -199,6 +209,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -220,6 +232,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -242,6 +256,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -269,6 +285,8 @@ export default class PagerService {
           clientId
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -314,6 +332,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -358,6 +378,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -398,6 +420,8 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
   }
@@ -435,8 +459,24 @@ export default class PagerService {
           }
         });
       }
+      //Getting tags
+      this.getTags(params, queryParams);
     }
     return queryParams;
+  }
+
+  static getTags(params, queryParams) {
+    if (params) {
+      let { tagIds } = params.filters;
+      // common filter query for tags filtering
+      if (tagIds) {
+        _.extend(queryParams.filters, {
+          tagIds: {
+            $in: tagIds
+          }
+        });
+      }
+    }
   }
 
   static getAccountFilters(
