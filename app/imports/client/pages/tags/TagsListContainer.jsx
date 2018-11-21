@@ -58,6 +58,11 @@ export default class TagsListContainer extends Pager {
     });
   };
 
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
   showFilterBar() {
     this.setState({
       filter: !this.state.filter

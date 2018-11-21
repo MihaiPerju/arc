@@ -56,6 +56,11 @@ export default class ReportListContainer extends Pager {
     }, 3000);
   }
 
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
   listReports = () => {
     const params = ParamsService.getReportsParams();
     Meteor.call("reports.get", params, (err, reports) => {

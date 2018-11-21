@@ -4,7 +4,6 @@ import ActionSearchBar from "./components/ActionSearchBar.jsx";
 import ActionList from "./components/ActionList.jsx";
 import ActionContent from "./ActionContent.jsx";
 import ActionCreate from "./ActionCreate.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
@@ -69,6 +68,11 @@ export default class ActionListContainer extends Pager {
       }
     });
   };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
