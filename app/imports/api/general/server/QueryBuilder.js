@@ -3,7 +3,7 @@ import stateEnum from "/imports/api/accounts/enums/states";
 import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
 
-export default class PagerService {
+export default class QueryBuilder {
   static getQueryParams({
     page,
     perPage,

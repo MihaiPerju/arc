@@ -42,7 +42,7 @@ export default class PagerService {
     return this.queryParams;
   }
 
-  static getAccountQueryParams() {
+  static getAccountParams() {
     const tickleUserId = FlowRouter.getQueryParam("tickleUserId");
     const page = FlowRouter.getQueryParam("page");
     const assign = FlowRouter.getQueryParam("assign");
