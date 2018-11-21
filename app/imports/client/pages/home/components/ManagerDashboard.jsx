@@ -2,17 +2,23 @@ import React from "react";
 
 import AssignedAccounts from "./dashboardWidgets/AssignedAccounts";
 import ArchivedAccounts from "./dashboardWidgets/ArchivedAccounts";
-import ReportsBuilt from "./dashboardWidgets/ReportsBuilt";
+import BuiltReports from "./dashboardWidgets/BuiltReports";
+import GeneratedReports from "./dashboardWidgets/GeneratedReports";
+import SentReports from "./dashboardWidgets/SentReports";
+import EscalationResolved from "./dashboardWidgets/EscalationResolved";
 
 export default class ManagerDashboard extends React.Component {
 
   render() {
     const { filters } = this.props;
     return (
-      <div>
+      <div className="m-b--25">
         <AssignedAccounts filters={filters} />
         <ArchivedAccounts filters={filters} />
-        <ReportsBuilt filters={filters} />
+        <BuiltReports filters={filters} />
+        <GeneratedReports filters={filters} />
+        <SentReports filters={filters} />
+        <EscalationResolved filters={filters} />
       </div>
     );
   }

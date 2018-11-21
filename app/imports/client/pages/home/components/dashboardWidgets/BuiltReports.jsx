@@ -14,17 +14,19 @@ export default class ReportsBuilt extends React.Component {
     isLoadingReportsBuilt: false,
     builtReports: [],
     reportsBuiltChartData: [],
-
+    isLoadingReportsBuiltChart: false
   };
 
   componentDidMount() {
-    const { filters } = this.props;
-    this.getBuiltReports(filters.selectedClientId, filters.selectedFacilityId);
+    //const { filters } = this.props;
+    this.getBuiltReports();
+    this.getBuiltReportsChartData();
   }
 
-  componentWillReceiveProps(props) {
-    const { filters } = props;
-    this.getBuiltReports(filters.selectedClientId, filters.selectedFacilityId);
+  componentWillReceiveProps() {
+    // const { filters } = props;
+    this.getBuiltReports();
+    this.getBuiltReportsChartData();
   }
 
   getBuiltReports() {
@@ -42,21 +44,31 @@ export default class ReportsBuilt extends React.Component {
   }
 
   getBuiltReportsChartData() {
-
+    this.setState({ isLoadingReportsBuiltChart: true });
+    setTimeout(() => {
+      Meteor.call("reports.getBuiltPerHour", '', new Date(moment()), (err, chartData) => {
+        if (!err) {
+          this.setState({ reportsBuiltChartData: chartData, isLoadingReportsBuiltChart: false });
+        } else {
+          this.setState({ isLoadingReportsBuiltChart: false });
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1000);
   }
 
   renderReportsBuiltChart() {
     const { filters } = this.props;
-    const { isLoadingReportsBuilt, reportsBuiltChartData } = this.state;
+    const { isLoadingReportsBuiltChart, reportsBuiltChartData } = this.state;
 
     let chartOptions = {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of reports',
-      title: 'Reports Built',
+      title: 'Built Reports',
       ySeries: 'Reports Built per hour'
     };
 
-    if (!isLoadingReportsBuilt) {
+    if (!isLoadingReportsBuiltChart) {
       if (filters.selectedChartType.type === CHART_TYPE.Pie) {
         return (
           <PieChart data={reportsBuiltChartData} chartOptions={chartOptions} />

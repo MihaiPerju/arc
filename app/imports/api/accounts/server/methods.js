@@ -587,7 +587,82 @@ Meteor.methods({
     },
     ]).toArray();
     return ActionService.graphStandardizeData(archivedAccountsPerHour);
-  }
+  },
+
+  async "escalationResolved.get"(clientId, facilityId) {
+    let filter = { 'employeeToRespond': { $ne: RolesEnum.MANAGER } };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    let AccountsRaw = Accounts.rawCollection();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+    return await AccountsRaw.aggregateSync([
+      {
+        $match: filter
+      },
+      {
+        $lookup: {
+          from: "escalations",
+          localField: "escalationId",
+          foreignField: "_id",
+          as: "escalation"
+        }
+      },
+      {
+        $unwind: "$escalation"
+      }
+    ]).toArray();
+  },
+
+  async "escalationResolved.getPerHour"(clientId, facilityId, date) {
+    let filter = { 'employeeToRespond': { $ne: RolesEnum.MANAGER } };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    let AccountsRaw = Accounts.rawCollection();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+
+    if (date && date != '-1')
+      filter['createdAt'] = {
+        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
+        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
+      };
+
+    const escalationsResolvedPerHour = await AccountsRaw.aggregateSync([{
+      $match: filter,
+    },
+    {
+      $group: {
+        _id: {
+          y: {
+            $year: '$createdAt'
+          },
+          m: {
+            $month: '$createdAt'
+          },
+          d: {
+            $dayOfMonth: '$createdAt'
+          },
+          h: {
+            $hour: '$createdAt'
+          },
+        },
+        total: {
+          $sum: 1
+        },
+      },
+    },
+    ]).toArray();
+    return ActionService.graphStandardizeData(escalationsResolvedPerHour);
+  },
 
 
 });

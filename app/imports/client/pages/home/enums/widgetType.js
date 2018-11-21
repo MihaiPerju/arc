@@ -3,6 +3,8 @@ const ManagerWidgets = {
   ARCHIVED_ACCOUNTS: 'Archived Accounts',
   REPORTS_BUILT: 'Reports Built',
   REPORTS_GENERATED: 'Reports Generated',
+  REPORTS_SENT: 'Reports Sent',
+  ESCALATION_RESOLVED: 'Escalation Resolved',
 };
 
 export { ManagerWidgets };

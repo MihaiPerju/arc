@@ -14,5 +14,11 @@ Meteor.methods({
         $set: { seen: true }
       }
     );
-  }
+  },
+
+  "notifications.get"() {
+    let filter = { 'seen': false };
+    return Notifications.find(filter).fetch();
+  }, 
+
 });

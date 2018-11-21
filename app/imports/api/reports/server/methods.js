@@ -2,6 +2,8 @@ import Reports from "./../collection.js";
 import Security from "/imports/api/reports/security.js";
 import Cronjob from "/imports/api/reports/server/services/CronjobService";
 import reportColumnSchema from "../schemas/reportColumnSchema";
+import ActionService from '../../accounts/server/services/ActionService';
+import moment from 'moment';
 
 Meteor.methods({
   "report.delete"(id) {
@@ -81,16 +83,204 @@ Meteor.methods({
     );
   },
 
-  "reports.getbuilt"(authorId) {
+  async "reports.getbuilt"(authorId) {
     let filter = {};
+
     if (authorId && authorId != '-1')
       filter = { authorId: authorId };
-    return Reports.find(filter).fetch();
+
+    let ReportsRaw = Reports.rawCollection();
+    ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
+    return await ReportsRaw.aggregateSync([
+      {
+        $match: filter
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "authorId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $unwind: "$user"
+      }
+    ]).toArray();
   },
 
-  "reports.getgenerated"() {
+  async 'reports.getBuiltPerHour'(authorId, date) {
+    const ReportsRaw = Reports.rawCollection();
+    ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
+
     let filter = {};
-    return Reports.find(filter).fetch();
+
+    if (authorId && authorId != '-1')
+      filter = { authorId: authorId };
+
+    if (date && date != '-1')
+      filter['createdAt'] = {
+        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
+        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
+      };
+
+    const builtReportsPerHour = await ReportsRaw.aggregateSync([{
+      $match: filter,
+    },
+    {
+      $group: {
+        _id: {
+          y: {
+            $year: '$createdAt'
+          },
+          m: {
+            $month: '$createdAt'
+          },
+          d: {
+            $dayOfMonth: '$createdAt'
+          },
+          h: {
+            $hour: '$createdAt'
+          },
+        },
+        total: {
+          $sum: 1
+        },
+      },
+    },
+    ]).toArray();
+    return ActionService.graphStandardizeData(builtReportsPerHour);
+  },
+
+  async "reports.getGenerated"() {
+    let filter = { authorId: this.userId };
+    let ReportsRaw = Reports.rawCollection();
+    ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
+    return await ReportsRaw.aggregateSync([
+      {
+        $match: filter
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "authorId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $unwind: "$user"
+      }
+    ]).toArray();
+  },
+
+  async 'reports.getGeneratedPerHour'(date) {
+    const ReportsRaw = Reports.rawCollection();
+    ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
+
+    let filter = { authorId: this.userId };
+
+    if (date && date != '-1')
+      filter['createdAt'] = {
+        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
+        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
+      };
+
+    const generatedReportsPerHour = await ReportsRaw.aggregateSync([{
+      $match: filter,
+    },
+    {
+      $group: {
+        _id: {
+          y: {
+            $year: '$createdAt'
+          },
+          m: {
+            $month: '$createdAt'
+          },
+          d: {
+            $dayOfMonth: '$createdAt'
+          },
+          h: {
+            $hour: '$createdAt'
+          },
+        },
+        total: {
+          $sum: 1
+        },
+      },
+    },
+    ]).toArray();
+    return ActionService.graphStandardizeData(generatedReportsPerHour);
+  },
+
+  async "reports.getSent"(authorId) {
+    let filter = {};
+
+    if (authorId && authorId != '-1')
+      filter = { authorId: authorId };
+
+    let ReportsRaw = Reports.rawCollection();
+    ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
+    return await ReportsRaw.aggregateSync([
+      {
+        $match: filter
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "authorId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $unwind: "$user"
+      }
+    ]).toArray();
+  },
+
+  async "reports.getSentPerHour"(authorId, date) {
+    let filter = {};
+
+    if (authorId && authorId != '-1')
+      filter = { authorId: authorId };
+
+    const ReportsRaw = Reports.rawCollection();
+    ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
+
+    if (date && date != '-1')
+      filter['createdAt'] = {
+        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
+        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
+      };
+
+    const sentReportsPerHour = await ReportsRaw.aggregateSync([{
+      $match: filter,
+    },
+    {
+      $group: {
+        _id: {
+          y: {
+            $year: '$createdAt'
+          },
+          m: {
+            $month: '$createdAt'
+          },
+          d: {
+            $dayOfMonth: '$createdAt'
+          },
+          h: {
+            $hour: '$createdAt'
+          },
+        },
+        total: {
+          $sum: 1
+        },
+      },
+    },
+    ]).toArray();
+    return ActionService.graphStandardizeData(sentReportsPerHour);
   },
 
 });
