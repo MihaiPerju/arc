@@ -2,7 +2,7 @@ import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 
-export default class PagerService {
+export default class ParamsService {
   static setQuery(query, { page, perPage, state, assign, filters, options }) {
     let params = this.getPagerOptions(page, perPage);
     const { route } = FlowRouter.current();
@@ -26,7 +26,7 @@ export default class PagerService {
     return this.params;
   }
 
-  static getAccountQueryParams() {
+  static getAccountParams() {
     //Filter Params
     const route = FlowRouter.current().path;
     const tickleUserId = FlowRouter.getQueryParam("tickleUserId");

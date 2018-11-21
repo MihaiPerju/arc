@@ -32,7 +32,6 @@ export default class AccountListContainer extends Pager {
       tags: [],
       dropdownOptions: [],
       currentRouteState: null,
-      tags: [],
       isLockedDialogActive: false,
       lockOwnerName: null,
       lockedAccountId: null,
@@ -94,7 +93,7 @@ export default class AccountListContainer extends Pager {
   }
 
   listAccounts = () => {
-    const params = ParamsService.getAccountQueryParams();
+    const params = ParamsService.getAccountParams();
     Meteor.call("accounts.get", params, (err, accounts) => {
       if (!err) {
         this.setState({ accounts });

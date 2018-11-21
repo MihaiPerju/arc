@@ -33,7 +33,6 @@ class FlaggedAccountListContainer extends Pager {
       tags: [],
       dropdownOptions: [],
       currentRouteState: null,
-      tags: []
     });
     this.query = query;
   }
