@@ -10,9 +10,6 @@ export default class PagerService {
     if (state || state === "" || route.path.indexOf("flagged") > -1) {
       this.getAccountFilters(params, state, filters, options);
       this.getProperAccounts(params, assign);
-    } else {
-      // common method for filtering
-      this.getFilters(params, filters);
     }
     this.params = params;
     return query.clone(params);
@@ -51,8 +48,8 @@ export default class PagerService {
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
     const admitDateMin = FlowRouter.getQueryParam("admitDateMin");
     const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
-    const tagIds = FlowRouter.getQueryParam("tagIds");
     const medNo = FlowRouter.getQueryParam("medNo");
+    let tagIds = this.getTags();
 
     // Sort Params
     const sortAcctBal = FlowRouter.getQueryParam("sortAcctBal");
@@ -111,6 +108,7 @@ export default class PagerService {
     const facilityId = FlowRouter.getQueryParam("facilityId");
     const clientId = FlowRouter.getQueryParam("clientId");
     const fileName = FlowRouter.getQueryParam("fileName");
+    let tagIds = this.getTags();
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
@@ -118,7 +116,8 @@ export default class PagerService {
       filters: {
         facilityId,
         clientId,
-        fileName
+        fileName,
+        tagIds
       },
       page,
       perPage
@@ -129,6 +128,8 @@ export default class PagerService {
     let clientName = FlowRouter.getQueryParam("clientName");
     let createdAtMin = FlowRouter.getQueryParam("createdAtMin");
     let createdAtMax = FlowRouter.getQueryParam("createdAtMax");
+    let tagIds = this.getTags();
+
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
@@ -136,7 +137,8 @@ export default class PagerService {
       filters: {
         clientName,
         createdAtMax,
-        createdAtMin
+        createdAtMin,
+        tagIds
       },
       options: {
         page,
@@ -147,13 +149,15 @@ export default class PagerService {
 
   static getUserParams() {
     let email = FlowRouter.getQueryParam("email");
+    let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        email
+        email,
+        tagIds
       },
       options: {
         page,
@@ -164,13 +168,15 @@ export default class PagerService {
 
   static getRulesParams() {
     let name = FlowRouter.getQueryParam("name");
+    let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        name
+        name,
+        tagIds
       },
       options: {
         page,
@@ -181,13 +187,15 @@ export default class PagerService {
 
   static getCodesParams() {
     let code = FlowRouter.getQueryParam("code");
+    let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        code
+        code,
+        tagIds
       },
       options: {
         page,
@@ -198,12 +206,15 @@ export default class PagerService {
 
   static getLettersParams() {
     let letterName = FlowRouter.getQueryParam("letterTemplateName");
+    let tagIds = this.getTags();
+
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        letterName
+        letterName,
+        tagIds
       },
       options: {
         page,
@@ -214,12 +225,15 @@ export default class PagerService {
 
   static getActionsParams() {
     let title = FlowRouter.getQueryParam("title");
+    let tagIds = this.getTags();
+
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        title
+        title,
+        tagIds
       },
       options: {
         page,
@@ -233,6 +247,8 @@ export default class PagerService {
     let clientId = FlowRouter.getQueryParam("clientId");
     let facilityId = FlowRouter.getQueryParam("facilityId");
     let status = FlowRouter.getQueryParam("status");
+    let tagIds = this.getTags();
+
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
@@ -241,7 +257,8 @@ export default class PagerService {
         fileName,
         clientId,
         facilityId,
-        status
+        status,
+        tagIds
       },
       options: {
         page,
@@ -255,6 +272,7 @@ export default class PagerService {
     let createdAtMin = FlowRouter.getQueryParam("createdAtMin");
     let createdAtMax = FlowRouter.getQueryParam("createdAtMax");
     let clientId = FlowRouter.current().params._id;
+    let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
@@ -264,7 +282,8 @@ export default class PagerService {
         facilityName,
         clientId,
         createdAtMin,
-        createdAtMax
+        createdAtMax,
+        tagIds
       },
       options: {
         page,
@@ -275,6 +294,7 @@ export default class PagerService {
 
   static getTagsParams() {
     let tagName = FlowRouter.getQueryParam("tagName");
+
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
@@ -292,13 +312,16 @@ export default class PagerService {
   static getRegionsParams() {
     let regionName = FlowRouter.getQueryParam("regionName");
     let clientId = FlowRouter.current().params.id;
+    let tagIds = this.getTags();
+
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
         regionName,
-        clientId
+        clientId,
+        tagIds
       },
       options: {
         page,
@@ -311,12 +334,15 @@ export default class PagerService {
     let stateName = FlowRouter.getQueryParam("stateName");
     let sortState = FlowRouter.getQueryParam("sortState");
     let sortSubstate = FlowRouter.getQueryParam("sortSubstate");
+    let tagIds = this.getTags();
+
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        stateName
+        stateName,
+        tagIds
       },
       options: {
         page,
@@ -331,6 +357,7 @@ export default class PagerService {
     let name = FlowRouter.getQueryParam("name");
     let facCode = FlowRouter.getQueryParam("facCode");
     let ptType = FlowRouter.getQueryParam("ptType");
+    let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
@@ -339,7 +366,8 @@ export default class PagerService {
       filters: {
         name,
         facCode,
-        ptType
+        ptType,
+        tagIds
       },
       options: {
         page,
@@ -350,13 +378,15 @@ export default class PagerService {
 
   static getTemplatesParams() {
     let letterTemplateName = FlowRouter.getQueryParam("letterTemplateName");
+    let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        letterTemplateName
+        letterTemplateName,
+        tagIds
       },
       options: {
         page,
@@ -715,60 +745,9 @@ export default class PagerService {
     }
   }
 
-  static getFilters(params, filters) {
-    let facilityName,
-      regionName,
-      createdAtMin,
-      createdAtMax,
-      tagIds,
-      fileName,
-      clientId,
-      facilityId,
-      status;
-
-    _.extend(params, {
-      filters: {}
-    });
-
-    if (filters && filters.status) {
-      status = filters.status;
-    }
-    let currentPath = FlowRouter.current().route.path;
-
-    tagIds = FlowRouter.getQueryParam("tagIds");
-
-    // common filter query for tags filtering
-    if (tagIds) {
-      _.extend(params.filters, {
-        tagIds: {
-          $in: tagIds
-        }
-      });
-    }
-
-    // facility search
-    if (facilityName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: facilityName,
-          $options: "i"
-        }
-      });
-    }
-
-    // created at search
-    if (createdAtMin && createdAtMax) {
-      _.extend(params.filters, {
-        createdAt: {
-          $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
-          $lt: new Date(
-            moment(new Date(createdAtMax))
-              .add(1, "day")
-              .startOf("day")
-          )
-        }
-      });
-    }
+  static getTags() {
+    let tagIds = FlowRouter.getQueryParam("tagIds");
+    return tagIds;
   }
 
   static getRange(page, perPage) {
