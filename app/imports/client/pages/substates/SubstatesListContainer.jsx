@@ -33,7 +33,7 @@ export default class SubstatesListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
-    
+
     this.pollingMethod = setInterval(() => {
       this.listSubstates();
     }, 3000);
@@ -43,13 +43,18 @@ export default class SubstatesListContainer extends Pager {
     const params = ParamsService.getSubstatesParams();
     Meteor.call("substates.get", params, (err, substates) => {
       if (!err) {
-        this.setState({substates });
+        this.setState({ substates });
         this.updatePager();
       } else {
         Notifier.error(err.reason);
       }
     });
   };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
@@ -160,7 +165,6 @@ export default class SubstatesListContainer extends Pager {
       substates
     } = this.state;
     const substate = objectFromArray(substates, currentSubstate);
-
 
     return (
       <div className="cc-container substates-container">
