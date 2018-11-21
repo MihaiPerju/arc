@@ -19,7 +19,9 @@ import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 
 Meteor.methods({
   "accounts.get"(params) {
-    const queryParams = QueryBuilder.getQueryParams(params);
+    console.log(params);
+    const queryParams = QueryBuilder.getAccountParams(params);
+    console.log(queryParams);
     let filters = queryParams.filters;
     let options = queryParams.options;
     return Accounts.find(filters, options).fetch();
@@ -166,7 +168,7 @@ Meteor.methods({
   },
 
   "accounts.count"(params) {
-    const queryParams = QueryBuilder.getQueryParams(params);
+    const queryParams = QueryBuilder.getAccountParams(params);
     let filters = queryParams.filters;
     return Accounts.find(filters).count();
   },
