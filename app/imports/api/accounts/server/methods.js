@@ -3,8 +3,6 @@ import Accounts from "../collection";
 import AccountSecurity from "./../security";
 import Security from "/imports/api/security/security";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
-import StateEnum from "/imports/api/accounts/enums/states";
-import TimeService from "./services/TimeService";
 import moment from "moment";
 import Facilities from "/imports/api/facilities/collection";
 import Uploads from "/imports/api/uploads/uploads/collection";
@@ -17,13 +15,13 @@ import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import Users from "/imports/api/users/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 
 Meteor.methods({
   "accounts.get"(params) {
-    const queryParams = QueryBuilder.getQueryParams(params);
+    const queryParams = QueryBuilder.getAccountParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
-
     return Accounts.find(filters, options).fetch();
   },
 
@@ -168,7 +166,7 @@ Meteor.methods({
   },
 
   "accounts.count"(params) {
-    const queryParams = QueryBuilder.getQueryParams(params);
+    const queryParams = QueryBuilder.getAccountParams(params);
     let filters = queryParams.filters;
     return Accounts.find(filters).count();
   },

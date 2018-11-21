@@ -268,8 +268,6 @@ export default class AccountListContainer extends Pager {
   };
 
   checkAllAccount = selectAll => {
-    const { data } = this.props;
-
     this.setState({
       bulkAssign: selectAll,
       accountsSelected: [],

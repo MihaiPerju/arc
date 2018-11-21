@@ -3,18 +3,6 @@ import stateEnum from "/imports/api/accounts/enums/states";
 import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 
 export default class ParamsService {
-  static setQuery(query, { page, perPage, state, assign, filters, options }) {
-    let params = this.getPagerOptions(page, perPage);
-    const { route } = FlowRouter.current();
-
-    if (state || state === "" || route.path.indexOf("flagged") > -1) {
-      this.getAccountFilters(params, state, filters, options);
-      this.getProperAccounts(params, assign);
-    }
-    this.params = params;
-    return query.clone(params);
-  }
-
   static getPagerOptions(page, perPage) {
     return {
       limit: perPage,
@@ -28,7 +16,6 @@ export default class ParamsService {
 
   static getAccountParams() {
     //Filter Params
-    const route = FlowRouter.current().path;
     const tickleUserId = FlowRouter.getQueryParam("tickleUserId");
     const page = FlowRouter.getQueryParam("page");
     const assign = FlowRouter.getQueryParam("assign");
@@ -86,9 +73,13 @@ export default class ParamsService {
         admitDateMin,
         admitDateMax,
         tagIds,
-        medNo
+        medNo,
+        state,
+        assign
       },
       options: {
+        page,
+        perPage,
         sortAcctBal,
         sortTickleDate,
         sortCreatedAt,
@@ -96,11 +87,6 @@ export default class ParamsService {
         sortFbDate,
         sortAdmitDate
       },
-      page,
-      perPage,
-      state,
-      assign,
-      route
     };
   }
 

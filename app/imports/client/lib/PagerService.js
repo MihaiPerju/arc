@@ -6,31 +6,7 @@ import UserRoles, {
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
-
-  static setQuery(query, {
-    page,
-    perPage,
-    state,
-    assign,
-    filters,
-    options
-  }) {
-    let params = this.getPagerOptions(page, perPage);
-    const {
-      route
-    } = FlowRouter.current();
-
-    if (state || state === "" || route.path.indexOf("flagged") > -1) {
-      this.getAccountFilters(params, state, filters, options);
-      this.getProperAccounts(params, assign);
-    } else {
-      // common method for filtering
-      this.getFilters(params, filters);
-    }
-    this.queryParams = params;
-    return query.clone(params);
-  }
-
+  
   static getPagerOptions(page, perPage) {
     return {
       limit: perPage,
