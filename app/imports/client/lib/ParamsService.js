@@ -250,6 +250,29 @@ export default class PagerService {
     };
   }
 
+  static getFacilitiesParams() {
+    let facilityName = FlowRouter.getQueryParam("facilityName");
+    let createdAtMin = FlowRouter.getQueryParam("createdAtMin");
+    let createdAtMax = FlowRouter.getQueryParam("createdAtMax");
+    let clientId = FlowRouter.current().params._id;
+
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        facilityName,
+        clientId,
+        createdAtMin,
+        createdAtMax
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getTagsParams() {
     let tagName = FlowRouter.getQueryParam("tagName");
     const page = FlowRouter.getQueryParam("page");
@@ -675,8 +698,7 @@ export default class PagerService {
   }
 
   static getFilters(params, filters) {
-    let
-      facilityName,
+    let facilityName,
       regionName,
       createdAtMin,
       createdAtMax,
@@ -694,15 +716,6 @@ export default class PagerService {
       status = filters.status;
     }
     let currentPath = FlowRouter.current().route.path;
-
-    if (currentPath.indexOf("/client/:_id/manage-facilities") > -1) {
-      facilityName = FlowRouter.getQueryParam("facilityName");
-      createdAtMin = FlowRouter.getQueryParam("createdAtMin");
-      createdAtMax = FlowRouter.getQueryParam("createdAtMax");
-      _.extend(params.filters, {
-        clientId: FlowRouter.current().params._id
-      });
-    }
 
     if (currentPath.indexOf("/client/:id/region/list") > -1) {
       regionName = FlowRouter.getQueryParam("regionName");
@@ -755,7 +768,6 @@ export default class PagerService {
         }
       });
     }
-
   }
 
   static getRange(page, perPage) {

@@ -69,7 +69,7 @@ export default class FacilityContent extends Component {
             </li>
             <li>
               <a style={{ pointerEvents: "none", cursor: "default" }}>
-                {facility.client.clientName}
+                {facility.client && facility.client.clientName}
               </a>
             </li>
             <li>

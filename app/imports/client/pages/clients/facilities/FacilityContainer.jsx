@@ -4,14 +4,12 @@ import FacilitySearchBar from "./components/FacilitySearchBar.jsx";
 import FacilityList from "./components/FacilityList.jsx";
 import FacilityContent from "./FacilityContent.jsx";
 import FacilityCreate from "./FacilityCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/facilities/queries/facilityList";
 import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
-import PagerService from "../../../lib/PagerService";
+import ParamsService from "../../../lib/ParamsService";
 import Pager from "../../../lib/Pager";
 
-class FacilityContainer extends Pager {
+export default class FacilityContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -23,13 +21,35 @@ class FacilityContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
+      facilities: []
     });
-    this.query = query;
+    this.method = "facilities.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
+    this.pollingMethod = setInterval(() => {
+      this.listFacilities();
+    }, 3000);
   }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
+  listFacilities = () => {
+    const params = ParamsService.getFacilitiesParams();
+    Meteor.call("facilities.get", params, (err, facilities) => {
+      if (!err) {
+        this.setState({ facilities });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
@@ -74,9 +94,8 @@ class FacilityContainer extends Pager {
   };
 
   getFacility() {
-    const { data } = this.props;
-    const { currentFacility } = this.state;
-    for (let facility of data) {
+    const { currentFacility, facilities } = this.state;
+    for (let facility of facilities) {
       if (facility._id === currentFacility) {
         return facility;
       }
@@ -120,15 +139,15 @@ class FacilityContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentFacility: null });
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getFacilitiesParams();
     this.recount(queryParams);
   };
 
@@ -139,23 +158,15 @@ class FacilityContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       facilitiesSelected,
       currentFacility,
       create,
       range,
-      total
+      total,
+      facilities
     } = this.state;
     const facility = this.getFacility();
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
 
     return (
       <div className="cc-container">
@@ -177,7 +188,7 @@ class FacilityContainer extends Pager {
             setFacility={this.setFacility.bind(this)}
             selectFacility={this.selectFacility}
             currentFacility={currentFacility}
-            facilities={data}
+            facilities={facilities}
           />
           <PaginationBar
             module="Facility"
@@ -230,12 +241,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filter: {} });
-  },
-  { reactive: true }
-)(FacilityContainer);
