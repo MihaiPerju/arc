@@ -289,6 +289,24 @@ export default class PagerService {
     };
   }
 
+  static getRegionsParams() {
+    let regionName = FlowRouter.getQueryParam("regionName");
+    let clientId = FlowRouter.current().params.id;
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        regionName,
+        clientId
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
   static getSubstatesParams() {
     let stateName = FlowRouter.getQueryParam("stateName");
     let sortState = FlowRouter.getQueryParam("sortState");
@@ -717,13 +735,6 @@ export default class PagerService {
     }
     let currentPath = FlowRouter.current().route.path;
 
-    if (currentPath.indexOf("/client/:id/region/list") > -1) {
-      regionName = FlowRouter.getQueryParam("regionName");
-      _.extend(params.filters, {
-        clientId: FlowRouter.current().params.id
-      });
-    }
-
     tagIds = FlowRouter.getQueryParam("tagIds");
 
     // common filter query for tags filtering
@@ -740,16 +751,6 @@ export default class PagerService {
       _.extend(params.filters, {
         name: {
           $regex: facilityName,
-          $options: "i"
-        }
-      });
-    }
-
-    // region search
-    if (regionName) {
-      _.extend(params.filters, {
-        name: {
-          $regex: regionName,
           $options: "i"
         }
       });

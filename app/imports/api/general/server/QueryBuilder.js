@@ -246,10 +246,42 @@ export default class PagerService {
     return queryParams;
   }
 
+  static getRegionsParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { regionName, clientId } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      // region search
+      if (regionName) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: regionName,
+            $options: "i"
+          }
+        });
+      }
+      if (clientId) {
+        _.extend(queryParams.filters, {
+          clientId
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getFacilitiesParams(params) {
     let queryParams = {};
     if (params) {
-      let { facilityName, createdAtMax, createdAtMin,clientId } = params.filters;
+      let {
+        facilityName,
+        createdAtMax,
+        createdAtMin,
+        clientId
+      } = params.filters;
       let { page, perPage } = params.options;
 
       queryParams = this.getPagerOptions(page, perPage);

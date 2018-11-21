@@ -3,16 +3,14 @@ import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import RegionSearchBar from "./components/RegionSearchBar.jsx";
 import RegionsList from "./components/RegionsList.jsx";
 import RegionContent from "./RegionContent.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/regions/queries/regionList";
 import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import RegionCreate from "./RegionCreate";
 import Notifier from "/imports/client/lib/Notifier";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 
-class RegionListContainer extends Pager {
+export default class RegionListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -23,17 +21,40 @@ class RegionListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      regions: []
     });
-    this.query = query;
+    this.method = "regions.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
+
+    this.pollingMethod = setInterval(() => {
+      this.listRegions();
+    }, 3000);
   }
 
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
+  listRegions = () => {
+    const params = ParamsService.getRegionsParams();
+    Meteor.call("regions.get", params, (err, regions) => {
+      if (!err) {
+        this.setState({ regions });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
   componentWillReceiveProps() {
-    const {queryParams} = FlowRouter.current();
+    const { queryParams } = FlowRouter.current();
     if (queryParams.regionName && queryParams.regionName == "") {
       this.setPagerInitial();
     }
@@ -122,30 +143,29 @@ class RegionListContainer extends Pager {
   };
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentRegion: null });
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getRegionsParams();
     this.recount(queryParams);
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
-    const { regionsSelected, currentRegion, create, range, total } = this.state;
-    const region = objectFromArray(data, currentRegion);
+    const {
+      regionsSelected,
+      currentRegion,
+      create,
+      range,
+      total,
+      regions
+    } = this.state;
+    const region = objectFromArray(regions, currentRegion);
 
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -166,7 +186,7 @@ class RegionListContainer extends Pager {
             selectRegion={this.selectRegion}
             currentRegion={currentRegion}
             setRegion={this.setRegion}
-            regions={data}
+            regions={regions}
           />
           <PaginationBar
             module="Region"
@@ -213,12 +233,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filter: {} });
-  },
-  { reactive: true }
-)(RegionListContainer);
