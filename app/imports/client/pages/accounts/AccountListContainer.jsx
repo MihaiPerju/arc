@@ -93,6 +93,7 @@ export default class AccountListContainer extends Pager {
 
   listAccounts = () => {
     const params = ParamsService.getAccountParams();
+    console.log(params);
     Meteor.call("accounts.get", params, (err, accounts) => {
       if (!err) {
         this.setState({ accounts });
@@ -268,8 +269,6 @@ export default class AccountListContainer extends Pager {
   };
 
   checkAllAccount = selectAll => {
-    const { data } = this.props;
-
     this.setState({
       bulkAssign: selectAll,
       accountsSelected: [],

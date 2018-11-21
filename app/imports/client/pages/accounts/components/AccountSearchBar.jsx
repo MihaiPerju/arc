@@ -391,7 +391,6 @@ export default class AccountSearchBar extends Component {
       "btn-select": true,
       active: selectAll
     });
-    console.log(tags);
     const searchBarClasses = classNames("search-input", {
       full__width:
         (btnGroup && Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) ||

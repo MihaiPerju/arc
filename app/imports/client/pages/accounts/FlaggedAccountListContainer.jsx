@@ -1,12 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import AccountContent from "./AccountContent.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
-import query from "/imports/api/accounts/queries/accountList";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import Loading from "/imports/client/lib/ui/Loading";
-import PagerService from "/imports/client/lib/PagerService";
+import ParamsService from "/imports/client/lib/ParamsService";
 import AccountAssigning from "/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx";
 import AccountSearchBar from "./components/AccountSearchBar";
 import userTagsQuery from "/imports/api/users/queries/userTags.js";
@@ -14,8 +10,9 @@ import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./components/AccountRightSide";
 
-class FlaggedAccountListContainer extends Pager {
+export default class FlaggedAccountListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -32,12 +29,19 @@ class FlaggedAccountListContainer extends Pager {
       assignFilterArr: ["assigneeId"],
       tags: [],
       dropdownOptions: [],
-      currentRouteState: null
+      currentRouteState: null,
+      accounts: []
     });
-    this.query = query;
+
+    this.method = "accounts.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
+    this.pollingMethod = setInterval(() => {
+      this.listAccounts();
+    }, 3000);
+
     this.nextPage(0);
     userTagsQuery
       .clone({
@@ -79,6 +83,18 @@ class FlaggedAccountListContainer extends Pager {
     this.setState({ currentRouteState: state });
     this.getTags();
   }
+
+  listAccounts = () => {
+    const params = ParamsService.getAccountParams();
+    Meteor.call("accounts.get", params, (err, accounts) => {
+      if (!err) {
+        this.setState({ accounts });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps(newProps) {
     const { currentRouteState } = this.state;
@@ -215,7 +231,7 @@ class FlaggedAccountListContainer extends Pager {
   }
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getAccountParams();
     this.recount(queryParams);
   };
 
@@ -249,18 +265,20 @@ class FlaggedAccountListContainer extends Pager {
   };
 
   getAccount(currentAccount) {
-    const { data } = this.props;
-    const [account] = data.filter(account => account._id === currentAccount);
+    const { accounts } = this.state;
+    const [account] = accounts.filter(
+      account => account._id === currentAccount
+    );
     return account || null;
   }
 
   getAccounts(accountsSelected) {
-    const { data } = this.props;
-    let accounts = [];
-    for (let account of data) {
-      if (accountsSelected.includes(account._id)) accounts.push(account);
+    const { accounts } = this.state;
+    let result = [];
+    for (let account of accounts) {
+      if (accountsSelected.includes(account._id)) result.push(account);
     }
-    return accounts;
+    return result;
   }
 
   getUserOptions(accounts) {
@@ -292,8 +310,8 @@ class FlaggedAccountListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentAccount: null });
   };
@@ -356,7 +374,6 @@ class FlaggedAccountListContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       accountsSelected,
       currentAccount,
@@ -367,22 +384,15 @@ class FlaggedAccountListContainer extends Pager {
       showMetaData,
       assignFilterArr,
       dropdownOptions,
-      tags
+      tags,
+      accounts
     } = this.state;
-    const options = this.getData(data);
+    const options = this.getData(accounts);
     const account = this.getAccount(currentAccount);
     const icons = [
       { icon: "user", method: this.assignToUser },
       { icon: "users", method: this.assignToWorkQueue }
     ];
-
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
 
     return (
       <div className="cc-container">
@@ -429,7 +439,7 @@ class FlaggedAccountListContainer extends Pager {
             selectAccount={this.selectAccount}
             checkAccount={this.checkAccount}
             currentAccount={currentAccount}
-            data={data}
+            data={accounts}
             tags={tags}
           />
           <PaginationBar
@@ -457,46 +467,3 @@ class FlaggedAccountListContainer extends Pager {
     );
   }
 }
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const {
-      account,
-      openMetaData,
-      closeRightPanel,
-      accountsSelected
-    } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        <AccountContent
-          account={account}
-          openMetaData={openMetaData}
-          accountsSelected={accountsSelected}
-          closeRightPanel={closeRightPanel}
-        />
-      </div>
-    );
-  }
-}
-
-export default withQuery(
-  () => {
-    const params = PagerService.getAccountParams();
-    return PagerService.setQuery(query, params);
-  },
-  { reactive: true }
-)(FlaggedAccountListContainer);

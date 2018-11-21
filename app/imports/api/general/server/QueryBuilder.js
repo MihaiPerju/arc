@@ -4,25 +4,21 @@ import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class QueryBuilder {
-  static getQueryParams({
-    page,
-    perPage,
-    state,
-    assign,
-    filters,
-    options,
-    route
-  }) {
-    let params = this.getPagerOptions(page, perPage);
+  static getQueryParams(args) {
+    let params = {};
+    if (args) {
+      let { page, perPage, state, assign, filters, options, route } = args;
+      params = this.getPagerOptions(page, perPage);
 
-    if (state || state === "" || (route && route.indexOf("flagged") > -1)) {
-      this.getAccountFilters(params, state, filters, options, route);
-      this.getProperAccounts(params, assign);
-    } else {
-      // common method for filtering
-      this.getFilters(params, filters);
+      if (state || state === "" || (route && route.indexOf("flagged") > -1)) {
+        this.getAccountFilters(params, state, filters, options, route);
+        this.getProperAccounts(params, assign);
+      } else {
+        // common method for filtering
+        this.getFilters(params, filters);
+      }
+      this.queryParams = params;
     }
-    this.queryParams = params;
     return params;
   }
 
