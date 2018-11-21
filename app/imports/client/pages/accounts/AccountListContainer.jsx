@@ -2,7 +2,6 @@ import React from "react";
 import AccountList from "./components/AccountList.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import Pager from "/imports/client/lib/Pager.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
 import ParamsService from "/imports/client/lib/ParamsService";
 import AccountAssigning from "/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx";
 import AccountSearchBar from "./components/AccountSearchBar";
@@ -59,7 +58,7 @@ export default class AccountListContainer extends Pager {
       })
       .fetchOne((err, user) => {
         if (!err) {
-          const tags = user.tags;
+          const tags = user.tags || [];
           let assignFilterArr = ["assigneeId"];
           let dropdownOptions = [
             { label: "Personal Accounts", filter: "assigneeId" }
@@ -291,7 +290,7 @@ export default class AccountListContainer extends Pager {
     }
     return [options[0]];
   }
-  
+
   updatePager = () => {
     // update the pager count
     const queryParams = ParamsService.getAccountParams();
@@ -346,12 +345,12 @@ export default class AccountListContainer extends Pager {
   };
 
   getAccounts(accountsSelected) {
-    const { data } = this.props;
-    let accounts = [];
-    for (let account of data) {
-      if (accountsSelected.includes(account._id)) accounts.push(account);
+    let { accounts } = this.state;
+    let result = [];
+    for (let account of accounts) {
+      if (accountsSelected.includes(account._id)) result.push(account);
     }
-    return accounts;
+    return result;
   }
 
   getUserOptions(accounts) {
@@ -508,7 +507,6 @@ export default class AccountListContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       accounts,
       accountsSelected,
@@ -529,20 +527,12 @@ export default class AccountListContainer extends Pager {
       currentRouteState,
       assignActions
     } = this.state;
-    const options = this.getData(data);
+    const options = this.getData(accounts);
     const icons = [
       { icon: "user", method: this.assignToUser },
       { icon: "users", method: this.assignToWorkQueue },
       { icon: "thumb-tack", method: this.assignAction }
     ];
-
-    if (isLoading && !FlowRouter.getQueryParam("acctNum")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
 
     return (
       <div className="cc-container">
@@ -564,7 +554,7 @@ export default class AccountListContainer extends Pager {
             assignFilterArr={assignFilterArr}
             checkAll={this.checkAllAccount}
             accountsSelected={accountsSelected}
-            data={data}
+            data={accounts}
             tags={tags}
             bulkAssign={bulkAssign}
             getSort={this.getSort}
