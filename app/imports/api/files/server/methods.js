@@ -7,8 +7,20 @@ import Settings from "../../settings/collection";
 import settings from "/imports/api/settings/enums/settings";
 import fs from "fs";
 import Business from "/imports/api/business";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "files.get"(params) {
+    const queryParams = QueryBuilder.getFilesParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    return Files.find(filters, options).fetch();
+  },
+  "files.count"(params) {
+    const queryParams = QueryBuilder.getFilesParams(params);
+    let filters = queryParams.filters;
+    return Files.find(filters).count();
+  },
   "file.rollback"(_id) {
     RevertService.revert(_id);
     //Need to perform the rest of the logic here, including getting backups and so on.

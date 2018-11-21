@@ -1,7 +1,6 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
-import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
   static setQuery(query, { page, perPage, state, assign, filters, options }) {
@@ -221,6 +220,28 @@ export default class PagerService {
     return {
       filters: {
         title
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
+
+  static getFilesParams() {
+    let fileName = FlowRouter.getQueryParam("fileName");
+    let clientId = FlowRouter.getQueryParam("clientId");
+    let facilityId = FlowRouter.getQueryParam("facilityId");
+    let status = FlowRouter.getQueryParam("status");
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        fileName,
+        clientId,
+        facilityId,
+        status
       },
       options: {
         page,
@@ -654,23 +675,11 @@ export default class PagerService {
   }
 
   static getFilters(params, filters) {
-    let clientName,
-      email,
-      title,
-      name,
-      facCode,
-      ptType,
-      letterTemplateName,
-      code,
-      tagName,
-      stateName,
-      sortState,
-      sortSubstate,
+    let
       facilityName,
       regionName,
       createdAtMin,
       createdAtMax,
-      letterName,
       tagIds,
       fileName,
       clientId,
@@ -701,24 +710,8 @@ export default class PagerService {
         clientId: FlowRouter.current().params.id
       });
     }
-    if (currentPath.indexOf("file/list") > -1) {
-      fileName = FlowRouter.getQueryParam("fileName");
-      clientId = FlowRouter.getQueryParam("clientId");
-      facilityId = FlowRouter.getQueryParam("facilityId");
-      status = FlowRouter.getQueryParam("status");
-    }
 
     tagIds = FlowRouter.getQueryParam("tagIds");
-
-    // code search
-    if (code) {
-      _.extend(params.filters, {
-        code: {
-          $regex: code,
-          $options: "i"
-        }
-      });
-    }
 
     // common filter query for tags filtering
     if (tagIds) {
@@ -763,37 +756,6 @@ export default class PagerService {
       });
     }
 
-    // file search
-    if (fileName) {
-      _.extend(params.filters, {
-        fileName: {
-          $regex: fileName,
-          $options: "i"
-        }
-      });
-    }
-    if (clientId) {
-      _.extend(params.filters, {
-        clientId: clientId
-      });
-    }
-    if (facilityId) {
-      _.extend(params.filters, {
-        facilityId: facilityId
-      });
-    }
-
-    if (status) {
-      _.extend(params.filters, {
-        status
-      });
-    } else {
-      _.extend(params.filters, {
-        status: {
-          $ne: statuses.DISMISS
-        }
-      });
-    }
   }
 
   static getRange(page, perPage) {

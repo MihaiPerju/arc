@@ -1,6 +1,7 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
+import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
   static getQueryParams({
@@ -238,6 +239,50 @@ export default class PagerService {
           title: {
             $regex: title,
             $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
+  static getFilesParams(params) {
+    let queryParams = {};
+    if (params) {
+      let { fileName, clientId, facilityId, status } = params.filters;
+      let { page, perPage } = params.options;
+
+      queryParams = this.getPagerOptions(page, perPage);
+      queryParams.filters = {};
+
+      // file search
+      if (fileName) {
+        _.extend(queryParams.filters, {
+          fileName: {
+            $regex: fileName,
+            $options: "i"
+          }
+        });
+      }
+      if (clientId) {
+        _.extend(queryParams.filters, {
+          clientId: clientId
+        });
+      }
+      if (facilityId) {
+        _.extend(queryParams.filters, {
+          facilityId: facilityId
+        });
+      }
+
+      if (status) {
+        _.extend(queryParams.filters, {
+          status
+        });
+      } else {
+        _.extend(queryParams.filters, {
+          status: {
+            $ne: statuses.DISMISS
           }
         });
       }
