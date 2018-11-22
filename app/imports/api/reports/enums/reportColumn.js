@@ -47,8 +47,8 @@ export default [{
     label: "Substate"
   },
   {
-    value: "metaData",
-    label: "Meta Data"
+    value: "metadata",
+    label: "Metadata"
   },
   {
     value: "activeInsCode",
@@ -120,7 +120,7 @@ const types = {
 
 const fields = {
   INSURANCES: "insurances",
-  METADATA: "metaData"
+  METADATA: "metadata"
 };
 export {
   insuranceColumnEnum

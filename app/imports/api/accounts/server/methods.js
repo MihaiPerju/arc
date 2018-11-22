@@ -25,6 +25,11 @@ Meteor.methods({
     return Accounts.find(filters, options).fetch();
   },
 
+  "account.getMetadata"(_id) {
+    const account = Accounts.findOne({ _id });
+    return account.metadata;
+  },
+
   "account.freeze"(_id) {
     ActionService.freezeAccount(_id);
   },
@@ -32,6 +37,10 @@ Meteor.methods({
   "account.addAction"(data) {
     data.userId = this.userId;
     ActionService.createAction(data);
+  },
+
+  "account.getOne"(_id) {
+    return Accounts.finOne({ _id });
   },
 
   "account.assignUser"({ _id, assigneeId }) {
@@ -342,10 +351,10 @@ Meteor.methods({
   },
 
   "account.facility"(params) {
-    let accountList = Accounts.find(params).fetch();
+    let accounts = Accounts.find(params).fetch();
     let facilityList = [];
     let facilityObj = [];
-    _.map(accountList, account => {
+    _.map(accounts, account => {
       if (!facilityList.includes(account.facilityId)) {
         facilityList.push(account.facilityId);
       }
@@ -392,11 +401,11 @@ Meteor.methods({
     selectedActionId,
     reasonCodes,
     params,
-    accountList
+    accounts
   ) {
     let accountIdList = [];
-    if (accountList) {
-      accountIdList = Accounts.find({ _id: { $in: accountList } }).fetch();
+    if (accounts) {
+      accountIdList = Accounts.find({ _id: { $in: accounts } }).fetch();
     } else {
       accountIdList = Accounts.find(params).fetch();
     }

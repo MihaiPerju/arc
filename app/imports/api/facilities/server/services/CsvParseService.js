@@ -90,13 +90,13 @@ export default class CsvParseService {
       }
     }
     if (rules.metaRules) {
-      account.metaData = {};
+      account.metadata = {};
       for (let key in rules.metaRules) {
         let metaValue = CsvParseService.convertToType(
           key,
           data[rules.metaRules[key] - 1]
         );
-        account.metaData[key] = metaValue;
+        account.metadata[key] = metaValue;
       }
     }
     return account;

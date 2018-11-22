@@ -1,17 +1,26 @@
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/accounts/queries/accountList";
 import React, { Component } from "react";
 import AccountContent from "../AccountContent.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 
-class AccountRightSide extends Component {
+export default class AccountRightSide extends Component {
   constructor() {
     super();
     this.state = {
       fade: false,
-      wasAccountActioned: false
+      wasAccountActioned: false,
+      account: {}
     };
+  }
+
+  componentWillMount() {
+    const { currentAccount } = this.props;
+    Meteor.call("account.getOne", currentAccount, (err, account) => {
+      if (!err) {
+        this.setState({ account });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   componentDidMount() {
@@ -39,22 +48,14 @@ class AccountRightSide extends Component {
   };
 
   render() {
-    const { fade } = this.state;
+    const { fade, account } = this.state;
     const {
       openMetaData,
       closeRightPanel,
       accountsSelected,
-      removeLock,
-      data,
-      isLoading
+      removeLock
     } = this.props;
 
-    const account = data;
-
-    if (isLoading) {
-      return <Loading />;
-    }
-    
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         <AccountContent
@@ -69,12 +70,3 @@ class AccountRightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  ({ currentAccount }) => {
-    return query.clone({
-      filters: { _id: currentAccount }
-    });
-  },
-  { reactive: true, single: true }
-)(AccountRightSide);

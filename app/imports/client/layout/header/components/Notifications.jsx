@@ -44,10 +44,10 @@ class Notitfications extends Component {
   };
 
   getMessage = notification => {
-    const { metaData, type } = notification;
+    const { metadata, type } = notification;
     if (
-      metaData &&
-      metaData.acctNum &&
+      metadata &&
+      metadata.acctNum &&
       type === NotificationTypeEnum.RESPONSE
     ) {
       return (
@@ -55,17 +55,17 @@ class Notitfications extends Component {
           Manager responded to account with Account Number{" "}
           <a
             className="text-blue"
-            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
-              metaData.accountId
+            href={`/accounts/${metadata.state.toLowerCase()}?accountId=${
+              metadata.accountId
             }`}
           >
-            {metaData.acctNum}
+            {metadata.acctNum}
           </a>
         </div>
       );
     } else if (
-      metaData &&
-      metaData.name &&
+      metadata &&
+      metadata.name &&
       type === NotificationTypeEnum.REPORT
     ) {
       return (
@@ -73,38 +73,38 @@ class Notitfications extends Component {
           Report:
           <a
             className="text-blue"
-            href={`/reports/list?reportId=${metaData.reportId}`}
+            href={`/reports/list?reportId=${metadata.reportId}`}
           >
-            {metaData.name}
+            {metadata.name}
           </a>
           has been completed
         </div>
       );
     } else if (
-      metaData &&
-      metaData.acctNum &&
+      metadata &&
+      metadata.acctNum &&
       type === NotificationTypeEnum.FLAG
     ) {
       return (
         <div>
           <span>
             User flagged
-            {metaData.flagType === flagTypesEnum.ACTION ? " an " : " a "}
-            {metaData.flagType} on account with Account number
+            {metadata.flagType === flagTypesEnum.ACTION ? " an " : " a "}
+            {metadata.flagType} on account with Account number
           </span>
           <a
             className="text-blue"
-            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
-              metaData.accountId
+            href={`/accounts/${metadata.state.toLowerCase()}?accountId=${
+              metadata.accountId
             }`}
           >
-            {metaData.acctNum}
+            {metadata.acctNum}
           </a>
         </div>
       );
     } else if (
-      metaData &&
-      metaData.acctNum &&
+      metadata &&
+      metadata.acctNum &&
       type === NotificationTypeEnum.COMMENT
     ) {
       return (
@@ -112,11 +112,11 @@ class Notitfications extends Component {
           <span>Note left by manager on account with Account number</span>
           <a
             className="text-blue"
-            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
-              metaData.accountId
+            href={`/accounts/${metadata.state.toLowerCase()}?accountId=${
+              metadata.accountId
             }`}
           >
-            {metaData.acctNum}
+            {metadata.acctNum}
           </a>
         </div>
       );
