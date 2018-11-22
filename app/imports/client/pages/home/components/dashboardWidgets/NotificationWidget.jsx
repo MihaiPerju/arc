@@ -8,7 +8,6 @@ import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
 
-
 export default class NotificationWidget extends React.Component {
 
   state = {
@@ -21,13 +20,13 @@ export default class NotificationWidget extends React.Component {
   componentDidMount() {
     const { filters } = this.props;
     this.getNotifications(filters.selectedClientId, filters.selectedFacilityId);
-    this.getEscalationResolvedChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getNotificationsChartData(filters.selectedClientId, filters.selectedFacilityId);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
     this.getNotifications(filters.selectedClientId, filters.selectedFacilityId);
-    this.getEscalationResolvedChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getNotificationsChartData(filters.selectedClientId, filters.selectedFacilityId);
   }
 
   getNotifications() {
@@ -44,18 +43,76 @@ export default class NotificationWidget extends React.Component {
     }, 1000);
   }
 
-  getEscalationResolvedChartData(clientId, facilityId) {
-    this.setState({ isLoadingEscalationResolvedChart: true });
+  getNotificationsChartData() {
+    this.setState({ isLoadingNotificationsChart: true });
     setTimeout(() => {
-      Meteor.call("escalationResolved.getPerHour", clientId, facilityId, new Date(moment()), (err, chartData) => {
+      Meteor.call("notifications.getPerHour", new Date(moment()), (err, chartData) => {
         if (!err) {
-          this.setState({ escalationResolvedChartData: chartData, isLoadingEscalationResolvedChart: false });
+          this.setState({ notificationsChartData: chartData, isLoadingNotificationsChart: false });
         } else {
-          this.setState({ isLoadingEscalationResolvedChart: false });
+          this.setState({ isLoadingNotificationsChart: false });
           Notifier.error(err.reason);
         }
       });
     }, 1000);
+  }
+
+  renderNotifications() {
+    const { isLoadingNotifications, notifications } = this.state;
+    if (!isLoadingNotifications) {
+      return (
+        <div className={notifications.length > 0 ? '' : 'dashboard-content-center'}>
+          {
+            notifications.length > 0 ?
+              notifications.map(notification => {
+                return <DashboardListItem key={notification._id} data={notification} type={ManagerWidgets.NOTIFICATIONS} />;
+              })
+              : <div className="dashboard-empty-content">
+                No notifications has been found.
+            </div>
+          }
+        </div>
+      );
+    } else {
+      return (
+        <div className="dashboard-content-center">
+          <Loading />
+        </div>
+      );
+    }
+  }
+
+  renderNotificationsChart() {
+    const { filters } = this.props;
+    const { isLoadingNotificationsChart, notificationsChartData } = this.state;
+
+    let chartOptions = {
+      xAxisTitle: 'Hours',
+      yAxisTitle: 'Number of Notifications',
+      title: 'Notifications',
+      ySeries: 'Notifications resolved per hour'
+    };
+
+    if (!isLoadingNotificationsChart) {
+      if (filters.selectedChartType.type === CHART_TYPE.Pie) {
+        return (
+          <PieChart data={notificationsChartData} chartOptions={chartOptions} />
+        );
+      }
+      else if (filters.selectedChartType.type === CHART_TYPE.Line) {
+        return (
+          <LineChart data={notificationsChartData} chartOptions={chartOptions} />
+        );
+      }
+      else
+        return null;
+    } else {
+      return (
+        <div className="dashboard-content-center">
+          <Loading />
+        </div>
+      );
+    }
   }
 
   render() {
@@ -68,14 +125,14 @@ export default class NotificationWidget extends React.Component {
           <div className="dashboard-section">
             <div className="dashboard-section-content">
               {
-                this.renderEscalationResolved()
+                this.renderNotifications()
               }
             </div>
           </div>
           <div className="dashboard-section">
             <div className="dashboard-section-content m-l-5">
               {
-                this.renderEscalationResolvedChart()
+                this.renderNotificationsChart()
               }
             </div>
           </div>

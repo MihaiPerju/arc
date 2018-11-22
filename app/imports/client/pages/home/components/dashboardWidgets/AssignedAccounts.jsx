@@ -21,20 +21,20 @@ export default class AssignedAccounts extends React.Component {
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getAssignedAccounts(filters.selectedClientId, filters.selectedFacilityId);
-    this.getAssignedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getAssignedAccounts(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
+    this.getAssignedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getAssignedAccounts(filters.selectedClientId, filters.selectedFacilityId);
-    this.getAssignedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getAssignedAccounts(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
+    this.getAssignedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
   }
 
-  getAssignedAccounts(clientId, facilityId) {
+  getAssignedAccounts(clientId, facilityId, userId) {
     this.setState({ isLoadingAssignedAccounts: true });
     setTimeout(() => {
-      Meteor.call("accountsAssigned.get", clientId, facilityId, '', (err, responseData) => {
+      Meteor.call("accountsAssigned.get", clientId, facilityId, userId, (err, responseData) => {
         if (!err) {
 
           this.setState({ assignedAccounts: responseData, isLoadingAssignedAccounts: false });
@@ -46,10 +46,10 @@ export default class AssignedAccounts extends React.Component {
     }, 1000);
   }
 
-  getAssignedAccountsChartData(clientId, facilityId) {
+  getAssignedAccountsChartData(clientId, facilityId, userId) {
     this.setState({ isLoadingAssignedAccountChart: true });
     setTimeout(() => {
-      Meteor.call("account.getAssignedPerHour", clientId, facilityId, '', new Date(moment()), (err, chartData) => {
+      Meteor.call("account.getAssignedPerHour", clientId, facilityId, userId, new Date(moment()), (err, chartData) => {
         if (!err) {
           this.setState({ assignedAccountsChartData: chartData, isLoadingAssignedAccountChart: false });
         } else {

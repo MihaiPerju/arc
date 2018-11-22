@@ -5,6 +5,7 @@ const ManagerWidgets = {
   REPORTS_GENERATED: 'Reports Generated',
   REPORTS_SENT: 'Reports Sent',
   ESCALATION_RESOLVED: 'Escalation Resolved',
+  NOTIFICATIONS:'Notifications'
 };
 
 export { ManagerWidgets };

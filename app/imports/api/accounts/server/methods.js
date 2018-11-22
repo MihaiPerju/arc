@@ -470,13 +470,13 @@ Meteor.methods({
   "accountsAssigned.get"(clientId, facilityId, assigneeId) {
     let filter = { 'assigneeId': { $ne: null } };
 
-    if (clientId != '' && clientId != '-1')
+    if (clientId && clientId != '-1')
       filter['clientId'] = clientId;
 
-    if (facilityId != '' && facilityId != '-1')
+    if (facilityId && facilityId != '-1')
       filter['facilityId'] = facilityId;
 
-    if (assigneeId != '' && assigneeId != '-1')
+    if (assigneeId && assigneeId != '-1')
       filter['assigneeId'] = assigneeId;
 
     return Accounts.find(filter).fetch();

@@ -18,21 +18,21 @@ export default class SentReports extends React.Component {
   };
 
   componentDidMount() {
-    //const { filters } = this.props;
-    this.getSentReports();
-    this.getSentReportsChartData();
+    const { filters } = this.props;
+    this.getSentReports(filters.selectedUserId);
+    this.getSentReportsChartData(filters.selectedUserId);
   }
 
-  componentWillReceiveProps() {
-    // const { filters } = props;
-    this.getSentReports();
-    this.getSentReportsChartData();
+  componentWillReceiveProps(props) {
+    const { filters } = props;
+    this.getSentReports(filters.selectedUserId);
+    this.getSentReportsChartData(filters.selectedUserId);
   }
 
-  getSentReports() {
+  getSentReports(authorId) {
     this.setState({ isLoadingSentReports: true });
     setTimeout(() => {
-      Meteor.call("reports.getSent", '', (err, responseData) => {
+      Meteor.call("reports.getSent", authorId, (err, responseData) => {
         if (!err) {
           this.setState({ isLoadingSentReports: false, sentReports: responseData });
         } else {
@@ -43,10 +43,10 @@ export default class SentReports extends React.Component {
     }, 1000);
   }
 
-  getSentReportsChartData() {
+  getSentReportsChartData(authorId) {
     this.setState({ isLoadingSentReportsChart: true });
     setTimeout(() => {
-      Meteor.call("reports.getSentPerHour", '', new Date(moment()), (err, chartData) => {
+      Meteor.call("reports.getSentPerHour", authorId, new Date(moment()), (err, chartData) => {
         if (!err) {
           this.setState({ sentReportsChartData: chartData, isLoadingSentReportsChart: false });
         } else {
@@ -67,7 +67,7 @@ export default class SentReports extends React.Component {
               sentReports.map(report => {
                 return <DashboardListItem key={report._id} data={report} type={ManagerWidgets.REPORTS_SENT} />;
               })
-              : <div className="dashboard-empty-content dashboard-content-center">
+              : <div className="dashboard-empty-content">
                 No reports has been found.
             </div>
           }

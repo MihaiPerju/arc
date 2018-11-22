@@ -46,7 +46,7 @@ export default class GeneratedReports extends React.Component {
   getGeneratedReportsChartData() {
     this.setState({ isLoadingGeneratedReportChart: true });
     setTimeout(() => {
-      Meteor.call("reports.getBuiltPerHour", '', new Date(moment()), (err, chartData) => {
+      Meteor.call("reports.getGeneratedPerHour", new Date(moment()), (err, chartData) => {
         if (!err) {
           this.setState({ generatedReportsChartData: chartData, isLoadingGeneratedReportChart: false });
         } else {
@@ -67,7 +67,7 @@ export default class GeneratedReports extends React.Component {
               generatedReports.map(report => {
                 return <DashboardListItem key={report._id} data={report} type={ManagerWidgets.REPORTS_GENERATED} />;
               })
-              : <div className="dashboard-empty-content dashboard-content-center">
+              : <div className="dashboard-empty-content">
                 No generated reports has been found.
             </div>
           }

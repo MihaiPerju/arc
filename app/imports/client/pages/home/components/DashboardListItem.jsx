@@ -85,6 +85,14 @@ export default class DashboardListItem extends React.Component {
             </div>
           </div>
         );
+      case ManagerWidgets.NOTIFICATIONS:
+        return (
+          <div key={`archived-${data._id}`} className="dashboard-list-item">
+            <div className="dashboard-list-item-left-content">
+              <div className="dashboard-list-item-sub-title"><span style={{ color: '#000' }}>{data.type}</span></div>
+              <div className="dashboard-notification-message">{data.message}</div>  </div>
+          </div>
+        );
       default:
         return null;
     }

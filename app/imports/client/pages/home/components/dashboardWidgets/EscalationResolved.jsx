@@ -33,7 +33,7 @@ export default class EscalationResolved extends React.Component {
   getEscalationResolved(clientId, facilityId) {
     this.setState({ isLoadingEscalationResolved: true });
     setTimeout(() => {
-      Meteor.call("escalationResolved.get", clientId, facilityId, '', (err, responseData) => {
+      Meteor.call("escalationResolved.get", clientId, facilityId, (err, responseData) => {
         if (!err) {
           this.setState({ escalations: responseData, isLoadingEscalationResolved: false });
         } else {

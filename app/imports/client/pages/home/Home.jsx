@@ -28,25 +28,15 @@ export default class Home extends React.Component {
       facilities: [],
       selectedClientId: '',
       selectedFacilityId: '',
+      selectedUserId: '',
+      users: [],
       chartTypes: [],
       selectedChartType: '',
-      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', },
-      managerDashboardData: {
-        isLoadingAssignedAccounts: false,
-        assignedAccounts: [],
-        isLoadingArchivedAccounts: false,
-        archivedAccounts: [],
-        isLoadingAssignedAccountChart: false,
-        assignedAccountsChartData: {},
-        isLoadingArchivedAccountChart: false,
-        archivedAccountsChartData: {},
-        isLoadingBuiltReports: false,
-        builtReports: [],
-        isLoadingReportsBuilt: false,
-        reportsBuiltChartData: []
-      }
+      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedUserId: '' },
+
     };
   }
+
   componentWillMount() {
     this.prepareChartTypes();
   }
@@ -89,6 +79,21 @@ export default class Home extends React.Component {
           facilities.unshift({ label: 'All Facilities', value: -1 });
         }
         this.setState({ facilities });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  getUsers(facilityId) {
+    Meteor.call("account.facility.user", facilityId, (err, responseData) => {
+      if (!err) {
+        let users = [];
+        users = responseData;
+        if (users.length > 0) {
+          users.unshift({ label: 'All Users', value: -1 });
+        }
+        this.setState({ users });
       } else {
         Notifier.error(err.reason);
       }
@@ -157,6 +162,11 @@ export default class Home extends React.Component {
       case "facilityId":
         filters.selectedFacilityId = value;
         this.setState({ filters });
+        this.getUsers(value);
+        break;
+      case "userId":
+        filters.selectedUserId = value;
+        this.setState({ filters });
         break;
       case "selectChartTypeId":
         let chartTypes = this.state.chartTypes;
@@ -210,7 +220,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { clients, facilities, chartTypes, selectedChartType } = this.state;
+    const { clients, facilities, users, chartTypes } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
 
       // return (
@@ -281,6 +291,18 @@ export default class Home extends React.Component {
                       </div>
                     </div> : null
                 }
+                {
+                  users.length > 0 ?
+                    <div className="select-form select-box-width m-l-15">
+                      <label className="dashboard-label">Users</label>
+                      <div className="m-t--5">
+                        <AutoField
+                          labelHidden={true}
+                          name="userId"
+                          options={users} />
+                      </div>
+                    </div> : null
+                }
                 <div className="select-form select-box-width m-l-15">
                   <label className="dashboard-label">Chart Types</label>
                   <div className="m-t--5">
@@ -293,7 +315,7 @@ export default class Home extends React.Component {
               </div>
             </AutoForm>
           </div>
-          <ManagerDashboard data={this.state.managerDashboardData} chartType={selectedChartType.type} filters={this.state.filters} />
+          <ManagerDashboard filters={this.state.filters} />
         </div>
       );
 
@@ -323,6 +345,9 @@ const dashboardSchema = new SimpleSchema({
     type: String
   },
   selectChartTypeId: {
+    type: String
+  },
+  userId: {
     type: String
   }
 });

@@ -47,7 +47,7 @@ export default class ArchivedAccounts extends React.Component {
   getArchivedAccountsChartData(clientId, facilityId) {
     this.setState({ isLoadingArchivedAccountChart: true });
     setTimeout(() => {
-      Meteor.call("account.getAssignedPerHour", clientId, facilityId, '', new Date(moment()), (err, chartData) => {
+      Meteor.call("account.getArchivedPerHour", clientId, facilityId, new Date(moment()), (err, chartData) => {
         if (!err) {
           this.setState({ archivedAccountsChartData: chartData, isLoadingArchivedAccountChart: false });
         } else {

@@ -20,6 +20,9 @@ export default class PieChart extends React.Component {
     const options = {
       chart: {
         type: "pie",
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
         width: 640
       },
       colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
@@ -31,6 +34,17 @@ export default class PieChart extends React.Component {
       },
       title: {
         text: chartOptions.title
+      },
+      plotOptions: {
+        pie: {
+          allowPointSelect: true,
+          cursor: 'pointer',
+          dataLabels: {
+            enabled: true,
+            color: '#000000',
+            connectorColor: '#d3d3d3',
+          }
+        }
       },
       series: [
         {

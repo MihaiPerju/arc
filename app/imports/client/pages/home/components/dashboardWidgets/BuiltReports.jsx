@@ -18,21 +18,21 @@ export default class ReportsBuilt extends React.Component {
   };
 
   componentDidMount() {
-    //const { filters } = this.props;
-    this.getBuiltReports();
-    this.getBuiltReportsChartData();
+    const { filters } = this.props;
+    this.getBuiltReports(filters.selectedUserId);
+    this.getBuiltReportsChartData(filters.selectedUserId);
   }
 
-  componentWillReceiveProps() {
-    // const { filters } = props;
-    this.getBuiltReports();
-    this.getBuiltReportsChartData();
+  componentWillReceiveProps(props) {
+    const { filters } = props;
+    this.getBuiltReports(filters.selectedUserId);
+    this.getBuiltReportsChartData(filters.selectedUserId);
   }
 
-  getBuiltReports() {
+  getBuiltReports(authorId) {
     this.setState({ isLoadingBuiltReports: true });
     setTimeout(() => {
-      Meteor.call("reports.getbuilt", '', (err, responseData) => {
+      Meteor.call("reports.getbuilt", authorId, (err, responseData) => {
         if (!err) {
           this.setState({ isLoadingBuiltReports: false, builtReports: responseData });
         } else {
@@ -43,10 +43,10 @@ export default class ReportsBuilt extends React.Component {
     }, 1000);
   }
 
-  getBuiltReportsChartData() {
+  getBuiltReportsChartData(authorId) {
     this.setState({ isLoadingReportsBuiltChart: true });
     setTimeout(() => {
-      Meteor.call("reports.getBuiltPerHour", '', new Date(moment()), (err, chartData) => {
+      Meteor.call("reports.getBuiltPerHour", authorId, new Date(moment()), (err, chartData) => {
         if (!err) {
           this.setState({ reportsBuiltChartData: chartData, isLoadingReportsBuiltChart: false });
         } else {
@@ -100,7 +100,7 @@ export default class ReportsBuilt extends React.Component {
               builtReports.map(report => {
                 return <DashboardListItem key={report._id} data={report} type={ManagerWidgets.REPORTS_BUILT} />;
               })
-              : <div className="dashboard-empty-content dashboard-content-center">
+              : <div className="dashboard-empty-content">
                 No reports has been found.
             </div>
           }
