@@ -102,7 +102,7 @@ export default class ActionService {
         escalationId: null
       },
       $push: {
-        actionsLinkData: accountActionId
+        actionIds: accountActionId
       }
     });
 
@@ -151,7 +151,7 @@ export default class ActionService {
         hasLastSysAction: true
       },
       $push: {
-        actionsLinkData: accountActionId
+        actionIds: accountActionId
       }
     });
     this.changeState(accountId, action);
@@ -197,7 +197,7 @@ export default class ActionService {
           fileId
         },
         $push: {
-          actionsLinkData: accountActionId
+          actionIds: accountActionId
         }
       });
     });

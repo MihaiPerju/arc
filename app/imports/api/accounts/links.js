@@ -31,7 +31,7 @@ Accounts.addLinks({
   actions: {
     type: "many",
     collection: AccountActions,
-    field: "actionsLinkData"
+    field: "actionIds"
   },
   tag: {
     type: "one",

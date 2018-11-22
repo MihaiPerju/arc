@@ -52,10 +52,10 @@ export default class RevertService {
 
     //remove them from Accounts
     Accounts.update(
-      { actionsLinkData: { $in: accountActionIds } },
+      { actionIds: { $in: accountActionIds } },
       {
         $pull: {
-          actionsLinkData: {
+          actionIds: {
             $in: accountActionIds
           }
         }
@@ -107,7 +107,7 @@ export default class RevertService {
           delete account.hasLastSysAction;
         } else {
           //Actions are valid, so we don't need to update them.
-          delete backUpAccount.actionsLinkData;
+          delete backUpAccount.actionIds;
           delete backUpAccount.state;
           delete backUpAccount.substate;
           delete backUpAccount.hasLastSysAction;

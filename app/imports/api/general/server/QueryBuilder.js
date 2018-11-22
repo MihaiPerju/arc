@@ -758,7 +758,6 @@ export default class QueryBuilder {
         });
       }
     }
-    console.log(queryParams);
     return queryParams;
   }
 

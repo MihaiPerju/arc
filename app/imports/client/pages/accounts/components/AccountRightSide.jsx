@@ -55,6 +55,7 @@ export default class AccountRightSide extends Component {
       accountsSelected,
       removeLock
     } = this.props;
+    console.log(account);
 
     return (
       <div className={fade ? "right__side in" : "right__side"}>

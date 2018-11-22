@@ -27,7 +27,7 @@ export default class AccountContentHeader extends Component {
       } else {
         return (
           <div className="label label--grey">
-            {profile.firstName + " " + profile.lastName}
+            {profile && profile.firstName + " " + profile.lastName}
           </div>
         );
       }
