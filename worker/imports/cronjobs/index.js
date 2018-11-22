@@ -9,6 +9,7 @@ import Settings from "/imports/api/settings/collection";
 import moment from "moment/moment";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import BulkUploadService from "../services/BulkUploadService";
 
 // Job for running reports
 SyncedCron.add({
@@ -96,5 +97,17 @@ SyncedCron.add({
   },
   job: function() {
     ReuploadService.run();
+  }
+});
+
+//Job for importing accounts number from Bulk uploaded accounts file
+SyncedCron.add({
+  name: "Import Accounts from Bulk Upload",
+  schedule: function(parser) {
+    // parser is a later.parse object
+    return parser.text("every 10 seconds");
+  },
+  job: function() {
+    BulkUploadService.run();
   }
 });

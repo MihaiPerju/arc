@@ -17,6 +17,7 @@ import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import Users from "/imports/api/users/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 
 Meteor.methods({
   "accounts.get"(params) {
