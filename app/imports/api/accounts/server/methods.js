@@ -19,7 +19,8 @@ import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 
 Meteor.methods({
   "accounts.get"(params) {
-    const queryParams = QueryBuilder.getAccountParams(params);
+    userId = this.userId;
+    const queryParams = QueryBuilder.getAccountParams(params,userId);
     let filters = queryParams.filters;
     let options = queryParams.options;
     return Accounts.find(filters, options).fetch();

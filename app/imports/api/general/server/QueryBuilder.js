@@ -50,8 +50,7 @@ export default class QueryBuilder {
       let { clientName, createdAtMax, createdAtMin } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (clientName) {
         _.extend(queryParams.filters, {
@@ -88,8 +87,7 @@ export default class QueryBuilder {
       let { email } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (email) {
         _.extend(queryParams.filters, {
@@ -112,8 +110,7 @@ export default class QueryBuilder {
       let { tagName } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (tagName) {
         _.extend(queryParams.filters, {
@@ -133,8 +130,7 @@ export default class QueryBuilder {
       let { name } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (name) {
         _.extend(queryParams.filters, {
@@ -156,8 +152,7 @@ export default class QueryBuilder {
       let { code } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (code) {
         _.extend(queryParams.filters, {
@@ -179,8 +174,7 @@ export default class QueryBuilder {
       let { letterTemplateName } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (letterTemplateName) {
         _.extend(queryParams.filters, {
@@ -202,8 +196,7 @@ export default class QueryBuilder {
       let { letterName } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (letterName) {
         _.extend(queryParams.filters, {
@@ -225,8 +218,7 @@ export default class QueryBuilder {
       let { title } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       // action search
       if (title) {
@@ -249,8 +241,7 @@ export default class QueryBuilder {
       let { regionName, clientId } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       // region search
       if (regionName) {
@@ -283,8 +274,7 @@ export default class QueryBuilder {
       } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (clientId) {
         _.extend(queryParams.filters, {
@@ -325,8 +315,7 @@ export default class QueryBuilder {
       let { fileName, clientId, facilityId, status } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       // file search
       if (fileName) {
@@ -371,8 +360,7 @@ export default class QueryBuilder {
       let { stateName } = params.filters;
       let { page, perPage, sortState, sortSubstate } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (stateName) {
         _.extend(queryParams.filters, {
@@ -413,8 +401,7 @@ export default class QueryBuilder {
       let { name, facCode, ptType } = params.filters;
       let { page, perPage } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
 
       if (name) {
         _.extend(queryParams.filters, {
@@ -460,7 +447,7 @@ export default class QueryBuilder {
     }
   }
 
-  static getAccountParams(params) {
+  static getAccountParams(params, userId) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
       let {
@@ -496,26 +483,22 @@ export default class QueryBuilder {
         sortAdmitDate
       } = params.options;
 
-      this.getPagerOptions(queryParams,page, perPage);
-      queryParams.filters = {};
+      this.getPagerOptions(queryParams, page, perPage);
+      this.secureAccounts(queryParams, params, userId);
 
       if (state === "unassigned") {
-        _.extend(queryParams, {
-          filters: {
+        _.extend(queryParams.filters, {
             assigneeId: null,
             workQueueId: null,
             tickleDate: null,
             employeeToRespond: null
-          }
         });
       } else if (state === "tickles") {
-        _.extend(queryParams, {
-          filters: {
+        _.extend(queryParams.filters, {
             tickleDate: {
               $exists: true
             },
             employeeToRespond: null
-          }
         });
         _.extend(queryParams.options, {
           sort: {
@@ -541,11 +524,9 @@ export default class QueryBuilder {
           employeeToRespond = Meteor.userId();
         }
 
-        _.extend(queryParams, {
-          filters: {
+        _.extend(queryParams.filters, {
             tickleDate: null,
             employeeToRespond
-          }
         });
       } else if (state === "flagged") {
         _.extend(queryParams.filters, {
@@ -553,35 +534,29 @@ export default class QueryBuilder {
             $gt: 0
           }
         });
-      } else if (state !== "all") {
+      } else if (state && state !== "all") {
         state = stateEnum[state.toUpperCase()];
-        _.extend(queryParams, {
-          filters: {
+        _.extend(queryParams.filters, {
             state,
             tickleDate: null,
             employeeToRespond: null
-          }
         });
       } else {
         // state undefined
-        _.extend(queryParams, {
-          filters: {
+        _.extend(queryParams.filters, {
             state: {
               $exists: true
             }
-          }
         });
       }
 
       //adding filter query options
       if (acctNum) {
-        _.extend(queryParams, {
-          filters: {
+        _.extend(queryParams.filters, {
             acctNum: {
               $regex: acctNum,
               $options: "i"
             }
-          }
         });
       }
 
@@ -783,10 +758,17 @@ export default class QueryBuilder {
         });
       }
     }
+    console.log(queryParams);
     return queryParams;
   }
 
-  static secureAccounts(params) {
+  static secureAccounts(queryParams, params, userId) {
+    const user = Users.findOne({ _id: userId });
+    let clientIds = [];
+
+    if (user) {
+      clientIds = user.clientIds;
+    }
     const userFacilities = Facilities.find(
       {
         allowedUsers: {
@@ -805,46 +787,45 @@ export default class QueryBuilder {
       userFacilitiesArr.push(element._id);
     }
 
-    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
-      if (params.filters.flagCounter) {
-        _.extend(params.filters, {
-          $and: [
-            {
-              flagCounter: {
-                $gt: 0
-              }
-            },
-            {
-              managerIds: {
-                $in: [this.userId]
-              }
-            }
-          ]
-        });
-      } else {
-        _.extend(params.filters, {
-          facilityId: {
-            $in: userFacilitiesArr
-          }
-        });
-      }
+    //Secure for Managers
+    if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
+      _.extend(queryParams.filters, {
+        clientId: { $in: clientIds }
+      });
+
+      // if (params.filters.flagCounter) {
+      //   _.extend(queryParams.filters, {
+      //     $and: [
+      //       {
+      //         flagCounter: {
+      //           $gt: 0
+      //         }
+      //       },
+      //       {
+      //         managerIds: {
+      //           $in: [userId]
+      //         }
+      //       }
+      //     ]
+      //   });
+      // }
     }
-    if (Roles.userIsInRole(this.userId, RolesEnum.REP)) {
+    if (Roles.userIsInRole(userId, RolesEnum.REP)) {
       //Getting tags and accounts from within the work queue
       let { tagIds } = Users.findOne({
-        _id: this.userId
+        _id: userId
       });
 
       //Getting only the escalated accounts that are open and the rep is the author
       if (!tagIds) {
         tagIds = [];
       }
-      _.extend(params.filters, {
+      _.extend(queryParams.filters, {
         $and: [
           {
             $or: [
               {
-                assigneeId: this.userId
+                assigneeId: userId
               },
               {
                 workQueueId: {
