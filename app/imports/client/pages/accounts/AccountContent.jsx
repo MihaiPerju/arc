@@ -65,6 +65,9 @@ export default class AccountContent extends Component {
       removeLock,
       freezeAccount
     } = this.props;
+
+    console.log(account);
+
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;
     }
