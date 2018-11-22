@@ -18,7 +18,6 @@ export default class AccountContent extends Component {
 
   componentWillMount() {
     const { account } = this.props;
-    console.log(account);
     if (account && account.isPending) {
       let customWarning = {
         title: "Warning!",
@@ -66,7 +65,6 @@ export default class AccountContent extends Component {
       freezeAccount
     } = this.props;
 
-    console.log(account);
 
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;

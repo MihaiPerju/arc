@@ -488,17 +488,17 @@ export default class QueryBuilder {
 
       if (state === "unassigned") {
         _.extend(queryParams.filters, {
-            assigneeId: null,
-            workQueueId: null,
-            tickleDate: null,
-            employeeToRespond: null
+          assigneeId: null,
+          workQueueId: null,
+          tickleDate: null,
+          employeeToRespond: null
         });
       } else if (state === "tickles") {
         _.extend(queryParams.filters, {
-            tickleDate: {
-              $exists: true
-            },
-            employeeToRespond: null
+          tickleDate: {
+            $exists: true
+          },
+          employeeToRespond: null
         });
         _.extend(queryParams.options, {
           sort: {
@@ -525,8 +525,8 @@ export default class QueryBuilder {
         }
 
         _.extend(queryParams.filters, {
-            tickleDate: null,
-            employeeToRespond
+          tickleDate: null,
+          employeeToRespond
         });
       } else if (state === "flagged") {
         _.extend(queryParams.filters, {
@@ -537,26 +537,26 @@ export default class QueryBuilder {
       } else if (state && state !== "all") {
         state = stateEnum[state.toUpperCase()];
         _.extend(queryParams.filters, {
-            state,
-            tickleDate: null,
-            employeeToRespond: null
+          state,
+          tickleDate: null,
+          employeeToRespond: null
         });
       } else {
         // state undefined
         _.extend(queryParams.filters, {
-            state: {
-              $exists: true
-            }
+          state: {
+            $exists: true
+          }
         });
       }
 
       //adding filter query options
       if (acctNum) {
         _.extend(queryParams.filters, {
-            acctNum: {
-              $regex: acctNum,
-              $options: "i"
-            }
+          acctNum: {
+            $regex: acctNum,
+            $options: "i"
+          }
         });
       }
 
@@ -765,9 +765,11 @@ export default class QueryBuilder {
   static secureAccounts(queryParams, params, userId) {
     const user = Users.findOne({ _id: userId });
     let clientIds = [];
+    let tagIds =[];
 
     if (user) {
       clientIds = user.clientIds;
+      tagIds = user.tagIds;
     }
     const userFacilities = Facilities.find(
       {
@@ -792,37 +794,13 @@ export default class QueryBuilder {
       _.extend(queryParams.filters, {
         clientId: { $in: clientIds }
       });
-
-      // if (params.filters.flagCounter) {
-      //   _.extend(queryParams.filters, {
-      //     $and: [
-      //       {
-      //         flagCounter: {
-      //           $gt: 0
-      //         }
-      //       },
-      //       {
-      //         managerIds: {
-      //           $in: [userId]
-      //         }
-      //       }
-      //     ]
-      //   });
-      // }
-    }
-    if (Roles.userIsInRole(userId, RolesEnum.REP)) {
-      //Getting tags and accounts from within the work queue
-      let { tagIds } = Users.findOne({
-        _id: userId
-      });
+    } else if (Roles.userIsInRole(userId, RolesEnum.REP)) {
 
       //Getting only the escalated accounts that are open and the rep is the author
       if (!tagIds) {
         tagIds = [];
       }
       _.extend(queryParams.filters, {
-        $and: [
-          {
             $or: [
               {
                 assigneeId: userId
@@ -832,14 +810,7 @@ export default class QueryBuilder {
                   $in: tagIds
                 }
               },
-              {
-                facilityId: {
-                  $in: userFacilitiesArr
-                }
-              }
             ]
-          }
-        ]
       });
     }
   }

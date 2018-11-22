@@ -1,6 +1,6 @@
 import Tags from "../collection.js";
 import Users from "/imports/api/users/collection.js";
-import RolesEnum from "/imports/api/users/enums/roles";
+import RolesEnum,{roleGroups} from "/imports/api/users/enums/roles";
 import TagService from "/imports/api/tags/server/services/TagService";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
@@ -46,7 +46,7 @@ Meteor.methods({
   },
 
   "user.addTag"({ userIds, tagId }) {
-    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
+    if (Roles.userIsInRole(this.userId, roleGroups.ADMIN_TECH_MANAGER)) {
       _.each(userIds, _id => {
         return TagService.addTagToUser({ _id, tagId });
       });
@@ -59,7 +59,7 @@ Meteor.methods({
   },
 
   "user.removeTags"({ userIds, tagId }) {
-    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
+    if (Roles.userIsInRole(this.userId, roleGroups.ADMIN_TECH_MANAGER)) {
       Users.update({ _id: { $in: userIds } }, { $pull: { tagIds: tagId } });
     } else {
       throw new Meteor.Error(
