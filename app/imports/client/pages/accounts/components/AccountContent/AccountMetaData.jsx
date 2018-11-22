@@ -2,7 +2,7 @@ import React from 'react';
 
 export default class AccountMetaData extends React.Component {
   render () {
-    const {metaData} = this.props;
+    const {metadata} = this.props;
     return (
       <div className="metadata-container">
         <div className="main-content">
@@ -16,13 +16,13 @@ export default class AccountMetaData extends React.Component {
             </div>
             <div className="additional-info">
               <ul>
-                {metaData &&
-                  Object.keys (metaData).map ((data, index) => {
+                {metadata &&
+                  Object.keys (metadata).map ((data, index) => {
                     return (
                       <li className="text-center" key={index}>
                         <div className="text-light-grey">{data}</div>
                         <div className="text-dark-grey text-uppercase">
-                          {metaData[data]}
+                          {metadata[data]}
                         </div>
                       </li>
                     );

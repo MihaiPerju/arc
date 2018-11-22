@@ -2,6 +2,9 @@ import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
 import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
+import Facilities from "/imports/api/facilities/collection";
+import Users from "/imports/api/users/collection";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class QueryBuilder {
   static getProperAccounts(params, assign) {
@@ -551,7 +554,7 @@ export default class QueryBuilder {
             $gt: 0
           }
         });
-      } else if (state && state !== "all") {
+      } else if (state !== "all") {
         state = stateEnum[state.toUpperCase()];
         _.extend(queryParams, {
           filters: {
@@ -582,6 +585,14 @@ export default class QueryBuilder {
           }
         });
       }
+
+      //Don't get the pending accounts while we don't have specific account number
+      if (!acctNum) {
+        _.extend(queryParams.filters, {
+          isPending: false
+        });
+      }
+
       if (facilityId) {
         _.extend(queryParams.filters, {
           facilityId
@@ -774,6 +785,73 @@ export default class QueryBuilder {
       }
     }
     return queryParams;
+  }
+
+  static secureAccounts(params){
+    const userFacilities = Facilities.find({
+      allowedUsers: {
+        $in: [this.userId]
+      }
+    }, {
+      fields: {
+        _id: 1
+      }
+    }).fetch();
+
+    let userFacilitiesArr = [];
+    for (let element of userFacilities) {
+      userFacilitiesArr.push(element._id);
+    }
+
+    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
+      if (params.filters.flagCounter) {
+        _.extend(params.filters, {
+          $and: [{
+            flagCounter: {
+              $gt: 0
+            },
+          }, {
+            managerIds: {
+              $in: [this.userId]
+            }
+          }]
+        });
+      } else {
+        _.extend(params.filters, {
+          facilityId: {
+            $in: userFacilitiesArr
+          }
+        });
+      }
+    }
+    if (Roles.userIsInRole(this.userId, RolesEnum.REP)) {
+      //Getting tags and accounts from within the work queue
+      let {
+        tagIds
+      } = Users.findOne({
+        _id: this.userId
+      });
+
+      //Getting only the escalated accounts that are open and the rep is the author
+      if (!tagIds) {
+        tagIds = [];
+      }
+      _.extend(params.filters, {
+        $and: [{
+          $or: [{
+            assigneeId: this.userId
+          }, {
+            workQueueId: {
+              $in: tagIds
+            }
+          }, {
+            facilityId: {
+              $in: userFacilitiesArr
+            }
+          }]
+        }]
+      });
+    }
   }
 
   static getPagerOptions(page, perPage) {

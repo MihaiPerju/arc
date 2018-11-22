@@ -17,11 +17,11 @@ export default class AccountContent extends Component {
   }
 
   componentWillMount() {
-    if(this.props.account && this.props.account.isPending) {
+    if (this.props.account && this.props.account.isPending) {
       let customWarning = {
-        title: 'Warning!',
-        message: 'Account is currently being processed',
-        level: 'warning',
+        title: "Warning!",
+        message: "Account is currently being processed",
+        level: "warning"
       };
       Notifier.addNotification(customWarning);
     }
@@ -66,11 +66,12 @@ export default class AccountContent extends Component {
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;
     }
-    let main_class = ( account && account.isPending ) ? 'main-content position_style' : 'main-content';
+    let main_class =
+      account && account.isPending
+        ? "main-content position_style"
+        : "main-content";
     return (
-   
-      <div className={main_class} >
-      
+      <div className={main_class}>
         {account && (
           <div>
             <AccountContentHeader
@@ -96,8 +97,8 @@ export default class AccountContent extends Component {
             />
           </div>
         )}
-        
-      { account && account.isPending && <div className="overlay"></div> }
+
+        {account && account.isPending && <div className="overlay" />}
       </div>
     );
   }

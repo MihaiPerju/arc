@@ -26,15 +26,15 @@ export default class NotificationService {
       {
         type: NotificationTypeEnum.RESPONSE,
         receiverId,
-        "metaData.accountId": accountId
+        "metadata.accountId": accountId
       },
       {
         $set: {
           receiverId,
           type: NotificationTypeEnum.RESPONSE,
-          "metaData.accountId": accountId,
-          "metaData.acctNum": acctNum,
-          "metaData.state": "escalated", // the reponse notifications will be always for escalated acounts 
+          "metadata.accountId": accountId,
+          "metadata.acctNum": acctNum,
+          "metadata.state": "escalated", // the reponse notifications will be always for escalated acounts 
           createdAt: new Date()
         }
       },
@@ -48,14 +48,14 @@ export default class NotificationService {
       {
         type: NotificationTypeEnum.REPORT,
         receiverId,
-        "metaData.reportId": reportId
+        "metadata.reportId": reportId
       },
       {
         $set: {
           receiverId,
           type: NotificationTypeEnum.REPORT,
-          "metaData.reportId": reportId,
-          "metaData.name": name,
+          "metadata.reportId": reportId,
+          "metadata.name": name,
           createdAt: new Date()
         }
       },
@@ -69,16 +69,16 @@ export default class NotificationService {
       {
         type: NotificationTypeEnum.FLAG,
         receiverId,
-        "metaData.accountId": accountId,
-        "metaData.flagType": flagType
+        "metadata.accountId": accountId,
+        "metadata.flagType": flagType
       },
       {
         $set: {
           receiverId,
           type: NotificationTypeEnum.FLAG,
-          "metaData.accountId": accountId,
-          "metaData.acctNum": acctNum,
-          "metaData.state": state,
+          "metadata.accountId": accountId,
+          "metadata.acctNum": acctNum,
+          "metadata.state": state,
           createdAt: new Date()
         }
       },
@@ -92,17 +92,17 @@ export default class NotificationService {
       {
         type: NotificationTypeEnum.COMMENT,
         receiverId,
-        "metaData.accountId": accountId,
-        "metaData.state": state,
-        "metaData.acctNum": acctNum
+        "metadata.accountId": accountId,
+        "metadata.state": state,
+        "metadata.acctNum": acctNum
       },
       {
         $set: {
           receiverId,
           type: NotificationTypeEnum.COMMENT,
-          "metaData.accountId": accountId,
-          "metaData.acctNum": acctNum,
-          "metaData.state": state,
+          "metadata.accountId": accountId,
+          "metadata.acctNum": acctNum,
+          "metadata.state": state,
           createdAt: new Date()
         }
       },
@@ -119,7 +119,8 @@ export default class NotificationService {
         $set: {
           receiverId,
           type: NotificationTypeEnum.FILEUPLOAD,
-          "metaData.client_id": clientId,
+          "metadata.client_id": clientId,
+          "metadata.client_id": clientId,
           message: `A new file has been uploaded for the client ${clientName}`,
           createdAt: new Date()
         }

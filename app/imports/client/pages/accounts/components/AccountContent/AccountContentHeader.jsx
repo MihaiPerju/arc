@@ -149,7 +149,7 @@ export default class AccountContentHeader extends Component {
               )}
 
             <AccountActioning
-              metaData={true}
+              metadata={true}
               type="View Meta Data"
               openMetaData={openMetaData}
               closeRightPanel={closeRightPanel}

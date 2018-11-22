@@ -57,15 +57,15 @@ export default class RunReports {
     _.map(reportColumns, (value, key) => {
       if (value && key !== fields.INSURANCES) {
         if (key === fields.METADATA) {
-          const metaDataColumns = this.getMetaDataColumns(reportId);
-          _.map(metaDataColumns, (value, key) => {
+          const metadataColumns = this.getMetaDataColumns(reportId);
+          _.map(metadataColumns, (value, key) => {
             if (key === "hasHeader") {
               value.map(header => {
-                columns[`metaData[${header}]`] = `meta column: ${header}`;
+                columns[`metadata[${header}]`] = `meta column: ${header}`;
               });
             } else {
               value.map(header => {
-                columns[`metaData[${header}]`] = `meta column: ${header}`;
+                columns[`metadata[${header}]`] = `meta column: ${header}`;
               });
             }
           });
@@ -91,28 +91,28 @@ export default class RunReports {
 
   static getMetaDataColumns(reportId) {
     const filters = this.getFilters(reportId);
-    const metaDataArr = Accounts.find(filters, {
-      fields: { metaData: 1, _id: 0 }
+    const metadataArr = Accounts.find(filters, {
+      fields: { metadata: 1, _id: 0 }
     }).fetch();
 
-    const metaDataColumn = { hasHeader: [], noHeader: [] };
-    metaDataArr.map(accountMetaData => {
-      _.map(accountMetaData["metaData"], (value, key) => {
+    const metadataColumn = { hasHeader: [], noHeader: [] };
+    metadataArr.map(accountMetaData => {
+      _.map(accountMetaData["metadata"], (value, key) => {
         if (key.indexOf("Column#") === -1) {
-          metaDataColumn["hasHeader"].push(key);
+          metadataColumn["hasHeader"].push(key);
         } else {
-          metaDataColumn["noHeader"].push(key);
+          metadataColumn["noHeader"].push(key);
         }
       });
     });
 
-    metaDataColumn["hasHeader"] = Array.from(
-      new Set(metaDataColumn["hasHeader"])
+    metadataColumn["hasHeader"] = Array.from(
+      new Set(metadataColumn["hasHeader"])
     );
-    metaDataColumn["noHeader"] = Array.from(
-      new Set(metaDataColumn["noHeader"])
+    metadataColumn["noHeader"] = Array.from(
+      new Set(metadataColumn["noHeader"])
     );
-    return metaDataColumn;
+    return metadataColumn;
   }
 
   static async saveReport({ reportId, _id }) {
@@ -148,7 +148,7 @@ export default class RunReports {
 
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    let metaData = await AccountsRaw.aggregateSync([
+    let metadata = await AccountsRaw.aggregateSync([
       {
         $match: filters
       },
@@ -174,17 +174,17 @@ export default class RunReports {
 
     let headers = this.getColumns(reportId);
 
-    metaData = metaData.map(m => {
+    metadata = metadata.map(m => {
       if (m.tag && m.workQueueId) m.workQueueId = m.tag.name;
       return m;
     });
 
     const bindColumn = (d, key) => {
-      if (key.includes("metaData")) {
-        var metaDataKeys = key.split("[");
-        var metaDataKey = metaDataKeys[0];
-        var subKey = metaDataKeys[1].slice(0, -1);
-        var value = d[metaDataKey][subKey];
+      if (key.includes("metadata")) {
+        var metadataKeys = key.split("[");
+        var metadataKey = metadataKeys[0];
+        var subKey = metadataKeys[1].slice(0, -1);
+        var value = d[metadataKey][subKey];
         return `${value != undefined ? value : ""}`;
       } else if (key.includes("insurances")) {
         var insKeys = key.split(".");
@@ -224,7 +224,7 @@ export default class RunReports {
       return ReactDOMServer.renderToString(data);
     };
 
-    const reportContent = renderHtml(metaData);
+    const reportContent = renderHtml(metadata);
 
     try {
       pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {

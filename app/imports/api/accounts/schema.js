@@ -133,7 +133,7 @@ export default new SimpleSchema({
   "actionsLinkData.$": {
     type: String
   },
-  metaData: {
+  metadata: {
     type: Object,
     blackbox: true,
     optional: true

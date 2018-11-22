@@ -75,13 +75,13 @@ export default class PaymentService {
       }
     }
     if (rules.metaRules) {
-      payment.metaData = {};
+      payment.metadata = {};
       for (let key in rules.metaRules) {
         let metaValue = CsvParseService.convertToType(
           key,
           data[rules.metaRules[key] - 1]
         );
-        payment.metaData[key] = metaValue;
+        payment.metadata[key] = metaValue;
       }
     }
     return payment;
