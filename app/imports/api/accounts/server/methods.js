@@ -40,7 +40,7 @@ Meteor.methods({
   },
 
   "account.getOne"(_id) {
-    return Accounts.finOne({ _id });
+    return Accounts.findOne({ _id });
   },
 
   "account.assignUser"({ _id, assigneeId }) {
