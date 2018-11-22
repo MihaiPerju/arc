@@ -17,7 +17,9 @@ export default class AccountContent extends Component {
   }
 
   componentWillMount() {
-    if (this.props.account && this.props.account.isPending) {
+    const { account } = this.props;
+    console.log(account);
+    if (account && account.isPending) {
       let customWarning = {
         title: "Warning!",
         message: "Account is currently being processed",

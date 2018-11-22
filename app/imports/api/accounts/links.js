@@ -8,7 +8,7 @@ import Tags from "/imports/api/tags/collection";
 
 Accounts.addLinks({
   facility: {
-    type: "one",
+    type: "one", 
     collection: Facilities,
     field: "facilityId"
   },
