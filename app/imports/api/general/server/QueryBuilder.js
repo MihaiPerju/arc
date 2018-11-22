@@ -45,12 +45,12 @@ export default class QueryBuilder {
   }
 
   static getClientParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { clientName, createdAtMax, createdAtMin } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (clientName) {
@@ -83,12 +83,12 @@ export default class QueryBuilder {
   }
 
   static getUserParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { email } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (email) {
@@ -107,12 +107,12 @@ export default class QueryBuilder {
   }
 
   static getTagsParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { tagName } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (tagName) {
@@ -128,12 +128,12 @@ export default class QueryBuilder {
   }
 
   static getRulesParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { name } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (name) {
@@ -151,12 +151,12 @@ export default class QueryBuilder {
   }
 
   static getCodesParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { code } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (code) {
@@ -174,12 +174,12 @@ export default class QueryBuilder {
   }
 
   static getTemplatesParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { letterTemplateName } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (letterTemplateName) {
@@ -197,12 +197,12 @@ export default class QueryBuilder {
   }
 
   static getLettersParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { letterName } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (letterName) {
@@ -220,12 +220,12 @@ export default class QueryBuilder {
   }
 
   static getActionsParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { title } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       // action search
@@ -244,12 +244,12 @@ export default class QueryBuilder {
   }
 
   static getRegionsParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { regionName, clientId } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       // region search
@@ -273,7 +273,7 @@ export default class QueryBuilder {
   }
 
   static getFacilitiesParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let {
         facilityName,
@@ -283,7 +283,7 @@ export default class QueryBuilder {
       } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (clientId) {
@@ -320,12 +320,12 @@ export default class QueryBuilder {
   }
 
   static getFilesParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { fileName, clientId, facilityId, status } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       // file search
@@ -366,12 +366,12 @@ export default class QueryBuilder {
   }
 
   static getSubstatesParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { stateName } = params.filters;
       let { page, perPage, sortState, sortSubstate } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (stateName) {
@@ -408,12 +408,12 @@ export default class QueryBuilder {
   }
 
   static getReportsParams(params) {
-    let queryParams = {};
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let { name, facCode, ptType } = params.filters;
       let { page, perPage } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (name) {
@@ -461,8 +461,7 @@ export default class QueryBuilder {
   }
 
   static getAccountParams(params) {
-    let queryParams = {};
-
+    let queryParams = { filters: {}, options: {} };
     if (params) {
       let {
         acctNum,
@@ -497,7 +496,7 @@ export default class QueryBuilder {
         sortAdmitDate
       } = params.options;
 
-      queryParams = this.getPagerOptions(page, perPage);
+      this.getPagerOptions(queryParams,page, perPage);
       queryParams.filters = {};
 
       if (state === "unassigned") {
@@ -787,16 +786,19 @@ export default class QueryBuilder {
     return queryParams;
   }
 
-  static secureAccounts(params){
-    const userFacilities = Facilities.find({
-      allowedUsers: {
-        $in: [this.userId]
+  static secureAccounts(params) {
+    const userFacilities = Facilities.find(
+      {
+        allowedUsers: {
+          $in: [this.userId]
+        }
+      },
+      {
+        fields: {
+          _id: 1
+        }
       }
-    }, {
-      fields: {
-        _id: 1
-      }
-    }).fetch();
+    ).fetch();
 
     let userFacilitiesArr = [];
     for (let element of userFacilities) {
@@ -806,15 +808,18 @@ export default class QueryBuilder {
     if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
       if (params.filters.flagCounter) {
         _.extend(params.filters, {
-          $and: [{
-            flagCounter: {
-              $gt: 0
+          $and: [
+            {
+              flagCounter: {
+                $gt: 0
+              }
             },
-          }, {
-            managerIds: {
-              $in: [this.userId]
+            {
+              managerIds: {
+                $in: [this.userId]
+              }
             }
-          }]
+          ]
         });
       } else {
         _.extend(params.filters, {
@@ -826,9 +831,7 @@ export default class QueryBuilder {
     }
     if (Roles.userIsInRole(this.userId, RolesEnum.REP)) {
       //Getting tags and accounts from within the work queue
-      let {
-        tagIds
-      } = Users.findOne({
+      let { tagIds } = Users.findOne({
         _id: this.userId
       });
 
@@ -837,30 +840,34 @@ export default class QueryBuilder {
         tagIds = [];
       }
       _.extend(params.filters, {
-        $and: [{
-          $or: [{
-            assigneeId: this.userId
-          }, {
-            workQueueId: {
-              $in: tagIds
-            }
-          }, {
-            facilityId: {
-              $in: userFacilitiesArr
-            }
-          }]
-        }]
+        $and: [
+          {
+            $or: [
+              {
+                assigneeId: this.userId
+              },
+              {
+                workQueueId: {
+                  $in: tagIds
+                }
+              },
+              {
+                facilityId: {
+                  $in: userFacilitiesArr
+                }
+              }
+            ]
+          }
+        ]
       });
     }
   }
 
-  static getPagerOptions(page, perPage) {
-    return {
-      options: {
-        limit: perPage,
-        skip: perPage * (page - 1)
-      }
-    };
+  static getPagerOptions(params, page, perPage) {
+    _.extend(params.options, {
+      limit: perPage,
+      skip: perPage * (page - 1)
+    });
   }
 
   static getParams() {
