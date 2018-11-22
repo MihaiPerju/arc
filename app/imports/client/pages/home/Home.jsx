@@ -12,6 +12,7 @@ import RolesEnum from "../../../api/users/enums/roles";
 import RepDashboard from "./components/RepDashboard";
 import ManagerDashboard from "./components/ManagerDashboard";
 import CHART_TYPE from './enums/chartType';
+import { dateRangeValues } from './enums/dateRange';
 
 export default class Home extends React.Component {
 
@@ -26,23 +27,28 @@ export default class Home extends React.Component {
       selectedRep: '',
       clients: [],
       facilities: [],
-      selectedClientId: '',
-      selectedFacilityId: '',
-      selectedUserId: '',
       users: [],
       chartTypes: [],
       selectedChartType: '',
-      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedUserId: '' },
-
+      dateRangeFilters: [],
+      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedUserId: '', selectedDateRange: '' },
     };
   }
 
   componentWillMount() {
+    this.prepareDateRangeOptions();
     this.prepareChartTypes();
   }
 
   componentDidMount() {
     this.getClients();
+  }
+
+  prepareDateRangeOptions() {
+    let dateRangeFilters = dateRangeValues;
+    dateRangeFilters.unshift({ label: 'Select Date', value: -1 });
+    let selectedDateRange = dateRangeFilters[0].value;
+    this.setState({ dateRangeFilters, selectedDateRange });
   }
 
   prepareChartTypes() {
@@ -178,6 +184,10 @@ export default class Home extends React.Component {
         filters.selectedChartType = selectedChartType;
         this.setState({ filters });
         break;
+      case "selectedDateRange":
+        filters.selectedDateRange = value;
+        this.setState({ filters });
+        break;
       default:
         break;
     }
@@ -220,7 +230,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { clients, facilities, users, chartTypes } = this.state;
+    const { clients, facilities, users, chartTypes, dateRangeFilters } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
 
       // return (
@@ -312,6 +322,16 @@ export default class Home extends React.Component {
                       options={chartTypes} />
                   </div>
                 </div>
+                <div className="select-form select-box-width m-l-15">
+                  <label className="dashboard-label">Date Range Filters</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="selectedDateRange"
+                      options={dateRangeFilters}
+                    />
+                  </div>
+                </div>
               </div>
             </AutoForm>
           </div>
@@ -348,6 +368,9 @@ const dashboardSchema = new SimpleSchema({
     type: String
   },
   userId: {
+    type: String
+  },
+  selectedDateRange: {
     type: String
   }
 });
