@@ -8,6 +8,7 @@ import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import Accounts from "/imports/api/accounts/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import Users from "../../users/collection";
 
 Meteor.methods({
   "client.create"(data) {
@@ -60,7 +61,7 @@ Meteor.methods({
     );
   },
 
-  "client.updateManagers"(_id, managerIds) {
+  "client.assign"(_id, managerIds) {
     Security.isAdminOrTech(this.userId);
     //Update client
     Clients.update(
@@ -84,6 +85,28 @@ Meteor.methods({
           managerIds
         }
       }
+    );
+
+    //Grant access to users
+    Users.update(
+      { _id: { $in: managerIds } },
+      {
+        $addToSet: {
+          clientIds: _id
+        }
+      },
+      { multi: true }
+    );
+
+    //Remove access to users
+    Users.update(
+      { _id: { $nin: managerIds } },
+      {
+        $pull: {
+          clientIds: _id
+        }
+      },
+      { multi: true }
     );
   },
 

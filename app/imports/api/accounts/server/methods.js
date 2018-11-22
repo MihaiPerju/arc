@@ -16,10 +16,12 @@ import settings from "/imports/api/settings/enums/settings";
 import Users from "/imports/api/users/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
+import AccountsService from "/imports/api/accounts/server/services/AccountsService";
 
 Meteor.methods({
   "accounts.get"(params) {
-    const queryParams = QueryBuilder.getAccountParams(params);
+    let userId = this.userId;
+    const queryParams = QueryBuilder.getAccountParams(params, userId);
     let filters = queryParams.filters;
     let options = queryParams.options;
     return Accounts.find(filters, options).fetch();
@@ -40,7 +42,7 @@ Meteor.methods({
   },
 
   "account.getOne"(_id) {
-    return Accounts.findOne({ _id });
+    return AccountsService.getAccount(_id);
   },
 
   "account.assignUser"({ _id, assigneeId }) {
@@ -175,7 +177,8 @@ Meteor.methods({
   },
 
   "accounts.count"(params) {
-    const queryParams = QueryBuilder.getAccountParams(params);
+    let userId = this.userId;
+    const queryParams = QueryBuilder.getAccountParams(params, userId);
     let filters = queryParams.filters;
     return Accounts.find(filters).count();
   },

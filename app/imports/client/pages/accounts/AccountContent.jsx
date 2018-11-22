@@ -17,7 +17,8 @@ export default class AccountContent extends Component {
   }
 
   componentWillMount() {
-    if (this.props.account && this.props.account.isPending) {
+    const { account } = this.props;
+    if (account && account.isPending) {
       let customWarning = {
         title: "Warning!",
         message: "Account is currently being processed",
@@ -63,6 +64,8 @@ export default class AccountContent extends Component {
       removeLock,
       freezeAccount
     } = this.props;
+
+
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;
     }

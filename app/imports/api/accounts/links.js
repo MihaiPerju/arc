@@ -8,7 +8,7 @@ import Tags from "/imports/api/tags/collection";
 
 Accounts.addLinks({
   facility: {
-    type: "one",
+    type: "one", 
     collection: Facilities,
     field: "facilityId"
   },
@@ -31,7 +31,7 @@ Accounts.addLinks({
   actions: {
     type: "many",
     collection: AccountActions,
-    field: "actionsLinkData"
+    field: "actionIds"
   },
   tag: {
     type: "one",

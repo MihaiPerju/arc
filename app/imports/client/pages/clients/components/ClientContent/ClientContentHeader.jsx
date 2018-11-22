@@ -7,8 +7,6 @@ import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import ActionDropdown from "./ActionDropdown";
 import { AutoForm, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
-import managersListQuery from "/imports/api/users/queries/listUsers";
-import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class ClientContentHeader extends Component {
   constructor() {
@@ -22,15 +20,13 @@ export default class ClientContentHeader extends Component {
   }
 
   componentWillMount() {
-    managersListQuery
-      .clone({ filters: { roles: { $in: [RolesEnum.MANAGER] } } })
-      .fetch((err, managers) => {
-        if (!err) {
-          this.setState({ managers });
-        } else {
-          Notifier.error(err.reason);
-        }
-      });
+    Meteor.call("users.getManagers", (err, managers) => {
+      if (!err) {
+        this.setState({ managers });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   onEdit = () => {
@@ -85,7 +81,7 @@ export default class ClientContentHeader extends Component {
     const { client } = this.props;
     const { _id } = client;
     this.setState({ isDisabled: true });
-    Meteor.call("client.updateManagers", _id, managerIds, err => {
+    Meteor.call("client.assign", _id, managerIds, err => {
       if (err) {
         Notifier.error(err.reason);
       } else {
@@ -108,7 +104,7 @@ export default class ClientContentHeader extends Component {
     const { dialogIsActive, isAssigning, managers, isDisabled } = this.state;
 
     const managerIdsOptions = this.getManagerOptions(managers);
-   
+
     return (
       <div className="header-block">
         <img

@@ -102,7 +102,7 @@ export default class ActionService {
         escalationId: null
       },
       $push: {
-        actionsLinkData: accountActionId
+        actionIds: accountActionId
       }
     });
 
@@ -151,7 +151,7 @@ export default class ActionService {
         hasLastSysAction: true
       },
       $push: {
-        actionsLinkData: accountActionId
+        actionIds: accountActionId
       }
     });
     this.changeState(accountId, action);
@@ -169,21 +169,13 @@ export default class ActionService {
 
   static archive(accountIds, facilityId, fileId) {
     _.map(accountIds, accountId => {
-      const action = {
-        title: "System archive",
-        substate: Substates.SELF_RETURNED,
-        systemAction: true
-      };
-
       const {
         clientId
       } = Facilities.findOne({
         _id: facilityId
       });
 
-      const actionId = Actions.insert(action);
       const accountActionId = AccountActions.insert({
-        actionId,
         fileId,
         systemAction: true,
         type: actionTypesEnum.SYSTEM_ACTION,
@@ -205,7 +197,7 @@ export default class ActionService {
           fileId
         },
         $push: {
-          actionsLinkData: accountActionId
+          actionIds: accountActionId
         }
       });
     });

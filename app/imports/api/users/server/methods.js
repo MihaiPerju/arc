@@ -51,9 +51,16 @@ Meteor.methods({
 
     return tagIds;
   },
+
   "users.getReps"() {
     return Users.find({
       roles: RolesEnum.REP
+    }).fetch();
+  },
+
+  "users.getManagers"() {
+    return Users.find({
+      roles: RolesEnum.MANAGER
     }).fetch();
   },
 
