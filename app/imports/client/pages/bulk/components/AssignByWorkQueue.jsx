@@ -51,7 +51,7 @@ export default class AssignByWorkQueue extends Component {
         workQueueId: workQueueId
       },
       complete(file) {
-        Notifier.success("Added");
+        Notifier.success("File Uploaded & Update Successfully");
         this.removeFile(file);
       },
       acceptedFiles: ".csv"
@@ -59,16 +59,15 @@ export default class AssignByWorkQueue extends Component {
     return (
       <div className={this.state.fade ? "new-action in" : "new-action"}>
         <div className="create-form">
-          <div className="main-content m-t--10">
-            <div className="header-block header-account">
-              <div className="additional-info account-info">
-                <AutoForm
-                  schema={schema}
-                  onChange={this.onHandleChange.bind(this)}
-                  model={model}
-                >
-
-                  <div className="select-wrapper select_div">
+          <AutoForm
+            schema={schema}
+            onChange={this.onHandleChange.bind(this)}
+            model={model}
+          >
+            <div className="main-content m-t--10">
+              <div className="header-block header-account">
+                <div className="additional-info account-info">
+                  <div className="select-wrapper select_div dropdown-icon">
                     <div className="select_label">Select Group :</div>
                     <div className="select-form border-style">
                       <SelectField
@@ -81,37 +80,29 @@ export default class AssignByWorkQueue extends Component {
                       <ErrorField name="workQueueId" />
                     </div>
                   </div>
-
-                  {/*           <div className="form-wrapper">
-                  <SelectField
-                    label="Select Group:"
-                    name="workQueueId"
-                    options={workQueueOptions}
-                    placeholder="Select Group"
-                    value={workQueueId}
-                  />
-                  <ErrorField name="workQueueId" />
-                </div> */}
-                  {workQueueId &&
-                    <div className="select-row">
-                      <div className="action-block drop-file">
-                        <div className="main__block">
-                          <div className="btn-group-1">
-                            <div className="add-content">
-                              <i className="icon-upload" />
-                              <div className="drop-file__wrapper">
-                                <DropzoneComponent config={componentConfig} djsConfig={djsConfig} />
-                              </div>
-                            </div>
+                </div>
+              </div>
+            </div>
+          
+            <div className="select-row">
+              {workQueueId && workQueueId != 'Unassigned' &&
+                <div className="select-row">
+                  <div className="action-block drop-file">
+                    <div className="main__block">
+                      <div className="btn-group-1">
+                        <div className="add-content">
+                          <i className="icon-upload" />
+                          <div className="drop-file__wrapper">
+                            <DropzoneComponent config={componentConfig} djsConfig={djsConfig} />
                           </div>
                         </div>
                       </div>
                     </div>
-                  }
-                </AutoForm>
-              </div>
+                  </div>
+                </div>
+              }
             </div>
-          </div>
+          </AutoForm>
         </div>
       </div>
     )

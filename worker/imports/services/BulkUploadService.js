@@ -19,14 +19,14 @@ export default class BulkUploadService {
     });
     if (job) {
       //Update the job as taken
-      console.log(job);
-        JobQueue.update({
+     // console.log(job);
+         JobQueue.update({
         _id: job._id
       }, {
           $set: {
             workerId
           }
-        });  
+        });   
       this.processBulkUploadFile(job);
     }
   }
@@ -59,10 +59,13 @@ export default class BulkUploadService {
     });
   }
 
-  static updateAssign(data, jobData) {
-    data.map((value, index) => {
-      value.map((acctNum) => {
-        if (acctNum) {
+  static updateAssign(excelData, jobData) {
+    let data = {};
+    excelData.map((value, index) => {
+      
+      if(value && value[0]) {
+        let acctNum = value[0];
+        if (acctNum) {  console.log(acctNum);
           let acctData = Accounts.find({ acctNum }).fetch()[0];
           
           if (acctData) {
@@ -102,14 +105,18 @@ export default class BulkUploadService {
                 data.reasonCode = jobData.reasonCodes;
                 data.userId = jobData.userId;
                 data.accountId = acctData._id;
-
+                
                 if (acctData.assignee) {
                   data.addedBy = `${acctData.assignee.profile.firstName} ${
                     acctData.assignee.profile.lastName
                     }`;
-                } else if (acctData.workQueueId) {
+                } else if (acctData.workQueueId && acctData.tag) {
                   data.addedBy = acctData.tag.name;
                 }
+
+                if(jobData.customFields)
+                  data = { ...data, ...jobData.customFields} 
+
                 ActionService.createAction(data);
                 break;
               default:
@@ -118,8 +125,8 @@ export default class BulkUploadService {
 
 
           }
-        }
-      });
+        } 
+      }
     });
   }
 

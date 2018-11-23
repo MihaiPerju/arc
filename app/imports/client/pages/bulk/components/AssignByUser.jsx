@@ -71,25 +71,24 @@ export default class AssignByUser extends Component {
         userType: userType
       },
       complete(file) {
-        Notifier.success("Added");
+        Notifier.success("File Uploaded & Update Successfully");
         this.removeFile(file);
       },
       acceptedFiles: ".csv"
     };
     return (
       <div className="create-form">
-        <div className="main-content m-t--10">
-          <div className="header-block header-account">
-            <div className="additional-info account-info">
 
-              <AutoForm
-                onSubmit={this.onSubmit.bind(this)}
-                schema={schema}
-                onChange={this.onHandleChange.bind(this)}
-                model={model}
-              >
-
-                <div className="select-wrapper select_div">
+        <AutoForm
+          onSubmit={this.onSubmit.bind(this)}
+          schema={schema}
+          onChange={this.onHandleChange.bind(this)}
+          model={model}
+        >
+          <div className="main-content m-t--10">
+            <div className="header-block header-account">
+              <div className="additional-info account-info">
+                <div className="select-wrapper select_div dropdown-icon">
                   <div className="select_label">Select Facility :</div>
                   <div className="select-form border-style">
                     <SelectField
@@ -103,7 +102,7 @@ export default class AssignByUser extends Component {
                   </div>
                 </div>
 
-                <div className="select-wrapper select_div">
+                <div className="select-wrapper select_div dropdown-icon">
                   <div className="select_label">Select Users :</div>
                   <div className="select-form border-style">
                     <SelectField
@@ -116,26 +115,28 @@ export default class AssignByUser extends Component {
                     <ErrorField name="assigneeId" />
                   </div>
                 </div>
-                {facilityType && userType &&
-                  <div className="select-row">
-                    <div className="action-block drop-file">
-                      <div className="main__block">
-                        <div className="btn-group-1">
-                          <div className="add-content">
-                            <i className="icon-upload" />
-                            <div className="drop-file__wrapper">
-                              <DropzoneComponent config={componentConfig} djsConfig={djsConfig} />
-                            </div>
-                          </div>
-                        </div>
+              </div>
+            </div>
+          </div>
+
+
+          {facilityType && userType &&
+            <div className="select-row">
+              <div className="action-block drop-file">
+                <div className="main__block">
+                  <div className="btn-group-1">
+                    <div className="add-content">
+                      <i className="icon-upload" />
+                      <div className="drop-file__wrapper">
+                        <DropzoneComponent config={componentConfig} djsConfig={djsConfig} />
                       </div>
                     </div>
                   </div>
-                }
-              </AutoForm>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          }
+        </AutoForm>
       </div>
     )
   }

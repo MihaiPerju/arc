@@ -60,7 +60,8 @@ createRoute(
           job = null;
       }
       if(postData.reasonCodes) { job.reasonCodes = postData.reasonCodes }
-      
+      if(postData.customFields) { job.customFields = JSON.parse(postData.customFields) }
+     
       job != null && JobQueue.insert(job); 
 
       success();

@@ -22,8 +22,10 @@ export default class AssignAction extends Component {
       reasonCodes: [],
       loading: true,
       selectedActionId: null,
-      isDisabled: false
+      isDisabled: false,
+      customFieldValue: {}
     };
+    let selVal = {};
   }
 
   componentWillMount() {
@@ -105,6 +107,7 @@ export default class AssignAction extends Component {
 
 
   onHandleChange = (field, value) => {
+    let selVal = {}
     if (field == "actionId") {
       reasonCodesQuery
         .clone({
@@ -121,6 +124,12 @@ export default class AssignAction extends Component {
         });
       this.setState({ selectedActionId: value });
     }
+    if (this.state.selectedActionId) {
+      selVal = { ...this.state.customFieldValue, [field]: value };
+    } else {
+      selVal = {}
+    }
+    this.setState({ customFieldValue: selVal });
   };
 
   onChange = (date, label) => {
@@ -206,6 +215,30 @@ export default class AssignAction extends Component {
     return new SimpleSchema(schema);
   }
 
+  getParams = () => {
+    let { selectedActionId, reasonCodes, customFieldValue } = this.state;
+
+    let reqParams = {
+      assignType: 'apply_bulk_action',
+      actionId: JSON.stringify(selectedActionId)
+    }
+    if (customFieldValue) {
+      reqParams.customFields = JSON.stringify(customFieldValue);
+    }
+    if (reasonCodes && reasonCodes.length != 0)
+      reqParams.reasonCodes = reasonCodes
+
+    let retParams = {
+      params: reqParams,
+      complete(file) {
+        Notifier.success("File Uploaded & Update Successfully");
+        this.removeFile(file);
+      },
+      acceptedFiles: ".csv"
+    }
+    return retParams;
+  }
+
   render() {
     const {
       selectedActionId,
@@ -220,28 +253,13 @@ export default class AssignAction extends Component {
       selectedActionId && selectedActionId.value,
       actions
     );
-   
+
     const schema = this.getSchema(selectedAction);
+
     const componentConfig = {
       postUrl: `/uploads/assignBulkUpload/${getToken()}`
     };
-
-    let reqParams = {
-      assignType: 'apply_bulk_action',
-      actionId: JSON.stringify(selectedActionId)
-    }
-    
-    if(reasonCodes && reasonCodes.length != 0)
-      reqParams['reasonCodes'] = reasonCodes
-
-    const djsConfig = {
-      params: reqParams,
-      complete(file) {
-        Notifier.success("Added");
-        this.removeFile(file);
-      },
-      acceptedFiles: ".csv"
-    };
+    const djsConfig = this.getParams();
 
     if (loading) {
       return <Loading />;
@@ -261,7 +279,8 @@ export default class AssignAction extends Component {
             <div className="main-content m-t--10">
               <div className="header-block header-account">
                 <div className="additional-info account-info">
-                  <div className="select-wrapper select_div">
+
+                  <div className="select-wrapper select_div dropdown-icon">
                     <div className="select_label">Action Id :</div>
                     <div className="select-form border-style">
                       <SelectSimple
@@ -273,6 +292,28 @@ export default class AssignAction extends Component {
                       <ErrorField name="actionId" />
                     </div>
                   </div>
+
+                  {reasonCodeOptions.length > 0 && (
+                    <div className="select-wrapper select_div dropdown-icon">
+                      <div className="select_label">Reason Code :</div>
+                      <div className="select-form border-style">
+                        <SelectSimple
+                          labelHidden={true}
+                          name="reasonCode"
+                          options={reasonCodeOptions}
+                        />
+                        <ErrorField name="reasonCode" />
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="custom-wrapper">
+                    {selectedAction &&
+                      selectedAction.inputs.map((input, index) => {
+                        return this.getInputSingle(input, index);
+                      })}
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -288,7 +329,7 @@ export default class AssignAction extends Component {
                 />
                 <ErrorField name="actionId" />
               </div> */}
-              {reasonCodeOptions.length > 0 && (
+              {/* reasonCodeOptions.length > 0 && (
                 <div className="select-group">
                   <SelectSimple
                     labelHidden={true}
@@ -297,13 +338,13 @@ export default class AssignAction extends Component {
                   />
                   <ErrorField name="reasonCode" />
                 </div>
-              )}
-              <div className="custom-wrapper">
+              ) */}
+              {/* <div className="custom-wrapper">
                 {selectedAction &&
                   selectedAction.inputs.map((input, index) => {
                     return this.getInputSingle(input, index);
                   })}
-              </div>
+              </div> */}
               {selectedActionId &&
                 <div className="action-block drop-file">
                   <div className="main__block">

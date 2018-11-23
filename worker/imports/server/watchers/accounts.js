@@ -21,7 +21,7 @@ Meteor.startup(function() {
     }
   ];
 
-  const changeStream = AccountsNative.watch(pipeline);
+/*  const changeStream = AccountsNative.watch(pipeline);
 
   changeStream.on(
     "change",
@@ -32,5 +32,5 @@ Meteor.startup(function() {
       },
       function(error) {}
     )
-  );
+  );*/
 });
