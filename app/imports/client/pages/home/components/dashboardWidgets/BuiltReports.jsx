@@ -1,12 +1,12 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import moment from "moment";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
+import FilterService from "../../services/FilterService";
 
 export default class ReportsBuilt extends React.Component {
 
@@ -19,20 +19,21 @@ export default class ReportsBuilt extends React.Component {
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getBuiltReports(filters.selectedUserId);
-    this.getBuiltReportsChartData(filters.selectedUserId);
+    this.getBuiltReports(filters);
+    this.getBuiltReportsChartData(filters);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getBuiltReports(filters.selectedUserId);
-    this.getBuiltReportsChartData(filters.selectedUserId);
+    this.getBuiltReports(filters);
+    this.getBuiltReportsChartData(filters);
   }
 
-  getBuiltReports(authorId) {
+  getBuiltReports(filters) {
     this.setState({ isLoadingBuiltReports: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("reports.getbuilt", authorId, (err, responseData) => {
+      Meteor.call("reports.getbuilt", filters.selectedUserId, filterCondition, (err, responseData) => {
         if (!err) {
           this.setState({ isLoadingBuiltReports: false, builtReports: responseData });
         } else {
@@ -43,10 +44,11 @@ export default class ReportsBuilt extends React.Component {
     }, 1000);
   }
 
-  getBuiltReportsChartData(authorId) {
+  getBuiltReportsChartData(filters) {
     this.setState({ isLoadingReportsBuiltChart: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("reports.getBuiltPerHour", authorId, new Date(moment()), (err, chartData) => {
+      Meteor.call("reports.getBuiltPerHour", filters.selectedUserId, filterCondition, (err, chartData) => {
         if (!err) {
           this.setState({ reportsBuiltChartData: chartData, isLoadingReportsBuiltChart: false });
         } else {

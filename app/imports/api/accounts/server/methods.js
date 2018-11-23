@@ -467,7 +467,7 @@ Meteor.methods({
 
   },
 
-  "accountsAssigned.get"(clientId, facilityId, assigneeId) {
+  "accountsAssigned.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
     let filter = { 'assigneeId': { $ne: null } };
 
     if (clientId && clientId != '-1')
@@ -479,10 +479,13 @@ Meteor.methods({
     if (assigneeId && assigneeId != '-1')
       filter['assigneeId'] = assigneeId;
 
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
     return Accounts.find(filter).fetch();
   },
 
-  async 'account.getAssignedPerHour'(clientId, facilityId, assigneeId, date) {
+  async 'account.getAssignedPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
@@ -497,11 +500,8 @@ Meteor.methods({
     if (assigneeId && assigneeId != '-1')
       filter['assigneeId'] = assigneeId;
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     const acccountsPerHour = await AccountsRaw.aggregateSync([{
       $match: filter,
@@ -531,7 +531,7 @@ Meteor.methods({
     return ActionService.graphStandardizeData(acccountsPerHour);
   },
 
-  "accountsArchived.get"(clientId, facilityId) {
+  "accountsArchived.get"(clientId, facilityId, dateRangeFilter) {
     let filter = { 'state': StateEnum.ARCHIVED };
 
     if (clientId && clientId != '-1')
@@ -540,10 +540,13 @@ Meteor.methods({
     if (facilityId && facilityId != '-1')
       filter['facilityId'] = facilityId;
 
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
     return Accounts.find(filter).fetch();
   },
 
-  async 'account.getArchivedPerHour'(clientId, facilityId, date) {
+  async 'account.getArchivedPerHour'(clientId, facilityId, dateRangeFilter) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
@@ -555,11 +558,8 @@ Meteor.methods({
     if (facilityId && facilityId != '-1')
       filter['facilityId'] = facilityId;
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     const archivedAccountsPerHour = await AccountsRaw.aggregateSync([{
       $match: filter,
@@ -589,7 +589,7 @@ Meteor.methods({
     return ActionService.graphStandardizeData(archivedAccountsPerHour);
   },
 
-  async "escalationResolved.get"(clientId, facilityId) {
+  async "escalationResolved.get"(clientId, facilityId, dateRangeFilter) {
     let filter = { 'employeeToRespond': { $ne: RolesEnum.MANAGER } };
 
     if (clientId && clientId != '-1')
@@ -597,6 +597,9 @@ Meteor.methods({
 
     if (facilityId && facilityId != '-1')
       filter['facilityId'] = facilityId;
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     let AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
@@ -618,7 +621,7 @@ Meteor.methods({
     ]).toArray();
   },
 
-  async "escalationResolved.getPerHour"(clientId, facilityId, date) {
+  async "escalationResolved.getPerHour"(clientId, facilityId, dateRangeFilter) {
     let filter = { 'employeeToRespond': { $ne: RolesEnum.MANAGER } };
 
     if (clientId && clientId != '-1')
@@ -630,11 +633,8 @@ Meteor.methods({
     let AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     const escalationsResolvedPerHour = await AccountsRaw.aggregateSync([{
       $match: filter,

@@ -24,6 +24,8 @@ export default class Home extends React.Component {
       reps: [],
       chartData: [],
       selectedDate: moment(),
+      startDate: moment(),
+      endDate: moment(),
       selectedRep: '',
       clients: [],
       facilities: [],
@@ -31,7 +33,8 @@ export default class Home extends React.Component {
       chartTypes: [],
       selectedChartType: '',
       dateRangeFilters: [],
-      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedUserId: '', selectedDateRange: '' },
+      showCustomDateRange: false,
+      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedUserId: '', selectedDateRange: '', startDate: new Date(moment()), endDate: new Date(moment()) },
     };
   }
 
@@ -157,17 +160,29 @@ export default class Home extends React.Component {
     this.setState({ selectedDate: moment(newDate) });
   };
 
+  onStartDateChange = startDate => {
+    let filters = this.state.filters;
+    filters.startDate = new Date(moment(startDate));
+    this.setState({ startDate: moment(startDate), filters });
+  };
+
+  onEndDateChange = endDate => {
+    let filters = this.state.filters;
+    filters.endDate = new Date(moment(endDate));
+    this.setState({ endDate: moment(endDate), filters });
+  };
+
   onHandleChange = (field, value) => {
     let filters = this.state.filters;
     switch (field) {
       case "clientId":
         filters.selectedClientId = value;
-        this.setState({ filters });
+        this.setState({ filters, facilities: [], users: [] });
         this.getFacilities(value);
         break;
       case "facilityId":
         filters.selectedFacilityId = value;
-        this.setState({ filters });
+        this.setState({ filters, users: [] });
         this.getUsers(value);
         break;
       case "userId":
@@ -175,9 +190,9 @@ export default class Home extends React.Component {
         this.setState({ filters });
         break;
       case "selectChartTypeId":
-        let chartTypes = this.state.chartTypes;
-        let chartType = chartTypes.find(p => p.value == value);
-        let selectedChartType = chartTypes[0];
+        var chartTypes = this.state.chartTypes;
+        var chartType = chartTypes.find(p => p.value == value);
+        var selectedChartType = chartTypes[0];
         if (chartType)
           selectedChartType = chartType;
 
@@ -186,7 +201,12 @@ export default class Home extends React.Component {
         break;
       case "selectedDateRange":
         filters.selectedDateRange = value;
-        this.setState({ filters });
+        if (value === 'custom_range') {
+          this.setState({ filters, showCustomDateRange: true });
+        }
+        else {
+          this.setState({ filters, showCustomDateRange: false });
+        }
         break;
       default:
         break;
@@ -230,7 +250,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { clients, facilities, users, chartTypes, dateRangeFilters } = this.state;
+    const { clients, facilities, users, chartTypes, dateRangeFilters, startDate, endDate, showCustomDateRange } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
 
       // return (
@@ -277,60 +297,98 @@ export default class Home extends React.Component {
       return (
         <div className="dashboard-content-container">
           <div className="dashboard-header-content">
+            <div className="dashboard-header-title">
+              FILTERS FOR DASHBOARD
+            </div>
             <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
-              <div className="flex--helper form-group__pseudo--3">
-                <div className="select-form select-box-width">
-                  <label className="dashboard-label">Clients</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="clientId"
-                      options={clients}
-                    />
+              <div>
+                <div className="flex--helper form-group__pseudo--3">
+                  <div className="select-form select-box-width">
+                    <label className="dashboard-label">Clients</label>
+                    <div className="m-t--5">
+                      <AutoField
+                        labelHidden={true}
+                        name="clientId"
+                        options={clients}
+                      />
+                    </div>
+                  </div>
+                  {
+                    facilities.length > 0 ?
+                      <div className="select-form select-box-width m-l-10">
+                        <label className="dashboard-label">Facilities</label>
+                        <div className="m-t--5">
+                          <AutoField
+                            labelHidden={true}
+                            name="facilityId"
+                            options={facilities} />
+                        </div>
+                      </div> : null
+                  }
+                  {
+                    users.length > 0 ?
+                      <div className="select-form select-box-width m-l-10">
+                        <label className="dashboard-label">Users</label>
+                        <div className="m-t--5">
+                          <AutoField
+                            labelHidden={true}
+                            name="userId"
+                            options={users} />
+                        </div>
+                      </div> : null
+                  }
+                  <div className="select-form select-box-width m-l-10">
+                    <label className="dashboard-label">Chart Types</label>
+                    <div className="m-t--5">
+                      <AutoField
+                        labelHidden={true}
+                        name="selectChartTypeId"
+                        options={chartTypes} />
+                    </div>
                   </div>
                 </div>
-                {
-                  facilities.length > 0 ?
-                    <div className="select-form select-box-width m-l-15">
-                      <label className="dashboard-label">Facilities</label>
-                      <div className="m-t--5">
-                        <AutoField
-                          labelHidden={true}
-                          name="facilityId"
-                          options={facilities} />
-                      </div>
-                    </div> : null
-                }
-                {
-                  users.length > 0 ?
-                    <div className="select-form select-box-width m-l-15">
-                      <label className="dashboard-label">Users</label>
-                      <div className="m-t--5">
-                        <AutoField
-                          labelHidden={true}
-                          name="userId"
-                          options={users} />
-                      </div>
-                    </div> : null
-                }
-                <div className="select-form select-box-width m-l-15">
-                  <label className="dashboard-label">Chart Types</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="selectChartTypeId"
-                      options={chartTypes} />
+                <div className="flex--helper form-group__pseudo--3 m-t--20">
+                  <div className="select-form select-box-width">
+                    <label className="dashboard-label">Date Range Filters</label>
+                    <div className="m-t--5">
+                      <AutoField
+                        labelHidden={true}
+                        name="selectedDateRange"
+                        options={dateRangeFilters}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="select-form select-box-width m-l-15">
-                  <label className="dashboard-label">Date Range Filters</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="selectedDateRange"
-                      options={dateRangeFilters}
-                    />
-                  </div>
+                  {
+                    showCustomDateRange &&
+                    <div style={{ display: 'inherit' }}>
+                      <div className="dashboard-dp-panel">
+                        <DatePicker
+                          calendarClassName="cc-datepicker"
+                          showMonthDropdown
+                          showYearDropdown
+                          yearDropdownItemNumber={4}
+                          todayButton={"Today"}
+                          placeholderText="Start Date"
+                          selected={startDate}
+                          onChange={this.onStartDateChange}
+                          fixedHeight
+                        />
+                      </div>
+                      <div className="dashboard-dp-panel">
+                        <DatePicker
+                          calendarClassName="cc-datepicker"
+                          showMonthDropdown
+                          showYearDropdown
+                          yearDropdownItemNumber={4}
+                          todayButton={"Today"}
+                          placeholderText="End Date"
+                          selected={endDate}
+                          onChange={this.onEndDateChange}
+                          fixedHeight
+                        />
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
             </AutoForm>

@@ -1,16 +1,16 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import moment from "moment";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
+import FilterService from "../../services/FilterService";
+
 
 
 export default class AssignedAccounts extends React.Component {
-
 
   state = {
     isLoadingAssignedAccounts: false,
@@ -21,22 +21,22 @@ export default class AssignedAccounts extends React.Component {
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getAssignedAccounts(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
-    this.getAssignedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
+    this.getAssignedAccounts(filters);
+    this.getAssignedAccountsChartData(filters);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getAssignedAccounts(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
-    this.getAssignedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId);
+    this.getAssignedAccounts(filters);
+    this.getAssignedAccountsChartData(filters);
   }
 
-  getAssignedAccounts(clientId, facilityId, userId) {
+  getAssignedAccounts(filters) {
     this.setState({ isLoadingAssignedAccounts: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("accountsAssigned.get", clientId, facilityId, userId, (err, responseData) => {
+      Meteor.call("accountsAssigned.get", filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId, filterCondition, (err, responseData) => {
         if (!err) {
-
           this.setState({ assignedAccounts: responseData, isLoadingAssignedAccounts: false });
         } else {
           this.setState({ isLoadingAssignedAccounts: false });
@@ -46,10 +46,11 @@ export default class AssignedAccounts extends React.Component {
     }, 1000);
   }
 
-  getAssignedAccountsChartData(clientId, facilityId, userId) {
+  getAssignedAccountsChartData(filters) {
     this.setState({ isLoadingAssignedAccountChart: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("account.getAssignedPerHour", clientId, facilityId, userId, new Date(moment()), (err, chartData) => {
+      Meteor.call("account.getAssignedPerHour", filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId, filterCondition, (err, chartData) => {
         if (!err) {
           this.setState({ assignedAccountsChartData: chartData, isLoadingAssignedAccountChart: false });
         } else {

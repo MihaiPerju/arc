@@ -1,12 +1,12 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import moment from "moment";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
+import FilterService from "../../services/FilterService";
 
 
 export default class EscalationResolved extends React.Component {
@@ -20,20 +20,21 @@ export default class EscalationResolved extends React.Component {
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getEscalationResolved(filters.selectedClientId, filters.selectedFacilityId);
-    this.getEscalationResolvedChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getEscalationResolved(filters);
+    this.getEscalationResolvedChartData(filters);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getEscalationResolved(filters.selectedClientId, filters.selectedFacilityId);
-    this.getEscalationResolvedChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getEscalationResolved(filters);
+    this.getEscalationResolvedChartData(filters);
   }
 
-  getEscalationResolved(clientId, facilityId) {
+  getEscalationResolved(filters) {
     this.setState({ isLoadingEscalationResolved: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("escalationResolved.get", clientId, facilityId, (err, responseData) => {
+      Meteor.call("escalationResolved.get", filters.selectedClientId, filters.selectedFacilityId, filterCondition, (err, responseData) => {
         if (!err) {
           this.setState({ escalations: responseData, isLoadingEscalationResolved: false });
         } else {
@@ -44,10 +45,11 @@ export default class EscalationResolved extends React.Component {
     }, 1000);
   }
 
-  getEscalationResolvedChartData(clientId, facilityId) {
+  getEscalationResolvedChartData(filters) {
     this.setState({ isLoadingEscalationResolvedChart: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("escalationResolved.getPerHour", clientId, facilityId, new Date(moment()), (err, chartData) => {
+      Meteor.call("escalationResolved.getPerHour", filters.selectedClientId, filters.selectedFacilityId, filterCondition, (err, chartData) => {
         if (!err) {
           this.setState({ escalationResolvedChartData: chartData, isLoadingEscalationResolvedChart: false });
         } else {

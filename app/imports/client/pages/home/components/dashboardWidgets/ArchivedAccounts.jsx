@@ -1,12 +1,12 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import moment from "moment";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
+import FilterService from "../../services/FilterService";
 
 
 export default class ArchivedAccounts extends React.Component {
@@ -20,20 +20,21 @@ export default class ArchivedAccounts extends React.Component {
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getArchivedAccounts(filters.selectedClientId, filters.selectedFacilityId);
-    this.getArchivedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getArchivedAccounts(filters);
+    this.getArchivedAccountsChartData(filters);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getArchivedAccounts(filters.selectedClientId, filters.selectedFacilityId);
-    this.getArchivedAccountsChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getArchivedAccounts(filters);
+    this.getArchivedAccountsChartData(filters);
   }
 
-  getArchivedAccounts(clientId, facilityId) {
+  getArchivedAccounts(filters) {
     this.setState({ isLoadingArchivedAccounts: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("accountsArchived.get", clientId, facilityId, (err, responseData) => {
+      Meteor.call("accountsArchived.get", filters.selectedClientId, filters.selectedFacilityId, filterCondition, (err, responseData) => {
         if (!err) {
           this.setState({ archivedAccounts: responseData, isLoadingArchivedAccounts: false });
         } else {
@@ -44,10 +45,11 @@ export default class ArchivedAccounts extends React.Component {
     }, 1000);
   }
 
-  getArchivedAccountsChartData(clientId, facilityId) {
+  getArchivedAccountsChartData(filters) {
     this.setState({ isLoadingArchivedAccountChart: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("account.getArchivedPerHour", clientId, facilityId, new Date(moment()), (err, chartData) => {
+      Meteor.call("account.getArchivedPerHour", filters.selectedClientId, filters.selectedFacilityId, filterCondition, (err, chartData) => {
         if (!err) {
           this.setState({ archivedAccountsChartData: chartData, isLoadingArchivedAccountChart: false });
         } else {

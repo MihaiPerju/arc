@@ -3,7 +3,7 @@ import Security from "/imports/api/reports/security.js";
 import Cronjob from "/imports/api/reports/server/services/CronjobService";
 import reportColumnSchema from "../schemas/reportColumnSchema";
 import ActionService from '../../accounts/server/services/ActionService';
-import moment from 'moment';
+
 
 Meteor.methods({
   "report.delete"(id) {
@@ -83,11 +83,14 @@ Meteor.methods({
     );
   },
 
-  async "reports.getbuilt"(authorId) {
+  async "reports.getbuilt"(authorId, dateRangeFilter) {
     let filter = {};
 
     if (authorId && authorId != '-1')
       filter = { authorId: authorId };
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     let ReportsRaw = Reports.rawCollection();
     ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
@@ -109,7 +112,7 @@ Meteor.methods({
     ]).toArray();
   },
 
-  async 'reports.getBuiltPerHour'(authorId, date) {
+  async 'reports.getBuiltPerHour'(authorId, dateRangeFilter) {
     const ReportsRaw = Reports.rawCollection();
     ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
 
@@ -118,11 +121,8 @@ Meteor.methods({
     if (authorId && authorId != '-1')
       filter = { authorId: authorId };
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     const builtReportsPerHour = await ReportsRaw.aggregateSync([{
       $match: filter,
@@ -152,8 +152,12 @@ Meteor.methods({
     return ActionService.graphStandardizeData(builtReportsPerHour);
   },
 
-  async "reports.getGenerated"() {
+  async "reports.getGenerated"(dateRangeFilter) {
     let filter = { authorId: this.userId };
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
     let ReportsRaw = Reports.rawCollection();
     ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
     return await ReportsRaw.aggregateSync([
@@ -174,17 +178,14 @@ Meteor.methods({
     ]).toArray();
   },
 
-  async 'reports.getGeneratedPerHour'(date) {
+  async 'reports.getGeneratedPerHour'(dateRangeFilter) {
     const ReportsRaw = Reports.rawCollection();
     ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
 
     let filter = { authorId: this.userId };
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     const generatedReportsPerHour = await ReportsRaw.aggregateSync([{
       $match: filter,
@@ -214,11 +215,14 @@ Meteor.methods({
     return ActionService.graphStandardizeData(generatedReportsPerHour);
   },
 
-  async "reports.getSent"(authorId) {
+  async "reports.getSent"(authorId, dateRangeFilter) {
     let filter = {};
 
     if (authorId && authorId != '-1')
       filter = { authorId: authorId };
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     let ReportsRaw = Reports.rawCollection();
     ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
@@ -240,7 +244,7 @@ Meteor.methods({
     ]).toArray();
   },
 
-  async "reports.getSentPerHour"(authorId, date) {
+  async "reports.getSentPerHour"(authorId, dateRangeFilter) {
     let filter = {};
 
     if (authorId && authorId != '-1')
@@ -249,11 +253,8 @@ Meteor.methods({
     const ReportsRaw = Reports.rawCollection();
     ReportsRaw.aggregateSync = Meteor.wrapAsync(ReportsRaw.aggregate);
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     const sentReportsPerHour = await ReportsRaw.aggregateSync([{
       $match: filter,

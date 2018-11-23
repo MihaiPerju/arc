@@ -50,7 +50,7 @@ width: 50%;
 .dashboard-header-content{
   background-color: white;
   height: inherit;
-  padding: 10px;
+  padding: 20px 15px;
   width: 100%;
 }
 
@@ -161,4 +161,14 @@ width: 50%;
  color: #929292;
 }
 
+.dashboard-dp-panel{
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.dashboard-header-title{
+  color: #969696;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
 

@@ -18,22 +18,21 @@ Meteor.methods({
     );
   },
 
-  "notifications.get"() {
+  "notifications.get"(dateRangeFilter) {
     let filter = { 'seen': false };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
     return Notifications.find(filter).fetch();
   },
-  
-  async "notifications.getPerHour"(date) {
+
+  async "notifications.getPerHour"(dateRangeFilter) {
     let filter = { 'seen': false };
 
     let NotificationRaw = Notifications.rawCollection();
     NotificationRaw.aggregateSync = Meteor.wrapAsync(NotificationRaw.aggregate);
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).subtract(1, 'year').startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
     const notificationsPerHour = await NotificationRaw.aggregateSync([{
       $match: filter,

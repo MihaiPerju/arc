@@ -1,12 +1,12 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import moment from "moment";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
+import FilterService from "../../services/FilterService";
 
 export default class GeneratedReports extends React.Component {
 
@@ -18,21 +18,22 @@ export default class GeneratedReports extends React.Component {
   };
 
   componentDidMount() {
-    //const { filters } = this.props;
-    this.getGeneratedReports();
-    this.getGeneratedReportsChartData();
+    const { filters } = this.props;
+    this.getGeneratedReports(filters);
+    this.getGeneratedReportsChartData(filters);
   }
 
-  componentWillReceiveProps() {
-    //const { filters } = props;
-    this.getGeneratedReports();
-    this.getGeneratedReportsChartData();
+  componentWillReceiveProps(props) {
+    const { filters } = props;
+    this.getGeneratedReports(filters);
+    this.getGeneratedReportsChartData(filters);
   }
 
-  getGeneratedReports() {
+  getGeneratedReports(filters) {
     this.setState({ isLoadingGeneratedReports: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("reports.getGenerated", (err, responseData) => {
+      Meteor.call("reports.getGenerated", filterCondition, (err, responseData) => {
         if (!err) {
           this.setState({ isLoadingGeneratedReports: false, generatedReports: responseData });
         } else {
@@ -43,10 +44,11 @@ export default class GeneratedReports extends React.Component {
     }, 1000);
   }
 
-  getGeneratedReportsChartData() {
+  getGeneratedReportsChartData(filters) {
     this.setState({ isLoadingGeneratedReportChart: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("reports.getGeneratedPerHour", new Date(moment()), (err, chartData) => {
+      Meteor.call("reports.getGeneratedPerHour", filterCondition, (err, chartData) => {
         if (!err) {
           this.setState({ generatedReportsChartData: chartData, isLoadingGeneratedReportChart: false });
         } else {

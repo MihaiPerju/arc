@@ -1,12 +1,12 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import moment from "moment";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
+import FilterService from "../../services/FilterService";
 
 export default class SentReports extends React.Component {
 
@@ -19,20 +19,21 @@ export default class SentReports extends React.Component {
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getSentReports(filters.selectedUserId);
-    this.getSentReportsChartData(filters.selectedUserId);
+    this.getSentReports(filters);
+    this.getSentReportsChartData(filters);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getSentReports(filters.selectedUserId);
-    this.getSentReportsChartData(filters.selectedUserId);
+    this.getSentReports(filters);
+    this.getSentReportsChartData(filters);
   }
 
-  getSentReports(authorId) {
+  getSentReports(filters) {
     this.setState({ isLoadingSentReports: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("reports.getSent", authorId, (err, responseData) => {
+      Meteor.call("reports.getSent", filters.selectedUserId, filterCondition, (err, responseData) => {
         if (!err) {
           this.setState({ isLoadingSentReports: false, sentReports: responseData });
         } else {
@@ -43,10 +44,11 @@ export default class SentReports extends React.Component {
     }, 1000);
   }
 
-  getSentReportsChartData(authorId) {
+  getSentReportsChartData(filters) {
     this.setState({ isLoadingSentReportsChart: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("reports.getSentPerHour", authorId, new Date(moment()), (err, chartData) => {
+      Meteor.call("reports.getSentPerHour", filters.selectedUserId, filterCondition, (err, chartData) => {
         if (!err) {
           this.setState({ sentReportsChartData: chartData, isLoadingSentReportsChart: false });
         } else {

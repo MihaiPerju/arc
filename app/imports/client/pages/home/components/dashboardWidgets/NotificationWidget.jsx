@@ -1,12 +1,12 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import moment from "moment";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
+import FilterService from "../../services/FilterService";
 
 export default class NotificationWidget extends React.Component {
 
@@ -19,20 +19,21 @@ export default class NotificationWidget extends React.Component {
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getNotifications(filters.selectedClientId, filters.selectedFacilityId);
-    this.getNotificationsChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getNotifications(filters);
+    this.getNotificationsChartData(filters);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getNotifications(filters.selectedClientId, filters.selectedFacilityId);
-    this.getNotificationsChartData(filters.selectedClientId, filters.selectedFacilityId);
+    this.getNotifications(filters);
+    this.getNotificationsChartData(filters);
   }
 
-  getNotifications() {
+  getNotifications(filters) {
     this.setState({ isLoadingNotifications: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("notifications.get", (err, responseData) => {
+      Meteor.call("notifications.get", filterCondition, (err, responseData) => {
         if (!err) {
           this.setState({ notifications: responseData, isLoadingNotifications: false });
         } else {
@@ -43,10 +44,11 @@ export default class NotificationWidget extends React.Component {
     }, 1000);
   }
 
-  getNotificationsChartData() {
+  getNotificationsChartData(filters) {
     this.setState({ isLoadingNotificationsChart: true });
+    let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
-      Meteor.call("notifications.getPerHour", new Date(moment()), (err, chartData) => {
+      Meteor.call("notifications.getPerHour", filterCondition, (err, chartData) => {
         if (!err) {
           this.setState({ notificationsChartData: chartData, isLoadingNotificationsChart: false });
         } else {

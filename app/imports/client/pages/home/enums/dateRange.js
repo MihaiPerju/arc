@@ -6,7 +6,8 @@ const dateRangeValues = [
   { value: 'month_to_date', label: 'Month To Date' },
   { value: 'last_month', label: 'Last Month' },
   { value: 'year_to_date', label: 'Year To Date' },
-  { value: 'last_year', label: 'Last Year' }
+  { value: 'last_year', label: 'Last Year' },
+  { value: 'custom_range', label: 'Custom Range' }
 ];
 
 export { dateRangeValues };
