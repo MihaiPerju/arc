@@ -135,7 +135,7 @@ export default class CommentSingle extends React.Component {
     const { user } = comment;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
-    const isRep = Roles.userIsInRole(user._id, RolesEnum.REP);
+    const isRep = Roles.userIsInRole(user && user._id, RolesEnum.REP);
     const commentClasses = classNames({
       message: true,
       "text-light-grey": !comment.correctComment,
@@ -160,7 +160,8 @@ export default class CommentSingle extends React.Component {
                     {user.profile.firstName + " " + user.profile.lastName}
                   </a>
                 )
-              : user.profile &&
+              : user &&
+                user.profile &&
                 user.profile.firstName + " " + user.profile.lastName}
           </div>
           <div className="time">
