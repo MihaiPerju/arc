@@ -348,7 +348,7 @@ export default class AccountService {
     }
 
     //Getting meta fields
-    let metaData = {};
+    let metadata = {};
     let count = 1;
     data.map((value, index) => {
       if (!mainFields.includes(index)) {
@@ -358,11 +358,11 @@ export default class AccountService {
           label = labels[index];
         }
         //Set value
-        metaData[label] = value;
+        metadata[label] = value;
       }
     });
     Object.assign(account, {
-      metaData
+      metadata
     });
     if (uploadErrors.numbers || uploadErrors.dates) {
       return null;

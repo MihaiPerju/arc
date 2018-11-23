@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import ScheduleBlock from "./../../ScheduleBlock.jsx";
 import Notifier from "../../../../lib/Notifier";
-import accountsQuery from "/imports/api/accounts/queries/accountList";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
@@ -94,7 +93,7 @@ class ReportHeader extends Component {
           }
         });
     } else {
-      accountsQuery.clone({ filters, options }).fetch((err, accounts) => {
+      Meteor.call("accounts.getSample",filters,(err,accounts)=>{
         if (!err) {
           this.setState({
             accounts,
@@ -104,7 +103,7 @@ class ReportHeader extends Component {
           this.setState({ loading: false });
           Notifier.error("Couldn't get sample accounts");
         }
-      });
+      })
     }
   }
 

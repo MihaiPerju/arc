@@ -268,8 +268,6 @@ export default class AccountListContainer extends Pager {
   };
 
   checkAllAccount = selectAll => {
-    const { data } = this.props;
-
     this.setState({
       bulkAssign: selectAll,
       accountsSelected: [],
@@ -469,9 +467,10 @@ export default class AccountListContainer extends Pager {
       Meteor.userId() !== lockOwnerId &&
       lockBreakUsers.indexOf(Meteor.userId()) === -1
     ) {
-      const lockOwnerName = `${lockOwner.profile.firstName} ${
-        lockOwner.profile.lastName
-      }`;
+      const lockOwnerName =
+        lockOwner &&
+        lockOwner.profile &&
+        `${lockOwner.profile.firstName} ${lockOwner.profile.lastName}`;
       this.setState({
         isLockedDialogActive: true,
         lockOwnerName,

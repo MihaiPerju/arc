@@ -3,8 +3,6 @@ import Accounts from "../collection";
 import AccountSecurity from "./../security";
 import Security from "/imports/api/security/security";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
-import StateEnum from "/imports/api/accounts/enums/states";
-import TimeService from "./services/TimeService";
 import moment from "moment";
 import Facilities from "/imports/api/facilities/collection";
 import Uploads from "/imports/api/uploads/uploads/collection";
@@ -18,14 +16,21 @@ import settings from "/imports/api/settings/enums/settings";
 import Users from "/imports/api/users/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
+import AccountsService from "/imports/api/accounts/server/services/AccountsService";
+
 
 Meteor.methods({
   "accounts.get"(params) {
-    const queryParams = QueryBuilder.getQueryParams(params);
+    let userId = this.userId;
+    const queryParams = QueryBuilder.getAccountParams(params, userId);
     let filters = queryParams.filters;
     let options = queryParams.options;
-
     return Accounts.find(filters, options).fetch();
+  },
+
+  "account.getMetadata"(_id) {
+    const account = Accounts.findOne({ _id });
+    return account.metadata;
   },
 
   "account.freeze"(_id) {
@@ -35,6 +40,10 @@ Meteor.methods({
   "account.addAction"(data) {
     data.userId = this.userId;
     ActionService.createAction(data);
+  },
+
+  "account.getOne"(_id) {
+    return AccountsService.getAccount(_id);
   },
 
   "account.assignUser"({ _id, assigneeId }) {
@@ -169,7 +178,8 @@ Meteor.methods({
   },
 
   "accounts.count"(params) {
-    const queryParams = QueryBuilder.getQueryParams(params);
+    let userId = this.userId;
+    const queryParams = QueryBuilder.getAccountParams(params, userId);
     let filters = queryParams.filters;
     return Accounts.find(filters).count();
   },
@@ -345,10 +355,10 @@ Meteor.methods({
   },
 
   "account.facility"(params) {
-    let accountList = Accounts.find(params).fetch();
+    let accounts = Accounts.find(params).fetch();
     let facilityList = [];
     let facilityObj = [];
-    _.map(accountList, account => {
+    _.map(accounts, account => {
       if (!facilityList.includes(account.facilityId)) {
         facilityList.push(account.facilityId);
       }
@@ -395,11 +405,11 @@ Meteor.methods({
     selectedActionId,
     reasonCodes,
     params,
-    accountList
+    accounts
   ) {
     let accountIdList = [];
-    if (accountList) {
-      accountIdList = Accounts.find({ _id: { $in: accountList } }).fetch();
+    if (accounts) {
+      accountIdList = Accounts.find({ _id: { $in: accounts } }).fetch();
     } else {
       accountIdList = Accounts.find(params).fetch();
     }

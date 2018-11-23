@@ -224,7 +224,7 @@ export default class RouteService {
           icon: "question-circle-o"
         },
         {
-          name: "flagged",
+          name: "accounts/flagged",
           label: "Flagged",
           icon: "flag"
         },

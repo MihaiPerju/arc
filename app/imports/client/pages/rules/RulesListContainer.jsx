@@ -3,8 +3,6 @@ import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import RuleSearchBar from "./components/RuleSearchBar.jsx";
 import RulesList from "./components/RulesList.jsx";
 import RuleContent from "./RuleContent.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/rules/queries/listRules";
 import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import RuleCreate from "./RuleCreate";
@@ -12,7 +10,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 
-class RuleListContainer extends Pager {
+export default class RuleListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -239,12 +237,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return ParamsService.setQuery(query, { page, perPage, filter: {} });
-  },
-  { reactive: true }
-)(RuleListContainer);

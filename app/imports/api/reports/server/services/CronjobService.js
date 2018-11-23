@@ -3,7 +3,6 @@ import ReportsEnum from "/imports/api/schedules/enums/reports";
 import Schedules from "/imports/api/schedules/collection";
 import Reports from "/imports/api/reports/collection";
 import { EJSON } from "meteor/ejson";
-import accountQuery from "/imports/api/accounts/queries/accountList";
 import ReactDOMServer from "react-dom/server";
 import React from "react";
 import { Container, Table } from "semantic-ui-react";
@@ -12,6 +11,7 @@ import Users from "/imports/api/users/collection";
 import Clients from "/imports/api/clients/collection";
 import PropTypes from 'prop-types';
 import { Email } from "meteor/email";
+import Accounts from "/imports/api/accounts/collection";
 
 const AccountData = ({ account }) => {
   return (
@@ -192,7 +192,7 @@ export default class CronjobService {
     const filters = EJSON.parse(report.mongoFilters);
     const userIds = schedule.userIds;
     const clientIds = schedule.clientIds;
-    const accounts = accountQuery.clone({ filters }).fetch();
+    const accounts = Accounts.find(filters).fetch();
 
     CronjobService.createReportPdf(userIds, clientIds, accounts, report);
   }

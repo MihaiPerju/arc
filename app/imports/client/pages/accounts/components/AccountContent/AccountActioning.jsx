@@ -14,7 +14,7 @@ export default class AccountActioning extends React.Component {
   }
 
   openDialog = () => {
-    if (!this.props.metaData) {
+    if (!this.props.metadata) {
       this.setState({
         dialogIsActive: true
       });
@@ -35,7 +35,7 @@ export default class AccountActioning extends React.Component {
       accountId,
       title,
       escalate,
-      metaData,
+      metadata,
       tickle,
       openMetaData,
       closeRightPanel,
@@ -51,7 +51,7 @@ export default class AccountActioning extends React.Component {
         />
       );
     }
-    if (metaData) {
+    if (metadata) {
       openMetaData();
     }
     if (escalate) {

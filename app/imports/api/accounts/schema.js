@@ -126,14 +126,14 @@ export default new SimpleSchema({
   "attachmentIds.$": {
     type: String
   },
-  actionsLinkData: {
+  actionIds: {
     type: Array,
     optional: true
   },
-  "actionsLinkData.$": {
+  "actionIds.$": {
     type: String
   },
-  metaData: {
+  metadata: {
     type: Object,
     blackbox: true,
     optional: true
