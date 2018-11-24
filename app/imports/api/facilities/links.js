@@ -17,11 +17,11 @@ Facilities.addLinks({
         collection: Users,
         field: 'allowedUsers'
     },
-    accounts: {
-        collection: Accounts,
-        type: 'many',
-        inversedBy: 'facility'
-    },
+    // accounts: {
+    //     collection: Accounts,
+    //     type: 'many',
+    //     inversedBy: 'facility'
+    // },
     region: {
         collection: Regions,
         type: 'one',

@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import AccountContentHeader from "./components/AccountContent/AccountContentHeader";
 import InvoiceMembers from "./components/AccountContent/InvoiceMembers";
 import PayerBlock from "./components/AccountContent/PayerBlock";
-import ActionBlock from "./components/AccountContent/ActionBlock";
+import ActionBlock from "./components/AccountContent/ActionBlock"; 
 import LetterList from "./components/AccountContent/LetterList";
 import PdfFiles from "./components/AccountContent/PdfFiles";
 import EscalateReason from "./components/AccountContent/EscalateReason";
-import CommentsListContainer from "/imports/client/pages/comments/CommentsListContainer.jsx";
+import CommentList from "/imports/client/pages/comments/components/CommentList.jsx";
 import Statistics from "/imports/client/pages/accounts/components/Statistics";
 import TickleBlock from "./components/AccountContent/TickleBlock";
 import Notifier from "/imports/client/lib/Notifier";
@@ -65,7 +65,6 @@ export default class AccountContent extends Component {
       freezeAccount
     } = this.props;
 
-
     if (accountsSelected.length) {
       return <Statistics accountsSelected={accountsSelected} />;
     }
@@ -94,10 +93,7 @@ export default class AccountContent extends Component {
             />
             <LetterList account={account} />
             <PdfFiles account={account} />
-            <CommentsListContainer
-              account={account}
-              closeRightPanel={closeRightPanel}
-            />
+            <CommentList account={account} closeRightPanel={closeRightPanel} />
           </div>
         )}
 

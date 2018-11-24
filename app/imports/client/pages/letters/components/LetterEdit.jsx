@@ -20,7 +20,7 @@ export default class LetterEdit extends React.Component {
       attachmentIds,
       letterTemplateId,
       letterValues: keywordsValues
-    };
+    }; 
 
     Meteor.call("letter.update", selectedLetterId, data, err => {
       if (err) {

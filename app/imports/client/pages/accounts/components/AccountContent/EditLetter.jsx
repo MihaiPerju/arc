@@ -3,7 +3,7 @@ import { getImagePath } from "/imports/api/utils";
 import { AutoForm, SelectField } from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import LetterEditContainer from "/imports/client/pages/letters/LetterEditContainer.jsx";
-
+ 
 export default class EditLetter extends Component {
   constructor() {
     super();

@@ -10,9 +10,16 @@ export default class AccountRightSide extends Component {
       wasAccountActioned: false,
       account: {}
     };
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
+    this.pollingMethod = setInterval(() => {
+      this.getAccount();
+    }, 3000);
+  }
+
+  getAccount() {
     const { currentAccount } = this.props;
     Meteor.call("account.getOne", currentAccount, (err, account) => {
       if (!err) {
@@ -45,6 +52,8 @@ export default class AccountRightSide extends Component {
         }
       });
     }
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   };
 
   render() {
@@ -55,7 +64,6 @@ export default class AccountRightSide extends Component {
       accountsSelected,
       removeLock
     } = this.props;
-    console.log(account);
 
     return (
       <div className={fade ? "right__side in" : "right__side"}>
