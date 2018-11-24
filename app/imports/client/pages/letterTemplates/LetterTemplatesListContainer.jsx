@@ -1,16 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import LetterSearchBar from "./components/LetterSearchBar.jsx";
 import LetterTemplatesList from "./components/LetterTemplatesList.jsx";
-import LetterTemplateContent from "./LetterTemplateContent.jsx";
-import LetterTemplateCreate from "./LetterTemplateCreate.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./TemplateRightSide";
 
 export default class LetterTemplateListContainer extends Pager {
   constructor() {
@@ -165,7 +162,6 @@ export default class LetterTemplateListContainer extends Pager {
       tags,
       templates
     } = this.state;
-    const template = objectFromArray(templates, currentTemplate);
 
     return (
       <div className="cc-container">
@@ -206,39 +202,10 @@ export default class LetterTemplateListContainer extends Pager {
         </div>
         {(currentTemplate || create) && (
           <RightSide
-            template={template}
+            currentTemplate={currentTemplate}
             create={create}
             close={this.closeForm}
           />
-        )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { template, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <LetterTemplateCreate close={close} />
-        ) : (
-          <LetterTemplateContent template={template} />
         )}
       </div>
     );
