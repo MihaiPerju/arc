@@ -36,7 +36,8 @@ Meteor.methods({
     const queryParams = QueryBuilder.getClientParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
-
+    //Project fields
+    options.fields = { clientName: 1, tagIds: 1, email: 1 };
     return Clients.find(filters, options).fetch();
   },
 
