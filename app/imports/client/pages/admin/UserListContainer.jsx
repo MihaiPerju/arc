@@ -1,15 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import UserSearchBar from "./components/UserSearchBar.jsx";
 import UserList from "./components/UserList.jsx";
-import UserContent from "./UserContent.jsx";
-import CreateUser from "./CreateUser.jsx";
-import query from "/imports/api/users/queries/listUsers";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
+import RightSide from "./components/UserRightSide";
 
 export default class UserListContainer extends Pager {
   constructor() {
@@ -26,7 +22,6 @@ export default class UserListContainer extends Pager {
       tags: [],
       users: []
     });
-    this.query = query;
     this.method = "users.count";
     this.pollingMethod = null;
   }
@@ -147,7 +142,6 @@ export default class UserListContainer extends Pager {
   };
 
   render() {
-    const { isLoading, error } = this.props;
     const {
       usersSelected,
       currentUser,
@@ -156,15 +150,6 @@ export default class UserListContainer extends Pager {
       range,
       users
     } = this.state;
-    const user = objectFromArray(users, currentUser);
-
-    if (isLoading && !FlowRouter.getQueryParam("email")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>{error.reason}</div>;
-    }
 
     return (
       <div className="cc-container">
@@ -199,33 +184,12 @@ export default class UserListContainer extends Pager {
           />
         </div>
         {(currentUser || create) && (
-          <RightSide close={this.closeForm} create={create} user={user} />
+          <RightSide
+            close={this.closeForm}
+            create={create}
+            currentUser={currentUser}
+          />
         )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { user, create, close } = this.props;
-    const { fade } = this.state;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <CreateUser close={close} /> : <UserContent user={user} />}
       </div>
     );
   }

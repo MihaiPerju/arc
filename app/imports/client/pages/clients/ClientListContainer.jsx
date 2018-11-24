@@ -167,8 +167,6 @@ export default class ClientContainer extends Pager {
       tags
     } = this.state;
 
-    console.log(clients);
-
     return (
       <div className="cc-container">
         <div
