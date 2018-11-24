@@ -7,13 +7,19 @@ Meteor.methods({
     const queryParams = QueryBuilder.getRulesParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
+    //Project fields
+    options.fields = { name: 1 };
     return Rules.find(filters, options).fetch();
   },
-  
+
   "rules.count"(params) {
     const queryParams = QueryBuilder.getRulesParams(params);
     let filters = queryParams.filters;
     return Rules.find(filters).count();
+  },
+
+  "rule.getOne"(_id) {
+    return Rules.findOne({ _id });
   },
 
   "rule.create"(data) {
