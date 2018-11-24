@@ -4,14 +4,39 @@ import ContactBlock from "./components/ClientContent/ContactBlock";
 import ClientTimeline from "./components/ClientContent/ClientTimeline";
 import ClientEdit from "./ClientEdit";
 import { roleGroups } from "/imports/api/users/enums/roles";
+import Notifier from "/imports/client/lib/Notifier";
 
 export default class ClientContent extends Component {
   constructor() {
     super();
     this.state = {
-      edit: false
+      edit: false,
+      client: {}
     };
+    this.pollingMethod = null;
   }
+
+  componentWillMount() {
+    this.pollingMethod = setInterval(() => {
+      this.getClient();
+    }, 3000);
+  }
+
+  getClient() {
+    const { currentClient } = this.props;
+    Meteor.call("client.getOne", currentClient, (err, client) => {
+      if (!err) {
+        this.setState({ client });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount = () => {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  };
 
   setEdit = () => {
     const { edit } = this.state;
@@ -19,8 +44,8 @@ export default class ClientContent extends Component {
   };
 
   render() {
-    const { client, setClient } = this.props;
-    const { edit } = this.state;
+    const { setClient } = this.props;
+    const { edit, client } = this.state;
 
     if (!client) {
       return <div>No Client Selected</div>;

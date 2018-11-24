@@ -21,9 +21,7 @@ export default class AssignByUser extends Component {
     this.getFacilityByAccount();
   }
 
-  onSubmit(params) {
-    console.log(params);
-  }
+  onSubmit(params) {}
 
   getFacilityByAccount = () => {
     Meteor.call("account.facility", {}, (err, facilitiesOption) => {
