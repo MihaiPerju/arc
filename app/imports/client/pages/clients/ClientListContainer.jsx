@@ -1,15 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import ClientSearchBar from "./components/ClientSearchBar.jsx";
 import ClientList from "./components/ClientList.jsx";
-import ClientContent from "./ClientContent.jsx";
-import ClientCreate from "./ClientCreate.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./components/ClientRightSide";
 
 export default class ClientContainer extends Pager {
   constructor() {
@@ -99,15 +97,6 @@ export default class ClientContainer extends Pager {
     });
   };
 
-  getClient = () => {
-    const { currentClient, clients } = this.state;
-    for (let client of clients) {
-      if (client._id === currentClient) {
-        return client;
-      }
-    }
-  };
-
   createForm = () => {
     this.setState({
       currentClient: false,
@@ -120,6 +109,14 @@ export default class ClientContainer extends Pager {
       create: false
     });
     this.updatePager();
+  };
+  getClient = () => {
+    const { currentClient, clients } = this.state;
+    for (let client of clients) {
+      if (client._id === currentClient) {
+        return client;
+      }
+    }
   };
 
   deleteAction = () => {
@@ -160,7 +157,6 @@ export default class ClientContainer extends Pager {
   };
 
   render() {
-    const { isLoading, error } = this.props;
     const {
       clientsSelected,
       currentClient,
@@ -170,15 +166,9 @@ export default class ClientContainer extends Pager {
       total,
       tags
     } = this.state;
-    const client = this.getClient();
 
-    if (isLoading && !FlowRouter.getQueryParam("clientName")) {
-      return <Loading />;
-    }
+    console.log(clients);
 
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -220,41 +210,11 @@ export default class ClientContainer extends Pager {
         </div>
         {(currentClient || create) && (
           <RightSide
-            client={client}
+            currentClient={currentClient}
             create={create}
             close={this.closeForm}
             setClient={this.setClient}
           />
-        )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { client, create, close, setClient } = this.props;
-    const { fade } = this.state;
-
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <ClientCreate close={close} />
-        ) : (
-          <ClientContent setClient={setClient} client={client} />
         )}
       </div>
     );
