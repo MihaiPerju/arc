@@ -8,6 +8,7 @@ Meteor.methods({
     const queryParams = QueryBuilder.getTemplatesParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
+    options.fields = { tagIds: 1, name: 1 };
     return LetterTemplates.find(filters, options).fetch();
   },
 
@@ -15,6 +16,10 @@ Meteor.methods({
     const queryParams = QueryBuilder.getTemplatesParams(params);
     let filters = queryParams.filters;
     return LetterTemplates.find(filters).count();
+  },
+
+  "template.getOne"(_id) {
+    return LetterTemplates.findOne({ _id });
   },
 
   "letterTemplates.get"() {
