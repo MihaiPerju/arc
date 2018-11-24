@@ -44,5 +44,39 @@ export default new SimpleSchema({
   placementDate: {
     type: Date,
     optional: true
-  }
+  },
+  assignType: {
+    type: String,
+    optional: true
+  },
+  facilityType: {
+    type: String,
+    optional: true
+  },
+  userType: {
+    type: String,
+    optional: true
+  },
+  workQueueId: {
+    type: String,
+    optional: true
+  },
+  actionId: {
+    type: Object,
+    blackbox: true,
+    optional: true
+  },
+  reasonCodes:{
+    type: Array,
+    optional: true
+  },
+  "reasonCodes.$":{
+    type: String,
+    optional: true
+  },
+  customFields: {
+    type: Object,
+    blackbox: true,
+    optional: true
+  },
 });

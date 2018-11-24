@@ -88,6 +88,11 @@ export default class RouteService {
           name: "tags/list",
           label: "Tags",
           icon: "tags"
+        },
+        {
+          name: "bulk/action",
+          label: "Bulk Action",
+          icon: "thumb-tack"
         }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {

@@ -1,5 +1,6 @@
 export default {
   RUN_REPORT: "report",
   IMPORT_DATA: "dataImport",
-  RETRY_UPLOAD: "retryUpload"
+  RETRY_UPLOAD: "retryUpload",
+  BULK_UPLOAD: "bulkUpload"
 };

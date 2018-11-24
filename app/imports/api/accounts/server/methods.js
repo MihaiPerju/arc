@@ -18,6 +18,7 @@ import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import AccountsService from "/imports/api/accounts/server/services/AccountsService";
 
+
 Meteor.methods({
   "accounts.get"(params) {
     let userId = this.userId;
