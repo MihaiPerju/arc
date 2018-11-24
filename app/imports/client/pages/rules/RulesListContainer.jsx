@@ -1,14 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import RuleSearchBar from "./components/RuleSearchBar.jsx";
 import RulesList from "./components/RulesList.jsx";
-import RuleContent from "./RuleContent.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
-import RuleCreate from "./RuleCreate";
 import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
+import RightSide from "./RuleRightSide";
 
 export default class RuleListContainer extends Pager {
   constructor() {
@@ -156,7 +153,6 @@ export default class RuleListContainer extends Pager {
   };
 
   render() {
-    const { loading, error } = this.props;
     const {
       rulesSelected,
       currentRule,
@@ -165,15 +161,7 @@ export default class RuleListContainer extends Pager {
       total,
       rules
     } = this.state;
-    const rule = objectFromArray(rules, currentRule);
 
-    if (loading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -206,33 +194,12 @@ export default class RuleListContainer extends Pager {
           />
         </div>
         {(currentRule || create) && (
-          <RightSide rule={rule} create={create} close={this.closeForm} />
+          <RightSide
+            currentRule={currentRule}
+            create={create}
+            close={this.closeForm}
+          />
         )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { rule, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <RuleCreate close={close} /> : <RuleContent rule={rule} />}
       </div>
     );
   }
