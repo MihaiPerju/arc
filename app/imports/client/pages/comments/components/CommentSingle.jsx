@@ -24,7 +24,9 @@ export default class CommentSingle extends React.Component {
     const { flags } = this.props.account;
     const index = flags.findIndex(flag => {
       const { flagAction } = flag;
-      return flagAction.commentId === commentId && flagAction.isOpen;
+      return (
+        flagAction && flagAction.commentId === commentId && flagAction.isOpen
+      );
     });
     return index > -1 ? true : false;
   };
@@ -41,7 +43,9 @@ export default class CommentSingle extends React.Component {
     } else if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
       const index = flags.findIndex(flag => {
         const { flagAction } = flag;
-        return flagAction.commentId === commentId && flagAction.isOpen;
+        return (
+          flagAction && flagAction.commentId === commentId && flagAction.isOpen
+        );
       });
       return index === -1 ? true : false;
     }
@@ -122,7 +126,9 @@ export default class CommentSingle extends React.Component {
     if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
       const index = flags.findIndex(flag => {
         const { flagAction } = flag;
-        return flagAction.commentId === commentId && !flagAction.isOpen;
+        return (
+          flagAction && flagAction.commentId === commentId && !flagAction.isOpen
+        );
       });
       return index === -1 ? true : false;
     }
