@@ -1,17 +1,14 @@
-import React, { Component } from "react";
+import React from "react";
 import ReportList from "./components/ReportList.jsx";
 import ReportSearchBar from "./components/ReportSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import ReportContent from "./ReportContent.jsx";
-import ReportCreate from "./ReportCreate.jsx";
-import { objectFromArray } from "/imports/api/utils";
-import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import substatesQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./ReportRightSide";
 
 export default class ReportListContainer extends Pager {
   constructor() {
@@ -194,7 +191,6 @@ export default class ReportListContainer extends Pager {
       tags,
       reports
     } = this.state;
-    const report = objectFromArray(reports, currentReport);
 
     return (
       <div className="cc-container">
@@ -237,47 +233,10 @@ export default class ReportListContainer extends Pager {
         {(currentReport || create) && (
           <RightSide
             close={this.closeForm}
-            report={report}
+            currentReport={currentReport}
             create={create}
             substates={substates}
             closeRightPanel={this.closeRightPanel}
-          />
-        )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { report, create, close, substates, closeRightPanel } = this.props;
-    const { fade } = this.state;
-    const classes = classNames({
-      right__side: true,
-      in: fade
-    });
-    return (
-      <div className={classes}>
-        {create ? (
-          <ReportCreate close={close} substates={substates} />
-        ) : (
-          <ReportContent
-            closeRightPanel={closeRightPanel}
-            substates={substates}
-            report={report}
           />
         )}
       </div>

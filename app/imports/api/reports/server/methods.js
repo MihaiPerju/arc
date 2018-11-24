@@ -19,6 +19,10 @@ Meteor.methods({
     return Reports.find(filters).count();
   },
 
+  "report.getOne"(_id) {
+    return Reports.findOne(_id);
+  },
+
   "report.delete"(id) {
     Security.hasRightsOnReport(this.userId, id);
     Reports.remove({ _id: id });
