@@ -103,4 +103,17 @@ export default class AccountsService {
 
     return accounts[0];
   }
+
+  static applyProjection(options) {
+    _.extend(options, {
+      fields: {
+        acctBal: 1,
+        acctNum: 1,
+        createdAt: 1,
+        tagIds: 1,
+        substate: 1,
+        ptName: 1,
+      }
+    });
+  }
 }
