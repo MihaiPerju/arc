@@ -1,6 +1,6 @@
 import Tags from "../collection.js";
 import Users from "/imports/api/users/collection.js";
-import RolesEnum,{roleGroups} from "/imports/api/users/enums/roles";
+import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import TagService from "/imports/api/tags/server/services/TagService";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
@@ -9,6 +9,7 @@ Meteor.methods({
     const queryParams = QueryBuilder.getTagsParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
+    options.fields = { name: 1 };
     return Tags.find(filters, options).fetch();
   },
 
@@ -17,6 +18,11 @@ Meteor.methods({
     let filters = queryParams.filters;
     return Tags.find(filters).count();
   },
+
+  "tag.getOne"(_id) {
+    return Tags.findOne({ _id });
+  },
+
   "tag.create"(data) {
     return TagService.createTag(data);
   },

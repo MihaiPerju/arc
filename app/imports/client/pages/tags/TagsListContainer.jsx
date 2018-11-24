@@ -133,8 +133,6 @@ export default class TagsListContainer extends Pager {
   render() {
     const { tagsSelected, currentTag, create, range, total, tags } = this.state;
 
-    const tag = objectFromArray(tags, currentTag);
-
     return (
       <div className="cc-container">
         <div
@@ -170,7 +168,11 @@ export default class TagsListContainer extends Pager {
           />
         </div>
         {(currentTag || create) && (
-          <TagPanel tag={tag} create={create} close={this.closeForm} />
+          <TagPanel
+            currentTag={currentTag}
+            create={create}
+            close={this.closeForm}
+          />
         )}
       </div>
     );
