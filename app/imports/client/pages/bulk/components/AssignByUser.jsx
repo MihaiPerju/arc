@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SimpleSchema from "simpl-schema";
-import { AutoForm, AutoField, ErrorField, SelectField } from "/imports/ui/forms";
+import { AutoForm, ErrorField, SelectField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "/imports/api/uploads/utils";
@@ -14,7 +14,7 @@ export default class AssignByUser extends Component {
       userOptions: [],
       facilityType: "",
       userType: ""
-    }
+    };
   }
 
   componentDidMount() {
@@ -38,35 +38,39 @@ export default class AssignByUser extends Component {
   };
 
   onHandleChange(field, value) {
-    if (field == 'facilityId') {
+    if (field == "facilityId") {
       this.setState({ facilityType: value });
       if (value) {
-        Meteor.call(
-          "account.facility.user",
-          value,
-          (err, userOptions) => {
-            if (!err) {
-              this.setState({ userOptions });
-            } else {
-              this.setState({ userOptions: [] });
-            }
+        Meteor.call("account.facility.user", value, (err, userOptions) => {
+          if (!err) {
+            this.setState({ userOptions });
+          } else {
+            this.setState({ userOptions: [] });
           }
-        );
+        });
       } else {
         this.setState({ userOptions: [] });
       }
     }
-    if (field == 'assigneeId') { this.setState({ userType: value }); }
+    if (field == "assigneeId") {
+      this.setState({ userType: value });
+    }
   }
 
   render() {
-    const { model, facilitiesOption, userOptions, facilityType, userType } = this.state;
+    const {
+      model,
+      facilitiesOption,
+      userOptions,
+      facilityType,
+      userType
+    } = this.state;
     const componentConfig = {
       postUrl: `/uploads/assignBulkUpload/${getToken()}`
     };
     const djsConfig = {
       params: {
-        assignType: 'assign_by_user',
+        assignType: "assign_by_user",
         facilityType: facilityType,
         userType: userType
       },
@@ -78,7 +82,6 @@ export default class AssignByUser extends Component {
     };
     return (
       <div className="create-form">
-
         <AutoForm
           onSubmit={this.onSubmit.bind(this)}
           schema={schema}
@@ -119,8 +122,7 @@ export default class AssignByUser extends Component {
             </div>
           </div>
 
-
-          {facilityType && userType &&
+          {facilityType && userType && (
             <div className="select-row">
               <div className="action-block drop-file">
                 <div className="main__block">
@@ -128,19 +130,21 @@ export default class AssignByUser extends Component {
                     <div className="add-content">
                       <i className="icon-upload" />
                       <div className="drop-file__wrapper">
-                        <DropzoneComponent config={componentConfig} djsConfig={djsConfig} />
+                        <DropzoneComponent
+                          config={componentConfig}
+                          djsConfig={djsConfig}
+                        />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          }
+          )}
         </AutoForm>
       </div>
-    )
+    );
   }
-
 }
 
 const schema = new SimpleSchema({
