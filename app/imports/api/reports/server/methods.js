@@ -10,6 +10,7 @@ Meteor.methods({
     const queryParams = QueryBuilder.getReportsParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
+    options.fields = { name: 1, tagIds: 1 };
     return Reports.find(filters, options).fetch();
   },
 
