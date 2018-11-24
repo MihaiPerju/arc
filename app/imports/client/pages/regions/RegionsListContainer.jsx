@@ -1,14 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import RegionSearchBar from "./components/RegionSearchBar.jsx";
 import RegionsList from "./components/RegionsList.jsx";
-import RegionContent from "./RegionContent.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
-import RegionCreate from "./RegionCreate";
 import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
+import RightSide from "./RegionRightSide";
 
 export default class RegionListContainer extends Pager {
   constructor() {
@@ -164,7 +161,6 @@ export default class RegionListContainer extends Pager {
       total,
       regions
     } = this.state;
-    const region = objectFromArray(regions, currentRegion);
 
     return (
       <div className="cc-container">
@@ -198,36 +194,7 @@ export default class RegionListContainer extends Pager {
           />
         </div>
         {(currentRegion || create) && (
-          <RightSide region={region} create={create} close={this.closeForm} />
-        )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { region, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <RegionCreate close={close} />
-        ) : (
-          <RegionContent region={region} />
+          <RightSide currentRegion={currentRegion} create={create} close={this.closeForm} />
         )}
       </div>
     );
