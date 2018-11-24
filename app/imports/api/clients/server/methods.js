@@ -17,12 +17,18 @@ Meteor.methods({
     return Clients.insert(data);
   },
 
-  "client.get"(id) {
+  "client.get"(_id) {
     Security.isAdminOrTech(this.userId);
 
     return Clients.findOne({
-      _id: id
+      _id
     });
+  },
+
+  "client.getOne"(_id) {
+    Security.isAdminOrTech(this.userId);
+
+    return Clients.findOne({ _id });
   },
 
   "clients.get"(params) {

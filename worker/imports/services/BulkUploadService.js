@@ -19,7 +19,6 @@ export default class BulkUploadService {
     });
     if (job) {
       //Update the job as taken
-     // console.log(job);
          JobQueue.update({
         _id: job._id
       }, {
