@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AccountContentHeader from "./components/AccountContent/AccountContentHeader";
 import InvoiceMembers from "./components/AccountContent/InvoiceMembers";
 import PayerBlock from "./components/AccountContent/PayerBlock";
-import ActionBlock from "./components/AccountContent/ActionBlock";
+import ActionBlock from "./components/AccountContent/ActionBlock"; 
 import LetterList from "./components/AccountContent/LetterList";
 import PdfFiles from "./components/AccountContent/PdfFiles";
 import EscalateReason from "./components/AccountContent/EscalateReason";

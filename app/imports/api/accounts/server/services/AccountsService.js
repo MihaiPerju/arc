@@ -75,7 +75,7 @@ export default class AccountsService {
       },
       {
         $lookup: {
-          from: "account_actions",
+          from: "letters",
           localField: "letterIds",
           foreignField: "_id",
           as: "letters"
