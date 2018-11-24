@@ -9,6 +9,7 @@ Meteor.methods({
     const queryParams = QueryBuilder.getActionsParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
+    options.fields = { tagIds: 1, title: 1 };
     return Actions.find(filters, options).fetch();
   },
 
@@ -16,6 +17,10 @@ Meteor.methods({
     const queryParams = QueryBuilder.getActionsParams(params);
     let filters = queryParams.filters;
     return Actions.find(filters).count();
+  },
+
+  "action.getOne"(_id) {
+    return Actions.findOne({ _id });
   },
 
   "action.create"(data) {

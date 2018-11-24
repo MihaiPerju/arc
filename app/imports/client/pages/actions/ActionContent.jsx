@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ActionHeader from "./components/ActionContentHeader";
 import ActionEdit from "./ActionEdit";
+import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ActionContent extends Component {
   constructor() {
@@ -8,6 +10,7 @@ export default class ActionContent extends Component {
     this.state = {
       edit: false
     };
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
@@ -15,11 +18,26 @@ export default class ActionContent extends Component {
     if (id) {
       this.setEdit();
     }
+    this.pollingMethod = setInterval(() => {
+      this.getAction();
+    }, 3000);
   }
 
-  componentWillReceiveProps() {
-    // this.setState({ edit: false });
+  getAction() {
+    const { currentAction } = this.props;
+    Meteor.call("action.getOne", currentAction, (err, action) => {
+      if (!err) {
+        this.setState({ action });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
+
+  componentWillUnmount = () => {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  };
 
   setEdit = () => {
     const { edit } = this.state;
@@ -27,8 +45,13 @@ export default class ActionContent extends Component {
   };
 
   render() {
-    const { action, substates } = this.props;
-    const { edit } = this.state;
+    const { substates } = this.props;
+    const { action, edit } = this.state;
+
+    if (!action) {
+      return <Loading />;
+    }
+
     return (
       <div className="section-action">
         {edit ? (

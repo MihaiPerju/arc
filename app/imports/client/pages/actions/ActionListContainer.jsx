@@ -1,16 +1,14 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import ActionSearchBar from "./components/ActionSearchBar.jsx";
 import ActionList from "./components/ActionList.jsx";
-import ActionContent from "./ActionContent.jsx";
-import ActionCreate from "./ActionCreate.jsx";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./ActionRightSide";
 
 export default class ActionListContainer extends Pager {
   constructor() {
@@ -180,7 +178,6 @@ export default class ActionListContainer extends Pager {
       tags,
       actions
     } = this.state;
-    const action = objectFromArray(actions, currentAction);
 
     return (
       <div className="cc-container">
@@ -220,40 +217,11 @@ export default class ActionListContainer extends Pager {
         </div>
         {(currentAction || create) && (
           <RightSide
-            action={action}
+            currentAction={currentAction}
             create={create}
             close={this.closeForm}
             substates={substates}
           />
-        )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { action, create, close, substates } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <ActionCreate substates={substates} close={close} />
-        ) : (
-          <ActionContent substates={substates} action={action} />
         )}
       </div>
     );
