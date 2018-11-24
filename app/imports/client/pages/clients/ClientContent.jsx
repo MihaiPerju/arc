@@ -5,13 +5,13 @@ import ClientTimeline from "./components/ClientContent/ClientTimeline";
 import ClientEdit from "./ClientEdit";
 import { roleGroups } from "/imports/api/users/enums/roles";
 import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ClientContent extends Component {
   constructor() {
     super();
     this.state = {
-      edit: false,
-      client: {}
+      edit: false
     };
     this.pollingMethod = null;
   }
@@ -48,7 +48,7 @@ export default class ClientContent extends Component {
     const { edit, client } = this.state;
 
     if (!client) {
-      return <div>No Client Selected</div>;
+      return <Loading />;
     }
 
     return (

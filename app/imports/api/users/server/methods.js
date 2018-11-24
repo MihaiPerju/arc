@@ -33,8 +33,13 @@ Meteor.methods({
     const queryParams = QueryBuilder.getUserParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
-
+    //Project fields
+    options.fields = { emails: 1 };
     return Users.find(filters, options).fetch();
+  },
+
+  "user.getOne"(_id) {
+    return Users.findOne({ _id });
   },
 
   "users.count"(params) {
