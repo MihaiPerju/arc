@@ -16,7 +16,7 @@ export default class AccountRightSide extends Component {
   componentWillMount() {
     this.pollingMethod = setInterval(() => {
       this.getAccount();
-    }, 10000);
+    }, 3000);
   }
 
   getAccount() {
