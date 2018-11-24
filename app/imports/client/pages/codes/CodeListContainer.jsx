@@ -1,16 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import CodeList from "./components/CodeList.jsx";
 import CodeSearchBar from "./components/CodeSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import CodeContent from "./CodeContent.jsx";
-import CodeCreate from "./CodeCreate.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./CodeRightSide";
 
 export default class CodeListContainer extends Pager {
   constructor() {
@@ -164,7 +161,6 @@ export default class CodeListContainer extends Pager {
   };
 
   render() {
-    const { isLoading, error } = this.props;
     const {
       codesSelected,
       currentCode,
@@ -174,15 +170,7 @@ export default class CodeListContainer extends Pager {
       tags,
       codes
     } = this.state;
-    const code = objectFromArray(codes, currentCode);
 
-    if (isLoading && !FlowRouter.getQueryParam("code")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -220,33 +208,12 @@ export default class CodeListContainer extends Pager {
           />
         </div>
         {(currentCode || create) && (
-          <RightSide code={code} create={create} close={this.closeForm} />
+          <RightSide
+            currentCode={currentCode}
+            create={create}
+            close={this.closeForm}
+          />
         )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { code, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <CodeCreate close={close} /> : <CodeContent code={code} />}
       </div>
     );
   }

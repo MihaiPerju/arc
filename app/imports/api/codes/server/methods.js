@@ -6,6 +6,8 @@ Meteor.methods({
     const queryParams = QueryBuilder.getCodesParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
+    //Project fields
+    options.fields = { code: 1, tagIds: 1 };
     return Codes.find(filters, options).fetch();
   },
 
@@ -13,6 +15,10 @@ Meteor.methods({
     const queryParams = QueryBuilder.getCodesParams(params);
     let filters = queryParams.filters;
     return Codes.find(filters).count();
+  },
+
+  "code.getOne"(_id) {
+    return Codes.findOne({ _id });
   },
 
   "code.create"(data) {
