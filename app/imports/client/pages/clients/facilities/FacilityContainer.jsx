@@ -156,8 +156,6 @@ export default class FacilityContainer extends Pager {
       facilities
     } = this.state;
 
-    console.log(facilities);
-
     return (
       <div className="cc-container">
         <div
