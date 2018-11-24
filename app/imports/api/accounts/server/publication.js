@@ -5,15 +5,17 @@ Meteor.publish("unassignedAccounts", () => {
   let unassignedCount = new Counter(
     "unassignedAccounts",
     Accounts.find({
-      $and: [{
-        assigneeId: null
-      }, {
-        workQueueId: null
-      }]
+      $and: [
+        {
+          assigneeId: null
+        },
+        {
+          workQueueId: null
+        }
+      ]
     }),
     1000
   );
-
   return unassignedCount;
 });
 
@@ -59,7 +61,8 @@ Meteor.publish("flaggedAccounts", flaggedUserId => {
   let flaggedCount = new Counter(
     "flaggedAccounts",
     Accounts.find({
-      $and: [{
+      $and: [
+        {
           flagCounter: {
             $gt: 0
           }
@@ -70,7 +73,7 @@ Meteor.publish("flaggedAccounts", flaggedUserId => {
           }
         }
       ]
-    }),
+    })
   );
   return flaggedCount;
 });
