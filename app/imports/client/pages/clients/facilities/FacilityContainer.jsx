@@ -1,13 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import FacilitySearchBar from "./components/FacilitySearchBar.jsx";
 import FacilityList from "./components/FacilityList.jsx";
-import FacilityContent from "./FacilityContent.jsx";
-import FacilityCreate from "./FacilityCreate.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../../lib/ParamsService";
 import Pager from "../../../lib/Pager";
+import RightSide from "./FacilityRightSide";
 
 export default class FacilityContainer extends Pager {
   constructor() {
@@ -93,15 +91,6 @@ export default class FacilityContainer extends Pager {
     this.setState({ facilitiesSelected });
   };
 
-  getFacility() {
-    const { currentFacility, facilities } = this.state;
-    for (let facility of facilities) {
-      if (facility._id === currentFacility) {
-        return facility;
-      }
-    }
-  }
-
   createForm = () => {
     this.setState({
       currentFacility: false,
@@ -166,7 +155,8 @@ export default class FacilityContainer extends Pager {
       total,
       facilities
     } = this.state;
-    const facility = this.getFacility();
+
+    console.log(facilities);
 
     return (
       <div className="cc-container">
@@ -201,41 +191,11 @@ export default class FacilityContainer extends Pager {
         </div>
         {(currentFacility || create) && (
           <RightSide
-            facility={facility}
+            currentFacility={currentFacility}
             create={create}
             close={this.closeForm}
             setFacility={this.setFacility}
           />
-        )}
-      </div>
-    );
-  }
-}
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { facility, create, close, setFacility } = this.props;
-
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <FacilityCreate close={close} />
-        ) : (
-          <FacilityContent setFacility={setFacility} facility={facility} />
         )}
       </div>
     );

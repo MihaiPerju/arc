@@ -16,22 +16,25 @@ Meteor.methods({
     const queryParams = QueryBuilder.getFacilitiesParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
+    options.fields = { name: 1 };
     return Facilities.find(filters, options).fetch();
   },
+
   "facilities.count"(params) {
     const queryParams = QueryBuilder.getFacilitiesParams(params);
     let filters = queryParams.filters;
     return Facilities.find(filters).count();
   },
+
+  "facility.getOne"(_id) {
+    Security.isAdminOrTech(this.userId);
+    return Facilities.findOne({ _id });
+  },
+
   "facility.create"(data) {
     Security.isAdminOrTech(this.userId);
 
     Facilities.insert(data);
-  },
-
-  "facility.get"(facilityId) {
-    Security.isAdminOrTech(this.userId);
-    return Facilities.findOne(facilityId);
   },
 
   "facility.update"(facility) {

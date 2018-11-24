@@ -7,6 +7,8 @@ import InventoryBlock from "./components/FacilityContent/InventoryBlock";
 import PaymentBlock from "./components/FacilityContent/PaymentBlock";
 import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.jsx";
 import { roleGroups } from "/imports/api/users/enums/roles";
+import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class FacilityContent extends Component {
   constructor() {
@@ -17,20 +19,42 @@ export default class FacilityContent extends Component {
       inventoryFacility: null,
       resetImportForm: false
     };
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
-    const { facility } = this.props;
-    const { placementRules } = facility;
-    this.setState({
-      copiedPlacementRules: placementRules,
-      inventoryFacility: facility
+    this.pollingMethod = setInterval(() => {
+      this.getFacility();
+    }, 3000);
+  }
+
+  getFacility() {
+    const { currentFacility } = this.props;
+    Meteor.call("facility.getOne", currentFacility, (err, facility) => {
+      if (!err) {
+        this.setState({ facility });
+        this.getRules();
+      } else {
+        Notifier.error(err.reason);
+      }
     });
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({ edit: false });
+  getRules() {
+    const { facility } = this.state;
+    if (facility) {
+      const { placementRules } = facility;
+      this.setState({
+        copiedPlacementRules: placementRules,
+        inventoryFacility: facility
+      });
+    }
   }
+
+  componentWillUnmount = () => {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  };
 
   setEdit = () => {
     const { edit } = this.state;
@@ -55,11 +79,13 @@ export default class FacilityContent extends Component {
   };
 
   render() {
-    const { facility, setFacility } = this.props;
-    const { edit, inventoryFacility, resetImportForm } = this.state;
+    const { setFacility } = this.props;
+    const { facility, edit, inventoryFacility, resetImportForm } = this.state;
+
     if (!facility) {
-      return <div>No Facility Selected</div>;
+      return <Loading />;
     }
+
     return (
       <div className="main-content facility-content">
         <div className="breadcrumb">

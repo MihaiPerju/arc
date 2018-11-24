@@ -144,7 +144,7 @@ export default class ImportingRules extends React.Component {
         ) : (
           <AutoForm
             disabled={disabled}
-            model={model[rules] ? model[rules] : {}}
+            model={model && model[rules] ? model[rules] : {}}
             schema={schema}
             onChange={this.onChange.bind(this)}
             onSubmit={this.onSubmitImportingRules}
