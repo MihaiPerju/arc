@@ -19,7 +19,6 @@ export default class RightSide extends Component {
   render() {
     const { currentClient, create, close, setClient } = this.props;
     const { fade } = this.state;
-
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         {create ? (

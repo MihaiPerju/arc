@@ -80,6 +80,7 @@ export default class AccountContent extends Component {
     const { tableHeader, accounts, report } = this.props;
     const { reportColumns } = report;
     const metadataHeaders = this.getMetadataHeaders();
+
     if (accounts && !accounts.length) {
       return <div>No Accounts</div>;
     }

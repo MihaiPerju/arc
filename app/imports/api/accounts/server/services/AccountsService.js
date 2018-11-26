@@ -104,6 +104,19 @@ export default class AccountsService {
     return accounts[0];
   }
 
+  static async getSample(filters) {
+    const AccountsRaw = Accounts.rawCollection();
+
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+    let accounts = await AccountsRaw.aggregateSync([
+      {
+        $match: { acctNum: "1" }
+      }
+    ]).toArray();
+
+    return accounts;
+  }
+
   static applyProjection(options) {
     _.extend(options, {
       fields: {
@@ -112,7 +125,7 @@ export default class AccountsService {
         createdAt: 1,
         tagIds: 1,
         substate: 1,
-        ptName: 1,
+        ptName: 1
       }
     });
   }

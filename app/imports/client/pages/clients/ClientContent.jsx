@@ -63,10 +63,11 @@ export default class ClientContent extends Component {
               client={client}
             />
             <ContactBlock client={client} />
+
             {Roles.userIsInRole(
               Meteor.userId(),
               roleGroups.ADMIN_TECH_MANAGER
-            ) && <ClientTimeline client={client} />}
+            ) && <ClientTimeline clientId={client._id} />}
           </div>
         )}
       </div>
