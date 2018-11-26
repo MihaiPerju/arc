@@ -761,10 +761,10 @@ export default class QueryBuilder {
     return queryParams;
   }
 
-  static secureAccounts(queryParams, params, userId) {
+  static secureAccounts(queryParams, params, userId = '') {
     const user = Users.findOne({ _id: userId });
     let clientIds = [];
-    let tagIds =[];
+    let tagIds = [];
 
     if (user) {
       clientIds = user.clientIds;
@@ -772,9 +772,7 @@ export default class QueryBuilder {
     }
     const userFacilities = Facilities.find(
       {
-        allowedUsers: {
-          $in: [this.userId]
-        }
+        allowedUsers: userId
       },
       {
         fields: {
@@ -783,6 +781,8 @@ export default class QueryBuilder {
       }
     ).fetch();
 
+
+    // Is this even used any more? If so should be combined w/ above code to be smaller / more efficient
     let userFacilitiesArr = [];
     for (let element of userFacilities) {
       userFacilitiesArr.push(element._id);
