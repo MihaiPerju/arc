@@ -8,6 +8,7 @@ import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import Accounts from "/imports/api/accounts/collection";
 import ActionService from "/imports/api/accounts/server/services/ActionService";
+import bulkType from "/imports/api/bulk/enums/pages";
 
 export default class BulkUploadService {
   static run() {
@@ -18,7 +19,7 @@ export default class BulkUploadService {
     });
     if (job) {
       //Update the job as taken
-      JobQueue.update(
+       JobQueue.update(
         {
           _id: job._id
         },
@@ -27,7 +28,7 @@ export default class BulkUploadService {
             workerId
           }
         }
-      );
+      ); 
       this.processBulkUploadFile(job);
     }
   }
@@ -70,7 +71,7 @@ export default class BulkUploadService {
 
           if (acctData) {
             switch (jobData.assignType) {
-              case "assign_by_user":
+              case bulkType.ASSIGN_USER:
                 Accounts.update(
                   {
                     _id: acctData._id
@@ -85,7 +86,7 @@ export default class BulkUploadService {
                   }
                 );
                 break;
-              case "assign_by_group":
+              case bulkType.ASSIGN_WORKQUEUE:
                 Accounts.update(
                   {
                     _id: acctData._id
@@ -100,7 +101,7 @@ export default class BulkUploadService {
                   }
                 );
                 break;
-              case "apply_bulk_action":
+              case bulkType.ASSIGN_ACTION:
                 data.actionId = jobData.actionId;
                 data.reasonCode = jobData.reasonCodes;
                 data.userId = jobData.userId;

@@ -7,6 +7,8 @@ import { getToken } from "/imports/api/uploads/utils";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import WorkQueueService from "/imports/client/pages/accounts/services/WorkQueueService";
+import pages from "/imports/api/bulk/enums/pages";
+import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 
 
 export default class AssignByWorkQueue extends Component {
@@ -15,8 +17,10 @@ export default class AssignByWorkQueue extends Component {
     this.state = {
       model: {},
       workQueueOptions: [],
-      workQueueId: ""
+      workQueueId: "",
+      queueStatus: false
     }
+    this.getStatus = null;
   }
 
   componentWillMount() {
@@ -36,29 +40,65 @@ export default class AssignByWorkQueue extends Component {
       });
   }
 
+  componentDidMount() {
+    this.getStatus = setInterval(() => {
+      this.getJobQueueStatus();
+    }, 3000);
+  }
+
   onHandleChange(field, value) {
     if (field == 'workQueueId') { this.setState({ workQueueId: value }); }
   }
 
+  getJobQueueStatus = () => {
+    this.setState({ queueStatus: false });
+    Meteor.call("jobQueue.assignByUser", pages.ASSIGN_WORKQUEUE, (err, queueResult) => {
+      if (!err) {
+        if (queueResult && queueResult[0]) {
+          let res = queueResult[0];
+          if (res.status == jobStatuses.NEW) {
+            this.setState({ queueStatus: true })
+          }
+        }
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount = () => {
+    clearInterval(this.getStatus);
+  }
+
   render() {
-    const { model, workQueueId, workQueueOptions } = this.state;
+    const { model, workQueueId, workQueueOptions, queueStatus } = this.state;
     const componentConfig = {
       postUrl: `/uploads/assignBulkUpload/${getToken()}`
     };
     const djsConfig = {
       params: {
-        assignType: 'assign_by_group',
+        assignType: pages.ASSIGN_WORKQUEUE,
         workQueueId: workQueueId
       },
       complete(file) {
-        Notifier.success("File Uploaded & Update Successfully");
+        Notifier.success("File Uploaded Successfully");
         this.removeFile(file);
+        this.getStatus = setInterval(() => {
+          this.getJobQueueStatus;
+        }, 3000);
       },
       acceptedFiles: ".csv"
     };
+
+    let overlayTag = queueStatus ? (<div className="overlay" />) : null;
+
     return (
       <div className={this.state.fade ? "new-action in" : "new-action"}>
-        <div className="create-form">
+        <div className="create-form position_style">
+          {queueStatus ? (<div className="create-form__bar">
+            <div className="text-light-grey">Assign Status : </div>
+            <div className="label label--grey text-uppercase" style={{ "backgroundColor": "orange" }}>In Progress</div>
+          </div>) : null}
           <AutoForm
             schema={schema}
             onChange={this.onHandleChange.bind(this)}
@@ -83,7 +123,7 @@ export default class AssignByWorkQueue extends Component {
                 </div>
               </div>
             </div>
-          
+
             <div className="select-row">
               {workQueueId && workQueueId != 'Unassigned' &&
                 <div className="select-row">
@@ -103,6 +143,7 @@ export default class AssignByWorkQueue extends Component {
               }
             </div>
           </AutoForm>
+          {overlayTag}
         </div>
       </div>
     )
