@@ -81,8 +81,6 @@ export default class AccountContent extends Component {
     const { reportColumns } = report;
     const metadataHeaders = this.getMetadataHeaders();
 
-    console.log(tableHeader);
-
     if (accounts && !accounts.length) {
       return <div>No Accounts</div>;
     }

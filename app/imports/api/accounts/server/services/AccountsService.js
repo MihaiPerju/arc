@@ -105,7 +105,6 @@ export default class AccountsService {
   }
 
   static async getSample(filters) {
-    console.log(filters);
     const AccountsRaw = Accounts.rawCollection();
 
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);

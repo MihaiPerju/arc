@@ -599,8 +599,6 @@ export default class ClientTimeline extends Component {
       dialogIsActive
     } = this.state;
 
-    console.log(accountActions);
-
     return (
       <div className="action-block">
         <div className="header__block flex--helper ">
