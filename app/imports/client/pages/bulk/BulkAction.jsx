@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import classNames from "classnames";
-import pages from "./enums/pages";
+import pages from "/imports/api/bulk/enums/pages";
 import ActionContent from './components/ActionContent';
 
 export default class BulkAction extends Component {

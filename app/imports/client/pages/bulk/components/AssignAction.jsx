@@ -12,6 +12,8 @@ import DateField from "/imports/client/lib/uniforms/DateField";
 import requirementTypes from "/imports/api/actions/enums/requirementEnum";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "/imports/api/uploads/utils";
+import pages from "/imports/api/bulk/enums/pages";
+import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 
 export default class AssignAction extends Component {
   constructor() {
@@ -23,9 +25,11 @@ export default class AssignAction extends Component {
       loading: true,
       selectedActionId: null,
       isDisabled: false,
-      customFieldValue: {}
+      customFieldValue: {},
+      queueStatus: false
     };
     let selVal = {};
+    this.getStatus = null;
   }
 
   componentWillMount() {
@@ -43,68 +47,33 @@ export default class AssignAction extends Component {
     setTimeout(() => {
       this.setState({ fade: true });
     }, 1);
+    this.getStatus = setInterval(() => {
+      this.getJobQueueStatus();
+    }, 3000);
   }
 
-  onSubmit = data => {
-    const {
-      account,
-      hide,
-      freezeAccount,
-      bulkAssign,
-      params,
-      accountIds,
-      bulkOption
-    } = this.props;
-    const selectedActionId = this.state.selectedActionId;
-    const reasonCodes = this.state.reasonCodes;
 
-    if (bulkOption) {
-      this.setState({ isDisabled: true });
-      let accountList = bulkAssign ? false : accountIds;
-      Meteor.call(
-        "account.assignAction.bulk",
-        data,
-        selectedActionId,
-        reasonCodes,
-        params,
-        accountList,
-        err => {
-          if (!err) {
-            hide();
-            Notifier.success("Data saved");
-          } else {
-            Notifier.error(err.reason);
+  onSubmit(data) { }
+
+  getJobQueueStatus = () => {
+    this.setState({ queueStatus: false });
+    Meteor.call("jobQueue.assignByUser", pages.ASSIGN_ACTION, (err, queueResult) => {
+      if (!err) {
+        if (queueResult && queueResult[0]) {
+          let res = queueResult[0];
+          if (res.status == jobStatuses.NEW) {
+            this.setState({ queueStatus: true })
           }
-          this.setState({ isDisabled: false });
         }
-      );
-    } else {
-      data.accountId = account._id;
-      if (account.assignee) {
-        data.addedBy = `${account.assignee.profile.firstName} ${
-          account.assignee.profile.lastName
-          }`;
-      } else if (account.workQueueId) {
-        data.addedBy = account.tag.name;
+      } else {
+        Notifier.error(err.reason);
       }
+    });
+  }
 
-      this.setState({ isDisabled: true });
-
-      Meteor.call("account.addAction", data, err => {
-        if (!err) {
-          Notifier.success("Data saved");
-          //Clear inputs
-          this.refs.form.reset();
-          hide();
-          freezeAccount();
-        } else {
-          Notifier.error(err.reason);
-        }
-        this.setState({ isDisabled: false });
-      });
-    }
-  };
-
+  componentWillUnmount = () => {
+    clearInterval(this.getStatus);
+  }
 
   onHandleChange = (field, value) => {
     let selVal = {}
@@ -219,7 +188,7 @@ export default class AssignAction extends Component {
     let { selectedActionId, reasonCodes, customFieldValue } = this.state;
 
     let reqParams = {
-      assignType: 'apply_bulk_action',
+      assignType: pages.ASSIGN_ACTION,
       actionId: JSON.stringify(selectedActionId)
     }
     if (customFieldValue) {
@@ -229,10 +198,13 @@ export default class AssignAction extends Component {
       reqParams.reasonCodes = reasonCodes
 
     let retParams = {
-      params: reqParams,
-      complete(file) {
-        Notifier.success("File Uploaded & Update Successfully");
+        params: reqParams,
+        complete(file) {
+        Notifier.success("File Uploaded Successfully");
         this.removeFile(file);
+        this.getStatus = setInterval(() => {
+          this.getJobQueueStatus;
+        }, 3000);
       },
       acceptedFiles: ".csv"
     }
@@ -245,7 +217,8 @@ export default class AssignAction extends Component {
       loading,
       isDisabled,
       actions,
-      reasonCodes
+      reasonCodes,
+      queueStatus
     } = this.state;
     const actionOptions = ActionsHelper.generateOptions(actions);
     const reasonCodeOptions = ReasonCodesHelper.generateOptions(reasonCodes);
@@ -265,9 +238,15 @@ export default class AssignAction extends Component {
       return <Loading />;
     }
 
+    let overlayTag = queueStatus ? (<div className="overlay" />) : null;
+
     return (
       <div className={this.state.fade ? "new-action in" : "new-action"}>
-        <div className="create-form">
+        <div className="create-form position_style">
+          {queueStatus ? (<div className="create-form__bar">
+            <div className="text-light-grey">Assign Status : </div>
+            <div className="label label--grey text-uppercase" style={{ "backgroundColor": "orange" }}>In Progress</div>
+          </div>) : null}
           <AutoForm
             schema={schema}
             onSubmit={this.onSubmit.bind(this)}
@@ -361,6 +340,7 @@ export default class AssignAction extends Component {
               }
             </div>
           </AutoForm>
+          {overlayTag}
         </div>
       </div>
     );

@@ -4,6 +4,8 @@ import { AutoForm, ErrorField, SelectField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "/imports/api/uploads/utils";
+import pages from "/imports/api/bulk/enums/pages";
+import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 
 export default class AssignByUser extends Component {
   constructor() {
@@ -13,15 +15,20 @@ export default class AssignByUser extends Component {
       facilitiesOption: [],
       userOptions: [],
       facilityType: "",
-      userType: ""
+      userType: "",
+      queueStatus: false
     };
+    this.getStatus = null;
   }
 
   componentDidMount() {
     this.getFacilityByAccount();
+    this.getStatus = setInterval(() => {
+      this.getJobQueueStatus();
+    }, 3000);
   }
 
-  onSubmit(params) {}
+  onSubmit(params) { }
 
   getFacilityByAccount = () => {
     Meteor.call("account.facility", {}, (err, facilitiesOption) => {
@@ -55,31 +62,62 @@ export default class AssignByUser extends Component {
     }
   }
 
+  getJobQueueStatus = () => {
+    this.setState({ queueStatus: false });
+    Meteor.call("jobQueue.assignByUser", pages.ASSIGN_USER, (err, queueResult) => {
+      if (!err) {
+        if (queueResult && queueResult[0]) {
+          let res = queueResult[0];
+          if (res.status == jobStatuses.NEW) {
+            this.setState({ queueStatus: true })
+          }
+        }
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount = () => {
+    clearInterval(this.getStatus);
+  }
+
   render() {
     const {
       model,
       facilitiesOption,
       userOptions,
       facilityType,
-      userType
+      userType,
+      queueStatus
     } = this.state;
     const componentConfig = {
       postUrl: `/uploads/assignBulkUpload/${getToken()}`
     };
     const djsConfig = {
       params: {
-        assignType: "assign_by_user",
+        assignType: pages.ASSIGN_USER,
         facilityType: facilityType,
         userType: userType
       },
       complete(file) {
-        Notifier.success("File Uploaded & Update Successfully");
+        Notifier.success("File Uploaded Successfully");
         this.removeFile(file);
+        this.getStatus = setInterval(() => {
+          this.getJobQueueStatus;
+        }, 3000);
       },
       acceptedFiles: ".csv"
     };
+
+    let overlayTag = queueStatus ? (<div className="overlay" />) : null;
+
     return (
-      <div className="create-form">
+      <div className="create-form position_style">
+        {queueStatus ? (<div className="create-form__bar">
+          <div className="text-light-grey">Assign Status : </div>
+          <div className="label label--grey text-uppercase" style={{ "backgroundColor": "orange" }}>In Progress</div>
+        </div>) : null}
         <AutoForm
           onSubmit={this.onSubmit.bind(this)}
           schema={schema}
@@ -140,6 +178,7 @@ export default class AssignByUser extends Component {
             </div>
           )}
         </AutoForm>
+        {overlayTag}
       </div>
     );
   }

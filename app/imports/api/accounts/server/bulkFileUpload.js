@@ -7,6 +7,7 @@ import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 import Business from "/imports/api/business";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import bulkType from "/imports/api/bulk/enums/pages";
 
 createRoute(
   "/uploads/assignBulkUpload/:token",
@@ -25,7 +26,7 @@ createRoute(
 
        let job = null;
       switch (postData.assignType) {
-        case ('assign_by_user'):
+        case (bulkType.ASSIGN_USER):
           job = {
             type: jobTypes.BULK_UPLOAD,
             status: jobStatuses.NEW,
@@ -36,7 +37,7 @@ createRoute(
             userType: postData.userType
           };
           break;
-        case ('assign_by_group'):
+        case (bulkType.ASSIGN_WORKQUEUE):
           job = {
             type: jobTypes.BULK_UPLOAD,
             status: jobStatuses.NEW,
@@ -46,7 +47,7 @@ createRoute(
             assignType: postData.assignType,
           };
           break;
-        case ('apply_bulk_action'):
+        case (bulkType.ASSIGN_ACTION):
           job = {
             type: jobTypes.BULK_UPLOAD,
             status: jobStatuses.NEW,

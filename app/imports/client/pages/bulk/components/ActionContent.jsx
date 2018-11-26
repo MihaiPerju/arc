@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import pages from "../enums/pages";
+import pages from "/imports/api/bulk/enums/pages";
 import AssignByUser from './AssignByUser';
 import AssignByWorkQueue from './AssignByWorkQueue';
 import AssignAction from './AssignAction';
