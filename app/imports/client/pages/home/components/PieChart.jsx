@@ -1,7 +1,7 @@
 import React from "react";
 import Highcharts from "highcharts";
 import ReactHighcharts from "highcharts-react-official";
- export default class PieChart extends React.Component {
+export default class PieChart extends React.Component {
 
   preparePieChartData() {
     let chartData = [];
@@ -12,8 +12,8 @@ import ReactHighcharts from "highcharts-react-official";
     return chartData;
   }
 
-   render() {
-    const { data, chartOptions } = this.props;
+  render() {
+    const { chartOptions } = this.props;
     let chartData = this.preparePieChartData();
     const options = {
       chart: {
@@ -43,4 +43,4 @@ import ReactHighcharts from "highcharts-react-official";
       </div>
     );
   }
- }
+}

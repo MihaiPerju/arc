@@ -467,7 +467,7 @@ Meteor.methods({
 
   },
 
-  "accountsAssigned.get"(clientId, facilityId, assigneeId) {
+  "accountsAssigned.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
     let filter = { 'assigneeId': { $ne: null } };
 
     if (clientId && clientId != '-1')
@@ -479,10 +479,13 @@ Meteor.methods({
     if (assigneeId && assigneeId != '-1')
       filter['assigneeId'] = assigneeId;
 
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
     return Accounts.find(filter).fetch();
   },
 
-  async 'account.getAssignedPerHour'(clientId, facilityId, assigneeId, date) {
+  async 'account.getAssignedPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
@@ -497,13 +500,10 @@ Meteor.methods({
     if (assigneeId && assigneeId != '-1')
       filter['assigneeId'] = assigneeId;
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
-    const accountsPerHour = await AccountsRaw.aggregateSync([{
+    const acccountsPerHour = await AccountsRaw.aggregateSync([{
       $match: filter,
     },
     {
@@ -528,10 +528,10 @@ Meteor.methods({
       },
     },
     ]).toArray();
-    return ActionService.graphStandardizeData(accountsPerHour);
+    return ActionService.graphStandardizeData(acccountsPerHour);
   },
 
-  "accountsHold.get"(clientId, facilityId, assigneeId) {
+  "accountsHold.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
     let filter = { 'assigneeId': { $ne: null }, state: StateEnum.HOLD };
 
     if (clientId && clientId != '-1')
@@ -543,10 +543,13 @@ Meteor.methods({
     if (assigneeId && assigneeId != '-1')
       filter['assigneeId'] = assigneeId;
 
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
     return Accounts.find(filter).fetch();
   },
 
-  async 'account.getHoldAccountsPerHour'(clientId, facilityId, assigneeId, date) {
+  async 'account.getHoldAccountsPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
@@ -561,13 +564,10 @@ Meteor.methods({
     if (assigneeId && assigneeId != '-1')
       filter['assigneeId'] = assigneeId;
 
-    if (date && date != '-1')
-      filter['createdAt'] = {
-        $gte: new Date(moment(date).startOf('day')),
-        $lt: new Date(moment(date).add(1, 'day').startOf('day')),
-      };
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
 
-    const accountsPerHour = await AccountsRaw.aggregateSync([{
+    const holdAccountsPerHour = await AccountsRaw.aggregateSync([{
       $match: filter,
     },
     {
@@ -593,7 +593,7 @@ Meteor.methods({
     },
     ]).toArray();
 
-    return ActionService.graphStandardizeData(accountsPerHour);
+    return ActionService.graphStandardizeData(holdAccountsPerHour);
   },
 
 });

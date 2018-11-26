@@ -6,7 +6,7 @@ export default class DashboardListItem extends React.Component {
   render() {
     const { data, type } = this.props;
     switch (type) {
-      case REP.ASSIGNED_ME:
+      case REP.ASSIGNED_TO_ME:
         return (
           <div key={`file-${data._id}`} className="dashboard-list-item">
             <div className="dashboard-list-item-left-content">
@@ -19,6 +19,7 @@ export default class DashboardListItem extends React.Component {
             </div>
           </div>
         );
+      default:
         break;
     }
 

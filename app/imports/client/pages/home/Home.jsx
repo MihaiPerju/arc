@@ -1,5 +1,4 @@
 import React from "react";
-
 import Highcharts from "highcharts";
 import ReactHighcharts from "highcharts-react-official";
 import Notifier from "/imports/client/lib/Notifier";
@@ -12,6 +11,7 @@ import RolesEnum from "../../../api/users/enums/roles";
 import RepDashboard from "./components/RepDashboard";
 import UserDashboard from "./components/UserDashboard";
 import CHART_TYPE from "./enums/chartType";
+import { dateRangeValues } from './enums/dateRange';
 
 export default class Home extends React.Component {
 
@@ -23,32 +23,42 @@ export default class Home extends React.Component {
       reps: [],
       chartData: [],
       selectedDate: moment(),
+      startDate: moment(),
+      endDate: moment(),
       selectedRep: '',
       clients: [],
       facilities: [],
-      selectedClientId: null,
-      selectedFacilityId: null,
-      isLoadingFiles: false,
       chartTypes: [],
       selectedChartType: '',
+      dateRangeFilters: [],
+      showCustomDateRange: false,
+      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedDateRange: '', startDate: new Date(moment()), endDate: new Date(moment()) },
     };
   }
 
   componentWillMount() {
+    this.prepareDateRangeOptions();
     this.prepareChartTypes();
   }
 
+  componentDidMount() {
+    this.getClients();
+  }
+
+  prepareDateRangeOptions() {
+    let dateRangeFilters = dateRangeValues;
+    dateRangeFilters.unshift({ label: 'Select Date', value: -1 });
+    let selectedDateRange = dateRangeFilters[0].value;
+    this.setState({ dateRangeFilters, selectedDateRange });
+  }
+
   prepareChartTypes() {
+    let filters = this.state.filters;
     let chartTypes = this.state.chartTypes;
     chartTypes.push({ value: 1, label: 'Line Chart', type: CHART_TYPE.Line });
     chartTypes.push({ value: 2, label: 'Pie Chart', type: CHART_TYPE.Pie });
-    this.setState({ chartTypes: chartTypes, selectedChartType: chartTypes[0] });
-    this.getDashboardData();
-  }
-
-  getDashboardData() {
-    this.getRepresentatives();
-    this.getClients();
+    filters.selectedChartType = chartTypes[0];
+    this.setState({ chartTypes: chartTypes, filters });
   }
 
   getClients() {
@@ -134,49 +144,39 @@ export default class Home extends React.Component {
   };
 
   onHandleChange = (field, value) => {
-
+    let filters = this.state.filters;
     switch (field) {
       case "clientId":
-          if(value === '-1')
-            this.setState({ selectedClientId: value, selectedFacilityId: value })
-          else  
-            this.setState({ selectedClientId: value });
-
-          this.getFacilities(value);
-          break;
-      case "facilityId":
-          this.setState({ selectedFacilityId: value });
-          break;
-      case "selectChartTypeId":
-          let chartTypes = this.state.chartTypes;
-          let chartType = chartTypes.find(p => p.value == value);
-          let selectedChartType = chartTypes[0];
-          if (chartType)
-            selectedChartType = chartType;  
-          this.setState({ selectedChartType: selectedChartType }, () => {
-            this.getDashboardData();
-          }); 
-          break;
-      default:    
-        this.getDashboardData();
-        break;
-
-    }
-
-
-/*     if (field == "clientId") {
-      if (value != "-1") {
+        filters.selectedClientId = value;
+        this.setState({ filters, facilities: [] });
         this.getFacilities(value);
-      }
-    }
+        break;
+      case "facilityId":
+        filters.selectedFacilityId = value;
+        this.setState({ filters });
+        break;
+      case "selectChartTypeId":
+        var chartTypes = this.state.chartTypes;
+        var chartType = chartTypes.find(p => p.value == value);
+        var selectedChartType = chartTypes[0];
+        if (chartType)
+          selectedChartType = chartType;
 
-    if (field == "clientId") {
-      this.setState({ selectedClientId: value });
-      this.getFacilities(value);
+        filters.selectedChartType = selectedChartType;
+        this.setState({ filters });
+        break;
+      case "selectedDateRange":
+        filters.selectedDateRange = value;
+        if (value === 'custom_range') {
+          this.setState({ filters, showCustomDateRange: true });
+        }
+        else {
+          this.setState({ filters, showCustomDateRange: false });
+        }
+        break;
+      default:
+        break;
     }
-    if (field == "facilityId") {
-      this.setState({ selectedFacilityId: value });
-    } */
   }
 
   renderGraph() {
@@ -216,7 +216,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { reps, selectedDate, clients, facilities, selectedFacilityId, selectedClientId, chartTypes, selectedChartType } = this.state;
+    const { reps, selectedDate, clients, facilities, chartTypes, dateRangeFilters, startDate, endDate, showCustomDateRange } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return (
         <div className="cc-container home-container flex-align--start">
@@ -261,47 +261,93 @@ export default class Home extends React.Component {
     }
     else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
       return (
-        /*  <RepDashboard /> */
         <div className="dashboard-content-container">
           <div className="dashboard-header-content">
+            <div className="dashboard-header-title">
+              FILTERS FOR DASHBOARD
+          </div>
             <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
-              <div className="flex--helper form-group__pseudo--3">
-                <div className="select-form select-box-width">
-                  <label className="dashboard-label">Clients</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="clientId"
-                      options={clients}
-                    />
+              <div>
+                <div className="flex--helper form-group__pseudo--3">
+                  <div className="select-form select-box-width">
+                    <label className="dashboard-label">Clients</label>
+                    <div className="m-t--5">
+                      <AutoField
+                        labelHidden={true}
+                        name="clientId"
+                        options={clients}
+                      />
+                    </div>
+                  </div>
+                  {
+                    facilities.length > 0 ?
+                      <div className="select-form select-box-width m-l-10">
+                        <label className="dashboard-label">Facilities</label>
+                        <div className="m-t--5">
+                          <AutoField
+                            labelHidden={true}
+                            name="facilityId"
+                            options={facilities} />
+                        </div>
+                      </div> : null
+                  }
+                  <div className="select-form select-box-width m-l-10">
+                    <label className="dashboard-label">Chart Types</label>
+                    <div className="m-t--5">
+                      <AutoField
+                        labelHidden={true}
+                        name="selectChartTypeId"
+                        options={chartTypes} />
+                    </div>
                   </div>
                 </div>
-                {
-                  facilities.length > 0 ?
-                    <div className="select-form select-box-width m-l-15">
-                      <label className="dashboard-label">Facilities</label>
-                      <div className="m-t--5">
-                        <AutoField
-                          labelHidden={true}
-                          name="facilityId"
-                          options={facilities} />
-                      </div>
-                    </div> : null
-                }
-
-                <div className="select-form select-box-width m-l-15">
-                  <label className="dashboard-label">Chart Types</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="selectChartTypeId"
-                      options={chartTypes} />
+                <div className="flex--helper form-group__pseudo--3 m-t--20">
+                  <div className="select-form select-box-width">
+                    <label className="dashboard-label">Date Range Filters</label>
+                    <div className="m-t--5">
+                      <AutoField
+                        labelHidden={true}
+                        name="selectedDateRange"
+                        options={dateRangeFilters}
+                      />
+                    </div>
                   </div>
+                  {
+                    showCustomDateRange &&
+                    <div style={{ display: 'inherit' }}>
+                      <div className="dashboard-dp-panel">
+                        <DatePicker
+                          calendarClassName="cc-datepicker"
+                          showMonthDropdown
+                          showYearDropdown
+                          yearDropdownItemNumber={4}
+                          todayButton={"Today"}
+                          placeholderText="Start Date"
+                          selected={startDate}
+                          onChange={this.onStartDateChange}
+                          fixedHeight
+                        />
+                      </div>
+                      <div className="dashboard-dp-panel">
+                        <DatePicker
+                          calendarClassName="cc-datepicker"
+                          showMonthDropdown
+                          showYearDropdown
+                          yearDropdownItemNumber={4}
+                          todayButton={"Today"}
+                          placeholderText="End Date"
+                          selected={endDate}
+                          onChange={this.onEndDateChange}
+                          fixedHeight
+                        />
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
             </AutoForm>
           </div>
-          <UserDashboard facilityId={selectedFacilityId} clientId={selectedClientId} chartType={selectedChartType} />
+          <UserDashboard filters={this.state.filters} />
         </div>
       );
     }
@@ -324,6 +370,12 @@ const dashboardSchema = new SimpleSchema({
     type: String
   },
   selectChartTypeId: {
+    type: String
+  },
+  userId: {
+    type: String
+  },
+  selectedDateRange: {
     type: String
   }
 });
