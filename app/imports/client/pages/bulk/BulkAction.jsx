@@ -41,7 +41,7 @@ export default class BulkAction extends Component {
             onClick={this.onSelectPage.bind(this, pages.ASSIGN_USER)}
           >
             <div className="row__item margin-top-10">
-              <div className="item-name">Assign By User</div>
+              <div className="item-name">Assign To User</div>
             </div>
           </div>
 
@@ -50,7 +50,7 @@ export default class BulkAction extends Component {
             onClick={this.onSelectPage.bind(this, pages.ASSIGN_WORKQUEUE)}
           >
             <div className="row__item margin-top-10">
-              <div className="item-name">Assign By Work Queue</div>
+              <div className="item-name">Assign To Work Queue</div>
             </div>
           </div>
 
@@ -59,7 +59,7 @@ export default class BulkAction extends Component {
             onClick={this.onSelectPage.bind(this, pages.ASSIGN_ACTION)}
           >
             <div className="row__item margin-top-10">
-              <div className="item-name">Assign Action</div>
+              <div className="item-name">Apply Action</div>
             </div>
           </div>
         </div>
