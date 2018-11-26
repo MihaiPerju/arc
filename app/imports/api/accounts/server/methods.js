@@ -246,19 +246,7 @@ Meteor.methods({
   },
 
   "accounts.getSample"(filters) {
-    const AccountsRaw = Accounts.rawCollection();
-    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
-
-    return AccountsRaw.aggregateSync([
-      {
-        $match: filters
-      },
-      {
-        $sample: {
-          size: 20
-        }
-      }
-    ]);
+    return AccountsService.getSample(filters);
   },
 
   "account.comment.add"(data) {

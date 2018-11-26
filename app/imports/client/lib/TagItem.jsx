@@ -10,21 +10,19 @@ export default class TagItem extends Component {
     super(props);
     this.state = {
       dialogIsActive: false,
-      passedValue: '',
+      passedValue: "",
       tags: props.tags,
-      tagIds: props.tagIds,
-      
+      tagIds: props.tagIds
     };
   }
-  componentWillReceiveProps(props){
-    const {tags, tagIds} = props;
-    if(this.state.tags !== tags){
-      this.setState(()=>({tags: tags}))
+  componentWillReceiveProps(props) {
+    const { tags, tagIds } = props;
+    if (this.state.tags !== tags) {
+      this.setState(() => ({ tags: tags }));
     }
-    if(this.state.tagIds !== tagIds){
-      this.setState(()=>({tagIds: tagIds}))
+    if (this.state.tagIds !== tagIds) {
+      this.setState(() => ({ tagIds: tagIds }));
     }
-    
   }
 
   onhandleTag = e => {
@@ -57,64 +55,64 @@ export default class TagItem extends Component {
   };
 
   handleCreateTagButton = () => {
-    const entities=[this.props.entityName];
-    const {tags, passedValue} = this.state;
-    let data={entities,name: passedValue}
-    Meteor.call("tag.create", { data}, (err,result) => {
+    const entities = [this.props.entityName];
+    const { tags, passedValue } = this.state;
+    let data = { entities, name: passedValue };
+    Meteor.call("tag.create", { data }, (err, result) => {
       if (!err) {
-        data._id=result
-        tags.push(data)
+        data._id = result;
+        tags.push(data);
         Notifier.success("Tag added!");
-        this.setState(()=>({tags}))
+        this.setState(() => ({ tags }));
       } else {
         Notifier.error(err.reason);
       }
     });
-  }
+  };
 
   updateValue = data => {
     this.setState(() => ({
       passedValue: data
-    }))
-  }
+    }));
+  };
 
   renderTag(option) {
-    return (
-      <div className="tag-item-with-bg">
-        {option.label}
-      </div>
-    );
+    return <div className="tag-item-with-bg">{option.label}</div>;
   }
 
-    
-    
-    
-  
-
   render() {
-    const { tagIds, tags, dialogIsActive,passedValue } = this.state;
+    const { tagIds, tags, dialogIsActive, passedValue } = this.state;
     const { title } = this.props;
 
-    const noResultText =  <a className="create-tag-button" href='javascript:void(0);' onClick={this.handleCreateTagButton}>Create tag</a>
+    const noResultText = (
+      <a
+        className="create-tag-button"
+        href="javascript:void(0);"
+        onClick={this.handleCreateTagButton}
+      >
+        Create tag
+      </a>
+    );
 
     const options = this.getOptions(tags);
     let selectedOptions = options.filter(p => tagIds.includes(p.value));
-
 
     return (
       <div>
         <div className="left__side">
           <div className="tag-inner-div">
             <a onClick={this.onhandleTag.bind(this)}>
-              <div className="menu__icon"><i className="icon-tags tags-icon"></i></div>
+              <div className="menu__icon">
+                <i className="icon-tags tags-icon" />
+              </div>
             </a>
           </div>
           <div className="tag-inner-div">
-            {
-              selectedOptions.length > 0 ?
-                selectedOptions.map(option => this.renderTag(option)) :
-                <label className="no-tags-found">No tags found.</label>
-            }
+            {selectedOptions.length > 0 ? (
+              selectedOptions.map(option => this.renderTag(option))
+            ) : (
+              <label className="no-tags-found">No tags found.</label>
+            )}
           </div>
         </div>
         {dialogIsActive && (
@@ -137,14 +135,18 @@ export default class TagItem extends Component {
                     labelHidden={true}
                     name="tagIds"
                     options={options}
-                    noResultText={ ((passedValue.length > 1) &&(passedValue.trim().length>0)) ? noResultText : null}
+                    noResultText={
+                      passedValue.length > 1 && passedValue.trim().length > 0
+                        ? noResultText
+                        : null
+                    }
                     updateValue={this.updateValue}
                   />
                   <ErrorField name="tagIds" />
                 </div>
               </div>
             </AutoForm>
-           
+
             <div className="btn-group">
               <button className="btn-cancel" onClick={this.closeDialog}>
                 Cancel

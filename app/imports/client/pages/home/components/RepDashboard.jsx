@@ -1,6 +1,5 @@
 import React from "react";
 import SimpleSchema from "simpl-schema";
-import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { Timeline, TimelineEvent } from "react-event-timeline";
 import moment from "moment";
 import UserService from "../../users/services/UserService";
@@ -80,8 +79,8 @@ export default class RepDashboard extends React.Component {
     _.extend(params, {
       options: { limit, skip, sort: { createdAt: -1 } }
     });
-
-    accountActionsQuery.clone(params).fetch((err, actions) => {
+   
+    Meteor.call("accountActions.get", params, (err, actions) => {
       if (!err) {
         let { accountActions } = this.state;
         accountActions = accountActions.concat(actions);

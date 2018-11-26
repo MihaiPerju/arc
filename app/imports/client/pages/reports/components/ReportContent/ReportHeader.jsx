@@ -8,7 +8,6 @@ import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import { EJSON } from "meteor/ejson";
 import Loading from "/imports/client/lib/ui/Loading";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { reportTypes } from "/imports/client/pages/reports/enums/reportType";
 import AccountActionContent from "./AccountActionContent";
 import AccountContent from "./AccountContent";
@@ -24,18 +23,31 @@ class ReportHeader extends Component {
       selectedReportColumns: [],
       accountActions: [],
       isDisabled: false,
-      isOpenedDropdown: false
+      isOpenedDropdown: false,
+      reportId: null
     };
   }
 
   componentWillMount() {
+    const { report } = this.props;
+    const { _id } = report;
+    this.setState({ reportId: _id });
     this.getAccounts(this.props);
+    this.getColumns();
   }
 
   componentWillReceiveProps(props) {
-    this.getAccounts(props);
     const { report } = props;
-    const { reportColumns } = report;
+    const { _id } = report;
+    if (this.state.reportId !== _id) {
+      this.setState({ reportId: _id });
+      this.getColumns();
+      this.getAccounts(props);
+    }
+  }
+
+  getColumns() {
+    const { reportColumns } = this.props.report;
     const selectedReportColumns = [];
 
     for (let key in reportColumns) {
@@ -43,7 +55,6 @@ class ReportHeader extends Component {
         selectedReportColumns.push(key);
       }
     }
-
     this.setState({
       selectedReportColumns
     });
@@ -79,9 +90,10 @@ class ReportHeader extends Component {
     const options = { limit: 20 };
     this.setState({ loading: true });
     if (report.type === reportTypes.ACCOUNT_ACTIONS) {
-      accountActionsQuery
-        .clone({ filters, options })
-        .fetch((err, accountActions) => {
+      Meteor.call(
+        "accountActions.get",
+        { filters, options },
+        (err, accountActions) => {
           if (!err) {
             this.setState({
               accountActions,
@@ -91,9 +103,10 @@ class ReportHeader extends Component {
             this.setState({ loading: false });
             Notifier.error("Couldn't get sample account actions");
           }
-        });
+        }
+      );
     } else {
-      Meteor.call("accounts.getSample",filters,(err,accounts)=>{
+      Meteor.call("accounts.getSample", filters, (err, accounts) => {
         if (!err) {
           this.setState({
             accounts,
@@ -103,7 +116,7 @@ class ReportHeader extends Component {
           this.setState({ loading: false });
           Notifier.error("Couldn't get sample accounts");
         }
-      })
+      });
     }
   }
 
@@ -324,10 +337,9 @@ class ReportHeader extends Component {
               <div className="title float-left">{report.name}</div>
               <div className="btn-run-report">
                 {this.renderRunReportButton(job && job.status)}
-                {job &&
-                  job.status === JobQueueStatuses.FAILED && (
-                    <div style={{ color: "red" }}>Report failed</div>
-                  )}
+                {job && job.status === JobQueueStatuses.FAILED && (
+                  <div style={{ color: "red" }}>Report failed</div>
+                )}
               </div>
             </div>
             <div className="row__header">
