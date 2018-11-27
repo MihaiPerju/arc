@@ -21,6 +21,10 @@ Meteor.methods({
     return Codes.findOne({ _id });
   },
 
+  "codes.getNames"(filters = {}) {
+    return Codes.find(filters).fetch();
+  },
+
   "code.create"(data) {
     Codes.insert(data);
   },
