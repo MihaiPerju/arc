@@ -36,5 +36,9 @@ export default new SimpleSchema({
   },
   type: {
     type: String
+  },
+  createdAt: {
+    type: Date,
+    defaultValue: new Date()
   }
 });

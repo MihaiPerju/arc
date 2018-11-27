@@ -37,8 +37,8 @@ Meteor.methods({
     Clients.update({
       _id
     }, {
-      $set: data
-    });
+        $set: data
+      });
   },
 
   "client.updateManagers"(_id, managerIds) {
@@ -47,19 +47,19 @@ Meteor.methods({
     Clients.update({
       _id
     }, {
-      $set: {
-        managerIds
-      }
-    });
+        $set: {
+          managerIds
+        }
+      });
 
     //Update Accounts;
     Accounts.update({
       clientId: _id
     }, {
-      $set: {
-        managerIds
-      }
-    })
+        $set: {
+          managerIds
+        }
+      })
   },
 
   "client.removeLogo"(clientId) {
@@ -85,10 +85,10 @@ Meteor.methods({
       Clients.update({
         _id: clientId
       }, {
-        $unset: {
-          logoPath: null
-        }
-      });
+          $unset: {
+            logoPath: null
+          }
+        });
       const filePath = root + Business.CLIENTS_FOLDER + logoPath;
       if (logoPath && fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
@@ -138,8 +138,8 @@ Meteor.methods({
     Security.isAdminOrTech(this.userId);
 
     return Clients.update({
-        _id: _id
-      }, {
+      _id: _id
+    }, {
         $set: {
           status: !status
         }
@@ -149,12 +149,12 @@ Meteor.methods({
           Facilities.update({
             clientId: _id
           }, {
-            $set: {
-              status: false
-            }
-          }, {
-            multi: true
-          });
+              $set: {
+                status: false
+              }
+            }, {
+              multi: true
+            });
         }
       }
     );
@@ -167,9 +167,14 @@ Meteor.methods({
     Clients.update({
       _id
     }, {
-      $set: {
-        tagIds
-      }
-    });
-  }
+        $set: {
+          tagIds
+        }
+      });
+  },
+
+  "clients.get"() {
+    Security.checkLoggedIn(this.userId);
+    return Clients.find().fetch();
+  },
 });

@@ -171,6 +171,10 @@ h6 {
   margin-bottom: 10px;
 }
 
+.m-b--25 {
+  margin-bottom: 25px;
+}
+
 .m-t--0 {
   margin-top: 0!important;
 }
@@ -217,7 +221,6 @@ h6 {
   }
 }
 
-
 .border-style{
   border: 1px solid #d3d3d3;
   border-radius: 5px;
@@ -225,6 +228,14 @@ h6 {
 
 .m-l-15{
   margin-left: 15px;
+}
+
+.m-l-10{
+  margin-left: 10px;
+}
+
+.m-l-5{
+  margin-left: 5px;
 }
 
 .custom-submit-btn{
@@ -242,10 +253,10 @@ top: 0;
 left: 0;
 width: 100%;
 }
+
 .position_style {
   position: relative;
 }
-
 
 .showMore-tag {
   margin: 6px !important;
@@ -329,3 +340,8 @@ cursor: none !important;
   height: calc(100% - 50px) !important;
   overflow-y: auto;
 }
+
+.font-bold {
+  font-weight: 700;
+}
+
