@@ -209,3 +209,8 @@ route("/flagged", FlaggedAccountListContainer);
 import FileListContainer from "/imports/client/pages/files/FileListContainer.jsx";
 
 route("/file/list", FileListContainer);
+
+//Manager
+import CommonSettings from "/imports/client/pages/settings/Settings.jsx";
+
+route("/manager/settings", CommonSettings);

@@ -145,14 +145,15 @@ class BtnGroup extends Component {
   };
 
   render() {
+    let settingsLink = Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) ? "/manager/settings" : "/admin/settings";
     return (
       <div className="btn-group">
         <a href="/my-profile">
           <i className="icon-user" />
           <span>Profile</span>
         </a>
-        {Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN) && (
-          <a href="/admin/settings">
+        { ( Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN) || Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) && (
+          <a href={settingsLink}>
             <i className="icon-cog" />
             <span>Settings</span>
           </a>
