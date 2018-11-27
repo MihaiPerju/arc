@@ -5,12 +5,16 @@ import Security from "/imports/api/security/security";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
-  "actions.get"(params) {
+  "actions.list"(params) {
     const queryParams = QueryBuilder.getActionsParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
     options.fields = { tagIds: 1, title: 1 };
     return Actions.find(filters, options).fetch();
+  },
+
+  "actions.get"(filters = {}) {
+    return Actions.find(filters).fetch();
   },
 
   "actions.count"(params) {

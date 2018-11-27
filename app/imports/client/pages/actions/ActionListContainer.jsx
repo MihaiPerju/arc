@@ -57,7 +57,7 @@ export default class ActionListContainer extends Pager {
 
   listActions = () => {
     const params = ParamsService.getActionsParams();
-    Meteor.call("actions.get", params, (err, actions) => {
+    Meteor.call("actions.list", params, (err, actions) => {
       if (!err) {
         this.setState({ actions });
         this.updatePager();

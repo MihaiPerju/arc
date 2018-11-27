@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField, ErrorField, SelectField } from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
-import query from "/imports/api/actions/queries/actionList";
 import Notifier from "/imports/client/lib/Notifier";
 import reasonCodesQuery from "/imports/api/reasonCodes/queries/reasonCodesList";
 import Loading from "/imports/client/lib/ui/Loading";
@@ -29,7 +28,7 @@ export default class AssignAction extends Component {
   }
 
   componentWillMount() {
-    query.clone().fetch((err, actions) => {
+    Meteor.call("actions.get",(err,actions)=> {
       if (!err) {
         this.setState({
           actions,

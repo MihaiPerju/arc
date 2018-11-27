@@ -6,7 +6,6 @@ import Notifier from "/imports/client/lib/Notifier";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
 import userQuery from "/imports/api/users/queries/listUsers";
-import actionQuery from "/imports/api/actions/queries/actionList";
 
 export default class AccountFilterBuilder extends React.Component {
   constructor() {
@@ -56,7 +55,7 @@ export default class AccountFilterBuilder extends React.Component {
       userOptions = [];
 
     // Getting actions options
-    actionQuery.fetch((err, actions) => {
+    Meteor.call("actions.get", (err, actions) => {
       if (!err) {
         actions.map(action => {
           actionOptions.push({
@@ -112,7 +111,11 @@ export default class AccountFilterBuilder extends React.Component {
       result,
       filterBuilderData,
       error
-    } = AccountActionReportService.getFilters(data, components, filteredActions);
+    } = AccountActionReportService.getFilters(
+      data,
+      components,
+      filteredActions
+    );
 
     if (error) {
       Notifier.error(error);
@@ -145,16 +148,18 @@ export default class AccountFilterBuilder extends React.Component {
   };
 
   getFilteredActions = inputs => {
-    actionQuery
-      .clone({ filters: { "inputs.type": { $in: inputs } } })
-      .fetch((err, actions) => {
+    Meteor.call(
+      "actions.get",
+      { filters: { "inputs.type": { $in: inputs } } },
+      (err, actions) => {
         if (!err) {
           const filteredActions = actions.map(action => action._id);
           this.setState({ filteredActions });
         } else {
           Notifier.error(err.reason);
         }
-      });
+      }
+    );
   };
 
   render() {
