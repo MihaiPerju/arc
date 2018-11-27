@@ -11,13 +11,10 @@ export default class EscalateReason extends Component {
     this.state = {
       isDisabled: false
     };
-    this.pollingMethod = null;
   }
 
   componentWillMount() {
-    this.pollingMethod = setInterval(() => {
-      this.getEscalation();
-    }, 3000);
+    this.getEscalation();
   }
 
   getEscalation() {
@@ -29,11 +26,6 @@ export default class EscalateReason extends Component {
         Notifier.error(err.reason);
       }
     });
-  }
-
-  componentWillUnmount() {
-    //Removing Interval
-    clearInterval(this.pollingMethod);
   }
 
   onRespond = content => {
@@ -54,7 +46,7 @@ export default class EscalateReason extends Component {
     const { isDisabled, escalation } = this.state;
 
     if (!escalation) {
-      return <Loading/>
+      return <Loading />;
     }
 
     return (
