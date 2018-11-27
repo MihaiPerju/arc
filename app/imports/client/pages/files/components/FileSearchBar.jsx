@@ -6,7 +6,6 @@ import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import FilterService from "/imports/client/lib/FilterService";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
-import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class FileSearchBar extends Component {
@@ -41,7 +40,8 @@ export default class FileSearchBar extends Component {
         this.setState({ facilityOptions });
       }
     });
-    clientsQuery.fetch((err, res) => {
+
+    Meteor.call("clients.get", (err, res) => {
       if (!err) {
         res.map(client => {
           clientOptions.push({ label: client.clientName, value: client._id });
@@ -325,7 +325,7 @@ class BtnGroup extends Component {
     return (
       <div className={btnClasses}>
         {icons ? (
-          icons.map((element,index) => {
+          icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon} />

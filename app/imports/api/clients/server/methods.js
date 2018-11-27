@@ -9,6 +9,7 @@ import settings from "/imports/api/settings/enums/settings";
 import Accounts from "/imports/api/accounts/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import Users from "../../users/collection";
+import ClientService from "/imports/api/clients/server/services/ClientService";
 
 Meteor.methods({
   "client.create"(data) {
@@ -31,7 +32,7 @@ Meteor.methods({
     return Clients.findOne({ _id });
   },
 
-  "clients.get"(params) {
+  "clients.list"(params) {
     Security.isAdminOrTech(this.userId);
     const queryParams = QueryBuilder.getClientParams(params);
     let filters = queryParams.filters;
@@ -39,6 +40,25 @@ Meteor.methods({
     //Project fields
     options.fields = { clientName: 1, tagIds: 1, email: 1 };
     return Clients.find(filters, options).fetch();
+  },
+
+  "clients.get"(filters = {}) {
+    return ClientService.getClients(filters);
+  },
+
+  "clients.getEssential"(filters = {}) {
+    return Clients.find(filters, {
+      fields: {
+        clientName: 1,
+        email: 1,
+        financialGoals: 1,
+        logoPath: 1,
+        contacts: 1,
+        status: 1,
+        managerIds: 1,
+        tagIds: 1
+      }
+    }).fetch();
   },
 
   "clients.count"(params) {

@@ -9,7 +9,6 @@ import Tags from "/imports/client/lib/Tags";
 import DatePicker from "react-datepicker";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
-import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
 import userListQuery from "/imports/api/users/queries/listUsers.js";
@@ -56,7 +55,7 @@ export default class AccountSearchBar extends Component {
         this.setState({ facilityOptions });
       }
     });
-    clientsQuery.fetch((err, res) => {
+    Meteor.call("clients.get", (err, res) => {
       if (!err) {
         res.map(client => {
           clientOptions.push({ label: client.clientName, value: client._id });

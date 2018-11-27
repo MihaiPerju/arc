@@ -7,7 +7,7 @@ import assigneeQuery from "/imports/api/users/queries/listUsers";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
 import facilityNames from "/imports/api/facilities/queries/facilityListNames";
-import clientsQuery from "/imports/api/clients/queries/listClients";
+import { Meteor } from "meteor/meteor";
 
 export default class AccountFilterBuilder extends React.Component {
   constructor() {
@@ -103,7 +103,7 @@ export default class AccountFilterBuilder extends React.Component {
     });
 
     //Getting client options
-    clientsQuery.fetch((err, clients) => {
+    Meteor.call("clients.getEssential", (err, clients) => {
       if (!err) {
         clients.map(client => {
           clientOptions.push({ value: client._id, label: client.clientName });
@@ -232,42 +232,41 @@ export default class AccountFilterBuilder extends React.Component {
         {loading ? (
           <Loading />
         ) : (
-
-            <div>
+          <div>
+            <AutoForm
+              model={filterBuilderData}
+              schema={schema}
+              onSubmit={this.onSubmit}
+              ref="filters"
+              onChange={this.onHandleChange}
+            >
+              {_.map(components, item => {
+                return (
+                  item.isActive && (
+                    <FilterSingle
+                      assigneeIdOptions={assigneeOptions}
+                      facilityIdOptions={facilityOptions}
+                      clientIdOptions={clientOptions}
+                      substateOptions={substateOptions}
+                      deleteFilter={this.deleteFilter}
+                      name={item.name}
+                      filterData={filterBuilderData}
+                    />
+                  )
+                );
+              })}
+            </AutoForm>
+            <div className="add-report-filter">
               <AutoForm
-                model={filterBuilderData}
-                schema={schema}
-                onSubmit={this.onSubmit}
-                ref="filters"
-                onChange={this.onHandleChange}
+                ref="filterSelect"
+                onChange={this.createFilter}
+                schema={filterSchema}
               >
-                {_.map(components, item => {
-                  return (
-                    item.isActive && (
-                      <FilterSingle
-                        assigneeIdOptions={assigneeOptions}
-                        facilityIdOptions={facilityOptions}
-                        clientIdOptions={clientOptions}
-                        substateOptions={substateOptions}
-                        deleteFilter={this.deleteFilter}
-                        name={item.name}
-                        filterData={filterBuilderData}
-                      />
-                    )
-                  );
-                })}
+                <SelectField options={schemaOptions} name="filter" />
               </AutoForm>
-              <div className="add-report-filter">
-                <AutoForm
-                  ref="filterSelect"
-                  onChange={this.createFilter}
-                  schema={filterSchema}
-                >
-                  <SelectField options={schemaOptions} name="filter" />
-                </AutoForm>
-              </div>
             </div>
-          )}
+          </div>
+        )}
       </main>
     );
   }

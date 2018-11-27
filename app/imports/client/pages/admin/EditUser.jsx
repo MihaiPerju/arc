@@ -6,7 +6,6 @@ import CreateEditTags from "./components/CreateEditTags";
 import TagsService from "./services/TagsService";
 import TagsListQuery from "/imports/api/tags/queries/listTags.js";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
-import clientsQuery from "../../../api/clients/queries/listClients";
 import RolesEnum from "/imports/api/users/enums/roles";
 
 class EditUser extends Component {
@@ -24,7 +23,7 @@ class EditUser extends Component {
   }
 
   componentWillMount() {
-    clientsQuery.fetch((err, clients) => {
+    Meteor.call("clients.getEssential", (err, clients) => {
       if (!err) {
         this.setState({ clients });
       }
@@ -47,7 +46,7 @@ class EditUser extends Component {
   getTagList = () => {
     const { data } = this.props;
 
-    return data.map((tag) => ({
+    return data.map(tag => ({
       value: tag._id,
       label: TagsService.getTagName(tag)
     }));
@@ -81,7 +80,15 @@ class EditUser extends Component {
               onClick={this.onEditUser}
               className="btn--green"
             >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm & Save"}
+              {isDisabled ? (
+                <div>
+                  {" "}
+                  Loading
+                  <i className="icon-cog" />
+                </div>
+              ) : (
+                "Confirm & Save"
+              )}
             </button>
           </div>
         </div>
