@@ -39,7 +39,7 @@ export default class FileListContainer extends Pager {
 
   listFiles = () => {
     const params = ParamsService.getFilesParams();
-    Meteor.call("files.get", params, (err, files) => {
+    Meteor.call("files.list", params, (err, files) => {
       if (!err) {
         this.setState({ files });
         this.updatePager();
