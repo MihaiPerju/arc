@@ -10,7 +10,6 @@ import SimpleSchema from "simpl-schema";
 import schema from "/imports/api/reasonCodes/schema";
 import { withQuery } from "meteor/cultofcoders:grapher-react";
 import query from "/imports/api/reasonCodes/queries/reasonCodesList";
-import clientsQuery from "/imports/api/clients/queries/listClients";
 import RolesEnum from "/imports/api/users/enums/roles.js";
 import Loading from "/imports/client/lib/ui/Loading";
 
@@ -144,7 +143,7 @@ class CreateReasonCode extends Component {
 
   componentWillMount() {
     const clientOptions = [];
-    clientsQuery.fetch((err, res) => {
+    Meteor.call("clients.getEssential", (err, res) => {
       if (!err) {
         res.map(client => {
           clientOptions.push({ label: client.clientName, value: client._id });

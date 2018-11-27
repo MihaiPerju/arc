@@ -46,6 +46,21 @@ Meteor.methods({
     return ClientService.getClients(filters);
   },
 
+  "clients.getEssential"(filters = {}) {
+    return Clients.find(filters, {
+      fields: {
+        clientName: 1,
+        email: 1,
+        financialGoals: 1,
+        logoPath: 1,
+        contacts: 1,
+        status: 1,
+        managerIds: 1,
+        tagIds: 1
+      }
+    }).fetch();
+  },
+
   "clients.count"(params) {
     const queryParams = QueryBuilder.getClientParams(params);
     let filters = queryParams.filters;

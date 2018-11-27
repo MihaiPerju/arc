@@ -32,6 +32,14 @@ export default class ClientService {
           foreignField: "clientId",
           as: "facilities"
         }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "managerIds",
+          foreignField: "_id",
+          as: "managers"
+        }
       }
     ]).toArray();
 
