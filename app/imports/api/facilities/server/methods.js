@@ -10,9 +10,10 @@ import bcrypt from "bcrypt";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import FacilityService from "./services/FacilityService.js";
 
 Meteor.methods({
-  "facilities.get"(params) {
+  "facilities.list"(params) {
     const queryParams = QueryBuilder.getFacilitiesParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
@@ -29,6 +30,10 @@ Meteor.methods({
   "facility.getOne"(_id) {
     Security.isAdminOrTech(this.userId);
     return Facilities.findOne({ _id });
+  },
+
+  "facilities.get"(filters = {}) {
+    return FacilityService.getFacilities(filters);
   },
 
   "facility.create"(data) {

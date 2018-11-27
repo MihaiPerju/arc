@@ -7,7 +7,6 @@ import _ from "underscore";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Tags from "/imports/client/lib/Tags";
 import DatePicker from "react-datepicker";
-import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
@@ -47,7 +46,7 @@ export default class AccountSearchBar extends Component {
     let tickleUserIdOptions = [];
     let model = {};
 
-    facilityQuery.fetch((err, res) => {
+    Meteor.call("facilities.get", (err, res) => {
       if (!err) {
         res.map(facility => {
           facilityOptions.push({ label: facility.name, value: facility._id });
