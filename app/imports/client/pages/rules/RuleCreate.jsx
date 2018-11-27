@@ -11,7 +11,6 @@ import triggerTypes, {
 } from "/imports/api/rules/enums/triggers";
 import userQuery from "/imports/api/users/queries/listUsers.js";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
-import actionQuery from "/imports/api/actions/queries/actionList";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
 import RuleQuery from "/imports/api/rules/queries/listRules";
@@ -97,7 +96,8 @@ export default class RuleCreate extends React.Component {
       });
 
     //Filling the action options
-    actionQuery.clone().fetch((err, res) => {
+
+    Meteor.call("actions.get", (err, res) => {
       if (!err) {
         res.map(action => {
           actionOptions.push({
