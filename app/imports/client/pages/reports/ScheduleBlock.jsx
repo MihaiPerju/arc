@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Notifier from "../../lib/Notifier";
-import clientsQuery from "../../../api/clients/queries/clientsWithFacilites";
 import usersQuery from "../../../api/users/queries/listUsersByRole";
 import ReportsEnum from "../../../api/schedules/enums/reports";
 import { AutoForm, ErrorField } from "/imports/ui/forms";
@@ -32,7 +31,7 @@ class ScheduleBlock extends Component {
       }
     });
 
-    clientsQuery.clone({}).fetch((err, clients) => {
+    Meteor.call("clients.get", (err, clients) => {
       if (!err) {
         this.setState({
           clients

@@ -3,9 +3,7 @@ import RuleSchema from "/imports/api/rules/schemas/schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
-import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import facilityQuery from "/imports/api/facilities/queries/facilityList";
-import { SelectField } from "/imports/ui/forms";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
@@ -59,7 +57,7 @@ export default class RuleEdit extends React.Component {
     let facilityOptions = [{ label: "All", value: "all" }];
 
     //Filling the client options
-    clientsQuery.fetch((err, res) => {
+    Meteor.call("clients.get", (err, res) => {
       if (!err) {
         res.map(client => {
           clientOptions.push({ label: client.clientName, value: client._id });

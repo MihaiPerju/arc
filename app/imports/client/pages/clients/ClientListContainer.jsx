@@ -44,7 +44,7 @@ export default class ClientContainer extends Pager {
 
   listClients = () => {
     const params = ParamsService.getClientParams();
-    Meteor.call("clients.get", params, (err, clients) => {
+    Meteor.call("clients.list", params, (err, clients) => {
       if (!err) {
         this.setState({ clients });
         this.updatePager();
