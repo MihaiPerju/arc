@@ -5,7 +5,7 @@ export default class FacilityService {
     const FacilitiesRaw = Facilities.rawCollection();
 
     FacilitiesRaw.aggregateSync = Meteor.wrapAsync(FacilitiesRaw.aggregate);
-    let clients = await FacilitiesRaw.aggregateSync([
+    let facilities = await FacilitiesRaw.aggregateSync([
       {
         $match: filters
       },
@@ -49,6 +49,39 @@ export default class FacilityService {
       }
     ]).toArray();
 
-    return clients;
+    return facilities;
+  }
+
+  static async getEssential(filters) {
+    const FacilitiesRaw = Facilities.rawCollection();
+
+    FacilitiesRaw.aggregateSync = Meteor.wrapAsync(FacilitiesRaw.aggregate);
+    let facilities = await FacilitiesRaw.aggregateSync([
+      {
+        $match: filters
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "clientId",
+          foreignField: "_id",
+          as: "client"
+        }
+      },
+      {
+        $project: {
+          clientId: 1,
+          name: 1,
+          client: 1
+        }
+      },
+      {
+        $addFields: {
+          client: { $arrayElemAt: ["$client", 0] }
+        }
+      }
+    ]).toArray();
+
+    return facilities;
   }
 }

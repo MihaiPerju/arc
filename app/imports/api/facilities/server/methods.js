@@ -36,6 +36,10 @@ Meteor.methods({
     return FacilityService.getFacilities(filters);
   },
 
+  "facilities.getEssential"(filters = {}) {
+    return FacilityService.getEssential(filters);
+  },
+
   "facility.create"(data) {
     Security.isAdminOrTech(this.userId);
 
