@@ -84,7 +84,7 @@ export default class EscalateReason extends Component {
           </AutoForm>
         </div>
         <div className="comment-list">
-          {escalation &&
+          {escalation.messages &&
             escalation.messages.map((message, index) => {
               return (
                 <div
