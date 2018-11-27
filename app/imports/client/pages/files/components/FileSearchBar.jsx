@@ -5,7 +5,6 @@ import Dropdown from "/imports/client/lib/Dropdown";
 import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import FilterService from "/imports/client/lib/FilterService";
-import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class FileSearchBar extends Component {
@@ -32,7 +31,7 @@ export default class FileSearchBar extends Component {
       { label: "Failed", value: statuses.FAIL }
     ];
 
-    facilityQuery.fetch((err, res) => {
+    Meteor.call("facilities.get", (err, res) => {
       if (!err) {
         res.map(facility => {
           facilityOptions.push({ label: facility.name, value: facility._id });

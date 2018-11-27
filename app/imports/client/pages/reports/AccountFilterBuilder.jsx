@@ -6,7 +6,6 @@ import Notifier from "/imports/client/lib/Notifier";
 import assigneeQuery from "/imports/api/users/queries/listUsers";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
-import facilityNames from "/imports/api/facilities/queries/facilityListNames";
 import { Meteor } from "meteor/meteor";
 
 export default class AccountFilterBuilder extends React.Component {
@@ -70,7 +69,7 @@ export default class AccountFilterBuilder extends React.Component {
     if (filterBuilderData.clientId) {
       this.getProperFacilities(filterBuilderData.clientId);
     } else {
-      facilityNames.fetch((err, facilities) => {
+      Meteor.call("facilities.getEssential", (err, facilities) => {
         if (!err) {
           facilities.map(facility => {
             facilityOptions.push({
@@ -178,13 +177,10 @@ export default class AccountFilterBuilder extends React.Component {
     let facilityOptions = [];
 
     if (clientIds.length !== 0) {
-      facilityNames
-        .clone({
-          filters: {
-            clientId: { $in: clientIds }
-          }
-        })
-        .fetch((err, facilities) => {
+      Meteor.call(
+        "facilities.getEssential",
+        { clientId: { $in: clientIds } },
+        (err, facilities) => {
           if (!err) {
             facilities.map(facility => {
               facilityOptions.push({
@@ -196,10 +192,11 @@ export default class AccountFilterBuilder extends React.Component {
           } else {
             Notifier.error(err.reason);
           }
-        });
+        }
+      );
     } else {
       let facilityOptions = [];
-      facilityNames.fetch((err, facilities) => {
+      Meteor.call("facilities.getEssential", (err, facilities) => {
         if (!err) {
           facilities.map(facility => {
             facilityOptions.push({

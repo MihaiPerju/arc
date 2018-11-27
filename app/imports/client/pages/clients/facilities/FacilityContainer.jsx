@@ -39,7 +39,7 @@ export default class FacilityContainer extends Pager {
 
   listFacilities = () => {
     const params = ParamsService.getFacilitiesParams();
-    Meteor.call("facilities.get", params, (err, facilities) => {
+    Meteor.call("facilities.list", params, (err, facilities) => {
       if (!err) {
         this.setState({ facilities });
         this.updatePager();

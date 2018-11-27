@@ -3,7 +3,6 @@ import RuleSchema from "/imports/api/rules/schemas/schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
-import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
@@ -35,7 +34,7 @@ export default class RuleEdit extends React.Component {
       let clientId = value;
       let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
       this.setState({ model: { priority: 1, clientId } });
-      facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
+      Meteor.call("facilities.get", { clientId }, (err, res) => {
         if (!err) {
           res.map(facility => {
             facilityOptions.push({ label: facility.name, value: facility._id });
@@ -66,7 +65,7 @@ export default class RuleEdit extends React.Component {
     });
 
     //Filling the facility options
-    facilityQuery.fetch((err, res) => {
+    Meteor.call("facilities.get", (err, res) => {
       if (!err) {
         res.map(facility => {
           facilityOptions.push({ label: facility.name, value: facility._id });
@@ -112,7 +111,7 @@ export default class RuleEdit extends React.Component {
       });
 
     //Filling the action options
-    Meteor.call("actions.get",(err,res) => {
+    Meteor.call("actions.get", (err, res) => {
       if (!err) {
         res.map(action => {
           actionOptions.push({
