@@ -183,12 +183,12 @@ export default class RunReports {
 
     const bindColumn = (d, key) => {
       if (key.includes('metaData')) {
-        var metaDataKeys=key.split('[');
-        var metaDataKey=metaDataKeys[0];
-        var subKey=metaDataKeys[1].slice(0, -1);
+        var metaDataKeys = key.split('[');
+        var metaDataKey = metaDataKeys[0];
+        var subKey = metaDataKeys[1].slice(0, -1);
         return `${d[metaDataKey][subKey]}`;
       }
-      else  
+      else
         return `${d[key]}`;
     }
 
@@ -218,9 +218,9 @@ export default class RunReports {
     };
 
     const reportContent = renderHtml(metaData);
-
-
-    pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+    
+    const optionswidthheight = { "height": "768px", "width": "3000px" };
+    pdf.create(reportContent, optionswidthheight).toFile(pdfFilePath, (err, res) => {
       if (err) {
         future.return(err);
       } else {

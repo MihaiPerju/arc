@@ -7,6 +7,7 @@ import Settings from "../../settings/collection";
 import settings from "/imports/api/settings/enums/settings";
 import fs from "fs";
 import Business from "/imports/api/business";
+import statuses from "../enums/statuses";
 
 Meteor.methods({
   "file.rollback"(_id) {
@@ -52,4 +53,16 @@ Meteor.methods({
       return 'FILE_NOT_AVAILABLE';
     }
   },
+  
+  "failedFiles.get"(clientId, facilityId) {
+    let filter = { status: statuses.FAIL };
+
+    if (clientId != '' && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId != '' && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    return Files.find(filter).fetch();
+  }
 });

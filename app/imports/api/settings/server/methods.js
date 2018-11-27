@@ -31,19 +31,17 @@ Meteor.methods({
     Settings.update({ name }, { $set: data });
     SettingsService.createDirectories();
   },
-  
+
   "settings.get"(name) {
     Security.checkAdmin(this.userId);
     return Settings.findOne({ name });
   },
 
   "managerSettings.get"(name) {
-    Security.checkManager(this.userId);
     return Settings.findOne({ name });
   },
 
   "managerSettings.update"(data) {
-    Security.checkManager(this.userId);
     const { name } = data;
     Settings.update({ name }, { $set: data });
   }

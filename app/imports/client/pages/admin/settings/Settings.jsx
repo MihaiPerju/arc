@@ -33,7 +33,6 @@ export default class SettingsListContainer extends Component {
 
   render() {
     const { pageSelected } = this.state;
-
     return (
 
       <div className="cc-container">
