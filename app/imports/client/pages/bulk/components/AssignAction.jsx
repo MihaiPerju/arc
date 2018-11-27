@@ -25,14 +25,15 @@ export default class AssignAction extends Component {
       selectedActionId: null,
       isDisabled: false,
       customFieldValue: {},
-      queueStatus: false
+      queueStatus: false,
+      reasonCode: false
     };
     let selVal = {};
     this.getStatus = null;
   }
 
   componentWillMount() {
-    Meteor.call("actions.get",(err,actions)=> {
+    Meteor.call("actions.get", (err, actions) => {
       if (!err) {
         this.setState({
           actions,
@@ -80,7 +81,7 @@ export default class AssignAction extends Component {
       reasonCodesQuery
         .clone({
           filters: {
-            actionId: value
+            actionId: value.value
           }
         })
         .fetch((err, reasonCodes) => {
@@ -90,8 +91,9 @@ export default class AssignAction extends Component {
             });
           }
         });
-      this.setState({ selectedActionId: value });
+      this.setState({ selectedActionId: value, reasonCode: false });
     }
+    if (field == "reasonCode") { this.setState({ [field]: value }) }
     if (this.state.selectedActionId) {
       selVal = { ...this.state.customFieldValue, [field]: value };
     } else {
@@ -115,7 +117,7 @@ export default class AssignAction extends Component {
     if (input.type === "date") {
       return (
         <div className="custom-inputs" key={index}>
-          <DateField label={input.label} name={input.label} />
+          <DateField label={input.label} name={input.label} key={index} />
           <ErrorField name={input.label} />
         </div>
       );
@@ -127,6 +129,7 @@ export default class AssignAction extends Component {
             name={input.label}
             pattern="[0-9]"
             onKeyPress={this.onChangeNumber}
+            key={index}
           />
           <ErrorField name={input.label} />
         </div>
@@ -134,7 +137,7 @@ export default class AssignAction extends Component {
     }
     return (
       <div className="custom-inputs" key={index}>
-        <AutoField placeholder={input.label} name={input.label} />
+        <AutoField placeholder={input.label} name={input.label} key={index} />
         <ErrorField name={input.label} />
       </div>
     );
@@ -197,8 +200,8 @@ export default class AssignAction extends Component {
       reqParams.reasonCodes = reasonCodes
 
     let retParams = {
-        params: reqParams,
-        complete(file) {
+      params: reqParams,
+      complete(file) {
         Notifier.success("File Uploaded Successfully");
         this.removeFile(file);
         this.getStatus = setInterval(() => {
@@ -217,7 +220,8 @@ export default class AssignAction extends Component {
       isDisabled,
       actions,
       reasonCodes,
-      queueStatus
+      queueStatus,
+      reasonCode
     } = this.state;
     const actionOptions = ActionsHelper.generateOptions(actions);
     const reasonCodeOptions = ReasonCodesHelper.generateOptions(reasonCodes);
@@ -225,7 +229,7 @@ export default class AssignAction extends Component {
       selectedActionId && selectedActionId.value,
       actions
     );
-
+    
     const schema = this.getSchema(selectedAction);
 
     const componentConfig = {
@@ -279,6 +283,7 @@ export default class AssignAction extends Component {
                           labelHidden={true}
                           name="reasonCode"
                           options={reasonCodeOptions}
+                          value={reasonCode}
                         />
                         <ErrorField name="reasonCode" />
                       </div>
