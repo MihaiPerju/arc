@@ -19,7 +19,7 @@ export default class BulkUploadService {
     });
     if (job) {
       //Update the job as taken
-       JobQueue.update(
+        JobQueue.update(
         {
           _id: job._id
         },
@@ -28,7 +28,7 @@ export default class BulkUploadService {
             workerId
           }
         }
-      ); 
+      );  
       this.processBulkUploadFile(job);
     }
   }
@@ -118,7 +118,10 @@ export default class BulkUploadService {
                 if (jobData.customFields)
                   data = { ...data, ...jobData.customFields };
 
-                ActionService.createAction(data);
+                //checking the client name of the imported account number  
+                if(acctData.clientId && acctData.clientId == jobData.clientId){
+                  ActionService.createAction(data);
+                }
                 break;
               default:
                 return null;

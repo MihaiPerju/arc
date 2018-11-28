@@ -53,6 +53,7 @@ createRoute(
             status: jobStatuses.NEW,
             filePath: fileName,
             userId: user._id,
+            clientId: postData.clientId,
             actionId: JSON.parse(postData.actionId),
             assignType: postData.assignType
           };
@@ -60,9 +61,9 @@ createRoute(
         default:
           job = null;
       }
-      if(postData.reasonCodes) { job.reasonCodes = postData.reasonCodes }
-      if(postData.customFields) { job.customFields = JSON.parse(postData.customFields) }
-     
+      if(postData.assignType == bulkType.ASSIGN_ACTION && postData.reasonCodes) { job.reasonCodes = postData.reasonCodes }
+      if(postData.assignType == bulkType.ASSIGN_ACTION && postData.customFields) { job.customFields = JSON.parse(postData.customFields) }
+    
       job != null && JobQueue.insert(job); 
 
       success();

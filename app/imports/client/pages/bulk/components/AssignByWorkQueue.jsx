@@ -8,7 +8,7 @@ import workQueueQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import WorkQueueService from "/imports/client/pages/accounts/services/WorkQueueService";
 import pages from "/imports/api/bulk/enums/pages";
-import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses"; 
+import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 
 
 export default class AssignByWorkQueue extends Component {
@@ -26,8 +26,8 @@ export default class AssignByWorkQueue extends Component {
   }
 
   componentWillMount() {
-    Meteor.call("client.getAll",(err, clients) => {
-      if(!err) {
+    Meteor.call("client.getAll", (err, clients) => {
+      if (!err) {
         const clientOptions = this.clientOptions(clients);
         this.setState({
           clientOptions
@@ -50,7 +50,7 @@ export default class AssignByWorkQueue extends Component {
         }
       });  */
   }
-  
+
   componentDidMount() {
     this.getStatus = setInterval(() => {
       this.getJobQueueStatus();
@@ -66,9 +66,10 @@ export default class AssignByWorkQueue extends Component {
   }
 
   onHandleChange(field, value) {
-    if(field == "clientId") {
+    if (field == "clientId") {
       if (value) {
-        Meteor.call("client.getWorkQueue", value, (err, workQueueOptions) => {
+        Meteor.call("client.getWorkQueue", value, (err, res) => {
+          const workQueueOptions = WorkQueueService.createOptions(res);
            if (!err) {
             this.setState({ workQueueOptions });
           } else {
