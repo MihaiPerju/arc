@@ -28,12 +28,6 @@ exports.Hold = [
                     "Received Check Information",
                     "Check Information not available"
                 ]
-            },
-            {
-                name: "Zero",
-                reasons: [
-                    "Zero Balance"
-                ]
             }
         ]
     },
