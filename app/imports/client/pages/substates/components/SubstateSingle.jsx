@@ -109,18 +109,6 @@ export default class SubstateSingle extends Component {
           <SubstateDescription>{substate.description}</SubstateDescription>
         </div>
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
-          {actions.map((action, index) => (
-            <a
-              key={index}
-              className="text-blue truncate"
-              href={"/action/" + action._id + "/edit"}
-            >
-              {action.title}
-            </a>
-          ))}
-          {actions.length === 0 && "-"}
-        </div>
-        <div className="substates-field flex--helper flex-justify--center flex-align--center">
           {substate.status ? "Active" : "Not Active"}
         </div>
         <div className="substates-field text-center">

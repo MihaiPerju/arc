@@ -8,6 +8,7 @@ export default class ActionContent extends Component {
   constructor() {
     super();
     this.state = {
+      action: null,
       edit: false
     };
     this.pollingMethod = null;
@@ -18,13 +19,19 @@ export default class ActionContent extends Component {
     if (id) {
       this.setEdit();
     }
-    this.pollingMethod = setInterval(() => {
-      this.getAction();
-    }, 3000);
+
+    this.getAction(this.props.currentAction)
   }
 
-  getAction() {
-    const { currentAction } = this.props;
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.currentAction === this.props.currentAction)
+      return;
+
+    this.getAction(nextProps.currentAction);
+  }
+
+  getAction(currentAction) {
     Meteor.call("action.getOne", currentAction, (err, action) => {
       if (!err) {
         this.setState({ action });
@@ -34,37 +41,29 @@ export default class ActionContent extends Component {
     });
   }
 
-  componentWillUnmount = () => {
-    //Removing Interval
-    clearInterval(this.pollingMethod);
-  };
-
   setEdit = () => {
     const { edit } = this.state;
     this.setState({ edit: !edit });
   };
 
   render() {
-    const { substates } = this.props;
-    const { action, edit } = this.state;
-
-    if (!action) {
+    if (!this.state.action) {
       return <Loading />;
     }
 
     return (
       <div className="section-action">
-        {edit ? (
+        {this.state.edit ? (
           <ActionEdit
             setEdit={this.setEdit}
-            substates={substates}
-            action={action}
+            substates={this.props.substates}
+            action={this.state.action}
           />
         ) : (
           <ActionHeader
             setEdit={this.setEdit}
-            substates={substates}
-            action={action}
+            substates={this.props.substates}
+            action={this.state.action}
           />
         )}
       </div>

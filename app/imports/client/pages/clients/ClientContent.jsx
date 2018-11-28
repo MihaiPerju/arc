@@ -17,9 +17,11 @@ export default class ClientContent extends Component {
   }
 
   componentWillMount() {
+    this.getClient()
+
     this.pollingMethod = setInterval(() => {
       this.getClient();
-    }, 3000);
+    }, 10000);
   }
 
   getClient() {

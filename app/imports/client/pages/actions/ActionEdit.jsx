@@ -25,8 +25,20 @@ export default class ActionEdit extends React.Component {
     this.state = {
       error: null,
       checked: false,
-      isDisabled: false
+      isDisabled: false,
+      action: null
     };
+  }
+
+  componentWillMount() {
+    this.updateProps(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.action._id === this.props.action._id)
+      return;
+
+    this.updateProps(nextProps);
   }
 
   onSubmit(formData) {
@@ -54,39 +66,27 @@ export default class ActionEdit extends React.Component {
   };
 
   updateProps(props) {
-    const { action } = props;
-    if (action) {
+    if (props.action) {
       this.setState({
-        checked: !!action.substateId
+        checked: !!props.action.substateId
       });
     }
   }
 
-  componentWillReceiveProps(props) {
-    this.updateProps(props);
-  }
-
-  componentWillMount() {
-    this.updateProps(this.props);
-  }
-
   handleClick() {
     if (!Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      const currentState = this.state.checked;
       this.setState({
-        checked: !currentState
+        checked: !this.state.checked
       });
     }
   }
 
   onEditAction = () => {
-    const { form } = this.refs;
-    form.submit();
+    this.refs.form.submit();
   };
 
   onSetEdit = () => {
-    const { setEdit } = this.props;
-    setEdit();
+    this.props.setEdit();
   };
 
   handleBack = () => {
@@ -142,24 +142,56 @@ export default class ActionEdit extends React.Component {
               </div>
             </div>
             <div className="arcc-form-wrap">
-              <AutoForm
-                disabled={Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)}
-                schema={ActionSchema}
-                onSubmit={this.onSubmit.bind(this)}
-                onChange={this.onChange}
-                ref="form"
-                model={action}
-              >
-                {this.state.error && (
-                  <div className="error">{this.state.error}</div>
-                )}
-                <div className="form-wrapper">
-                  <AutoField
-                    labelHidden={true}
-                    placeholder="Title"
-                    name="title"
-                  />
-                  <ErrorField name="title" />
+            <AutoForm
+              disabled={Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)}
+              schema={ActionSchema}
+              onSubmit={this.onSubmit.bind(this)}
+              ref="form"
+              model={action}
+            >
+              {this.state.error && (
+                <div className="error">{this.state.error}</div>
+              )}
+              <div className="form-wrapper">
+                <AutoField
+                  labelHidden={true}
+                  placeholder="Title"
+                  name="title"
+                />
+                <ErrorField name="title" />
+              </div>
+
+              <div className="form-wrapper">
+                <LongTextField
+                  labelHidden={true}
+                  placeholder="Description"
+                  name="description"
+                />
+                <ErrorField name="description" />
+              </div>
+
+              <div className="check-group">
+                <input checked={checked} type="checkbox" />
+                <label onClick={this.handleClick}>
+                  Changes the substate of the Account?
+                </label>
+              </div>
+
+              {checked && (
+                <div className="select-group">
+                  <div className="form-wrapper">
+                    <SelectSimple
+                      disabled={Roles.userIsInRole(
+                        Meteor.userId(),
+                        RolesEnum.MANAGER
+                      )}
+                      placeholder="Substate"
+                      labelHidden={true}
+                      name="substateId"
+                      options={substatesOptions}
+                    />
+                    <ErrorField name="substateId" />
+                  </div>
                 </div>
 
                 <div className="form-wrapper">
