@@ -18,13 +18,24 @@ export default class AssignByWorkQueue extends Component {
       model: {},
       workQueueOptions: [],
       workQueueId: "",
-      queueStatus: false
+      queueStatus: false,
+      clientId: "",
+      clientOptions: [],
     }
     this.getStatus = null;
   }
 
   componentWillMount() {
-    workQueueQuery
+    Meteor.call("client.getAll", (err, clients) => {
+      if (!err) {
+        const clientOptions = this.clientOptions(clients);
+        this.setState({
+          clientOptions
+        });
+      }
+    });
+
+    /*  workQueueQuery
       .clone({
         filters: {
           entities: { $in: [moduleNames.WORK_QUEUE] }
@@ -37,7 +48,7 @@ export default class AssignByWorkQueue extends Component {
             workQueueOptions
           });
         }
-      });
+      });  */
   }
 
   componentDidMount() {
@@ -46,8 +57,31 @@ export default class AssignByWorkQueue extends Component {
     }, 3000);
   }
 
+  clientOptions = (data) => {
+    let clientQueues = [];
+    for (let client of data) {
+      clientQueues.push({ value: client._id, label: client.clientName });
+    }
+    return clientQueues;
+  }
+
   onHandleChange(field, value) {
+    if (field == "clientId") {
+      if (value) {
+        Meteor.call("client.getWorkQueue", value, (err, res) => {
+          const workQueueOptions = WorkQueueService.createOptions(res);
+           if (!err) {
+            this.setState({ workQueueOptions });
+          } else {
+            this.setState({ workQueueOptions: [] });
+          } 
+        });
+      } else {
+        this.setState({ workQueueOptions: [] });
+      }
+    }
     if (field == 'workQueueId') { this.setState({ workQueueId: value }); }
+    if (field == 'clientId') { this.setState({ clientId: value, workQueueId: "" }); }
   }
 
   getJobQueueStatus = () => {
@@ -71,7 +105,7 @@ export default class AssignByWorkQueue extends Component {
   }
 
   render() {
-    const { model, workQueueId, workQueueOptions, queueStatus } = this.state;
+    const { model, workQueueId, workQueueOptions, queueStatus, clientId, clientOptions } = this.state;
     const componentConfig = {
       postUrl: `/uploads/assignBulkUpload/${getToken()}`
     };
@@ -107,6 +141,19 @@ export default class AssignByWorkQueue extends Component {
             <div className="main-content m-t--10">
               <div className="header-block header-account">
                 <div className="additional-info account-info">
+                  <div className="select-wrapper select_div dropdown-icon">
+                    <div className="select_label">Select Client :</div>
+                    <div className="select-form border-style">
+                      <SelectField
+                        name="clientId"
+                        labelHidden={true}
+                        options={clientOptions}
+                        placeholder="Select Client"
+                        value={clientId}
+                      />
+                      <ErrorField name="clientId" />
+                    </div>
+                  </div>
                   <div className="select-wrapper select_div dropdown-icon">
                     <div className="select_label">Select Group :</div>
                     <div className="select-form border-style">
@@ -154,7 +201,10 @@ export default class AssignByWorkQueue extends Component {
 const schema = new SimpleSchema({
   workQueueId: {
     type: String,
-    optional: true,
-    label: "Select Work Queue"
+    optional: true
+  },
+  clientId: {
+    type: String,
+    optional: true
   }
 });

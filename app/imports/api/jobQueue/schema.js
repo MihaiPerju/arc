@@ -79,6 +79,10 @@ export default new SimpleSchema({
     blackbox: true,
     optional: true
   },
+  clientId: {
+    type: String,
+    optional: true
+  },
   createdAt: {
     type: Date,
     autoValue: () => {
