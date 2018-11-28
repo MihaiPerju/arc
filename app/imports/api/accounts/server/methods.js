@@ -245,7 +245,7 @@ Meteor.methods({
     );
   },
 
-  "accounts.getSample"(filters) {
+  "accounts.getSample"(filters = {}) {
     return AccountsService.getSample(filters);
   },
 
