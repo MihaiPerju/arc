@@ -4,7 +4,6 @@ import LetterDirectory from "./LetterDirectory";
 import SMTP from "./SMTP";
 import CompileTime from "./CompileTime";
 import pages from "/imports/api/settings/enums/settings";
-import Loading from "/imports/client/lib/ui/Loading";
 import WidgetSettings from "../../../settings/components/WidgetSettings";
 
 export default class SettingsContent extends Component {

@@ -9,10 +9,10 @@ export default class TechOrAdminDashboard extends React.Component {
   state = { widgetSettings: null, isLoading: true };
 
   componentWillMount() {
-    this.getManagerWidgetSettings()
+    this.getWidgetSettings()
   }
 
-  getManagerWidgetSettings() {
+  getWidgetSettings() {
     this.setState({ isLoading: true });
     Meteor.call("managerSettings.get", pages.WIDGET_SETTINGS, (err, responseData) => {
       if (!err) {

@@ -9,11 +9,12 @@ import moment from "moment";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
-import RepDashboard from "./components/RepDashboard";
+//import RepDashboard from "./components/RepDashboard";
 import ManagerDashboard from "./components/ManagerDashboard";
 import CHART_TYPE from './enums/chartType';
 import { dateRangeValues } from './enums/dateRange';
 import TechOrAdminDashboard from "./components/TechOrAdminDashboard";
+import UserDashboard from "./components/UserDashboard";
 
 export default class Home extends React.Component {
 
@@ -261,7 +262,7 @@ export default class Home extends React.Component {
     }
 
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
-      return <RepDashboard />;
+      return <UserDashboard filters={filters} />;
     }
   }
 
