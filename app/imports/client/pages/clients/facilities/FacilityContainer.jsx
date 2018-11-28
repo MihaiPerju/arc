@@ -102,7 +102,9 @@ export default class FacilityContainer extends Pager {
     this.setState({
       create: false
     });
+    
     this.updatePager();
+    this.listFacilities()
   };
 
   deleteAction = () => {
@@ -132,6 +134,8 @@ export default class FacilityContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentFacility: null });
+
+    this.listFacilities()
   };
 
   updatePager = () => {

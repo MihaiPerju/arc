@@ -23,9 +23,11 @@ export default class FacilityContent extends Component {
   }
 
   componentWillMount() {
+    this.getFacility();
+
     this.pollingMethod = setInterval(() => {
       this.getFacility();
-    }, 3000);
+    }, 10000);
   }
 
   getFacility() {
