@@ -6,7 +6,10 @@ const ManagerWidgets = {
   REPORTS_SENT: 'Reports Sent',
   ESCALATION_RESOLVED: 'Escalation Resolved',
   NOTIFICATIONS: 'Notifications',
-  FAILEDUPLOADQUEUES: 'Failed Upload Queues'
+  FAILEDUPLOADQUEUES: 'Failed Upload Queues',
+  ASSIGNED_TO_ME: 'Assigned To Me',
+  COMPLETED: 'Completed'
 };
 
 export { ManagerWidgets };
+

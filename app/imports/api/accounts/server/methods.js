@@ -674,6 +674,71 @@ Meteor.methods({
       filter['userId'] = userId;
 
     return AccountActions.find(filter).fetch();
-  }
+  },
+  
+  "accountsHold.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
+    let filter = { 'assigneeId': { $ne: null }, state: StateEnum.HOLD };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    if (assigneeId && assigneeId != '-1')
+      filter['assigneeId'] = assigneeId;
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
+    return Accounts.find(filter).fetch();
+  },
+
+  async 'account.getHoldAccountsPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
+    const AccountsRaw = Accounts.rawCollection();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+
+    let filter = { 'assigneeId': { $ne: null }, state: StateEnum.HOLD };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    if (assigneeId && assigneeId != '-1')
+      filter['assigneeId'] = assigneeId;
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
+    const holdAccountsPerHour = await AccountsRaw.aggregateSync([{
+      $match: filter,
+    },
+    {
+      $group: {
+        _id: {
+          y: {
+            $year: '$createdAt'
+          },
+          m: {
+            $month: '$createdAt'
+          },
+          d: {
+            $dayOfMonth: '$createdAt'
+          },
+          h: {
+            $hour: '$createdAt'
+          },
+        },
+        total: {
+          $sum: 1
+        },
+      },
+    },
+    ]).toArray();
+
+    return ActionService.graphStandardizeData(holdAccountsPerHour);
+  },
 
 });
