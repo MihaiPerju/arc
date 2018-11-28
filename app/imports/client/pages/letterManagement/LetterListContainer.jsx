@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import LetterList from "./components/LetterList";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/letters/queries/letterList.js";
-import Loading from "/imports/client/lib/ui/Loading";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import Notifier from "/imports/client/lib/Notifier";
 
-class LetterListContainer extends Pager {
+export default class LetterListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -20,14 +18,37 @@ class LetterListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: []
+      tags: [],
+      letters: []
     });
-    this.query = query;
+    this.method = "letters.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listLetters();
+    }, 3000);
+  }
+
+  listLetters = () => {
+    const params = ParamsService.getLettersParams();
+    Meteor.call("letters.get", params, (err, letters) => {
+      if (!err) {
+        this.setState({ letters });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   componentWillReceiveProps() {
@@ -52,8 +73,8 @@ class LetterListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage });
   };
@@ -73,7 +94,7 @@ class LetterListContainer extends Pager {
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getLettersParams();
     this.recount(queryParams);
   };
 
@@ -88,15 +109,8 @@ class LetterListContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
-    const { total, range, create, tags } = this.state;
-    if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
-      return <Loading />;
-    }
+    const { total, range, create, tags, letters } = this.state;
 
-    if (error) {
-      return <div>{error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div className={create ? "left__side" : "left__side full__width"}>
@@ -105,7 +119,7 @@ class LetterListContainer extends Pager {
             tags={tags}
             hideFilter
           />
-          <LetterList letters={data} tags={tags} />
+          <LetterList letters={letters} tags={tags} />
           <PaginationBar
             create={this.createForm}
             closeForm={this.closeForm}
@@ -146,12 +160,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(LetterListContainer);

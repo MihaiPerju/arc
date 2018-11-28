@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import { moduleNames } from "/imports/api/tags/enums/tags";
@@ -27,17 +26,11 @@ export default class SubstateSingle extends Component {
   }
 
   getActions = actionIds => {
-    actionQuery
-      .clone({
-        filters: {
-          _id: { $in: actionIds }
-        }
-      })
-      .fetch((err, actions) => {
-        if (!err) {
-          this.setState({ actions });
-        }
-      });
+    Meteor.call("actions.get", { _id: { $in: actionIds } }, (err, actions) => {
+      if (!err) {
+        this.setState({ actions });
+      }
+    });
   };
 
   onSetSubstate = () => {

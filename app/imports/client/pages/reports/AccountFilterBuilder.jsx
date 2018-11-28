@@ -6,8 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import assigneeQuery from "/imports/api/users/queries/listUsers";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
-import facilityNames from "/imports/api/facilities/queries/facilityListNames";
-import clientsQuery from "/imports/api/clients/queries/listClients";
+import { Meteor } from "meteor/meteor";
 
 export default class AccountFilterBuilder extends React.Component {
   constructor() {
@@ -70,7 +69,7 @@ export default class AccountFilterBuilder extends React.Component {
     if (filterBuilderData.clientId) {
       this.getProperFacilities(filterBuilderData.clientId);
     } else {
-      facilityNames.fetch((err, facilities) => {
+      Meteor.call("facilities.getEssential", (err, facilities) => {
         if (!err) {
           facilities.map(facility => {
             facilityOptions.push({
@@ -103,7 +102,7 @@ export default class AccountFilterBuilder extends React.Component {
     });
 
     //Getting client options
-    clientsQuery.fetch((err, clients) => {
+    Meteor.call("clients.getEssential", (err, clients) => {
       if (!err) {
         clients.map(client => {
           clientOptions.push({ value: client._id, label: client.clientName });
@@ -143,7 +142,7 @@ export default class AccountFilterBuilder extends React.Component {
       data,
       components
     );
-    
+
     if (error) {
       Notifier.error(error);
     } else {
@@ -178,13 +177,10 @@ export default class AccountFilterBuilder extends React.Component {
     let facilityOptions = [];
 
     if (clientIds.length !== 0) {
-      facilityNames
-        .clone({
-          filters: {
-            clientId: { $in: clientIds }
-          }
-        })
-        .fetch((err, facilities) => {
+      Meteor.call(
+        "facilities.getEssential",
+        { clientId: { $in: clientIds } },
+        (err, facilities) => {
           if (!err) {
             facilities.map(facility => {
               facilityOptions.push({
@@ -196,10 +192,11 @@ export default class AccountFilterBuilder extends React.Component {
           } else {
             Notifier.error(err.reason);
           }
-        });
+        }
+      );
     } else {
       let facilityOptions = [];
-      facilityNames.fetch((err, facilities) => {
+      Meteor.call("facilities.getEssential", (err, facilities) => {
         if (!err) {
           facilities.map(facility => {
             facilityOptions.push({
@@ -232,7 +229,6 @@ export default class AccountFilterBuilder extends React.Component {
         {loading ? (
           <Loading />
         ) : (
-
           <div>
             <AutoForm
               model={filterBuilderData}
@@ -251,22 +247,23 @@ export default class AccountFilterBuilder extends React.Component {
                       substateOptions={substateOptions}
                       deleteFilter={this.deleteFilter}
                       name={item.name}
+                      filterData={filterBuilderData}
                     />
                   )
                 );
               })}
             </AutoForm>
             <div className="add-report-filter">
-               <AutoForm
-                  ref="filterSelect"
-                  onChange={this.createFilter}
-                  schema={filterSchema}
-                >
-                  <SelectField options={schemaOptions} name="filter" />
-                </AutoForm>
-              </div>
+              <AutoForm
+                ref="filterSelect"
+                onChange={this.createFilter}
+                schema={filterSchema}
+              >
+                <SelectField options={schemaOptions} name="filter" />
+              </AutoForm>
             </div>
-          )}
+          </div>
+        )}
       </main>
     );
   }

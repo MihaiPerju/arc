@@ -186,7 +186,7 @@ export default class FacilityContentHeader extends Component {
               >
                 <div className="text-light-grey">Allowed users</div>
                 <div className="info-label">
-                  <span>{facility.users.length} users</span>
+                  <span>{facility&& facility.users&&facility.users.length} users</span>
                 </div>
               </div>
               {dropdown && <Dropdown users={facility.users} />}

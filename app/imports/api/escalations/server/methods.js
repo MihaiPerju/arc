@@ -26,5 +26,11 @@ Meteor.methods({
     }
 
     NotificationService.createRespondToEscalation(authorId, accountId);
+  },
+
+  "escalation.get"(filters = {}) {
+    return Escalations.findOne(filters, {
+      fields: { open: 1, messages: 1 }
+    });
   }
 });

@@ -1,19 +1,14 @@
 import React, { Component } from "react";
-import {
-  AutoForm,
-  AutoField,
-  ErrorField,
-  SelectField
-} from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
-import query from "/imports/api/actions/queries/actionList";
 import Notifier from "../../../../lib/Notifier";
 import reasonCodesQuery from "/imports/api/reasonCodes/queries/reasonCodesList";
 import Loading from "/imports/client/lib/ui/Loading";
 import ActionsHelper from "/imports/api/actions/helpers/OptionsGenerator";
 import ReasonCodesHelper from "/imports/api/reasonCodes/helpers/OptionsGenerator";
 import DateField from "/imports/client/lib/uniforms/DateField";
+import requirementTypes from "/imports/api/actions/enums/requirementEnum";
 
 export default class NewAction extends Component {
   constructor() {
@@ -29,7 +24,7 @@ export default class NewAction extends Component {
   }
 
   componentWillMount() {
-    query.clone().fetch((err, actions) => {
+    Meteor.call("actions.get", (err, actions) => {
       if (!err) {
         this.setState({
           actions,
@@ -46,24 +41,40 @@ export default class NewAction extends Component {
   }
 
   onSubmit = data => {
-    const { account, hide, freezeAccount, bulkAssign, params, accountIds, bulkOption } = this.props;
+    const {
+      account,
+      hide,
+      freezeAccount,
+      bulkAssign,
+      params,
+      accountIds,
+      bulkOption
+    } = this.props;
+    reasonCodes;
     const selectedActionId = this.state.selectedActionId;
     const reasonCodes = this.state.reasonCodes;
-    
-    if(bulkOption) {
+
+    if (bulkOption) {
       this.setState({ isDisabled: true });
       let accountList = bulkAssign ? false : accountIds;
-      Meteor.call("account.assignAction.bulk",  data, selectedActionId, reasonCodes, params, accountList, err => {
-        if (!err) {
-          hide();
-          Notifier.success("Data saved");
-        } else {
-          Notifier.error(err.reason);
+      Meteor.call(
+        "account.assignAction.bulk",
+        data,
+        selectedActionId,
+        reasonCodes,
+        params,
+        accountList,
+        err => {
+          if (!err) {
+            hide();
+            Notifier.success("Data saved");
+          } else {
+            Notifier.error(err.reason);
+          }
+          this.setState({ isDisabled: false });
         }
-        this.setState({ isDisabled: false });
-      }); 
-
-    } else{
+      );
+    } else {
       data.accountId = account._id;
       if (account.assignee) {
         data.addedBy = `${account.assignee.profile.firstName} ${
@@ -87,7 +98,7 @@ export default class NewAction extends Component {
         }
         this.setState({ isDisabled: false });
       });
-    }  
+    }
   };
 
   onHide = () => {
@@ -100,7 +111,7 @@ export default class NewAction extends Component {
       reasonCodesQuery
         .clone({
           filters: {
-            actionId: value
+            actionId: value && value.value
           }
         })
         .fetch((err, reasonCodes) => {
@@ -108,6 +119,8 @@ export default class NewAction extends Component {
             this.setState({
               reasonCodes
             });
+          } else {
+            Notifier.error(err.reason);
           }
         });
       this.setState({ selectedActionId: value });
@@ -126,8 +139,7 @@ export default class NewAction extends Component {
     e = e || window.event;
     var charCode = typeof e.which == "undefined" ? e.keyCode : e.which;
     var charStr = String.fromCharCode(charCode);
-
-    if (!charStr.match(/^[0-9]+$/)) e.preventDefault();
+    if (!charStr.match(/^[0-9]+$/) && charStr != ".") e.preventDefault();
   };
 
   getInputSingle = (input, index) => {
@@ -142,7 +154,6 @@ export default class NewAction extends Component {
       return (
         <div className="custom-inputs" key={index}>
           <AutoField
-            labelHidden={true}
             placeholder={input.label}
             name={input.label}
             pattern="[0-9]"
@@ -154,11 +165,7 @@ export default class NewAction extends Component {
     }
     return (
       <div className="custom-inputs" key={index}>
-        <AutoField
-          labelHidden={true}
-          placeholder={input.label}
-          name={input.label}
-        />
+        <AutoField placeholder={input.label} name={input.label} />
         <ErrorField name={input.label} />
       </div>
     );
@@ -179,7 +186,7 @@ export default class NewAction extends Component {
     //Extend schema for inputs
     if (action && action.inputs) {
       for (let input of action.inputs) {
-        let optional = !input.isRequired;
+        let optional = input.requirement === requirementTypes.OPTIONAL;
         if (input.type === "date") {
           _.extend(schema, {
             [input.label]: {
@@ -190,7 +197,7 @@ export default class NewAction extends Component {
         } else if (input.type === "number") {
           _.extend(schema, {
             [input.label]: {
-              type: SimpleSchema.Integer,
+              type: Number,
               optional
             }
           });
@@ -215,12 +222,14 @@ export default class NewAction extends Component {
       actions,
       reasonCodes
     } = this.state;
+
     const actionOptions = ActionsHelper.generateOptions(actions);
     const reasonCodeOptions = ReasonCodesHelper.generateOptions(reasonCodes);
     const selectedAction = ActionsHelper.selectAction(
-      selectedActionId,
+      selectedActionId && selectedActionId.value,
       actions
     );
+
     const schema = this.getSchema(selectedAction);
 
     if (loading) {
@@ -239,7 +248,7 @@ export default class NewAction extends Component {
           >
             <div className="select-row">
               <div className="select-group">
-                <SelectField
+                <SelectSimple
                   name="actionId"
                   labelHidden={false}
                   options={actionOptions}

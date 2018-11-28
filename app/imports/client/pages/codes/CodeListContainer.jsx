@@ -1,20 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import CodeList from "./components/CodeList.jsx";
 import CodeSearchBar from "./components/CodeSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import CodeContent from "./CodeContent.jsx";
-import CodeCreate from "./CodeCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/codes/queries/listCodes";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./CodeRightSide";
 
-class CodeListContainer extends Pager {
+export default class CodeListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -25,14 +20,37 @@ class CodeListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: []
+      tags: [],
+      codes: []
     });
-    this.query = query;
+    this.method = "codes.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listCodes();
+    }, 3000);
+  }
+
+  listCodes = () => {
+    const params = ParamsService.getCodesParams();
+    Meteor.call("codes.get", params, (err, codes) => {
+      if (!err) {
+        this.setState({ codes });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   componentWillReceiveProps() {
@@ -113,8 +131,8 @@ class CodeListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
   };
@@ -128,7 +146,7 @@ class CodeListContainer extends Pager {
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getCodesParams();
     this.recount(queryParams);
   };
 
@@ -143,24 +161,16 @@ class CodeListContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       codesSelected,
       currentCode,
       create,
       range,
       total,
-      tags
+      tags,
+      codes
     } = this.state;
-    const code = objectFromArray(data, currentCode);
 
-    if (isLoading && !FlowRouter.getQueryParam("code")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -186,7 +196,7 @@ class CodeListContainer extends Pager {
             selectCode={this.selectCode}
             currentCode={currentCode}
             setCode={this.setCode}
-            codes={data}
+            codes={codes}
             tags={tags}
           />
           <PaginationBar
@@ -198,43 +208,13 @@ class CodeListContainer extends Pager {
           />
         </div>
         {(currentCode || create) && (
-          <RightSide code={code} create={create} close={this.closeForm} />
+          <RightSide
+            currentCode={currentCode}
+            create={create}
+            close={this.closeForm}
+          />
         )}
       </div>
     );
   }
 }
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { code, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <CodeCreate close={close} /> : <CodeContent code={code} />}
-      </div>
-    );
-  }
-}
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(CodeListContainer);

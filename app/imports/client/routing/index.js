@@ -199,13 +199,12 @@ import TagsListContainer from "/imports/client/pages/tags/TagsListContainer.jsx"
 
 route("/tags/list", TagsListContainer);
 
-
-//Flagged accounts
-import FlaggedAccountListContainer from "/imports/client/pages/accounts/FlaggedAccountListContainer";
-
-route("/flagged", FlaggedAccountListContainer);
-
 //Tags
 import FileListContainer from "/imports/client/pages/files/FileListContainer.jsx";
 
 route("/file/list", FileListContainer);
+
+//Bulk management
+import BulkManagement from "/imports/client/pages/bulk/BulkAction.jsx";
+
+route("/bulk/action", BulkManagement);

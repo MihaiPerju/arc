@@ -9,17 +9,41 @@ import Uploads from "../../uploads/uploads/collection";
 import bcrypt from "bcrypt";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import FacilityService from "./services/FacilityService.js";
 
 Meteor.methods({
+  "facilities.list"(params) {
+    const queryParams = QueryBuilder.getFacilitiesParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    options.fields = { name: 1 };
+    return Facilities.find(filters, options).fetch();
+  },
+
+  "facilities.count"(params) {
+    const queryParams = QueryBuilder.getFacilitiesParams(params);
+    let filters = queryParams.filters;
+    return Facilities.find(filters).count();
+  },
+
+  "facility.getOne"(_id) {
+    Security.isAdminOrTech(this.userId);
+    return Facilities.findOne({ _id });
+  },
+
+  "facilities.get"(filters = {}) {
+    return FacilityService.getFacilities(filters);
+  },
+
+  "facilities.getEssential"(filters = {}) {
+    return FacilityService.getEssential(filters);
+  },
+
   "facility.create"(data) {
     Security.isAdminOrTech(this.userId);
 
     Facilities.insert(data);
-  },
-
-  "facility.get"(facilityId) {
-    Security.isAdminOrTech(this.userId);
-    return Facilities.findOne(facilityId);
   },
 
   "facility.update"(facility) {

@@ -179,6 +179,14 @@ h6 {
   padding-bottom: 0!important;
 }
 
+.p-l--10{
+  padding-left: 10px;
+}
+
+.p-l--0{
+  padding-left: 0 !important;
+}
+
 .m-t--20 {
   margin-top: 20px;
 }
@@ -269,5 +277,22 @@ width: 100%;
 .btn-disable-color {
 background-color: #ffc966 !important;
 cursor: none !important;
+}
+
+.main-container{
+  display: inline-block;
+  width:100%;
+}
+
+.float-right{
+  float: right;
+}
+
+.chk-box-label{
+  margin-left: 7px;
+}
+
+.dropdown-icon:before {
+  top: 30px !important;
 }
 

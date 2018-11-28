@@ -1,6 +1,5 @@
 import React from "react";
 import SimpleSchema from "simpl-schema";
-import accountActionsQuery from "/imports/api/accountActions/queries/accountActionList";
 import { Timeline, TimelineEvent } from "react-event-timeline";
 import moment from "moment";
 import UserService from "./services/UserService";
@@ -80,7 +79,7 @@ export default class ActivityStream extends React.Component {
       options: { limit, skip, sort: { createdAt: -1 } }
     });
 
-    accountActionsQuery.clone(params).fetch((err, actions) => {
+    Meteor.call("accountActions.get", params, (err, actions) => {
       if (!err) {
         let { accountActions } = this.state;
         accountActions = accountActions.concat(actions);
@@ -147,7 +146,7 @@ export default class ActivityStream extends React.Component {
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
-                      }`}
+                    }`}
                   >
                     {account.acctNum}
                   </a>
@@ -182,7 +181,7 @@ export default class ActivityStream extends React.Component {
                 className="text-blue"
                 href={`/accounts/${account.state.toLowerCase()}?accountId=${
                   account._id
-                  }`}
+                }`}
               >
                 {account.acctNum}
               </a>
@@ -206,7 +205,7 @@ export default class ActivityStream extends React.Component {
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
-                      }`}
+                    }`}
                   >
                     {account.acctNum}
                   </a>
@@ -229,7 +228,7 @@ export default class ActivityStream extends React.Component {
                     className="text-blue"
                     href={`/accounts/${account.state.toLowerCase()}?accountId=${
                       account._id
-                      }`}
+                    }`}
                   >
                     {account.acctNum}
                   </a>
@@ -250,37 +249,37 @@ export default class ActivityStream extends React.Component {
                 )}
               </div>
             ) : (
-                <div>
-                  <b>
-                    {user.profile.firstName} {user.profile.lastName}
-                  </b>{" "}
-                  flagged a comment on account with account number{" "}
-                  {account && (
-                    <a
-                      className="text-blue"
-                      href={`/accounts/${account.state.toLowerCase()}?accountId=${
-                        account._id
-                        }`}
-                    >
-                      {account.acctNum}
-                    </a>
-                  )}
-                  {!isOpen && (
-                    <div>
-                      <br />
-                      Manager{" "}
-                      {manager && (
-                        <b>
-                          {manager.profile.firstName} {manager.profile.lastName}
-                        </b>
-                      )}{" "}
-                      has responsed to a comment and{" "}
-                      {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                flagged a comment on account with account number{" "}
+                {account && (
+                  <a
+                    className="text-blue"
+                    href={`/accounts/${account.state.toLowerCase()}?accountId=${
+                      account._id
+                    }`}
+                  >
+                    {account.acctNum}
+                  </a>
+                )}
+                {!isOpen && (
+                  <div>
+                    <br />
+                    Manager{" "}
+                    {manager && (
+                      <b>
+                        {manager.profile.firstName} {manager.profile.lastName}
+                      </b>
+                    )}{" "}
+                    has responsed to a comment and{" "}
+                    {isFlagApproved ? <b>approved</b> : <b>rejected</b>} the
                     flag with reason <b>{flagResponse}</b>
-                    </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         );
       case actionTypesEnum.EDIT:
@@ -296,15 +295,15 @@ export default class ActivityStream extends React.Component {
                 in the field <b>{accountField}</b>.
               </div>
             ) : (
-                <div>
-                  <b>
-                    {user.profile.firstName} {user.profile.lastName}
-                  </b>{" "}
-                  updated the account <b>{account && account.acctNum}</b> and
+              <div>
+                <b>
+                  {user.profile.firstName} {user.profile.lastName}
+                </b>{" "}
+                updated the account <b>{account && account.acctNum}</b> and
                 added the value <b>{fieldUpdatedValue}</b> in the field{" "}
-                  <b>{accountField}</b>.
+                <b>{accountField}</b>.
               </div>
-              )}
+            )}
           </div>
         );
       case actionTypesEnum.LOCK_BREAK:
@@ -321,7 +320,7 @@ export default class ActivityStream extends React.Component {
                 className="text-blue"
                 href={`/accounts/${account.state.toLowerCase()}?accountId=${
                   account._id
-                  }`}
+                }`}
               >
                 {account.acctNum}
               </a>
@@ -343,12 +342,7 @@ export default class ActivityStream extends React.Component {
   };
 
   render() {
-    const {
-      accountActions,
-      model,
-      actionTypes,
-      isScrollLoading
-    } = this.state;
+    const { accountActions, model, actionTypes, isScrollLoading } = this.state;
 
     return (
       <div className="cc-container settings-container dashboard-container">
@@ -360,16 +354,16 @@ export default class ActivityStream extends React.Component {
             <div className="d-header-left">
               <h2>Activity Timeline</h2>
             </div>
-            <div className="d-header-right" style={{ width: '30%' }}>
+            <div className="d-header-right" style={{ width: "30%" }}>
               <AutoForm
                 autosave
                 autosaveDelay={500}
                 ref="filters"
                 onSubmit={this.onSubmit}
                 schema={schema}
-                model={model} style={{ width: '100%' }}
+                model={model}
+                style={{ width: "100%" }}
               >
-
                 <div className="select-wrapper full-width">
                   <div className="flex--helper form-group__pseudo full-width">
                     <div className="select-form full-width">

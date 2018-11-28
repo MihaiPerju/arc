@@ -1,8 +1,6 @@
 import SimpleSchema from "simpl-schema";
 import StateEnum from "./enums/states";
-import {
-  Substates
-} from "./enums/substates";
+import { Substates } from "./enums/substates";
 import insuranceSchema from "/imports/api/facilities/schemas/insuranceSchema";
 
 export default new SimpleSchema({
@@ -69,7 +67,7 @@ export default new SimpleSchema({
   insurances: {
     type: Array,
     optional: true,
-    autoValue: function () {
+    autoValue: function() {
       let arrayLen = this.value ? this.value.length : 0;
       for (let i = 0; i < arrayLen; i++) {
         let index = i;
@@ -102,7 +100,7 @@ export default new SimpleSchema({
   state: {
     type: String,
     defaultValue: StateEnum.ACTIVE,
-    allowedValues: _.map(StateEnum, (value) => value)
+    allowedValues: _.map(StateEnum, value => value)
   },
   substate: {
     type: String,
@@ -126,14 +124,21 @@ export default new SimpleSchema({
   "attachmentIds.$": {
     type: String
   },
-  actionsLinkData: {
+  actionIds: {
     type: Array,
     optional: true
   },
-  "actionsLinkData.$": {
+  "actionIds.$": {
     type: String
   },
-  metaData: {
+  letterIds: {
+    type: Array,
+    optional: true
+  },
+  "letterIds.$": {
+    type: String
+  },
+  metadata: {
     type: Object,
     blackbox: true,
     optional: true
@@ -191,7 +196,7 @@ export default new SimpleSchema({
   invoiceNo: {
     type: Array,
     optional: true,
-    autoValue: function () {
+    autoValue: function() {
       let arrayLen = this.value ? this.value.length : 0;
       for (let i = 0; i < arrayLen; i++) {
         if (!this.value[i]) {
@@ -279,4 +284,3 @@ export default new SimpleSchema({
     optional: true
   }
 });
-

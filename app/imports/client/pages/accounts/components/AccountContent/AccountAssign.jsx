@@ -55,7 +55,7 @@ export default class AccountAssign extends React.Component {
     workQueueQuery
       .clone({
         filters: {
-          entities: { $in: [moduleNames.USERS] }
+          entities: { $in: [moduleNames.WORK_QUEUE] }
         }
       })
       .fetch((err, res) => {

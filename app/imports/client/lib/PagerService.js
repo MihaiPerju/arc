@@ -6,36 +6,19 @@ import UserRoles, {
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
-
-  static setQuery(query, {
-    page,
-    perPage,
-    state,
-    assign,
-    filters,
-    options
-  }) {
-    let params = this.getPagerOptions(page, perPage);
-    const {
-      route
-    } = FlowRouter.current();
-
-    if (state || state === "" || route.path.indexOf("flagged") > -1) {
-      this.getAccountFilters(params, state, filters, options);
-      this.getProperAccounts(params, assign);
-    } else {
-      // common method for filtering
-      this.getFilters(params, filters);
-    }
-    this.queryParams = params;
-    return query.clone(params);
+  
+  static getPagerOptions(page, perPage) {
+    return {
+      limit: perPage,
+      skip: perPage * (page - 1)
+    };
   }
 
   static getParams() {
     return this.queryParams;
   }
 
-  static getAccountQueryParams() {
+  static getAccountParams() {
     const tickleUserId = FlowRouter.getQueryParam("tickleUserId");
     const page = FlowRouter.getQueryParam("page");
     const assign = FlowRouter.getQueryParam("assign");
@@ -108,6 +91,7 @@ export default class PagerService {
       assign
     };
   }
+
   static getFilesQueryParams() {
     const facilityId = FlowRouter.getQueryParam("facilityId");
     const clientId = FlowRouter.getQueryParam("clientId");
@@ -577,6 +561,10 @@ export default class PagerService {
       status = FlowRouter.getQueryParam("status");
     }
 
+    if (currentPath.indexOf("rules/list") > -1) {
+      name = FlowRouter.getQueryParam("name");
+    }
+
     tagIds = FlowRouter.getQueryParam("tagIds");
 
     // client search
@@ -788,13 +776,6 @@ export default class PagerService {
     return {
       lowest,
       highest
-    };
-  }
-
-  static getPagerOptions(page, perPage) {
-    return {
-      limit: perPage,
-      skip: perPage * (page - 1)
     };
   }
 

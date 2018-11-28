@@ -1,21 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import ActionSearchBar from "./components/ActionSearchBar.jsx";
 import ActionList from "./components/ActionList.jsx";
-import ActionContent from "./ActionContent.jsx";
-import ActionCreate from "./ActionCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/actions/queries/actionList";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import substateQuery from "/imports/api/substates/queries/listSubstates";
-import TagsListQuery from '/imports/api/tags/queries/listTags';
+import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./ActionRightSide";
 
-class ActionListContainer extends Pager {
+export default class ActionListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -28,9 +23,11 @@ class ActionListContainer extends Pager {
       range: {},
       substates: [],
       loadingSubstates: true,
-      tags: []
+      tags: [],
+      actions: []
     });
-    this.query = query;
+    this.method = "actions.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
@@ -52,6 +49,27 @@ class ActionListContainer extends Pager {
       this.setAction(id);
     }
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listActions();
+    }, 3000);
+  }
+
+  listActions = () => {
+    const params = ParamsService.getActionsParams();
+    Meteor.call("actions.list", params, (err, actions) => {
+      if (!err) {
+        this.setState({ actions });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   componentWillReceiveProps() {
@@ -127,32 +145,29 @@ class ActionListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getActionsParams();
     this.recount(queryParams);
   };
 
   getTags = () => {
-    TagsListQuery
-      .clone({
-        filters: {entities: {$in: [moduleNames.ACTIONS]}},
-      })
-      .fetch((err, tags) => {
-        if (!err) {
-          this.setState({ tags });
-        }
-      });
+    TagsListQuery.clone({
+      filters: { entities: { $in: [moduleNames.ACTIONS] } }
+    }).fetch((err, tags) => {
+      if (!err) {
+        this.setState({ tags });
+      }
+    });
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       actionsSelected,
       currentAction,
@@ -160,18 +175,10 @@ class ActionListContainer extends Pager {
       total,
       range,
       substates,
-      loadingSubstates,
-      tags
+      tags,
+      actions
     } = this.state;
-    const action = objectFromArray(data, currentAction);
 
-    if ((isLoading || loadingSubstates) && !FlowRouter.getQueryParam("title")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -188,12 +195,16 @@ class ActionListContainer extends Pager {
             hideFilter
           />
           <ActionList
-            class={this.state.filter ? "task-list actions decreased" : "task-list actions"}
+            class={
+              this.state.filter
+                ? "task-list actions decreased"
+                : "task-list actions"
+            }
             actionsSelected={actionsSelected}
             selectAction={this.selectAction}
             currentAction={currentAction}
             setAction={this.setAction}
-            actions={data}
+            actions={actions}
             tags={tags}
           />
           <PaginationBar
@@ -206,7 +217,7 @@ class ActionListContainer extends Pager {
         </div>
         {(currentAction || create) && (
           <RightSide
-            action={action}
+            currentAction={currentAction}
             create={create}
             close={this.closeForm}
             substates={substates}
@@ -216,41 +227,3 @@ class ActionListContainer extends Pager {
     );
   }
 }
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { action, create, close, substates } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <ActionCreate substates={substates} close={close} />
-        ) : (
-            <ActionContent substates={substates} action={action} />
-          )}
-      </div>
-    );
-  }
-}
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(ActionListContainer);

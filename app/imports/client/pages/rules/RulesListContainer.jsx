@@ -1,18 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import RuleSearchBar from "./components/RuleSearchBar.jsx";
 import RulesList from "./components/RulesList.jsx";
-import RuleContent from "./RuleContent.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/rules/queries/listRules";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
-import RuleCreate from "./RuleCreate";
 import Notifier from "/imports/client/lib/Notifier";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
+import RightSide from "./RuleRightSide";
 
-class RuleListContainer extends Pager {
+export default class RuleListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -23,13 +18,36 @@ class RuleListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      rules: []
     });
-    this.query = query;
+    this.method = "rules.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
+
+    this.pollingMethod = setInterval(() => {
+      this.listRules();
+    }, 3000);
+  }
+
+  listRules = () => {
+    const params = ParamsService.getRulesParams();
+    Meteor.call("rules.get", params, (err, rules) => {
+      if (!err) {
+        this.setState({ rules });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   componentWillReceiveProps() {
@@ -122,30 +140,28 @@ class RuleListContainer extends Pager {
   };
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentRule: null });
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getRulesParams();
     this.recount(queryParams);
   };
 
   render() {
-    const { data, loading, error } = this.props;
-    const { rulesSelected, currentRule, create, range, total } = this.state;
-    const rule = objectFromArray(data, currentRule);
+    const {
+      rulesSelected,
+      currentRule,
+      create,
+      range,
+      total,
+      rules
+    } = this.state;
 
-    if (loading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -166,7 +182,7 @@ class RuleListContainer extends Pager {
             selectRule={this.selectRule}
             currentRule={currentRule}
             setRule={this.setRule}
-            rules={data}
+            rules={rules}
           />
           <PaginationBar
             module="Rule"
@@ -178,43 +194,13 @@ class RuleListContainer extends Pager {
           />
         </div>
         {(currentRule || create) && (
-          <RightSide rule={rule} create={create} close={this.closeForm} />
+          <RightSide
+            currentRule={currentRule}
+            create={create}
+            close={this.closeForm}
+          />
         )}
       </div>
     );
   }
 }
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { rule, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <RuleCreate close={close} /> : <RuleContent rule={rule} />}
-      </div>
-    );
-  }
-}
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filter: {} });
-  },
-  { reactive: true }
-)(RuleListContainer);

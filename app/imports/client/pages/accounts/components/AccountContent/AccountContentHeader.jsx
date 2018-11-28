@@ -27,7 +27,7 @@ export default class AccountContentHeader extends Component {
       } else {
         return (
           <div className="label label--grey">
-            {profile.firstName + " " + profile.lastName}
+            {profile && profile.firstName + " " + profile.lastName}
           </div>
         );
       }
@@ -149,7 +149,7 @@ export default class AccountContentHeader extends Component {
               )}
 
             <AccountActioning
-              metaData={true}
+              metadata={true}
               type="View Meta Data"
               openMetaData={openMetaData}
               closeRightPanel={closeRightPanel}

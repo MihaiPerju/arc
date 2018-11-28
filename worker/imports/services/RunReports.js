@@ -20,7 +20,6 @@ import settings from "/imports/api/settings/enums/settings";
 
 export default class RunReports {
   static run() {
-
     const job = JobQueue.findOne({
       workerId: null,
       type: JobQueueEnum.RUN_REPORT
@@ -58,15 +57,15 @@ export default class RunReports {
     _.map(reportColumns, (value, key) => {
       if (value && key !== fields.INSURANCES) {
         if (key === fields.METADATA) {
-          const metaDataColumns = this.getMetaDataColumns(reportId);
-          _.map(metaDataColumns, (value, key) => {
+          const metadataColumns = this.getMetaDataColumns(reportId);
+          _.map(metadataColumns, (value, key) => {
             if (key === "hasHeader") {
               value.map(header => {
-                columns[`metaData[${header}]`] = `meta column: ${header}`;
+                columns[`metadata[${header}]`] = `meta column: ${header}`;
               });
             } else {
               value.map(header => {
-                columns[`metaData[${header}]`] = `meta column: ${header}`;
+                columns[`metadata[${header}]`] = `meta column: ${header}`;
               });
             }
           });
@@ -92,28 +91,28 @@ export default class RunReports {
 
   static getMetaDataColumns(reportId) {
     const filters = this.getFilters(reportId);
-    const metaDataArr = Accounts.find(filters, {
-      fields: { metaData: 1, _id: 0 }
+    const metadataArr = Accounts.find(filters, {
+      fields: { metadata: 1, _id: 0 }
     }).fetch();
 
-    const metaDataColumn = { hasHeader: [], noHeader: [] };
-    metaDataArr.map(accountMetaData => {
-      _.map(accountMetaData["metaData"], (value, key) => {
+    const metadataColumn = { hasHeader: [], noHeader: [] };
+    metadataArr.map(accountMetaData => {
+      _.map(accountMetaData["metadata"], (value, key) => {
         if (key.indexOf("Column#") === -1) {
-          metaDataColumn["hasHeader"].push(key);
+          metadataColumn["hasHeader"].push(key);
         } else {
-          metaDataColumn["noHeader"].push(key);
+          metadataColumn["noHeader"].push(key);
         }
       });
     });
 
-    metaDataColumn["hasHeader"] = Array.from(
-      new Set(metaDataColumn["hasHeader"])
+    metadataColumn["hasHeader"] = Array.from(
+      new Set(metadataColumn["hasHeader"])
     );
-    metaDataColumn["noHeader"] = Array.from(
-      new Set(metaDataColumn["noHeader"])
+    metadataColumn["noHeader"] = Array.from(
+      new Set(metadataColumn["noHeader"])
     );
-    return metaDataColumn;
+    return metadataColumn;
   }
 
   static async saveReport({ reportId, _id }) {
@@ -149,7 +148,7 @@ export default class RunReports {
 
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    let metaData = await AccountsRaw.aggregateSync([
+    let metadata = await AccountsRaw.aggregateSync([
       {
         $match: filters
       },
@@ -163,7 +162,7 @@ export default class RunReports {
       },
       {
         $addFields: {
-          "tag": { $arrayElemAt: ["$tag", 0] }
+          tag: { $arrayElemAt: ["$tag", 0] }
         }
       },
       {
@@ -175,22 +174,28 @@ export default class RunReports {
 
     let headers = this.getColumns(reportId);
 
-    metaData = metaData.map(m => {
-      if (m.tag && m.workQueueId)
-        m.workQueueId = m.tag.name;
+    metadata = metadata.map(m => {
+      if (m.tag && m.workQueueId) m.workQueueId = m.tag.name;
       return m;
     });
 
     const bindColumn = (d, key) => {
-      if (key.includes('metaData')) {
-        var metaDataKeys=key.split('[');
-        var metaDataKey=metaDataKeys[0];
-        var subKey=metaDataKeys[1].slice(0, -1);
-        return `${d[metaDataKey][subKey]}`;
-      }
-      else  
-        return `${d[key]}`;
-    }
+      if (key.includes("metadata")) {
+        var metadataKeys = key.split("[");
+        var metadataKey = metadataKeys[0];
+        var subKey = metadataKeys[1].slice(0, -1);
+        var value = d[metadataKey][subKey];
+        return `${value != undefined ? value : ""}`;
+      } else if (key.includes("insurances")) {
+        var insKeys = key.split(".");
+        var objectKeys = insKeys[0].split("[");
+        var propKey = insKeys[1];
+        var insuranceKey = objectKeys[0];
+        var indexKey = objectKeys[1].slice(0, -1);
+        var value = d[insuranceKey][indexKey][propKey];
+        return `${value != undefined ? value : ""}`;
+      } else return `${d[key]}`;
+    };
 
     // Render HTML
     const renderHtml = meta => {
@@ -203,10 +208,12 @@ export default class RunReports {
                   <Table.Cell key={item}>{item}</Table.Cell>
                 ))}
               </Table.Row>
-              {meta.map(d => (
-                <Table.Row>
-                  {Object.keys(headers).map(item => {
-                    return <Table.Cell>{bindColumn(d, item)}</Table.Cell>
+              {meta.map((d, index) => (
+                <Table.Row key={index}>
+                  {Object.keys(headers).map((item, index) => {
+                    return (
+                      <Table.Cell key={index}>{bindColumn(d, item)}</Table.Cell>
+                    );
                   })}
                 </Table.Row>
               ))}
@@ -217,18 +224,44 @@ export default class RunReports {
       return ReactDOMServer.renderToString(data);
     };
 
-    const reportContent = renderHtml(metaData);
+    const reportContent = renderHtml(metadata);
 
+    try {
+      pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+        if (err) {
+          future.return(err);
+        } else {
+          future.return(res);
+        }
+      });
+    } catch (err) {
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
+    }
 
-    pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
-      if (err) {
-        future.return(err);
-      } else {
-        future.return(res);
-      }
+    //Catching error
+    stringifier.on("error", function(err) {
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
     });
-    //Catching
-    // stringifier.on("error", function(err) {});
 
     stringifier.on(
       "finish",
