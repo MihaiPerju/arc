@@ -28,6 +28,7 @@ export default class RuleListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
+    this.listRules();
     this.pollingMethod = setInterval(() => {
       this.listRules();
     }, 3000);

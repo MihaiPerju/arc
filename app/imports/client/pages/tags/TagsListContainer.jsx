@@ -28,6 +28,7 @@ export default class TagsListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
+    this.listTags();
     this.pollingMethod = setInterval(() => {
       this.listTags();
     }, 3000);

@@ -29,6 +29,7 @@ export default class LetterListContainer extends Pager {
     this.nextPage(0);
     this.getTags();
 
+    this.listLetters();
     this.pollingMethod = setInterval(() => {
       this.listLetters();
     }, 3000);

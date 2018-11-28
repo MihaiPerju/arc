@@ -31,6 +31,7 @@ export default class ClientContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
+    this.listClients();
 
     this.pollingMethod = setInterval(() => {
       this.listClients();

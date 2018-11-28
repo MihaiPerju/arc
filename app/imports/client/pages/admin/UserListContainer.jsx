@@ -29,6 +29,7 @@ export default class UserListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
+    this.listUsers();
     this.pollingMethod = setInterval(() => {
       this.listUsers();
     }, 3000);

@@ -48,6 +48,7 @@ export default class ReportListContainer extends Pager {
       });
     this.getTags();
 
+    this.listReports();
     this.pollingMethod = setInterval(() => {
       this.listReports();
     }, 3000);

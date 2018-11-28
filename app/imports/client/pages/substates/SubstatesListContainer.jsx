@@ -34,6 +34,7 @@ export default class SubstatesListContainer extends Pager {
     this.nextPage(0);
     this.getTags();
 
+    this.listSubstates();
     this.pollingMethod = setInterval(() => {
       this.listSubstates();
     }, 3000);

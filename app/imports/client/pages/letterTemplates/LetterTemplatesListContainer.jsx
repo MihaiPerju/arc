@@ -32,6 +32,7 @@ export default class LetterTemplateListContainer extends Pager {
     this.nextPage(0);
     this.getTags();
 
+    this.listTemplates();
     this.pollingMethod = setInterval(() => {
       this.listTemplates();
     }, 3000);

@@ -28,6 +28,7 @@ export default class RegionListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
+    this.listRegions();
     this.pollingMethod = setInterval(() => {
       this.listRegions();
     }, 3000);

@@ -45,10 +45,6 @@ export default class AccountListContainer extends Pager {
   }
 
   componentWillMount() {
-    this.pollingMethod = setInterval(() => {
-      this.listAccounts();
-    }, 3000);
-
     this.nextPage(0);
     userTagsQuery
       .clone({
@@ -89,6 +85,11 @@ export default class AccountListContainer extends Pager {
     const { state } = this.props;
     this.setState({ currentRouteState: state });
     this.getTags();
+
+    this.listAccounts();
+    this.pollingMethod = setInterval(() => {
+      this.listAccounts();
+    }, 3000);
   }
 
   listAccounts = () => {
