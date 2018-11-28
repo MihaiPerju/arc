@@ -32,7 +32,6 @@ export default class LetterTemplateListContainer extends Pager {
     this.nextPage(0);
     this.getTags();
 
-    this.listTemplates();
     this.pollingMethod = setInterval(() => {
       this.listTemplates();
     }, 3000);
@@ -135,6 +134,8 @@ export default class LetterTemplateListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentTemplate: null });
+
+    this.listTemplates();
   };
 
   updatePager = () => {

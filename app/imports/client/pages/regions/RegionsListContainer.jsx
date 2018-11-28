@@ -28,7 +28,6 @@ export default class RegionListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
-    this.listRegions();
     this.pollingMethod = setInterval(() => {
       this.listRegions();
     }, 3000);
@@ -145,6 +144,8 @@ export default class RegionListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentRegion: null });
+
+    this.listRegions();
   };
 
   updatePager = () => {

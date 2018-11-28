@@ -31,7 +31,6 @@ export default class ClientContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
-    this.listClients();
 
     this.pollingMethod = setInterval(() => {
       this.listClients();
@@ -139,6 +138,8 @@ export default class ClientContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+
+    this.listClients();
   };
 
   updatePager = () => {

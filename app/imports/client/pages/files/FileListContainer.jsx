@@ -27,7 +27,6 @@ export default class FileListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
-    this.listFiles();
     this.pollingMethod = setInterval(() => {
       this.listFiles();
     }, 3000);
@@ -132,6 +131,8 @@ export default class FileListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+    
+    this.listFiles();
   };
 
   closeRightPanel = () => {

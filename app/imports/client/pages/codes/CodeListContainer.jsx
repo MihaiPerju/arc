@@ -31,7 +31,6 @@ export default class CodeListContainer extends Pager {
     this.nextPage(0);
     this.getTags();
 
-    this.listCodes();
     this.pollingMethod = setInterval(() => {
       this.listCodes();
     }, 3000);
@@ -136,6 +135,8 @@ export default class CodeListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+
+    this.listCodes();
   };
 
   closeRightPanel = () => {

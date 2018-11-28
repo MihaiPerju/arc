@@ -86,7 +86,6 @@ export default class AccountListContainer extends Pager {
     this.setState({ currentRouteState: state });
     this.getTags();
 
-    this.listAccounts();
     this.pollingMethod = setInterval(() => {
       this.listAccounts();
     }, 3000);
@@ -388,6 +387,8 @@ export default class AccountListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentAccount: null });
+
+    this.listAccounts();
   };
 
   getProperAccounts = assign => {

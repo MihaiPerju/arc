@@ -28,7 +28,6 @@ export default class RuleListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
-    this.listRules();
     this.pollingMethod = setInterval(() => {
       this.listRules();
     }, 3000);
@@ -145,6 +144,8 @@ export default class RuleListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentRule: null });
+
+    this.listRules();
   };
 
   updatePager = () => {
