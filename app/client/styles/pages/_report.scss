@@ -120,7 +120,6 @@
 }
 
 .add-report-filter {
-  margin-top: 25px;
   position: relative;
   &:before {
     content: '\f107';
@@ -144,8 +143,10 @@
 //Create form Report
 .create-form {
   .filter-type__wrapper {
-    padding-bottom: 15px;
+    padding: 1.5em;
     border-bottom: 1px #e1e1e1 solid;
+    text-transform: capitalize;
+
     .row-select {
       padding-left: 15px;
       display: flex;
