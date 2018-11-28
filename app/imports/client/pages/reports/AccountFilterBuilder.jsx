@@ -225,7 +225,7 @@ export default class AccountFilterBuilder extends React.Component {
     const { filterBuilderData } = this.props;
     const schemaOptions = this.clearSchemaOptions();
     return (
-      <main className="cc-main">
+      <div className="arcc-form-wrap">
         {loading ? (
           <Loading />
         ) : (
@@ -264,7 +264,7 @@ export default class AccountFilterBuilder extends React.Component {
             </div>
           </div>
         )}
-      </main>
+      </div>
     );
   }
 }
