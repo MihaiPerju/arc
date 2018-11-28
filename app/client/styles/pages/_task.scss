@@ -54,9 +54,8 @@
 }
 
 .mark-task {
-  position: absolute;
-  top: 25px;
-  right: 10px;
+  float: right;
+  margin: 7px 0 0 3px;
 
   label {
     position: relative;
@@ -85,9 +84,8 @@
 }
 
 .check-item {
-  position: absolute;
-  left: 10px;
-  top: 23px;
+  float: left;
+  margin-top: 5px;
 
   label {
     position: relative;
@@ -252,10 +250,6 @@
 
   .cc-dialog__card {
     max-width: 500px;
-  }
-
-  .btn-cancel {
-    color: $red;
   }
 
   .form-wrapper {
@@ -436,11 +430,10 @@
 
   .list-item {
     border-bottom: 1px #e1e1e1 solid;
-    padding: 15px 47px;
+    padding: 15px;
     position: relative;
     cursor: pointer;
     background: rgba($color-white, 0.5);
-    height: 74px;
 
     .status {
       padding: 0 20px;
@@ -1488,18 +1481,6 @@
     button {
       padding: 12px;
     }
-  }
-}
-
-.accounts,.clients{
-  .list-item{
-    height: 110px;
-  }
-} 
-
-.codes,.reports,.templates,.letters,.actions,.work-queues{
-  .list-item{
-    height: 90px;
   }
 }
 

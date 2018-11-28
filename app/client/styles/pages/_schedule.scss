@@ -9,9 +9,6 @@
       font-weight: 700;
       margin-bottom: 20px;
     }
-    .btn-cancel {
-      color: $red;
-    }
     .btn-group {
       padding-top: 15px;
       display: flex;
@@ -57,11 +54,6 @@
         .info-label {
           margin-left: 15px;
         }
-      }
-    }
-    .btn-group {
-      .btn-cancel {
-        color: $red;
       }
     }
   }

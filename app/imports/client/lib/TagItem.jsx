@@ -103,13 +103,13 @@ export default class TagItem extends Component {
 
     return (
       <div>
-        <div className="left__side">
-          <div className="tag-inner-div">
+        <div className="left__side tag-item-component">
+          <div className="checkbox-wrap">
             <a onClick={this.onhandleTag.bind(this)}>
               <div className="menu__icon"><i className="icon-tags tags-icon"></i></div>
             </a>
           </div>
-          <div className="tag-inner-div">
+          <div className="tags-wrap">
             {
               selectedOptions.length > 0 ?
                 selectedOptions.map(option => this.renderTag(option)) :
