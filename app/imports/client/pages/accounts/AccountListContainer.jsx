@@ -12,12 +12,12 @@ import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import RightSide from "./components/AccountRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class AccountListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
-      accounts: [],
       accountsSelected: [],
       currentAccount: null,
       page: 1,
@@ -129,6 +129,7 @@ export default class AccountListContainer extends Pager {
   };
 
   componentWillReceiveProps(newProps) {
+    this.setState({ accounts: null });
     const { currentRouteState } = this.state;
     const { state } = newProps;
     if (currentRouteState !== state) {
@@ -601,16 +602,21 @@ export default class AccountListContainer extends Pager {
             />
           )}
 
-          <AccountList
-            classes={"task-list accounts"}
-            accountsSelected={accountsSelected}
-            selectAccount={this.selectAccount}
-            checkAccount={this.checkAccount}
-            currentAccount={currentAccount}
-            data={accounts}
-            tags={tags}
-            bulkAssign={bulkAssign}
-          />
+          {accounts ? (
+            <AccountList
+              classes={"task-list accounts"}
+              accountsSelected={accountsSelected}
+              selectAccount={this.selectAccount}
+              checkAccount={this.checkAccount}
+              currentAccount={currentAccount}
+              data={accounts}
+              tags={tags}
+              bulkAssign={bulkAssign}
+            />
+          ) : (
+            <Loading />
+          )}
+
           <PaginationBar
             nextPage={this.nextPage}
             range={range}
