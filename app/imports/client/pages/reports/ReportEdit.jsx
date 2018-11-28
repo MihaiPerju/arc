@@ -287,6 +287,7 @@ export default class ReportEdit extends React.Component {
                   width: "100%",
                   lineHeight: "1.6rem",
                   borderRadius: "3px",
+                  margin: "0",
                   borderBottom: "0"
                 }}
                 onClick={this.openDialog.bind(this)}
