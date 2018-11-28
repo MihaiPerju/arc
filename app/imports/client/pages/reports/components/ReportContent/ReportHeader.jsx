@@ -343,8 +343,6 @@ export default class ReportHeader extends Component {
       tableHeader = [...selectedReportColumns];
     }
 
-    console.log(job);
-
     return (
       <div className="main-content report-content">
         {schedule ? (

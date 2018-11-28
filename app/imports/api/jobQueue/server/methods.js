@@ -15,5 +15,9 @@ Meteor.methods({
 
   "jobQueue.getLastJob"(filters = {}) {
     return JobQueue.findOne(filters, { sort: { createdAt: -1 } });
+  },
+
+  "jobQueue.get"(filters = {}) {
+    return JobQueue.findOne(filters);
   }
 });
