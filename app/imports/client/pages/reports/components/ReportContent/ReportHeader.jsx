@@ -3,8 +3,6 @@ import ScheduleBlock from "./../../ScheduleBlock.jsx";
 import Notifier from "../../../../lib/Notifier";
 import JobQueueEnum from "/imports/api/jobQueue/enums/jobQueueTypes";
 import JobQueueStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import jobQueueQuery from "/imports/api/jobQueue/queries/listJobQueues";
 import { EJSON } from "meteor/ejson";
 import Loading from "/imports/client/lib/ui/Loading";
 import Dialog from "/imports/client/lib/ui/Dialog";
@@ -13,7 +11,7 @@ import AccountActionContent from "./AccountActionContent";
 import AccountContent from "./AccountContent";
 import ActionDropdown from "./ActionDropdown";
 
-class ReportHeader extends Component {
+export default class ReportHeader extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,6 +24,7 @@ class ReportHeader extends Component {
       isOpenedDropdown: false,
       reportId: null
     };
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
@@ -34,7 +33,23 @@ class ReportHeader extends Component {
     this.setState({ reportId: _id });
     this.getAccounts(this.props);
     this.getColumns();
+
+    this.pollingMethod = setInterval(() => {
+      this.getLastJob();
+    }, 5000);
   }
+
+  getLastJob = () => {
+    const { report } = this.props;
+
+    Meteor.call("jobQueue.getLastJob", { reportId: report._id }, (err, job) => {
+      if (!err) {
+        this.setState({ job });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps(props) {
     const { report } = props;
@@ -62,6 +77,8 @@ class ReportHeader extends Component {
 
   componentWillUnmount() {
     document.removeEventListener("click", this.outsideClick, false);
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   outsideClick = e => {
@@ -154,14 +171,14 @@ class ReportHeader extends Component {
   };
 
   downloadReport = () => {
-    const { data } = this.props;
-    const { reportId } = data[0];
+    const { job } = this.state;
+    const { reportId } = job;
     window.open("/report/" + reportId);
   };
 
   downloadReportpdf = () => {
-    const { data } = this.props;
-    const { reportId } = data[0];
+    const { job } = this.state;
+    const { reportId } = job;
     window.open("/reportpdf/" + reportId);
   };
 
@@ -302,15 +319,15 @@ class ReportHeader extends Component {
   };
 
   render() {
-    const { report, data } = this.props;
+    const { report } = this.props;
     const {
       schedule,
       loading,
       dialogIsActive,
       selectedReportColumns,
-      isDisabled
+      isDisabled,
+      job
     } = this.state;
-    const job = data[data.length - 1];
     let tableHeader = [];
     if (report.type === reportTypes.ACCOUNT_ACTIONS) {
       tableHeader = [
@@ -325,6 +342,8 @@ class ReportHeader extends Component {
     } else {
       tableHeader = [...selectedReportColumns];
     }
+
+    console.log(job);
 
     return (
       <div className="main-content report-content">
@@ -402,10 +421,3 @@ class ReportHeader extends Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    return jobQueueQuery.clone({ filters: { reportId: props.report._id } });
-  },
-  { reactive: true }
-)(ReportHeader);
