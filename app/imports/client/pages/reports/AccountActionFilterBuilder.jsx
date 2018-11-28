@@ -177,7 +177,7 @@ export default class AccountFilterBuilder extends React.Component {
       return <Loading />;
     }
     return (
-      <main className="cc-main">
+      <div className="arcc-form-wrap">
         <div>
           <AutoForm
             model={filterBuilderData}
@@ -209,7 +209,7 @@ export default class AccountFilterBuilder extends React.Component {
             </AutoForm>
           </div>
         </div>
-      </main>
+      </div>
     );
   }
 }

@@ -141,95 +141,96 @@ export default class ActionEdit extends React.Component {
                 Action information
               </div>
             </div>
-
-            <AutoForm
-              disabled={Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)}
-              schema={ActionSchema}
-              onSubmit={this.onSubmit.bind(this)}
-              onChange={this.onChange}
-              ref="form"
-              model={action}
-            >
-              {this.state.error && (
-                <div className="error">{this.state.error}</div>
-              )}
-              <div className="form-wrapper">
-                <AutoField
-                  labelHidden={true}
-                  placeholder="Title"
-                  name="title"
-                />
-                <ErrorField name="title" />
-              </div>
-
-              <div className="form-wrapper">
-                <LongTextField
-                  labelHidden={true}
-                  placeholder="Description"
-                  name="description"
-                />
-                <ErrorField name="description" />
-              </div>
-
-              <div className="check-group">
-                <input checked={checked} type="checkbox" />
-                <label onClick={this.handleClick}>
-                  Changes the substate of the Account?
-                </label>
-              </div>
-
-              {checked && (
-                <div className="select-group">
-                  <div className="form-wrapper">
-                    <SelectSimple
-                      disabled={Roles.userIsInRole(
-                        Meteor.userId(),
-                        RolesEnum.MANAGER
-                      )}
-                      placeholder="Substate"
-                      labelHidden={true}
-                      name="substateId"
-                      options={substatesOptions}
-                    />
-                    <ErrorField name="substateId" />
-                  </div>
+            <div className="arcc-form-wrap">
+              <AutoForm
+                disabled={Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)}
+                schema={ActionSchema}
+                onSubmit={this.onSubmit.bind(this)}
+                onChange={this.onChange}
+                ref="form"
+                model={action}
+              >
+                {this.state.error && (
+                  <div className="error">{this.state.error}</div>
+                )}
+                <div className="form-wrapper">
+                  <AutoField
+                    labelHidden={true}
+                    placeholder="Title"
+                    name="title"
+                  />
+                  <ErrorField name="title" />
                 </div>
-              )}
 
-              <ListField name="inputs">
-                <ListItemField name="$">
-                  <NestField className="upload-item text-center">
-                    <div className="form-wrapper">
-                      <SelectField
-                        placeholder="Select type"
-                        labelHidden={true}
-                        options={inputTypesEnum}
-                        name="type"
-                      />
-                      <ErrorField name="type" />
-                    </div>
+                <div className="form-wrapper">
+                  <LongTextField
+                    labelHidden={true}
+                    placeholder="Description"
+                    name="description"
+                  />
+                  <ErrorField name="description" />
+                </div>
 
-                    <div className="form-wrapper">
-                      <AutoField
-                        labelHidden={true}
-                        name="label"
-                        placeholder="label"
-                      />
-                      <ErrorField name="label" />
-                    </div>
+                <div className="check-group">
+                  <input checked={checked} type="checkbox" />
+                  <label onClick={this.handleClick}>
+                    Changes the substate of the Account?
+                  </label>
+                </div>
 
+                {checked && (
+                  <div className="select-group">
                     <div className="form-wrapper">
-                      <SelectField
+                      <SelectSimple
+                        disabled={Roles.userIsInRole(
+                          Meteor.userId(),
+                          RolesEnum.MANAGER
+                        )}
+                        placeholder="Substate"
                         labelHidden={true}
-                        name="requirement"
-                        options={requirementOptions}
-                        label="Mandatory"
+                        name="substateId"
+                        options={substatesOptions}
                       />
+                      <ErrorField name="substateId" />
                     </div>
-                  </NestField>
-                </ListItemField>
-              </ListField>
-            </AutoForm>
+                  </div>
+                )}
+
+                <ListField name="inputs">
+                  <ListItemField name="$">
+                    <NestField className="upload-item text-center">
+                      <div className="form-wrapper">
+                        <SelectField
+                          placeholder="Select type"
+                          labelHidden={true}
+                          options={inputTypesEnum}
+                          name="type"
+                        />
+                        <ErrorField name="type" />
+                      </div>
+
+                      <div className="form-wrapper">
+                        <AutoField
+                          labelHidden={true}
+                          name="label"
+                          placeholder="label"
+                        />
+                        <ErrorField name="label" />
+                      </div>
+
+                      <div className="form-wrapper">
+                        <SelectField
+                          labelHidden={true}
+                          name="requirement"
+                          options={requirementOptions}
+                          label="Mandatory"
+                        />
+                      </div>
+                    </NestField>
+                  </ListItemField>
+                </ListField>
+              </AutoForm>
+            </div>
           </div>
 
           <ReasonCodesBlock action={action} />
