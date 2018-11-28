@@ -111,7 +111,7 @@ export default class NewAction extends Component {
       reasonCodesQuery
         .clone({
           filters: {
-            actionId: value.value
+            actionId: value && value.value
           }
         })
         .fetch((err, reasonCodes) => {

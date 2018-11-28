@@ -4,7 +4,6 @@ export default ReasonCodes.createQuery("reasonCodeList", {
   $filter({ filters, options, params }) {
     _.extend(filters, params.filters);
     _.extend(options, params.options);
-    console.log(params);
   },
   $options: {
     sort: { reason: 1 }
