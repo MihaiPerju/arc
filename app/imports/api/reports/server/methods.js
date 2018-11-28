@@ -3,7 +3,6 @@ import Security from "/imports/api/reports/security.js";
 import Cronjob from "/imports/api/reports/server/services/CronjobService";
 import reportColumnSchema from "../schemas/reportColumnSchema";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
-import Accounts from "/imports/api/accounts/collection";
 
 Meteor.methods({
   "reports.get"(params) {
@@ -33,10 +32,6 @@ Meteor.methods({
     _.each(Ids, id => {
       Meteor.call("report.delete", id);
     });
-  },
-
-  "report.getAccounts"({ filters, options }) {
-    return Accounts.find(filters, options).fetch();
   },
 
   "report.create"(data) {

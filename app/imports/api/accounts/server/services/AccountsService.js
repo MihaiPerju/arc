@@ -104,13 +104,13 @@ export default class AccountsService {
     return accounts[0];
   }
 
-  static async getSample(filters) {
+  static async getSample(filters = {}) {
     const AccountsRaw = Accounts.rawCollection();
 
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
     let accounts = await AccountsRaw.aggregateSync([
       {
-        $match: { acctNum: "1" }
+        $match: filters
       }
     ]).toArray();
 
