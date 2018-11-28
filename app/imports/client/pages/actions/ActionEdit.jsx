@@ -25,8 +25,20 @@ export default class ActionEdit extends React.Component {
     this.state = {
       error: null,
       checked: false,
-      isDisabled: false
+      isDisabled: false,
+      action: null
     };
+  }
+
+  componentWillMount() {
+    this.updateProps(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.action._id === this.props.action._id)
+      return;
+
+    this.updateProps(nextProps);
   }
 
   onSubmit(formData) {
@@ -54,39 +66,27 @@ export default class ActionEdit extends React.Component {
   };
 
   updateProps(props) {
-    const { action } = props;
-    if (action) {
+    if (props.action) {
       this.setState({
-        checked: !!action.substateId
+        checked: !!props.action.substateId
       });
     }
   }
 
-  componentWillReceiveProps(props) {
-    this.updateProps(props);
-  }
-
-  componentWillMount() {
-    this.updateProps(this.props);
-  }
-
   handleClick() {
     if (!Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      const currentState = this.state.checked;
       this.setState({
-        checked: !currentState
+        checked: !this.state.checked
       });
     }
   }
 
   onEditAction = () => {
-    const { form } = this.refs;
-    form.submit();
+    this.refs.form.submit();
   };
 
   onSetEdit = () => {
-    const { setEdit } = this.props;
-    setEdit();
+    this.props.setEdit();
   };
 
   handleBack = () => {
@@ -146,7 +146,6 @@ export default class ActionEdit extends React.Component {
               disabled={Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)}
               schema={ActionSchema}
               onSubmit={this.onSubmit.bind(this)}
-              onChange={this.onChange}
               ref="form"
               model={action}
             >
