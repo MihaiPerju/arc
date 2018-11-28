@@ -1,84 +1,67 @@
 import React from "react";
-import DashboardListItem from "./DashboardListItem";
-import Loading from "../../../../client/lib/ui/Loading";
+import Notifier from "../../../lib/Notifier";
+import FailedUploadQueue from "./dashboardWidgets/FailedUploadQueue";
+import BulkActionRequestQueue from "./dashboardWidgets/BulkActionRequestQueue";
+import pages from "../../../../api/settings/enums/settings";
 
 export default class TechOrAdminDashboard extends React.Component {
 
+  state = { widgetSettings: null, isLoading: true };
 
-  renderFailedUploadQueues(files, isLoadingFiles) {
-    if (!isLoadingFiles) {
-      return (
-        <div>
-          {
-            files.length > 0 ?
-              files.map(file => { return <DashboardListItem key={`file-${file._id}`} file={file} />; })
-              : <div className="dashboard-empty-content">
-                No files has been found.
-            </div>
-          }
-        </div>
-      );
-    } else {
-      return <Loading />;
-    }
+  componentWillMount() {
+    this.getManagerWidgetSettings()
   }
 
-  renderBulkActionRequestQueues() {
-    const { isLoadingBulkActionQueues, bulkActionQueues } = this.props;
-    if (!isLoadingBulkActionQueues) {
-      return (
-        <div>
-          {
-            bulkActionQueues.length > 0 ?
-              bulkActionQueues.map(action => {
-                return (
-                  <div key={`file-${action._id}`} className="dashboard-list-item">
-                    <div className="dashboard-list-item-left-content">
-                      <div className="dashboard-list-item-title">FIAS</div>
-                      <div className="dashboard-list-item-sub-title">{action.type}</div>
-                    </div>
-                  </div>
-                );
-              })
-              : <div className="dashboard-empty-content">
-                No bulk actions has been found.
-            </div>
-          }
-        </div>
-      );
-    } else {
-      return <Loading />;
-    }
+  getManagerWidgetSettings() {
+    this.setState({ isLoading: true });
+    Meteor.call("managerSettings.get", pages.WIDGET_SETTINGS, (err, responseData) => {
+      if (!err) {
+        this.setState({
+          widgetSettings: responseData.widgetSetting,
+          isLoading: false
+        });
+      } else {
+        this.setState({ isLoading: false });
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   render() {
-    const { files, isLoadingFiles } = this.props;
+    const { widgetSettings } = this.state;
+    const { filters } = this.props;
     return (
-      <div className="dashboard-row">
-        <div className="dashboard-section">
-          <div className="dashboard-section-header m-t--5">
-            <div className="dashboard-section-title">
-              Failed Upload Queue
+      <div className="dashboard-row full-width">
+        {
+          (widgetSettings && widgetSettings.failedUploadQueue) &&
+          <div className="dashboard-section">
+            <div className="dashboard-section-header m-t--5">
+              <div className="dashboard-section-title">
+                Failed Upload Queue
+            </div>
+            </div>
+            <div className="dashboard-section-content">
+              {
+                <FailedUploadQueue filters={filters} />
+              }
             </div>
           </div>
-          <div className="dashboard-section-content">
-            {
-              this.renderFailedUploadQueues(files, isLoadingFiles)
-            }
-          </div>
-        </div>
-        <div className="dashboard-section">
-          <div className="dashboard-section-header m-t--5  m-l-5">
-            <div className="dashboard-section-title">
-              Bulk Action Request Queue
+        }
+        {
+          (widgetSettings && widgetSettings.bulkActionRequestQueue) &&
+          <div className="dashboard-section">
+            <div className="dashboard-section-header m-t--5  m-l-5">
+              <div className="dashboard-section-title">
+                Bulk Action Request Queue
+            </div>
+            </div>
+            <div className="dashboard-section-content m-l-5">
+              {
+                <BulkActionRequestQueue filters={filters} />
+              }
             </div>
           </div>
-          <div className="dashboard-section-content m-l-5">
-            {
-              this.renderBulkActionRequestQueues()
-            }
-          </div>
-        </div>
+        }
       </div>
     );
   }

@@ -13,6 +13,7 @@ import RepDashboard from "./components/RepDashboard";
 import ManagerDashboard from "./components/ManagerDashboard";
 import CHART_TYPE from './enums/chartType';
 import { dateRangeValues } from './enums/dateRange';
+import TechOrAdminDashboard from "./components/TechOrAdminDashboard";
 
 export default class Home extends React.Component {
 
@@ -249,163 +250,126 @@ export default class Home extends React.Component {
     }
   }
 
+  renderDashboardBasedOnRoles() {
+    const { filters } = this.state;
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      return <ManagerDashboard filters={filters} />;
+    }
+
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) || Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
+      return <TechOrAdminDashboard filters={filters} />;
+    }
+
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      return <RepDashboard />;
+    }
+  }
+
   render() {
     const { clients, facilities, users, chartTypes, dateRangeFilters, startDate, endDate, showCustomDateRange } = this.state;
-    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
 
-      // return (
-      //   <div className="cc-container home-container flex-align--start">
-      //     <div className="heart-beat">
-      //       {
-      //         !this.state.isLoading ?
-      //           <AutoForm ref="graphFilters" schema={heartBeatSchema} onSubmit={this.onSubmit.bind(this)}>
-      //             <div className="flex--helper form-group__pseudo--3">
-      //               <div className="select-form">
-      //                 <AutoField
-      //                   label="Reps:"
-      //                   name="userId"
-      //                   options={reps}
-      //                 />
-      //               </div>
-      //               <div className="m-l-15">
-      //                 <label>Select Date:</label>
-      //                 <div className="border-style">
-      //                   <DatePicker
-      //                     calendarClassName="cc-datepicker"
-      //                     showMonthDropdown
-      //                     showYearDropdown
-      //                     yearDropdownItemNumber={4}
-      //                     todayButton={"Today"}
-      //                     selected={selectedDate}
-      //                     onChange={this.onChange}
-      //                     placeholderText="Selected Date"
-      //                     fixedHeight
-      //                   />
-      //                 </div>
-      //               </div>
-      //               <button className="custom-submit-btn" onClick={this.addGraphFilters}>
-      //                 Submit
-      //               </button>
-      //             </div>
-      //           </AutoForm> : <Loading />
-      //       }
-      //       {this.renderGraph()}
-      //     </div>
-      //   </div>
-      // );
-
-      return (
-        <div className="dashboard-content-container">
-          <div className="dashboard-header-content">
-            <div className="dashboard-header-title">
-              FILTERS FOR DASHBOARD
+    return (
+      <div className="dashboard-content-container">
+        <div className="dashboard-header-content">
+          <div className="dashboard-header-title">
+            FILTERS FOR DASHBOARD
             </div>
-            <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
-              <div>
-                <div className="flex--helper form-group__pseudo--3">
-                  <div className="select-form select-box-width">
-                    <label className="dashboard-label">Clients</label>
-                    <div className="m-t--5">
-                      <AutoField
-                        labelHidden={true}
-                        name="clientId"
-                        options={clients}
-                      />
-                    </div>
-                  </div>
-                  {
-                    facilities.length > 0 ?
-                      <div className="select-form select-box-width m-l-10">
-                        <label className="dashboard-label">Facilities</label>
-                        <div className="m-t--5">
-                          <AutoField
-                            labelHidden={true}
-                            name="facilityId"
-                            options={facilities} />
-                        </div>
-                      </div> : null
-                  }
-                  {
-                    users.length > 0 ?
-                      <div className="select-form select-box-width m-l-10">
-                        <label className="dashboard-label">Users</label>
-                        <div className="m-t--5">
-                          <AutoField
-                            labelHidden={true}
-                            name="userId"
-                            options={users} />
-                        </div>
-                      </div> : null
-                  }
-                  <div className="select-form select-box-width m-l-10">
-                    <label className="dashboard-label">Chart Types</label>
-                    <div className="m-t--5">
-                      <AutoField
-                        labelHidden={true}
-                        name="selectChartTypeId"
-                        options={chartTypes} />
-                    </div>
+          <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
+            <div>
+              <div className="flex--helper form-group__pseudo--3">
+                <div className="select-form select-box-width">
+                  <label className="dashboard-label">Clients</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="clientId"
+                      options={clients}
+                    />
                   </div>
                 </div>
-                <div className="flex--helper form-group__pseudo--3 m-t--20">
-                  <div className="select-form select-box-width">
-                    <label className="dashboard-label">Date Range Filters</label>
-                    <div className="m-t--5">
-                      <AutoField
-                        labelHidden={true}
-                        name="selectedDateRange"
-                        options={dateRangeFilters}
-                      />
-                    </div>
+                {
+                  facilities.length > 0 ?
+                    <div className="select-form select-box-width m-l-10">
+                      <label className="dashboard-label">Facilities</label>
+                      <div className="m-t--5">
+                        <AutoField
+                          labelHidden={true}
+                          name="facilityId"
+                          options={facilities} />
+                      </div>
+                    </div> : null
+                }
+                {
+                  users.length > 0 ?
+                    <div className="select-form select-box-width m-l-10">
+                      <label className="dashboard-label">Users</label>
+                      <div className="m-t--5">
+                        <AutoField
+                          labelHidden={true}
+                          name="userId"
+                          options={users} />
+                      </div>
+                    </div> : null
+                }
+                <div className="select-form select-box-width m-l-10">
+                  <label className="dashboard-label">Chart Types</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="selectChartTypeId"
+                      options={chartTypes} />
                   </div>
-                  {
-                    showCustomDateRange &&
-                    <div style={{ display: 'inherit' }}>
-                      <div className="dashboard-dp-panel">
-                        <DatePicker
-                          calendarClassName="cc-datepicker"
-                          showMonthDropdown
-                          showYearDropdown
-                          yearDropdownItemNumber={4}
-                          todayButton={"Today"}
-                          placeholderText="Start Date"
-                          selected={startDate}
-                          onChange={this.onStartDateChange}
-                          fixedHeight
-                        />
-                      </div>
-                      <div className="dashboard-dp-panel">
-                        <DatePicker
-                          calendarClassName="cc-datepicker"
-                          showMonthDropdown
-                          showYearDropdown
-                          yearDropdownItemNumber={4}
-                          todayButton={"Today"}
-                          placeholderText="End Date"
-                          selected={endDate}
-                          onChange={this.onEndDateChange}
-                          fixedHeight
-                        />
-                      </div>
-                    </div>
-                  }
                 </div>
               </div>
-            </AutoForm>
-          </div>
-          <ManagerDashboard filters={this.state.filters} />
+              <div className="flex--helper form-group__pseudo--3 m-t--20">
+                <div className="select-form select-box-width">
+                  <label className="dashboard-label">Date Range Filters</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="selectedDateRange"
+                      options={dateRangeFilters}
+                    />
+                  </div>
+                </div>
+                {
+                  showCustomDateRange &&
+                  <div style={{ display: 'inherit' }}>
+                    <div className="dashboard-dp-panel">
+                      <DatePicker
+                        calendarClassName="cc-datepicker"
+                        showMonthDropdown
+                        showYearDropdown
+                        yearDropdownItemNumber={4}
+                        todayButton={"Today"}
+                        placeholderText="Start Date"
+                        selected={startDate}
+                        onChange={this.onStartDateChange}
+                        fixedHeight
+                      />
+                    </div>
+                    <div className="dashboard-dp-panel">
+                      <DatePicker
+                        calendarClassName="cc-datepicker"
+                        showMonthDropdown
+                        showYearDropdown
+                        yearDropdownItemNumber={4}
+                        todayButton={"Today"}
+                        placeholderText="End Date"
+                        selected={endDate}
+                        onChange={this.onEndDateChange}
+                        fixedHeight
+                      />
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          </AutoForm>
         </div>
-      );
-
-
-    }
-    else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
-      return (
-        <RepDashboard />
-      );
-    }
-    else
-      return null;
+        {this.renderDashboardBasedOnRoles()}
+      </div>
+    );
   }
 }
 

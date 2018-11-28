@@ -74,6 +74,14 @@ export default class SettingsListContainer extends Component {
                   <div className="item-name">Letter Compilation Time</div>
                 </div>
               </div>
+              <div
+                className={this.getClassNames(pages.WIDGET_SETTINGS)}
+                onClick={this.onSelectPage.bind(this, pages.WIDGET_SETTINGS)}
+              >
+                <div className="row__item margin-top-10">
+                  <div className="item-name">Widget Settings</div>
+                </div>
+              </div>
             </div>
           </div>
 
