@@ -50,6 +50,7 @@ export default class NewAction extends Component {
       accountIds,
       bulkOption
     } = this.props;
+    reasonCodes;
     const selectedActionId = this.state.selectedActionId;
     const reasonCodes = this.state.reasonCodes;
 
@@ -110,7 +111,7 @@ export default class NewAction extends Component {
       reasonCodesQuery
         .clone({
           filters: {
-            actionId: value
+            actionId: value && value.value
           }
         })
         .fetch((err, reasonCodes) => {
@@ -118,6 +119,8 @@ export default class NewAction extends Component {
             this.setState({
               reasonCodes
             });
+          } else {
+            Notifier.error(err.reason);
           }
         });
       this.setState({ selectedActionId: value });
@@ -219,6 +222,7 @@ export default class NewAction extends Component {
       actions,
       reasonCodes
     } = this.state;
+
     const actionOptions = ActionsHelper.generateOptions(actions);
     const reasonCodeOptions = ReasonCodesHelper.generateOptions(reasonCodes);
     const selectedAction = ActionsHelper.selectAction(

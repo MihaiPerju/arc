@@ -66,11 +66,11 @@ export default new SimpleSchema({
     blackbox: true,
     optional: true
   },
-  reasonCodes:{
+  reasonCodes: {
     type: Array,
     optional: true
   },
-  "reasonCodes.$":{
+  "reasonCodes.$": {
     type: String,
     optional: true
   },
@@ -79,8 +79,14 @@ export default new SimpleSchema({
     blackbox: true,
     optional: true
   },
-  clientId:{
+  clientId: {
     type: String,
     optional: true
+  },
+  createdAt: {
+    type: Date,
+    autoValue: () => {
+      return new Date();
+    }
   }
 });

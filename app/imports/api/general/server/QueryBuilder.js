@@ -354,6 +354,18 @@ export default class QueryBuilder {
     return queryParams;
   }
 
+  /**
+   * Returns the mongo sort obj
+   * @param {String} direction String of ASC or DESC to determin sort direction
+   * @param {*} sortKeyName The key name for the mongo query
+   * @returns {Object} Mongo sort Obj {key: 1}
+   */
+  static resolveSort(direction, sortKeyName) {
+    return {
+      [sortKeyName]: direction === "ASC" ? 1 : -1
+    }
+  }
+
   static getSubstatesParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
@@ -722,42 +734,23 @@ export default class QueryBuilder {
         });
       }
 
-      if (sortCreatedAt) {
-        _.extend(queryParams.options.sort, {
-          createdAt: sortCreatedAt === "ASC" ? 1 : -1
-        });
-      }
-
-      if (sortDischrgDate) {
-        _.extend(queryParams.options.sort, {
-          dischrgDate: sortDischrgDate === "ASC" ? 1 : -1
-        });
-      }
-
-      if (sortFbDate) {
-        _.extend(queryParams.options.sort, {
-          fbDate: sortFbDate === "ASC" ? 1 : -1
-        });
-      }
-
-      if (sortAcctBal) {
-        _.extend(queryParams.options.sort, {
-          acctBal: sortAcctBal === "ASC" ? 1 : -1
-        });
-      }
-
-      if (sortAdmitDate) {
-        _.extend(queryParams.options.sort, {
-          admitDate: sortAdmitDate === "ASC" ? 1 : -1
-        });
-      }
-
-      if (sortTickleDate) {
-        _.extend(queryParams.options.sort, {
-          tickleDate: sortTickleDate === "ASC" ? 1 : -1
-        });
+      // This is sooooo guly :(
+      // It needs to be cleaned up above, so a nice switch statment or something that makes more sesne can be used... But it works for now.
+      if(sortCreatedAt) {
+        queryParams.options.sort = this.resolveSort(sortCreatedAt, 'createdAt');
+      } else if(sortDischrgDate) {
+        queryParams.options.sort = this.resolveSort(sortDischrgDate, 'dischrgDate');
+      } else if(sortFbDate) {
+        queryParams.options.sort = this.resolveSort(sortFbDate, 'fbDate');
+      } else if(sortAcctBal) {
+        queryParams.options.sort = this.resolveSort(sortAcctBal, 'acctBal');
+      } else if(sortAdmitDate) {
+        queryParams.options.sort = this.resolveSort(sortAdmitDate, 'admitDate');
+      } else if(sortTickleDate) {
+        queryParams.options.sort = this.resolveSort(sortTickleDate, 'tickleDate');
       }
     }
+
     return queryParams;
   }
 

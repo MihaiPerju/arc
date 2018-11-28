@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import AccountContent from "../AccountContent.jsx";
 import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class AccountRightSide extends Component {
   constructor() {
     super();
     this.state = {
       fade: false,
-      wasAccountActioned: false,
-      account: {}
+      wasAccountActioned: false
     };
     this.pollingMethod = null;
   }
@@ -64,6 +64,10 @@ export default class AccountRightSide extends Component {
       accountsSelected,
       removeLock
     } = this.props;
+
+    if (!account) {
+      return <Loading />;
+    }
 
     return (
       <div className={fade ? "right__side in" : "right__side"}>
