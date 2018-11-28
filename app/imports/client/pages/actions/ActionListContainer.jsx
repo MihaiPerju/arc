@@ -50,7 +50,6 @@ export default class ActionListContainer extends Pager {
     }
     this.getTags();
 
-    this.listActions();
     this.pollingMethod = setInterval(() => {
       this.listActions();
     }, 3000);
@@ -150,6 +149,8 @@ export default class ActionListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+
+    this.listActions();
   };
 
   updatePager = () => {

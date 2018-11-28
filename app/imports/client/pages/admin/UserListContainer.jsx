@@ -29,7 +29,6 @@ export default class UserListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
-    this.listUsers();
     this.pollingMethod = setInterval(() => {
       this.listUsers();
     }, 3000);
@@ -127,6 +126,8 @@ export default class UserListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+
+    this.listUsers();
   };
 
   closeRightPanel = () => {

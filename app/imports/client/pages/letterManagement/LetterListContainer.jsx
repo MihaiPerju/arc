@@ -29,7 +29,6 @@ export default class LetterListContainer extends Pager {
     this.nextPage(0);
     this.getTags();
 
-    this.listLetters();
     this.pollingMethod = setInterval(() => {
       this.listLetters();
     }, 3000);
@@ -78,6 +77,8 @@ export default class LetterListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage });
+
+    this.listLetters();
   };
 
   setPagerInitial = () => {

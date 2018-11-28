@@ -48,7 +48,6 @@ export default class ReportListContainer extends Pager {
       });
     this.getTags();
 
-    this.listReports();
     this.pollingMethod = setInterval(() => {
       this.listReports();
     }, 3000);
@@ -156,6 +155,8 @@ export default class ReportListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentReport: null });
+
+    this.listReports();
   };
 
   closeRightPanel = () => {
