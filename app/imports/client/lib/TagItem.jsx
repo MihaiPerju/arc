@@ -99,20 +99,20 @@ export default class TagItem extends Component {
 
     return (
       <div>
-        <div className="left__side">
-          <div className="tag-inner-div">
+        <div className="left__side tag-item-component">
+          <div className="checkbox-wrap">
             <a onClick={this.onhandleTag.bind(this)}>
               <div className="menu__icon">
                 <i className="icon-tags tags-icon" />
               </div>
             </a>
           </div>
-          <div className="tag-inner-div">
-            {selectedOptions.length > 0 ? (
-              selectedOptions.map(option => this.renderTag(option))
-            ) : (
-              <label className="no-tags-found">No tags found.</label>
-            )}
+          <div className="tags-wrap">
+            {
+              selectedOptions.length > 0 ?
+                selectedOptions.map(option => this.renderTag(option)) :
+                <label className="no-tags-found">No tags found.</label>
+            }
           </div>
         </div>
         {dialogIsActive && (
