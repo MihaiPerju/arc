@@ -31,6 +31,7 @@ export default class CodeListContainer extends Pager {
     this.nextPage(0);
     this.getTags();
 
+    this.listCodes();
     this.pollingMethod = setInterval(() => {
       this.listCodes();
     }, 3000);

@@ -16,6 +16,7 @@ export default class ReportContent extends Component {
   }
 
   componentWillMount() {
+    this.getReport();
     this.pollingMethod = setInterval(() => {
       this.getReport();
     }, 3000);

@@ -50,6 +50,7 @@ export default class ActionListContainer extends Pager {
     }
     this.getTags();
 
+    this.listActions();
     this.pollingMethod = setInterval(() => {
       this.listActions();
     }, 3000);

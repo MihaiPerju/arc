@@ -27,6 +27,7 @@ export default class FileListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
 
+    this.listFiles();
     this.pollingMethod = setInterval(() => {
       this.listFiles();
     }, 3000);
