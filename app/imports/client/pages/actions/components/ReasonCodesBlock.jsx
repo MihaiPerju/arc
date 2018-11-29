@@ -8,12 +8,10 @@ import {
 } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import schema from "/imports/api/reasonCodes/schema";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/reasonCodes/queries/reasonCodesList";
 import RolesEnum from "/imports/api/users/enums/roles.js";
 import Loading from "/imports/client/lib/ui/Loading";
 
-class ReasonCodesBlock extends Component {
+export default class ReasonCodesBlock extends Component {
   constructor() {
     super();
     this.state = {
@@ -22,6 +20,36 @@ class ReasonCodesBlock extends Component {
       schedule: false,
       blankSchedule: false
     };
+    this.pollingMethod = null;
+  }
+
+  componentWillMount() {
+    this.getReasonCodes();
+    this.pollingMethod = setInterval(() => {
+      this.getReasonCodes();
+    }, 3000);
+  }
+
+  getReasonCodes() {
+    const { action } = this.props;
+
+    let filters = {
+      actionId: action._id,
+      managerId: this.props.isPrivate ? Meteor.userId() : null
+    };
+
+    Meteor.call("reasonCodes.get", filters, (err, reasonCodes) => {
+      if (!err) {
+        this.setState({ reasonCodes });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   onAddReasonCode = () => {
@@ -47,15 +75,11 @@ class ReasonCodesBlock extends Component {
   };
 
   render() {
-    const { data, error, isLoading, action, isPrivate } = this.props;
-    const { blankSchedule } = this.state;
+    const { action, isPrivate } = this.props;
+    const { blankSchedule, reasonCodes } = this.state;
 
-    if (isLoading) {
+    if (!reasonCodes) {
       return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
     }
 
     return (
@@ -86,7 +110,7 @@ class ReasonCodesBlock extends Component {
           )}
 
           <div className="code-list">
-            {data.map((reasonCode, index) => {
+            {reasonCodes.map((reasonCode, index) => {
               return (
                 <div key={index} className="code-item">
                   <div className="left__side">
@@ -230,19 +254,6 @@ class CreateReasonCode extends Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    const { action } = props;
-    return query.clone({
-      filters: {
-        actionId: action._id,
-        managerId: props.isPrivate ? Meteor.userId() : null
-      }
-    });
-  },
-  { reactive: true }
-)(ReasonCodesBlock);
 
 const privateReasonSchema = new SimpleSchema({
   reason: {
