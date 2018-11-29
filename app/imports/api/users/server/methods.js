@@ -7,6 +7,7 @@ import RolesEnum from "/imports/api/users/enums/roles";
 import Accounts from "/imports/api/accounts/collection";
 import Facilities from "/imports/api/facilities/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import UserService from "./services/UserService";
 
 Meteor.methods({
   "users.remove_avatar"() {
@@ -29,7 +30,19 @@ Meteor.methods({
     Uploads.remove(_id);
   },
 
-  "users.get"(params) {
+  "users.getWithTags"(filters = {}) {
+    return UserService.getUsers(filters);
+  },
+
+  "user.getWithTags"(filters = {}) {
+    return UserService.getUser(filters);
+  },
+
+  "users.get"(filters = {}) {
+    return Users.find(filters).fetch();
+  },
+
+  "users.list"(params) {
     const queryParams = QueryBuilder.getUserParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;

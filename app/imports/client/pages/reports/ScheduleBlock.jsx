@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Notifier from "../../lib/Notifier";
-import usersQuery from "../../../api/users/queries/listUsersByRole";
 import ReportsEnum from "../../../api/schedules/enums/reports";
 import { AutoForm, ErrorField } from "/imports/ui/forms";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
@@ -20,7 +19,7 @@ export default class ScheduleBlock extends Component {
   }
 
   componentWillMount() {
-    usersQuery.clone({}).fetch((err, users) => {
+    Meteor.call("users.get", (err, users) => {
       if (!err) {
         this.setState({
           users
