@@ -13,6 +13,10 @@ export default new SimpleSchema({
       settings.WIDGET_SETTINGS
     ]
   },
+  userId: {
+    type: String,
+    optional: true
+  },
   root: {
     type: String,
     optional: true

@@ -26,6 +26,10 @@ export default class WidgetSettings extends Component {
   };
 
   componentDidMount() {
+    this.getWidgetSettings();
+  }
+
+  getWidgetSettings() {
     Meteor.call("managerSettings.get", pages.WIDGET_SETTINGS, (err, model) => {
       if (!err) {
         this.setState({
@@ -42,6 +46,7 @@ export default class WidgetSettings extends Component {
     data.name = pages.WIDGET_SETTINGS;
     Meteor.call("managerSettings.update", data, err => {
       if (!err) {
+        this.getWidgetSettings();
         Notifier.success("Settings Updated!");
       } else {
         Notifier.error(err.reason);

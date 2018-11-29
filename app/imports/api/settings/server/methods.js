@@ -4,7 +4,8 @@ import SettingsService from "./SettingsService";
 
 Meteor.methods({
   "settings.update"(data) {
-    Security.checkAdmin(this.userId);
+    let userId = this.userId;
+    Security.checkAdmin(userId);
     const { name } = data;
 
     //Standardize the folder names
@@ -28,21 +29,31 @@ Meteor.methods({
       }
     }
 
-    Settings.update({ name }, { $set: data });
+    data.userId = userId;
+    Settings.update({ name, userId }, { $set: data });
     SettingsService.createDirectories();
   },
 
   "settings.get"(name) {
-    Security.checkAdmin(this.userId);
-    return Settings.findOne({ name });
+    let userId = this.userId;
+    Security.checkLoggedIn(userId);
+    return Settings.findOne({ name, userId });
   },
 
   "managerSettings.get"(name) {
-    return Settings.findOne({ name });
+    let userId = this.userId;
+    Security.checkLoggedIn(userId);
+    return Settings.findOne({ name, userId });
   },
 
   "managerSettings.update"(data) {
+    let userId = this.userId;
+    Security.checkLoggedIn(userId);
     const { name } = data;
-    Settings.update({ name }, { $set: data });
+    data.userId = userId;
+    if (data._id)
+      Settings.update({ name, userId }, { $set: data });
+    else
+      Settings.insert(data);
   }
 });

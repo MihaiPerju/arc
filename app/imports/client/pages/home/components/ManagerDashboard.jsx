@@ -24,7 +24,7 @@ export default class ManagerDashboard extends React.Component {
     Meteor.call("managerSettings.get", pages.WIDGET_SETTINGS, (err, responseData) => {
       if (!err) {
         this.setState({
-          widgetSettings: responseData.widgetSetting,
+          widgetSettings: responseData ? responseData.widgetSetting : undefined,
           isLoading: false
         });
       } else {
