@@ -1,16 +1,43 @@
 import React from "react";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/reasonCodes/queries/reasonCodesList";
 import RolesEnum from "/imports/api/users/enums/roles";
+import Notifier from "../../../lib/Notifier";
 
-class ActionContentHeader extends React.Component {
+export default class ActionContentHeader extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      reasonCodes: []
+    };
+  }
+
+  componentWillMount() {
+    const managerId = Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
+      ? Meteor.userId()
+      : null;
+    const { action } = this.props;
+
+    let filters = {
+      actionId: action._id,
+      managerId
+    };
+
+    Meteor.call("reasonCodes.get", filters, (err, reasonCodes) => {
+      if (!err) {
+        this.setState({ reasonCodes });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
   onEdit = () => {
     const { setEdit } = this.props;
     setEdit();
   };
 
   render() {
-    const { action, substates, data } = this.props;
+    const { action, substates } = this.props;
+    const { reasonCodes } = this.state;
     const substate =
       action &&
       substates.filter(substate => substate._id === action.substateId);
@@ -40,13 +67,14 @@ class ActionContentHeader extends React.Component {
               <div className="text-light-grey text-label">Reason Codes</div>
 
               <div className="reason">
-                {data.map((reason, index) => (
-                  <span key={index}>
-                    {reason.reason}
-                    {index !== data.length - 1 ? "," : ""}{" "}
-                  </span>
-                ))}
-                {data.length === 0 && "No Reason codes"}
+                {reasonCodes.length
+                  ? reasonCodes.map((reason, index) => (
+                      <span key={index}>
+                        {reason.reason}
+                        {index !== reasonCodes.length - 1 ? "," : ""}{" "}
+                      </span>
+                    ))
+                  : "No Reason codes"}
               </div>
             </div>
           </div>
@@ -58,19 +86,3 @@ class ActionContentHeader extends React.Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    const managerId = Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)
-      ? Meteor.userId()
-      : null;
-    const { action } = props;
-    return query.clone({
-      filters: {
-        actionId: action._id,
-        managerId
-      }
-    });
-  },
-  { reactive: true }
-)(ActionContentHeader);
