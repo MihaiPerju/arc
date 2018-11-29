@@ -3,7 +3,6 @@ import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import Notifier from "../../../../lib/Notifier";
-import reasonCodesQuery from "/imports/api/reasonCodes/queries/reasonCodesList";
 import Loading from "/imports/client/lib/ui/Loading";
 import ActionsHelper from "/imports/api/actions/helpers/OptionsGenerator";
 import ReasonCodesHelper from "/imports/api/reasonCodes/helpers/OptionsGenerator";
@@ -50,7 +49,7 @@ export default class NewAction extends Component {
       accountIds,
       bulkOption
     } = this.props;
-    reasonCodes;
+    
     const selectedActionId = this.state.selectedActionId;
     const reasonCodes = this.state.reasonCodes;
 
@@ -108,13 +107,10 @@ export default class NewAction extends Component {
 
   onHandleChange = (field, value) => {
     if (field == "actionId") {
-      reasonCodesQuery
-        .clone({
-          filters: {
-            actionId: value && value.value
-          }
-        })
-        .fetch((err, reasonCodes) => {
+      Meteor.call(
+        "reasonCodes.get",
+        { actionId: value && value.value },
+        (err, reasonCodes) => {
           if (!err) {
             this.setState({
               reasonCodes
@@ -122,7 +118,8 @@ export default class NewAction extends Component {
           } else {
             Notifier.error(err.reason);
           }
-        });
+        }
+      );
       this.setState({ selectedActionId: value });
     }
   };

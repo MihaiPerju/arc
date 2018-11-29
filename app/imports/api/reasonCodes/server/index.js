@@ -1,3 +1,1 @@
-import './expose';
-import './methods';
-import './../links';
+import "./methods";

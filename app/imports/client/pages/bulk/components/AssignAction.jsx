@@ -1,9 +1,13 @@
 import React, { Component } from "react";
-import { AutoForm, AutoField, ErrorField, SelectField } from "/imports/ui/forms";
+import {
+  AutoForm,
+  AutoField,
+  ErrorField,
+  SelectField
+} from "/imports/ui/forms";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
-import reasonCodesQuery from "/imports/api/reasonCodes/queries/reasonCodesList";
 import Loading from "/imports/client/lib/ui/Loading";
 import ActionsHelper from "/imports/api/actions/helpers/OptionsGenerator";
 import ReasonCodesHelper from "/imports/api/reasonCodes/helpers/OptionsGenerator";
@@ -28,7 +32,7 @@ export default class AssignAction extends Component {
       queueStatus: false,
       reasonCode: false,
       clientId: "",
-      clientOptions: [],
+      clientOptions: []
     };
     let selVal = {};
     this.getStatus = null;
@@ -62,61 +66,67 @@ export default class AssignAction extends Component {
     }, 3000);
   }
 
-  clientOptions = (data) => {
+  clientOptions = data => {
     let clientQueues = [];
     for (let client of data) {
       clientQueues.push({ value: client._id, label: client.clientName });
     }
     return clientQueues;
-  }
+  };
 
-  onSubmit(data) { }
+  onSubmit(data) {}
 
   getJobQueueStatus = () => {
     this.setState({ queueStatus: false });
-    Meteor.call("jobQueue.assignByUser", pages.ASSIGN_ACTION, (err, queueResult) => {
-      if (!err) {
-        if (queueResult && queueResult[0]) {
-          let res = queueResult[0];
-          if (res.status == jobStatuses.NEW) {
-            this.setState({ queueStatus: true })
+    Meteor.call(
+      "jobQueue.assignByUser",
+      pages.ASSIGN_ACTION,
+      (err, queueResult) => {
+        if (!err) {
+          if (queueResult && queueResult[0]) {
+            let res = queueResult[0];
+            if (res.status == jobStatuses.NEW) {
+              this.setState({ queueStatus: true });
+            }
           }
+        } else {
+          Notifier.error(err.reason);
         }
-      } else {
-        Notifier.error(err.reason);
       }
-    });
-  }
+    );
+  };
 
   componentWillUnmount = () => {
     clearInterval(this.getStatus);
-  }
+  };
 
   onHandleChange = (field, value) => {
-    let selVal = {}
+    let selVal = {};
     if (field == "actionId") {
-      reasonCodesQuery
-        .clone({
-          filters: {
-            actionId: value.value
-          }
-        })
-        .fetch((err, reasonCodes) => {
+      Meteor.call(
+        "reasonCodes.get",
+        { actionId: value.value },
+        (err, reasonCodes) => {
           if (!err) {
             this.setState({
               reasonCodes
             });
           }
-        });
+        }
+      );
       this.setState({ selectedActionId: value, reasonCode: false });
     }
-    if (field == "reasonCode") { this.setState({ [field]: value }) }
-    if (field == 'clientId') { this.setState({ clientId: value}); }
+    if (field == "reasonCode") {
+      this.setState({ [field]: value });
+    }
+    if (field == "clientId") {
+      this.setState({ clientId: value });
+    }
 
     if (this.state.selectedActionId) {
       selVal = { ...this.state.customFieldValue, [field]: value };
     } else {
-      selVal = {}
+      selVal = {};
     }
     this.setState({ customFieldValue: selVal });
   };
@@ -210,18 +220,23 @@ export default class AssignAction extends Component {
   }
 
   getParams = () => {
-    let { selectedActionId, reasonCodes, customFieldValue, clientId } = this.state;
+    let {
+      selectedActionId,
+      reasonCodes,
+      customFieldValue,
+      clientId
+    } = this.state;
 
     let reqParams = {
       assignType: pages.ASSIGN_ACTION,
       actionId: JSON.stringify(selectedActionId),
-      clientId : clientId
-    }
+      clientId: clientId
+    };
     if (customFieldValue) {
       reqParams.customFields = JSON.stringify(customFieldValue);
     }
     if (reasonCodes && reasonCodes.length != 0)
-      reqParams.reasonCodes = reasonCodes
+      reqParams.reasonCodes = reasonCodes;
 
     let retParams = {
       params: reqParams,
@@ -233,20 +248,19 @@ export default class AssignAction extends Component {
         }, 3000);
       },
       acceptedFiles: ".csv"
-    }
+    };
     return retParams;
-  }
+  };
 
   render() {
     const {
       selectedActionId,
       loading,
-      isDisabled,
       actions,
       reasonCodes,
       queueStatus,
-      reasonCode, 
-      clientId, 
+      reasonCode,
+      clientId,
       clientOptions
     } = this.state;
     const actionOptions = ActionsHelper.generateOptions(actions);
@@ -267,15 +281,22 @@ export default class AssignAction extends Component {
       return <Loading />;
     }
 
-    let overlayTag = queueStatus ? (<div className="overlay" />) : null;
+    let overlayTag = queueStatus ? <div className="overlay" /> : null;
 
     return (
       <div className={this.state.fade ? "new-action in" : "new-action"}>
         <div className="create-form position_style">
-          {queueStatus ? (<div className="create-form__bar">
-            <div className="text-light-grey">Assign Status : </div>
-            <div className="label label--grey text-uppercase" style={{ "backgroundColor": "orange" }}>In Progress</div>
-          </div>) : null}
+          {queueStatus ? (
+            <div className="create-form__bar">
+              <div className="text-light-grey">Assign Status : </div>
+              <div
+                className="label label--grey text-uppercase"
+                style={{ backgroundColor: "orange" }}
+              >
+                In Progress
+              </div>
+            </div>
+          ) : null}
           <AutoForm
             schema={schema}
             onSubmit={this.onSubmit.bind(this)}
@@ -286,7 +307,6 @@ export default class AssignAction extends Component {
             <div className="main-content m-t--10">
               <div className="header-block header-account">
                 <div className="additional-info account-info">
-
                   <div className="select-wrapper select_div dropdown-icon">
                     <div className="select_label">Select Client :</div>
                     <div className="select-form border-style">
@@ -335,11 +355,9 @@ export default class AssignAction extends Component {
                         return this.getInputSingle(input, index);
                       })}
                   </div>
-
                 </div>
               </div>
             </div>
-
 
             <div className="select-row">
               {/*      <div className="select-group">
@@ -367,20 +385,23 @@ export default class AssignAction extends Component {
                     return this.getInputSingle(input, index);
                   })}
               </div> */}
-              {selectedActionId && clientId &&
+              {selectedActionId && clientId && (
                 <div className="action-block drop-file">
                   <div className="main__block">
                     <div className="btn-group-1">
                       <div className="add-content">
                         <i className="icon-upload" />
                         <div className="drop-file__wrapper">
-                          <DropzoneComponent config={componentConfig} djsConfig={djsConfig} />
+                          <DropzoneComponent
+                            config={componentConfig}
+                            djsConfig={djsConfig}
+                          />
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              }
+              )}
             </div>
           </AutoForm>
           {overlayTag}
