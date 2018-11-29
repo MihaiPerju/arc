@@ -8,7 +8,6 @@ import AccountSearchBar from "./components/AccountSearchBar";
 import userTagsQuery from "/imports/api/users/queries/userTags.js";
 import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import RightSide from "./components/AccountRightSide";
@@ -436,13 +435,15 @@ export default class AccountListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.ACCOUNT] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.ACCOUNT] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        }
       }
-    });
+    );
   };
 
   addLock = _id => {

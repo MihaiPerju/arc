@@ -5,7 +5,6 @@ import LetterTemplatesList from "./components/LetterTemplatesList.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./TemplateRightSide";
 
@@ -145,13 +144,17 @@ export default class LetterTemplateListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.TEMPLATES] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.TEMPLATES] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   };
 
   render() {

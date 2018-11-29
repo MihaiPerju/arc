@@ -5,7 +5,6 @@ import ActionList from "./components/ActionList.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./ActionRightSide";
 
@@ -156,13 +155,15 @@ export default class ActionListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.ACTIONS] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.ACTIONS] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        }
       }
-    });
+    );
   };
 
   render() {

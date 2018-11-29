@@ -2,13 +2,9 @@ import React, { Component } from "react";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
-import CreateEditTags from "./components/CreateEditTags";
 import TagsService from "./services/TagsService";
-import TagsListQuery from "/imports/api/tags/queries/listTags.js";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import RolesEnum from "/imports/api/users/enums/roles";
 
-class EditUser extends Component {
+export default class EditUser extends Component {
   constructor() {
     super();
 
@@ -17,17 +13,8 @@ class EditUser extends Component {
       firstName: "",
       lastName: "",
       phoneNumber: "",
-      clients: [],
       isDisabled: false
     };
-  }
-
-  componentWillMount() {
-    Meteor.call("clients.getEssential", (err, clients) => {
-      if (!err) {
-        this.setState({ clients });
-      }
-    });
   }
 
   onSubmit(formData) {
@@ -63,8 +50,8 @@ class EditUser extends Component {
   };
 
   render() {
-    const { data, user } = this.props;
-    const { clients, isDisabled } = this.state;
+    const {  user } = this.props;
+    const {  isDisabled } = this.state;
     user.email = user.emails[0].address;
 
     return (
@@ -149,10 +136,6 @@ class EditUser extends Component {
                 <ErrorField name="profile.phoneNumber" />
               </div>
             </AutoForm>
-            {Roles.userIsInRole(user._id, RolesEnum.REP) &&
-              Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
-                <CreateEditTags user={user} clients={clients} tags={data} />
-              )}
           </div>
         </div>
       </div>
@@ -178,12 +161,3 @@ const EditSchema = new SimpleSchema({
     type: String
   }
 });
-
-export default withQuery(
-  props => {
-    const { user } = props;
-    const ids = user.tagIds || [];
-    return TagsListQuery.clone({ filters: { _id: { $in: ids } } });
-  },
-  { reactive: true }
-)(EditUser);

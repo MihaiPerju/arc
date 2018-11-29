@@ -8,7 +8,6 @@ import triggerTypes, {
   triggerOptions
 } from "/imports/api/rules/enums/triggers";
 import userQuery from "/imports/api/users/queries/listUsers.js";
-import workQueueQuery from "/imports/api/tags/queries/listTags";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
 import { moduleNames } from "/imports/api/tags/enums/tags";
@@ -74,13 +73,9 @@ export default class RuleCreate extends React.Component {
       });
 
     //Filling the work queue options
-    workQueueQuery
-      .clone({
-        filters: {
-          entities: { $in: [moduleNames.WORK_QUEUE] }
-        }
-      })
-      .fetch((err, res) => {
+    Meteor.call("tags.get",{
+      entities: { $in: [moduleNames.WORK_QUEUE] }
+    },(err,res)=>{
         if (!err) {
           res.map(workQueue => {
             workQueueOptions.push({
