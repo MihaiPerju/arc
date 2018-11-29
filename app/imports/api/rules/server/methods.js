@@ -43,6 +43,10 @@ Meteor.methods({
     Rules.insert(data);
   },
 
+  "rule.getPrior"(filters = {}) {
+    return Rules.findOne(filters, { sort: { priority: -1 } });
+  },
+
   "rule.update"(data) {
     const { priority, clientId } = data;
     //Increase priority for all the rules that have a priority greater than or equal to the new one

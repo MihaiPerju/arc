@@ -105,7 +105,7 @@ export default class AssignAction extends Component {
     if (field == "actionId") {
       Meteor.call(
         "reasonCodes.get",
-        { actionId: value.value },
+        { actionId: value },
         (err, reasonCodes) => {
           if (!err) {
             this.setState({
