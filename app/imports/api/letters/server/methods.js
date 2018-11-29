@@ -6,7 +6,7 @@ import LetterService from "/imports/api/letters/server/service/LetterService";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
-  "letters.get"(params) {
+  "letters.list"(params) {
     const queryParams = QueryBuilder.getLettersParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
@@ -24,8 +24,8 @@ Meteor.methods({
     LetterService.createLetter(data);
   },
 
-  "letter.get"(letterId) {
-    return Letters.findOne(letterId);
+  "letter.get"(filters) {
+    return Letters.findOne(filters);
   },
 
   "letter.delete"(letterId) {
