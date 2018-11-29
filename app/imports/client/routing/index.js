@@ -193,15 +193,6 @@ route(
   }
 );
 
-//Insurance Companies
-import InsuranceCompanyCreate from "/imports/client/pages/insuranceCompanies/InsuranceCompanyCreate";
-import InsuranceCompanyEdit from "/imports/client/pages/insuranceCompanies/InsuranceCompanyEdit";
-import InsuranceCompanyListContainer from "/imports/client/pages/insuranceCompanies/InsuranceCompanyListContainer";
-
-route("/inscompany/create", InsuranceCompanyCreate);
-route("/inscompany/:id/edit", InsuranceCompanyEdit);
-route("/inscompany/list", InsuranceCompanyListContainer);
-
 //Rules Engine
 import RulesContainer from "/imports/client/pages/rules/RulesListContainer";
 import RuleCreate from "/imports/client/pages/rules/RuleCreate";

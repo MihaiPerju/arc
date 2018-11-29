@@ -16,7 +16,6 @@ import "/imports/api/regions/server";
 import "/imports/api/reports/server";
 import "/imports/api/schedules/server";
 import "/imports/cronjobs";
-import "/imports/api/insuranceCompanies/server";
 import "/imports/api/tags/server";
 import "/imports/api/payments/server";
 import "/imports/api/reasonCodes/server";
