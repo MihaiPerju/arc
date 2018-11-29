@@ -36,7 +36,7 @@ export default class LetterListContainer extends Pager {
 
   listLetters = () => {
     const params = ParamsService.getLettersParams();
-    Meteor.call("letters.get", params, (err, letters) => {
+    Meteor.call("letters.list", params, (err, letters) => {
       if (!err) {
         this.setState({ letters });
         this.updatePager();
