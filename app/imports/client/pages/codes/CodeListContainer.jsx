@@ -5,7 +5,6 @@ import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./CodeRightSide";
 
@@ -153,13 +152,17 @@ export default class CodeListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.CODES] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.CODES] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   };
 
   render() {

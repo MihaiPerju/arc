@@ -2,7 +2,6 @@ import React from "react";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import WorkQueueService from "../../services/WorkQueueService";
-import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Notifier from "../../../../lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 import { moduleNames } from "/imports/api/tags/enums/tags";
@@ -52,13 +51,13 @@ export default class AccountAssign extends React.Component {
         Notifier.error(err.reason);
       }
     });
-    workQueueQuery
-      .clone({
-        filters: {
-          entities: { $in: [moduleNames.WORK_QUEUE] }
-        }
-      })
-      .fetch((err, res) => {
+
+    Meteor.call(
+      "tags.get",
+      {
+        entities: { $in: [moduleNames.WORK_QUEUE] }
+      },
+      (err, res) => {
         if (!err) {
           const workQueueOptions = WorkQueueService.createOptions(res);
           this.setState({
@@ -66,7 +65,8 @@ export default class AccountAssign extends React.Component {
             loadingWorkQueues: false
           });
         }
-      });
+      }
+    );
   }
 
   assignToUser = ({ assigneeId }) => {

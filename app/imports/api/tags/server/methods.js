@@ -5,7 +5,7 @@ import TagService from "/imports/api/tags/server/services/TagService";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
-  "tags.get"(params) {
+  "tags.list"(params) {
     const queryParams = QueryBuilder.getTagsParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
@@ -21,6 +21,10 @@ Meteor.methods({
 
   "tag.getOne"(_id) {
     return Tags.findOne({ _id });
+  },
+
+  "tags.get"(filters = {}) {
+    return Tags.find(filters).fetch();
   },
 
   "tag.create"(data) {

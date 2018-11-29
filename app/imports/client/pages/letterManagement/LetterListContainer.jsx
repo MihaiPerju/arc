@@ -5,7 +5,6 @@ import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import Notifier from "/imports/client/lib/Notifier";
 
@@ -101,13 +100,17 @@ export default class LetterListContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.LETTERS] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.LETTERS] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   };
 
   render() {

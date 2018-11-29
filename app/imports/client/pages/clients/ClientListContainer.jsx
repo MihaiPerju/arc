@@ -5,7 +5,6 @@ import ClientList from "./components/ClientList.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./components/ClientRightSide";
 
@@ -149,13 +148,17 @@ export default class ClientContainer extends Pager {
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.CLIENTS] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.CLIENTS] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   };
 
   render() {

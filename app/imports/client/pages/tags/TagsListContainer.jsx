@@ -48,7 +48,7 @@ export default class TagsListContainer extends Pager {
 
   listTags = () => {
     const params = ParamsService.getTagsParams();
-    Meteor.call("tags.get", params, (err, tags) => {
+    Meteor.call("tags.list", params, (err, tags) => {
       if (!err) {
         this.setState({ tags });
         this.updatePager();
