@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import moment from "moment/moment";
-import query from "/imports/api/tickles/queries/tickleList";
 
 export default class TickleBlock extends Component {
   constructor() {
@@ -21,7 +20,7 @@ export default class TickleBlock extends Component {
   }
 
   fetchMessages = accountId => {
-    query.clone({ filters: { accountId } }).fetchOne((err, data) => {
+    Meteor.call("tickle.get", { accountId }, (err, data) => {
       if (!err) {
         const messages = data ? data.messages : [];
         this.setState({
