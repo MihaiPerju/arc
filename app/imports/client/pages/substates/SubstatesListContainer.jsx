@@ -41,7 +41,7 @@ export default class SubstatesListContainer extends Pager {
 
   listSubstates = () => {
     const params = ParamsService.getSubstatesParams();
-    Meteor.call("substates.get", params, (err, substates) => {
+    Meteor.call("substates.list", params, (err, substates) => {
       if (!err) {
         this.setState({ substates });
         this.updatePager();

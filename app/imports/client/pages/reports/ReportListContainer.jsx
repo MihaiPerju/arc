@@ -5,7 +5,6 @@ import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
-import substatesQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./ReportRightSide";
@@ -37,15 +36,12 @@ export default class ReportListContainer extends Pager {
         currentReport: reportId
       });
     }
-    substatesQuery
-      .clone({
-        filters: { status: true }
-      })
-      .fetch((err, substates) => {
-        if (!err) {
-          this.setState({ substates });
-        }
-      });
+
+    Meteor.call("substates.get", { status: true }, (err, substates) => {
+      if (!err) {
+        this.setState({ substates });
+      }
+    });
     this.getTags();
 
     this.pollingMethod = setInterval(() => {

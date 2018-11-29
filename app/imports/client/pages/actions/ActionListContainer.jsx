@@ -5,7 +5,6 @@ import ActionList from "./components/ActionList.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
-import substateQuery from "/imports/api/substates/queries/listSubstates";
 import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./ActionRightSide";
@@ -32,18 +31,15 @@ export default class ActionListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
-    substateQuery
-      .clone({
-        filters: { status: true }
-      })
-      .fetch((err, substates) => {
-        if (!err) {
-          this.setState({
-            substates,
-            loadingSubstates: false
-          });
-        }
-      });
+
+    Meteor.call("substates.get", { status: true }, (err, substates) => {
+      if (!err) {
+        this.setState({
+          substates,
+          loadingSubstates: false
+        });
+      }
+    });
     const { id } = FlowRouter.current().params;
     if (id) {
       this.setAction(id);
