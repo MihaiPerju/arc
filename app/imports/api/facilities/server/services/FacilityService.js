@@ -25,14 +25,14 @@ export default class FacilityService {
           as: "users"
         }
       },
-      {
-        $lookup: {
-          from: "accounts",
-          localField: "_id",
-          foreignField: "facilityId",
-          as: "accounts"
-        }
-      },
+      // { ! Causes Mongo error
+      //   $lookup: {
+      //     from: "accounts",
+      //     localField: "_id",
+      //     foreignField: "facilityId",
+      //     as: "accounts"
+      //   }
+      // },
       {
         $lookup: {
           from: "regions",
