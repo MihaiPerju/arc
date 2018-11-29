@@ -3,7 +3,7 @@ import Security from "/imports/api/security/security";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
-  "substates.get"(params) {
+  "substates.list"(params) {
     const queryParams = QueryBuilder.getSubstatesParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
@@ -14,6 +14,10 @@ Meteor.methods({
     const queryParams = QueryBuilder.getSubstatesParams(params);
     let filters = queryParams.filters;
     return Substates.find(filters).count();
+  },
+
+  "substates.get"(filters={}){
+    return Substates.find(filters).fetch();
   },
 
   "substate.create"(data) {

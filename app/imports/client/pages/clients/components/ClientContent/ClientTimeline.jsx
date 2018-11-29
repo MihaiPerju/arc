@@ -6,7 +6,6 @@ import Loading from "/imports/client/lib/ui/Loading";
 import actionTypesEnum, {
   typeList
 } from "/imports/api/accounts/enums/actionTypesEnum";
-import substateQuery from "/imports/api/substates/queries/listSubstates";
 import ClientService from "../../services/ClientService";
 import { rolesTypes } from "/imports/api/clients/enums/contactTypes";
 import filterTypeEnums from "../../enums/filterTypes";
@@ -57,22 +56,18 @@ export default class ClientTimeline extends Component {
       actionTypes
     });
 
-    substateQuery
-      .clone({
-        filters: { status: true }
-      })
-      .fetch((err, res) => {
-        if (!err) {
-          res.map(substate => {
-            const label = `${substate.stateName}: ${substate.name}`;
-            substates.push({
-              label: label,
-              value: substate.name
-            });
+    Meteor.call("substates.get", { status: true }, (err, res) => {
+      if (!err) {
+        res.map(substate => {
+          const label = `${substate.stateName}: ${substate.name}`;
+          substates.push({
+            label: label,
+            value: substate.name
           });
-          this.setState({ substates });
-        }
-      });
+        });
+        this.setState({ substates });
+      }
+    });
 
     const { model, state } = ClientService.getFilterParams();
     const { clientId } = this.props;

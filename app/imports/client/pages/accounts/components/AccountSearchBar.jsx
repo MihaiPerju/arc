@@ -7,7 +7,6 @@ import _ from "underscore";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Tags from "/imports/client/lib/Tags";
 import DatePicker from "react-datepicker";
-import substateQuery from "/imports/api/substates/queries/listSubstates";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
 import userListQuery from "/imports/api/users/queries/listUsers.js";
@@ -62,22 +61,19 @@ export default class AccountSearchBar extends Component {
         this.setState({ clientOptions });
       }
     });
-    substateQuery
-      .clone({
-        filters: { status: true }
-      })
-      .fetch((err, res) => {
-        if (!err) {
-          res.map(substate => {
-            const label = `${substate.stateName}: ${substate.name}`;
-            substates.push({
-              label: label,
-              value: substate.name
-            });
+
+    Meteor.call("substates.get", { status: true }, (err, res) => {
+      if (!err) {
+        res.map(substate => {
+          const label = `${substate.stateName}: ${substate.name}`;
+          substates.push({
+            label: label,
+            value: substate.name
           });
-          this.setState({ substates });
-        }
-      });
+        });
+        this.setState({ substates });
+      }
+    });
     userListQuery
       .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
       .fetch((err, res) => {
