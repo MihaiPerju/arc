@@ -27,9 +27,9 @@ SyncedCron.add({
 SyncedCron.add({
   name: "Send Letters",
   schedule: function(parser) {
-    const { compileTime } = SettingsService.getSettings(settings.COMPILE_TIME);
+    const compileTime = SettingsService.getSettings(settings.COMPILE_TIME) || {};
 
-    let letterTime = compileTime
+    let letterTime = settings.compileTime
       ? `at ${moment(compileTime).format("h:mm a")}`
       : "at 1:00 am";
     // parser is a later.parse object
