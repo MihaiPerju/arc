@@ -1,4 +1,5 @@
 import Codes from "/imports/api/reasonCodes/collection";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class ReasonCodesService {
   static async getReasonCodes(filters = {}) {
@@ -34,5 +35,22 @@ export default class ReasonCodesService {
     ]).toArray();
 
     return codes;
+  }
+
+  static secure(filters = {}) {
+    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
+      _.extend(filters, {
+        $or: [{ managerId: this.userId }, { managerId: null }]
+      });
+    } else if (Roles.userIsInRole(this.userId, RolesEnum.REP)) {
+      _.extend(filters, {
+        $or: [{ clientId: { $exists: true } }, { managerId: null }]
+      });
+    } else {
+      // for admin and tech
+      _.extend(filters, {
+        managerId: null
+      });
+    }
   }
 }
