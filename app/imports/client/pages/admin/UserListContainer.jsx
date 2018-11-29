@@ -41,7 +41,7 @@ export default class UserListContainer extends Pager {
 
   listUsers = () => {
     const params = ParamsService.getUserParams();
-    Meteor.call("users.get", params, (err, users) => {
+    Meteor.call("users.list", params, (err, users) => {
       if (!err) {
         this.setState({ users });
         this.updatePager();

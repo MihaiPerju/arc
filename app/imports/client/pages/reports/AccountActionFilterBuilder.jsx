@@ -5,7 +5,6 @@ import AccountActionFilterSingle from "./components/AccountActionFilterSingle";
 import Notifier from "/imports/client/lib/Notifier";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
-import userQuery from "/imports/api/users/queries/listUsers";
 
 export default class AccountFilterBuilder extends React.Component {
   constructor() {
@@ -70,7 +69,7 @@ export default class AccountFilterBuilder extends React.Component {
     });
 
     // Getting user options
-    userQuery.fetch((err, users) => {
+    Meteor.call("users.get", (err, users) => {
       if (!err) {
         users.map(user => {
           const { profile, _id } = user;

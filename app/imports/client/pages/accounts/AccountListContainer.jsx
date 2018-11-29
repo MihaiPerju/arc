@@ -5,7 +5,6 @@ import Pager from "/imports/client/lib/Pager.jsx";
 import ParamsService from "/imports/client/lib/ParamsService";
 import AccountAssigning from "/imports/client/pages/accounts/components/AccountContent/AccountAssigning.jsx";
 import AccountSearchBar from "./components/AccountSearchBar";
-import userTagsQuery from "/imports/api/users/queries/userTags.js";
 import Notifier from "/imports/client/lib/Notifier";
 import MetaDataSlider from "/imports/client/pages/accounts/components/AccountContent/MetaData";
 import { moduleNames } from "/imports/api/tags/enums/tags";
@@ -45,13 +44,12 @@ export default class AccountListContainer extends Pager {
 
   componentWillMount() {
     this.nextPage(0);
-    userTagsQuery
-      .clone({
-        filters: {
-          _id: Meteor.userId()
-        }
-      })
-      .fetchOne((err, user) => {
+    Meteor.call(
+      "user.getWithTags",
+      {
+        _id: Meteor.userId()
+      },
+      (err, user) => {
         if (!err) {
           const tags = user.tags || [];
           let assignFilterArr = ["assigneeId"];
@@ -72,7 +70,8 @@ export default class AccountListContainer extends Pager {
           ];
           this.setState({ assignFilterArr, dropdownOptions });
         }
-      });
+      }
+    );
 
     const accountId = FlowRouter.getQueryParam("accountId");
     if (accountId) {

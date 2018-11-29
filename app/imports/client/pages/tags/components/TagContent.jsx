@@ -1,34 +1,42 @@
 import React, { Component } from "react";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
 import TagContentHeader from "./TagContentHeader";
 import TagEdit from "../TagEdit";
 import TagContentDescription from "./TagContentDescription";
-import usersQuery from "/imports/api/users/queries/listUsers";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
-class TagContent extends Component {
+export default class TagContent extends Component {
   constructor() {
     super();
     this.state = {
       edit: false,
-      clientOptions: []
+      clientOptions: [],
+      users: []
     };
     this.pollingMethod = null;
   }
 
   componentWillMount() {
+    this.getData();
     this.pollingMethod = setInterval(() => {
-      this.getTag();
+      this.getData();
     }, 3000);
   }
 
-  getTag() {
+  getData() {
     const { currentTag } = this.props;
     Meteor.call("tag.getOne", currentTag, (err, tag) => {
       if (!err) {
         this.setState({ tag });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+
+    Meteor.call("users.get", { roles: { $in: ["rep"] } }, (err, users) => {
+      if (!err) {
+        this.setState({ users });
       } else {
         Notifier.error(err.reason);
       }
@@ -48,8 +56,7 @@ class TagContent extends Component {
   sortUsers = () => {
     const taggedUsers = [],
       untaggedUsers = [];
-    const { data: users } = this.props;
-    const { tag } = this.state;
+    const { tag, users } = this.state;
     _.map(users, user => {
       const index = user.tagIds ? user.tagIds.indexOf(tag && tag._id) : -1;
       if (index > -1) {
@@ -62,11 +69,9 @@ class TagContent extends Component {
   };
 
   render() {
-    const { tag, edit } = this.state;
-    const { data: users } = this.props;
+    const { tag, edit, users } = this.state;
 
     const { taggedUsers, untaggedUsers } = this.sortUsers();
-
     if (!tag) {
       return <Loading />;
     }
@@ -93,13 +98,3 @@ class TagContent extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const params = {
-      filters: { roles: { $in: ["rep"] } }
-    };
-    return usersQuery.clone(params);
-  },
-  { reactive: true }
-)(TagContent);

@@ -3,7 +3,6 @@ import { AutoForm, SelectField } from "uniforms-unstyled";
 import ReportsService from "../../../api/reports/services/ReportsService";
 import FilterSingle from "./components/FilterSingle";
 import Notifier from "/imports/client/lib/Notifier";
-import assigneeQuery from "/imports/api/users/queries/listUsers";
 import SimpleSchema from "simpl-schema";
 import Loading from "/imports/client/lib/ui/Loading";
 import { Meteor } from "meteor/meteor";
@@ -87,7 +86,7 @@ export default class AccountFilterBuilder extends React.Component {
     }
 
     //Getting assignee options
-    assigneeQuery.fetch((err, assignees) => {
+    Meteor.call("users.get", (err, assignees) => {
       if (!err) {
         assignees.map(assignee => {
           assigneeOptions.push({

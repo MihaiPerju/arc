@@ -7,7 +7,6 @@ import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
 } from "/imports/api/rules/enums/triggers";
-import userQuery from "/imports/api/users/queries/listUsers.js";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
 import { moduleNames } from "/imports/api/tags/enums/tags";
@@ -74,9 +73,10 @@ export default class RuleEdit extends React.Component {
     });
 
     //Filling the user options
-    userQuery
-      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
-      .fetch((err, res) => {
+    Meteor.call(
+      "users.get",
+      { roles: { $in: [RolesEnum.REP] } },
+      (err, res) => {
         if (!err) {
           res.map(user => {
             userOptions.push({
@@ -88,7 +88,8 @@ export default class RuleEdit extends React.Component {
           });
           this.setState({ userOptions });
         }
-      });
+      }
+    );
 
     //Filling the work queue options
     Meteor.call(

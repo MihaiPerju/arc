@@ -9,7 +9,6 @@ import Tags from "/imports/client/lib/Tags";
 import DatePicker from "react-datepicker";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum from "/imports/api/users/enums/roles";
-import userListQuery from "/imports/api/users/queries/listUsers.js";
 import FilterService from "/imports/client/lib/FilterService";
 
 export default class AccountSearchBar extends Component {
@@ -74,9 +73,10 @@ export default class AccountSearchBar extends Component {
         this.setState({ substates });
       }
     });
-    userListQuery
-      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
-      .fetch((err, res) => {
+    Meteor.call(
+      "users.getWithTags",
+      { roles: { $in: [RolesEnum.REP] } },
+      (err, res) => {
         if (!err) {
           res.map(user => {
             tickleUserIdOptions.push({
@@ -87,7 +87,8 @@ export default class AccountSearchBar extends Component {
             });
           });
         }
-      });
+      }
+    );
     this.setState({ tickleUserIdOptions });
     model = FilterService.getFilterParams();
     const {
