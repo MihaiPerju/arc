@@ -11,7 +11,6 @@ import {
   ListItemField,
   NestField
 } from "/imports/ui/forms";
-import RegionListQuery from "/imports/api/regions/queries/regionList.js";
 import SelectUsersContainer from "/imports/client/pages/clients/facilities/components/SelectUsersContainer.jsx";
 import Loading from "/imports/client/lib/ui/Loading";
 
@@ -26,11 +25,9 @@ export default class FacilityCreate extends Component {
     };
   }
   componentWillMount() {
-    RegionListQuery.clone({
-      filters: {
-        clientId: FlowRouter.current().params._id
-      }
-    }).fetch((err, regions) => {
+    let regionFilters = { clientId: FlowRouter.current().params._id };
+
+    Meteor.call("regions.get", regionFilters, (err, regions) => {
       if (!err) {
         this.setState({
           regions,
@@ -43,7 +40,7 @@ export default class FacilityCreate extends Component {
   }
 
   getRegionOptions = regions => {
-    return regions.map((region) => ({
+    return regions.map(region => ({
       value: region._id,
       label: region.name
     }));
