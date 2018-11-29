@@ -101,7 +101,7 @@ export default class AccountContentHeader extends Component {
                   : "No client name"}
               </div>
               <div className="label-group">
-                <div className="label label--green">158 points(TBM)</div>
+                {/* <div className="label label--green">158 points(TBM)</div> */}
                 <div className="label label--grey text-uppercase">
                   CARC(TNM)
                 </div>
