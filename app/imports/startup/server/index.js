@@ -3,7 +3,6 @@ import "./fixtures";
 import "/imports/api/mailing/server";
 import "/imports/api/uploads/server";
 import "/imports/api/users/server";
-import "/imports/api/grapherLive/server";
 import "/imports/api/admin/server";
 import "/imports/api/settings/server";
 import "/imports/api/clients/server";
