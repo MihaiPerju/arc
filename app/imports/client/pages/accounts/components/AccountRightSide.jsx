@@ -14,14 +14,24 @@ export default class AccountRightSide extends Component {
   }
 
   componentWillMount() {
+    this.getAccount()
+
     this.pollingMethod = setInterval(() => {
       this.getAccount();
     }, 3000);
   }
 
-  getAccount() {
-    const { currentAccount } = this.props;
-    Meteor.call("account.getOne", currentAccount, (err, account) => {
+  // If account changed we need to go fetch it right away
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.currentAccount === this.props.currentAccount)
+      return;
+
+    this.getAccount(nextProps.currentAccount)
+  }
+
+  getAccount(currentAccount) {
+    const accountId = currentAccount || this.props.currentAccount
+    Meteor.call("account.getOne", accountId, (err, account) => {
       if (!err) {
         this.setState({ account });
       } else {
