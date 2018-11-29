@@ -40,7 +40,7 @@ export default class RegionListContainer extends Pager {
 
   listRegions = () => {
     const params = ParamsService.getRegionsParams();
-    Meteor.call("regions.get", params, (err, regions) => {
+    Meteor.call("regions.list", params, (err, regions) => {
       if (!err) {
         this.setState({ regions });
         this.updatePager();
@@ -196,7 +196,11 @@ export default class RegionListContainer extends Pager {
           />
         </div>
         {(currentRegion || create) && (
-          <RightSide currentRegion={currentRegion} create={create} close={this.closeForm} />
+          <RightSide
+            currentRegion={currentRegion}
+            create={create}
+            close={this.closeForm}
+          />
         )}
       </div>
     );
