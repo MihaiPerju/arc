@@ -109,7 +109,7 @@ export default class NewAction extends Component {
     if (field == "actionId") {
       Meteor.call(
         "reasonCodes.get",
-        { actionId: value && value.value },
+        { actionId: value },
         (err, reasonCodes) => {
           if (!err) {
             this.setState({

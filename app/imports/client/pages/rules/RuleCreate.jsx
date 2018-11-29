@@ -11,7 +11,6 @@ import userQuery from "/imports/api/users/queries/listUsers.js";
 import workQueueQuery from "/imports/api/tags/queries/listTags";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
-import RuleQuery from "/imports/api/rules/queries/listRules";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 
@@ -134,12 +133,8 @@ export default class RuleCreate extends React.Component {
 
   getPriority = clientId => {
     let { model } = this.state;
-    RuleQuery.clone({
-      options: {
-        sort: { priority: -1 }
-      },
-      filters: { clientId }
-    }).fetchOne((err, rule) => {
+    let filters = { clientId };
+    Meteor.call("rule.getPrior", filters, (err, rule) => {
       if (!err) {
         let priority = rule ? rule.priority + 1 : 1;
         _.extend(model, { priority });

@@ -5,4 +5,3 @@ import "/imports/api/users/collection"; // for helpers
 import svg4everybody from "svg4everybody"; //external file svg polyfill
 
 import "/imports/api/users/links";
-import "/imports/api/rules/links";
