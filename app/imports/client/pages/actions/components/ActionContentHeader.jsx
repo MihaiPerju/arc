@@ -43,7 +43,7 @@ export default class ActionContentHeader extends React.Component {
       substates.filter(substate => substate._id === action.substateId);
     const substateName =
       substate && substate[0] ? substate[0].name : "No substate";
-
+    
     return (
       <div className="main-content action-content">
         <div className="main-content__wrapper">

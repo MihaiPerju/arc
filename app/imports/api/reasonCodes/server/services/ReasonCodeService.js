@@ -37,12 +37,12 @@ export default class ReasonCodesService {
     return codes;
   }
 
-  static secure(filters = {}) {
-    if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
+  static secure(filters = {},userId) {
+    if (Roles.userIsInRole(userId, RolesEnum.MANAGER)) {
       _.extend(filters, {
-        $or: [{ managerId: this.userId }, { managerId: null }]
+        $or: [{ managerId: userId }, { managerId: null }]
       });
-    } else if (Roles.userIsInRole(this.userId, RolesEnum.REP)) {
+    } else if (Roles.userIsInRole(userId, RolesEnum.REP)) {
       _.extend(filters, {
         $or: [{ clientId: { $exists: true } }, { managerId: null }]
       });

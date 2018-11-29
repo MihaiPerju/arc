@@ -1,7 +1,6 @@
 import ReasonCodes from "../collection.js";
 import Security from "/imports/api/security/security.js";
 import CodesService from "/imports/api/reasonCodes/server/services/ReasonCodeService";
-import RolesEnum from "/imports/api/users/enums/roles";
 
 Meteor.methods({
   "reasonCode.create"(data) {
@@ -30,7 +29,7 @@ Meteor.methods({
   },
 
   "reasonCodes.get"(filters = {}) {
-    CodesService.secure(filters);
+    CodesService.secure(filters, this.userId);
     return CodesService.getReasonCodes(filters);
   }
 });

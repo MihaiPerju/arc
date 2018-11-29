@@ -32,7 +32,6 @@ export default class ReasonCodesBlock extends Component {
 
   getReasonCodes() {
     const { action } = this.props;
-
     let filters = {
       actionId: action._id,
       managerId: this.props.isPrivate ? Meteor.userId() : null
