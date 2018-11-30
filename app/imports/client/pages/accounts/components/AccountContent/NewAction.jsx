@@ -4,8 +4,7 @@ import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import SimpleSchema from "simpl-schema";
 import Notifier from "../../../../lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
-import ActionsHelper from "/imports/api/actions/helpers/OptionsGenerator";
-import ReasonCodesHelper from "/imports/api/reasonCodes/helpers/OptionsGenerator";
+import { generateOptions } from "/imports/api/general/helpers";
 import DateField from "/imports/client/lib/uniforms/DateField";
 import requirementTypes from "/imports/api/actions/enums/requirementEnum";
 
@@ -20,7 +19,7 @@ export default class NewAction extends Component {
       selectedActionId: null,
       isDisabled: false
     };
-  }
+}
 
   componentWillMount() {
     Meteor.call("actions.get", (err, actions) => {
@@ -212,24 +211,15 @@ export default class NewAction extends Component {
   }
 
   render() {
-    const {
-      selectedActionId,
-      loading,
-      isDisabled,
-      actions,
-      reasonCodes
-    } = this.state;
+    const { isDisabled } = this.state;
 
-    const actionOptions = ActionsHelper.generateOptions(actions);
-    const reasonCodeOptions = ReasonCodesHelper.generateOptions(reasonCodes);
-    const selectedAction = ActionsHelper.selectAction(
-      selectedActionId && selectedActionId.value,
-      actions
-    );
+    const actionOptions = generateOptions(this.state.actions, '_id', 'title');
+    const reasonCodeOptions = generateOptions(this.state.reasonCodes, '_id', 'reason');
+    const selectedAction = this.state.actions.find(action => action._id === this.state.selectedActionId)
 
     const schema = this.getSchema(selectedAction);
 
-    if (loading) {
+    if (this.state.loading) {
       return <Loading />;
     }
 
