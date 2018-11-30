@@ -183,27 +183,31 @@ export default class NewAction extends Component {
     if (action && action.inputs) {
       for (let input of action.inputs) {
         let optional = input.requirement === requirementTypes.OPTIONAL;
-        if (input.type === "date") {
-          _.extend(schema, {
-            [input.label]: {
-              type: Date,
-              optional
-            }
-          });
-        } else if (input.type === "number") {
-          _.extend(schema, {
-            [input.label]: {
-              type: Number,
-              optional
-            }
-          });
-        } else {
-          _.extend(schema, {
-            [input.label]: {
-              type: String,
-              optional
-            }
-          });
+
+        switch(input.type){
+          case 'date':
+            _.extend(schema, {
+              [input.label]: {
+                type: Date,
+                optional
+              }
+            });
+            break;
+          case 'number':
+            _.extend(schema, {
+              [input.label]: {
+                type: Number,
+                optional
+              }
+            });
+            break;
+          default:
+            _.extend(schema, {
+              [input.label]: {
+                type: String,
+                optional
+              }
+            });
         }
       }
     }
