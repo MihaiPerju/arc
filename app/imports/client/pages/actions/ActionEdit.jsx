@@ -195,7 +195,7 @@ export default class ActionEdit extends React.Component {
                     </div>
                 )}
 
-                  <ListField name="inputs">
+                  <ListField name="inputs" showListField={() => {}}>
                     <ListItemField name="$">
                       <NestField className="upload-item text-center">
                         <div className="form-wrapper">
