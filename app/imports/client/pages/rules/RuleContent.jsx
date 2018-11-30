@@ -4,22 +4,33 @@ import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
 export default class RuleContent extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      edit: false
+      edit: false,
+      currentRule: this.props.currentRule
     };
     this.pollingMethod = null;
   }
 
   componentWillMount() {
+    this.getRule();
+
     this.pollingMethod = setInterval(() => {
       this.getRule();
-    }, 3000);
+    }, 10000);
   }
 
-  getRule() {
-    const { currentRule } = this.props;
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.currentRule === this.props.currentRule)
+      return;
+
+    this.setState({currentRule: nextProps.currentRule, edit: false});
+    this.getRule(nextProps.currentRule);
+  }
+
+  getRule(newRuleID) {
+    const currentRule = newRuleID || this.state.currentRule;
     Meteor.call("rule.getOne", currentRule, (err, rule) => {
       if (!err) {
         this.setState({ rule });
@@ -35,12 +46,11 @@ export default class RuleContent extends Component {
   };
 
   setEdit = () => {
-    const { edit } = this.state;
-    this.setState({ edit: !edit });
+    this.setState({ edit: !this.state.edit });
   };
 
   render() {
-    const { edit, rule } = this.state;
+    const { rule } = this.state;
 
     if (!rule) {
       return <Loading />;
@@ -48,7 +58,7 @@ export default class RuleContent extends Component {
 
     return (
       <div>
-        {edit ? (
+        {this.state.edit ? (
           <RuleEdit rule={rule} close={this.setEdit} />
         ) : (
           <div className="main-content action-content">
