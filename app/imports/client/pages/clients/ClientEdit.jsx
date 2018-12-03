@@ -105,6 +105,7 @@ export default class EditClient extends React.Component {
                 Client information
               </div>
             </div>
+			<div className="arcc-form-wrap">
             <AutoForm
               model={client}
               schema={ClientSchema}
@@ -222,6 +223,7 @@ export default class EditClient extends React.Component {
                 </ListItemField>
               </ListField>
             </AutoForm>
+			</div>
           </div>
         </div>
       </div>

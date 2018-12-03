@@ -65,9 +65,9 @@ export default class AccountContent extends Component {
       freezeAccount
     } = this.props;
 
-    if (accountsSelected.length) {
-      return <Statistics accountsSelected={accountsSelected} />;
-    }
+    // if (accountsSelected.length) {
+    //   return <Statistics accountsSelected={accountsSelected} />;
+    // }
     let main_class =
       account && account.isPending
         ? "main-content position_style"

@@ -255,8 +255,9 @@ export default class AccountListContainer extends Pager {
 
   checkAccount = account => {
     const { accountsSelected } = this.state;
-    if (accountsSelected.includes(account._id)) {
-      accountsSelected.splice(accountsSelected.indexOf(account._id), 1);
+    const prevSelectedIndex = accountsSelected.indexOf(account._id);
+    if (prevSelectedIndex !== -1) {
+      accountsSelected.splice(prevSelectedIndex, 1);
     } else {
       accountsSelected.push(account._id);
     }
@@ -540,7 +541,7 @@ export default class AccountListContainer extends Pager {
       <div className="cc-container">
         <div
           className={
-            currentAccount || accountsSelected.length
+            currentAccount
               ? "left__side"
               : "left__side full__width"
           }
@@ -626,7 +627,7 @@ export default class AccountListContainer extends Pager {
             buttonHidden={true}
           />
         </div>
-        {(currentAccount || accountsSelected.length) && !showMetaData && (
+        {(currentAccount) && !showMetaData && (
           <RightSide
             openMetaData={this.openMetaDataSlider}
             currentAccount={currentAccount}
