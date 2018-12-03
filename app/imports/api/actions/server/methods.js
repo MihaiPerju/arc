@@ -2,8 +2,31 @@ import Actions from "/imports/api/actions/collection.js";
 import ActionService from "./services/ActionService";
 import FlagService from "./services/FlagService";
 import Security from "/imports/api/security/security";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "actions.list"(params) {
+    const queryParams = QueryBuilder.getActionsParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    options.fields = { tagIds: 1, title: 1 };
+    return Actions.find(filters, options).fetch();
+  },
+
+  "actions.get"(filters = {}) {
+    return Actions.find(filters).fetch();
+  },
+
+  "actions.count"(params) {
+    const queryParams = QueryBuilder.getActionsParams(params);
+    let filters = queryParams.filters;
+    return Actions.find(filters).count();
+  },
+
+  "action.getOne"(_id) {
+    return Actions.findOne({ _id });
+  },
+
   "action.create"(data) {
     Security.isAdminOrTech(this.userId);
     ActionService.createAction(data);

@@ -1,3 +1,4 @@
 import './users';
 import './clients';
-import './letterTemplates.js';
+import './letterTemplates';
+import './substatesAndActions';

@@ -1,6 +1,6 @@
 import React from "react";
 import Pagination from "react-js-pagination";
-import PagerService from "./PagerService";
+import ParamsService from "./ParamsService";
 
 export default class Pager extends React.Component {
   constructor() {
@@ -14,24 +14,19 @@ export default class Pager extends React.Component {
   }
 
   componentDidMount() {
-    const queryParams = PagerService.getParams();
-    this.handlePageChange(this.state.page, queryParams);
+    const params = ParamsService.getParams();
+    this.handlePageChange(this.state.page, params);
   }
 
-  getQuery() {
-    return this.query;
-  }
-
-  handlePageChange(page, queryParams) {
+  handlePageChange(page, params) {
     this.setState({ page });
-
     FlowRouter.setParams({ page });
 
-    this.recount(queryParams);
+    this.recount(params);
   }
 
   updateFilters() {
-    const filters = PagerService.getParams();
+    const filters = ParamsService.getParams();
     this.recount(filters);
     this.setState({
       filters,
@@ -39,12 +34,10 @@ export default class Pager extends React.Component {
     });
   }
 
-  recount = queryParams => {
-    this.getQuery()
-      .clone(queryParams)
-      .getCount((err, res) => {
-        this.setState({ total: res });
-      });
+  recount = params => {
+    Meteor.call(this.method, params, (err, total) => {
+      this.setState({ total });
+    });
   };
 
   getPaginator() {

@@ -1,18 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import UserSearchBar from "./components/UserSearchBar.jsx";
 import UserList from "./components/UserList.jsx";
-import UserContent from "./UserContent.jsx";
-import CreateUser from "./CreateUser.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/users/queries/listUsers";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
+import RightSide from "./components/UserRightSide";
 
-class UserListContainer extends Pager {
+export default class UserListContainer extends Pager {
   constructor() {
     super();
 
@@ -24,14 +19,37 @@ class UserListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: []
+      tags: [],
+      users: []
     });
-    this.query = query;
+    this.method = "users.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
+
+    this.pollingMethod = setInterval(() => {
+      this.listUsers();
+    }, 3000);
   }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
+  listUsers = () => {
+    const params = ParamsService.getUserParams();
+    Meteor.call("users.list", params, (err, users) => {
+      if (!err) {
+        this.setState({ users });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
@@ -104,10 +122,12 @@ class UserListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+
+    this.listUsers();
   };
 
   closeRightPanel = () => {
@@ -119,28 +139,19 @@ class UserListContainer extends Pager {
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getUserParams();
     this.recount(queryParams);
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       usersSelected,
       currentUser,
       create,
       total,
-      range
+      range,
+      users
     } = this.state;
-    const user = objectFromArray(data, currentUser);
-
-    if (isLoading && !FlowRouter.getQueryParam("email")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>{error.reason}</div>;
-    }
 
     return (
       <div className="cc-container">
@@ -163,7 +174,7 @@ class UserListContainer extends Pager {
             showBtnGroup={this.showBtnGroup}
             usersSelected={usersSelected}
             currentUser={currentUser}
-            users={data}
+            users={users}
           />
           <PaginationBar
             closeForm={this.closeForm}
@@ -175,43 +186,13 @@ class UserListContainer extends Pager {
           />
         </div>
         {(currentUser || create) && (
-          <RightSide close={this.closeForm} create={create} user={user} />
+          <RightSide
+            close={this.closeForm}
+            create={create}
+            currentUser={currentUser}
+          />
         )}
       </div>
     );
   }
 }
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { user, create, close } = this.props;
-    const { fade } = this.state;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? <CreateUser close={close} /> : <UserContent user={user} />}
-      </div>
-    );
-  }
-}
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(UserListContainer);

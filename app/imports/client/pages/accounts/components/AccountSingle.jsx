@@ -55,7 +55,7 @@ export default class AccountSingle extends Component {
   render() {
     const { account, active, currentAccount, expiredTickle, tags } = this.props;
 
-    const classes = classNames("list-item task-item", {
+    const classes = classNames("list-item", {
       "bg--yellow": active,
       "tickled-item": expiredTickle == 1,
       open: account._id === currentAccount
@@ -63,6 +63,7 @@ export default class AccountSingle extends Component {
 
     return (
       <div className={classes} onClick={this.onSelectAccount}>
+
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
           <label onClick={this.onCheck.bind(this)} />
@@ -72,7 +73,9 @@ export default class AccountSingle extends Component {
           <input type="checkbox" className="hidden" />
           <label />
         </div>
+
         <div className="row__item margin-top-10 ">
+
           <div className="left__side">
             <div
               className={
@@ -82,21 +85,24 @@ export default class AccountSingle extends Component {
               {account.ptName}
             </div>
           </div>
+
           <div className="right__side">
-            <div className="patient-id text-blue">{account.acctNum}</div>
+            <div className="patient-id text-dark-grey">{account.acctNum}</div>
             <div className="substate">{account.substate}</div>
             <div className="time"> 
               {account && moment(account.createdAt).format(" hh:mm")}
             </div>
           </div>
+
         </div>
 
         <div className="row__item margin-top-10 ">
-          <div className="price">{commaNumber(account.acctBal)}</div>
           <div className="location">
             {account.facility && account.facility.name}
           </div>
+          <div className="price">{commaNumber(account.acctBal)}</div>
         </div>
+
         <div className="row__item margin-top-10">
           <TagItem
             title="Tag Account"

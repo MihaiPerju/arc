@@ -1,58 +1,79 @@
-import {
-  mount
-} from 'react-mounter';
-
+import { mount } from "react-mounter";
 
 import route from "./router";
-import "./logoutRoute";
 import Home from "/imports/client/pages/home/Home";
 
 //User
-import MyProfile from '/imports/client/pages/users/MyProfile';
-import ActivityStream from '/imports/client/pages/users/ActivityStream';
-import ChangePassword from '/imports/client/pages/users/ChangePassword';
-import ForgotPassword from '/imports/client/pages/users/ForgotPassword';
-import ResetPassword from '/imports/client/pages/users/ResetPassword.jsx';
-import Login from '/imports/client/pages/users/Login';
-import Dashboard from '/imports/client/pages/users/Dashboard';
+import MyProfile from "/imports/client/pages/users/MyProfile";
+import ActivityStream from "/imports/client/pages/users/ActivityStream";
+import ChangePassword from "/imports/client/pages/users/ChangePassword";
+import ForgotPassword from "/imports/client/pages/users/ForgotPassword";
+import ResetPassword from "/imports/client/pages/users/ResetPassword.jsx";
+import Login from "/imports/client/pages/users/Login";
+import Dashboard from "/imports/client/pages/users/Dashboard";
 
-route('/dashboard', Home, {}, {
-  name: 'dashboard',
-
-});
-route('/', Login, {}, {
-  name: 'login',
-
-});
-route('/my-profile', MyProfile, {}, {
-  name: 'profile',
-});
-route('/:userId/activity', ActivityStream);
-route('/password/change', ChangePassword, {}, {
-  name: 'password.change',
-
-});
-route('/password/forgot', ForgotPassword, {}, {
-  name: 'password.forgot',
-
-});
-route('/reset-password/:token', ResetPassword, {}, {
-  name: 'password.reset',
-
-});
-route('/dashboard', Dashboard);
+route(
+  "/dashboard",
+  Home,
+  {},
+  {
+    name: "dashboard"
+  }
+);
+route(
+  "/",
+  Login,
+  {},
+  {
+    name: "login"
+  }
+);
+route(
+  "/my-profile",
+  MyProfile,
+  {},
+  {
+    name: "profile"
+  }
+);
+route("/:userId/activity", ActivityStream);
+route(
+  "/password/change",
+  ChangePassword,
+  {},
+  {
+    name: "password.change"
+  }
+);
+route(
+  "/password/forgot",
+  ForgotPassword,
+  {},
+  {
+    name: "password.forgot"
+  }
+);
+route(
+  "/reset-password/:token",
+  ResetPassword,
+  {},
+  {
+    name: "password.reset"
+  }
+);
+route("/dashboard", Dashboard);
 
 //Admin
-import UserListContainer from '/imports/client/pages/admin/UserListContainer.jsx';
-import CreateUser from '/imports/client/pages/admin/CreateUser.jsx';
-import EditUser from '/imports/client/pages/admin/EditUser.jsx';
+import UserListContainer from "/imports/client/pages/admin/UserListContainer.jsx";
+import CreateUser from "/imports/client/pages/admin/CreateUser.jsx";
+import EditUser from "/imports/client/pages/admin/EditUser.jsx";
 import Settings from "/imports/client/pages/admin/settings/Settings";
 
 route("/admin/settings", Settings);
 
-route('/admin/user/list', UserListContainer);
-route('/admin/user/create', CreateUser);
-route('/admin/user/:userId/edit', EditUser);
+route("/admin/user/list", UserListContainer);
+route("/admin/user/create", CreateUser);
+route("/admin/user/:userId/edit", EditUser);
 
 //Clients
 import CreateClient from "/imports/client/pages/clients/ClientCreate";
@@ -78,13 +99,17 @@ import LetterView from "/imports/client/pages/letters/LetterView.jsx";
 
 route(
   "/account/:accountId/create-letter",
-  LetterCreateContainer, {}, {
+  LetterCreateContainer,
+  {},
+  {
     name: "letter.create"
   }
 );
 route(
   "/account/:accountId/letter/:letterId/view",
-  LetterView, {}, {
+  LetterView,
+  {},
+  {
     name: "letter.view"
   }
 );
@@ -96,19 +121,25 @@ import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.
 
 route(
   "/client/:_id/manage-facilities",
-  FacilityContainer, {}, {
+  FacilityContainer,
+  {},
+  {
     name: "facility.list"
   }
 );
 route(
   "/client/:_id/manage-facilities/create",
-  FacilityCreate, {}, {
+  FacilityCreate,
+  {},
+  {
     name: "facility.create"
   }
 );
 route(
   "/client/:_id/manage-facilities/:facilityId/edit",
-  FacilityEdit, {}, {
+  FacilityEdit,
+  {},
+  {
     name: "facility.edit"
   }
 );
@@ -139,7 +170,9 @@ import RegionListContainer from "/imports/client/pages/regions/RegionsListContai
 
 route(
   "/client/:id/region/list",
-  RegionListContainer, {}, {
+  RegionListContainer,
+  {},
+  {
     name: "region.list"
   }
 );
@@ -153,28 +186,12 @@ route("/accounts/filter-builder", AccountFilterBuilder);
 route("/reports/list", ReportListContainer);
 route(
   "/report/create/facilityid/:facilityId",
-  ReportCreate, {}, {
+  ReportCreate,
+  {},
+  {
     name: "report.create.facilityid"
   }
 );
-
-//Insurance Companies
-import InsuranceCompanyCreate from "/imports/client/pages/insuranceCompanies/InsuranceCompanyCreate";
-import InsuranceCompanyEdit from "/imports/client/pages/insuranceCompanies/InsuranceCompanyEdit";
-import InsuranceCompanyListContainer from "/imports/client/pages/insuranceCompanies/InsuranceCompanyListContainer";
-
-route("/inscompany/create", InsuranceCompanyCreate);
-route("/inscompany/:id/edit", InsuranceCompanyEdit);
-route("/inscompany/list", InsuranceCompanyListContainer);
-
-//Reason Codes
-import ReasonCodesContainer from "/imports/client/pages/reasonCodes/ReasonCodesContainer";
-import ReasonCodeCreate from "/imports/client/pages/reasonCodes/ReasonCodeCreate";
-import ReasonCodeEdit from "/imports/client/pages/reasonCodes/ReasonCodeEdit";
-
-route("/reason-codes/list", ReasonCodesContainer);
-route("/reason-code/create", ReasonCodeCreate);
-route("/reason-code/:id/edit", ReasonCodeEdit);
 
 //Rules Engine
 import RulesContainer from "/imports/client/pages/rules/RulesListContainer";
@@ -200,13 +217,12 @@ import TagsListContainer from "/imports/client/pages/tags/TagsListContainer.jsx"
 
 route("/tags/list", TagsListContainer);
 
-
-//Flagged accounts
-import FlaggedAccountListContainer from "/imports/client/pages/accounts/FlaggedAccountListContainer";
-
-route("/flagged", FlaggedAccountListContainer);
-
 //Tags
 import FileListContainer from "/imports/client/pages/files/FileListContainer.jsx";
 
 route("/file/list", FileListContainer);
+
+//Bulk management
+import BulkManagement from "/imports/client/pages/bulk/BulkAction.jsx";
+
+route("/bulk/action", BulkManagement);

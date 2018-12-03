@@ -3,16 +3,29 @@ import Notifier from "/imports/client/lib/Notifier";
 import moment from "moment/moment";
 import SimpleSchema from "simpl-schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/escalations/queries/escalationList";
+import Loading from "/imports/client/lib/ui/Loading";
 
-class EscalateReason extends Component {
+export default class EscalateReason extends Component {
   constructor() {
     super();
     this.state = {
-      escalation: {},
       isDisabled: false
     };
+  }
+
+  componentWillMount() {
+    this.getEscalation();
+  }
+
+  getEscalation() {
+    const { accountId } = this.props;
+    Meteor.call("escalation.get", { accountId }, (err, escalation) => {
+      if (!err) {
+        this.setState({ escalation });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   onRespond = content => {
@@ -30,16 +43,12 @@ class EscalateReason extends Component {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
-    const { isDisabled } = this.state;
+    const { isDisabled, escalation } = this.state;
 
-    if (isLoading) {
-      return <div>Loading</div>;
+    if (!escalation) {
+      return <Loading />;
     }
 
-    if (error) {
-      return <div>{error.reason}</div>;
-    }
     return (
       <div className="action-block">
         <div className="header__block">
@@ -61,14 +70,22 @@ class EscalateReason extends Component {
                 type="submit"
                 className="btn-post"
               >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Post"}
+                {isDisabled ? (
+                  <div>
+                    {" "}
+                    Loading
+                    <i className="icon-cog" />
+                  </div>
+                ) : (
+                  "Post"
+                )}
               </button>
             </div>
           </AutoForm>
         </div>
         <div className="comment-list">
-          {data &&
-            data.messages.map((message, index) => {
+          {escalation.messages &&
+            escalation.messages.map((message, index) => {
               return (
                 <div
                   key={index}
@@ -101,11 +118,3 @@ const escalateSchema = new SimpleSchema({
     type: String
   }
 });
-
-export default withQuery(
-  props => {
-    const { accountId } = props;
-    return query.clone({ filters: { accountId } });
-  },
-  { reactive: true, single: true }
-)(EscalateReason);

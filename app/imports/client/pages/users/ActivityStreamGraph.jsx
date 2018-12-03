@@ -4,13 +4,15 @@ import ReactHighcharts from "highcharts-react-official";
 import Notifier from "/imports/client/lib/Notifier";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ActivityStreamGraph extends React.Component {
   constructor() {
     super();
     this.state = {
       graphData: [],
-      selectedDate: moment()
+      selectedDate: moment(),
+      isLoading: false
     };
   }
 
@@ -21,12 +23,15 @@ export default class ActivityStreamGraph extends React.Component {
 
   getAccountActions = date => {
     const { userId } = FlowRouter.current().params;
+    this.setState({ isLoading: true });
     Meteor.call("account.getActionPerHour", userId, date, (err, graphData) => {
       if (!err) {
         this.setState({
-          graphData
+          graphData,
+          isLoading: false
         });
       } else {
+        this.setState({ isLoading: false });
         Notifier.error(err.reason);
       }
     });
@@ -36,15 +41,17 @@ export default class ActivityStreamGraph extends React.Component {
     this.setState({ selectedDate: moment(newDate) });
   };
 
-  onSubmit = date => {
-    this.getAccountActions(date);
+  onSubmit = () => {
+    let selectedDate = new Date(this.state.selectedDate);
+    this.getAccountActions(selectedDate);
   };
 
-  render() {
-    const { graphData, selectedDate } = this.state;
+  renderGraph() {
+    const { graphData, isLoading } = this.state;
     const options = {
       chart: {
-        type: "line"
+        type: "line",
+        width: 600
       },
       xAxis: {
         title: { text: "Hours" }
@@ -53,7 +60,7 @@ export default class ActivityStreamGraph extends React.Component {
         title: { text: "Number of Action" }
       },
       title: {
-        text: "Activity Timeline Graph"
+        text: "Actions"
       },
       series: [
         {
@@ -62,39 +69,51 @@ export default class ActivityStreamGraph extends React.Component {
         }
       ]
     };
-    return (
-      <div style={{ width: "450px" }}>
-        <div style={{ width: "100%" }}>
+
+    if (!isLoading) {
+      return (
+        <div className="line-chart">
           <ReactHighcharts highcharts={Highcharts} options={options} />
         </div>
-        <div
-          style={{
-            marginTop: "20px",
-            width: "100%",
-            background: "white",
-            padding: "10px"
-          }}
-        >
-          <DatePicker
-            showMonthDropdown
-            showYearDropdown
-            yearDropdownItemNumber={4}
-            todayButton={"Today"}
-            selected={selectedDate}
-            onChange={this.onChange}
-            placeholderText="Select New Date"
-            fixedHeight
-          />
+      );
+    }
+    else {
+      return <Loading />;
+    }
+
+
+  }
+
+  render() {
+    const { selectedDate } = this.state;
+
+    return (
+      <div>
+        <div className="d-header">
+          <div className="d-header-left">
+            <h2>Activity Graph</h2>
+          </div>
+          <div className="d-header-right flex--helper form-group__pseudo--3">
+            <div className="m-l-15">
+              <label>Select Date:</label>
+              <div className="border-style">
+                <DatePicker
+                  calendarClassName="cc-datepicker"
+                  showMonthDropdown
+                  showYearDropdown
+                  yearDropdownItemNumber={4}
+                  todayButton={"Today"}
+                  selected={selectedDate}
+                  onChange={this.onChange}
+                  placeholderText="Selected Date"
+                  fixedHeight
+                />
+              </div>
+            </div>
+            <button className="custom-submit-btn" onClick={this.onSubmit}>Submit </button>
+          </div>
         </div>
-        <button
-          style={{ background: "orange" }}
-          onClick={this.onSubmit.bind(
-            this,
-            selectedDate && selectedDate.toDate()
-          )}
-        >
-          Submit
-        </button>
+        {this.renderGraph()}
       </div>
     );
   }

@@ -7,9 +7,8 @@ import {
 } from "/imports/ui/forms";
 import TagsSchema from "/imports/api/tags/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
-import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import moduleListEnum , { moduleNames } from "/imports/api/tags/enums/tags";
+import moduleListEnum, { moduleNames } from "/imports/api/tags/enums/tags";
 
 export default class TagEdit extends React.Component {
   constructor() {
@@ -23,7 +22,7 @@ export default class TagEdit extends React.Component {
   }
 
   componentDidMount() {
-    clientsQuery.fetch((err, clients) => {
+    Meteor.call("clients.get", (err, clients) => {
       if (!err) {
         const clientOptions = clients.map(client => {
           return { label: client.clientName, value: client._id };
@@ -128,7 +127,7 @@ export default class TagEdit extends React.Component {
 
               {tag &&
                 tag.entities &&
-                tag.entities.includes(moduleNames.USERS) && (
+                tag.entities.includes(moduleNames.WORK_QUEUE) && (
                   <div className="select-group">
                     <div className="form-wrapper">
                       <SelectField

@@ -18,7 +18,7 @@ export default class TagPanel extends Component {
 
   render() {
     const { fade } = this.state;
-    const { tag, create, close } = this.props;
+    const { currentTag, create, close } = this.props;
     if (create) {
       return (
         <div className={fade ? "right__side in" : "right__side"}>
@@ -28,7 +28,7 @@ export default class TagPanel extends Component {
     }
     return (
       <div className={fade ? "right__side in" : "right__side"}>
-        <TagContent tag={tag} />
+        <TagContent currentTag={currentTag} />
       </div>
     );
   }

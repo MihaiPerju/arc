@@ -1,20 +1,14 @@
-import React, { Component } from "react";
+import React from "react";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import LetterSearchBar from "./components/LetterSearchBar.jsx";
 import LetterTemplatesList from "./components/LetterTemplatesList.jsx";
-import LetterTemplateContent from "./LetterTemplateContent.jsx";
-import LetterTemplateCreate from "./LetterTemplateCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/letterTemplates/queries/listLetterTemplates";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./TemplateRightSide";
 
-class LetterTemplateListContainer extends Pager {
+export default class LetterTemplateListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -25,14 +19,38 @@ class LetterTemplateListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: []
+      tags: [],
+      templates: []
     });
-    this.query = query;
+
+    this.method = "templates.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listTemplates();
+    }, 3000);
+  }
+
+  listTemplates = () => {
+    const params = ParamsService.getTemplatesParams();
+    Meteor.call("templates.get", params, (err, templates) => {
+      if (!err) {
+        this.setState({ templates });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   componentWillReceiveProps() {
@@ -111,47 +129,44 @@ class LetterTemplateListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentTemplate: null });
+
+    this.listTemplates();
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getTemplatesParams();
     this.recount(queryParams);
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.TEMPLATES] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.TEMPLATES] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       templatesSelected,
       currentTemplate,
       create,
       range,
       total,
-      tags
+      tags,
+      templates
     } = this.state;
-    const template = objectFromArray(data, currentTemplate);
-
-    if (isLoading && !FlowRouter.getQueryParam("letterTemplateName")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
 
     return (
       <div className="cc-container">
@@ -178,7 +193,7 @@ class LetterTemplateListContainer extends Pager {
             selectTemplate={this.selectTemplate}
             currentTemplate={currentTemplate}
             setTemplate={this.setTemplate}
-            templates={data}
+            templates={templates}
             tags={tags}
           />
           <PaginationBar
@@ -192,7 +207,7 @@ class LetterTemplateListContainer extends Pager {
         </div>
         {(currentTemplate || create) && (
           <RightSide
-            template={template}
+            currentTemplate={currentTemplate}
             create={create}
             close={this.closeForm}
           />
@@ -201,41 +216,3 @@ class LetterTemplateListContainer extends Pager {
     );
   }
 }
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { fade } = this.state;
-    const { template, create, close } = this.props;
-    return (
-      <div className={fade ? "right__side in" : "right__side"}>
-        {create ? (
-          <LetterTemplateCreate close={close} />
-        ) : (
-          <LetterTemplateContent template={template} />
-        )}
-      </div>
-    );
-  }
-}
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(LetterTemplateListContainer);

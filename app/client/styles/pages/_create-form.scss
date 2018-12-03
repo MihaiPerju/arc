@@ -1,7 +1,7 @@
 //Check Group
 .check-group {
-  margin-top: 20px;
-  padding-left: 15px;
+  margin: 0;
+  padding: 1em;
   input {
     display: none;
     & + label {
@@ -68,12 +68,6 @@
     .btn-add {
       color: $dark-grey
     }
-    .btn-cancel {
-      color: $red;
-      &:hover {
-        color: #d02121;
-      }
-    }
   }
 
   &__wrapper {
@@ -87,11 +81,6 @@
     width: 100%;
     margin-bottom: 15px;
     background-color: #fff;
-
-    .form-wrapper {
-      padding-top: 8px;
-    }
-
   }
   .form-wrapper {
     input, textarea {

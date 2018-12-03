@@ -24,7 +24,7 @@ class LetterEditContainer extends React.Component {
     this.setState({ letterTemplates: data });
     const { profile } = Meteor.user();
     _.extend(account, profile);
-  
+
     const clonedAccount = _.clone(account);
     const { letterValues, attachmentIds } = selectedLetter;
     Object.assign(clonedAccount, letterValues);
@@ -71,7 +71,7 @@ class LetterEditContainer extends React.Component {
   getKeywordsValues = (selectedTemplate = {}) => {
     const { keywords } = selectedTemplate;
     const keywordsValues = {};
-    _.each(keywords, (value) => {
+    _.each(keywords, value => {
       if (variablesEnum[value]) {
         keywordsValues[variablesEnum[value].field] = this.state[
           variablesEnum[value].field

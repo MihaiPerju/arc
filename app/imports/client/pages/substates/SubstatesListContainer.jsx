@@ -4,17 +4,13 @@ import SubstateSearchBar from "./components/SubstateSearchBar";
 import SubstatesList from "./components/SubstatesList";
 import SubstateEdit from "./SubstateEdit";
 import SubstateCreate from "./SubstateCreate";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/substates/queries/listSubstates";
-import Loading from "/imports/client/lib/ui/Loading";
 import { objectFromArray } from "/imports/api/utils";
 import Notifier from "/imports/client/lib/Notifier";
-import PagerService from "/imports/client/lib/PagerService";
+import ParamsService from "/imports/client/lib/ParamsService";
 import Pager from "../../lib/Pager";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 
-class SubstatesListContainer extends Pager {
+export default class SubstatesListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -26,14 +22,37 @@ class SubstatesListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: []
+      tags: [],
+      substates: []
     });
-    this.query = query;
+    this.method = "substates.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listSubstates();
+    }, 3000);
+  }
+
+  listSubstates = () => {
+    const params = ParamsService.getSubstatesParams();
+    Meteor.call("substates.list", params, (err, substates) => {
+      if (!err) {
+        this.setState({ substates });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   componentWillReceiveProps() {
@@ -111,30 +130,35 @@ class SubstatesListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentSubstate: null });
+
+    this.listSubstates();
   };
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getSubstatesParams();
     this.recount(queryParams);
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.SUBSTATES] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.SUBSTATES] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       substateSelected,
       currentSubstate,
@@ -142,17 +166,10 @@ class SubstatesListContainer extends Pager {
       filter,
       range,
       total,
-      tags
+      tags,
+      substates
     } = this.state;
-    const substate = objectFromArray(data, currentSubstate);
-
-    if (isLoading && !FlowRouter.getQueryParam("stateName")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
+    const substate = objectFromArray(substates, currentSubstate);
 
     return (
       <div className="cc-container substates-container">
@@ -175,7 +192,7 @@ class SubstatesListContainer extends Pager {
             selectSubstate={this.selectSubstate}
             currentSubstate={currentSubstate}
             setSubstate={this.setSubstate}
-            substates={data}
+            substates={substates}
             tags={tags}
           />
           <PaginationBar
@@ -228,16 +245,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, {
-      page,
-      perPage,
-      filters: { status: true }
-    });
-  },
-  { reactive: true }
-)(SubstatesListContainer);

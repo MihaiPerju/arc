@@ -27,7 +27,7 @@ export default class AccountContentHeader extends Component {
       } else {
         return (
           <div className="label label--grey">
-            {profile.firstName + " " + profile.lastName}
+            {profile && profile.firstName + " " + profile.lastName}
           </div>
         );
       }
@@ -87,7 +87,7 @@ export default class AccountContentHeader extends Component {
             </div>
 
             <div className="row__block">
-              <div className="patient-id text-blue">
+              <div className="patient-id text-dark-grey">
                 {account && account.acctNum}
               </div>
               <div className="substate">{account.substate}</div>
@@ -101,7 +101,7 @@ export default class AccountContentHeader extends Component {
                   : "No client name"}
               </div>
               <div className="label-group">
-                <div className="label label--green">158 points(TBM)</div>
+                {/* <div className="label label--green">158 points(TBM)</div> */}
                 <div className="label label--grey text-uppercase">
                   CARC(TNM)
                 </div>
@@ -149,7 +149,7 @@ export default class AccountContentHeader extends Component {
               )}
 
             <AccountActioning
-              metaData={true}
+              metadata={true}
               type="View Meta Data"
               openMetaData={openMetaData}
               closeRightPanel={closeRightPanel}

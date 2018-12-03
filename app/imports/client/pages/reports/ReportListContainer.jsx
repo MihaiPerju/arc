@@ -1,22 +1,14 @@
-import React, { Component } from "react";
+import React from "react";
 import ReportList from "./components/ReportList.jsx";
 import ReportSearchBar from "./components/ReportSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
-import ReportContent from "./ReportContent.jsx";
-import ReportCreate from "./ReportCreate.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/reports/queries/reportsList";
-import Loading from "/imports/client/lib/ui/Loading";
-import { objectFromArray } from "/imports/api/utils";
-import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
-import substatesQuery from "/imports/api/substates/queries/listSubstates";
-import TagsListQuery from "/imports/api/tags/queries/listTags";
+import ParamsService from "../../lib/ParamsService";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import RightSide from "./ReportRightSide";
 
-class ReportListContainer extends Pager {
+export default class ReportListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -28,9 +20,11 @@ class ReportListContainer extends Pager {
       total: 0,
       range: {},
       substates: [],
-      tags: []
+      tags: [],
+      reports: []
     });
-    this.query = query;
+    this.method = "reports.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
@@ -41,17 +35,35 @@ class ReportListContainer extends Pager {
         currentReport: reportId
       });
     }
-    substatesQuery
-      .clone({
-        filters: { status: true }
-      })
-      .fetch((err, substates) => {
-        if (!err) {
-          this.setState({ substates });
-        }
-      });
+
+    Meteor.call("substates.get", { status: true }, (err, substates) => {
+      if (!err) {
+        this.setState({ substates });
+      }
+    });
     this.getTags();
+
+    this.pollingMethod = setInterval(() => {
+      this.listReports();
+    }, 3000);
   }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
+  listReports = () => {
+    const params = ParamsService.getReportsParams();
+    Meteor.call("reports.get", params, (err, reports) => {
+      if (!err) {
+        this.setState({ reports });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
@@ -134,10 +146,12 @@ class ReportListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentReport: null });
+
+    this.listReports();
   };
 
   closeRightPanel = () => {
@@ -149,22 +163,25 @@ class ReportListContainer extends Pager {
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getReportsParams();
     this.recount(queryParams);
   };
 
   getTags = () => {
-    TagsListQuery.clone({
-      filters: { entities: { $in: [moduleNames.REPORTS] } }
-    }).fetch((err, tags) => {
-      if (!err) {
-        this.setState({ tags });
+    Meteor.call(
+      "tags.get",
+      { entities: { $in: [moduleNames.REPORTS] } },
+      (err, tags) => {
+        if (!err) {
+          this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
     const {
       reportsSelected,
       currentReport,
@@ -172,17 +189,9 @@ class ReportListContainer extends Pager {
       total,
       range,
       substates,
-      tags
+      tags,
+      reports
     } = this.state;
-    const report = objectFromArray(data, currentReport);
-
-    if (isLoading && !FlowRouter.getQueryParam("name")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
 
     return (
       <div className="cc-container">
@@ -210,7 +219,7 @@ class ReportListContainer extends Pager {
             selectReport={this.selectReport}
             currentReport={currentReport}
             setReport={this.setReport}
-            reports={data}
+            reports={reports}
             tags={tags}
           />
           <PaginationBar
@@ -225,7 +234,7 @@ class ReportListContainer extends Pager {
         {(currentReport || create) && (
           <RightSide
             close={this.closeForm}
-            report={report}
+            currentReport={currentReport}
             create={create}
             substates={substates}
             closeRightPanel={this.closeRightPanel}
@@ -235,49 +244,3 @@ class ReportListContainer extends Pager {
     );
   }
 }
-
-class RightSide extends Component {
-  constructor() {
-    super();
-    this.state = {
-      fade: false
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({ fade: true });
-    }, 300);
-  }
-
-  render() {
-    const { report, create, close, substates, closeRightPanel } = this.props;
-    const { fade } = this.state;
-    const classes = classNames({
-      right__side: true,
-      in: fade
-    });
-    return (
-      <div className={classes}>
-        {create ? (
-          <ReportCreate close={close} substates={substates} />
-        ) : (
-          <ReportContent
-            closeRightPanel={closeRightPanel}
-            substates={substates}
-            report={report}
-          />
-        )}
-      </div>
-    );
-  }
-}
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(ReportListContainer);

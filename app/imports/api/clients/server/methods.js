@@ -7,6 +7,11 @@ import Business from "/imports/api/business";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import Accounts from "/imports/api/accounts/collection";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import Users from "../../users/collection";
+import ClientService from "/imports/api/clients/server/services/ClientService";
+import Tags from "/imports/api/tags/collection.js";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 Meteor.methods({
   "client.create"(data) {
@@ -15,12 +20,53 @@ Meteor.methods({
     return Clients.insert(data);
   },
 
-  "client.get"(id) {
+  "client.get"(_id) {
     Security.isAdminOrTech(this.userId);
 
     return Clients.findOne({
-      _id: id
+      _id
     });
+  },
+
+  "client.getOne"(_id) {
+    Security.isAdminOrTech(this.userId);
+
+    return Clients.findOne({ _id });
+  },
+
+  "clients.list"(params) {
+    Security.isAdminOrTech(this.userId);
+    const queryParams = QueryBuilder.getClientParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    //Project fields
+    options.fields = { clientName: 1, tagIds: 1, email: 1 };
+    return Clients.find(filters, options).fetch();
+  },
+
+  "clients.get"(filters = {}) {
+    return ClientService.getClients(filters);
+  },
+
+  "clients.getEssential"(filters = {}) {
+    return Clients.find(filters, {
+      fields: {
+        clientName: 1,
+        email: 1,
+        financialGoals: 1,
+        logoPath: 1,
+        contacts: 1,
+        status: 1,
+        managerIds: 1,
+        tagIds: 1
+      }
+    }).fetch();
+  },
+
+  "clients.count"(params) {
+    const queryParams = QueryBuilder.getClientParams(params);
+    let filters = queryParams.filters;
+    return Clients.find(filters).count();
   },
 
   "client.getLogoPath"(uploadId) {
@@ -34,32 +80,63 @@ Meteor.methods({
 
   "client.update"(_id, data) {
     Security.isAdminOrTech(this.userId);
-    Clients.update({
-      _id
-    }, {
-      $set: data
-    });
+    Clients.update(
+      {
+        _id
+      },
+      {
+        $set: data
+      }
+    );
   },
 
-  "client.updateManagers"(_id, managerIds) {
+  "client.assign"(_id, managerIds) {
     Security.isAdminOrTech(this.userId);
     //Update client
-    Clients.update({
-      _id
-    }, {
-      $set: {
-        managerIds
+    Clients.update(
+      {
+        _id
+      },
+      {
+        $set: {
+          managerIds
+        }
       }
-    });
+    );
 
     //Update Accounts;
-    Accounts.update({
-      clientId: _id
-    }, {
-      $set: {
-        managerIds
+    Accounts.update(
+      {
+        clientId: _id
+      },
+      {
+        $set: {
+          managerIds
+        }
       }
-    })
+    );
+
+    //Grant access to users
+    Users.update(
+      { _id: { $in: managerIds } },
+      {
+        $addToSet: {
+          clientIds: _id
+        }
+      },
+      { multi: true }
+    );
+
+    //Remove access to users
+    Users.update(
+      { _id: { $nin: managerIds } },
+      {
+        $pull: {
+          clientIds: _id
+        }
+      },
+      { multi: true }
+    );
   },
 
   "client.removeLogo"(clientId) {
@@ -70,25 +147,24 @@ Meteor.methods({
     });
 
     if (client) {
-      const {
-        logoPath
-      } = client;
-      const {
-        root
-      } = SettingsService.getSettings(settings.ROOT);
+      const { logoPath } = client;
+      const { root } = SettingsService.getSettings(settings.ROOT);
 
       //Delete from local storage
       Uploads.remove({
         path: logoPath
       });
 
-      Clients.update({
-        _id: clientId
-      }, {
-        $unset: {
-          logoPath: null
+      Clients.update(
+        {
+          _id: clientId
+        },
+        {
+          $unset: {
+            logoPath: null
+          }
         }
-      });
+      );
       const filePath = root + Business.CLIENTS_FOLDER + logoPath;
       if (logoPath && fs.existsSync(filePath)) {
         fs.unlinkSync(filePath);
@@ -137,39 +213,59 @@ Meteor.methods({
   "client.switchStatus"(_id, status) {
     Security.isAdminOrTech(this.userId);
 
-    return Clients.update({
+    return Clients.update(
+      {
         _id: _id
-      }, {
+      },
+      {
         $set: {
           status: !status
         }
       },
       err => {
         if (!err && !!status) {
-          Facilities.update({
-            clientId: _id
-          }, {
-            $set: {
-              status: false
+          Facilities.update(
+            {
+              clientId: _id
+            },
+            {
+              $set: {
+                status: false
+              }
+            },
+            {
+              multi: true
             }
-          }, {
-            multi: true
-          });
+          );
         }
       }
     );
   },
 
-  "client.tag"({
-    _id,
-    tagIds
-  }) {
-    Clients.update({
-      _id
-    }, {
-      $set: {
-        tagIds
+  "client.tag"({ _id, tagIds }) {
+    Clients.update(
+      {
+        _id
+      },
+      {
+        $set: {
+          tagIds
+        }
       }
-    });
-  }
+    );
+  },
+
+  "client.getAll"() {
+    Security.isAdminOrTech(this.userId);
+    return Clients.find({}, { fields: { _id: 1, clientName: 1, tagIds: 1 } }).fetch();
+  },
+
+  "client.getWorkQueue"(clientId) {
+    Security.isAdminOrTech(this.userId);
+    let workQueue = [];
+
+    let tagDetails = Tags.find({ clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] }  }, { fields: { _id: 1, name: 1 } }).fetch();
+    return tagDetails;
+  },
+
 });

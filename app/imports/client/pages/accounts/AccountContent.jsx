@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import AccountContentHeader from "./components/AccountContent/AccountContentHeader";
 import InvoiceMembers from "./components/AccountContent/InvoiceMembers";
 import PayerBlock from "./components/AccountContent/PayerBlock";
-import ActionBlock from "./components/AccountContent/ActionBlock";
+import ActionBlock from "./components/AccountContent/ActionBlock"; 
 import LetterList from "./components/AccountContent/LetterList";
 import PdfFiles from "./components/AccountContent/PdfFiles";
 import EscalateReason from "./components/AccountContent/EscalateReason";
-import CommentsListContainer from "/imports/client/pages/comments/CommentsListContainer.jsx";
+import CommentList from "/imports/client/pages/comments/components/CommentList.jsx";
 import Statistics from "/imports/client/pages/accounts/components/Statistics";
 import TickleBlock from "./components/AccountContent/TickleBlock";
 import Notifier from "/imports/client/lib/Notifier";
@@ -17,11 +17,12 @@ export default class AccountContent extends Component {
   }
 
   componentWillMount() {
-    if(this.props.account && this.props.account.isPending) {
+    const { account } = this.props;
+    if (account && account.isPending) {
       let customWarning = {
-        title: 'Warning!',
-        message: 'Account is currently being processed',
-        level: 'warning',
+        title: "Warning!",
+        message: "Account is currently being processed",
+        level: "warning"
       };
       Notifier.addNotification(customWarning);
     }
@@ -63,14 +64,16 @@ export default class AccountContent extends Component {
       removeLock,
       freezeAccount
     } = this.props;
-    if (accountsSelected.length) {
-      return <Statistics accountsSelected={accountsSelected} />;
-    }
-    let main_class = ( account && account.isPending ) ? 'main-content position_style' : 'main-content';
+
+    // if (accountsSelected.length) {
+    //   return <Statistics accountsSelected={accountsSelected} />;
+    // }
+    let main_class =
+      account && account.isPending
+        ? "main-content position_style"
+        : "main-content";
     return (
-   
-      <div className={main_class} >
-      
+      <div className={main_class}>
         {account && (
           <div>
             <AccountContentHeader
@@ -90,14 +93,11 @@ export default class AccountContent extends Component {
             />
             <LetterList account={account} />
             <PdfFiles account={account} />
-            <CommentsListContainer
-              account={account}
-              closeRightPanel={closeRightPanel}
-            />
+            <CommentList account={account} closeRightPanel={closeRightPanel} />
           </div>
         )}
-        
-      { account && account.isPending && <div className="overlay"></div> }
+
+        {account && account.isPending && <div className="overlay" />}
       </div>
     );
   }

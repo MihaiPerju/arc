@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 import Notifier from "../../lib/Notifier";
-import clientsQuery from "../../../api/clients/queries/clientsWithFacilites";
-import usersQuery from "../../../api/users/queries/listUsersByRole";
 import ReportsEnum from "../../../api/schedules/enums/reports";
 import { AutoForm, ErrorField } from "/imports/ui/forms";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import schema from "/imports/api/schedules/schemas/schema";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/schedules/queries/scheduleList";
 import Loading from "/imports/client/lib/ui/Loading";
 
-class ScheduleBlock extends Component {
+export default class ScheduleBlock extends Component {
   constructor() {
     super();
     this.state = {
@@ -19,10 +15,11 @@ class ScheduleBlock extends Component {
       schedule: false,
       blankSchedule: false
     };
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
-    usersQuery.clone({}).fetch((err, users) => {
+    Meteor.call("users.get", (err, users) => {
       if (!err) {
         this.setState({
           users
@@ -32,7 +29,7 @@ class ScheduleBlock extends Component {
       }
     });
 
-    clientsQuery.clone({}).fetch((err, clients) => {
+    Meteor.call("clients.get", (err, clients) => {
       if (!err) {
         this.setState({
           clients
@@ -41,6 +38,29 @@ class ScheduleBlock extends Component {
         Notifier.error(err + "Couldn't get clients");
       }
     });
+
+    this.getSchedules();
+
+    this.pollingMethod = setInterval(() => {
+      this.getSchedules();
+    }, 3000);
+  }
+
+  getSchedules() {
+    const { report } = this.props;
+    let filters = { reportId: report._id };
+    Meteor.call("schedules.get", filters, (err, schedules) => {
+      if (!err) {
+        this.setState({ schedules });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   getUserOptions(users) {
@@ -90,18 +110,14 @@ class ScheduleBlock extends Component {
   };
 
   render() {
-    const { data, error, isLoading, report } = this.props;
-    const { blankSchedule } = this.state;
+    const { report } = this.props;
+    const { blankSchedule, schedules } = this.state;
     const users = this.getUserOptions(this.state.users);
     const clients = this.getClientOptions(this.state.clients);
     schema = schema.omit("reportId");
 
-    if (isLoading) {
+    if (!schedules) {
       return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
     }
 
     return (
@@ -125,7 +141,7 @@ class ScheduleBlock extends Component {
           )}
 
           <div className="schedule-list">
-            {data.map((schedule, index) => {
+            {schedules.map((schedule, index) => {
               return (
                 <div key={index} className="schedule-item">
                   <div className="left__side">
@@ -258,10 +274,3 @@ class CreateSchedule extends Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    return query.clone({ filters: { reportId: props.report._id } });
-  },
-  { reactive: true }
-)(ScheduleBlock);

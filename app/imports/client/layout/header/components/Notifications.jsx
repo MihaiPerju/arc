@@ -1,19 +1,44 @@
 import React, { Component } from "react";
 import classNames from "classnames";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import NotificationQuery from "/imports/api/notifications/queries/notificationList";
 import NotificationTypeEnum from "/imports/api/notifications/enums/notificationTypes";
 import Loading from "/imports/client/lib/ui/Loading";
 import flagTypesEnum from "/imports/api/accounts/enums/flagTypesEnum";
 import moment from "moment";
+import Notifier from "../../../lib/Notifier";
 
-class Notitfications extends Component {
+export default class Notitfications extends Component {
   constructor() {
     super();
     this.state = {
       dropdownIsActive: false,
       badge: true
     };
+    this.pollingMetod = null;
+  }
+
+  componentWillMount() {
+    this.pollingMethod = setInterval(() => {
+      this.getNotifications();
+    }, 3000);
+  }
+
+  getNotifications() {
+    let filters = {
+      receiverId: Meteor.userId(),
+      type: { $ne: NotificationTypeEnum.GLOBAL }
+    };
+    Meteor.call("notifications.get", filters, (err, notifications) => {
+      if (!err) {
+        this.setState({ notifications });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   }
 
   openDropdown = () => {
@@ -44,10 +69,10 @@ class Notitfications extends Component {
   };
 
   getMessage = notification => {
-    const { metaData, type } = notification;
+    const { metadata, type } = notification;
     if (
-      metaData &&
-      metaData.acctNum &&
+      metadata &&
+      metadata.acctNum &&
       type === NotificationTypeEnum.RESPONSE
     ) {
       return (
@@ -55,17 +80,17 @@ class Notitfications extends Component {
           Manager responded to account with Account Number{" "}
           <a
             className="text-blue"
-            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
-              metaData.accountId
+            href={`/accounts/${metadata.state.toLowerCase()}?accountId=${
+              metadata.accountId
             }`}
           >
-            {metaData.acctNum}
+            {metadata.acctNum}
           </a>
         </div>
       );
     } else if (
-      metaData &&
-      metaData.name &&
+      metadata &&
+      metadata.name &&
       type === NotificationTypeEnum.REPORT
     ) {
       return (
@@ -73,38 +98,38 @@ class Notitfications extends Component {
           Report:
           <a
             className="text-blue"
-            href={`/reports/list?reportId=${metaData.reportId}`}
+            href={`/reports/list?reportId=${metadata.reportId}`}
           >
-            {metaData.name}
+            {metadata.name}
           </a>
           has been completed
         </div>
       );
     } else if (
-      metaData &&
-      metaData.acctNum &&
+      metadata &&
+      metadata.acctNum &&
       type === NotificationTypeEnum.FLAG
     ) {
       return (
         <div>
           <span>
             User flagged
-            {metaData.flagType === flagTypesEnum.ACTION ? " an " : " a "}
-            {metaData.flagType} on account with Account number
+            {metadata.flagType === flagTypesEnum.ACTION ? " an " : " a "}
+            {metadata.flagType} on account with Account number
           </span>
           <a
             className="text-blue"
-            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
-              metaData.accountId
+            href={`/accounts/${metadata.state.toLowerCase()}?accountId=${
+              metadata.accountId
             }`}
           >
-            {metaData.acctNum}
+            {metadata.acctNum}
           </a>
         </div>
       );
     } else if (
-      metaData &&
-      metaData.acctNum &&
+      metadata &&
+      metadata.acctNum &&
       type === NotificationTypeEnum.COMMENT
     ) {
       return (
@@ -112,11 +137,11 @@ class Notitfications extends Component {
           <span>Note left by manager on account with Account number</span>
           <a
             className="text-blue"
-            href={`/accounts/${metaData.state.toLowerCase()}?accountId=${
-              metaData.accountId
+            href={`/accounts/${metadata.state.toLowerCase()}?accountId=${
+              metadata.accountId
             }`}
           >
-            {metaData.acctNum}
+            {metadata.acctNum}
           </a>
         </div>
       );
@@ -125,18 +150,14 @@ class Notitfications extends Component {
   };
 
   render() {
-    const { dropdownIsActive, badge } = this.state;
-    const { data, isLoading, error } = this.props;
+    const { dropdownIsActive, badge, notifications } = this.state;
+
     const notificationBtnClasses = classNames("notification-btn", {
       active: dropdownIsActive
     });
 
-    if (isLoading) {
+    if (!notifications) {
       return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
     }
 
     return (
@@ -148,10 +169,9 @@ class Notitfications extends Component {
           ref={this.nodeRef}
         >
           <i className="icon-bell-o" />
-          {badge &&
-            data.length > 1 && (
-              <div className="badge text-center">{data.length}</div>
-            )}
+          {badge && notifications.length && (
+            <div className="badge text-center">{notifications.length}</div>
+          )}
         </a>
         {dropdownIsActive && (
           <div className="notification-dropdown__container">
@@ -160,16 +180,18 @@ class Notitfications extends Component {
               <div className="notification-inner" />
             </div>
             <div className="notification-dropdown__wrapper">
-              {data.map((notification, index) => (
+              {notifications.map((notification, index) => (
                 <NotificationItem
                   key={index}
                   content={notification.content}
-                  time={moment(notification.createdAt).format("MM/DD/YYYY, h:mm a")}
+                  time={moment(notification.createdAt).format(
+                    "MM/DD/YYYY, h:mm a"
+                  )}
                 >
                   {this.getMessage(notification)}
                 </NotificationItem>
               ))}
-              {data.length === 0 && (
+              {notifications && notifications.length === 0 && (
                 <div className="notification-none text-center text-light-grey">
                   No notifications!
                 </div>
@@ -199,16 +221,3 @@ class NotificationItem extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    return NotificationQuery.clone({
-      filters: {
-        receiverId: Meteor.userId(),
-        type: { $ne: NotificationTypeEnum.GLOBAL }
-      },
-      options: { sort: { createdAt: -1 } }
-    });
-  },
-  { reactive: true }
-)(Notitfications);

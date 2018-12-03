@@ -3,15 +3,29 @@ import Letters from "../collection.js";
 import Security from "/imports/api/security/security";
 import { roleGroups } from "/imports/api/users/enums/roles";
 import LetterService from "/imports/api/letters/server/service/LetterService";
+import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 
 Meteor.methods({
+  "letters.list"(params) {
+    const queryParams = QueryBuilder.getLettersParams(params);
+    let filters = queryParams.filters;
+    let options = queryParams.options;
+    return Letters.find(filters, options).fetch();
+  },
+
+  "letters.count"(params) {
+    const queryParams = QueryBuilder.getLettersParams(params);
+    let filters = queryParams.filters;
+    return Letters.find(filters).count();
+  },
+
   "letter.create"(data) {
     data.userId = this.userId;
     LetterService.createLetter(data);
   },
 
-  "letter.get"(letterId) {
-    return Letters.findOne(letterId);
+  "letter.get"(filters) {
+    return Letters.findOne(filters);
   },
 
   "letter.delete"(letterId) {

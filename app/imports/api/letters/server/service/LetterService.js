@@ -37,6 +37,14 @@ export default class LetterService {
 
     // create the account action type 'letter'
     AccountActions.insert(letterData);
+    Accounts.update(
+      { _id: accountId },
+      {
+        $push: {
+          letterIds: letterId
+        }
+      }
+    );
   }
 
   static updateLetter(

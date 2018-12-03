@@ -1,23 +1,52 @@
 import React, { Component } from "react";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
 import TagContentHeader from "./TagContentHeader";
 import TagEdit from "../TagEdit";
 import TagContentDescription from "./TagContentDescription";
-import usersQuery from "/imports/api/users/queries/listUsers";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
-class TagContent extends Component {
+export default class TagContent extends Component {
   constructor() {
     super();
     this.state = {
       edit: false,
-      clientOptions: []
+      clientOptions: [],
+      users: []
     };
+    this.pollingMethod = null;
   }
 
-  componentWillReceiveProps() {
-    this.setState({ edit: false });
+  componentWillMount() {
+    this.getData();
+    this.pollingMethod = setInterval(() => {
+      this.getData();
+    }, 3000);
   }
+
+  getData() {
+    const { currentTag } = this.props;
+    Meteor.call("tag.getOne", currentTag, (err, tag) => {
+      if (!err) {
+        this.setState({ tag });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+
+    Meteor.call("users.get", { roles: { $in: ["rep"] } }, (err, users) => {
+      if (!err) {
+        this.setState({ users });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount = () => {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  };
 
   setEdit = () => {
     const { edit } = this.state;
@@ -27,9 +56,9 @@ class TagContent extends Component {
   sortUsers = () => {
     const taggedUsers = [],
       untaggedUsers = [];
-    const { tag, data: users } = this.props;
+    const { tag, users } = this.state;
     _.map(users, user => {
-      const index = user.tagIds ? user.tagIds.indexOf(tag._id) : -1;
+      const index = user.tagIds ? user.tagIds.indexOf(tag && tag._id) : -1;
       if (index > -1) {
         taggedUsers.push(user);
       } else {
@@ -40,14 +69,12 @@ class TagContent extends Component {
   };
 
   render() {
-    const { edit } = this.state;
-    const { tag, data: users, error } = this.props;
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
+    const { tag, edit, users } = this.state;
 
     const { taggedUsers, untaggedUsers } = this.sortUsers();
-
+    if (!tag) {
+      return <Loading />;
+    }
     return (
       <div className="main-content tag-content">
         {edit ? (
@@ -57,7 +84,7 @@ class TagContent extends Component {
             <TagContentHeader setEdit={this.setEdit} tag={tag} />
             {tag &&
               tag.entities &&
-              tag.entities.includes(moduleNames.USERS) && (
+              tag.entities.includes(moduleNames.WORK_QUEUE) && (
                 <TagContentDescription
                   taggedUsers={taggedUsers}
                   untaggedUsers={untaggedUsers}
@@ -71,13 +98,3 @@ class TagContent extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const params = {
-      filters: { roles: { $in: ["rep"] } }
-    };
-    return usersQuery.clone(params);
-  },
-  { reactive: true }
-)(TagContent);

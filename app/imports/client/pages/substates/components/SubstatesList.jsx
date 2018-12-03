@@ -85,9 +85,6 @@ export default class SubstatesList extends Component {
                 Description
               </div>
               <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
-                Triggering Actions
-              </div>
-              <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">
                 Status
               </div>
               <div className="substates-field flex--helper flex-justify--center flex-align--center text-light-grey">

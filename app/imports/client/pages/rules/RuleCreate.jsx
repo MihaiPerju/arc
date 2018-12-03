@@ -3,18 +3,12 @@ import RuleSchema from "/imports/api/rules/schemas/schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
-import clientsQuery from "/imports/api/clients/queries/clientsWithFacilites";
-import facilityQuery from "/imports/api/facilities/queries/facilityList";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
 } from "/imports/api/rules/enums/triggers";
-import userQuery from "/imports/api/users/queries/listUsers.js";
-import workQueueQuery from "/imports/api/tags/queries/listTags";
-import actionQuery from "/imports/api/actions/queries/actionList";
 import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
-import RuleQuery from "/imports/api/rules/queries/listRules";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 
@@ -41,7 +35,7 @@ export default class RuleCreate extends React.Component {
     let facilityOptions = [{ label: "All", value: "all" }];
 
     //Filling the client options
-    clientsQuery.fetch((err, res) => {
+    Meteor.call("clients.get", (err, res) => {
       if (!err) {
         res.map(client => {
           clientOptions.push({ label: client.clientName, value: client._id });
@@ -51,7 +45,7 @@ export default class RuleCreate extends React.Component {
     });
 
     //Filling the facility options
-    facilityQuery.fetch((err, res) => {
+    Meteor.call("facilities.get", (err, res) => {
       if (!err) {
         res.map(facility => {
           facilityOptions.push({ label: facility.name, value: facility._id });
@@ -61,9 +55,10 @@ export default class RuleCreate extends React.Component {
     });
 
     //Filling the user options
-    userQuery
-      .clone({ filters: { roles: { $in: [RolesEnum.REP] } } })
-      .fetch((err, res) => {
+    Meteor.call(
+      "users.get",
+      { roles: { $in: [RolesEnum.REP] } },
+      (err, res) => {
         if (!err) {
           res.map(user => {
             userOptions.push({
@@ -75,16 +70,16 @@ export default class RuleCreate extends React.Component {
           });
           this.setState({ userOptions });
         }
-      });
+      }
+    );
 
     //Filling the work queue options
-    workQueueQuery
-      .clone({
-        filters: {
-          entities: { $in: [moduleNames.USERS] }
-        }
-      })
-      .fetch((err, res) => {
+    Meteor.call(
+      "tags.get",
+      {
+        entities: { $in: [moduleNames.WORK_QUEUE] }
+      },
+      (err, res) => {
         if (!err) {
           res.map(workQueue => {
             workQueueOptions.push({
@@ -94,10 +89,12 @@ export default class RuleCreate extends React.Component {
           });
           this.setState({ workQueueOptions });
         }
-      });
+      }
+    );
 
     //Filling the action options
-    actionQuery.clone().fetch((err, res) => {
+
+    Meteor.call("actions.get", (err, res) => {
       if (!err) {
         res.map(action => {
           actionOptions.push({
@@ -119,7 +116,7 @@ export default class RuleCreate extends React.Component {
       let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
       _.extend(model, { priority: 1, clientId });
       this.setState({ model });
-      facilityQuery.clone({ filters: { clientId } }).fetch((err, res) => {
+      Meteor.call("facilities.get", { clientId }, (err, res) => {
         if (!err) {
           res.map(facility => {
             facilityOptions.push({ label: facility.name, value: facility._id });
@@ -136,12 +133,8 @@ export default class RuleCreate extends React.Component {
 
   getPriority = clientId => {
     let { model } = this.state;
-    RuleQuery.clone({
-      options: {
-        sort: { priority: -1 }
-      },
-      filters: { clientId }
-    }).fetchOne((err, rule) => {
+    let filters = { clientId };
+    Meteor.call("rule.getPrior", filters, (err, rule) => {
       if (!err) {
         let priority = rule ? rule.priority + 1 : 1;
         _.extend(model, { priority });

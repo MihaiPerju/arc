@@ -1,13 +1,18 @@
 import React from "react";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { AutoForm, AutoField, ErrorField, SelectField } from "/imports/ui/forms";
+import {
+  AutoForm,
+  AutoField,
+  ErrorField,
+  SelectField
+} from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
 import WorkQueueService from "./../../services/WorkQueueService";
-import workQueueQuery from "/imports/api/tags/queries/listTags";
 import Loading from "/imports/client/lib/ui/Loading";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import PagerService from "/imports/client/lib/PagerService";
+import NewAction from "./NewAction";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -24,13 +29,12 @@ export default class AccountActioning extends React.Component {
   }
 
   componentWillMount() {
-    workQueueQuery
-      .clone({
-        filters: {
-          entities: { $in: [moduleNames.USERS] }
-        }
-      })
-      .fetch((err, res) => {
+    Meteor.call(
+      "tags.get",
+      {
+        entities: { $in: [moduleNames.WORK_QUEUE] }
+      },
+      (err, res) => {
         if (!err) {
           const workQueueOptions = WorkQueueService.createOptions(res);
           this.setState({
@@ -38,9 +42,12 @@ export default class AccountActioning extends React.Component {
             loadingWorkQueues: false
           });
         }
-      });
+      }
+    );
 
-      this.props.bulkAssign ? this.setState({ userOptions: [] }) : this.setState({ userOptions: this.props.options });
+    this.props.bulkAssign
+      ? this.setState({ userOptions: [] })
+      : this.setState({ userOptions: this.props.options });
   }
 
   closeDialog = () => {
@@ -52,16 +59,20 @@ export default class AccountActioning extends React.Component {
     const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
     const params = bulkAssign ? PagerService.getParams().filters : false;
-    Meteor.call("account.assignUser.bulk", { accountIds, assigneeId, params }, err => {
-      if (!err) {
-        Notifier.success("Account assigned to user!");
-        uncheckAccountList();
-        this.closeDialog();
-      } else {
-        Notifier.error(err.reason);
+    Meteor.call(
+      "account.assignUser.bulk",
+      { accountIds, assigneeId, params },
+      err => {
+        if (!err) {
+          Notifier.success("Account assigned to user!");
+          uncheckAccountList();
+          this.closeDialog();
+        } else {
+          Notifier.error(err.reason);
+        }
+        this.setState({ isDisabled: false });
       }
-      this.setState({ isDisabled: false });
-    });  
+    );
   };
   assignToWorkQueue = ({ workQueueId }) => {
     const { accountIds, uncheckAccountList, bulkAssign } = this.props;
@@ -84,26 +95,33 @@ export default class AccountActioning extends React.Component {
   };
 
   onHandleChange(field, value) {
-    if(field == 'facilityId') {
-      Meteor.call(
-        "account.facility.user",
-         value ,
-        (err, userOptions) => {
-          if (!err) {
-            this.setState({userOptions});
-          } else {
-            this.setState({userOptions: []});
-          }
+    if (field == "facilityId") {
+      Meteor.call("account.facility.user", value, (err, userOptions) => {
+        if (!err) {
+          this.setState({ userOptions });
+        } else {
+          this.setState({ userOptions: [] });
         }
-      );
-     
+      });
     }
   }
 
   showDialog = () => {
-    const { options, assignToUser, bulkAssign, facilitiesOption } = this.props;
+    const {
+      options,
+      assignToUser,
+      bulkAssign,
+      facilitiesOption,
+      assignToWorkQueue,
+      accountIds
+    } = this.props;
 
-    const { workQueueOptions, loadingWorkQueues, isDisabled, userOptions } = this.state;
+    const {
+      workQueueOptions,
+      loadingWorkQueues,
+      isDisabled,
+      userOptions
+    } = this.state;
 
     if (loadingWorkQueues) {
       return <Loading />;
@@ -117,12 +135,17 @@ export default class AccountActioning extends React.Component {
             onSubmit={this.assignToUser}
             onChange={this.onHandleChange.bind(this)}
           >
-            {bulkAssign && 
-                <div className="form-wrapper select-item">
-                <SelectField  name="facilityId" labelHidden={true} options={facilitiesOption}  placeholder="Select Facility" />
+            {bulkAssign && (
+              <div className="form-wrapper select-item">
+                <SelectField
+                  name="facilityId"
+                  labelHidden={true}
+                  options={facilitiesOption}
+                  placeholder="Select Facility"
+                />
                 <ErrorField name="facilityId" />
-                </div>
-            }
+              </div>
+            )}
             <div className="form-wrapper select-item">
               <SelectField
                 labelHidden={true}
@@ -154,7 +177,7 @@ export default class AccountActioning extends React.Component {
               </button>
             </div>
           </AutoForm>
-        ) : (
+        ) : assignToWorkQueue ? (
           <AutoForm //model={model}
             schema={workQueueSchema}
             onSubmit={this.assignToWorkQueue}
@@ -189,6 +212,19 @@ export default class AccountActioning extends React.Component {
               </button>
             </div>
           </AutoForm>
+        ) : (
+          <div className="action-block">
+            <NewAction
+              freezeAccount={false}
+              closeRightPanel={false}
+              hide={this.closeDialog}
+              account={false}
+              accountIds={accountIds}
+              bulkAssign={bulkAssign}
+              params={bulkAssign ? PagerService.getParams().filters : false}
+              bulkOption={true}
+            />
+          </div>
         )}
       </div>
     );

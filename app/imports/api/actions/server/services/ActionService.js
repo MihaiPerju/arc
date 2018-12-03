@@ -1,6 +1,8 @@
 import Actions from "/imports/api/actions/collection";
 import Substates from "/imports/api/substates/collection";
 
+// WTH do we have a class with nothing but static functions?!?!?!.... I hope this was just CoC garbage
+// Also why is none of this documented? We are just passing a "data" var down?..... I hate this file....
 export default class ActionService {
   static createAction(data) {
     const { substateId } = data;
@@ -11,6 +13,8 @@ export default class ActionService {
     if (data.substateId) {
       this.pushActionId({ actionId, substateId });
     }
+
+    return actionId;
   }
 
   static editAction({ _id, title, description, substateId, inputs }) {

@@ -53,7 +53,7 @@ export default class CommentList extends Component {
   };
 
   render() {
-    const { account, comments, closeRightPanel } = this.props;
+    const { account, closeRightPanel } = this.props;
     const { isCorrectNote, isDisabled } = this.state;
 
     return (
@@ -95,17 +95,19 @@ export default class CommentList extends Component {
           )}
         </div>
         <div className="comment-list">
-          {comments.map((comment, index) => {
-            return (
-              <CommentSingle
-                account={account}
-                comment={comment}
-                key={index}
-                commentId={index}
-                closeRightPanel={closeRightPanel}
-              />
-            );
-          })}
+          {account &&
+            account.comments &&
+            account.comments.map((comment, index) => {
+              return (
+                <CommentSingle
+                  account={account}
+                  comment={comment}
+                  key={index}
+                  commentId={index}
+                  closeRightPanel={closeRightPanel}
+                />
+              );
+            })}
         </div>
       </div>
     );
