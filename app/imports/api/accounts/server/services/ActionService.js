@@ -30,15 +30,15 @@ export default class ActionService {
     Accounts.update({
       _id
     }, {
-      $set: {
-        isPending: true
-      },
-      $unset: {
-        workQueueId: null,
-        assigneeId: null,
-        escalationId: null
-      }
-    });
+        $set: {
+          isPending: true
+        },
+        $unset: {
+          workQueueId: null,
+          assigneeId: null,
+          escalationId: null
+        }
+      });
   }
 
   //Adding action to account
@@ -61,11 +61,18 @@ export default class ActionService {
       value: reasonId
     } = reasonCode || {};
 
-    const {
-      reason
-    } = reasonId ? ReasonCodes.findOne({
-      _id: reasonId
-    }) : {};
+    let reason;
+    if (reasonId) {
+      reason = reasonId ? ReasonCodes.findOne({
+        _id: reasonId
+      }).reason : {};
+    } else {
+      // if the reasonId is not availble on the above destructing.  
+      reason = reasonCode ? ReasonCodes.findOne({
+        _id: reasonCode
+      }).reason : {};
+    }
+
     const {
       clientId
     } = Accounts.findOne({
@@ -73,8 +80,8 @@ export default class ActionService {
     });
     const accountActionData = {
       userId,
-      actionId: actionId.value,
-      reasonCode: reasonId && reason,
+      actionId: actionId.value ? actionId.value : actionId,
+      reasonCode: reason && reason,
       addedBy,
       type: actionTypesEnum.USER_ACTION,
       createdAt,
@@ -94,17 +101,17 @@ export default class ActionService {
     Accounts.update({
       _id: accountId
     }, {
-      $set: {
-        hasLastSysAction: false,
-        lastUserAction: action._id
-      },
-      $unset: {
-        escalationId: null
-      },
-      $push: {
-        actionIds: accountActionId
-      }
-    });
+        $set: {
+          hasLastSysAction: false,
+          lastUserAction: action._id
+        },
+        $unset: {
+          escalationId: null
+        },
+        $push: {
+          actionIds: accountActionId
+        }
+      });
 
     Dispatcher.emit(Events.ACCOUNT_ACTION_ADDED, {
       accountId,
@@ -147,13 +154,13 @@ export default class ActionService {
     Accounts.update({
       _id: accountId
     }, {
-      $set: {
-        hasLastSysAction: true
-      },
-      $push: {
-        actionIds: accountActionId
-      }
-    });
+        $set: {
+          hasLastSysAction: true
+        },
+        $push: {
+          actionIds: accountActionId
+        }
+      });
     this.changeState(accountId, action);
 
     const actionsSubState = _.flatten([
@@ -190,16 +197,16 @@ export default class ActionService {
         },
         facilityId
       }, {
-        hasLastSysAction: true,
-        $set: {
-          state: stateEnum.ARCHIVED,
-          substate: Substates.SELF_RETURNED,
-          fileId
-        },
-        $push: {
-          actionIds: accountActionId
-        }
-      });
+          hasLastSysAction: true,
+          $set: {
+            state: stateEnum.ARCHIVED,
+            substate: Substates.SELF_RETURNED,
+            fileId
+          },
+          $push: {
+            actionIds: accountActionId
+          }
+        });
     });
   }
 
@@ -241,37 +248,37 @@ export default class ActionService {
       Accounts.update({
         _id: accountId
       }, {
-        $set: {
-          substate: name
-        }
-      });
+          $set: {
+            substate: name
+          }
+        });
     }
 
     Accounts.update({
       _id: accountId
     }, {
-      $set: {
-        state,
-        reactivationDate
-      },
-      $unset: {
-        tickleDate: null,
-        employeeToRespond: null,
-        tickleUserId: null,
-        tickleReason: null
-      }
-    });
+        $set: {
+          state,
+          reactivationDate
+        },
+        $unset: {
+          tickleDate: null,
+          employeeToRespond: null,
+          tickleUserId: null,
+          tickleReason: null
+        }
+      });
   }
 
   static removeAssignee(_id) {
     Accounts.update({
       _id
     }, {
-      $unset: {
-        workQueueId: null,
-        assigneeId: null
-      }
-    });
+        $unset: {
+          workQueueId: null,
+          assigneeId: null
+        }
+      });
   }
 
   static addComment({
@@ -298,10 +305,10 @@ export default class ActionService {
     Accounts.update({
       _id: accountId
     }, {
-      $push: {
-        commentIds: accountActionId
-      }
-    });
+        $push: {
+          commentIds: accountActionId
+        }
+      });
     if (isCorrectNote) {
       this.sendNotification(accountId);
     }
@@ -372,8 +379,8 @@ export default class ActionService {
       Accounts.update({
         _id
       }, {
-        $set: data
-      });
+          $set: data
+        });
     }
   }
 
@@ -391,23 +398,23 @@ export default class ActionService {
       _id,
       lockOwnerId: null
     }, {
-      $set: {
-        lockOwnerId: userId,
-        lockTimestamp: new Date()
-      }
-    });
+        $set: {
+          lockOwnerId: userId,
+          lockTimestamp: new Date()
+        }
+      });
   }
 
   static removeLockFromAccount(userId) {
     Accounts.update({
       lockOwnerId: userId
     }, {
-      $set: {
-        lockOwnerId: null,
-        lockTimestamp: null,
-        lockBreakUsers: []
-      }
-    });
+        $set: {
+          lockOwnerId: null,
+          lockTimestamp: null,
+          lockBreakUsers: []
+        }
+      });
   }
 
   static breakLockFromAccount(_id, userId) {
@@ -428,9 +435,9 @@ export default class ActionService {
     Accounts.update({
       _id
     }, {
-      $push: {
-        lockBreakUsers: userId
-      }
-    });
+        $push: {
+          lockBreakUsers: userId
+        }
+      });
   }
 }
