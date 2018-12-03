@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import RegionEdit from "/imports/client/pages/regions/RegionEdit.jsx";
 import { roleGroups } from "/imports/api/users/enums/roles";
+import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class RegionContent extends Component {
   constructor() {
@@ -8,8 +10,30 @@ export default class RegionContent extends Component {
     this.state = {
       edit: false
     };
+    this.pollingMethod = null;
   }
 
+  componentWillMount() {
+    this.pollingMethod = setInterval(() => {
+      this.getRegion();
+    }, 3000);
+  }
+
+  getRegion() {
+    const { currentRegion } = this.props;
+    Meteor.call("region.getOne", currentRegion, (err, region) => {
+      if (!err) {
+        this.setState({ region });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount = () => {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  };
   componentWillReceiveProps() {
     this.setState({ edit: false });
   }
@@ -20,8 +44,12 @@ export default class RegionContent extends Component {
   };
 
   render() {
-    const { region } = this.props;
-    const { edit } = this.state;
+    const { edit, region } = this.state;
+
+    if (!region) {
+      return <Loading />;
+    }
+
     return (
       <div>
         {edit ? (

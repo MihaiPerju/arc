@@ -58,22 +58,29 @@ button,
     border: 0;
   }
 
-  &.btn--red {
-    background-color: $orange;
+  &.btn--red,
+  &.btn-cancel {
+    background-color: #d02121;
     color: $color-white;
     &:hover {
-      background-color: lighten($orange, 10%);
+      background-color: lighten(#d02121, 10%);
     }
   }
 
   &.btn--pink {
-    background: $pink;
+    background-color: $pink;
+    color: $color-white;
+    &:hover {
+      background-color: $pink;
+    }
   }
 
   &.btn--green {
+    background-color: $green;
     color: $color-white;
-    background: $green;
-    color: $color-white;
+    &:hover {
+      background-color: lighten($green, 10%);
+    }
   }
 
   &.btn--blue {
@@ -85,7 +92,11 @@ button,
   }
 
   &.btn--light-blue {
-    background: #6dcff6;
+    background-color: #6dcff6;
+    color: $color-white;
+    &:hover {
+      background-color: lighten(#6dcff6, 10%);
+    }
   }
 
   &.btn-text--blue {
@@ -200,10 +211,8 @@ button,
 .insurance-btn {
   &__add {
     background: $green;
-    margin-left: 15px;
   }
   &__del {
     background: $red;
-    margin: 0;
   }
 }

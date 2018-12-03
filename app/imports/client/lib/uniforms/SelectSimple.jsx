@@ -13,10 +13,12 @@ class SelectSimple extends React.Component {
   }
 
   onChange = newValue => {
-    this.props.onChange(newValue);
-    this.setState({
-      value: newValue
-    });
+    if (newValue && newValue.value) {
+      this.props.onChange(newValue.value);
+      this.setState({
+        value: newValue.value
+      });
+    }
   };
 
   render() {

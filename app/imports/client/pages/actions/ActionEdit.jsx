@@ -15,6 +15,7 @@ import ReasonCodesBlock from "./components/ReasonCodesBlock";
 import RolesEnum from "/imports/api/users/enums/roles.js";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 import inputTypesEnum from "/imports/api/actions/enums/inputTypeEnum";
+import requirementTypes from "/imports/api/actions/enums/requirementEnum";
 
 export default class ActionEdit extends React.Component {
   constructor(props) {
@@ -24,8 +25,20 @@ export default class ActionEdit extends React.Component {
     this.state = {
       error: null,
       checked: false,
-      isDisabled: false
+      isDisabled: false,
+      action: null
     };
+  }
+
+  componentWillMount() {
+    this.updateProps(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.action._id === this.props.action._id)
+      return;
+
+    this.updateProps(nextProps);
   }
 
   onSubmit(formData) {
@@ -53,39 +66,27 @@ export default class ActionEdit extends React.Component {
   };
 
   updateProps(props) {
-    const { action } = props;
-    if (action) {
+    if (props.action) {
       this.setState({
-        checked: !!action.substateId
+        checked: !!props.action.substateId
       });
     }
   }
 
-  componentWillReceiveProps(props) {
-    this.updateProps(props);
-  }
-
-  componentWillMount() {
-    this.updateProps(this.props);
-  }
-
   handleClick() {
     if (!Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      const currentState = this.state.checked;
       this.setState({
-        checked: !currentState
+        checked: !this.state.checked
       });
     }
   }
 
   onEditAction = () => {
-    const { form } = this.refs;
-    form.submit();
+    this.refs.form.submit();
   };
 
   onSetEdit = () => {
-    const { setEdit } = this.props;
-    setEdit();
+    this.props.setEdit();
   };
 
   handleBack = () => {
@@ -97,9 +98,13 @@ export default class ActionEdit extends React.Component {
     const { checked, isDisabled } = this.state;
     const substatesOptions = this.getOptions(substates);
     const { id } = FlowRouter.current().params;
+    const requirementOptions = [
+      { label: requirementTypes.OPTIONAL, value: requirementTypes.OPTIONAL },
+      { label: requirementTypes.MANDATORY, value: requirementTypes.MANDATORY }
+    ];
 
     return (
-      <div className="create-form">
+      <div ref="forms" className="create-form">
         <div className="create-form__bar">
           {id && (
             <button onClick={this.handleBack} className="btn-cancel">
@@ -129,24 +134,20 @@ export default class ActionEdit extends React.Component {
           </div>
         </div>
 
-        {action && (
-          <div className="create-form__wrapper">
-            <div className="action-block">
-              <div className="header__block">
-                <div className="title-block text-uppercase">
-                  Action information
-                </div>
+        <div className="create-form__wrapper">
+          <div className="action-block">
+            <div className="header__block">
+              <div className="title-block text-uppercase">
+                Action information
               </div>
-
+            </div>
+            <div className="arcc-form-wrap">
               <AutoForm
-                disabled={Roles.userIsInRole(
-                  Meteor.userId(),
-                  RolesEnum.MANAGER
-                )}
-                model={action}
+                disabled={Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)}
                 schema={ActionSchema}
                 onSubmit={this.onSubmit.bind(this)}
                 ref="form"
+                model={action}
               >
                 {this.state.error && (
                   <div className="error">{this.state.error}</div>
@@ -177,62 +178,65 @@ export default class ActionEdit extends React.Component {
                 </div>
 
                 {checked && (
-                  <div className="select-group">
-                    <div className="form-wrapper">
-                      <SelectSimple
-                        disabled={Roles.userIsInRole(
-                          Meteor.userId(),
-                          RolesEnum.MANAGER
-                        )}
-                        placeholder="Substate"
-                        labelHidden={true}
-                        name="substateId"
-                        options={substatesOptions}
-                      />
-                      <ErrorField name="substateId" />
+                    <div className="select-group">
+                      <div className="form-wrapper">
+                        <SelectSimple
+                          disabled={Roles.userIsInRole(
+                            Meteor.userId(),
+                            RolesEnum.MANAGER
+                          )}
+                          placeholder="Substate"
+                          labelHidden={true}
+                          name="substateId"
+                          options={substatesOptions}
+                        />
+                        <ErrorField name="substateId" />
+                      </div>
                     </div>
-                  </div>
                 )}
 
-                <ListField name="inputs" showListField={() => {}}>
-                  <ListItemField name="$">
-                    <NestField className="upload-item text-center">
-                      <div className="form-wrapper">
-                        <SelectField
-                          placeholder="Select type"
-                          labelHidden={true}
-                          options={inputTypesEnum}
-                          name="type"
-                        />
-                        <ErrorField name="type" />
-                      </div>
-                      <div className="form-wrapper">
-                        <AutoField
-                          labelHidden={true}
-                          name="label"
-                          placeholder="label"
-                        />
-                        <ErrorField name="label" />
-                      </div>
-                      <div className="form-wrapper">
-                        <AutoField
-                          labelHidden={true}
-                          name="isRequired"
-                          label="Mandatory"
-                        />
-                      </div>
-                    </NestField>
-                  </ListItemField>
-                </ListField>
-              </AutoForm>
+                  <ListField name="inputs" showListField={() => {}}>
+                    <ListItemField name="$">
+                      <NestField className="upload-item text-center">
+                        <div className="form-wrapper">
+                          <SelectField
+                            placeholder="Select type"
+                            labelHidden={true}
+                            options={inputTypesEnum}
+                            name="type"
+                          />
+                          <ErrorField name="type" />
+                        </div>
+
+                        <div className="form-wrapper">
+                          <AutoField
+                            labelHidden={true}
+                            name="label"
+                            placeholder="label"
+                          />
+                          <ErrorField name="label" />
+                        </div>
+
+                        <div className="form-wrapper">
+                          <SelectField
+                            labelHidden={true}
+                            name="requirement"
+                            options={requirementOptions}
+                            label="Mandatory"
+                          />
+                        </div>
+                      </NestField>
+                    </ListItemField>
+                  </ListField>
+                </AutoForm>
+              </div>
             </div>
 
-            <ReasonCodesBlock action={action} />
-            {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
-              <ReasonCodesBlock isPrivate action={action} />
-            )}
-          </div>
-        )}
+          <ReasonCodesBlock action={action} />
+          {Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) && (
+            <ReasonCodesBlock isPrivate action={action} />
+          )}
+        </div>
       </div>
     );
   }

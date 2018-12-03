@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import classNames from "classnames";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
-import actionQuery from "/imports/api/actions/queries/actionList";
 import SubstateDescription from "./SubstateDescription";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import { moduleNames } from "/imports/api/tags/enums/tags";
@@ -27,17 +26,11 @@ export default class SubstateSingle extends Component {
   }
 
   getActions = actionIds => {
-    actionQuery
-      .clone({
-        filters: {
-          _id: { $in: actionIds }
-        }
-      })
-      .fetch((err, actions) => {
-        if (!err) {
-          this.setState({ actions });
-        }
-      });
+    Meteor.call("actions.get", { _id: { $in: actionIds } }, (err, actions) => {
+      if (!err) {
+        this.setState({ actions });
+      }
+    });
   };
 
   onSetSubstate = () => {
@@ -114,18 +107,6 @@ export default class SubstateSingle extends Component {
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
           <span className="truncate">{substate.description}</span>
           <SubstateDescription>{substate.description}</SubstateDescription>
-        </div>
-        <div className="substates-field flex--helper flex-justify--center flex-align--center">
-          {actions.map((action, index) => (
-            <a
-              key={index}
-              className="text-blue truncate"
-              href={"/action/" + action._id + "/edit"}
-            >
-              {action.title}
-            </a>
-          ))}
-          {actions.length === 0 && "-"}
         </div>
         <div className="substates-field flex--helper flex-justify--center flex-align--center">
           {substate.status ? "Active" : "Not Active"}

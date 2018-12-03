@@ -1,11 +1,9 @@
 import React, { Component } from "react";
-import query from "/imports/api/files/queries/listFiles";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
 import Loading from "/imports/client/lib/ui/Loading";
 
-class FacilityFiles extends Component {
+export default class FacilityFiles extends Component {
   constructor() {
     super();
     this.state = {
@@ -13,6 +11,21 @@ class FacilityFiles extends Component {
       isDisabled: false
     };
   }
+
+  componentWillMount() {
+    this.getFiles();
+  }
+
+  getFiles = () => {
+    const { facilityId } = this.props;
+    Meteor.call("files.getLastSevenDays", { facilityId }, (err, files) => {
+      if (!err) {
+        this.setState({ files });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   onRollBack = () => {
     const { _id } = this.state;
@@ -55,16 +68,12 @@ class FacilityFiles extends Component {
   }
 
   render() {
-    const { data, isLoading, error } = this.props;
-    const { dialogIsActive, isDisabled } = this.state;
+    const { dialogIsActive, isDisabled, files } = this.state;
 
-    if (isLoading) {
+    if (!files) {
       return <Loading />;
     }
 
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="action-block schedule-block">
         <div className="header__block">
@@ -72,8 +81,8 @@ class FacilityFiles extends Component {
         </div>
         <div className="main__block">
           <div className="schedule-list">
-            {data.length ? (
-              data.map((file, index) => {
+            {files.length ? (
+              files.map((file, index) => {
                 return (
                   <div key={index} className="schedule-item">
                     <div className="left__side">
@@ -139,14 +148,3 @@ class FacilityFiles extends Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    const { facilityId } = props;
-    return query.clone({
-      filters: { facilityId },
-      options: { sort: { createdAt: -1 }, limit: 1 }
-    });
-  },
-  { reactive: true }
-)(FacilityFiles);

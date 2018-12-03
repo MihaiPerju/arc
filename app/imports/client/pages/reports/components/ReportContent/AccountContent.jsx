@@ -39,7 +39,7 @@ export default class AccountContent extends Component {
     const { accounts } = this.props;
     let metadataHeaders = [];
     _.map(accounts, account => {
-      _.map(account.metaData, (value, key) => {
+      _.map(account.metadata, (value, key) => {
         if (!metadataHeaders.includes(key)) {
           metadataHeaders.push(key);
         }
@@ -80,6 +80,7 @@ export default class AccountContent extends Component {
     const { tableHeader, accounts, report } = this.props;
     const { reportColumns } = report;
     const metadataHeaders = this.getMetadataHeaders();
+
     if (accounts && !accounts.length) {
       return <div>No Accounts</div>;
     }
@@ -153,7 +154,7 @@ export default class AccountContent extends Component {
                             className="table-field table-field--grey text-center"
                           >
                             {this.getMetadataValues(
-                              account.metaData,
+                              account.metadata,
                               header,
                               idx
                             )}

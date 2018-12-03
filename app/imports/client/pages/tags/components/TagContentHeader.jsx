@@ -26,7 +26,7 @@ export default class TagContentHeader extends Component {
         <div className="row__header">
           <div className="text-light-grey">
             <div className="tag-module">Tagged modules </div>
-            <div className="tag-inner-div">
+            <div>
               {tag && tag.entities.length > 0 ? (
                 tag.entities.map(name => this.renderTag(name))
               ) : (

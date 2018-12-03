@@ -1,13 +1,17 @@
 import React, { Component } from "react";
 import ActionHeader from "./components/ActionContentHeader";
 import ActionEdit from "./ActionEdit";
+import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ActionContent extends Component {
   constructor() {
     super();
     this.state = {
+      action: null,
       edit: false
     };
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
@@ -15,10 +19,26 @@ export default class ActionContent extends Component {
     if (id) {
       this.setEdit();
     }
+
+    this.getAction(this.props.currentAction)
   }
 
-  componentWillReceiveProps() {
-    // this.setState({ edit: false });
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.currentAction === this.props.currentAction)
+      return;
+
+    this.getAction(nextProps.currentAction);
+  }
+
+  getAction(currentAction) {
+    Meteor.call("action.getOne", currentAction, (err, action) => {
+      if (!err) {
+        this.setState({ action });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   setEdit = () => {
@@ -27,21 +47,23 @@ export default class ActionContent extends Component {
   };
 
   render() {
-    const { action, substates } = this.props;
-    const { edit } = this.state;
+    if (!this.state.action) {
+      return <Loading />;
+    }
+
     return (
       <div className="section-action">
-        {edit ? (
+        {this.state.edit ? (
           <ActionEdit
             setEdit={this.setEdit}
-            substates={substates}
-            action={action}
+            substates={this.props.substates}
+            action={this.state.action}
           />
         ) : (
           <ActionHeader
             setEdit={this.setEdit}
-            substates={substates}
-            action={action}
+            substates={this.props.substates}
+            action={this.state.action}
           />
         )}
       </div>

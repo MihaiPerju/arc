@@ -30,6 +30,7 @@ var Bool = function Bool(_ref) {
     label = _ref.label,
     name = _ref.name,
     _onChange = _ref.onChange,
+    _onValueChange = _ref.onValueChange,
     value = _ref.value,
     props = (0, _objectWithoutProperties2.default)(_ref, [
       "disabled",
@@ -38,6 +39,7 @@ var Bool = function Bool(_ref) {
       "label",
       "name",
       "onChange",
+      "onValueChange",
       "value"
     ]);
   return _react.default.createElement(
@@ -49,6 +51,7 @@ var Bool = function Bool(_ref) {
       id: id,
       name: name,
       onChange: function onChange() {
+        _onValueChange(!value);
         return disabled || _onChange(!value);
       },
       ref: inputRef,
@@ -58,7 +61,8 @@ var Bool = function Bool(_ref) {
       _react.default.createElement(
         "label",
         {
-          htmlFor: id
+          htmlFor: id,
+          className: "chk-box-label"
         },
         label
       )

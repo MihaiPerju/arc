@@ -72,32 +72,33 @@ var List = function List(_ref) {
       ),
     children
       ? !collapse &&
-        value.map(function(item, index) {
-          return _react.Children.map(children, function(child) {
-            return _react.default.cloneElement(child, {
-              key: index,
-              label: null,
-              name: (0, _joinName.default)(
-                name,
-                child.props.name && child.props.name.replace("$", index)
-              )
-            });
-          });
-        })
-      : !collapse &&
-        value.map(function(item, index) {
-          return _react.default.createElement(
-            _ListItemField.default,
-            (0, _extends2.default)(
-              {
+          value &&
+          value.map(function(item, index) {
+            return _react.Children.map(children, function(child) {
+              return _react.default.cloneElement(child, {
                 key: index,
                 label: null,
-                name: (0, _joinName.default)(name, index)
-              },
-              itemProps
-            )
-          );
-        })
+                name: (0, _joinName.default)(
+                  name,
+                  child.props.name && child.props.name.replace("$", index)
+                )
+              });
+            });
+          })
+      : !collapse &&
+          value.map(function(item, index) {
+            return _react.default.createElement(
+              _ListItemField.default,
+              (0, _extends2.default)(
+                {
+                  key: index,
+                  label: null,
+                  name: (0, _joinName.default)(name, index)
+                },
+                itemProps
+              )
+            );
+          })
   );
 };
 

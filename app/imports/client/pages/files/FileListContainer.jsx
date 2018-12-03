@@ -3,14 +3,11 @@ import FileList from "./components/FileList.jsx";
 import FileSearchBar from "./components/FileSearchBar.jsx";
 import PaginationBar from "/imports/client/lib/PaginationBar.jsx";
 import FileContent from "./FileContent.jsx";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/files/queries/listFiles";
-import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
-import PagerService from "../../lib/PagerService";
+import ParamsService from "../../lib/ParamsService";
 
-class FileListContainer extends Pager {
+export default class FileListContainer extends Pager {
   constructor() {
     super();
     _.extend(this.state, {
@@ -20,14 +17,37 @@ class FileListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {}
+      range: {},
+      files: []
     });
-    this.query = query;
+    this.method = "files.count";
+    this.pollingMethod = null;
   }
 
   componentWillMount() {
     this.nextPage(0);
+
+    this.pollingMethod = setInterval(() => {
+      this.listFiles();
+    }, 3000);
   }
+
+  componentWillUnmount() {
+    //Removing Interval
+    clearInterval(this.pollingMethod);
+  }
+
+  listFiles = () => {
+    const params = ParamsService.getFilesParams();
+    Meteor.call("files.list", params, (err, files) => {
+      if (!err) {
+        this.setState({ files });
+        this.updatePager();
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
 
   componentWillReceiveProps() {
     const { queryParams } = FlowRouter.current();
@@ -107,10 +127,12 @@ class FileListContainer extends Pager {
 
   nextPage = inc => {
     const { perPage, total, page } = this.state;
-    const nextPage = PagerService.setPage({ page, perPage, total }, inc);
-    const range = PagerService.getRange(nextPage, perPage);
+    const nextPage = ParamsService.setPage({ page, perPage, total }, inc);
+    const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
+    
+    this.listFiles();
   };
 
   closeRightPanel = () => {
@@ -122,14 +144,13 @@ class FileListContainer extends Pager {
 
   updatePager = () => {
     // update the pager count
-    const queryParams = PagerService.getParams();
+    const queryParams = ParamsService.getFilesParams();
     this.recount(queryParams);
   };
 
   getFile = () => {
-    const { data } = this.props;
-    const { currentFile } = this.state;
-    for (let file of data) {
+    const { currentFile, files } = this.state;
+    for (let file of files) {
       if (file._id === currentFile) {
         return file;
       }
@@ -137,17 +158,16 @@ class FileListContainer extends Pager {
   };
 
   render() {
-    const { data, isLoading, error } = this.props;
-    const { filesSelected, currentFile, create, range, total } = this.state;
+    const {
+      filesSelected,
+      currentFile,
+      create,
+      range,
+      total,
+      files
+    } = this.state;
     const file = this.getFile(currentFile);
 
-    if (isLoading && !FlowRouter.getQueryParam("fileName")) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
     return (
       <div className="cc-container">
         <div
@@ -169,7 +189,7 @@ class FileListContainer extends Pager {
             selectFile={this.selectFile}
             currentFile={currentFile}
             setFile={this.setFile}
-            files={data}
+            files={files}
           />
           <PaginationBar
             create={this.createForm}
@@ -211,12 +231,3 @@ class RightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  () => {
-    const page = FlowRouter.getQueryParam("page");
-    const perPage = 13;
-    return PagerService.setQuery(query, { page, perPage, filters: {} });
-  },
-  { reactive: true }
-)(FileListContainer);

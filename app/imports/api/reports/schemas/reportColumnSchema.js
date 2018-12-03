@@ -76,7 +76,7 @@ export default new SimpleSchema({
     type: insuranceColumnSchema,
     optional: true
   },
-  metaData: {
+  metadata: {
     type: Boolean,
     optional: true,
     defaultValue: false

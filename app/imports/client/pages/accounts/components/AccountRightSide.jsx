@@ -1,17 +1,43 @@
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import query from "/imports/api/accounts/queries/accountList";
 import React, { Component } from "react";
 import AccountContent from "../AccountContent.jsx";
-import Loading from "/imports/client/lib/ui/Loading";
 import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
-class AccountRightSide extends Component {
+export default class AccountRightSide extends Component {
   constructor() {
     super();
     this.state = {
       fade: false,
       wasAccountActioned: false
     };
+    this.pollingMethod = null;
+  }
+
+  componentWillMount() {
+    this.getAccount()
+
+    this.pollingMethod = setInterval(() => {
+      this.getAccount();
+    }, 3000);
+  }
+
+  // If account changed we need to go fetch it right away
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.currentAccount === this.props.currentAccount)
+      return;
+
+    this.getAccount(nextProps.currentAccount)
+  }
+
+  getAccount(currentAccount) {
+    const accountId = currentAccount || this.props.currentAccount
+    Meteor.call("account.getOne", accountId, (err, account) => {
+      if (!err) {
+        this.setState({ account });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   componentDidMount() {
@@ -36,25 +62,23 @@ class AccountRightSide extends Component {
         }
       });
     }
+    //Removing Interval
+    clearInterval(this.pollingMethod);
   };
 
   render() {
-    const { fade } = this.state;
+    const { fade, account } = this.state;
     const {
       openMetaData,
       closeRightPanel,
       accountsSelected,
-      removeLock,
-      data,
-      isLoading
+      removeLock
     } = this.props;
 
-    const account = data;
-
-    if (isLoading) {
+    if (!account) {
       return <Loading />;
     }
-    
+
     return (
       <div className={fade ? "right__side in" : "right__side"}>
         <AccountContent
@@ -69,12 +93,3 @@ class AccountRightSide extends Component {
     );
   }
 }
-
-export default withQuery(
-  ({ currentAccount }) => {
-    return query.clone({
-      filters: { _id: currentAccount }
-    });
-  },
-  { reactive: true, single: true }
-)(AccountRightSide);

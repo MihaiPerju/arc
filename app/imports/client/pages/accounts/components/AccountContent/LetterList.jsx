@@ -2,15 +2,11 @@ import React, { Component } from "react";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import NewLetter from "./NewLetter";
 import EditLetter from "./EditLetter";
-import LetterListQuery from "/imports/api/letters/queries/letterList.js";
-import { withQuery } from "meteor/cultofcoders:grapher-react";
-import Loading from "/imports/client/lib/ui/Loading";
 import { getToken } from "/imports/api/uploads/utils";
-import letterTemplateQuery from "/imports/api/letterTemplates/queries/listLetterTemplates";
 import Notifier from "/imports/client/lib/Notifier";
 import Statuses from "/imports/api/letters/enums/statuses.js";
 
-class LetterList extends Component {
+export default class LetterList extends Component {
   constructor() {
     super();
     this.state = {
@@ -23,7 +19,7 @@ class LetterList extends Component {
   }
 
   componentWillMount() {
-    letterTemplateQuery.fetch((err, letterTemplates) => {
+    Meteor.call("letterTemplates.get", (err, letterTemplates) => {
       if (!err) {
         this.setState({
           letterTemplates,
@@ -33,16 +29,12 @@ class LetterList extends Component {
     });
   }
 
-  componentWillReceiveProps() {
-    this.setState({ editLetter: false, createLetter: false });
-  }
-
-  toggleLetter() {
+  toggleLetter = () => {
     this.setState({
       createLetter: !this.state.createLetter,
       editLetter: false
     });
-  }
+  };
 
   handleDelete = letterId => {
     Meteor.call("letter.delete", letterId, err => {
@@ -54,12 +46,12 @@ class LetterList extends Component {
     });
   };
 
-  toggleEditLetter() {
+  toggleEditLetter = () => {
     this.setState({
       editLetter: !this.state.editLetter,
       createLetter: false
     });
-  }
+  };
 
   resetForm = () => {
     this.setState({
@@ -82,11 +74,13 @@ class LetterList extends Component {
 
   extendFields(account) {
     if (account) {
-      account.FacilityAddress = account.facility.addressOne || null;
-      account.FacilityAddress2 = account.facility.addressTwo || null;
-      account.FacilityZip = account.facility.zipCode || null;
-      account.FacilityCity = account.facility.city || null;
-      account.FacilityState = account.facility.state || null;
+      if (account.facility) {
+        account.FacilityAddress = account.facility.addressOne || null;
+        account.FacilityAddress2 = account.facility.addressTwo || null;
+        account.FacilityZip = account.facility.zipCode || null;
+        account.FacilityCity = account.facility.city || null;
+        account.FacilityState = account.facility.state || null;
+      }
 
       if (account.client && account.client.clientName) {
         account.clientName = account.client.clientName;
@@ -108,7 +102,7 @@ class LetterList extends Component {
   };
 
   render() {
-    const { data, isLoading, error, account } = this.props;
+    const { account } = this.props;
     this.extendFields(account);
     const {
       editLetter,
@@ -117,21 +111,13 @@ class LetterList extends Component {
       createLetter
     } = this.state;
 
-    if (isLoading) {
-      return <Loading />;
-    }
-
-    if (error) {
-      return <div>Error: {error.reason}</div>;
-    }
-
     return (
       <div className="action-block">
         <div className="header__block">
           <div className="title-block text-uppercase">Letter list</div>
         </div>
         <div className="main__block">
-          <div className="add-content" onClick={this.toggleLetter.bind(this)}>
+          <div className="add-content" onClick={this.toggleLetter}>
             <i className="icon-envelope-o" />
             <div className="text-center">+ Create a new letter</div>
           </div>
@@ -153,8 +139,9 @@ class LetterList extends Component {
           ) : null}
 
           <div className="block-list letter-list">
-            {data &&
-              _.map(data, (letter, index) => {
+            {account &&
+              account.letters &&
+              _.map(account.letters, (letter, index) => {
                 return (
                   <div
                     key={index}
@@ -209,14 +196,6 @@ class LetterList extends Component {
     );
   }
 }
-
-export default withQuery(
-  props => {
-    const { account } = props;
-    return LetterListQuery.clone({ accountId: account && account._id });
-  },
-  { reactive: true }
-)(LetterList);
 
 class LetterPreview extends Component {
   constructor() {

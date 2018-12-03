@@ -76,7 +76,9 @@ export default class ActionBlock extends Component {
     const { flags } = this.props.account;
     const index = flags.findIndex(flag => {
       const { flagAction } = flag;
-      return flagAction.actionId === actionId && flagAction.isOpen;
+      return (
+        flagAction && flagAction.actionId === actionId && flagAction.isOpen
+      );
     });
     return index > -1 ? true : false;
   };
@@ -92,7 +94,9 @@ export default class ActionBlock extends Component {
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       const index = flags.findIndex(flag => {
         const { flagAction } = flag;
-        return flagAction.actionId === actionId && flagAction.isOpen;
+        return (
+          flagAction && flagAction.actionId === actionId && flagAction.isOpen
+        );
       });
       return index === -1 ? true : false;
     }
@@ -128,7 +132,9 @@ export default class ActionBlock extends Component {
     if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
       const index = flags.findIndex(flag => {
         const { flagAction } = flag;
-        return flagAction.actionId === actionId && !flagAction.isOpen;
+        return (
+          flagAction && flagAction.actionId === actionId && !flagAction.isOpen
+        );
       });
       return index === -1 ? true : false;
     }
@@ -158,10 +164,10 @@ export default class ActionBlock extends Component {
               closeRightPanel={closeRightPanel}
               hide={this.newAction}
               account={account}
-              bulkAssign = {false}
-              params = {false}
-              accountIds = {false}
-              bulkOption = {false}
+              bulkAssign={false}
+              params={false}
+              accountIds={false}
+              bulkOption={false}
             />
           ) : null}
           <div className="action-list">

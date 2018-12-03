@@ -1,6 +1,3 @@
-import '../collection.js';
-import '../links';
-import './methods.js';
-import './hooks.js';
-import './expose.js';
-import './extensions/routeLetterPdf.js';
+import "../collection.js";
+import "./methods.js";
+import "./extensions/routeLetterPdf.js";

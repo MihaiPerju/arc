@@ -18,7 +18,7 @@ export default new SimpleSchema({
     defaultValue: TypesEnum.SYSTEM,
     allowedValues: TypesEnum
   },
-  metaData: {
+  metadata: {
     type: Object,
     optional: true,
     blackbox: true
