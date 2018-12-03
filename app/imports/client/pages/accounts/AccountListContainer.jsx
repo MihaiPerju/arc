@@ -15,7 +15,7 @@ import Loading from "/imports/client/lib/ui/Loading";
 export default class AccountListContainer extends Pager {
   constructor() {
     super();
-    _.extend(this.state, {
+    this.state = {
       accountsSelected: [],
       currentAccount: null,
       page: 1,
@@ -36,7 +36,8 @@ export default class AccountListContainer extends Pager {
       facilitiesOption: false,
       sortOption: false,
       assignActions: false
-    });
+    };
+    
     this.method = "accounts.count";
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
     this.pollingMethod = null;
