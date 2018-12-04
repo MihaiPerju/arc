@@ -36,6 +36,11 @@ Meteor.methods({
     return FacilityService.getFacilities(filters);
   },
 
+  "facilities.getNames"(filters = {}) {
+    let options = { fields: { name: 1 } };
+    return Facilities.find(filters, options).fetch();
+  },
+
   "facilities.getEssential"(filters = {}) {
     return FacilityService.getEssential(filters);
   },
