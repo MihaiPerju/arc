@@ -28,81 +28,14 @@ export default class RuleCreate extends React.Component {
   }
 
   componentDidMount() {
-    let userOptions = [];
-    let workQueueOptions = [];
-    let actionOptions = [];
-    let clientOptions = [];
-    let facilityOptions = [{ label: "All", value: "all" }];
+    let { state } = this;
 
-    //Filling the client options
-    Meteor.call("clients.get", (err, res) => {
+    Meteor.call("rule.getFilterOptions", (err, options) => {
       if (!err) {
-        res.map(client => {
-          clientOptions.push({ label: client.clientName, value: client._id });
-        });
-        this.setState({ clientOptions });
-      }
-    });
-
-    //Filling the facility options
-    Meteor.call("facilities.getNames", (err, res) => {
-      if (!err) {
-        res.map(facility => {
-          facilityOptions.push({ label: facility.name, value: facility._id });
-        });
-        this.setState({ facilityOptions });
-      }
-    });
-
-    //Filling the user options
-    Meteor.call(
-      "users.get",
-      { roles: { $in: [RolesEnum.REP] } },
-      (err, res) => {
-        if (!err) {
-          res.map(user => {
-            userOptions.push({
-              label:
-                user.profile &&
-                user.profile.lastName + " " + user.profile.firstName,
-              value: user._id
-            });
-          });
-          this.setState({ userOptions });
-        }
-      }
-    );
-
-    //Filling the work queue options
-    Meteor.call(
-      "tags.get",
-      {
-        entities: { $in: [moduleNames.WORK_QUEUE] }
-      },
-      (err, res) => {
-        if (!err) {
-          res.map(workQueue => {
-            workQueueOptions.push({
-              label: workQueue.name,
-              value: workQueue._id
-            });
-          });
-          this.setState({ workQueueOptions });
-        }
-      }
-    );
-
-    //Filling the action options
-
-    Meteor.call("actions.get", (err, res) => {
-      if (!err) {
-        res.map(action => {
-          actionOptions.push({
-            label: action.title,
-            value: action._id
-          });
-        });
-        this.setState({ actionOptions });
+        _.extend(state, options);
+        this.setState(state);
+      } else {
+        Notifier.error(err.reason);
       }
     });
   }
