@@ -46,90 +46,22 @@ export default class RuleEdit extends React.Component {
   };
 
   componentDidMount() {
-    let userOptions = [];
-    let workQueueOptions = [];
-    let actionOptions = [];
-    let clientOptions = [];
-    let facilityOptions = [{ label: "All", value: "all" }];
-
-    //Filling the client options
-    Meteor.call("clients.get", (err, res) => {
-      if (!err) {
-        res.map(client => {
-          clientOptions.push({ label: client.clientName, value: client._id });
-        });
-        this.setState({ clientOptions });
-      }
-    });
-
-    //Filling the facility options
-    Meteor.call("facilities.getNames", (err, res) => {
-      if (!err) {
-        res.map(facility => {
-          facilityOptions.push({ label: facility.name, value: facility._id });
-        });
-        this.setState({ facilityOptions });
-      }
-    });
-
-    //Filling the user options
-    Meteor.call(
-      "users.get",
-      { roles: { $in: [RolesEnum.REP] } },
-      (err, res) => {
-        if (!err) {
-          res.map(user => {
-            userOptions.push({
-              label:
-                user.profile &&
-                user.profile.lastName + " " + user.profile.firstName,
-              value: user._id
-            });
-          });
-          this.setState({ userOptions });
-        }
-      }
-    );
-
-    //Filling the work queue options
-    Meteor.call(
-      "tags.get",
-      {
-        entities: { $in: [moduleNames.WORK_QUEUE] }
-      },
-      (err, res) => {
-        if (!err) {
-          res.map(workQueue => {
-            workQueueOptions.push({
-              label: workQueue.name,
-              value: workQueue._id
-            });
-          });
-          this.setState({ workQueueOptions });
-        } else {
-          Notifier.error(err.reason);
-        }
-      }
-    );
-
-    //Filling the action options
-    Meteor.call("actions.get", (err, res) => {
-      if (!err) {
-        res.map(action => {
-          actionOptions.push({
-            label: action.title,
-            value: action._id
-          });
-        });
-        this.setState({ actionOptions });
-      }
-    });
+    let { state } = this;
 
     //Setting the trigger type
     const { rule } = this.props;
     if (rule.triggerType) {
-      this.setState({ triggerType: rule.triggerType });
+      _.extend(state, { triggerType: rule.triggerType });
     }
+
+    Meteor.call("rule.getFilterOptions", (err, options) => {
+      if (!err) {
+        _.extend(state, options);
+        this.setState(state);
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   onSubmit = data => {
