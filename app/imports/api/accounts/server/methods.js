@@ -321,9 +321,9 @@ Meteor.methods({
     ActionService.addLockToAccount(_id, this.userId, `${profile.firstName} ${profile.lastName}`);
   },
 
-  "account.removeLock"() {
+  "account.removeLock"(_id) {
     // This only logs the lock break
-    ActionService.removeLockFromAccount(this.userId);
+    ActionService.removeLockFromAccount(_id, this.userId);
   },
 
   "account.breakLock"(_id) {

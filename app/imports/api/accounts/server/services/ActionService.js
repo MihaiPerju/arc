@@ -400,10 +400,12 @@ export default class ActionService {
   }
 
   // This is bad code and should be fixed!
-  static removeLockFromAccount(userId) {
+  static removeLockFromAccount(_id, userId) {
     Accounts.update({
-      lockOwnerId: userId
-    }, {
+      lockOwnerId: userId,
+      _id
+    }, 
+    {
       $set: {
         lockOwner: null,
         lockOwnerId: null,

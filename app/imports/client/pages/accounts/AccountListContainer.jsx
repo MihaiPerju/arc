@@ -468,7 +468,7 @@ export default class AccountListContainer extends Pager {
   };
 
   removeLock = () => {
-    Meteor.call("account.removeLock", err => {
+    Meteor.call("account.removeLock", this.state.currentAccount ,err => {
       if (err) {
         Notifier.error(err.reason);
       }
