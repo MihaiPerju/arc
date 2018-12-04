@@ -15,7 +15,7 @@ import Loading from "/imports/client/lib/ui/Loading";
 export default class AccountListContainer extends Pager {
   constructor() {
     super();
-    _.extend(this.state, {
+    this.state = {
       accountsSelected: [],
       currentAccount: null,
       page: 1,
@@ -36,7 +36,8 @@ export default class AccountListContainer extends Pager {
       facilitiesOption: false,
       sortOption: false,
       assignActions: false
-    });
+    };
+    
     this.method = "accounts.count";
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
     this.pollingMethod = null;
@@ -224,24 +225,36 @@ export default class AccountListContainer extends Pager {
   }
 
   selectAccount = newAccount => {
-    const { currentAccount } = this.state;
     this.removeLock();
+
+    // If acct didn't change jsut close the right side
+    if (this.state.currentAccount === newAccount._id) {
+      this.closeRightPanel();
+      return;
+    }
+
     // removing accountId from the query when navigating from notification
     FlowRouter.setQueryParams({ accountId: null });
-    if (this.checkAccountIsLocked(newAccount)) {
-      if (currentAccount === newAccount._id) {
-        this.closeRightPanel();
-      } else {
-        this.setState({
-          currentAccount: newAccount._id,
-          showMetaData: false
-        });
-        const { state } = FlowRouter.current().params;
-        if (state === "active") {
-          this.incrementViewCount(newAccount._id);
-        }
-        this.addLock(newAccount._id);
-      }
+
+    // If this new acct is locked display lock break dialog
+    if(newAccount.lockOwnerId && Meteor.userId() !== newAccount.lockOwnerId) {
+      this.setState({
+        isLockedDialogActive: true,
+        lockOwnerName: newAccount.lockOwner,
+        lockedAccountId: newAccount._id,
+        showMetaData: false
+      });
+
+      return;
+    }
+
+    // Open and lock the acct
+    this.setState({currentAccount: newAccount._id,})
+    this.addLock(newAccount._id);
+
+    // Acct was opened, inc the views
+    if (FlowRouter.current().params.state === "active") {
+      this.incrementViewCount(newAccount._id);
     }
   };
 
@@ -460,29 +473,6 @@ export default class AccountListContainer extends Pager {
         Notifier.error(err.reason);
       }
     });
-  };
-
-  checkAccountIsLocked = account => {
-    // account is locked
-    const { lockOwnerId, lockOwner, _id, lockBreakUsers } = account;
-
-    if (
-      lockOwnerId &&
-      Meteor.userId() !== lockOwnerId &&
-      lockBreakUsers.indexOf(Meteor.userId()) === -1
-    ) {
-      const lockOwnerName =
-        lockOwner &&
-        lockOwner.profile &&
-        `${lockOwner.profile.firstName} ${lockOwner.profile.lastName}`;
-      this.setState({
-        isLockedDialogActive: true,
-        lockOwnerName,
-        lockedAccountId: _id
-      });
-      return false;
-    }
-    return true;
   };
 
   closeDialog = () => {

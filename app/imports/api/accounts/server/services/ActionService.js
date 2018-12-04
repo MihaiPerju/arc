@@ -384,60 +384,54 @@ export default class ActionService {
     }
   }
 
-  static addLockToAccount(_id, userId) {
-    // remove previous lock from the account by logged-in user
-    const account = Accounts.findOne({
-      lockOwnerId: userId
-    });
-
-    if (account) {
-      this.removeLockFromAccount(account._id, userId);
-    }
-
-    Accounts.update({
-      _id,
-      lockOwnerId: null
-    }, {
+  static addLockToAccount(_id, userId, lockOwner) {
+    Accounts.update(
+      {
+        _id
+      },
+      {
         $set: {
+          lockOwner,
           lockOwnerId: userId,
           lockTimestamp: new Date()
         }
-      });
+      }
+    );
   }
 
+  // This is bad code and should be fixed!
   static removeLockFromAccount(userId) {
     Accounts.update({
       lockOwnerId: userId
     }, {
-        $set: {
-          lockOwnerId: null,
-          lockTimestamp: null,
-          lockBreakUsers: []
-        }
-      });
+      $set: {
+        lockOwner: null,
+        lockOwnerId: null,
+        lockTimestamp: null
+      }
+    });
   }
 
   static breakLockFromAccount(_id, userId) {
-    const {
-      clientId
-    } = Accounts.findOne({
-      _id
-    });
+    const account = Accounts.findOne({_id});
+
     const data = {
       userId,
       type: actionTypesEnum.LOCK_BREAK,
       createdAt: new Date(),
       accountId: _id,
-      clientId
+      clientId: account.clientId
     };
 
     AccountActions.insert(data);
-    Accounts.update({
-      _id
-    }, {
-        $push: {
-          lockBreakUsers: userId
-        }
-      });
+    
+    // Not needed right now, maybe use in future to show who is viewing acct w/ you
+    // Accounts.update({
+    //   _id
+    // }, {
+    //   $push: {
+    //     lockBreakUsers: userId
+    //   }
+    // });
   }
 }
