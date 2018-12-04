@@ -6,6 +6,7 @@ import FileContent from "./FileContent.jsx";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class FileListContainer extends Pager {
   constructor() {
@@ -17,8 +18,7 @@ export default class FileListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
-      files: []
+      range: {}
     });
     this.method = "files.count";
     this.pollingMethod = null;
@@ -131,7 +131,7 @@ export default class FileListContainer extends Pager {
     const range = ParamsService.getRange(nextPage, perPage);
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentClient: null });
-    
+
     this.listFiles();
   };
 
@@ -166,6 +166,11 @@ export default class FileListContainer extends Pager {
       total,
       files
     } = this.state;
+
+    if (!files) {
+      return <Loading />;
+    }
+
     const file = this.getFile(currentFile);
 
     return (
