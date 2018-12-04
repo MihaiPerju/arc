@@ -51,6 +51,22 @@ export default class AccountsService {
       },
       {
         $lookup: {
+          from: "users",
+          localField: "actions.userId",
+          foreignField: "_id",
+          as: "action_users"
+        }
+      },
+      {
+        $lookup: {
+          from: "actions",
+          localField: "actions.actionId",
+          foreignField: "_id",
+          as: "action_list"
+        }
+      },
+      {
+        $lookup: {
           from: "tags",
           localField: "workQueueId",
           foreignField: "_id",
