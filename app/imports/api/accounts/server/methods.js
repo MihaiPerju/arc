@@ -316,12 +316,18 @@ Meteor.methods({
     return ActionService.graphStandardizeData(actionsPerHour);
   },
 
+  // TODO: This is not properly secure, this entire lock process needs a rewrite one day
   "account.addLock"(_id) {
     const profile = Meteor.user().profile
+
+    // If users has any other locks, remove them before allowing a new one
+    ActionService.removeLockFromAccount(this.userId);
+
+    // Create new lock
     ActionService.addLockToAccount(_id, this.userId, `${profile.firstName} ${profile.lastName}`);
   },
 
-  "account.removeLock"() {
+  "account.removeLock"(_id) {
     // This only logs the lock break
     ActionService.removeLockFromAccount(this.userId);
   },

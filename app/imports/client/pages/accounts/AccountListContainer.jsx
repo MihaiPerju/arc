@@ -225,11 +225,11 @@ export default class AccountListContainer extends Pager {
   }
 
   selectAccount = newAccount => {
-    this.removeLock();
 
     // If acct didn't change jsut close the right side
     if (this.state.currentAccount === newAccount._id) {
       this.closeRightPanel();
+      this.removeLock(); // Remove all of the users locks, since they closed account view page
       return;
     }
 
@@ -249,6 +249,7 @@ export default class AccountListContainer extends Pager {
     }
 
     // Open and lock the acct
+    this.removeLock();
     this.setState({currentAccount: newAccount._id,})
     this.addLock(newAccount._id);
 

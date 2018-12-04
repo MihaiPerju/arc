@@ -403,7 +403,8 @@ export default class ActionService {
   static removeLockFromAccount(userId) {
     Accounts.update({
       lockOwnerId: userId
-    }, {
+    }, 
+    {
       $set: {
         lockOwner: null,
         lockOwnerId: null,
