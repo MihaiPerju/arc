@@ -377,35 +377,30 @@ export default class ActionService {
     }
   }
 
-  static addLockToAccount(_id, userId) {
-    // remove previous lock from the account by logged-in user
-    const account = Accounts.findOne({
-      lockOwnerId: userId
-    });
-
-    if (account) {
-      this.removeLockFromAccount(account._id, userId);
-    }
-
-    Accounts.update({
-      _id,
-      lockOwnerId: null
-    }, {
-      $set: {
-        lockOwnerId: userId,
-        lockTimestamp: new Date()
+  static addLockToAccount(_id, userId, lockOwner) {
+    Accounts.update(
+      {
+        _id
+      },
+      {
+        $set: {
+          lockOwner,
+          lockOwnerId: userId,
+          lockTimestamp: new Date()
+        }
       }
-    });
+    );
   }
 
+  // This is bad code and should be fixed!
   static removeLockFromAccount(userId) {
     Accounts.update({
       lockOwnerId: userId
     }, {
       $set: {
+        lockOwner: null,
         lockOwnerId: null,
-        lockTimestamp: null,
-        lockBreakUsers: []
+        lockTimestamp: null
       }
     });
   }

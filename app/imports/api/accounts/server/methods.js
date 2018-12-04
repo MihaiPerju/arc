@@ -317,7 +317,8 @@ Meteor.methods({
   },
 
   "account.addLock"(_id) {
-    ActionService.addLockToAccount(_id, this.userId);
+    const profile = Meteor.user().profile
+    ActionService.addLockToAccount(_id, this.userId, `${profile.firstName} ${profile.lastName}`);
   },
 
   "account.removeLock"() {

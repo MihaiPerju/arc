@@ -82,20 +82,11 @@ export default class AccountsService {
         }
       },
       {
-        $lookup: {
-          from: "users",
-          localField: "lockOwnerId",
-          foreignField: "_id",
-          as: "lockOwner"
-        }
-      },
-      {
         $addFields: {
           assignee: { $arrayElemAt: ["$assignee", 0] },
           client: { $arrayElemAt: ["$client", 0] },
           facility: { $arrayElemAt: ["$facility", 0] },
           tag: { $arrayElemAt: ["$tag", 0] },
-          lockOwner: { $arrayElemAt: ["$lockOwner", 0] }
         }
       },
       { $limit: 1 }
@@ -126,7 +117,7 @@ export default class AccountsService {
         tagIds: 1,
         substate: 1,
         ptName: 1,
-        lockOwnerId: 1,
+        lockOwner: 1,
         lockTimestamp: 1,
         tickleDate: 1
       }
