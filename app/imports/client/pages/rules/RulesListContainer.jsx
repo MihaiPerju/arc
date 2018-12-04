@@ -6,6 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 import RightSide from "./RuleRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class RuleListContainer extends Pager {
   constructor() {
@@ -18,8 +19,7 @@ export default class RuleListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
-      rules: []
+      range: {}
     });
     this.method = "rules.count";
     this.pollingMethod = null;
@@ -164,6 +164,10 @@ export default class RuleListContainer extends Pager {
       rules
     } = this.state;
 
+    if (!rules) {
+      return <Loading />;
+    }
+    
     return (
       <div className="cc-container">
         <div

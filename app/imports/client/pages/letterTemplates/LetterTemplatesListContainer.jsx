@@ -7,6 +7,7 @@ import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./TemplateRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class LetterTemplateListContainer extends Pager {
   constructor() {
@@ -19,8 +20,7 @@ export default class LetterTemplateListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: [],
-      templates: []
+      tags: []
     });
 
     this.method = "templates.count";
@@ -167,6 +167,10 @@ export default class LetterTemplateListContainer extends Pager {
       tags,
       templates
     } = this.state;
+
+    if (!templates) {
+      return <Loading />;
+    }
 
     return (
       <div className="cc-container">

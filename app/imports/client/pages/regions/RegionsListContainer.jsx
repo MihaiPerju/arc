@@ -6,6 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../lib/ParamsService";
 import Pager from "../../lib/Pager";
 import RightSide from "./RegionRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class RegionListContainer extends Pager {
   constructor() {
@@ -18,8 +19,7 @@ export default class RegionListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
-      regions: []
+      range: {}
     });
     this.method = "regions.count";
     this.pollingMethod = null;
@@ -163,6 +163,10 @@ export default class RegionListContainer extends Pager {
       total,
       regions
     } = this.state;
+
+    if (!regions) {
+      return <Loading />;
+    }
 
     return (
       <div className="cc-container">

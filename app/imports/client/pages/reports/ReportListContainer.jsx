@@ -7,6 +7,7 @@ import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./ReportRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ReportListContainer extends Pager {
   constructor() {
@@ -21,7 +22,6 @@ export default class ReportListContainer extends Pager {
       range: {},
       substates: [],
       tags: [],
-      reports: []
     });
     this.method = "reports.count";
     this.pollingMethod = null;
@@ -192,6 +192,10 @@ export default class ReportListContainer extends Pager {
       tags,
       reports
     } = this.state;
+
+    if(!reports){
+      return <Loading/>
+    }
 
     return (
       <div className="cc-container">
