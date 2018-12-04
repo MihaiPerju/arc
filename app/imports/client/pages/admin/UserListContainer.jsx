@@ -6,6 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import RightSide from "./components/UserRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class UserListContainer extends Pager {
   constructor() {
@@ -20,7 +21,6 @@ export default class UserListContainer extends Pager {
       total: 0,
       range: {},
       tags: [],
-      users: []
     });
     this.method = "users.count";
     this.pollingMethod = null;
@@ -153,6 +153,10 @@ export default class UserListContainer extends Pager {
       users
     } = this.state;
 
+    if(!users){
+      return <Loading/>
+    }
+    
     return (
       <div className="cc-container">
         <div

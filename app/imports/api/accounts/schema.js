@@ -238,6 +238,10 @@ export default new SimpleSchema({
   "tagIds.$": {
     type: String
   },
+  lockOwner: {
+    type: String,
+    optional: true
+  },
   lockOwnerId: {
     type: String,
     optional: true

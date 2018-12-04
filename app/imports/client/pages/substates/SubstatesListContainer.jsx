@@ -9,6 +9,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "/imports/client/lib/ParamsService";
 import Pager from "../../lib/Pager";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class SubstatesListContainer extends Pager {
   constructor() {
@@ -22,8 +23,7 @@ export default class SubstatesListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: [],
-      substates: []
+      tags: []
     });
     this.method = "substates.count";
     this.pollingMethod = null;
@@ -169,6 +169,11 @@ export default class SubstatesListContainer extends Pager {
       tags,
       substates
     } = this.state;
+
+    if (!substates) {
+      return <Loading />;
+    }
+
     const substate = objectFromArray(substates, currentSubstate);
 
     return (

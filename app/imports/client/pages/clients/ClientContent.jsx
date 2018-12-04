@@ -8,11 +8,14 @@ import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ClientContent extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      edit: false
+      edit: false,
+      clientId: this.props.currentClient,
+      client: null
     };
+    
     this.pollingMethod = null;
   }
 
@@ -24,8 +27,20 @@ export default class ClientContent extends Component {
     }, 10000);
   }
 
-  getClient() {
-    const { currentClient } = this.props;
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentClient === this.props.currentClient)
+      return;
+
+    this.setState({clientId: nextProps.currentClient, client: null})
+    this.getClient(nextProps.currentClient);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollingMethod);
+  };
+
+  getClient(clientId) {
+    const currentClient = clientId || this.state.clientId;
     Meteor.call("client.getOne", currentClient, (err, client) => {
       if (!err) {
         this.setState({ client });
@@ -35,41 +50,33 @@ export default class ClientContent extends Component {
     });
   }
 
-  componentWillUnmount = () => {
-    //Removing Interval
-    clearInterval(this.pollingMethod);
-  };
-
   setEdit = () => {
-    const { edit } = this.state;
-    this.setState({ edit: !edit });
+    this.setState({ edit: !this.state.edit });
   };
 
   render() {
-    const { setClient } = this.props;
-    const { edit, client } = this.state;
 
-    if (!client) {
+    if (!this.state.client) {
       return <Loading />;
     }
 
     return (
       <div className="main-content client-content">
-        {edit ? (
-          <ClientEdit setEdit={this.setEdit} client={client} />
+        {this.state.edit ? (
+          <ClientEdit setEdit={this.setEdit} client={this.state.client} />
         ) : (
           <div>
             <ClientContentHeader
-              setClient={setClient}
+              setClient={this.props.setClient}
               setEdit={this.setEdit}
-              client={client}
+              client={this.state.client}
             />
-            <ContactBlock client={client} />
+            <ContactBlock client={this.state.client} />
 
             {Roles.userIsInRole(
               Meteor.userId(),
               roleGroups.ADMIN_TECH_MANAGER
-            ) && <ClientTimeline clientId={client._id} />}
+            ) && <ClientTimeline clientId={this.state.client._id} />}
           </div>
         )}
       </div>

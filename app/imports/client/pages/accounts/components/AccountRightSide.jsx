@@ -8,8 +8,10 @@ export default class AccountRightSide extends Component {
     super();
     this.state = {
       fade: false,
-      wasAccountActioned: false
+      wasAccountActioned: false,
+      account: null
     };
+
     this.pollingMethod = null;
   }
 
@@ -26,7 +28,8 @@ export default class AccountRightSide extends Component {
     if(nextProps.currentAccount === this.props.currentAccount)
       return;
 
-    this.getAccount(nextProps.currentAccount)
+    this.setState({account: null});
+    this.getAccount(nextProps.currentAccount);
   }
 
   getAccount(currentAccount) {
@@ -67,7 +70,6 @@ export default class AccountRightSide extends Component {
   };
 
   render() {
-    const { fade, account } = this.state;
     const {
       openMetaData,
       closeRightPanel,
@@ -75,15 +77,15 @@ export default class AccountRightSide extends Component {
       removeLock
     } = this.props;
 
-    if (!account) {
+    if (!this.state.account) {
       return <Loading />;
     }
 
     return (
-      <div className={fade ? "right__side in" : "right__side"}>
+      <div className={this.state.fade ? "right__side in" : "right__side"}>
         <AccountContent
           freezeAccount={this.freezeAccount}
-          account={account}
+          account={this.state.account}
           openMetaData={openMetaData}
           accountsSelected={accountsSelected}
           closeRightPanel={closeRightPanel}

@@ -7,6 +7,7 @@ import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./CodeRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class CodeListContainer extends Pager {
   constructor() {
@@ -20,7 +21,6 @@ export default class CodeListContainer extends Pager {
       total: 0,
       range: {},
       tags: [],
-      codes: []
     });
     this.method = "codes.count";
     this.pollingMethod = null;
@@ -175,6 +175,10 @@ export default class CodeListContainer extends Pager {
       tags,
       codes
     } = this.state;
+
+    if(!codes){
+      return <Loading/>
+    }
 
     return (
       <div className="cc-container">

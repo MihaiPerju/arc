@@ -1,6 +1,13 @@
 import Rules from "/imports/api/rules/collection.js";
 import FieldsGenerator from "./FieldsGenerator";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import Clients from "/imports/api/clients/collection";
+import Facilities from "/imports/api/facilities/collection";
+import Users from "/imports/api/users/collection";
+import Tags from "/imports/api/tags/collection";
+import Actions from "/imports/api/actions/collection";
+import RolesEnum from "/imports/api/users/enums/roles";
+import { moduleNames } from "/imports/api/tags/enums/tags";
 
 Meteor.methods({
   "rules.get"(params) {
@@ -20,6 +27,58 @@ Meteor.methods({
 
   "rule.getOne"(_id) {
     return Rules.findOne({ _id });
+  },
+
+  "rule.getFilterOptions"() {
+    const clients = Clients.find({}, { fields: { clientName: 1 } }).fetch();
+    const facilities = Facilities.find({}, { fields: { name: 1 } }).fetch();
+    const users = Users.find(
+      { roles: { $in: [RolesEnum.REP] } },
+      { fields: { profile: 1 } }
+    ).fetch();
+    const workQueues = Tags.find(
+      { entities: { $in: [moduleNames.WORK_QUEUE] } },
+      { fields: { name: 1 } }
+    ).fetch();
+    const actions = Actions.find({}, { fields: { title: 1 } }).fetch();
+
+    const clientOptions = clients.map(client => {
+      return { label: client.clientName, value: client._id };
+    });
+
+    const facilityOptions = [{ label: "All", value: "all" }].concat(facilities.map(facility => {
+      return { label: facility.name, value: facility._id };
+    }));
+
+    const userOptions = users.map(user => {
+      return {
+        label:
+          user.profile && user.profile.lastName + " " + user.profile.firstName,
+        value: user._id
+      };
+    });
+
+    const workQueueOptions = workQueues.map(workQueue => {
+      return {
+        label: workQueue.name,
+        value: workQueue._id
+      };
+    });
+
+    const actionOptions = actions.map(action => {
+      return {
+        label: action.title,
+        value: action._id
+      };
+    });
+
+    return {
+      clientOptions,
+      facilityOptions,
+      userOptions,
+      workQueueOptions,
+      actionOptions
+    };
   },
 
   "rule.create"(data) {
