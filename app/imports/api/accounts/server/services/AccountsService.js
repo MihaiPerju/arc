@@ -125,7 +125,10 @@ export default class AccountsService {
         createdAt: 1,
         tagIds: 1,
         substate: 1,
-        ptName: 1
+        ptName: 1,
+        lockOwnerId: 1,
+        lockTimestamp: 1,
+        tickleDate: 1
       }
     });
   }

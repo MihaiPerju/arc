@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import AccountSingle from "./AccountSingle.jsx";
 import _ from "underscore";
-import moment from "moment";
 
 export default class AccountList extends Component {
   constructor(props) {
@@ -15,18 +14,6 @@ export default class AccountList extends Component {
     }
     return _.includes(accountsSelected, account._id);
   }
-
-  isExpiredTickle = account => {
-    const { tickleDate } = account;
-    if (
-      tickleDate &&
-      (moment(tickleDate).isBefore(moment()) ||
-        moment(tickleDate).isSame(moment(), "day"))
-    ) {
-      return true;
-    }
-    return false;
-  };
 
   render() {
     const {
@@ -45,7 +32,6 @@ export default class AccountList extends Component {
             return (
               <AccountSingle
                 active={this.accountIsActive(account)}
-                expiredTickle={this.isExpiredTickle(account)}
                 currentAccount={currentAccount}
                 selectAccount={selectAccount}
                 checkAccount={checkAccount}

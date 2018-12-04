@@ -5,6 +5,8 @@ import commaNumber from "comma-number";
 import Notifier from "/imports/client/lib/Notifier";
 import TagItem from "/imports/client/lib/TagItem";
 import { moduleNames } from "/imports/api/tags/enums/tags";
+import isPast from 'date-fns/is_past';
+
 export default class AccountSingle extends Component {
   constructor(props) {
     super(props);
@@ -53,11 +55,11 @@ export default class AccountSingle extends Component {
   };
 
   render() {
-    const { account, active, currentAccount, expiredTickle, tags } = this.props;
+    const { account, active, currentAccount, tags } = this.props;
 
     const classes = classNames("list-item", {
       "bg--yellow": active,
-      "tickled-item": expiredTickle == 1,
+      "tickled-item": isPast(account.tickleDate),
       open: account._id === currentAccount
     });
 
