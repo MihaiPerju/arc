@@ -118,6 +118,7 @@ export default class AccountsService {
         substate: 1,
         ptName: 1,
         lockOwner: 1,
+        lockOwnerId: 1,
         lockTimestamp: 1,
         tickleDate: 1
       }

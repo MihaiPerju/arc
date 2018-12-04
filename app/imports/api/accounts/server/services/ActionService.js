@@ -406,26 +406,25 @@ export default class ActionService {
   }
 
   static breakLockFromAccount(_id, userId) {
-    const {
-      clientId
-    } = Accounts.findOne({
-      _id
-    });
+    const account = Accounts.findOne({_id});
+
     const data = {
       userId,
       type: actionTypesEnum.LOCK_BREAK,
       createdAt: new Date(),
       accountId: _id,
-      clientId
+      clientId: account.clientId
     };
 
     AccountActions.insert(data);
-    Accounts.update({
-      _id
-    }, {
-      $push: {
-        lockBreakUsers: userId
-      }
-    });
+
+    // Not needed right now, maybe use in future to show who is viewing acct w/ you
+    // Accounts.update({
+    //   _id
+    // }, {
+    //   $push: {
+    //     lockBreakUsers: userId
+    //   }
+    // });
   }
 }

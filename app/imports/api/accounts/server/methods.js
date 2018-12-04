@@ -322,6 +322,7 @@ Meteor.methods({
   },
 
   "account.removeLock"() {
+    // This only logs the lock break
     ActionService.removeLockFromAccount(this.userId);
   },
 
