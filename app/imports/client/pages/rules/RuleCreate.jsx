@@ -146,9 +146,11 @@ export default class RuleCreate extends React.Component {
   };
 
   onSubmit = data => {
+    const { close } = this.props;
     Meteor.call("rule.create", data, err => {
       if (!err) {
         Notifier.success("Rule added!");
+        close();
       } else {
         Notifier.error(err.reason);
       }
