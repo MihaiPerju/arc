@@ -6,6 +6,7 @@ import Notifier from "/imports/client/lib/Notifier";
 import ParamsService from "../../../lib/ParamsService";
 import Pager from "../../../lib/Pager";
 import RightSide from "./FacilityRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class FacilityContainer extends Pager {
   constructor() {
@@ -18,8 +19,7 @@ export default class FacilityContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
-      facilities: []
+      range: {}
     });
     this.method = "facilities.count";
     this.pollingMethod = null;
@@ -102,9 +102,9 @@ export default class FacilityContainer extends Pager {
     this.setState({
       create: false
     });
-    
+
     this.updatePager();
-    this.listFacilities()
+    this.listFacilities();
   };
 
   deleteAction = () => {
@@ -135,7 +135,7 @@ export default class FacilityContainer extends Pager {
     FlowRouter.setQueryParams({ page: nextPage });
     this.setState({ range, page: nextPage, currentFacility: null });
 
-    this.listFacilities()
+    this.listFacilities();
   };
 
   updatePager = () => {
@@ -159,6 +159,10 @@ export default class FacilityContainer extends Pager {
       total,
       facilities
     } = this.state;
+
+    if (!facilities) {
+      return <Loading />;
+    }
 
     return (
       <div className="cc-container">

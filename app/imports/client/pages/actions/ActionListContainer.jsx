@@ -7,6 +7,7 @@ import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./ActionRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ActionListContainer extends Pager {
   constructor() {
@@ -21,8 +22,7 @@ export default class ActionListContainer extends Pager {
       range: {},
       substates: [],
       loadingSubstates: true,
-      tags: [],
-      actions: []
+      tags: []
     });
     this.method = "actions.count";
     this.pollingMethod = null;
@@ -177,6 +177,10 @@ export default class ActionListContainer extends Pager {
       tags,
       actions
     } = this.state;
+
+    if (!actions) {
+      return <Loading />;
+    }
 
     return (
       <div className="cc-container">

@@ -7,6 +7,7 @@ import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import RightSide from "./components/ClientRightSide";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ClientContainer extends Pager {
   constructor() {
@@ -20,8 +21,7 @@ export default class ClientContainer extends Pager {
       total: 0,
       range: {},
       filter: false,
-      tags: [],
-      clients: []
+      tags: []
     });
     this.method = "clients.count";
     this.pollingMethod = null;
@@ -109,14 +109,6 @@ export default class ClientContainer extends Pager {
     });
     this.updatePager();
   };
-  getClient = () => {
-    const { currentClient, clients } = this.state;
-    for (let client of clients) {
-      if (client._id === currentClient) {
-        return client;
-      }
-    }
-  };
 
   deleteAction = () => {
     const { clientsSelected } = this.state;
@@ -171,6 +163,11 @@ export default class ClientContainer extends Pager {
       total,
       tags
     } = this.state;
+
+    if (!clients) {
+      return <Loading />;
+    }
+
     return (
       <div className="cc-container">
         <div

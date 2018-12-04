@@ -44,7 +44,7 @@ export default class AccountSearchBar extends Component {
     let tickleUserIdOptions = [];
     let model = {};
 
-    Meteor.call("facilities.get", (err, res) => {
+    Meteor.call("facilities.getNames", (err, res) => {
       if (!err) {
         res.map(facility => {
           facilityOptions.push({ label: facility.name, value: facility._id });

@@ -51,7 +51,7 @@ export default class NewAction extends Component {
     
     const selectedActionId = this.state.selectedActionId;
     const reasonCodes = this.state.reasonCodes;
-
+ 
     if (bulkOption) {
       this.setState({ isDisabled: true });
       let accountList = bulkAssign ? false : accountIds;
@@ -95,8 +95,8 @@ export default class NewAction extends Component {
           Notifier.error(err.reason);
         }
         this.setState({ isDisabled: false });
-      });
-    }
+      }); 
+    } 
   };
 
   onHide = () => {

@@ -5,8 +5,8 @@ import PaginationBar from "/imports/client/lib/PaginationBar";
 import Notifier from "/imports/client/lib/Notifier";
 import Pager from "../../lib/Pager";
 import ParamsService from "../../lib/ParamsService";
-import { objectFromArray } from "/imports/api/utils";
 import TagPanel from "./components/TagPanel";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class TagsListContainer extends Pager {
   constructor() {
@@ -18,8 +18,7 @@ export default class TagsListContainer extends Pager {
       page: 1,
       perPage: 13,
       total: 0,
-      range: {},
-      tags: []
+      range: {}
     });
     this.method = "tags.count";
     this.pollingMethod = null;
@@ -135,6 +134,10 @@ export default class TagsListContainer extends Pager {
   render() {
     const { tagsSelected, currentTag, create, range, total, tags } = this.state;
 
+    if (!tags) {
+      return <Loading />;
+    }
+    
     return (
       <div className="cc-container">
         <div

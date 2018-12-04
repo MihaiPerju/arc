@@ -31,7 +31,7 @@ export default class FileSearchBar extends Component {
       { label: "Failed", value: statuses.FAIL }
     ];
 
-    Meteor.call("facilities.get", (err, res) => {
+    Meteor.call("facilities.getNames", (err, res) => {
       if (!err) {
         res.map(facility => {
           facilityOptions.push({ label: facility.name, value: facility._id });

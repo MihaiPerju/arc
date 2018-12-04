@@ -7,6 +7,7 @@ import LetterManagementDropzone from "./components/LetterManagementDropzone";
 import LetterSearchBar from "./components/LetterSearchBar";
 import { moduleNames } from "/imports/api/tags/enums/tags";
 import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class LetterListContainer extends Pager {
   constructor() {
@@ -17,8 +18,7 @@ export default class LetterListContainer extends Pager {
       perPage: 13,
       total: 0,
       range: {},
-      tags: [],
-      letters: []
+      tags: []
     });
     this.method = "letters.count";
     this.pollingMethod = null;
@@ -115,6 +115,10 @@ export default class LetterListContainer extends Pager {
 
   render() {
     const { total, range, create, tags, letters } = this.state;
+
+    if (!letters) {
+      return <Loading />;
+    }
 
     return (
       <div className="cc-container">
