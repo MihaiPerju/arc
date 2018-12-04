@@ -19,6 +19,7 @@ import TickleService from '/imports/api/tickles/server/services/TickleService';
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 
+
 import actionTypesEnum, {
   typeList,
 } from '/imports/api/accounts/enums/actionTypesEnum';
@@ -665,7 +666,7 @@ Meteor.methods({
   },
 
   "accountactions.get"(clientId, userId) {
-    let filter = { type : actionTypesEnum.USER_ACTION };
+    let filter = { type: actionTypesEnum.USER_ACTION };
 
     if (clientId != '' && clientId != '-1')
       filter['clientId'] = clientId;
@@ -675,7 +676,7 @@ Meteor.methods({
 
     return AccountActions.find(filter).fetch();
   },
-  
+
   "accountsHold.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
     let filter = { 'assigneeId': { $ne: null }, state: StateEnum.HOLD };
 
@@ -739,6 +740,83 @@ Meteor.methods({
     ]).toArray();
 
     return ActionService.graphStandardizeData(holdAccountsPerHour);
+  },
+
+  "agedAccounts.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
+    var dateTimeNow = moment();
+    var agedDate = new Date(dateTimeNow.add(180, 'days'));
+    console.log(agedDate);
+    var agedAccountsDateQuery = {
+      $lt: agedDate
+    };
+
+    let filter = { 'placementDate': agedAccountsDateQuery };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    if (assigneeId && assigneeId != '-1')
+      filter['assigneeId'] = assigneeId;
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
+    return Accounts.find(filter).fetch();
+  },
+
+  async 'agedAccounts.getPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
+    const AccountsRaw = Accounts.rawCollection();
+    AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
+
+    var dateTimeNow = moment();
+    var agedDate = new Date(dateTimeNow.add(180, 'days'));
+    var agedAccountsDateQuery = {
+      $lt: agedDate
+    };
+
+    let filter = { 'placementDate': agedAccountsDateQuery };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (facilityId && facilityId != '-1')
+      filter['facilityId'] = facilityId;
+
+    if (assigneeId && assigneeId != '-1')
+      filter['assigneeId'] = assigneeId;
+
+    if (dateRangeFilter)
+      filter['createdAt'] = dateRangeFilter;
+
+    const agedAccountsPerHour = await AccountsRaw.aggregateSync([{
+      $match: filter,
+    },
+    {
+      $group: {
+        _id: {
+          y: {
+            $year: '$createdAt'
+          },
+          m: {
+            $month: '$createdAt'
+          },
+          d: {
+            $dayOfMonth: '$createdAt'
+          },
+          h: {
+            $hour: '$createdAt'
+          },
+        },
+        total: {
+          $sum: 1
+        },
+      },
+    },
+    ]).toArray();
+    return ActionService.graphStandardizeData(agedAccountsPerHour);
   },
 
 });

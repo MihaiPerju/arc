@@ -9,6 +9,7 @@ import EscalationResolved from "./dashboardWidgets/EscalationResolved";
 import NotificationWidget from "./dashboardWidgets/NotificationWidget";
 import pages from "../../../../api/settings/enums/settings";
 import Loading from "../../../lib/ui/Loading";
+import AgedAccounts from "./dashboardWidgets/AgedAccounts";
 
 export default class ManagerDashboard extends React.Component {
 
@@ -40,6 +41,7 @@ export default class ManagerDashboard extends React.Component {
     if (widgetSettings) {
       return (
         <div className="m-b--25">
+          <AgedAccounts filters={filters} />
           {widgetSettings.new_alert && <NotificationWidget filters={filters} />}
           {widgetSettings.account_assigned && <AssignedAccounts filters={filters} />}
           {widgetSettings.account_archived && <ArchivedAccounts filters={filters} />}

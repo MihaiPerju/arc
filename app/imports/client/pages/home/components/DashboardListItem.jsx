@@ -8,6 +8,7 @@ export default class DashboardListItem extends React.Component {
     const { data, type } = this.props;
     switch (type) {
       case ManagerWidgets.ASSIGNED_ACCOUNTS:
+      case ManagerWidgets.AGED_ACCOUNTS:
         return (
           <div key={`archived-${data._id}`} className="dashboard-list-item">
             <div className="dashboard-list-item-left-content">
