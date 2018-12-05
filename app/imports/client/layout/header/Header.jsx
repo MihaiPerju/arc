@@ -83,11 +83,11 @@ class Header extends Component {
                           className="toggle-dropdown"
                           style={{ cursor: "pointer" }}
                         >
-                          <a onClick={this.handleClick.bind(this, user._id)}>
+                          
                             {user.profile.firstName +
                               " " +
                               user.profile.lastName}
-                          </a>
+                          
                           <div className="profile-img" />
                         </div>
                       )
