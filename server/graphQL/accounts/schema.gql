@@ -1,0 +1,60 @@
+exports.queries = `
+    # Return a single acct
+    getAccount(acctNum: String!): Account
+    accountList(facilityIds: [String!], state: State!): [Account]
+`
+
+exports.baseSchema = `
+  type Account {
+    _id: ID
+    acctNum: String
+    accountBalance: Float
+    insurances: [Insurance]
+    medNo: String
+    ptType: String
+    ptName: String
+    fbDate: String
+    other1: String
+    activeInsCode: String
+    acctBal: Float
+    facCode: String
+    finClass: String
+    facilityId: Facility
+    clientId: String
+    fileId: String
+    collectedAmount: Float
+    state: State
+    createdAt: gqlDate
+    # meta: Object TODO
+    admitDate: gqlDate
+    dischrgDate: gqlDate
+    substate: String
+    hasLastSysAction: String
+    numberOfViews: String
+    invoiceNo: [String!]
+    letterIds: [String!] #TODO Change this to letter type _id
+    attachmentIds: [String!] #TODO Change this to letter type _id
+    actionsLinkData: [String!] #TODO Change this to letter type _id
+    workQueue: [String!] #TODO Change this to letter type _id
+    flagIds: [String!] #TODO Change this to letter type _id
+    commentIds: [String!] #TODO Change this to letter type _id
+    employeeToRespond: [String!] #TODO Change this to letter type _id
+    escalationId: [String!] #TODO Change this to letter type _id
+  }
+
+  type Insurance {
+    insName: String
+    insCode: String
+    insBal: Float
+    zip: String
+    policy: String
+  }
+
+  enum State{
+    Active
+    Review
+    Hold
+    Escalated
+    Archived
+  }
+`

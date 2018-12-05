@@ -1,0 +1,54 @@
+exports.queries = `
+    # Return a single acct
+    getFacility(id: ID!): Facility
+    facilityList(clientIDs: [ID!], status: Boolean!): [Facility]
+`
+
+exports.baseSchema = `
+  type Facility {
+    _id: ID!
+    name: String!
+    sftpPath: String
+    allowedUsers: [String!] #TODO : User IDs type
+    clientId: Client!
+    status: Boolean!
+    createdAt: gqlDate!
+    placementRules: PlacementRules
+    fileId: String # TODO: This is relation to the last file processed in the files collection
+    fileIds: [String]
+    contacts: [Contact]
+    addressOne: String!
+    city: String!
+    state: String!
+  }
+
+  type PlacementRules {
+    hasHeader: Boolean
+    acctNum: String
+    medNo: String
+    admitDate: String
+    dischrgDate: String
+    ptType: String
+    ptName: String
+    fbDate: String
+    other1: String
+    other2: String
+    activeInsCode: String
+    acctBal: String
+    facCode: String
+    finClass: String
+    insurances: [InsuranceRules]
+  }
+
+  type InsuranceRules {
+    insName: String
+    insCode: String
+    insBal: String
+    address1: String
+    address2: String
+    city: String
+    state: String
+    policy: String
+    phone: String
+  }
+`

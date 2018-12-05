@@ -1,0 +1,28 @@
+.letter-temp-content {
+	.main-content__header {
+		.row__header {
+			&:first-of-type .text-light-grey {
+				padding-left: 0;
+			}			
+		}
+		.title {
+			padding-left: 0;
+		}
+		.type {
+			margin-left: 10px;
+		}
+	}
+	.letter-block {
+		.main__block {
+			padding: 20px 15px;
+			background: rgba($color-white, 0.6);
+			border-radius: 3px;			
+		}
+		p {
+			margin-bottom: 30px;
+			&:last-of-type {
+				margin-bottom: 0;
+			}
+		}
+	}
+}

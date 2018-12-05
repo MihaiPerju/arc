@@ -1,0 +1,16 @@
+.cc-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0;
+  transition: opacity 0.3s $animation-standard-curve;
+
+  &.cc-bg--loaded {
+    opacity: 1;
+  }
+}

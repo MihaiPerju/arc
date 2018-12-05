@@ -1,0 +1,17 @@
+exports.queries = `
+    # Return a single acct
+    clientByID(id: ID!): Client
+    clientsList(clientIDs: [ID!], status: Boolean!): [Client]
+`
+
+exports.baseSchema = `
+  type Client {
+    _id: ID!
+    clientName: String!
+    email: String
+    createdAt: gqlDate!
+    status: Boolean!
+    managerIds: [String!] # TODO: Replace w/ User once added to schema
+    contacts: [Contact!]
+  }
+`
