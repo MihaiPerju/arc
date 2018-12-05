@@ -7,10 +7,6 @@ import Users from "/imports/api/users/collection";
 import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class QueryBuilder {
-  static getProperAccounts(params, assign) {
-    
-  }
-
   static getClientParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
