@@ -81,7 +81,7 @@ export default class ActionService {
     const accountActionData = {
       userId,
       actionId: actionId.value ? actionId.value : actionId,
-      reasonCode: reason && reason,
+      reasonCode: reasonCode && reason,
       addedBy,
       type: actionTypesEnum.USER_ACTION,
       createdAt,
