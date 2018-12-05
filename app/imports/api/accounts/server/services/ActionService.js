@@ -73,11 +73,8 @@ export default class ActionService {
       }).reason : {};
     }
 
-    const {
-      clientId
-    } = Accounts.findOne({
-      _id: accountId
-    });
+    const accountObj = Accounts.findOne({_id: accountId});
+
     const accountActionData = {
       userId,
       actionId: actionId.value ? actionId.value : actionId,
@@ -86,7 +83,9 @@ export default class ActionService {
       type: actionTypesEnum.USER_ACTION,
       createdAt,
       accountId,
-      clientId
+      clientId: accountObj.clientId,
+      newState: action.state,
+      oldState: accountObj.state
     };
     const customFields = {};
     _.map(inputs, input => {
