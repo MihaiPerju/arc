@@ -26,7 +26,8 @@ export default class RepDashboard extends React.Component {
 
   componentWillMount() {
     const actionTypes = [];
-    const { userId } = FlowRouter.current().params;
+    let { userId } = FlowRouter.current().params;
+    userId = userId ? userId : Meteor.userId();
     const { limit, skip } = this.state;
 
     typeList.map(type => {
@@ -41,7 +42,7 @@ export default class RepDashboard extends React.Component {
   componentDidMount() {
     const { isScroll } = this.refs;
     if (isScroll) {
-      isScroll.addEventListener("scroll", this.onHandleScroll);
+      isScroll.addEventListener("scroll", () => { this.onHandleScroll(); });
     }
   }
 
@@ -59,7 +60,8 @@ export default class RepDashboard extends React.Component {
 
   loadMoreItems = () => {
     let { limit, skip } = this.state;
-    const { userId } = FlowRouter.current().params;
+    let { userId } = FlowRouter.current().params;
+    userId = userId ? userId : Meteor.userId();
     skip = skip + limit;
     this.setState({ limit, skip });
     this.getActions(userId, limit, skip);
@@ -68,9 +70,10 @@ export default class RepDashboard extends React.Component {
   componentWillReceiveProps() {
     // set the limit to initial value
     this.setState({ limit: 20, skip: 0, accountActions: [] });
-    const { userId } = FlowRouter.current().params;
+    let { userId } = FlowRouter.current().params;
+    userId = userId ? userId : Meteor.userId();
     const { limit, skip } = this.state;
-
+    
     this.getActions(userId, limit, skip);
   }
 
@@ -385,7 +388,7 @@ export default class RepDashboard extends React.Component {
               </AutoForm>
             </div>
           </div>
-          <div ref="isScroll" className="m-t--10">
+          <div ref="isScroll" className="m-t--10 content-height">
             <Timeline>
               {accountActions &&
                 accountActions.map((actionPerformed, index) => {
@@ -404,9 +407,10 @@ export default class RepDashboard extends React.Component {
                   );
                 })}
             </Timeline>
+            {isScrollLoading && <Loading />}
           </div>
         </div>
-        {isScrollLoading && <Loading />}
+       
       </div>
     );
   }
