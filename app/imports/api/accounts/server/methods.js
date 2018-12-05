@@ -318,13 +318,17 @@ Meteor.methods({
 
   // TODO: This is not properly secure, this entire lock process needs a rewrite one day
   "account.addLock"(_id) {
-    const profile = Meteor.user().profile
+    const profile = Meteor.user().profile;
 
     // If users has any other locks, remove them before allowing a new one
     ActionService.removeLockFromAccount(this.userId);
 
     // Create new lock
-    ActionService.addLockToAccount(_id, this.userId, `${profile.firstName} ${profile.lastName}`);
+    ActionService.addLockToAccount(
+      _id,
+      this.userId,
+      `${profile.firstName} ${profile.lastName}`
+    );
   },
 
   "account.removeLock"(_id) {

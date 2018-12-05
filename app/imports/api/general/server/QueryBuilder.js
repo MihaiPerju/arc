@@ -8,40 +8,7 @@ import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class QueryBuilder {
   static getProperAccounts(params, assign) {
-    if (assign === "none") {
-      _.extend(params.filters, {
-        assigneeId: {
-          $exists: true
-        },
-        workQueueId: {
-          $exists: true
-        }
-      });
-    } else if (assign) {
-      const filterArr = assign.split(",");
-      if (_.contains(filterArr, "assigneeId")) {
-        _.extend(params.filters, {
-          $or: [
-            {
-              workQueueId: {
-                $in: filterArr
-              }
-            },
-            {
-              assigneeId: {
-                $exists: true
-              }
-            }
-          ]
-        });
-      } else {
-        _.extend(params.filters, {
-          workQueueId: {
-            $in: filterArr
-          }
-        });
-      }
-    }
+    
   }
 
   static getClientParams(params) {
@@ -482,7 +449,8 @@ export default class QueryBuilder {
         tickleUserId,
         tagIds,
         medNo,
-        state
+        state,
+        assign
       } = params.filters;
       let {
         perPage,
@@ -497,6 +465,52 @@ export default class QueryBuilder {
 
       this.getPagerOptions(queryParams, page, perPage);
       this.secureAccounts(queryParams, params, userId);
+
+       //if searching with Account Number, don't include the rest of the filters
+       if (acctNum) {
+        _.extend(queryParams.filters, {
+          acctNum: {
+            $regex: acctNum,
+            $options: "i"
+          }
+        });
+        return queryParams;
+      }
+
+      if (assign === "none") {
+        _.extend(queryParams.filters, {
+          assigneeId: {
+            $exists: true
+          },
+          workQueueId: {
+            $exists: true
+          }
+        });
+      } else if (assign) {
+        const filterArr = assign.split(",");
+        if (_.contains(filterArr, "assigneeId")) {
+          _.extend(queryParams.filters, {
+            $or: [
+              {
+                workQueueId: {
+                  $in: filterArr
+                }
+              },
+              {
+                assigneeId: {
+                  $exists: true
+                }
+              }
+            ]
+          });
+        } else {
+          _.extend(queryParams.filters, {
+            workQueueId: {
+              $in: filterArr
+            }
+          });
+        }
+      }
 
       if (state === "unassigned") {
         _.extend(queryParams.filters, {
@@ -558,16 +572,6 @@ export default class QueryBuilder {
         _.extend(queryParams.filters, {
           state: {
             $exists: true
-          }
-        });
-      }
-
-      //adding filter query options
-      if (acctNum) {
-        _.extend(queryParams.filters, {
-          acctNum: {
-            $regex: acctNum,
-            $options: "i"
           }
         });
       }
