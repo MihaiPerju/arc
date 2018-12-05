@@ -199,7 +199,7 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed.map((actionPerformed, key) => {
+              actionsPerformed.sort(function(a, b){return b.createdAt - a.createdAt}).map((actionPerformed, key) => {
                 const isRep = actionPerformed.userId
                   ? Roles.userIsInRole(actionPerformed.userId, RolesEnum.REP)
                   : false;
