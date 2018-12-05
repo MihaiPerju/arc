@@ -19,7 +19,7 @@ export default new SimpleSchema({
   ptType: {
     type: String,
     optional: true,
-    label: "Payment Type"
+    label: "Payment Type" 
   },
   ptName: {
     type: String,

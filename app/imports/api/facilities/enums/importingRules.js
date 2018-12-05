@@ -81,7 +81,7 @@ export default {
         {
             value: 'acctNum',
             label: 'Account Number',
-            optional: false
+            optional: true
         },
         {
             value: 'admitDate',
@@ -96,7 +96,7 @@ export default {
         {
             value: 'payorCode',
             label: 'Payor Code',
-            optional: false
+            optional: true
         },
         {
             value: 'insName',
@@ -121,17 +121,17 @@ export default {
         {
             value: 'transDate',
             label: 'Transaction Date',
-            optional: false
+            optional: true
         },
         {
             value: 'transType',
             label: 'Transaction Type',
-            optional: false
+            optional: true
         },
         {
             value: 'transAmount',
             label: 'Transaction Amount',
-            optional: false
+            optional: true
         }
     ],
     types: {
