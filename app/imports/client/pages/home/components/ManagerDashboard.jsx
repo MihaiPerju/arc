@@ -10,6 +10,7 @@ import NotificationWidget from "./dashboardWidgets/NotificationWidget";
 import pages from "../../../../api/settings/enums/settings";
 import Loading from "../../../lib/ui/Loading";
 import AgedAccounts from "./dashboardWidgets/AgedAccounts";
+import PushToCall from "./dashboardWidgets/PushToCall";
 
 export default class ManagerDashboard extends React.Component {
 
@@ -41,6 +42,7 @@ export default class ManagerDashboard extends React.Component {
     if (widgetSettings) {
       return (
         <div className="m-b--25">
+          <PushToCall filters={filters} />
           <AgedAccounts filters={filters} />
           {widgetSettings.new_alert && <NotificationWidget filters={filters} />}
           {widgetSettings.account_assigned && <AssignedAccounts filters={filters} />}

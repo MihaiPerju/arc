@@ -8,7 +8,6 @@ export default class DashboardListItem extends React.Component {
     const { data, type } = this.props;
     switch (type) {
       case ManagerWidgets.ASSIGNED_ACCOUNTS:
-      case ManagerWidgets.AGED_ACCOUNTS:
         return (
           <div key={`archived-${data._id}`} className="dashboard-list-item">
             <div className="dashboard-list-item-left-content">
@@ -104,6 +103,30 @@ export default class DashboardListItem extends React.Component {
             <div className="dashboard-list-item-right-content">
               <div className="text--right">{data.corruptRows.length}</div>
               <div className="dashboard-list-item-right-label">Corrupted rows</div>
+            </div>
+          </div>
+        );
+      case ManagerWidgets.AGED_ACCOUNTS:
+        return (
+          <div key={`archived-${data._id}`} className="dashboard-list-item">
+            <div className="dashboard-list-item-left-content">
+              <div className="dashboard-list-item-title">{data.clientName}</div>
+            </div>
+            <div className="dashboard-list-item-right-content">
+              <div className="text--right">{data.agedAccountsPercentage}%</div>
+              <div className="dashboard-list-item-right-label">accounts</div>
+            </div>
+          </div>
+        );
+      case ManagerWidgets.PUSH_TO_CALL:
+        return (
+          <div key={`push-to-call-${data._id}`} className="dashboard-list-item">
+            <div className="dashboard-list-item-left-content">
+              <div className="dashboard-list-item-title">{data.clientName}</div>
+            </div>
+            <div className="dashboard-list-item-right-content">
+              <div className="text--right">{data.callActionsPercentage}%</div>
+              <div className="dashboard-list-item-right-label">Push To Call Ratio</div>
             </div>
           </div>
         );

@@ -8,36 +8,36 @@ import PieChart from "../PieChart";
 import LineChart from "../LineChart";
 import FilterService from "../../services/FilterService";
 
-export default class AgedAccounts extends React.Component {
+export default class PushToCall extends React.Component {
 
   state = {
-    isLoadingAgedAccounts: false,
-    agedAccounts: [],
-    isLoadingAgedAccountChart: false,
-    agedAccountsChartData: []
+    isLoadingPushToCall: false,
+    numberOfAccounts: [],
+    isLoadingPushToCallChart: false,
+    numberOfAccountsChartData: []
   };
 
   componentDidMount() {
     const { filters } = this.props;
-    this.getAgedAccounts(filters);
-    this.getAgedAccountsChartData(filters);
+    this.getPushToCallAccounts(filters);
+    this.getPushToCallAccountsChartData(filters);
   }
 
   componentWillReceiveProps(props) {
     const { filters } = props;
-    this.getAgedAccounts(filters);
-    this.getAgedAccountsChartData(filters);
+    this.getPushToCallAccounts(filters);
+    this.getPushToCallAccountsChartData(filters);
   }
 
-  getAgedAccounts(filters) {
-    this.setState({ isLoadingAgedAccounts: true });
+  getPushToCallAccounts(filters) {
+    this.setState({ isLoadingPushToCall: true });
     let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
       Meteor.call("clients.getStatistics", filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId, filterCondition, (err, responseData) => {
         if (!err) {
-          this.setState({ agedAccounts: responseData, isLoadingAgedAccounts: false });
+          this.setState({ numberOfAccounts: responseData, isLoadingPushToCall: false });
         } else {
-          this.setState({ isLoadingAgedAccounts: false });
+          this.setState({ isLoadingPushToCall: false });
           Notifier.error(err.reason);
         }
       });
@@ -47,38 +47,38 @@ export default class AgedAccounts extends React.Component {
   prepareChartData(clients) {
     var chartData = { xAxisValues: [], yAxisValues: [] };
     chartData.xAxisValues = clients.map(c => c.name);
-    chartData.yAxisValues = clients.map(c => c.agedAccountsPercentage);
+    chartData.yAxisValues = clients.map(c => c.callActionsPercentage);
     return chartData;
   }
 
-  getAgedAccountsChartData(filters) {
-    this.setState({ isLoadingAgedAccountChart: true });
+  getPushToCallAccountsChartData(filters) {
+    this.setState({ isLoadingPushToCallChart: true });
     let filterCondition = FilterService.getQuery(filters.selectedDateRange, filters.startDate, filters.endDate);
     setTimeout(() => {
       Meteor.call("clients.getStatisticsChartData", filters.selectedClientId, filters.selectedFacilityId, filters.selectedUserId, filterCondition, (err, reponseData) => {
         if (!err) {
           var chartData = this.prepareChartData(reponseData);
-          this.setState({ agedAccountsChartData: chartData, isLoadingAgedAccountChart: false });
+          this.setState({ numberOfAccountsChartData: chartData, isLoadingPushToCallChart: false });
         } else {
-          this.setState({ isLoadingAgedAccountChart: false });
+          this.setState({ isLoadingPushToCallChart: false });
           Notifier.error(err.reason);
         }
       });
     }, 1000);
   }
 
-  renderAgedAccounts() {
-    const { isLoadingAgedAccounts, agedAccounts } = this.state;
-    if (!isLoadingAgedAccounts) {
+  renderPushToCallAccounts() {
+    const { isLoadingPushToCall, numberOfAccounts } = this.state;
+    if (!isLoadingPushToCall) {
       return (
-        <div className={agedAccounts.length > 0 ? '' : 'dashboard-content-center'}>
+        <div className={numberOfAccounts.length > 0 ? '' : 'dashboard-content-center'}>
           {
-            agedAccounts.length > 0 ?
-              agedAccounts.map(account => {
-                return <DashboardListItem key={account._id} data={account} type={ManagerWidgets.AGED_ACCOUNTS} />;
+            numberOfAccounts.length > 0 ?
+              numberOfAccounts.map(account => {
+                return <DashboardListItem key={account._id} data={account} type={ManagerWidgets.PUSH_TO_CALL} />;
               })
               : <div className="dashboard-empty-content">
-                No aged accounts has been found.
+                No push to call accounts has been found.
             </div>
           }
         </div>
@@ -92,26 +92,26 @@ export default class AgedAccounts extends React.Component {
     }
   }
 
-  renderAgedAccountsChart() {
+  renderPushToCallAccountsChart() {
     const { filters } = this.props;
-    const { isLoadingAgedAccountChart, agedAccountsChartData } = this.state;
+    const { isLoadingPushToCallChart, numberOfAccountsChartData } = this.state;
 
     let chartOptions = {
-      xAxisTitle: 'Hours',
-      yAxisTitle: 'Number of Aged Accounts',
-      title: 'Accounts',
-      ySeries: 'Aged Accounts per hour'
+      xAxisTitle: 'Clients',
+      yAxisTitle: 'Number of Push To Call Accounts',
+      title: 'Push To Call Ratio',
+      ySeries: 'Push To Call Accounts'
     };
 
-    if (!isLoadingAgedAccountChart) {
+    if (!isLoadingPushToCallChart) {
       if (filters.selectedChartType.type === CHART_TYPE.Pie) {
         return (
-          <PieChart data={agedAccountsChartData} chartOptions={chartOptions} />
+          <PieChart data={numberOfAccountsChartData} chartOptions={chartOptions} />
         );
       }
       else if (filters.selectedChartType.type === CHART_TYPE.Line) {
         return (
-          <LineChart data={agedAccountsChartData} chartOptions={chartOptions} />
+          <LineChart data={numberOfAccountsChartData} chartOptions={chartOptions} />
         );
       }
       else
@@ -129,20 +129,20 @@ export default class AgedAccounts extends React.Component {
     return (
       <div>
         <div className="dashboard-row">
-          <div className="dashboard-sub-title">Aged Accounts</div>
+          <div className="dashboard-sub-title">Push To Call</div>
         </div>
         <div className="dashboard-row content-height">
           <div className="dashboard-section">
             <div className="dashboard-section-content">
               {
-                this.renderAgedAccounts()
+                this.renderPushToCallAccounts()
               }
             </div>
           </div>
           <div className="dashboard-section">
             <div className="dashboard-section-content m-l-5">
               {
-                this.renderAgedAccountsChart()
+                this.renderPushToCallAccountsChart()
               }
             </div>
           </div>
@@ -150,5 +150,4 @@ export default class AgedAccounts extends React.Component {
       </div>
     );
   }
-
 }

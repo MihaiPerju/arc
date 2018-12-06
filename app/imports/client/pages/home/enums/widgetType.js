@@ -1,5 +1,6 @@
 const ManagerWidgets = {
   AGED_ACCOUNTS: 'Aged Accounts',
+  PUSH_TO_CALL:'Push To Call',
   ASSIGNED_ACCOUNTS: 'Assigned Accounts',
   ARCHIVED_ACCOUNTS: 'Archived Accounts',
   REPORTS_BUILT: 'Reports Built',

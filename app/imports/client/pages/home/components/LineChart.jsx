@@ -13,6 +13,7 @@ export default class LineChart extends React.Component {
       },
       colors: ['#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
       xAxis: {
+        categories: data.xAxisValues,
         title: { text: chartOptions.xAxisTitle }
       },
       yAxis: {
@@ -24,7 +25,7 @@ export default class LineChart extends React.Component {
       series: [
         {
           name: chartOptions.ySeries,
-          data: data
+          data: data.yAxisValues
         }
       ]
     };

@@ -2,7 +2,7 @@
   "name": "boilerplate",
   "private": true,
   "scripts": {
-    "start": "MONGO_URL='mongodb://arcc:12345@pms-shard-00-00-tuhpo.mongodb.net:27017,pms-shard-00-01-tuhpo.mongodb.net:27017,pms-shard-00-02-tuhpo.mongodb.net:27017/test?ssl=true&replicaSet=PMS-shard-0&authSource=admin' meteor run --settings .deploy/local.json",
+    "start": "MONGO_URL=mongodb://localhost:27017/test meteor run --settings .deploy/local.json",
     "debug": "MONGO_URL='mongodb://arcc:12345@pms-shard-00-00-tuhpo.mongodb.net:27017,pms-shard-00-01-tuhpo.mongodb.net:27017,pms-shard-00-02-tuhpo.mongodb.net:27017/test?ssl=true&replicaSet=PMS-shard-0&authSource=admin' meteor run --inspect --settings .deploy/local.json",
     "deploy:qa": "meteor npm i ; cd .deploy/qa && mup deploy",
     "pms-test": "MONGO_URL=mongodb+srv://arccTester:sZ5zViNL1jJBBD7v@arcc-testing-bxsso.mongodb.net/arcc meteor run --settings .deploy/pms/local.json",

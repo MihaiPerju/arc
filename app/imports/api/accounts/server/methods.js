@@ -745,7 +745,6 @@ Meteor.methods({
   "agedAccounts.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
     var dateTimeNow = moment();
     var agedDate = new Date(dateTimeNow.add(180, 'days'));
-    console.log(agedDate);
     var agedAccountsDateQuery = {
       $lt: agedDate
     };
