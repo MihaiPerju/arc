@@ -205,6 +205,10 @@ export default class ActionService {
           },
           $push: {
             actionIds: accountActionId
+          },
+          $unset: {             //Unassign the account - if the state is ARCHIVED
+            workQueueId: null,
+            assigneeId: null
           }
         });
     });
@@ -231,6 +235,11 @@ export default class ActionService {
       _id: accountId
     }).state || null;
     let reactivationDate = (prevState && prevState === stateEnum.ARCHIVED) ? new Date() : null;
+
+    //Unassign the account - if the state is ARCHIVED or HOLD
+    if(state && ( state === stateEnum.ARCHIVED || state === stateEnum.HOLD )) {
+      this.removeAssignee(accountId);
+    }
 
     // remove previous tickles history
     Tickles.remove({
