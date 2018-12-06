@@ -9,7 +9,12 @@ import moment from "moment";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
-import RepDashboard from "./components/RepDashboard";
+//import RepDashboard from "./components/RepDashboard";
+import ManagerDashboard from "./components/ManagerDashboard";
+import CHART_TYPE from './enums/chartType';
+import { dateRangeValues } from './enums/dateRange';
+import TechOrAdminDashboard from "./components/TechOrAdminDashboard";
+import UserDashboard from "./components/UserDashboard";
 
 export default class Home extends React.Component {
 
@@ -21,12 +26,89 @@ export default class Home extends React.Component {
       reps: [],
       chartData: [],
       selectedDate: moment(),
-      selectedRep: ''
+      startDate: moment(),
+      endDate: moment(),
+      selectedRep: '',
+      clients: [],
+      facilities: [],
+      users: [],
+      chartTypes: [],
+      selectedChartType: '',
+      dateRangeFilters: [],
+      showCustomDateRange: false,
+      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedUserId: '', selectedDateRange: '', startDate: new Date(moment()), endDate: new Date(moment()) },
     };
   }
 
+  componentWillMount() {
+    this.prepareDateRangeOptions();
+    this.prepareChartTypes();
+  }
+
   componentDidMount() {
-    this.getRepresentatives();
+    this.getClients();
+  }
+
+  prepareDateRangeOptions() {
+    let dateRangeFilters = dateRangeValues;
+    dateRangeFilters.unshift({ label: 'Select Date', value: -1 });
+    let selectedDateRange = dateRangeFilters[0].value;
+    this.setState({ dateRangeFilters, selectedDateRange });
+  }
+
+  prepareChartTypes() {
+    let filters = this.state.filters;
+    let chartTypes = this.state.chartTypes;
+    chartTypes.push({ value: 1, label: 'Line Chart', type: CHART_TYPE.Line });
+    chartTypes.push({ value: 2, label: 'Pie Chart', type: CHART_TYPE.Pie });
+    filters.selectedChartType = chartTypes[0];
+    this.setState({ chartTypes: chartTypes, filters });
+  }
+
+  getClients() {
+    Meteor.call("clients.get", (err, responseData) => {
+      if (!err) {
+        let clients = responseData.map(client => {
+          return { label: client.clientName, value: client._id };
+        });
+        clients.unshift({ label: 'All Clients', value: -1 });
+        this.setState({ clients });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  getFacilities(clientId) {
+    Meteor.call("facilities.get", clientId, (err, responseData) => {
+      if (!err) {
+        let facilities = [];
+        facilities = responseData.map(facility => {
+          return { label: facility.name, value: facility._id };
+        });
+        if (facilities.length > 0) {
+          facilities.unshift({ label: 'All Facilities', value: -1 });
+        }
+        this.setState({ facilities });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  getUsers(facilityId) {
+    Meteor.call("account.facility.user", facilityId, (err, responseData) => {
+      if (!err) {
+        let users = [];
+        users = responseData;
+        if (users.length > 0) {
+          users.unshift({ label: 'All Users', value: -1 });
+        }
+        this.setState({ users });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   getRepresentatives() {
@@ -80,6 +162,59 @@ export default class Home extends React.Component {
     this.setState({ selectedDate: moment(newDate) });
   };
 
+  onStartDateChange = startDate => {
+    let filters = this.state.filters;
+    filters.startDate = new Date(moment(startDate));
+    this.setState({ startDate: moment(startDate), filters });
+  };
+
+  onEndDateChange = endDate => {
+    let filters = this.state.filters;
+    filters.endDate = new Date(moment(endDate));
+    this.setState({ endDate: moment(endDate), filters });
+  };
+
+  onHandleChange = (field, value) => {
+    let filters = this.state.filters;
+    switch (field) {
+      case "clientId":
+        filters.selectedClientId = value;
+        this.setState({ filters, facilities: [], users: [] });
+        this.getFacilities(value);
+        break;
+      case "facilityId":
+        filters.selectedFacilityId = value;
+        this.setState({ filters, users: [] });
+        this.getUsers(value);
+        break;
+      case "userId":
+        filters.selectedUserId = value;
+        this.setState({ filters });
+        break;
+      case "selectChartTypeId":
+        var chartTypes = this.state.chartTypes;
+        var chartType = chartTypes.find(p => p.value == value);
+        var selectedChartType = chartTypes[0];
+        if (chartType)
+          selectedChartType = chartType;
+
+        filters.selectedChartType = selectedChartType;
+        this.setState({ filters });
+        break;
+      case "selectedDateRange":
+        filters.selectedDateRange = value;
+        if (value === 'custom_range') {
+          this.setState({ filters, showCustomDateRange: true });
+        }
+        else {
+          this.setState({ filters, showCustomDateRange: false });
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
   renderGraph() {
     const options = {
       chart: {
@@ -116,62 +251,149 @@ export default class Home extends React.Component {
     }
   }
 
-  render() {
-    const { reps, selectedDate } = this.state;
+  renderDashboardBasedOnRoles() {
+    const { filters } = this.state;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      return (
-        <div className="cc-container home-container flex-align--start">
-          <div className="heart-beat">
-            {
-              !this.state.isLoading ?
-                <AutoForm ref="graphFilters" schema={heartBeatSchema} onSubmit={this.onSubmit.bind(this)}>
-                  <div className="flex--helper form-group__pseudo--3">
-                    <div className="select-form">
-                      <AutoField
-                        label="Reps:"
-                        name="userId"
-                        options={reps}
+      return <ManagerDashboard filters={filters} />;
+    }
+
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) || Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
+      return <TechOrAdminDashboard filters={filters} />;
+    }
+
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      return <UserDashboard filters={filters} />;
+    }
+  }
+
+  render() {
+    const { clients, facilities, users, chartTypes, dateRangeFilters, startDate, endDate, showCustomDateRange } = this.state;
+
+    return (
+      <div className="dashboard-content-container">
+        <div className="dashboard-header-content">
+          <div className="dashboard-header-title">
+            FILTERS FOR DASHBOARD
+            </div>
+          <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
+            <div>
+              <div className="flex--helper form-group__pseudo--3">
+                <div className="select-form select-box-width">
+                  <label className="dashboard-label">Clients</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="clientId"
+                      options={clients}
+                    />
+                  </div>
+                </div>
+                {
+                  facilities.length > 0 ?
+                    <div className="select-form select-box-width m-l-10">
+                      <label className="dashboard-label">Facilities</label>
+                      <div className="m-t--5">
+                        <AutoField
+                          labelHidden={true}
+                          name="facilityId"
+                          options={facilities} />
+                      </div>
+                    </div> : null
+                }
+                {
+                  users.length > 0 ?
+                    <div className="select-form select-box-width m-l-10">
+                      <label className="dashboard-label">Users</label>
+                      <div className="m-t--5">
+                        <AutoField
+                          labelHidden={true}
+                          name="userId"
+                          options={users} />
+                      </div>
+                    </div> : null
+                }
+                <div className="select-form select-box-width m-l-10">
+                  <label className="dashboard-label">Chart Types</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="selectChartTypeId"
+                      options={chartTypes} />
+                  </div>
+                </div>
+              </div>
+              <div className="flex--helper form-group__pseudo--3 m-t--20">
+                <div className="select-form select-box-width">
+                  <label className="dashboard-label">Date Range Filters</label>
+                  <div className="m-t--5">
+                    <AutoField
+                      labelHidden={true}
+                      name="selectedDateRange"
+                      options={dateRangeFilters}
+                    />
+                  </div>
+                </div>
+                {
+                  showCustomDateRange &&
+                  <div style={{ display: 'inherit' }}>
+                    <div className="dashboard-dp-panel">
+                      <DatePicker
+                        calendarClassName="cc-datepicker"
+                        showMonthDropdown
+                        showYearDropdown
+                        yearDropdownItemNumber={4}
+                        todayButton={"Today"}
+                        placeholderText="Start Date"
+                        selected={startDate}
+                        onChange={this.onStartDateChange}
+                        fixedHeight
                       />
                     </div>
-                    <div className="m-l-15">
-                      <label>Select Date:</label>
-                      <div className="border-style">
-                        <DatePicker
-                          calendarClassName="cc-datepicker"
-                          showMonthDropdown
-                          showYearDropdown
-                          yearDropdownItemNumber={4}
-                          todayButton={"Today"}
-                          selected={selectedDate}
-                          onChange={this.onChange}
-                          placeholderText="Selected Date"
-                          fixedHeight
-                        />
-                      </div>
+                    <div className="dashboard-dp-panel">
+                      <DatePicker
+                        calendarClassName="cc-datepicker"
+                        showMonthDropdown
+                        showYearDropdown
+                        yearDropdownItemNumber={4}
+                        todayButton={"Today"}
+                        placeholderText="End Date"
+                        selected={endDate}
+                        onChange={this.onEndDateChange}
+                        fixedHeight
+                      />
                     </div>
-                    <button className="custom-submit-btn" onClick={this.addGraphFilters}>
-                      Submit
-                    </button>
                   </div>
-                </AutoForm> : <Loading />
-            }
-            {this.renderGraph()}
-          </div>
+                }
+              </div>
+            </div>
+          </AutoForm>
         </div>
-      );
-    }
-    else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
-      return (
-        <RepDashboard />
-      );
-    }
-    else
-      return null;
+        {this.renderDashboardBasedOnRoles()}
+      </div>
+    );
   }
 }
 
-const heartBeatSchema = new SimpleSchema({
+// const heartBeatSchema = new SimpleSchema({
+//   userId: {
+//     type: String
+//   }
+// });
+
+const dashboardSchema = new SimpleSchema({
+  clientId: {
+    type: String
+  },
+  facilityId: {
+    type: String
+  },
+  selectChartTypeId: {
+    type: String
+  },
   userId: {
+    type: String
+  },
+  selectedDateRange: {
     type: String
   }
 });

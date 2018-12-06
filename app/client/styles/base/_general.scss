@@ -171,6 +171,10 @@ h6 {
   margin-bottom: 10px;
 }
 
+.m-b--25 {
+  margin-bottom: 25px;
+}
+
 .m-t--0 {
   margin-top: 0!important;
 }
@@ -225,7 +229,6 @@ h6 {
   }
 }
 
-
 .border-style{
   border: 1px solid #d3d3d3;
   border-radius: 5px;
@@ -233,6 +236,14 @@ h6 {
 
 .m-l-15{
   margin-left: 15px;
+}
+
+.m-l-10{
+  margin-left: 10px;
+}
+
+.m-l-5{
+  margin-left: 5px;
 }
 
 .custom-submit-btn{
@@ -251,10 +262,10 @@ top: 0;
 left: 0;
 width: 100%;
 }
+
 .position_style {
   position: relative;
 }
-
 
 .showMore-tag {
   margin: 6px !important;
@@ -287,6 +298,40 @@ cursor: none !important;
 
 .float-right{
   float: right;
+.setting_label {
+  margin-top:12px;
+  font-size: 15px;
+}
+
+.widget_menu {
+  border-bottom: 1px solid #ccc;
+}
+
+.widget_div {
+  background: #fff;
+  color: rgba(0,0,0,.87);
+  height: auto;
+}
+
+.widget_item:hover {
+  background: rgba(0,0,0,.04);
+}
+
+.widget_item {
+  color: inherit;
+  font-size: 14px;
+  padding: 0 16px;
+  cursor: pointer;
+  padding-top: 15px;
+  padding-bottom: 15px; 
+  position: relative;
+  align-items: center;
+  position: relative;
+}
+
+.divider {
+  border-top: 1px solid #eee;
+  margin: 0px;
 }
 
 .chk-box-label{
@@ -300,5 +345,26 @@ cursor: none !important;
 .content-height {
   height: 720px;
   overflow: auto
+.select_label {
+  font-size: 14px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+}
+
+.select_div {
+  margin-top: 18px !important;
+}
+
+.select_div:before {
+  top: 34px !important;
+}
+
+.flex_screen {
+  height: calc(100% - 50px) !important;
+  overflow-y: auto;
+}
+
+.font-bold {
+  font-weight: 700;
 }
 

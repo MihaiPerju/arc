@@ -154,5 +154,10 @@ Meteor.methods({
         $set: { password: hash }
       }
     );
-  }
+  },
+
+  "facilities.get"(clientId) {
+    Security.checkLoggedIn(this.userId);
+    return Facilities.find({ clientId: clientId }).fetch();
+  },
 });

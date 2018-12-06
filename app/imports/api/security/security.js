@@ -37,5 +37,12 @@ export default {
 
   checkIfAdmin(userId) {
     return Roles.userIsInRole(userId, [UserRoles.ADMIN]);
-  }
+  },
+
+  checkManager(userId) {
+    this.checkLoggedIn(userId);
+    if (!Roles.userIsInRole(userId, UserRoles.MANAGER)) {
+      throw new Meteor.Error("Not allowed !");
+    }
+  },
 };

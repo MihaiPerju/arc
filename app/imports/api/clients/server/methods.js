@@ -268,4 +268,35 @@ Meteor.methods({
     return tagDetails;
   },
 
+  "clients.fetch"() {
+    Security.checkLoggedIn(this.userId);
+    return Clients.find().fetch();
+  },
+
+  "clients.getStatistics"() {
+    Security.checkLoggedIn(this.userId);
+    let filters = { 'managerIds': { $in: [this.userId] } };
+    var clients = Clients.find(filters).fetch().map(c => {
+      if (c.statistics) {
+        c.agedAccountsPercentage = Math.round((c.statistics.over180 / c.statistics.totalInventory) * 100);
+        c.callActionsPercentage = Math.round((c.statistics.callActions / c.statistics.totalInventory) * 100);
+      }
+      return c;
+    });
+    return clients;
+  },
+
+  "clients.getStatisticsChartData"() {
+    Security.checkLoggedIn(this.userId);
+    let filters = { 'managerIds': { $in: [this.userId] } };
+    var clients = Clients.find(filters).fetch().map(c => {
+      if (c.statistics) {
+        c.agedAccountsPercentage = Math.round((c.statistics.over180 / c.statistics.totalInventory) * 100);
+        c.callActionsPercentage = Math.round((c.statistics.callActions / c.statistics.totalInventory) * 100);
+      }
+      return { name: c.clientName, agedAccountsPercentage: c.agedAccountsPercentage, callActionsPercentage: c.callActionsPercentage };
+    });
+    return clients;
+  }
+
 });

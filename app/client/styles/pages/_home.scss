@@ -41,3 +41,134 @@ width: 50%;
     margin-left: 10px;
   }
 }
+
+.dashboard-content-container{
+  padding: 15px;
+  width: 100%;
+}
+
+.dashboard-header-content{
+  background-color: white;
+  height: inherit;
+  padding: 20px 15px;
+  width: 100%;
+}
+
+.select-box-width{
+  width: 15%;
+}
+
+.dashboard-label{
+  color: #929292;
+  font-size: 14px;
+}
+
+.dashboard-content{
+  background-color: white;
+  padding: 10px;
+  width: 100%;
+}
+
+.dashboard-section-header{
+  background-color: white;
+  padding: 15px;
+  height: 45px;
+}
+
+.dashboard-section-title{
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dashboard-section-content{
+  margin-top:1px;
+  background-color: white;
+  padding: 15px;
+  height: 430px;
+  position: relative;
+  overflow: auto;
+}
+
+.dashboard-list-item{
+  padding: 15px 0;
+  border-bottom: 1px solid #eae9e9;
+  margin-bottom: 10px;
+  display: inline-block;
+  width:100%;
+  &-left-content{
+    float: left;
+  }
+  &-title{
+    font-size: 15px;
+  }
+  &-sub-title{
+    font-size: 14px;
+    margin-top: 5px;
+    color: #929292;
+    text-transform: capitalize;
+  }
+  &-right-content{
+    float: right;
+  }
+  &-right-label{
+    text-transform: capitalize;
+    font-size: 12px;
+    color: #929292;
+    margin-top: 5px;
+    text-align: right;
+  }
+}
+
+.dashboard-empty-content{
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 25px;
+  font-size: 16px;
+  color: #878787;
+}
+
+.dashboard-section{
+  width:50%;
+  float: left;
+}
+
+.dashboard-row{
+  margin:0
+}
+
+.dashboard-content-center{
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.content-height{
+  height: 430px;
+}
+
+.dashboard-sub-title{
+  font-size: 18px;
+  margin: 5px 0;
+  padding: 7px;
+  font-weight: 600;
+}
+
+.dashboard-notification-message{
+ font-size: 13px;
+ margin-top: 7px;
+ color: #929292;
+}
+
+.dashboard-dp-panel{
+  margin-top: 20px;
+  margin-left: 10px;
+}
+
+.dashboard-header-title{
+  color: #969696;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
