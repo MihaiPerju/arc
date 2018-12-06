@@ -53,16 +53,18 @@ class StatisticsWorker {
         return new Promise((resolve, reject) => {
             Promise.all([
                 this.totalInventory(clientId),
-                this.newAccounts(clientId, startDate),
+                this.countPlacementDate(clientId, startDate),
                 this.accountsResolved(clientId, startDate),
-                this.countAgedPlacements(clientId, subDays(new Date(), 180))
+                this.countAgedPlacements(clientId, subDays(new Date(), 180)),
+                this.pushedToCall(clientId, startDate)
             ])
                 .then(resp => {
                     resolve({
                         totalInventory: resp[0],
                         newAccounts: resp[1],
                         accountsResolved: resp[2],
-                        over180: resp[3]  
+                        over180: resp[3],
+                        callActions: resp[4]
                     });
                 })
                 .catch(err => reject(err));
@@ -113,14 +115,13 @@ class StatisticsWorker {
      * @param {Date} endDate OPTIONAL: If supplied this is the end date in the query, if not defaults to now
      * @returns {Promise} MongoDB driver promise to
      */
-    newAccounts(clientId, startDate, endDate = new Date()) {
+    countPlacementDate(clientId, startDate, endDate = new Date()) {
         StatisticsWorker.verifyClientId(clientId);
         StatisticsWorker.verifyDate([startDate, endDate]);
 
-        return this.db.collection('account_actions').find({
-            type: 'new',
+        return this.db.collection('accounts').find({
             clientId,
-            createdAt: {
+            placementDate: {
                 $gte: startDate,
                 $lt: endDate
             }
@@ -149,7 +150,27 @@ class StatisticsWorker {
         }).count();
     };
 
-    //TODO: Call actions, but first need to add the substate into acct actions.
+    /**
+     * Queries for a count of accounts forwarded for a call in a specific date range
+     * @param {String} clientId The _id of the client in the DB
+     * @param {Date} startDate The date to start the query from
+     * @param {Date} endDate OPTIONAL: If supplied this is the end date in the query, if not defaults to now
+     * @returns {Promise} MongoDB driver promise to
+     */
+    pushedToCall(clientId, startDate, endDate = new Date()) {
+        StatisticsWorker.verifyClientId(clientId);
+        StatisticsWorker.verifyDate([startDate, endDate]);
+
+        return this.db.collection('account_actions').find({
+            type: 'userAction',
+            clientId,
+            createdAt: {
+                $gte: startDate,
+                $lt: endDate
+            },
+            newSubstate: 'Call'
+        }).count();
+    };
 
     /**
      * Queries for a accounts that have placement date matching or older than a specified date
@@ -173,6 +194,19 @@ class StatisticsWorker {
     };
 
     // TODO: Escalations need to be added to account actions before this done
+
+    // How many are new account actions, how many are in escalation state, how many have been replied too. Need to look at chema.
+    /**
+     * Queries for a escalation actions
+     * @param {String} clientId The _id of the client in the DB
+     * @param {Date} startDate The date to start the query from (Looks for this or older)
+     * @returns {Promise} Promise resolves to an object with total, completed, and pending escalations.
+     */
+    countEscalations(clientId, startDate) {
+        StatisticsWorker.verifyClientId(clientId);
+        StatisticsWorker.verifyDate(startDate);
+
+    };
 }
 
 
