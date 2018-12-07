@@ -156,7 +156,7 @@ Meteor.methods({
     );
   },
 
-  "facilities.get"(clientId) {
+  "facilities.fetch"(clientId) {
     Security.checkLoggedIn(this.userId);
     return Facilities.find({ clientId: clientId }).fetch();
   },

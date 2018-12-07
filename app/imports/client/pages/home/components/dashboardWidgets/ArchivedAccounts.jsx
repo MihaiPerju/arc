@@ -93,7 +93,8 @@ export default class ArchivedAccounts extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of archived accounts',
       title: 'Archived Accounts',
-      ySeries: 'Archived accounts per hour'
+      ySeries: 'Archived accounts per hour',
+      widgetType: ManagerWidgets.ARCHIVED_ACCOUNTS
     };
 
     if (!isLoadingArchivedAccountChart) {

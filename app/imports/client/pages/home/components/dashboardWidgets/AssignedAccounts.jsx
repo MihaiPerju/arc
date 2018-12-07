@@ -94,7 +94,8 @@ export default class AssignedAccounts extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of Accounts',
       title: 'Accounts',
-      ySeries: 'Accounts per hour'
+      ySeries: 'Accounts per hour',
+      widgetType: ManagerWidgets.ASSIGNED_ACCOUNTS
     };
 
     if (!isLoadingAssignedAccountChart) {

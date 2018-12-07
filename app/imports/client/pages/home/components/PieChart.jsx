@@ -1,25 +1,24 @@
 import React from "react";
 import Highcharts from "highcharts";
 import ReactHighcharts from "highcharts-react-official";
+import { ManagerWidgets } from "../enums/widgetType";
 
 export default class PieChart extends React.Component {
 
-
-  // preparePieChartData() {
-  //   let chartData = [];
-  //   const { data } = this.props;
-  //   chartData = data.map(d => {
-  //     return { name: d[0].toString(), y: d[1] };
-  //   });
-  //   return chartData;
-  // }
-
   preparePieChartData() {
     let chartData = [];
-    const { data } = this.props;
-    chartData = data.xAxisValues.map((e, i) => {
-      return { name: e, y: data.yAxisValues[i] };
-    });
+    const { data, chartOptions } = this.props;
+
+    if (chartOptions.widgetType == ManagerWidgets.PUSH_TO_CALL || chartOptions.widgetType == ManagerWidgets.AGED_ACCOUNTS || chartOptions.widgetType == ManagerWidgets.TURN_TIME) {
+      chartData = data.xAxisValues.map((e, i) => {
+        return { name: e, y: data.yAxisValues[i] };
+      });
+    }
+    else {
+      chartData = data.map(d => {
+        return { name: d[0].toString(), y: d[1] };
+      });
+    }
     return chartData;
   }
 

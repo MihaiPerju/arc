@@ -44,6 +44,7 @@ export default class WidgetSettings extends Component {
 
   onSubmit = data => {
     data.name = pages.WIDGET_SETTINGS;
+    console.log(data);
     Meteor.call("managerSettings.update", data, err => {
       if (!err) {
         this.getWidgetSettings();

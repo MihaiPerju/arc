@@ -92,7 +92,8 @@ export default class GeneratedReports extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of reports',
       title: 'Generated Reports',
-      ySeries: 'Reports Generated per hour'
+      ySeries: 'Reports Generated per hour',
+      widgetType: ManagerWidgets.REPORTS_GENERATED
     };
 
     if (!isLoadingGeneratedReportChart) {

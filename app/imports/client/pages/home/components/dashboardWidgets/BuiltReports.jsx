@@ -67,7 +67,8 @@ export default class ReportsBuilt extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of reports',
       title: 'Built Reports',
-      ySeries: 'Reports Built per hour'
+      ySeries: 'Reports Built per hour',
+      widgetType: ManagerWidgets.REPORTS_BUILT
     };
 
     if (!isLoadingReportsBuiltChart) {

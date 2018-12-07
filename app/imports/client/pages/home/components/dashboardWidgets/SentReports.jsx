@@ -92,7 +92,8 @@ export default class SentReports extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of reports',
       title: 'Sent Reports',
-      ySeries: 'Reports Sent per hour'
+      ySeries: 'Reports Sent per hour',
+      widgetType: ManagerWidgets.REPORTS_SENT
     };
 
     if (!isLoadingSentReportsChart) {

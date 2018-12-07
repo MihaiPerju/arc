@@ -7,12 +7,9 @@ import Settings from "../../settings/collection";
 import settings from "/imports/api/settings/enums/settings";
 import fs from "fs";
 import Business from "/imports/api/business";
-<<<<<<< HEAD
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import moment from "moment";
-=======
 import statuses from "../enums/statuses";
->>>>>>> 56385f3bc82ce3dddbae641e1d4ea9d0d8bb35d6
 
 Meteor.methods({
   "files.list"(params) {

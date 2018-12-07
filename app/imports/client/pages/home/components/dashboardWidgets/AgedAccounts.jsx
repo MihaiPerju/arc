@@ -100,7 +100,8 @@ export default class AgedAccounts extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of Aged Accounts',
       title: 'Accounts',
-      ySeries: 'Aged Accounts per hour'
+      ySeries: 'Aged Accounts per hour',
+      widgetType: ManagerWidgets.AGED_ACCOUNTS
     };
 
     if (!isLoadingAgedAccountChart) {

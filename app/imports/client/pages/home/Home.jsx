@@ -66,7 +66,7 @@ export default class Home extends React.Component {
   }
 
   getClients() {
-    Meteor.call("clients.get", (err, responseData) => {
+    Meteor.call("clients.fetch", (err, responseData) => {
       if (!err) {
         let clients = responseData.map(client => {
           return { label: client.clientName, value: client._id };
@@ -80,7 +80,7 @@ export default class Home extends React.Component {
   }
 
   getFacilities(clientId) {
-    Meteor.call("facilities.get", clientId, (err, responseData) => {
+    Meteor.call("facilities.fetch", clientId, (err, responseData) => {
       if (!err) {
         let facilities = [];
         facilities = responseData.map(facility => {

@@ -93,7 +93,8 @@ export default class EscalationResolved extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of Escalations',
       title: 'Escalations',
-      ySeries: 'Escalations resolved per hour'
+      ySeries: 'Escalations resolved per hour',
+      widgetType: ManagerWidgets.ESCALATION_RESOLVED
     };
 
     if (!isLoadingEscalationResolvedChart) {

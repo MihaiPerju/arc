@@ -92,7 +92,8 @@ export default class NotificationWidget extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of Notifications',
       title: 'Notifications',
-      ySeries: 'Notifications resolved per hour'
+      ySeries: 'Notifications resolved per hour',
+      widgetType: ManagerWidgets.NOTIFICATIONS
     };
 
     if (!isLoadingNotificationsChart) {

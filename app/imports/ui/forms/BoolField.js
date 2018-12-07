@@ -51,21 +51,22 @@ var Bool = function Bool(_ref) {
       id: id,
       name: name,
       onChange: function onChange() {
-        _onValueChange(!value);
+        if (_onValueChange)
+          _onValueChange(!value);
         return disabled || _onChange(!value);
       },
       ref: inputRef,
       type: "checkbox"
     }),
     label &&
-      _react.default.createElement(
-        "label",
-        {
-          htmlFor: id,
-          className: "chk-box-label"
-        },
-        label
-      )
+    _react.default.createElement(
+      "label",
+      {
+        htmlFor: id,
+        className: "chk-box-label"
+      },
+      label
+    )
   );
 };
 

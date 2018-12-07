@@ -130,6 +130,18 @@ export default class DashboardListItem extends React.Component {
             </div>
           </div>
         );
+      case ManagerWidgets.TURN_TIME:
+        return (
+          <div key={`push-to-call-${data._id}`} className="dashboard-list-item">
+            <div className="dashboard-list-item-left-content">
+              <div className="dashboard-list-item-title">{data.clientName}</div>
+            </div>
+            <div className="dashboard-list-item-right-content">
+              <div className="text--right">{data.turnTimeValue}</div>
+              <div className="dashboard-list-item-right-label">Turn Time</div>
+            </div>
+          </div>
+        );
       default:
         return null;
     }

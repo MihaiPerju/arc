@@ -77,35 +77,35 @@ class Header extends Component {
                   <Notifications />
                   {isRep
                     ? user.profile && (
-                        <div
-                          onClick={this.openDropdown}
-                          ref={this.nodeRef}
-                          className="toggle-dropdown"
-                          style={{ cursor: "pointer" }}
-                        >
-                          
-                            {user.profile.firstName +
-                              " " +
-                              user.profile.lastName}
-                          
-                          <div className="profile-img" />
-                        </div>
-                      )
+                      <div
+                        onClick={this.openDropdown}
+                        ref={this.nodeRef}
+                        className="toggle-dropdown"
+                        style={{ cursor: "pointer" }}
+                      >
+
+                        {user.profile.firstName +
+                          " " +
+                          user.profile.lastName}
+
+                        <div className="profile-img" />
+                      </div>
+                    )
                     : user.profile && (
-                        <a
-                          href=""
-                          className="toggle-dropdown"
-                          onClick={this.openDropdown}
-                          ref={this.nodeRef}
-                        >
-                          <span>
-                            {user.profile.firstName +
-                              " " +
-                              user.profile.lastName}
-                          </span>
-                          <div className="profile-img" />
-                        </a>
-                      )}
+                      <a
+                        href=""
+                        className="toggle-dropdown"
+                        onClick={this.openDropdown}
+                        ref={this.nodeRef}
+                      >
+                        <span>
+                          {user.profile.firstName +
+                            " " +
+                            user.profile.lastName}
+                        </span>
+                        <div className="profile-img" />
+                      </a>
+                    )}
                 </div>
                 {this.state.dropdown && <BtnGroup />}
               </div>
@@ -145,18 +145,26 @@ class BtnGroup extends Component {
   };
 
   render() {
+    let settingsLink = (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) ||
+      Roles.userIsInRole(Meteor.userId(), RolesEnum.REP) ||
+      Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) ? "/manager/settings" : "/admin/settings";
+      
     return (
       <div className="btn-group">
         <a href="/my-profile">
           <i className="icon-user" />
           <span>Profile</span>
         </a>
-        {Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN) && (
-          <a href="/admin/settings">
-            <i className="icon-cog" />
-            <span>Settings</span>
-          </a>
-        )}
+
+        {(Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN) ||
+          Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) ||
+          Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) ||
+          Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) && (
+            <a href={settingsLink}>
+              <i className="icon-cog" />
+              <span>Settings</span>
+            </a>
+          )}
 
         <a onClick={this.onLogOut}>
           <i className="icon-sign-out" />

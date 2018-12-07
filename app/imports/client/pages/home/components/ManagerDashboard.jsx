@@ -11,6 +11,7 @@ import pages from "../../../../api/settings/enums/settings";
 import Loading from "../../../lib/ui/Loading";
 import AgedAccounts from "./dashboardWidgets/AgedAccounts";
 import PushToCall from "./dashboardWidgets/PushToCall";
+import TurnTime from "./dashboardWidgets/TurnTime";
 
 export default class ManagerDashboard extends React.Component {
 
@@ -42,6 +43,7 @@ export default class ManagerDashboard extends React.Component {
     if (widgetSettings) {
       return (
         <div className="m-b--25">
+          <TurnTime filters={filters} />
           <PushToCall filters={filters} />
           <AgedAccounts filters={filters} />
           {widgetSettings.new_alert && <NotificationWidget filters={filters} />}

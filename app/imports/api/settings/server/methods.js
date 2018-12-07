@@ -47,6 +47,7 @@ Meteor.methods({
   },
 
   "managerSettings.update"(data) {
+    console.log(data);
     let userId = this.userId;
     Security.checkLoggedIn(userId);
     const { name } = data;

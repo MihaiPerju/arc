@@ -264,7 +264,7 @@ Meteor.methods({
     Security.isAdminOrTech(this.userId);
     let workQueue = [];
 
-    let tagDetails = Tags.find({ clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] }  }, { fields: { _id: 1, name: 1 } }).fetch();
+    let tagDetails = Tags.find({ clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] } }, { fields: { _id: 1, name: 1 } }).fetch();
     return tagDetails;
   },
 
@@ -280,6 +280,7 @@ Meteor.methods({
       if (c.statistics) {
         c.agedAccountsPercentage = Math.round((c.statistics.over180 / c.statistics.totalInventory) * 100);
         c.callActionsPercentage = Math.round((c.statistics.callActions / c.statistics.totalInventory) * 100);
+        c.turnTimeValue = Math.round((c.statistics.totalInventory / c.statistics.newAccounts));
       }
       return c;
     });
@@ -293,8 +294,9 @@ Meteor.methods({
       if (c.statistics) {
         c.agedAccountsPercentage = Math.round((c.statistics.over180 / c.statistics.totalInventory) * 100);
         c.callActionsPercentage = Math.round((c.statistics.callActions / c.statistics.totalInventory) * 100);
+        c.turnTimeValue = Math.round((c.statistics.totalInventory / c.statistics.newAccounts));
       }
-      return { name: c.clientName, agedAccountsPercentage: c.agedAccountsPercentage, callActionsPercentage: c.callActionsPercentage };
+      return { name: c.clientName, agedAccountsPercentage: c.agedAccountsPercentage, callActionsPercentage: c.callActionsPercentage, turnTimeValue: c.turnTimeValue };
     });
     return clients;
   }

@@ -93,7 +93,8 @@ export default class AssignedToMe extends React.Component {
       xAxisTitle: 'Hours',
       yAxisTitle: 'Number of Accounts',
       title: 'Accounts',
-      ySeries: 'Accounts per hour'
+      ySeries: 'Accounts per hour',
+      
     };
 
     if (!isLoadingAssignedAccountChart) {
