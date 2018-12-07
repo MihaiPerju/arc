@@ -35,6 +35,8 @@ export default class ParamsService {
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
     const admitDateMin = FlowRouter.getQueryParam("admitDateMin");
     const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
+    const placementDateMin = FlowRouter.getQueryParam("placementDateMin");
+    const placementDateMax = FlowRouter.getQueryParam("placementDateMax");
     const medNo = FlowRouter.getQueryParam("medNo");
     let tagIds = this.getTags();
 
@@ -75,7 +77,9 @@ export default class ParamsService {
         tagIds,
         medNo,
         state,
-        assign
+        assign,
+        placementDateMin,
+        placementDateMax
       },
       options: {
         page,
@@ -440,7 +444,9 @@ export default class ParamsService {
       admitDateMax,
       tickleUserId,
       tagIds,
-      medNo
+      medNo,
+      placementDateMin,
+      placementDateMax
     },
     {
       sortAcctBal,
@@ -665,6 +671,35 @@ export default class ParamsService {
         admitDate: {
           $lt: new Date(
             moment(new Date(admitDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
+    }
+
+    if (placementDateMin && placementDateMax) {
+      _.extend(params.filters, {
+        placementDate: {
+          $gte: new Date(moment(new Date(placementDateMin)).startOf("day")),
+          $lt: new Date(
+            moment(new Date(placementDateMax))
+              .startOf("day")
+              .add(1, "day")
+          )
+        }
+      });
+    } else if (placementDateMin) {
+      _.extend(params.filters, {
+        placementDate: {
+          $gte: new Date(moment(new Date(placementDateMin)).startOf("day"))
+        }
+      });
+    } else if (placementDateMax) {
+      _.extend(params.filters, {
+        placementDate: {
+          $lt: new Date(
+            moment(new Date(placementDateMax))
               .startOf("day")
               .add(1, "day")
           )

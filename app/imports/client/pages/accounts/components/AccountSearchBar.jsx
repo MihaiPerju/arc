@@ -33,7 +33,9 @@ export default class AccountSearchBar extends Component {
       admitDateMin: null,
       admitDateMax: null,
       tickleUserIdOptions: [],
-      model: {}
+      model: {},
+      placementDateMin: null,
+      placementDateMax: null
     };
   }
 
@@ -97,7 +99,9 @@ export default class AccountSearchBar extends Component {
       fbDateMin,
       fbDateMax,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
+      placementDateMin,
+      placementDateMax
     } = model;
     this.setState({
       model,
@@ -106,7 +110,9 @@ export default class AccountSearchBar extends Component {
       fbDateMin,
       fbDateMax,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
+      placementDateMin,
+      placementDateMax
     });
   }
 
@@ -129,7 +135,9 @@ export default class AccountSearchBar extends Component {
       fbDateMin,
       fbDateMax,
       admitDateMin,
-      admitDateMax
+      admitDateMax,
+      placementDateMin,
+      placementDateMax
     } = this.state;
     if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
@@ -198,6 +206,14 @@ export default class AccountSearchBar extends Component {
     FlowRouter.setQueryParams({
       admitDateMax: FilterService.formatDate(admitDateMax)
     });
+
+    FlowRouter.setQueryParams({
+      placementDateMin: FilterService.formatDate(placementDateMin)
+    });
+
+    FlowRouter.setQueryParams({
+      placementDateMax: FilterService.formatDate(placementDateMax)
+    });
   }
 
   openDropdown = () => {
@@ -254,6 +270,16 @@ export default class AccountSearchBar extends Component {
         );
       }
       this.setState({ admitDateMax: selectedDate });
+    } else if (field === "placementDateMin") {
+      this.setState({ placementDateMin: selectedDate });
+    } else if (field === "placementDateMax") {
+      const { placementDateMin } = this.state;
+      if (selectedDate && selectedDate < placementDateMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      }
+      this.setState({ placementDateMax: selectedDate });
     }
   };
 
@@ -344,7 +370,9 @@ export default class AccountSearchBar extends Component {
       fbDateMax: null,
       admitDateMin: null,
       admitDateMax: null,
-      model: {}
+      model: {},
+      placementDateMin: null,
+      placementDateMax: null
     });
     this.closeDialog();
   };
@@ -365,7 +393,9 @@ export default class AccountSearchBar extends Component {
       admitDateMin,
       admitDateMax,
       tickleUserIdOptions,
-      model
+      model,
+      placementDateMin,
+      placementDateMax
     } = this.state;
     const {
       btnGroup,
@@ -641,6 +671,40 @@ export default class AccountSearchBar extends Component {
                               selected={admitDateMax}
                               onChange={date =>
                                 this.onDateSelect(date, "admitDateMax")
+                              }
+                              fixedHeight
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group flex--helper form-group__pseudo">
+                          <div>
+                            <label>From Placement Date:</label>
+                            <DatePicker
+                              calendarClassName="cc-datepicker"
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
+                              placeholderText="From Placement Date"
+                              selected={placementDateMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "placementDateMin")
+                              }
+                              fixedHeight
+                            />
+                          </div>
+                          <div>
+                            <label>To Placement Date:</label>
+                            <DatePicker
+                              calendarClassName="cc-datepicker"
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
+                              placeholderText="To Placement Date"
+                              selected={placementDateMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "placementDateMax")
                               }
                               fixedHeight
                             />
