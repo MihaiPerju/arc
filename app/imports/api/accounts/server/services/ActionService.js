@@ -2,7 +2,6 @@ import _ from "underscore";
 import Actions from "/imports/api/actions/collection";
 import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
-import GeneralEnums from "/imports/api/general/enums";
 import {
   StatesSubstates
 } from "/imports/api/accounts/enums/states.js";
@@ -210,63 +209,55 @@ export default class ActionService {
   }
 
   //Change account state if action has a state
-  static changeState(accountId, {
-    state,
-    substateId
-  }) {
-    const {
-      escalationId
-    } = Accounts.findOne({
-      _id: accountId
-    }) || null;
-    if (escalationId) {
-      // remove previous escalated comments
-      Escalations.remove({
-        _id: escalationId
-      });
-    }
+  static changeState(accountId, { state, substateId }) {
+    const account = Accounts.findOne({_id: accountId});
 
-    let prevState = Accounts.findOne({
-      _id: accountId
-    }).state || null;
-    let reactivationDate = (prevState && prevState === stateEnum.ARCHIVED) ? new Date() : null;
+    // ! This needs an error handle / notify for client
+    if(!account)
+      return;
 
-    // remove previous tickles history
-    Tickles.remove({
-      accountId
-    });
-
-    // when substateId is present
-    if (substateId && substateId !== GeneralEnums.NA) {
-      const substate = SubstatesCollection.findOne({
-        _id: substateId
-      });
-      const {
-        name
-      } = substate || {};
-      Accounts.update({
-        _id: accountId
-      }, {
-          $set: {
-            substate: name
-          }
-        });
-    }
-
-    Accounts.update({
-      _id: accountId
-    }, {
+    if (account.escalationId) {
+      // Mark escalation as resolved
+      Escalations.update({
+        _id: escalationId,
         $set: {
-          state,
-          reactivationDate
-        },
+          resolved: true
+        }
+      });
+    }
+
+    // This will be used to update the acct
+    const setObj = { state }
+
+    if(account.state === stateEnum.ARCHIVED) {
+      setObj.reactivationDate = new Date();
+    }
+
+    // when substateId is present ! Why when? This should or shouldn't be here...
+    if (substateId && substateId !== 'N/A') {
+      const substate = SubstatesCollection.findOne({_id: substateId});
+      setObj.state = substate.name || {}; // ! Why is this defaulting to obj?
+    }
+
+    // Perform the update
+    Accounts.update(
+      {
+        _id: accountId
+      },
+      {
+        $set: setObj,
         $unset: {
           tickleDate: null,
           employeeToRespond: null,
           tickleUserId: null,
-          tickleReason: null
+          tickleReason: null,
+          escalationId: null
         }
-      });
+      }
+    )
+
+    // remove previous tickles history
+    Tickles.remove({accountId});
   }
 
   static removeAssignee(_id) {

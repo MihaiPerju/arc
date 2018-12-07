@@ -56,7 +56,10 @@ class StatisticsWorker {
                 this.countPlacementDate(clientId, startDate),
                 this.accountsResolved(clientId, startDate),
                 this.countAgedPlacements(clientId, subDays(new Date(), 180)),
-                this.pushedToCall(clientId, startDate)
+                this.pushedToCall(clientId, startDate),
+                this.escalationsDue(clientId),
+                this.escalationsCreated(clientId, startDate),
+                this.escalationsResolved(clientId, startDate)
             ])
                 .then(resp => {
                     resolve({
@@ -64,7 +67,12 @@ class StatisticsWorker {
                         newAccounts: resp[1],
                         accountsResolved: resp[2],
                         over180: resp[3],
-                        callActions: resp[4]
+                        callActions: resp[4],
+                        escalations: {
+                            totalDue: resp[5],
+                            created: resp[6],
+                            resolved: resp[7]
+                        }
                     });
                 })
                 .catch(err => reject(err));
@@ -193,26 +201,61 @@ class StatisticsWorker {
         }).count();
     };
 
-    // TODO: Escalations need to be added to account actions before this done
-
-    // How many are new account actions, how many are in escalation state, how many have been replied too. Need to look at chema.
     /**
-     * Queries for a escalation actions
+     * Queries for a count of escalations due for a client
      * @param {String} clientId The _id of the client in the DB
-     * @param {Date} startDate The date to start the query from (Looks for this or older)
      * @returns {Promise} Promise resolves to an object with total, completed, and pending escalations.
      */
-    countEscalations(clientId, startDate) {
+    escalationsDue(clientId) {
         StatisticsWorker.verifyClientId(clientId);
-        StatisticsWorker.verifyDate(startDate);
 
+        return this.db.collection('escalations').find({
+            clientId,
+            resolved: false
+        }).count();
+    };
+
+    /**
+     * Queries for a count of escalations created in a date range
+     * @param {String} clientId The _id of the client in the DB
+     * @param {Date} startDate The date to start the query from (Looks for this or older)
+     * @param {Date} endDate OPTIONAL: If supplied this is the end date in the query, if not defaults to now
+     * @returns {Promise} Promise resolves to an object with total, completed, and pending escalations.
+     */
+    escalationsCreated(clientId, startDate, endDate = new Date()) {
+        StatisticsWorker.verifyClientId(clientId);
+        StatisticsWorker.verifyDate([startDate, endDate]);
+
+        return this.db.collection('escalations').find({
+            clientId,
+            createdAt: {
+                $gte: startDate,
+                $lt: endDate
+            }
+        }).count();
+    };
+
+    /**
+     * Queries for a count of escalations resolved in a date range
+     * @param {String} clientId The _id of the client in the DB
+     * @param {Date} startDate The date to start the query from (Looks for this or older)
+     * @param {Date} endDate OPTIONAL: If supplied this is the end date in the query, if not defaults to now
+     * @returns {Promise} Promise resolves to an object with total, completed, and pending escalations.
+     */
+    escalationsResolved(clientId, startDate, endDate = new Date()) {
+        StatisticsWorker.verifyClientId(clientId);
+        StatisticsWorker.verifyDate([startDate, endDate]);
+
+        return this.db.collection('escalations').find({
+            clientId,
+            resolved: true,
+            resolvedAt: {
+                $gte: startDate,
+                $lt: endDate
+            }
+        }).count();
     };
 }
-
-
-
-
-
 
 
 // ! Testing only
