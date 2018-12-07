@@ -273,9 +273,13 @@ Meteor.methods({
     return Clients.find().fetch();
   },
 
-  "clients.getStatistics"() {
+  "clients.getStatistics"(clientId = null) {
     Security.checkLoggedIn(this.userId);
     let filters = { 'managerIds': { $in: [this.userId] } };
+    if (clientId && clientId != '-1') {
+      filters["_id"] = clientId;
+    }
+
     var clients = Clients.find(filters).fetch().map(c => {
       if (c.statistics) {
         c.agedAccountsPercentage = Math.round((c.statistics.over180 / c.statistics.totalInventory) * 100);

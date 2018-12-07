@@ -1,26 +1,21 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
-import AssignedAccounts from "./dashboardWidgets/AssignedAccounts";
-import ArchivedAccounts from "./dashboardWidgets/ArchivedAccounts";
-import BuiltReports from "./dashboardWidgets/BuiltReports";
-import GeneratedReports from "./dashboardWidgets/GeneratedReports";
-import SentReports from "./dashboardWidgets/SentReports";
-import EscalationResolved from "./dashboardWidgets/EscalationResolved";
-import NotificationWidget from "./dashboardWidgets/NotificationWidget";
 import pages from "../../../../api/settings/enums/settings";
 import Loading from "../../../lib/ui/Loading";
-import AgedAccounts from "./dashboardWidgets/AgedAccounts";
-import PushToCall from "./dashboardWidgets/PushToCall";
 import TurnTime from "./dashboardWidgets/TurnTime";
+import ClientStatistics from "./dashboardWidgets/ClientStatistics";
 
 export default class ManagerDashboard extends React.Component {
 
-
-  state = { widgetSettings: null, isLoading: true };
+  state = {
+    widgetSettings: null,
+    isLoading: true
+  };
 
   componentWillMount() {
-    this.getManagerWidgetSettings()
+    this.getManagerWidgetSettings();
   }
+
 
   getManagerWidgetSettings() {
     this.setState({ isLoading: true });
@@ -39,23 +34,12 @@ export default class ManagerDashboard extends React.Component {
 
   renderWidgets() {
     const { filters } = this.props;
-    const { widgetSettings } = this.state;
-    if (widgetSettings) {
-      return (
-        <div className="m-b--25">
-          <TurnTime filters={filters} />
-          <PushToCall filters={filters} />
-          <AgedAccounts filters={filters} />
-          {widgetSettings.new_alert && <NotificationWidget filters={filters} />}
-          {widgetSettings.account_assigned && <AssignedAccounts filters={filters} />}
-          {widgetSettings.account_archived && <ArchivedAccounts filters={filters} />}
-          {widgetSettings.reports_built && <BuiltReports filters={filters} />}
-          {widgetSettings.report_generated && <GeneratedReports filters={filters} />}
-          {widgetSettings.report_sent && <SentReports filters={filters} />}
-          {widgetSettings.escalation_resolved && <EscalationResolved filters={filters} />}
-        </div>
-      );
-    }
+    return (
+      <div>
+        <ClientStatistics filters={filters} />
+        <TurnTime filters={filters} />
+      </div>
+    );
   }
 
   render() {

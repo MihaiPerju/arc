@@ -4,7 +4,6 @@ import Highcharts from "highcharts";
 import ReactHighcharts from "highcharts-react-official";
 import Notifier from "/imports/client/lib/Notifier";
 import SimpleSchema from "simpl-schema";
-import DatePicker from "react-datepicker";
 import moment from "moment";
 import { AutoForm, AutoField } from "/imports/ui/forms";
 import Loading from "/imports/client/lib/ui/Loading";
@@ -267,7 +266,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { clients, facilities, users, chartTypes, dateRangeFilters, startDate, endDate, showCustomDateRange } = this.state;
+    const { clients, facilities, users } = this.state;
 
     return (
       <div className="dashboard-content-container">
@@ -311,58 +310,6 @@ export default class Home extends React.Component {
                           options={users} />
                       </div>
                     </div> : null
-                }
-                <div className="select-form select-box-width m-l-10">
-                  <label className="dashboard-label">Chart Types</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="selectChartTypeId"
-                      options={chartTypes} />
-                  </div>
-                </div>
-              </div>
-              <div className="flex--helper form-group__pseudo--3 m-t--20">
-                <div className="select-form select-box-width">
-                  <label className="dashboard-label">Date Range Filters</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="selectedDateRange"
-                      options={dateRangeFilters}
-                    />
-                  </div>
-                </div>
-                {
-                  showCustomDateRange &&
-                  <div style={{ display: 'inherit' }}>
-                    <div className="dashboard-dp-panel">
-                      <DatePicker
-                        calendarClassName="cc-datepicker"
-                        showMonthDropdown
-                        showYearDropdown
-                        yearDropdownItemNumber={4}
-                        todayButton={"Today"}
-                        placeholderText="Start Date"
-                        selected={startDate}
-                        onChange={this.onStartDateChange}
-                        fixedHeight
-                      />
-                    </div>
-                    <div className="dashboard-dp-panel">
-                      <DatePicker
-                        calendarClassName="cc-datepicker"
-                        showMonthDropdown
-                        showYearDropdown
-                        yearDropdownItemNumber={4}
-                        todayButton={"Today"}
-                        placeholderText="End Date"
-                        selected={endDate}
-                        onChange={this.onEndDateChange}
-                        fixedHeight
-                      />
-                    </div>
-                  </div>
                 }
               </div>
             </div>

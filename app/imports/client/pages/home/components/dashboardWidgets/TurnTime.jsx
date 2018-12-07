@@ -3,10 +3,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
-import CHART_TYPE from "../../enums/chartType";
-import PieChart from "../PieChart";
-import LineChart from "../LineChart";
 import FilterService from "../../services/FilterService";
+import BarChart from "../BarChart";
 
 export default class TurnTime extends React.Component {
 
@@ -67,6 +65,7 @@ export default class TurnTime extends React.Component {
     }, 1000);
   }
 
+
   renderTurnTimeValues() {
     const { isLoadingTurnTime, turnTimeValues } = this.state;
     if (!isLoadingTurnTime) {
@@ -93,30 +92,19 @@ export default class TurnTime extends React.Component {
   }
 
   renderTurnTimeValuesChart() {
-    const { filters } = this.props;
     const { isLoadingTurnTimeChart, turnTimeValuesChartData } = this.state;
-
     let chartOptions = {
       xAxisTitle: 'Clients',
-      yAxisTitle: 'Number of Turn Time',
+      yAxisTitle: 'Turn Time Percentage',
       title: 'Turn Time',
       ySeries: 'Turn Time',
       widgetType: ManagerWidgets.TURN_TIME
     };
 
     if (!isLoadingTurnTimeChart) {
-      if (filters.selectedChartType.type === CHART_TYPE.Pie) {
-        return (
-          <PieChart data={turnTimeValuesChartData} chartOptions={chartOptions} />
-        );
-      }
-      else if (filters.selectedChartType.type === CHART_TYPE.Line) {
-        return (
-          <LineChart data={turnTimeValuesChartData} chartOptions={chartOptions} />
-        );
-      }
-      else
-        return null;
+      return (
+        <BarChart data={turnTimeValuesChartData} chartOptions={chartOptions} />
+      );
     } else {
       return (
         <div className="dashboard-content-center">
@@ -129,26 +117,43 @@ export default class TurnTime extends React.Component {
   render() {
     return (
       <div>
-        <div className="dashboard-row">
-          <div className="dashboard-sub-title">TurnTime</div>
-        </div>
-        <div className="dashboard-row content-height">
-          <div className="dashboard-section">
-            <div className="dashboard-section-content">
-              {
-                this.renderTurnTimeValues()
-              }
-            </div>
+        <div className="small-widget">
+          <div className="small-widget-header">
+            <div className="small-widget-title">TurnTime</div>
           </div>
-          <div className="dashboard-section">
-            <div className="dashboard-section-content m-l-5">
-              {
-                this.renderTurnTimeValuesChart()
-              }
-            </div>
+          <div className="small-widget-content">
+            {this.renderTurnTimeValues()}
+          </div>
+        </div>
+        <div className="chart-widget">
+          <div className="chart-widget-content">
+            {
+              this.renderTurnTimeValuesChart()
+            }
           </div>
         </div>
       </div>
+      // <div>
+      //   <div className="dashboard-row">
+      //     <div className="dashboard-sub-title">TurnTime</div>
+      //   </div>
+      //   <div className="dashboard-row content-height">
+      //     <div className="dashboard-section">
+      //       <div className="dashboard-section-content">
+      //         {
+      //           this.renderTurnTimeValues()
+      //         }
+      //       </div>
+      //     </div>
+      //     <div className="dashboard-section">
+      //       <div className="dashboard-section-content m-l-5">
+      //         {
+      //           this.renderTurnTimeValuesChart()
+      //         }
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
     );
   }
 }
