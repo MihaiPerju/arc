@@ -5,14 +5,49 @@ import ImportingRules from '../ImportingRules';
 import {getToken} from "/imports/api/uploads/utils";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import fileTypes from "/imports/api/files/enums/fileTypes";
+import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 
 export default class InventoryBlock extends Component {
 
     constructor() {
         super();
         this.state = {
-          placementDate: new Date()
+          placementDate: new Date(),
+          lastUploadStatus : ''
         };
+        this.getStatus = null;
+      }
+
+      componentDidMount() {
+        this.getStatus = setInterval(() => {
+          this.getJobQueueStatus();
+        }, 3000);
+      }
+
+      getJobQueueStatus = () => {
+        const { facility } = this.props;
+        const filters = {
+          fileType: fileTypes.INVENTORY,
+          facilityId: facility._id
+        }
+        Meteor.call("jobQueue.getLastJob", filters, (err, res) => {
+          if (!err) {
+            if(res && res.status == jobStatuses.FINISHED){
+              this.setState({lastUploadStatus: 'Completed'});
+            } else if(res && res.status != jobStatuses.FINISHED) {
+              this.setState({lastUploadStatus: 'In progress'});
+            }else{
+              this.setState({lastUploadStatus: ''});
+            } 
+          } else {
+            Notifier.error(err.reason);
+          }
+        });
+      }
+    
+      componentWillUnmount = () => {
+        clearInterval(this.getStatus);
       }
 
       onDateSelect = selectedDate => {
@@ -23,6 +58,20 @@ export default class InventoryBlock extends Component {
         const {copyPlacementRules} = this.props;
         copyPlacementRules();
     };
+
+    getLastUpdate = () => {
+        const { lastUploadStatus } = this.state;
+        if(lastUploadStatus == '') { return null; }
+        let statusColor = { "backgroundColor": "orange" };
+        if(lastUploadStatus == 'Completed' ) {
+          statusColor = { "backgroundColor": "green" };
+        }
+        return (
+          <div className="float-right">
+          <label>Last upload status : </label>
+          <div className="label label--grey text-uppercase" style={statusColor}> {lastUploadStatus}</div>
+          </div>);
+      }
 
     render() {
         const {facility, resetImportForm, changeResetStatus} = this.props;
@@ -45,7 +94,7 @@ export default class InventoryBlock extends Component {
         return (
             <div className="action-block drop-file">
                 <div className="header__block">
-                    <div className="title-block text-uppercase">Inventory File</div>
+                    <div className="title-block text-uppercase">Inventory File {this.getLastUpdate()} </div>
                 </div>
 
                 <div className="upload-section">

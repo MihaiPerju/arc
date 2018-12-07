@@ -5,18 +5,68 @@ import ImportingRules from "../ImportingRules";
 import { getToken } from "/imports/api/uploads/utils";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import fileTypes from "/imports/api/files/enums/fileTypes";
+import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
 
 export default class PlacementBlock extends Component {
   constructor() {
     super();
     this.state = {
-      placementDate: new Date()
+      placementDate: new Date(),
+      lastUploadStatus : ''
     };
+    this.getStatus = null;
+  }
+
+  componentDidMount() {
+    this.getStatus = setInterval(() => {
+      this.getJobQueueStatus();
+    }, 3000);
+  }
+
+  getJobQueueStatus = () => {
+    const { facility } = this.props;
+    const filters = {
+      fileType: fileTypes.PLACEMENT,
+      facilityId: facility._id
+    }
+    Meteor.call("jobQueue.getLastJob", filters, (err, res) => {
+      if (!err) {
+        if(res && res.status == jobStatuses.FINISHED){
+          this.setState({lastUploadStatus: 'Completed'});
+        } else if(res && res.status != jobStatuses.FINISHED) {
+          this.setState({lastUploadStatus: 'In progress'});
+        }else{
+          this.setState({lastUploadStatus: ''});
+        } 
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  }
+
+  componentWillUnmount = () => {
+    clearInterval(this.getStatus);
   }
 
   onDateSelect = selectedDate => {
     this.setState({ placementDate: selectedDate });
   };
+
+
+  getLastUpdate = () => {
+    const { lastUploadStatus } = this.state;
+    if(!lastUploadStatus) { return null; }
+    let statusColor = { "backgroundColor": "orange" };
+    if(lastUploadStatus == 'Completed' ) {
+      statusColor = { "backgroundColor": "green" };
+    }
+    return (
+      <div className="float-right">
+      <label>Last upload status : </label>
+      <div className="label label--grey text-uppercase" style={statusColor}> {lastUploadStatus}</div>
+      </div>);
+  }
 
   render() {
     const { facility, setTempRules } = this.props;
@@ -35,11 +85,10 @@ export default class PlacementBlock extends Component {
       },
       acceptedFiles: ".csv,.txt,.xls"
     };
-
     return (
       <div className="action-block drop-file">
         <div className="header__block">
-          <div className="title-block text-uppercase">Placement file</div>
+          <div className="title-block text-uppercase">Placement file {this.getLastUpdate()} </div>
         </div>
         <div className="upload-section">
           <div className="radio-group flex--helper flex-align--center">
@@ -53,7 +102,7 @@ export default class PlacementBlock extends Component {
               selected={moment(placementDate)}
               name="placementDate"
               onChange={date => this.onDateSelect(date, "placementDate")}
-            />
+            />            
           </div>
         </div>
         <div className="main__block">
