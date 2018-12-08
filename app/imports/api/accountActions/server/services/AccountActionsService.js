@@ -9,7 +9,7 @@ export default class AccountActionsService {
     );
     let actions = await AccountActionsRaw.aggregateSync([
       {
-        $match: params.filters
+        $match: params
       },
       {
         $lookup: {
