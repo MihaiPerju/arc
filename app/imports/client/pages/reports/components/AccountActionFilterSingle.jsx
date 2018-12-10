@@ -14,12 +14,14 @@ export default class FiltersSingle extends React.Component {
   };
 
   getOptions(name) {
-    const { actionOptions, userOptions } = this.props;
+    const { actionOptions, clientIdOptions, userOptions } = this.props;
     switch (name) {
       case "actionId":
         return actionOptions;
       case "userId":
         return userOptions;
+      case "clientId":
+        return clientIdOptions;
       default:
         return [];
     }

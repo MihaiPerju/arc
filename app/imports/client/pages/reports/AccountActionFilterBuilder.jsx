@@ -17,7 +17,8 @@ export default class AccountFilterBuilder extends React.Component {
       schema: {},
       actionOptions: [],
       userOptions: [],
-      filteredActions: []
+      filteredActions: [],
+      clientOptions: [],
     };
   }
 
@@ -51,7 +52,8 @@ export default class AccountFilterBuilder extends React.Component {
 
     //Getting actions and user options
     const actionOptions = [],
-      userOptions = [];
+      userOptions = [],
+      clientOptions = [];
 
     // Getting actions options
     Meteor.call("actions.get", (err, actions) => {
@@ -79,6 +81,18 @@ export default class AccountFilterBuilder extends React.Component {
           });
         });
         this.setState({ userOptions });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+
+    //Getting client options
+    Meteor.call("clients.getEssential", (err, clients) => {
+      if (!err) {
+        clients.map(client => {
+          clientOptions.push({ value: client._id, label: client.clientName });
+        });
+        this.setState({ clientOptions });
       } else {
         Notifier.error(err.reason);
       }
@@ -167,7 +181,8 @@ export default class AccountFilterBuilder extends React.Component {
       components,
       schema,
       actionOptions,
-      userOptions
+      userOptions,
+      clientOptions
     } = this.state;
     const { filterBuilderData } = this.props;
     const schemaOptions = this.clearSchemaOptions();
@@ -191,6 +206,7 @@ export default class AccountFilterBuilder extends React.Component {
                   <AccountActionFilterSingle
                     deleteFilter={this.deleteFilter}
                     name={item.name}
+                    clientIdOptions={clientOptions}
                     actionOptions={actionOptions}
                     userOptions={userOptions}
                   />

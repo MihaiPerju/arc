@@ -1,7 +1,7 @@
 export default {
   enums: ["type"],
   dates: ["createdAt"],
-  links: ["userId", "actionId"],
+  links: ["userId", "actionId", "clientId"],
   strings: [
     "reasonCode"
   ],
