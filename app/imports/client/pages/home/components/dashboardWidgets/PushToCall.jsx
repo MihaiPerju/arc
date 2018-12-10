@@ -3,10 +3,8 @@ import Notifier from "/imports/client/lib/Notifier";
 import DashboardListItem from "../DashboardListItem";
 import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
-import CHART_TYPE from "../../enums/chartType";
-import PieChart from "../PieChart";
-import LineChart from "../LineChart";
 import FilterService from "../../services/FilterService";
+import BarChart from "../BarChart";
 
 export default class PushToCall extends React.Component {
 
@@ -93,30 +91,20 @@ export default class PushToCall extends React.Component {
   }
 
   renderPushToCallAccountsChart() {
-    const { filters } = this.props;
     const { isLoadingPushToCallChart, numberOfAccountsChartData } = this.state;
 
     let chartOptions = {
       xAxisTitle: 'Clients',
-      yAxisTitle: 'Number of Push To Call Accounts',
-      title: 'Push To Call Ratio',
-      ySeries: 'Push To Call Accounts',
+      yAxisTitle: 'Push To Call Percentage',
+      title: 'Push To Call',
+      ySeries: 'Push To Call Ratio',
       widgetType: ManagerWidgets.PUSH_TO_CALL
     };
 
     if (!isLoadingPushToCallChart) {
-      if (filters.selectedChartType.type === CHART_TYPE.Pie) {
-        return (
-          <PieChart data={numberOfAccountsChartData} chartOptions={chartOptions} />
-        );
-      }
-      else if (filters.selectedChartType.type === CHART_TYPE.Line) {
-        return (
-          <LineChart data={numberOfAccountsChartData} chartOptions={chartOptions} />
-        );
-      }
-      else
-        return null;
+      return (
+        <BarChart data={numberOfAccountsChartData} chartOptions={chartOptions} />
+      );
     } else {
       return (
         <div className="dashboard-content-center">
@@ -128,24 +116,19 @@ export default class PushToCall extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="dashboard-row">
-          <div className="dashboard-sub-title">Push To Call</div>
+      <div> <div className="small-widget">
+        <div className="small-widget-header">
+          <div className="small-widget-title">Push To Call</div>
         </div>
-        <div className="dashboard-row content-height">
-          <div className="dashboard-section">
-            <div className="dashboard-section-content">
-              {
-                this.renderPushToCallAccounts()
-              }
-            </div>
-          </div>
-          <div className="dashboard-section">
-            <div className="dashboard-section-content m-l-5">
-              {
-                this.renderPushToCallAccountsChart()
-              }
-            </div>
+        <div className="small-widget-content">
+          {this.renderPushToCallAccounts()}
+        </div>
+      </div>
+        <div className="chart-widget">
+          <div className="chart-widget-content">
+            {
+              this.renderPushToCallAccountsChart()
+            }
           </div>
         </div>
       </div>

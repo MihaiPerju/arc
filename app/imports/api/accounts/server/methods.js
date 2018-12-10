@@ -425,7 +425,7 @@ Meteor.methods({
       if (account.assignee) {
         data.addedBy = `${account.assignee.profile.firstName} ${
           account.assignee.profile.lastName
-        }`;
+          }`;
       } else if (account.workQueueId) {
         data.addedBy = account.tag.name;
       }
@@ -628,18 +628,6 @@ Meteor.methods({
     },
     ]).toArray();
     return ActionService.graphStandardizeData(escalationsResolvedPerHour);
-  },
-
-  "accountactions.get"(clientId, userId) {
-    let filter = { type: actionTypesEnum.USER_ACTION };
-
-    if (clientId != '' && clientId != '-1')
-      filter['clientId'] = clientId;
-
-    if (userId != '' && userId != '-1')
-      filter['userId'] = userId;
-
-    return AccountActions.find(filter).fetch();
   },
 
   "accountsHold.get"(clientId, facilityId, assigneeId, dateRangeFilter) {

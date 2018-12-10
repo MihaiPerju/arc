@@ -100,7 +100,7 @@ export default class TurnTime extends React.Component {
       ySeries: 'Turn Time',
       widgetType: ManagerWidgets.TURN_TIME
     };
-
+   
     if (!isLoadingTurnTimeChart) {
       return (
         <BarChart data={turnTimeValuesChartData} chartOptions={chartOptions} />
@@ -133,27 +133,6 @@ export default class TurnTime extends React.Component {
           </div>
         </div>
       </div>
-      // <div>
-      //   <div className="dashboard-row">
-      //     <div className="dashboard-sub-title">TurnTime</div>
-      //   </div>
-      //   <div className="dashboard-row content-height">
-      //     <div className="dashboard-section">
-      //       <div className="dashboard-section-content">
-      //         {
-      //           this.renderTurnTimeValues()
-      //         }
-      //       </div>
-      //     </div>
-      //     <div className="dashboard-section">
-      //       <div className="dashboard-section-content m-l-5">
-      //         {
-      //           this.renderTurnTimeValuesChart()
-      //         }
-      //       </div>
-      //     </div>
-      //   </div>
-      // </div>
     );
   }
 }

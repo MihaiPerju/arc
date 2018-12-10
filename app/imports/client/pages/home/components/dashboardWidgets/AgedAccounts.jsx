@@ -7,6 +7,7 @@ import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
 import LineChart from "../LineChart";
 import FilterService from "../../services/FilterService";
+import BarChart from "../BarChart";
 
 export default class AgedAccounts extends React.Component {
 
@@ -93,30 +94,20 @@ export default class AgedAccounts extends React.Component {
   }
 
   renderAgedAccountsChart() {
-    const { filters } = this.props;
     const { isLoadingAgedAccountChart, agedAccountsChartData } = this.state;
 
     let chartOptions = {
-      xAxisTitle: 'Hours',
-      yAxisTitle: 'Number of Aged Accounts',
+      xAxisTitle: 'Clients',
+      yAxisTitle: 'Over 180 Percentage',
       title: 'Accounts',
-      ySeries: 'Aged Accounts per hour',
+      ySeries: 'Aged Accounts',
       widgetType: ManagerWidgets.AGED_ACCOUNTS
     };
 
     if (!isLoadingAgedAccountChart) {
-      if (filters.selectedChartType.type === CHART_TYPE.Pie) {
-        return (
-          <PieChart data={agedAccountsChartData} chartOptions={chartOptions} />
-        );
-      }
-      else if (filters.selectedChartType.type === CHART_TYPE.Line) {
-        return (
-          <LineChart data={agedAccountsChartData} chartOptions={chartOptions} />
-        );
-      }
-      else
-        return null;
+      return (
+        <BarChart data={agedAccountsChartData} chartOptions={chartOptions} />
+      );
     } else {
       return (
         <div className="dashboard-content-center">
@@ -129,19 +120,16 @@ export default class AgedAccounts extends React.Component {
   render() {
     return (
       <div>
-        <div className="dashboard-row">
-          <div className="dashboard-sub-title">Aged Accounts</div>
-        </div>
-        <div className="dashboard-row content-height">
-          <div className="dashboard-section">
-            <div className="dashboard-section-content">
-              {
-                this.renderAgedAccounts()
-              }
-            </div>
+        <div> <div className="small-widget">
+          <div className="small-widget-header">
+            <div className="small-widget-title">Aged Accounts</div>
           </div>
-          <div className="dashboard-section">
-            <div className="dashboard-section-content m-l-5">
+          <div className="small-widget-content">
+            {this.renderAgedAccounts()}
+          </div>
+        </div>
+          <div className="chart-widget">
+            <div className="chart-widget-content">
               {
                 this.renderAgedAccountsChart()
               }

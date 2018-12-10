@@ -11,7 +11,7 @@ const ManagerWidgets = {
   NOTIFICATIONS: 'Notifications',
   FAILEDUPLOADQUEUES: 'Failed Upload Queues',
   ASSIGNED_TO_ME: 'Assigned To Me',
-  COMPLETED: 'Completed'
+  COMPLETED: 'Completed',
 };
 
 export { ManagerWidgets };

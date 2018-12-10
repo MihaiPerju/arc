@@ -266,7 +266,7 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { clients, facilities, users } = this.state;
+    const { clients } = this.state;
 
     return (
       <div className="dashboard-content-container">
@@ -287,7 +287,7 @@ export default class Home extends React.Component {
                     />
                   </div>
                 </div>
-                {
+                {/* {
                   facilities.length > 0 ?
                     <div className="select-form select-box-width m-l-10">
                       <label className="dashboard-label">Facilities</label>
@@ -310,7 +310,7 @@ export default class Home extends React.Component {
                           options={users} />
                       </div>
                     </div> : null
-                }
+                } */}
               </div>
             </div>
           </AutoForm>

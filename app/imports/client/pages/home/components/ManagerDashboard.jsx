@@ -4,6 +4,8 @@ import pages from "../../../../api/settings/enums/settings";
 import Loading from "../../../lib/ui/Loading";
 import TurnTime from "./dashboardWidgets/TurnTime";
 import ClientStatistics from "./dashboardWidgets/ClientStatistics";
+import PushToCall from "./dashboardWidgets/PushToCall";
+import AgedAccounts from "./dashboardWidgets/AgedAccounts";
 
 export default class ManagerDashboard extends React.Component {
 
@@ -37,7 +39,15 @@ export default class ManagerDashboard extends React.Component {
     return (
       <div>
         <ClientStatistics filters={filters} />
-        <TurnTime filters={filters} />
+        <div className="dashboard-row">
+          <TurnTime filters={filters} />
+        </div>
+        <div className="dashboard-row">
+          <PushToCall filters={filters} />
+        </div>
+        <div className="dashboard-row">
+          <AgedAccounts filters={filters} />
+        </div>
       </div>
     );
   }

@@ -19,6 +19,17 @@ export default class ClientStatistics extends React.Component {
     this.getClientStatistics(filters);
   }
 
+  getStatusColor(value) {
+    let statusClassName = "";
+    if (value < 75)
+      statusClassName = "low-color";
+    else if (value > 75 && value < 90)
+      statusClassName = "average-color";
+    else if (value > 90)
+      statusClassName = "success-color";
+    return statusClassName;
+  }
+
   getClientStatistics(filters) {
     this.setState({ isLoadingClientStatistics: true });
     setTimeout(() => {
@@ -77,7 +88,7 @@ export default class ClientStatistics extends React.Component {
                 <span className="stats-icon"><span className="menu__icon"><i className="icon-user"></i></span></span>
                 Assigned Accounts
               </div>
-              <div className="stats-count">{stats.assignedAccounts}</div>
+              <div className={`stats-count ${this.getStatusColor(client.accountsAssignedPercentage)}`}>{client.accountsAssignedPercentage}%</div>
             </div>
             <span className="stats-left-border"></span>
           </div>

@@ -2,6 +2,7 @@ import React from "react";
 import DashboardListItem from "../DashboardListItem";
 import Loading from "../../../../lib/ui/Loading";
 import Notifier from "../../../../lib/Notifier";
+import { ManagerWidgets } from "../../enums/widgetType";
 
 
 export default class FailedUploadQueue extends React.Component {
@@ -43,7 +44,7 @@ export default class FailedUploadQueue extends React.Component {
         <div className={files.length > 0 ? '' : 'dashboard-content-center'}>
           {
             files.length > 0 ?
-              files.map(file => { return <DashboardListItem key={`file-${file._id}`} data={file} />; })
+              files.map(file => { return <DashboardListItem key={file._id} data={file} type={ManagerWidgets.FAILEDUPLOADQUEUES} />; })
               : <div className="dashboard-empty-content">
                 No files has been found.
             </div>

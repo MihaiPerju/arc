@@ -23,7 +23,7 @@ export default class BulkActionRequestQueue extends React.Component {
   getBulkActionRequestQueues(filters) {
     this.setState({ isLoadingBulkActionQueues: true });
     setTimeout(() => {
-      Meteor.call("accountactions.get", filters.selectedClientId, '', (err, responseData) => {
+      Meteor.call("bulkActionRequestQueue.get", filters.selectedClientId, '', (err, responseData) => {
         if (!err) {
           this.setState({ bulkActionQueues: responseData, isLoadingBulkActionQueues: false });
         } else {
