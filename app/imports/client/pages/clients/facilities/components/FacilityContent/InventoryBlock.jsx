@@ -26,10 +26,9 @@ export default class InventoryBlock extends Component {
       }
 
       getJobQueueStatus = () => {
-        const { facility } = this.props;
         const filters = {
           fileType: fileTypes.INVENTORY,
-          facilityId: facility._id
+          facilityId: this.props.facility._id
         }
         Meteor.call("jobQueue.getLastJob", filters, (err, res) => {
           if (!err) {
