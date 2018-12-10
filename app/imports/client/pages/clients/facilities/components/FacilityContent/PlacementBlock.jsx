@@ -25,10 +25,9 @@ export default class PlacementBlock extends Component {
   }
 
   getJobQueueStatus = () => {
-    const { facility } = this.props;
     const filters = {
       fileType: fileTypes.PLACEMENT,
-      facilityId: facility._id
+      facilityId: this.props.facility._id
     }
     Meteor.call("jobQueue.getLastJob", filters, (err, res) => {
       if (!err) {
