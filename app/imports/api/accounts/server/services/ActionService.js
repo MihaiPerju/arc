@@ -242,15 +242,11 @@ export default class ActionService {
       this.removeAssignee(accountId);
     }
 
-    // remove previous tickles history
-    Tickles.remove({
-      accountId
-    });
-
-    // when substateId is present ! Why when? This should or shouldn't be here...
+    // This is for IF the action changes the substate, this is a terrible way of handling this.
+    // We should just get the actionId from the user and resolve it all server side, so user can't send an invalid / malformed value.
     if (substateId && substateId !== 'N/A') {
       const substate = SubstatesCollection.findOne({_id: substateId});
-      setObj.state = substate.name || {}; // ! Why is this defaulting to obj?
+      setObj.substate = substate.name || {}; // ! Why is this defaulting to obj?
     }
 
     // Perform the update
