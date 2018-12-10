@@ -232,6 +232,13 @@ export default class ActionService {
 
     // This will be used to update the acct
     const setObj = { state }
+    const unsetObj = {
+      tickleDate: null,
+      employeeToRespond: null,
+      tickleUserId: null,
+      tickleReason: null,
+      escalationId: null
+    }
 
     if(account.state === stateEnum.ARCHIVED) {
       setObj.reactivationDate = new Date();
@@ -239,7 +246,8 @@ export default class ActionService {
     
     //Unassign the account - if the state is ARCHIVED or HOLD
     if(state === stateEnum.ARCHIVED || state === stateEnum.HOLD ) {
-      this.removeAssignee(accountId);
+      unsetObj.workQueueId = null;
+      unsetObj.assigneeId = null;
     }
 
     // This is for IF the action changes the substate, this is a terrible way of handling this.
@@ -256,13 +264,7 @@ export default class ActionService {
       },
       {
         $set: setObj,
-        $unset: {
-          tickleDate: null,
-          employeeToRespond: null,
-          tickleUserId: null,
-          tickleReason: null,
-          escalationId: null
-        }
+        $unset: unsetObj
       }
     )
 
