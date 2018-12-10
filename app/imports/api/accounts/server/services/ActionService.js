@@ -203,6 +203,10 @@ export default class ActionService {
           },
           $push: {
             actionIds: accountActionId
+          },
+          $unset: {             //Unassign the account - if the state is ARCHIVED
+            workQueueId: null,
+            assigneeId: null
           }
         });
     });
@@ -232,6 +236,16 @@ export default class ActionService {
     if(account.state === stateEnum.ARCHIVED) {
       setObj.reactivationDate = new Date();
     }
+    
+    //Unassign the account - if the state is ARCHIVED or HOLD
+    if(state === stateEnum.ARCHIVED || state === stateEnum.HOLD ) {
+      this.removeAssignee(accountId);
+    }
+
+    // remove previous tickles history
+    Tickles.remove({
+      accountId
+    });
 
     // when substateId is present ! Why when? This should or shouldn't be here...
     if (substateId && substateId !== 'N/A') {

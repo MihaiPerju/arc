@@ -446,7 +446,9 @@ export default class QueryBuilder {
         tagIds,
         medNo,
         state,
-        assign
+        assign,
+        placementDateMin,
+        placementDateMax
       } = params.filters;
       let {
         perPage,
@@ -718,6 +720,35 @@ export default class QueryBuilder {
           admitDate: {
             $lt: new Date(
               moment(new Date(admitDateMax))
+                .startOf("day")
+                .add(1, "day")
+            )
+          }
+        });
+      }
+
+      if (placementDateMin && placementDateMax) {
+        _.extend(queryParams.filters, {
+          placementDate: {
+            $gte: new Date(moment(new Date(placementDateMin)).startOf("day")),
+            $lt: new Date(
+              moment(new Date(placementDateMax))
+                .startOf("day")
+                .add(1, "day")
+            )
+          }
+        });
+      } else if (placementDateMin) {
+        _.extend(queryParams.filters, {
+          placementDate: {
+            $gte: new Date(moment(new Date(placementDateMin)).startOf("day"))
+          }
+        });
+      } else if (placementDateMax) {
+        _.extend(queryParams.filters, {
+          placementDate: {
+            $lt: new Date(
+              moment(new Date(placementDateMax))
                 .startOf("day")
                 .add(1, "day")
             )

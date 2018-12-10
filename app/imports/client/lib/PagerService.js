@@ -38,6 +38,8 @@ export default class PagerService {
     const activeInsCode = FlowRouter.getQueryParam("activeInsCode");
     const admitDateMin = FlowRouter.getQueryParam("admitDateMin");
     const admitDateMax = FlowRouter.getQueryParam("admitDateMax");
+    const placementDateMin = FlowRouter.getQueryParam("placementDateMin");
+    const placementDateMax = FlowRouter.getQueryParam("placementDateMax");
     const tagIds = FlowRouter.getQueryParam("tagIds");
     const medNo = FlowRouter.getQueryParam("medNo");
     // sorting query params
@@ -75,7 +77,9 @@ export default class PagerService {
         admitDateMin,
         admitDateMax,
         tagIds,
-        medNo
+        medNo,
+        placementDateMin,
+        placementDateMax
       },
       options: {
         sortAcctBal,
@@ -167,7 +171,9 @@ export default class PagerService {
       admitDateMax,
       tickleUserId,
       tagIds,
-      medNo
+      medNo,
+      placementDateMin,
+      placementDateMax
     }, {
       sortAcctBal,
       sortTickleDate,
@@ -391,6 +397,35 @@ export default class PagerService {
         admitDate: {
           $lt: new Date(
             moment(new Date(admitDateMax))
+            .startOf("day")
+            .add(1, "day")
+          )
+        }
+      });
+    }
+
+    if (placementDateMin && placementDateMax) {
+      _.extend(params.filters, {
+        placementDate: {
+          $gte: new Date(moment(new Date(placementDateMin)).startOf("day")),
+          $lt: new Date(
+            moment(new Date(placementDateMax))
+            .startOf("day")
+            .add(1, "day")
+          )
+        }
+      });
+    } else if (placementDateMin) {
+      _.extend(params.filters, {
+        placementDate: {
+          $gte: new Date(moment(new Date(placementDateMin)).startOf("day"))
+        }
+      });
+    } else if (placementDateMax) {
+      _.extend(params.filters, {
+        placementDate: {
+          $lt: new Date(
+            moment(new Date(placementDateMax))
             .startOf("day")
             .add(1, "day")
           )

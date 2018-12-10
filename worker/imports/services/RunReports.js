@@ -17,6 +17,8 @@ import ReactDOMServer from "react-dom/server";
 import { Container, Table } from "semantic-ui-react";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import { reportTypes } from "/imports/api/reports/enums/reportType";
+import AccountActions from "/imports/api/accountActions/collection";
 
 export default class RunReports {
   static run() {
@@ -129,7 +131,15 @@ export default class RunReports {
     const file = fs.createWriteStream(filePath);
 
     //Getting filters
-    const filters = this.getFilters(reportId);
+    let filters = this.getFilters(reportId);
+
+    //checking the report type
+    const { type } = Reports.findOne({ _id: reportId });
+    if(type === reportTypes.ACCOUNT_ACTIONS) {
+      const accountActions = AccountActions.find(filters).fetch();
+      const accountsId = accountActions.map(action => action.accountId);
+      filters = { _id: { $in : accountsId } }
+    }
 
     //Write file
     const AccountsNative = Accounts.rawCollection(filters);
