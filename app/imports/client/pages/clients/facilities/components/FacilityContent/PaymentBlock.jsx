@@ -23,10 +23,9 @@ export default class PaymentBlock extends Component {
   }
 
   getJobQueueStatus = () => {
-    const { facility } = this.props;
     const filters = {
       fileType: fileTypes.PAYMENT,
-      facilityId: facility._id
+      facilityId: this.props.facility._id
     }
     Meteor.call("jobQueue.getLastJob", filters, (err, res) => {
       if (!err) {
