@@ -136,7 +136,8 @@ export default class AccountsService {
         lockOwner: 1,
         lockOwnerId: 1,
         lockTimestamp: 1,
-        tickleDate: 1
+        tickleDate: 1,
+        facilityId:1
       }
     });
   }
