@@ -18,36 +18,22 @@ class ClientStatistics {
         this._dbStatusCheck = typeof dbStatusCheck === 'function' ? dbStatusCheck : () => false;
     }
 
-    /**
-     * Sets the clientId for the class
-     * @param {String} clientId The clientId in MongoDB
-     * @returns {Boolean} Indicates if updaing the clientId worked or not
-     */
     set clientId(clientId) {
         const isInvalid = ClientStatistics.verifyClientId(clientId)
         if(isInvalid) {
             this.isReady(false);
             this.offlineMessage('Invalid clientId');
             this.clientId(null);
-            return false;
+            return;
         }
         
         this._clientId = clientId;
-        return true;
     };
 
-    /**
-     * Get the current clientId
-     * @returns {String} Current clientId
-     */
     get clientId() {
         return this._clientId;
     };
 
-    /**
-     * Check if the worker is online / ready to process
-     * @returns {Boolean} Is worker ready
-     */
     get isReady() {
         if(!this.dbStatusCheck()) {
             this._isReady = false;
@@ -57,58 +43,32 @@ class ClientStatistics {
         return this._isReady;
     };
 
-    /**
-     * Set the worker to online / offline
-     * @param {Boolean} ready Sets the app to ready / online
-     * @param {String} message Sets the offline message, leave blank if turning online
-     */
     set isReady(ready) {
         this._isReady = ready;
         this.offlineMessage = ready ? '' : this.offlineMessage;
     };
 
-    /**
-     * Set the mongo client DB connection
-     * @param {MongoClient} mongoClient A MongoDB client w/ DB selected
-     */
     set db(mongoClient) {
         this._db = mongoClient;
         this.isReady(true);
     };
 
-    /**
-     * Get the MongoCLient DB connection
-     */
     get db() {
         return this._db;
     };
 
-    /**
-     * Set the function to check db status, if not a valid function it will always return false
-     * @param {Function} fn The function to check the status of the db
-     */
     set dbStatusCheck(fn) {
         this._dbStatusCheck = typeof fn === 'function' ? fn : () => false;
     };
 
-    /**
-     * Get the current offline message
-     */
     get dbStatusCheck() {
         return this._dbStatusCheck;
     };
 
-    /**
-     * Set the offline message
-     * @param {String} message Reason service is offline
-     */
     set offlineMessage(message) {
         this._offlineMessage = typeof message === 'string' ? message : 'An invalid offline message was passed.';
     };
 
-    /**
-     * Get the current offline message
-     */
     get offlineMessage() {
         return this._offlineMessage;
     };
