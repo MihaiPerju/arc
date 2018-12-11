@@ -1,6 +1,7 @@
 import middleware from "./extensions/busboy.middleware";
 import { Accounts } from "meteor/accounts-base";
 import fs from "fs";
+import * as Path from "path";
 import Uploader from "/imports/api/uploads/server/uploader";
 import UploadedFile from "/imports/api/uploads/server/UploadedFile";
 import Uploads from "../uploads/collection";
@@ -82,9 +83,6 @@ export function createRoute(path, handler) {
         return _.map(req.filenames, function(filePath) {
           const { resourceType, resourceId } = req.postData;
 
-          let fs = Npm.require("fs");
-          let os = Npm.require("os");
-
           const stats = fs.statSync(filePath);
           const fileSizeInBytes = stats.size;
 
@@ -92,8 +90,8 @@ export function createRoute(path, handler) {
             AccountsCollection.findOne({
               _id: accountId
             }) || [];
-            
-          let fileName = filePath.replace(os.tmpdir() + "/", "");
+
+          let fileName = Path.basename(filePath);
           
           if (attachmentIds) {
             const count = Uploads.find({
@@ -110,15 +108,6 @@ export function createRoute(path, handler) {
                 fileName.slice(fileName.indexOf("."));
             }
           }
-
-          const { root } = SettingsService.getSettings(settings.ROOT);
-
-          let movePath = root + fileName;
-          movePath = movePath.replace(/\s+/g, "-");
-        
-          //Move file to specified storage folder
-          fs.renameSync(filePath, movePath);
-          filePath = movePath.replace(root, "");
 
           const mimeType = Uploader.guessMimeType(fileName);
           const uploadFile = new UploadedFile(
