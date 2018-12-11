@@ -46,5 +46,21 @@ export default new SimpleSchema({
   },
   "tagIds.$": {
     type: String
+  },
+  statistics: {
+    type: Object,
+    defaultValue: {
+      totalInventory: 0,
+      newAccounts: 0,
+      accountsResolved: 0,
+      over180: 0,
+      callActions: 0,
+      escalations: {
+          totalDue: 0,
+          created: 0,
+          resolved: 0
+      }
+    },
+    optional: true
   }
 });
