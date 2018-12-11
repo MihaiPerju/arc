@@ -1,71 +1,77 @@
-import {Random} from 'meteor/random';
-import Busboy from 'busboy';
+import { Random } from "meteor/random";
+import Busboy from "busboy";
+import Settings from "/imports/api/settings/collection";
+import settings from "/imports/api/settings/enums/settings";
 
 let fs = Npm.require("fs"),
-    os = Npm.require("os"),
-    path = Npm.require("path");
+  os = Npm.require("os"),
+  path = Npm.require("path");
 
-export default function (req, res, next) {
-    let busboy = new Busboy({headers: req.headers});
-    req.filenames = [];
-    req.postData = {};
+export default function(req, res, next) {
+  let busboy = new Busboy({ headers: req.headers });
+  req.filenames = [];
+  req.postData = {};
 
-    let store = {
-        files: {}
-    };
+  let store = {
+    files: {}
+  };
 
-    busboy.on("file", fileHandler(req, store));
-    busboy.on("field", (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) => {
-        req.postData[fieldname] = val;
-    });
+  let setting = Settings.findOne({ name: settings.ROOT });
 
-    busboy.on("finish", onFinish(next, store));
+  busboy.on("file", fileHandler(req, store, setting.root));
+  busboy.on(
+    "field",
+    (fieldname, val, fieldnameTruncated, valTruncated, encoding, mimetype) => {
+      req.postData[fieldname] = val;
+    }
+  );
 
-    req.pipe(busboy);
+  busboy.on("finish", onFinish(next, store));
+
+  req.pipe(busboy);
 }
 
 const onFinish = (next, store) => {
-    return function () {
-        let finished = false;
-        while (!finished) {
-            finished = true;
+  return function() {
+    let finished = false;
+    while (!finished) {
+      finished = true;
 
-            _.each(store.files, (fstream, saveTo) => {
-                if (!fstream._writableState.ended) {
-                    finished = false;
-                }
-            });
-
-            if (finished) {
-                next();
-                break;
-            }
-
-            Meteor._sleepForMs(50);
+      _.each(store.files, (fstream, saveTo) => {
+        if (!fstream._writableState.ended) {
+          finished = false;
         }
+      });
+
+      if (finished) {
+        next();
+        break;
+      }
+
+      Meteor._sleepForMs(50);
     }
+  };
 };
 
-const fileHandler = (req, store) => {
+const fileHandler = (req, store, root) => {
+  //pause execution for reading small files on local
+  Meteor._sleepForMs(500);
 
-    //pause execution for reading small files on local
-    Meteor._sleepForMs(500);
+  return function(fieldname, file, filename, encoding, mimetype) {
+    // generating unique file name
+    const parts = filename.split(".");
+    const extension = parts[parts.length - 1];
 
-    return function (fieldname, file, filename, encoding, mimetype) {
-        // generating unique file name
-        const parts = filename.split('.');
-        const extension = parts[parts.length - 1];
+    filename =
+      parts.slice(0, parts.length - 1) + "." + Random.id() + "." + extension;
 
-        filename = parts.slice(0, parts.length - 1) + '.' + Random.id() + '.' + extension;
+    let movePath = root + filename;
+    let fstream = fs.createWriteStream(movePath);
 
-        // generating save path and saving
-        let saveTo = path.join(os.tmpdir(), filename);
-        let fstream = fs.createWriteStream(saveTo);
+    req.filenames.push(movePath);
 
-        req.filenames.push(saveTo);
+    store[movePath] = fstream;
 
-        store[saveTo] = fstream;
-
-        file.pipe(fstream);
-    }
+    file.pipe(fstream);
+  };
 };
