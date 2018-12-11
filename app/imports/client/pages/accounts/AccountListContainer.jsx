@@ -35,9 +35,10 @@ export default class AccountListContainer extends Pager {
       bulkAssign: false,
       facilitiesOption: false,
       sortOption: false,
-      assignActions: false
+      assignActions: false,
+      userOptions: []
     };
-    
+
     this.method = "accounts.count";
     this.handleBrowserClose = this.handleBrowserClose.bind(this);
     this.pollingMethod = null;
@@ -225,7 +226,6 @@ export default class AccountListContainer extends Pager {
   }
 
   selectAccount = newAccount => {
-
     // If acct didn't change jsut close the right side
     if (this.state.currentAccount === newAccount._id) {
       this.closeRightPanel();
@@ -237,7 +237,7 @@ export default class AccountListContainer extends Pager {
     FlowRouter.setQueryParams({ accountId: null });
 
     // If this new acct is locked display lock break dialog
-    if(newAccount.lockOwnerId && Meteor.userId() !== newAccount.lockOwnerId) {
+    if (newAccount.lockOwnerId && Meteor.userId() !== newAccount.lockOwnerId) {
       this.setState({
         isLockedDialogActive: true,
         lockOwnerName: newAccount.lockOwner,
@@ -250,7 +250,7 @@ export default class AccountListContainer extends Pager {
 
     // Open and lock the acct
     this.removeLock();
-    this.setState({currentAccount: newAccount._id,})
+    this.setState({ currentAccount: newAccount._id });
     this.addLock(newAccount._id);
 
     // Acct was opened, inc the views
@@ -316,12 +316,7 @@ export default class AccountListContainer extends Pager {
     } else {
       //if not bulk assign
       const accounts = this.getAccounts(this.state.accountsSelected);
-      const options = this.getUserOptions(accounts);
-      let userOptions = this.getFirstOption(accounts, options).concat(options);
-      this.setState({
-        assignUser: true,
-        userOptions
-      });
+      this.getUserOptions(accounts);
     }
   };
   closeAssignUser = () => {
@@ -366,32 +361,21 @@ export default class AccountListContainer extends Pager {
   }
 
   getUserOptions(accounts) {
-    let userOptions = [];
+    let facilityIds = [];
     for (let account of accounts) {
-      if (account.facility) {
-        for (let user of account.facility.users) {
-          let item = {
-            label:
-              user &&
-              user.profile &&
-              user.profile.firstName +
-                " " +
-                user.profile.lastName +
-                "(" +
-                user.roles[0] +
-                ")",
-            value: user && user._id
-          };
-          if (!userOptions.includes(item)) {
-            userOptions.push(item);
-          }
+      facilityIds.push(account.facilityId);
+    }
+    Meteor.call(
+      "users.getRepsByFacilities",
+      facilityIds,
+      (err, userOptions) => {
+        if (!err) {
+          this.setState({ userOptions, assignUser: true });
+        } else {
+          Notifier.error(err.reason);
         }
       }
-    }
-    const uniqueOptions = _.unique(userOptions, false, function(item) {
-      return item.value;
-    });
-    return uniqueOptions;
+    );
   }
 
   nextPage = inc => {
@@ -519,7 +503,8 @@ export default class AccountListContainer extends Pager {
       facilitiesOption,
       sortOption,
       currentRouteState,
-      assignActions
+      assignActions,
+      userOptions
     } = this.state;
     const options = this.getData(accounts);
     const icons = [
@@ -527,15 +512,10 @@ export default class AccountListContainer extends Pager {
       { icon: "users", method: this.assignToWorkQueue },
       { icon: "thumb-tack", method: this.assignAction }
     ];
-
     return (
       <div className="cc-container">
         <div
-          className={
-            currentAccount
-              ? "left__side"
-              : "left__side full__width"
-          }
+          className={currentAccount ? "left__side" : "left__side full__width"}
         >
           <AccountSearchBar
             setPagerInitial={this.setPagerInitial}
@@ -563,7 +543,7 @@ export default class AccountListContainer extends Pager {
               accountIds={accountsSelected}
               closeDialog={this.closeAssignUser}
               title={""}
-              options={this.state.userOptions}
+              options={userOptions}
               uncheckAccountList={this.uncheckAccountList}
               bulkAssign={bulkAssign}
               facilitiesOption={facilitiesOption}
@@ -618,7 +598,7 @@ export default class AccountListContainer extends Pager {
             buttonHidden={true}
           />
         </div>
-        {(currentAccount) && !showMetaData && (
+        {currentAccount && !showMetaData && (
           <RightSide
             openMetaData={this.openMetaDataSlider}
             currentAccount={currentAccount}

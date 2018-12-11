@@ -73,7 +73,7 @@ export default class RepDashboard extends React.Component {
     let { userId } = FlowRouter.current().params;
     userId = userId ? userId : Meteor.userId();
     const { limit, skip } = this.state;
-    
+
     this.getActions(userId, limit, skip);
   }
 
@@ -82,7 +82,6 @@ export default class RepDashboard extends React.Component {
     _.extend(params, {
       options: { limit, skip, sort: { createdAt: -1 } }
     });
-   
     Meteor.call("accountActions.get", params, (err, actions) => {
       if (!err) {
         let { accountActions } = this.state;
@@ -353,10 +352,12 @@ export default class RepDashboard extends React.Component {
       isScrollLoading
     } = this.state;
 
+    let userId = Meteor.userId();
+
     return (
       <div className="cc-container settings-container dashboard-container">
         <div className="graph-container">
-          <ActivityGraph />
+          <ActivityGraph userId={userId} />
         </div>
         <div className="timeline-container">
           <div className="d-header">
@@ -410,7 +411,7 @@ export default class RepDashboard extends React.Component {
             {isScrollLoading && <Loading />}
           </div>
         </div>
-       
+
       </div>
     );
   }
