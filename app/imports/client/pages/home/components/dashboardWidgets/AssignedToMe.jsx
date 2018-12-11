@@ -1,7 +1,7 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import DashboardListItem from "../DashboardListItem";
-import { REP } from "../../enums/widgetType";
+import { ManagerWidgets } from "../../enums/widgetType";
 import Loading from "../../../../lib/ui/Loading";
 import CHART_TYPE from "../../enums/chartType";
 import PieChart from "../PieChart";
@@ -67,7 +67,7 @@ export default class AssignedToMe extends React.Component {
           {
             assignedAccounts.length > 0 ?
               assignedAccounts.map(account => {
-                return <DashboardListItem key={account._id} data={account} type={REP.ASSIGNED_TO_ME} />;
+                return <DashboardListItem key={account._id} data={account} type={ManagerWidgets.ASSIGNED_TO_ME} />;
               })
               : <div className="dashboard-empty-content">
                 No assigned accounts has been found.
