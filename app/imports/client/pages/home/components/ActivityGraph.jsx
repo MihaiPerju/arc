@@ -22,7 +22,7 @@ export default class ActivityGraph extends React.Component {
   }
 
   getAccountActions = date => {
-    const { userId } = FlowRouter.current().params;
+    const { userId } = this.props;
     this.setState({ isLoading: true });
     Meteor.call("account.getActionPerHour", userId, date, (err, graphData) => {
       if (!err) {

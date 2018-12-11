@@ -2,14 +2,14 @@ import AccountActions from "../../collection";
 
 export default class AccountActionsService {
   static async getActions(params) {
+    let { limit, skip, sort } = params.options;
     let AccountActionsRaw = AccountActions.rawCollection();
-
     AccountActionsRaw.aggregateSync = Meteor.wrapAsync(
       AccountActionsRaw.aggregate
     );
     let actions = await AccountActionsRaw.aggregateSync([
       {
-        $match: params
+        $match: { ...params.filters }
       },
       {
         $lookup: {
@@ -68,7 +68,10 @@ export default class AccountActionsService {
           manager: { $arrayElemAt: ["$manager", 0] },
           account: { $arrayElemAt: ["$account", 0] }
         }
-      }
+      },
+      { "$sort": sort },
+      { "$limit": skip + limit },
+      { "$skip": skip },
     ]).toArray();
 
     return actions;
