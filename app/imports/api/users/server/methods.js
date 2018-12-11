@@ -82,6 +82,36 @@ Meteor.methods({
     }).fetch();
   },
 
+  "users.getRepsByFacilities"(facilityIds) {
+    let facilityProjection = { fields: { allowedUsers: 1 } };
+    let facilities = Facilities.find(
+      { _id: { $in: facilityIds } },
+      facilityProjection
+    ).fetch();
+    let userIds = [];
+    for (let facility of facilities) {
+      if (facility.allowedUsers) {
+        userIds = userIds.concat(facility.allowedUsers);
+      }
+    }
+    let userProjection = { fields: { profile: 1, roles: 1 } };
+    let users = Users.find({ _id: { $in: userIds } }, userProjection).fetch();
+    let userOptions = users.map(user => {
+      return {
+        label:
+          user &&
+          user.profile &&
+          user.profile.firstName +
+            " " +
+            user.profile.lastName +
+            "(" +
+            user.roles[0] +
+            ")",
+        value: user && user._id
+      };
+    });
+    return userOptions;
+  },
   "users.getRepsByFacility"(_id) {
     const account = Accounts.findOne({
       _id
