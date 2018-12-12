@@ -2,7 +2,6 @@ import _ from "underscore";
 import Actions from "/imports/api/actions/collection";
 import ReasonCodes from "/imports/api/reasonCodes/collection";
 import AccountActions from "/imports/api/accountActions/collection";
-import GeneralEnums from "/imports/api/general/enums";
 import {
   StatesSubstates
 } from "/imports/api/accounts/enums/states.js";
@@ -73,20 +72,19 @@ export default class ActionService {
       }).reason : {};
     }
 
-    const {
-      clientId
-    } = Accounts.findOne({
-      _id: accountId
-    });
+    const accountObj = Accounts.findOne({_id: accountId});
+
     const accountActionData = {
       userId,
       actionId: actionId.value ? actionId.value : actionId,
-      reasonCode: reason && reason,
+      reasonCode: reasonCode && reason,
       addedBy,
       type: actionTypesEnum.USER_ACTION,
       createdAt,
       accountId,
-      clientId
+      clientId: accountObj.clientId,
+      newState: action.state,
+      oldState: accountObj.state
     };
     const customFields = {};
     _.map(inputs, input => {
@@ -205,69 +203,73 @@ export default class ActionService {
           },
           $push: {
             actionIds: accountActionId
+          },
+          $unset: {             //Unassign the account - if the state is ARCHIVED
+            workQueueId: null,
+            assigneeId: null
           }
         });
     });
   }
 
   //Change account state if action has a state
-  static changeState(accountId, {
-    state,
-    substateId
-  }) {
-    const {
-      escalationId
-    } = Accounts.findOne({
-      _id: accountId
-    }) || null;
-    if (escalationId) {
-      // remove previous escalated comments
-      Escalations.remove({
-        _id: escalationId
-      });
-    }
+  static changeState(accountId, { state, substateId }) {
+    const account = Accounts.findOne({_id: accountId});
 
-    let prevState = Accounts.findOne({
-      _id: accountId
-    }).state || null;
-    let reactivationDate = (prevState && prevState === stateEnum.ARCHIVED) ? new Date() : null;
+    // ! This needs an error handle / notify for client
+    if(!account)
+      return;
 
-    // remove previous tickles history
-    Tickles.remove({
-      accountId
-    });
-
-    // when substateId is present
-    if (substateId && substateId !== GeneralEnums.NA) {
-      const substate = SubstatesCollection.findOne({
-        _id: substateId
-      });
-      const {
-        name
-      } = substate || {};
-      Accounts.update({
-        _id: accountId
-      }, {
-          $set: {
-            substate: name
-          }
-        });
-    }
-
-    Accounts.update({
-      _id: accountId
-    }, {
+    if (account.escalationId) {
+      // Mark escalation as resolved
+      Escalations.update({
+        _id: escalationId,
         $set: {
-          state,
-          reactivationDate
-        },
-        $unset: {
-          tickleDate: null,
-          employeeToRespond: null,
-          tickleUserId: null,
-          tickleReason: null
+          resolved: true
         }
       });
+    }
+
+    // This will be used to update the acct
+    const setObj = { state }
+    const unsetObj = {
+      tickleDate: null,
+      employeeToRespond: null,
+      tickleUserId: null,
+      tickleReason: null,
+      escalationId: null
+    }
+
+    if(account.state === stateEnum.ARCHIVED) {
+      setObj.reactivationDate = new Date();
+    }
+    
+    //Unassign the account - if the state is ARCHIVED or HOLD
+    if(state === stateEnum.ARCHIVED || state === stateEnum.HOLD ) {
+      unsetObj.workQueueId = null;
+      unsetObj.assigneeId = null;
+    }
+
+    // This is for IF the action changes the substate, this is a terrible way of handling this.
+    // We should just get the actionId from the user and resolve it all server side, so user can't send an invalid / malformed value.
+    if (substateId && substateId !== 'N/A') {
+      const substate = SubstatesCollection.findOne({_id: substateId});
+      setObj.substate = substate.name || {}; // ! Why is this defaulting to obj?
+    }
+
+    // Perform the update
+    Accounts.update(
+      {
+        _id: accountId
+      },
+      {
+        $set: setObj,
+        $unset: unsetObj
+      }
+    )
+
+    // remove previous tickles history
+    Tickles.remove({accountId});
   }
 
   static removeAssignee(_id) {

@@ -109,7 +109,7 @@ export default class ReportHeader extends Component {
     if (report.type === reportTypes.ACCOUNT_ACTIONS) {
       Meteor.call(
         "accountActions.get",
-        { filters, options },
+         filters, options,
         (err, accountActions) => {
           if (!err) {
             this.setState({

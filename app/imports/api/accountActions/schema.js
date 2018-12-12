@@ -108,5 +108,13 @@ export default new SimpleSchema({
   fieldUpdatedValue: {
     type: String,
     optional: true
+  },
+  newState: {
+    type: String,
+    optional: true
+  },
+  oldState: {
+    type: String,
+    optional: true
   }
 });

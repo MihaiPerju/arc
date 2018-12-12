@@ -32,7 +32,7 @@ export default class ActionBlock extends Component {
     let selectedFlag = {};
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       selectedFlag =
-        flags.filter(flag => flag.flagAction.actionId === id)[0].flagAction ||
+        flags.filter(flag => flag.flagActionId === id)[0].flag ||
         {};
     }
     this.setState({
@@ -74,30 +74,34 @@ export default class ActionBlock extends Component {
 
   isFlagChecked = actionId => {
     const { flags } = this.props.account;
-    const index = flags.findIndex(flag => {
-      const { flagAction } = flag;
-      return (
-        flagAction && flagAction.actionId === actionId && flagAction.isOpen
-      );
-    });
+    const index = flags && flags.flagActionId === actionId && flags.isOpen
+    /*   const index = flags.findIndex(flag => {
+        const { flagAction } = flag;
+        return (
+          flagAction && flagAction.actionId === actionId && flagAction.isOpen
+        );
+      }); */
     return index > -1 ? true : false;
   };
 
   isDisabledForReps = actionId => {
     const { flags } = this.props.account;
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
-      const index = flags.findIndex(flag => {
+      const index = flags.flagActionId === actionId && flags.isOpen;
+      /* const index = flags.findIndex(flag => {
         const { flagAction } = flag;
         return flagAction.actionId === actionId && flagAction.isOpen;
-      });
+      }); */
+
       return index > -1 ? true : false;
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      const index = flags.findIndex(flag => {
+      const index = flags && flags.flagActionId === actionId && flags.isOpen;
+      /* const index = flags.findIndex(flag => {
         const { flagAction } = flag;
         return (
           flagAction && flagAction.actionId === actionId && flagAction.isOpen
         );
-      });
+      }); */
       return index === -1 ? true : false;
     }
   };
@@ -130,12 +134,13 @@ export default class ActionBlock extends Component {
   showFlags = actionId => {
     const { flags } = this.props.account;
     if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
-      const index = flags.findIndex(flag => {
+      const index = flags && flags.flagActionId === actionId && !flags.isOpen
+      /* const index = flags.findIndex(flag => {
         const { flagAction } = flag;
         return (
           flagAction && flagAction.actionId === actionId && !flagAction.isOpen
         );
-      });
+      }); */
       return index === -1 ? true : false;
     }
     return false;
@@ -194,7 +199,7 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed.map((actionPerformed, key) => {
+              actionsPerformed.sort(function(a, b){return b.createdAt - a.createdAt}).map((actionPerformed, key) => {
                 const isRep = actionPerformed.userId
                   ? Roles.userIsInRole(actionPerformed.userId, RolesEnum.REP)
                   : false;
@@ -210,12 +215,12 @@ export default class ActionBlock extends Component {
                             )) ||
                             (isRep && userId === actionPerformed.userId)
                             ? actionPerformed.userId && (
-                                <a
+                              <a
                                 href={`/${actionPerformed.userId}/activity`}
-                                >
+                              >
                                 {this.getUserInfo(actionPerformed.userId)}
-                                </a>
-                              )
+                              </a>
+                            )
                             : actionPerformed.userId &&
                             this.getUserInfo(actionPerformed.userId)}
                         </div>

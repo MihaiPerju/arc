@@ -7,43 +7,6 @@ import Users from "/imports/api/users/collection";
 import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class QueryBuilder {
-  static getProperAccounts(params, assign) {
-    if (assign === "none") {
-      _.extend(params.filters, {
-        assigneeId: {
-          $exists: true
-        },
-        workQueueId: {
-          $exists: true
-        }
-      });
-    } else if (assign) {
-      const filterArr = assign.split(",");
-      if (_.contains(filterArr, "assigneeId")) {
-        _.extend(params.filters, {
-          $or: [
-            {
-              workQueueId: {
-                $in: filterArr
-              }
-            },
-            {
-              assigneeId: {
-                $exists: true
-              }
-            }
-          ]
-        });
-      } else {
-        _.extend(params.filters, {
-          workQueueId: {
-            $in: filterArr
-          }
-        });
-      }
-    }
-  }
-
   static getClientParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
@@ -363,7 +326,7 @@ export default class QueryBuilder {
   static resolveSort(direction, sortKeyName) {
     return {
       [sortKeyName]: direction === "ASC" ? 1 : -1
-    }
+    };
   }
 
   static getSubstatesParams(params) {
@@ -482,7 +445,10 @@ export default class QueryBuilder {
         tickleUserId,
         tagIds,
         medNo,
-        state
+        state,
+        assign,
+        placementDateMin,
+        placementDateMax
       } = params.filters;
       let {
         perPage,
@@ -495,8 +461,59 @@ export default class QueryBuilder {
         sortAdmitDate
       } = params.options;
 
+
+
       this.getPagerOptions(queryParams, page, perPage);
-      this.secureAccounts(queryParams, params, userId);
+      this.secureAccounts(queryParams, userId);
+
+      //if searching with Account Number, don't include the rest of the filters
+      if (acctNum) {
+        _.extend(queryParams.filters, {
+          acctNum: {
+            $regex: acctNum,
+            $options: "i"
+          }
+        });
+        return queryParams;
+      }
+      
+      this.limitRepAccountAccess(queryParams, userId);
+
+
+      if (assign === "none") {
+        _.extend(queryParams.filters, {
+          assigneeId: {
+            $exists: true
+          },
+          workQueueId: {
+            $exists: true
+          }
+        });
+      } else if (assign) {
+        const filterArr = assign.split(",");
+        if (_.contains(filterArr, "assigneeId")) {
+          _.extend(queryParams.filters, {
+            $or: [
+              {
+                workQueueId: {
+                  $in: filterArr
+                }
+              },
+              {
+                assigneeId: {
+                  $exists: true
+                }
+              }
+            ]
+          });
+        } else {
+          _.extend(queryParams.filters, {
+            workQueueId: {
+              $in: filterArr
+            }
+          });
+        }
+      }
 
       if (state === "unassigned") {
         _.extend(queryParams.filters, {
@@ -539,7 +556,7 @@ export default class QueryBuilder {
         _.extend(queryParams.filters, {
           tickleDate: null,
           employeeToRespond
-        });
+        }); params
       } else if (state === "flagged") {
         _.extend(queryParams.filters, {
           flagCounter: {
@@ -558,16 +575,6 @@ export default class QueryBuilder {
         _.extend(queryParams.filters, {
           state: {
             $exists: true
-          }
-        });
-      }
-
-      //adding filter query options
-      if (acctNum) {
-        _.extend(queryParams.filters, {
-          acctNum: {
-            $regex: acctNum,
-            $options: "i"
           }
         });
       }
@@ -720,6 +727,35 @@ export default class QueryBuilder {
         });
       }
 
+      if (placementDateMin && placementDateMax) {
+        _.extend(queryParams.filters, {
+          placementDate: {
+            $gte: new Date(moment(new Date(placementDateMin)).startOf("day")),
+            $lt: new Date(
+              moment(new Date(placementDateMax))
+                .startOf("day")
+                .add(1, "day")
+            )
+          }
+        });
+      } else if (placementDateMin) {
+        _.extend(queryParams.filters, {
+          placementDate: {
+            $gte: new Date(moment(new Date(placementDateMin)).startOf("day"))
+          }
+        });
+      } else if (placementDateMax) {
+        _.extend(queryParams.filters, {
+          placementDate: {
+            $lt: new Date(
+              moment(new Date(placementDateMax))
+                .startOf("day")
+                .add(1, "day")
+            )
+          }
+        });
+      }
+
       if (tagIds) {
         _.extend(queryParams.filters, {
           tagIds: {
@@ -736,32 +772,36 @@ export default class QueryBuilder {
 
       // This is sooooo guly :(
       // It needs to be cleaned up above, so a nice switch statment or something that makes more sesne can be used... But it works for now.
-      if(sortCreatedAt) {
-        queryParams.options.sort = this.resolveSort(sortCreatedAt, 'createdAt');
-      } else if(sortDischrgDate) {
-        queryParams.options.sort = this.resolveSort(sortDischrgDate, 'dischrgDate');
-      } else if(sortFbDate) {
-        queryParams.options.sort = this.resolveSort(sortFbDate, 'fbDate');
-      } else if(sortAcctBal) {
-        queryParams.options.sort = this.resolveSort(sortAcctBal, 'acctBal');
-      } else if(sortAdmitDate) {
-        queryParams.options.sort = this.resolveSort(sortAdmitDate, 'admitDate');
-      } else if(sortTickleDate) {
-        queryParams.options.sort = this.resolveSort(sortTickleDate, 'tickleDate');
+      if (sortCreatedAt) {
+        queryParams.options.sort = this.resolveSort(sortCreatedAt, "createdAt");
+      } else if (sortDischrgDate) {
+        queryParams.options.sort = this.resolveSort(
+          sortDischrgDate,
+          "dischrgDate"
+        );
+      } else if (sortFbDate) {
+        queryParams.options.sort = this.resolveSort(sortFbDate, "fbDate");
+      } else if (sortAcctBal) {
+        queryParams.options.sort = this.resolveSort(sortAcctBal, "acctBal");
+      } else if (sortAdmitDate) {
+        queryParams.options.sort = this.resolveSort(sortAdmitDate, "admitDate");
+      } else if (sortTickleDate) {
+        queryParams.options.sort = this.resolveSort(
+          sortTickleDate,
+          "tickleDate"
+        );
       }
     }
 
     return queryParams;
   }
 
-  static secureAccounts(queryParams, params, userId = '') {
+  static secureAccounts(queryParams, userId = "") {
     const user = Users.findOne({ _id: userId });
     let clientIds = [];
-    let tagIds = [];
 
     if (user) {
       clientIds = user.clientIds;
-      tagIds = user.tagIds;
     }
     const userFacilities = Facilities.find(
       {
@@ -773,7 +813,6 @@ export default class QueryBuilder {
         }
       }
     ).fetch();
-
 
     // Is this even used any more? If so should be combined w/ above code to be smaller / more efficient
     let userFacilitiesArr = [];
@@ -787,22 +826,36 @@ export default class QueryBuilder {
         clientId: { $in: clientIds }
       });
     } else if (Roles.userIsInRole(userId, RolesEnum.REP)) {
+      //Secure for Reps
+      _.extend(queryParams.filters, {
+        facilityId: { $in: userFacilitiesArr }
+      });
+    }
+  }
 
+  static limitRepAccountAccess(queryParams, userId = "") {
+    const user = Users.findOne({ _id: userId });
+    let tagIds = [];
+
+    if (user) {
+      tagIds = user.tagIds;
+    }
+     if (Roles.userIsInRole(userId, RolesEnum.REP)) {
       //Getting only the escalated accounts that are open and the rep is the author
       if (!tagIds) {
         tagIds = [];
       }
       _.extend(queryParams.filters, {
-            $or: [
-              {
-                assigneeId: userId
-              },
-              {
-                workQueueId: {
-                  $in: tagIds
-                }
-              },
-            ]
+        $or: [
+          {
+            assigneeId: userId
+          },
+          {
+            workQueueId: {
+              $in: tagIds
+            }
+          }
+        ]
       });
     }
   }

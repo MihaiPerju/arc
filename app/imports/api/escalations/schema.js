@@ -22,5 +22,20 @@ export default new SimpleSchema({
   },
   accountId: {
     type: String
+  },
+  resolved: {
+    type: Boolean,
+    defaultValue: false
+  },
+  resolvedAt: {
+    type: Date,
+    optional: true
+  },
+  createdAt: {
+    type: Date,
+    defaultValue: new Date()
+  },
+  clientId: {
+    type: String
   }
 });
