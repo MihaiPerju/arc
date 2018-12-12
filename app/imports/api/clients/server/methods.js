@@ -264,8 +264,61 @@ Meteor.methods({
     Security.isAdminOrTech(this.userId);
     let workQueue = [];
 
-    let tagDetails = Tags.find({ clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] }  }, { fields: { _id: 1, name: 1 } }).fetch();
+    let tagDetails = Tags.find({ clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] } }, { fields: { _id: 1, name: 1 } }).fetch();
     return tagDetails;
   },
+
+  "clients.fetch"() {
+    Security.checkLoggedIn(this.userId);
+    return Clients.find().fetch();
+  },
+
+  "clients.getStatistics"(clientId = null) {
+    Security.checkLoggedIn(this.userId);
+    let filters = { 'managerIds': { $in: [this.userId] } };
+    if (clientId && clientId != '-1') {
+      filters["_id"] = clientId;
+    }
+
+    var clients = Clients.find(filters).fetch().map(c => {
+      if (c.statistics) {
+        c.agedAccountsPercentage = Math.round((c.statistics.over180 / c.statistics.totalInventory) * 100);
+        c.callActionsPercentage = Math.round((c.statistics.callActions / c.statistics.totalInventory) * 100);
+        c.turnTimeValue = Math.round((c.statistics.totalInventory / c.statistics.newAccounts));
+        c.accountsAssignedPercentage = Math.round((c.statistics.assignedAccounts / c.statistics.totalInventory) * 100);
+        c.escalationResolvedPercentage = Math.round((c.statistics.escalations.resolved / c.statistics.escalations.created) * 100)
+      }
+      return c;
+    });
+    return clients;
+  },
+
+  "clients.getStatisticsChartData"(clientId = null) {
+    Security.checkLoggedIn(this.userId);
+    let filters = { 'managerIds': { $in: [this.userId] } };
+
+    if (clientId && clientId != '-1') {
+      filters["_id"] = clientId;
+    }
+
+    var clients = Clients.find(filters).fetch().map(c => {
+      if (c.statistics) {
+        c.agedAccountsPercentage = Math.round((c.statistics.over180 / c.statistics.totalInventory) * 100);
+        c.callActionsPercentage = Math.round((c.statistics.callActions / c.statistics.totalInventory) * 100);
+        c.turnTimeValue = Math.round((c.statistics.totalInventory / c.statistics.newAccounts));
+        c.accountsAssignedPercentage = Math.round((c.statistics.assignedAccounts / c.statistics.totalInventory) * 100);
+        c.escalationResolvedPercentage = Math.round((c.statistics.escalations.resolved / c.statistics.escalations.created) * 100);
+      }
+      return {
+        name: c.clientName,
+        agedAccountsPercentage: c.agedAccountsPercentage,
+        callActionsPercentage: c.callActionsPercentage,
+        turnTimeValue: c.turnTimeValue,
+        accountsAssignedPercentage: c.accountsAssignedPercentage,
+        escalationResolvedPercentage: c.escalationResolvedPercentage
+      };
+    });
+    return clients;
+  }
 
 });

@@ -226,3 +226,7 @@ route("/file/list", FileListContainer);
 import BulkManagement from "/imports/client/pages/bulk/BulkAction.jsx";
 
 route("/bulk/action", BulkManagement);
+//Manager
+import CommonSettings from "/imports/client/pages/settings/Settings.jsx";
+
+route("/manager/settings", CommonSettings);

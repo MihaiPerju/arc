@@ -1,5 +1,6 @@
 import JobQueue from "./../collection";
 import jobStatuses from "/imports/api/jobQueue/enums/jobQueueStatuses";
+import jobTypes from "/imports/api/jobQueue/enums/jobQueueTypes";
 
 Meteor.methods({
   "jobQueue.create"(data) {
@@ -19,5 +20,17 @@ Meteor.methods({
 
   "jobQueue.get"(filters = {}) {
     return JobQueue.findOne(filters);
-  }
+  },
+
+  "bulkActionRequestQueue.get"(clientId, userId) {
+    let filter = { 'status': jobStatuses.NEW, 'type': jobTypes.BULK_UPLOAD };
+
+    if (clientId && clientId != '-1')
+      filter['clientId'] = clientId;
+
+    if (userId && userId != '-1')
+      filter['userId'] = userId;
+      
+    return JobQueue.find(filter).fetch();
+  },
 });

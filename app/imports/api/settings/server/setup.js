@@ -31,5 +31,17 @@ Meteor.startup(function() {
     Settings.insert({ name: settings.SMTP });
   }
 
+    //Check thresholds Settings
+    let thresholds = SettingsService.getSettings(settings.THRESHOLDS);
+    if (!thresholds) {
+      Settings.insert({ name: settings.THRESHOLDS });
+    }
+
+    //Check thresholds Settings
+    let widgetSetting = SettingsService.getSettings(settings.WIDGET_SETTINGS);
+    if (!widgetSetting) {
+      Settings.insert({ name: settings.WIDGET_SETTINGS });
+    }
+    
   SettingsService.createDirectories();
 });

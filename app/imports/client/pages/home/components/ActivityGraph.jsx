@@ -38,13 +38,13 @@ export default class ActivityGraph extends React.Component {
   };
 
   onChange = newDate => {
-    this.setState({ selectedDate: moment(newDate) });
+    this.setState({ selectedDate: moment(newDate) }, () => {
+      let selectedDate = new Date(this.state.selectedDate);
+      this.getAccountActions(selectedDate);
+    });
   };
 
-  onSubmit = () => {
-    let selectedDate = new Date(this.state.selectedDate);
-    this.getAccountActions(selectedDate);
-  };
+ 
 
   renderGraph() {
     const { graphData, isLoading } = this.state;
@@ -89,13 +89,12 @@ export default class ActivityGraph extends React.Component {
 
     return (
       <div>
-        <div className="d-header">
-          <div className="d-header-left">
-            <h2>Activity Graph</h2>
+        <div className="activity-container-header">
+          <div className="activity-container-header-left">
+            <div className="activity-container-title m-t--10">Activity Graph</div>
           </div>
-          <div className="d-header-right flex--helper form-group__pseudo--3">
+          <div className="activity-container-header-right flex--helper form-group__pseudo--3">
             <div className="m-l-15">
-              <label>Select Date:</label>
               <div className="border-style">
                 <DatePicker
                   calendarClassName="cc-datepicker"
@@ -110,7 +109,6 @@ export default class ActivityGraph extends React.Component {
                 />
               </div>
             </div>
-            <button className="custom-submit-btn" onClick={this.onSubmit}>Submit </button>
           </div>
         </div>
         {this.renderGraph()}

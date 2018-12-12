@@ -4,7 +4,7 @@ import LetterDirectory from "./LetterDirectory";
 import SMTP from "./SMTP";
 import CompileTime from "./CompileTime";
 import pages from "/imports/api/settings/enums/settings";
-import Loading from "/imports/client/lib/ui/Loading";
+import WidgetSettings from "../../../settings/components/WidgetSettings";
 
 export default class SettingsContent extends Component {
   constructor() {
@@ -31,6 +31,7 @@ export default class SettingsContent extends Component {
         {page === pages.LETTERS_DIRECTORY && <LetterDirectory onClose={this.props.onClose} />}
         {page === pages.COMPILE_TIME && <CompileTime onClose={this.props.onClose}/>}
         {page === pages.SMTP && <SMTP onClose={this.props.onClose}/>}
+        {page === pages.WIDGET_SETTINGS && <WidgetSettings onClose={this.props.onClose}/>}
       </div>
     );
   }

@@ -137,5 +137,15 @@ Meteor.methods({
       }
     }
     return [];
-  }
+  },
+
+  "user.statistics.get"() {
+    const userId = Meteor.userId();
+    var user = Users.findOne({
+      _id: userId
+    });
+    return user;
+  },
+
+
 });
