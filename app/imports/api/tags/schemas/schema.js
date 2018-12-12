@@ -3,11 +3,9 @@ import SimpleSchema from "simpl-schema";
 export default new SimpleSchema({
   name: {
     type: String,
-    optional: true,
   },
   clientId: {
-    type: String,
-    optional: true,
+    type: String
   },
   tagIds: {
     type: Array,
@@ -16,12 +14,12 @@ export default new SimpleSchema({
   },
   "tagIds.$": {
     type: String
-  }, 
+  },
   entities: {
     type: Array,
     defaultValue: []
   },
   "entities.$": {
     type: String
-  },
+  }
 });

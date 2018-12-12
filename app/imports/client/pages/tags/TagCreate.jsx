@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import TagsSchema from "/imports/api/tags/schemas/schema";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import { AutoForm, AutoField, ErrorField, HiddenField } from "/imports/ui/forms";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 import moduleListEnum from "/imports/api/tags/enums/tags";
 
@@ -95,6 +95,7 @@ export default class TagCreate extends Component {
                   <ErrorField name="entities" />
                 </div>
               </div>
+               <HiddenField  name="clientId" value = {FlowRouter._current.params.clientId} />
             </AutoForm>
           </div>
         </div>

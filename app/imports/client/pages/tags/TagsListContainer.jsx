@@ -133,11 +133,10 @@ export default class TagsListContainer extends Pager {
 
   render() {
     const { tagsSelected, currentTag, create, range, total, tags } = this.state;
-
     if (!tags) {
       return <Loading />;
     }
-    
+
     return (
       <div className="cc-container">
         <div
