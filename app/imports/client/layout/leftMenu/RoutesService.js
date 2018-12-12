@@ -65,7 +65,7 @@ export default class RouteService {
         },
         {
           name: "letter-templates/list",
-          label: "Templates",
+          label: "Letter Templates",
           icon: "window-restore"
         },
         {

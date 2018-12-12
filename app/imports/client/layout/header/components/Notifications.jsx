@@ -169,7 +169,7 @@ export default class Notitfications extends Component {
           ref={this.nodeRef}
         >
           <i className="icon-bell-o" />
-          {badge && notifications.length && (
+          {badge && notifications.length !== 0 && (
             <div className="badge text-center">{notifications.length}</div>
           )}
         </a>
