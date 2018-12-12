@@ -45,6 +45,8 @@ export default class ActionDropdown extends Component {
       status,
       facilityHref,
       regionHref,
+      ruleHref,
+      tagHref,
       onEdit,
       disableAction,
       onOpenAssignDialog
@@ -66,35 +68,32 @@ export default class ActionDropdown extends Component {
             </div>
             <ul className="action-list">
               <li className="action-item">
-                <a href={regionHref}>Manage regions</a>
+                <a href={regionHref}>Manage Regions</a>
               </li>
               <li className="action-item">
-                <a href={facilityHref}>Manage facilities</a>
+                <a href={facilityHref}>Manage Facilities</a>
               </li>
-              {Roles.userIsInRole(
-                Meteor.userId(),
-                roleGroups.ADMIN_TECH
-              ) && (
+              <li className="action-item">
+                <a href={ruleHref}>Manage Rules</a>
+              </li>
+              <li className="action-item">
+                <a href={tagHref}>Manage Tags</a>
+              </li>
+              {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
                 <li className="action-item">
                   <a style={style} onClick={onEdit}>
                     Edit client
                   </a>
                 </li>
               )}
-              {Roles.userIsInRole(
-                Meteor.userId(),
-                roleGroups.ADMIN_TECH
-              ) && (
+              {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
                 <li className="action-item">
                   <a style={style} onClick={disableAction}>
                     {status ? "Disable client" : "Enable client"}
                   </a>
                 </li>
               )}
-              {Roles.userIsInRole(
-                Meteor.userId(),
-                roleGroups.ADMIN_TECH
-              ) && (
+              {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
                 <li className="action-item">
                   <a style={style} onClick={onOpenAssignDialog}>
                     Assign Manager

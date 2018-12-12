@@ -3,7 +3,8 @@ import RolesEnum from "../../../api/users/enums/roles";
 export default class RouteService {
   static getRoutesByRole() {
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
-      return [{
+      return [
+        {
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"
@@ -49,11 +50,6 @@ export default class RouteService {
           icon: "user-circle-o"
         },
         {
-          name: "rules/list",
-          label: "Rules",
-          icon: "file-text-o"
-        },
-        {
           name: "code/list",
           label: "Codes",
           icon: "code-fork"
@@ -83,12 +79,6 @@ export default class RouteService {
           label: "Substates",
           icon: "tasks"
         },
-
-        {
-          name: "tags/list",
-          label: "Tags",
-          icon: "tags"
-        },
         {
           name: "bulk/action",
           label: "Bulk Action",
@@ -96,7 +86,8 @@ export default class RouteService {
         }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
-      return [{
+      return [
+        {
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"
@@ -175,15 +166,11 @@ export default class RouteService {
           name: "action/list",
           label: "Actions",
           icon: "thumb-tack"
-        },
-        {
-          name: "tags/list",
-          label: "Tags",
-          icon: "tags"
         }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      return [{
+      return [
+        {
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"
@@ -253,15 +240,11 @@ export default class RouteService {
           name: "action/list",
           label: "Actions",
           icon: "thumb-tack"
-        },
-        {
-          name: "tags/list",
-          label: "Tags",
-          icon: "tags"
         }
       ];
     } else {
-      return [{
+      return [
+        {
           name: "dashboard",
           label: "Dashboard",
           icon: "dashboard"
@@ -295,104 +278,61 @@ export default class RouteService {
       case "/dashboard":
         return "Dashboard";
 
-      case "/accounts/active":
-        {
-          return "Active Accounts";
-
-        }
-      case "/accounts/review":
-        {
-          return "Accounts In Review";
-
-        }
-      case "/accounts/hold":
-        {
-          return "Accounts on Hold";
-
-        }
-      case "/accounts/archived":
-        {
-          return "Archived Accounts";
-
-        }
-      case "/accounts/tickles":
-        {
-          return "Tickled Accounts";
-
-        }
-      case "/accounts/escalated":
-        {
-          return "Escalated Accounts";
-
-        }
-      case "/flagged":
-        {
-          return "Escalated Accounts";
-
-        }
-      case "/accounts/unassigned":
-        {
-          return "Unassigned Accounts";
-
-        }
-      case "/client/list":
-        {
-          return "Clients";
-
-        }
-      case "/admin/user/list":
-        {
-          return "Users";
-
-        }
-      case "/code/list":
-        {
-          return "Reason Codes";
-
-        }
-      case "/reports/list":
-        {
-          return "Reports";
-
-        }
-      case "/letter-templates/list":
-        {
-          return "Letter Templates";
-
-        }
-      case "/letters/list":
-        {
-          return "Letters";
-
-        }
-      case "/action/list":
-        {
-          return "Actions";
-
-        }
-      case "/substate/list":
-        {
-          return "Substates";
-
-        }
-      case "/tags/list":
-        {
-          return "Tags";
-
-        }
-      case "/file/list":
-        {
-          return "Files";
-
-
-        }
+      case "/accounts/active": {
+        return "Active Accounts";
+      }
+      case "/accounts/review": {
+        return "Accounts In Review";
+      }
+      case "/accounts/hold": {
+        return "Accounts on Hold";
+      }
+      case "/accounts/archived": {
+        return "Archived Accounts";
+      }
+      case "/accounts/tickles": {
+        return "Tickled Accounts";
+      }
+      case "/accounts/escalated": {
+        return "Escalated Accounts";
+      }
+      case "/flagged": {
+        return "Escalated Accounts";
+      }
+      case "/accounts/unassigned": {
+        return "Unassigned Accounts";
+      }
+      case "/client/list": {
+        return "Clients";
+      }
+      case "/admin/user/list": {
+        return "Users";
+      }
+      case "/code/list": {
+        return "Reason Codes";
+      }
+      case "/reports/list": {
+        return "Reports";
+      }
+      case "/letter-templates/list": {
+        return "Letter Templates";
+      }
+      case "/letters/list": {
+        return "Letters";
+      }
+      case "/action/list": {
+        return "Actions";
+      }
+      case "/substate/list": {
+        return "Substates";
+      }
+      case "/file/list": {
+        return "Files";
+      }
       case "/admin/settings":
-      case "/manager/settings":
-        {
-          return "Settings";
-
-
-        }
+      case "/manager/settings": {
+        return "Settings";
+      }
       default:
         break;
     }

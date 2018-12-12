@@ -195,12 +195,8 @@ route(
 
 //Rules Engine
 import RulesContainer from "/imports/client/pages/rules/RulesListContainer";
-import RuleCreate from "/imports/client/pages/rules/RuleCreate";
-import RuleEdit from "/imports/client/pages/rules/RuleEdit";
 
-route("/rules/list", RulesContainer);
-route("/rule/create", RuleCreate);
-route("/rule/:id/edit", RuleEdit);
+route("/client/:_id/manage-rules", RulesContainer);
 
 //Substates
 import SubstatesListContainer from "/imports/client/pages/substates/SubstatesListContainer";
@@ -215,7 +211,7 @@ route("/letters/list", LetterListContainer);
 //Tags management
 import TagsListContainer from "/imports/client/pages/tags/TagsListContainer.jsx";
 
-route("/tags/list", TagsListContainer);
+route("/client/:_id/manage-tags", TagsListContainer);
 
 //Tags
 import FileListContainer from "/imports/client/pages/files/FileListContainer.jsx";
