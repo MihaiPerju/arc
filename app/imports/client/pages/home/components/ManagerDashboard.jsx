@@ -6,6 +6,7 @@ import TurnTime from "./dashboardWidgets/TurnTime";
 import ClientStatistics from "./dashboardWidgets/ClientStatistics";
 import PushToCall from "./dashboardWidgets/PushToCall";
 import AgedAccounts from "./dashboardWidgets/AgedAccounts";
+import HeartBeat from "./dashboardWidgets/HeartBeat";
 
 export default class ManagerDashboard extends React.Component {
 
@@ -17,7 +18,6 @@ export default class ManagerDashboard extends React.Component {
   componentWillMount() {
     this.getManagerWidgetSettings();
   }
-
 
   getManagerWidgetSettings() {
     this.setState({ isLoading: true });
@@ -47,6 +47,9 @@ export default class ManagerDashboard extends React.Component {
         </div>
         <div className="dashboard-row">
           <AgedAccounts filters={filters} />
+        </div>
+        <div className="dashboard-row">
+          <HeartBeat />
         </div>
       </div>
     );

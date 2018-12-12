@@ -1,19 +1,19 @@
 import React from "react";
 import Notifier from "../../../lib/Notifier";
-import AssignedToMe from "./dashboardWidgets/AssignedToMe";
-import CompletedAccounts from "./dashboardWidgets/CompletedAccounts";
-import CloseAssists from './dashboardWidgets/CloseAssists';
-import ClosedAccounts from './dashboardWidgets/ClosedAccounts';
-import CollectedToday from './dashboardWidgets/CollectedToday';
 import pages from "../../../../api/settings/enums/settings";
 import Loading from "../../../lib/ui/Loading";
 
 export default class UserDashboard extends React.Component {
 
-  state = { widgetSettings: null, isLoading: true };
+  state = {
+    widgetSettings: null,
+    isLoading: true,
+    userStatistics: undefined,
+    isLoadingStatistics: false
+  };
 
   componentWillMount() {
-    this.getWidgetSettings()
+    this.getUserStatistics();
   }
 
   getWidgetSettings() {
@@ -31,28 +31,76 @@ export default class UserDashboard extends React.Component {
     });
   }
 
+  getUserStatistics() {
+    this.setState({ isLoadingStatistics: true });
+    setTimeout(() => {
+      Meteor.call("user.statistics.get", (err, responseData) => {
+        if (!err) {
+          this.setState({
+            userStatistics: responseData ? responseData.statistics : undefined,
+            isLoadingStatistics: false
+          });
+        } else {
+          this.setState({ isLoadingStatistics: false });
+          Notifier.error(err.reason);
+        }
+      });
+    }, 1000);
+  }
+
   renderWidgets() {
-    const { filters } = this.props;
-    const { widgetSettings } = this.state;
-    if (widgetSettings) {
+    const { userStatistics } = this.state;
+    if (userStatistics) {
       return (
-        <div className="m-b--25">
-          {widgetSettings.assignedToMe && <AssignedToMe filters={filters} />}
-          {widgetSettings.completed && <CompletedAccounts filters={filters} />}
-          {widgetSettings.collectedToday && <CollectedToday filters={filters} />}
-          {widgetSettings.closedAccounts && <ClosedAccounts filters={filters} />}
-          {widgetSettings.closeAssists && <CloseAssists filters={filters} />}
+        <div>
+          <div className="stats-section">
+            <div className="stats-section-item" style={{ width: '25%' }}>
+              <div className="stats-content">
+                <div className="stats-title" style={{ fontSize: '14px' }}>
+                  <span className="stats-icon"><span className="menu__icon"><i className="icon-user"></i></span>
+                  </span>Assigned To Me</div>
+                <div className="stats-count" style={{ marginTop: '5px' }}>{userStatistics.assignedToMe}</div>
+              </div>
+              <span className="stats-left-border"></span>
+            </div>
+            <div className="stats-section-item" style={{ width: '25%' }}>
+              <div className="stats-content">
+                <div className="stats-title" style={{ fontSize: '14px' }}>
+                  <span className="stats-icon"><span className="menu__icon"><i className="icon-hand-paper-o"></i></span>
+                  </span>Completed Accounts</div>
+                <div className="stats-count" style={{ marginTop: '5px' }}>{userStatistics.completedAccounts}</div>
+              </div>
+              <span className="stats-left-border"></span>
+            </div>
+            <div className="stats-section-item" style={{ width: '25%' }}>
+              <div className="stats-content">
+                <div className="stats-title" style={{ fontSize: '14px' }}>
+                  <span className="stats-icon"><span className="menu__icon"><i className="icon-archive"></i></span>
+                  </span>Closed Accounts</div>
+                <div className="stats-count" style={{ marginTop: '5px' }}>{userStatistics.closedAccounts}</div>
+              </div>
+              <span className="stats-left-border"></span>
+            </div>
+            <div className="stats-section-item" style={{ width: '25%' }}>
+              <div className="stats-content">
+                <div className="stats-title" style={{ fontSize: '14px' }}>
+                  <span className="stats-icon"><span className="menu__icon"><i className="icon-users"></i></span>
+                  </span>Collected Today</div>
+                <div className="stats-count" style={{ marginTop: '5px' }}>{userStatistics.collectedToday}</div>
+              </div>
+            </div>
+          </div>
         </div>
       );
     }
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoadingStatistics } = this.state;
     return (
       <div style={{ position: 'relative' }}>
         {
-          !isLoading ?
+          !isLoadingStatistics ?
             this.renderWidgets() :
             <div className="dashboard-content-center">
               <Loading />
@@ -61,5 +109,4 @@ export default class UserDashboard extends React.Component {
       </div>
     );
   }
-
 }

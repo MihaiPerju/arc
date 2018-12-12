@@ -270,24 +270,26 @@ export default class Home extends React.Component {
 
     return (
       <div className="dashboard-content-container">
-        <div className="dashboard-header-content">
-          <div className="dashboard-header-title">
-            FILTERS FOR DASHBOARD
+        {
+          (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) || Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) || Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) &&
+          <div className="dashboard-header-content">
+            <div className="dashboard-header-title">
+              FILTERS FOR DASHBOARD
             </div>
-          <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
-            <div>
-              <div className="flex--helper form-group__pseudo--3">
-                <div className="select-form select-box-width">
-                  <label className="dashboard-label">Clients</label>
-                  <div className="m-t--5">
-                    <AutoField
-                      labelHidden={true}
-                      name="clientId"
-                      options={clients}
-                    />
+            <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
+              <div>
+                <div className="flex--helper form-group__pseudo--3">
+                  <div className="select-form select-box-width">
+                    <label className="dashboard-label">Clients</label>
+                    <div className="m-t--5">
+                      <AutoField
+                        labelHidden={true}
+                        name="clientId"
+                        options={clients}
+                      />
+                    </div>
                   </div>
-                </div>
-                {/* {
+                  {/* {
                   facilities.length > 0 ?
                     <div className="select-form select-box-width m-l-10">
                       <label className="dashboard-label">Facilities</label>
@@ -311,10 +313,11 @@ export default class Home extends React.Component {
                       </div>
                     </div> : null
                 } */}
+                </div>
               </div>
-            </div>
-          </AutoForm>
-        </div>
+            </AutoForm>
+          </div>
+        }
         {this.renderDashboardBasedOnRoles()}
       </div>
     );
