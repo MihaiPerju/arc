@@ -1,30 +1,47 @@
 import React from "react";
 import RuleSchema from "/imports/api/rules/schemas/schema";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import {
+  AutoForm,
+  AutoField,
+  ErrorField,
+  HiddenField
+} from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
 } from "/imports/api/rules/enums/triggers";
-import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
-import { moduleNames } from "/imports/api/tags/enums/tags";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class RuleCreate extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      clientOptions: [],
       facilityOptions: [],
-      model: {},
       triggerType: null,
       userOptions: [],
       workQueueOptions: [],
       actionOptions: []
     };
+  }
+
+  componentWillMount() {
+    let clientId = FlowRouter._current.params.clientId;
+    this.getPriority(clientId);
+
+    let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
+    Meteor.call("facilities.getNames", { clientId }, (err, res) => {
+      if (!err) {
+        res.map(facility => {
+          facilityOptions.push({ label: facility.name, value: facility._id });
+        });
+        this.setState({ facilityOptions });
+      }
+    });
   }
 
   componentDidMount() {
@@ -41,37 +58,17 @@ export default class RuleCreate extends React.Component {
   }
 
   onChange = (key, value) => {
-    let { model } = this.state;
-    model[key] = value;
-
-    if (key === "clientId") {
-      let clientId = value;
-      let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
-      _.extend(model, { priority: 1, clientId });
-      this.setState({ model });
-      Meteor.call("facilities.getNames", { clientId }, (err, res) => {
-        if (!err) {
-          res.map(facility => {
-            facilityOptions.push({ label: facility.name, value: facility._id });
-          });
-          this.setState({ facilityOptions });
-        }
-      });
-
-      this.getPriority(clientId);
-    } else if (key === "triggerType") {
+    if (key === "triggerType") {
       this.setState({ triggerType: value });
     }
   };
 
   getPriority = clientId => {
-    let { model } = this.state;
     let filters = { clientId };
     Meteor.call("rule.getPrior", filters, (err, rule) => {
       if (!err) {
         let priority = rule ? rule.priority + 1 : 1;
-        _.extend(model, { priority });
-        this.setState({ model });
+        this.setState({ model: { priority } });
       } else {
         Notifier.error(err.reason);
       }
@@ -102,7 +99,6 @@ export default class RuleCreate extends React.Component {
 
   render() {
     const {
-      clientOptions,
       facilityOptions,
       model,
       triggerType,
@@ -110,6 +106,11 @@ export default class RuleCreate extends React.Component {
       workQueueOptions,
       actionOptions
     } = this.state;
+
+    if (!model) {
+      return <Loading />;
+    }
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -133,11 +134,9 @@ export default class RuleCreate extends React.Component {
             >
               <div className="select-wrapper">
                 <div className="select-form">
-                  <SelectSimple
-                    labelHidden={true}
-                    placeholder="Select Client"
+                  <HiddenField
                     name="clientId"
-                    options={clientOptions}
+                    value={FlowRouter._current.params.clientId}
                   />
                   <ErrorField name="clientId" />
                 </div>
@@ -153,19 +152,14 @@ export default class RuleCreate extends React.Component {
                   <ErrorField name="facilityId" />
                 </div>
               </div>
-
-              {model.clientId && (
-                <div className="form-wrapper">
-                  <AutoField
-                    value={model.priority}
-                    labelHidden={true}
-                    placeholder="Priority"
-                    name="priority"
-                  />
-                  <ErrorField name="priority" />
-                </div>
-              )}
-
+              <div className="form-wrapper">
+                <AutoField
+                  labelHidden={true}
+                  placeholder="Priority"
+                  name="priority"
+                />
+                <ErrorField name="priority" />
+              </div>
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />

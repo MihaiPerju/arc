@@ -3,12 +3,12 @@ import {
   AutoForm,
   AutoField,
   ErrorField,
-  SelectField
+  HiddenField
 } from "/imports/ui/forms";
 import TagsSchema from "/imports/api/tags/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import moduleListEnum, { moduleNames } from "/imports/api/tags/enums/tags";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class TagEdit extends React.Component {
   constructor() {
@@ -16,22 +16,8 @@ export default class TagEdit extends React.Component {
 
     this.state = {
       error: null,
-      isDisabled: false,
-      clientOptions: []
+      isDisabled: false
     };
-  }
-
-  componentDidMount() {
-    Meteor.call("clients.get", (err, clients) => {
-      if (!err) {
-        const clientOptions = clients.map(client => {
-          return { label: client.clientName, value: client._id };
-        });
-        this.setState({ clientOptions });
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
   }
 
   onSubmit(formData) {
@@ -67,7 +53,7 @@ export default class TagEdit extends React.Component {
 
   render() {
     const { tag } = this.props;
-    const { isDisabled, clientOptions } = this.state;
+    const { isDisabled } = this.state;
     const options = this.getOptions();
 
     return (
@@ -125,21 +111,11 @@ export default class TagEdit extends React.Component {
                 </div>
               </div>
 
-              {tag &&
-                tag.entities &&
-                tag.entities.includes(moduleNames.WORK_QUEUE) && (
-                  <div className="select-group">
-                    <div className="form-wrapper">
-                      <SelectField
-                        placeholder="Select Client"
-                        labelHidden={true}
-                        options={clientOptions}
-                        name="clientId"
-                      />
-                      <ErrorField name="clientId" />
-                    </div>
-                  </div>
-                )}
+              <HiddenField
+                name="clientId"
+                value={FlowRouter._current.params.clientId}
+              />
+              <ErrorField name="clientId" />
             </AutoForm>
           </div>
         </div>
