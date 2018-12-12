@@ -130,7 +130,8 @@ class ClientStatistics {
                 this.pushedToCall(startDate),
                 this.escalationsDue(),
                 this.escalationsCreated(startDate),
-                this.escalationsResolved(startDate)
+                this.escalationsResolved(startDate),
+                this.unassignedAccounts()
             ])
                 .then(resp => {
                     resolve({
@@ -139,6 +140,7 @@ class ClientStatistics {
                         accountsResolved: resp[2],
                         over180: resp[3],
                         callActions: resp[4],
+                        assignedAccounts: resp[0] - resp[8],
                         escalations: {
                             totalDue: resp[5],
                             created: resp[6],
@@ -346,6 +348,22 @@ class ClientStatistics {
                 $gte: startDate,
                 $lt: endDate
             }
+        }).count();
+    };
+
+    /**
+     * Queries for a count of current unassigned accounts
+     * @returns {Promise} Promise resolves to an object with total, completed, and pending escalations.
+     */
+    async unassignedAccounts() {
+        if(!this.isReady)
+            throw new Error(this.offlineMessage);
+
+        return this.db.collection('accounts').find({
+            clientId: this._clientId,
+            state: 'Active',
+            assigneeId: null,
+            workQueueId: null
         }).count();
     };
 }
