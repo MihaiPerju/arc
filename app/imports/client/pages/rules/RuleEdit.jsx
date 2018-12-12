@@ -1,15 +1,18 @@
 import React from "react";
 import RuleSchema from "/imports/api/rules/schemas/schema";
-import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
+import {
+  AutoForm,
+  AutoField,
+  ErrorField,
+  HiddenField
+} from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RuleGenerator from "./components/RuleGenerator";
 import FacilitySelector from "/imports/api/facilities/enums/selectors";
 import triggerTypes, {
   triggerOptions
 } from "/imports/api/rules/enums/triggers";
-import RolesEnum from "/imports/api/users/enums/roles";
 import fieldsOptions from "/imports/api/rules/enums/accountFields";
-import { moduleNames } from "/imports/api/tags/enums/tags";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 
 export default class RuleEdit extends React.Component {
@@ -19,28 +22,28 @@ export default class RuleEdit extends React.Component {
     this.state = {
       clientOptions: [],
       facilityOptions: [],
-      model: {},
       triggerType: null,
       userOptions: [],
       workQueueOptions: [],
       actionOptions: []
     };
   }
+  componentWillMount() {
+    let clientId = FlowRouter._current.params.clientId;
+    let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
+    this.setState({ model: { priority: 1, clientId } });
+    Meteor.call("facilities.getNames", { clientId }, (err, res) => {
+      if (!err) {
+        res.map(facility => {
+          facilityOptions.push({ label: facility.name, value: facility._id });
+        });
+        this.setState({ facilityOptions });
+      }
+    });
+  }
 
   onChange = (key, value) => {
-    if (key === "clientId") {
-      let clientId = value;
-      let facilityOptions = [{ label: "All", value: FacilitySelector.ALL }];
-      this.setState({ model: { priority: 1, clientId } });
-      Meteor.call("facilities.getNames", { clientId }, (err, res) => {
-        if (!err) {
-          res.map(facility => {
-            facilityOptions.push({ label: facility.name, value: facility._id });
-          });
-          this.setState({ facilityOptions });
-        }
-      });
-    } else if (key === "triggerType") {
+    if (key === "triggerType") {
       this.setState({ triggerType: value });
     }
   };
@@ -119,11 +122,9 @@ export default class RuleEdit extends React.Component {
             >
               <div className="select-wrapper">
                 <div className="select-form">
-                  <SelectSimple
-                    labelHidden={true}
-                    label="Select Client"
+                  <HiddenField
                     name="clientId"
-                    options={clientOptions}
+                    value={FlowRouter._current.params.clientId}
                   />
                 </div>
               </div>
