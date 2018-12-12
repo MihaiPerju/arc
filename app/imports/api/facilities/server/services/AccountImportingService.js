@@ -179,6 +179,10 @@ export default class AccountService {
         fileId
       });
 
+      // Dirty hack to make sure always null - Needs to be correct / replaced up stream
+      newAccount.assigneeId = newAccount.assigneeId ? newAccount.assigneeId : null;
+      newAccount.workQueueId = newAccount.workQueueId ? newAccount.workQueueId : null;
+
       let accountId = Accounts.insert(newAccount);
 
       //Create a directory for every account to store attachments
