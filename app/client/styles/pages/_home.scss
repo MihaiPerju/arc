@@ -7,14 +7,8 @@
   padding: 15px 10px;
 }
 
-.graph-container{
- width:50%;
- border-right:1px solid #d3d3d3;
-}
-
-.timeline-container{
-width: 50%;
-
+.content-container{
+ background-color: #fff;
 }
 
 .line-chart{
@@ -224,10 +218,8 @@ width: 50%;
 }
 
 .stats-container{
-  min-height: 150px;
   max-height: 350px;
   overflow: scroll;
-  margin-top: 10px;
 }
 
 .small-widget{
@@ -319,6 +311,31 @@ width: 50%;
     font-size: 18px;
     color: #000;
     margin-top: 25px;
+   }
+}
+
+.activity-container{
+  width: 50%;
+  float: left;
+  &-header{
+    border-bottom: 2px solid #adb2b5;
+    display: inline-block;
+    width: 100%;
+    padding-bottom: 5px;
+  }
+  &-title{
+    font-size: 18px;
+    color: #000;
+   }
+   &-header-left{
+    float: left;
+   }
+   &-header-right{
+    float: right;
+   }
+   &-content{
+     background-color: #fff;
+     padding: 10px;
    }
 }
 

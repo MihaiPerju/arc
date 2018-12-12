@@ -40,17 +40,20 @@ export default class ManagerSettings extends Component {
             className={this.getClassNames(pages.THRESHOLDS)}
             onClick={this.onSelectPage.bind(this, pages.THRESHOLDS)}>
             <div className="row__item">
-              <div className="item-name setting_label" >Thresholds</div>  
+              <div className="item-name setting_label" >Thresholds</div>
             </div>
           </div>
         }
-        <div
-          className={this.getClassNames(pages.WIDGET_SETTINGS)}
-          onClick={this.onSelectPage.bind(this, pages.WIDGET_SETTINGS)}>
-          <div className="row__item">
-            <div className="item-name setting_label" >Widget Settings</div>
+        {
+          (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) || Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) &&
+          <div
+            className={this.getClassNames(pages.WIDGET_SETTINGS)}
+            onClick={this.onSelectPage.bind(this, pages.WIDGET_SETTINGS)}>
+            <div className="row__item">
+              <div className="item-name setting_label" >Widget Settings</div>
+            </div>
           </div>
-        </div>
+        }
       </div>
     );
   }

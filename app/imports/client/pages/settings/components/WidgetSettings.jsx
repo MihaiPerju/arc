@@ -259,9 +259,9 @@ export default class WidgetSettings extends Component {
                 schema={schema}
               >
                 <div className="widget_div">
-                  {(Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) && this.renderManagerWidgetSettings()}
+                  {/* {(Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) && this.renderManagerWidgetSettings()} */}
                   {(Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) || Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) && this.renderTechAdminWidgetSettings()}
-                  {(Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) && this.renderUserWidgetSettings()}
+                  {/* {(Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) && this.renderUserWidgetSettings()} */}
                 </div>
               </AutoForm>
             </div>

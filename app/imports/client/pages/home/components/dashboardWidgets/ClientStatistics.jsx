@@ -118,7 +118,7 @@ export default class ClientStatistics extends React.Component {
                 <Loading />
               </div>
             </div> :
-            clientStatistics.length > 0 ?
+              clientStatistics.length > 0 ?
               <div className="stats-container">
                 {clientStatistics.map(c => this.renderStatisticsWidget(c))}
               </div> : null
