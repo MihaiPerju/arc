@@ -8,7 +8,7 @@
     "pms-beta": "MONGO_URL='mongodb://arcc:reergwgewgeg@arcc-1.p-m-s.local:27017,arcc-2.p-m-s.local:27017,arcc-3.p-m-s.local:27017/arcc?ssl=false&replicaSet=ARCC&authSource=arcc' meteor run --port 4000"
   },
   "dependencies": {
-    "@babel/runtime": "7.0.0-beta.55",
+    "@babel/runtime": "^7.2.0",
     "bcrypt": "^3.0.0",
     "buffer-to-stream": "^1.0.0",
     "csv-parse": "^2.5.0",
@@ -17,10 +17,9 @@
     "fibers": "^2.0.2",
     "html-pdf": "^2.2.0",
     "into-stream": "^3.1.0",
-    "meteor-node-stubs": "^0.3.2",
+    "meteor-node-stubs": "^0.4.1",
     "moment": "^2.22.2",
     "papaparse": "^4.5.1",
-    "phantomjs-prebuilt": "^2.1.16",
     "qrcode": "^1.2.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
