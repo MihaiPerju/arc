@@ -65,6 +65,12 @@ export default class UserContentHeader extends React.Component {
             <span className="text-light-grey">Phone</span>
             <span className="info-label">{user.profile.phoneNumber}</span>
           </li>
+          {user.profile.goal && (
+            <li>
+              <span className="text-light-grey">Goal</span>
+              <span className="info-label">{user.profile.goal}</span>
+            </li>
+          )}
         </ul>
         {Roles.userIsInRole(user._id, RolesEnum.REP) && (
           <ul className="row__info">

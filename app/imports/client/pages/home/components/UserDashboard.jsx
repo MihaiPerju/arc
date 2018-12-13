@@ -24,7 +24,8 @@ export default class UserDashboard extends React.Component {
     model: {},
     limit: 20,
     skip: 0,
-    isScrollLoading: false
+    isScrollLoading: false,
+    userData: null
   };
 
   componentWillMount() {
@@ -71,7 +72,8 @@ export default class UserDashboard extends React.Component {
         if (!err) {
           this.setState({
             userStatistics: responseData ? responseData.statistics : undefined,
-            isLoadingStatistics: false
+            isLoadingStatistics: false,
+            userData: responseData
           });
         } else {
           this.setState({ isLoadingStatistics: false });
@@ -453,13 +455,24 @@ export default class UserDashboard extends React.Component {
   }
 
   renderWidgets() {
-    const { userStatistics } = this.state;
-
+    const { userStatistics, userData } = this.state;
+    const clsName = (userData.profile && userData.profile.goal ) ? "stats-section-item userWidget-width-even" : "stats-section-item userWidget-width-odd";
     return (
       <div>
         {userStatistics &&
           <div className="stats-section">
-            <div className="stats-section-item" style={{ width: '25%' }}>
+            {userData.profile && userData.profile.goal && 
+            <div className={clsName}>
+              <div className="stats-content">
+                <div className="stats-title" style={{ fontSize: '14px' }}>
+                  <span className="stats-icon"><span className="menu__icon"><i className="icon-thumb-tack"></i></span>
+                  </span>Goals</div>
+                <div className="stats-count" style={{ marginTop: '5px' }}>{userData.profile.goal}</div>
+              </div>
+              <span className="stats-left-border"></span>
+            </div>
+            }
+            <div className={clsName}>
               <div className="stats-content">
                 <div className="stats-title" style={{ fontSize: '14px' }}>
                   <span className="stats-icon"><span className="menu__icon"><i className="icon-user"></i></span>
@@ -468,7 +481,7 @@ export default class UserDashboard extends React.Component {
               </div>
               <span className="stats-left-border"></span>
             </div>
-            <div className="stats-section-item" style={{ width: '25%' }}>
+            <div className={clsName}>
               <div className="stats-content">
                 <div className="stats-title" style={{ fontSize: '14px' }}>
                   <span className="stats-icon"><span className="menu__icon"><i className="icon-hand-paper-o"></i></span>
@@ -477,7 +490,7 @@ export default class UserDashboard extends React.Component {
               </div>
               <span className="stats-left-border"></span>
             </div>
-            <div className="stats-section-item" style={{ width: '25%' }}>
+            <div className={clsName}>
               <div className="stats-content">
                 <div className="stats-title" style={{ fontSize: '14px' }}>
                   <span className="stats-icon"><span className="menu__icon"><i className="icon-archive"></i></span>
@@ -486,7 +499,7 @@ export default class UserDashboard extends React.Component {
               </div>
               <span className="stats-left-border"></span>
             </div>
-            <div className="stats-section-item" style={{ width: '25%' }}>
+            <div className={clsName}>
               <div className="stats-content">
                 <div className="stats-title" style={{ fontSize: '14px' }}>
                   <span className="stats-icon"><span className="menu__icon"><i className="icon-users"></i></span>
