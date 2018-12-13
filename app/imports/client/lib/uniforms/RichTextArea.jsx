@@ -41,6 +41,7 @@ class RichTextArea extends React.Component {
           events={{
             change: this.onChange
           }}
+		  scriptUrl='/assets/ckeditor/ckeditor.js'
           config={{
             on: {
               pluginsLoaded: function() {
@@ -50,7 +51,8 @@ class RichTextArea extends React.Component {
                 editor.ui.addRichCombo("my-combo", {
                   label: "Select variables",
                   title: "Select variables",
-                  toolbar: "basicstyles,0",
+                  toolbar: "insert,0",
+				  width: "120px",
 
                   panel: {
                     css: [CKEDITOR.skin.getPath("editor")].concat(

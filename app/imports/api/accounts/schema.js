@@ -111,6 +111,7 @@ export default new SimpleSchema({
   },
   assigneeId: {
     type: String,
+    defaultValue: null,
     optional: true
   },
   clientId: {
@@ -179,6 +180,7 @@ export default new SimpleSchema({
   },
   workQueueId: {
     type: String,
+    defaultValue: null,
     optional: true
   },
   numberOfViews: {
