@@ -234,7 +234,6 @@ export default class NewAction extends Component {
     }
 
     const { account } = this.props;
-    console.log(account);
     return (
       <div className={this.state.fade ? "new-action in" : "new-action"}>
         <div className="action-form">
