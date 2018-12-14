@@ -3,7 +3,7 @@ import Users from "/imports/api/users/collection.js";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import TagService from "/imports/api/tags/server/services/TagService";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
-import Accounts from "/imports/api/accounts/collection";
+import Accounts from '/imports/api/accounts/collection';
 
 Meteor.methods({
   "tags.list"(params) {
@@ -35,6 +35,7 @@ Meteor.methods({
   "tag.delete"(_id) {
     if (Roles.userIsInRole(this.userId, RolesEnum.MANAGER)) {
       Tags.remove({ _id });
+
       //Unassigning accounts from tags
       let workQueueId = _id;
       Accounts.update({ workQueueId }, { $unset: { workQueueId: null } });
@@ -57,10 +58,6 @@ Meteor.methods({
 
   "tags.deleteMany"(ids) {
     Tags.remove({ _id: { $in: ids } });
-    Accounts.update(
-      { workQueueId: { $in: ids } },
-      { $unset: { workQueueId: null } }
-    );
   },
 
   "user.addTag"({ userIds, tagId }) {
