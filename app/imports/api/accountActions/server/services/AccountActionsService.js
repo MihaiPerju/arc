@@ -7,6 +7,15 @@ export default class AccountActionsService {
     AccountActionsRaw.aggregateSync = Meteor.wrapAsync(
       AccountActionsRaw.aggregate
     );
+    
+    let additionalOption = [];
+    if(sort)
+      additionalOption.push({ "$sort": sort });
+    if(skip)
+      additionalOption.push({ "$skip": skip });
+    if(limit)
+      additionalOption.push({ "$limit": skip ? skip : 0 + limit });
+
     let actions = await AccountActionsRaw.aggregateSync([
       {
         $match: { ...params.filters }
@@ -69,9 +78,7 @@ export default class AccountActionsService {
           account: { $arrayElemAt: ["$account", 0] }
         }
       },
-      { "$sort": sort },
-      { "$limit": skip + limit },
-      { "$skip": skip },
+      ...additionalOption
     ]).toArray();
 
     return actions;
