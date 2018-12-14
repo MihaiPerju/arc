@@ -49,14 +49,9 @@ export default class RouteService {
           icon: "user-circle-o"
         },
         {
-          name: "rules/list",
-          label: "Rules",
-          icon: "file-text-o"
-        },
-        {
           name: "code/list",
           label: "Codes",
-          icon: "code-fork"
+          icon: "code-fok"
         },
         {
           name: "reports/list",

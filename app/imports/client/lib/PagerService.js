@@ -1,12 +1,9 @@
 import moment from "moment";
 import stateEnum from "/imports/api/accounts/enums/states";
-import UserRoles, {
-  roleGroups
-} from "/imports/api/users/enums/roles";
+import UserRoles, { roleGroups } from "/imports/api/users/enums/roles";
 import statuses from "/imports/api/files/enums/statuses";
 
 export default class PagerService {
-  
   static getPagerOptions(page, perPage) {
     return {
       limit: perPage,
@@ -128,7 +125,8 @@ export default class PagerService {
       const filterArr = assign.split(",");
       if (_.contains(filterArr, "assigneeId")) {
         _.extend(params.filters, {
-          $or: [{
+          $or: [
+            {
               workQueueId: {
                 $in: filterArr
               }
@@ -152,7 +150,8 @@ export default class PagerService {
 
   static getAccountFilters(
     params,
-    state, {
+    state,
+    {
       acctNum,
       facilityId,
       clientId,
@@ -174,7 +173,8 @@ export default class PagerService {
       medNo,
       placementDateMin,
       placementDateMax
-    }, {
+    },
+    {
       sortAcctBal,
       sortTickleDate,
       sortCreatedAt,
@@ -202,7 +202,7 @@ export default class PagerService {
             $exists: true
           },
           employeeToRespond: null
-        },
+        }
       });
       _.extend(params.options, {
         sort: {
@@ -319,8 +319,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(dischrgDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(dischrgDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -335,8 +335,8 @@ export default class PagerService {
         dischrgDate: {
           $lt: new Date(
             moment(new Date(dischrgDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -347,8 +347,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(fbDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(fbDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -363,8 +363,8 @@ export default class PagerService {
         fbDate: {
           $lt: new Date(
             moment(new Date(fbDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -381,8 +381,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(admitDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(admitDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -397,8 +397,8 @@ export default class PagerService {
         admitDate: {
           $lt: new Date(
             moment(new Date(admitDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -410,8 +410,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(placementDateMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(placementDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -426,8 +426,8 @@ export default class PagerService {
         placementDate: {
           $lt: new Date(
             moment(new Date(placementDateMax))
-            .startOf("day")
-            .add(1, "day")
+              .startOf("day")
+              .add(1, "day")
           )
         }
       });
@@ -520,7 +520,7 @@ export default class PagerService {
       filters: {}
     });
     if (filters && filters.status) {
-      status = filters.status
+      status = filters.status;
     }
     let currentPath = FlowRouter.current().route.path;
 
@@ -540,8 +540,8 @@ export default class PagerService {
 
     if (currentPath.indexOf("reports/list") > -1) {
       name = FlowRouter.getQueryParam("name");
-      facCode = FlowRouter.getQueryParam("facCode")
-      ptType = FlowRouter.getQueryParam("ptType")
+      facCode = FlowRouter.getQueryParam("facCode");
+      ptType = FlowRouter.getQueryParam("ptType");
     }
 
     if (currentPath.indexOf("letter-templates/list") > -1) {
@@ -648,7 +648,6 @@ export default class PagerService {
           $options: "i"
         }
       });
-
     }
     if (ptType) {
       _.extend(params.filters, {
@@ -657,7 +656,6 @@ export default class PagerService {
           $options: "i"
         }
       });
-
     }
     // letter-templates search
     if (letterTemplateName) {
@@ -755,8 +753,8 @@ export default class PagerService {
           $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
           $lt: new Date(
             moment(new Date(createdAtMax))
-            .add(1, "day")
-            .startOf("day")
+              .add(1, "day")
+              .startOf("day")
           )
         }
       });
@@ -814,11 +812,7 @@ export default class PagerService {
     };
   }
 
-  static setPage({
-    page,
-    perPage,
-    total
-  }, inc) {
+  static setPage({ page, perPage, total }, inc) {
     const maxPage = this.getMaxPage(total, perPage);
     if (page + inc <= maxPage && page + inc >= 1) {
       return page + inc;
