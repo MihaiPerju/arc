@@ -40,6 +40,9 @@ export default class ManagerDashboard extends React.Component {
       <div>
         <ClientStatistics filters={filters} />
         <div className="dashboard-row">
+          <HeartBeat />
+        </div>
+        <div className="dashboard-row">
           <TurnTime filters={filters} />
         </div>
         <div className="dashboard-row">
@@ -48,9 +51,7 @@ export default class ManagerDashboard extends React.Component {
         <div className="dashboard-row">
           <AgedAccounts filters={filters} />
         </div>
-        <div className="dashboard-row">
-          <HeartBeat />
-        </div>
+
       </div>
     );
   }
