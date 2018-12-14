@@ -15,13 +15,13 @@ import { moduleNames } from "/imports/api/tags/enums/tags";
 
 Meteor.methods({
   "client.create"(data) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     data.createdAt = new Date();
     return Clients.insert(data);
   },
 
   "client.get"(_id) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     return Clients.findOne({
       _id
@@ -29,13 +29,13 @@ Meteor.methods({
   },
 
   "client.getOne"(_id) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     return Clients.findOne({ _id });
   },
 
   "clients.list"(params) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     const queryParams = QueryBuilder.getClientParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
@@ -70,7 +70,7 @@ Meteor.methods({
   },
 
   "client.getLogoPath"(uploadId) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     const existingUpload = Uploads.findOne({
       _id: uploadId
@@ -79,7 +79,7 @@ Meteor.methods({
   },
 
   "client.update"(_id, data) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     Clients.update(
       {
         _id
@@ -91,7 +91,7 @@ Meteor.methods({
   },
 
   "client.assign"(_id, managerIds) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     //Update client
     Clients.update(
       {
@@ -140,7 +140,7 @@ Meteor.methods({
   },
 
   "client.removeLogo"(clientId) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     const client = Clients.findOne({
       _id: clientId
@@ -173,7 +173,7 @@ Meteor.methods({
   },
 
   "client.delete"(_id) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     const existingClient = Clients.findOne({
       _id
@@ -191,7 +191,7 @@ Meteor.methods({
   },
 
   "client.deleteMany"(Ids) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     _.each(Ids, id => {
       Meteor.call("client.removeLogo", id);
@@ -211,7 +211,7 @@ Meteor.methods({
   },
 
   "client.switchStatus"(_id, status) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     return Clients.update(
       {
@@ -256,12 +256,12 @@ Meteor.methods({
   },
 
   "client.getAll"() {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     return Clients.find({}, { fields: { _id: 1, clientName: 1, tagIds: 1 } }).fetch();
   },
 
   "client.getWorkQueue"(clientId) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     let workQueue = [];
 
     let tagDetails = Tags.find({ clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] } }, { fields: { _id: 1, name: 1 } }).fetch();

@@ -45,4 +45,14 @@ export default {
       throw new Meteor.Error("Not allowed !");
     }
   },
+
+  isAdminTechOrManager(userId) {
+    this.checkLoggedIn(userId);
+    if (!Roles.userIsInRole(userId, [UserRoles.ADMIN, UserRoles.TECH, UserRoles.MANAGER])) {
+      throw new Meteor.Error(
+        "not-allowed",
+        "You do not have the correct roles for this!"
+      );
+    }
+  },
 };
