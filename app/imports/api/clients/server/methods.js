@@ -15,7 +15,7 @@ import { moduleNames } from "/imports/api/tags/enums/tags";
 
 Meteor.methods({
   "client.create"(data) {
-    Security.isAdminTechOrManager(this.userId);
+    Security.isAdminOrTech(this.userId);
     data.createdAt = new Date();
     return Clients.insert(data);
   },
@@ -79,7 +79,7 @@ Meteor.methods({
   },
 
   "client.update"(_id, data) {
-    Security.isAdminTechOrManager(this.userId);
+    Security.isAdminOrTech(this.userId);
     Clients.update(
       {
         _id
@@ -91,7 +91,7 @@ Meteor.methods({
   },
 
   "client.assign"(_id, managerIds) {
-    Security.isAdminTechOrManager(this.userId);
+    Security.isAdminOrTech(this.userId);
     //Update client
     Clients.update(
       {
@@ -140,7 +140,7 @@ Meteor.methods({
   },
 
   "client.removeLogo"(clientId) {
-    Security.isAdminTechOrManager(this.userId);
+    Security.isAdminOrTech(this.userId);
 
     const client = Clients.findOne({
       _id: clientId
@@ -173,7 +173,7 @@ Meteor.methods({
   },
 
   "client.delete"(_id) {
-    Security.isAdminTechOrManager(this.userId);
+    Security.isAdminOrTech(this.userId);
 
     const existingClient = Clients.findOne({
       _id
@@ -191,7 +191,7 @@ Meteor.methods({
   },
 
   "client.deleteMany"(Ids) {
-    Security.isAdminTechOrManager(this.userId);
+    Security.isAdminOrTech(this.userId);
 
     _.each(Ids, id => {
       Meteor.call("client.removeLogo", id);
@@ -211,7 +211,7 @@ Meteor.methods({
   },
 
   "client.switchStatus"(_id, status) {
-    Security.isAdminTechOrManager(this.userId);
+    Security.isAdminOrTech(this.userId);
 
     return Clients.update(
       {
