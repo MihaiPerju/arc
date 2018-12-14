@@ -256,7 +256,7 @@ Meteor.methods({
   },
 
   "client.getAll"() {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     return Clients.find({}, { fields: { _id: 1, clientName: 1, tagIds: 1 } }).fetch();
   },
 
