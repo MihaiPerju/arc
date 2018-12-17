@@ -21,7 +21,7 @@ Meteor.methods({
   },
 
   "client.get"(_id) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     return Clients.findOne({
       _id
@@ -29,13 +29,13 @@ Meteor.methods({
   },
 
   "client.getOne"(_id) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     return Clients.findOne({ _id });
   },
 
   "clients.list"(params) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     const queryParams = QueryBuilder.getClientParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
@@ -70,7 +70,7 @@ Meteor.methods({
   },
 
   "client.getLogoPath"(uploadId) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
 
     const existingUpload = Uploads.findOne({
       _id: uploadId
@@ -256,12 +256,12 @@ Meteor.methods({
   },
 
   "client.getAll"() {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     return Clients.find({}, { fields: { _id: 1, clientName: 1, tagIds: 1 } }).fetch();
   },
 
   "client.getWorkQueue"(clientId) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     let workQueue = [];
 
     let tagDetails = Tags.find({ clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] } }, { fields: { _id: 1, name: 1 } }).fetch();

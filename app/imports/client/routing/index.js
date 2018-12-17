@@ -195,12 +195,8 @@ route(
 
 //Rules Engine
 import RulesContainer from "/imports/client/pages/rules/RulesListContainer";
-import RuleCreate from "/imports/client/pages/rules/RuleCreate";
-import RuleEdit from "/imports/client/pages/rules/RuleEdit";
 
-route("/rules/list", RulesContainer);
-route("/rule/create", RuleCreate);
-route("/rule/:id/edit", RuleEdit);
+route("/client/:clientId/manage-rules", RulesContainer);
 
 //Substates
 import SubstatesListContainer from "/imports/client/pages/substates/SubstatesListContainer";

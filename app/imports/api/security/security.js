@@ -48,8 +48,17 @@ export default {
 
   isAdminOrManager(userId) {
     this.checkLoggedIn(userId);
-
     if (!Roles.userIsInRole(userId, [UserRoles.ADMIN, UserRoles.MANAGER])) {
+      throw new Meteor.Error(
+        "not-allowed",
+        "You do not have the correct roles for this!"
+      );
+    }
+  },
+
+  isAdminTechOrManager(userId) {
+    this.checkLoggedIn(userId);
+    if (!Roles.userIsInRole(userId, [UserRoles.ADMIN, UserRoles.TECH, UserRoles.MANAGER])) {
       throw new Meteor.Error(
         "not-allowed",
         "You do not have the correct roles for this!"
