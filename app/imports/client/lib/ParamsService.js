@@ -90,7 +90,7 @@ export default class ParamsService {
         sortDischrgDate,
         sortFbDate,
         sortAdmitDate
-      },
+      }
     };
   }
 
@@ -159,6 +159,7 @@ export default class ParamsService {
   static getRulesParams() {
     let name = FlowRouter.getQueryParam("name");
     let tagIds = this.getTags();
+    let clientId = FlowRouter._current.params.clientId;
 
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
@@ -166,7 +167,8 @@ export default class ParamsService {
     return {
       filters: {
         name,
-        tagIds
+        tagIds,
+        clientId
       },
       options: {
         page,

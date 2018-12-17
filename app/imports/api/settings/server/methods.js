@@ -47,14 +47,11 @@ Meteor.methods({
   },
 
   "managerSettings.update"(data) {
-    console.log(data);
     let userId = this.userId;
     Security.checkLoggedIn(userId);
     const { name } = data;
     data.userId = userId;
-    if (data._id)
-      Settings.update({ name, userId }, { $set: data });
-    else
-      Settings.insert(data);
+    if (data._id) Settings.update({ name, userId }, { $set: data });
+    else Settings.insert(data);
   }
 });

@@ -167,7 +167,7 @@ export default class RuleListContainer extends Pager {
     if (!rules) {
       return <Loading />;
     }
-    
+
     return (
       <div className="cc-container">
         <div

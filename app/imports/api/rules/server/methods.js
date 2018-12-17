@@ -1,7 +1,6 @@
 import Rules from "/imports/api/rules/collection.js";
 import FieldsGenerator from "./FieldsGenerator";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
-import Clients from "/imports/api/clients/collection";
 import Facilities from "/imports/api/facilities/collection";
 import Users from "/imports/api/users/collection";
 import Tags from "/imports/api/tags/collection";
@@ -29,9 +28,11 @@ Meteor.methods({
     return Rules.findOne({ _id });
   },
 
-  "rule.getFilterOptions"() {
-    const clients = Clients.find({}, { fields: { clientName: 1 } }).fetch();
-    const facilities = Facilities.find({}, { fields: { name: 1 } }).fetch();
+  "rule.getFilterOptions"(clientId) {
+    const facilities = Facilities.find(
+      { clientId },
+      { fields: { name: 1 } }
+    ).fetch();
     const users = Users.find(
       { roles: { $in: [RolesEnum.REP] } },
       { fields: { profile: 1 } }
@@ -42,13 +43,12 @@ Meteor.methods({
     ).fetch();
     const actions = Actions.find({}, { fields: { title: 1 } }).fetch();
 
-    const clientOptions = clients.map(client => {
-      return { label: client.clientName, value: client._id };
-    });
 
-    const facilityOptions = [{ label: "All", value: "all" }].concat(facilities.map(facility => {
-      return { label: facility.name, value: facility._id };
-    }));
+    const facilityOptions = [{ label: "All", value: "all" }].concat(
+      facilities.map(facility => {
+        return { label: facility.name, value: facility._id };
+      })
+    );
 
     const userOptions = users.map(user => {
       return {
@@ -73,7 +73,6 @@ Meteor.methods({
     });
 
     return {
-      clientOptions,
       facilityOptions,
       userOptions,
       workQueueOptions,

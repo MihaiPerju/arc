@@ -90,7 +90,7 @@ export default class QueryBuilder {
   static getRulesParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
-      let { name } = params.filters;
+      let { name, clientId } = params.filters;
       let { page, perPage } = params.options;
 
       this.getPagerOptions(queryParams, page, perPage);
@@ -102,6 +102,9 @@ export default class QueryBuilder {
             $options: "i"
           }
         });
+      }
+      if (clientId) {
+        _.extend(queryParams.filters, { clientId });
       }
       //Getting tags
       this.getTags(params, queryParams);
@@ -461,8 +464,6 @@ export default class QueryBuilder {
         sortAdmitDate
       } = params.options;
 
-
-
       this.getPagerOptions(queryParams, page, perPage);
       this.secureAccounts(queryParams, userId);
 
@@ -476,9 +477,8 @@ export default class QueryBuilder {
         });
         return queryParams;
       }
-      
-      this.limitRepAccountAccess(queryParams, userId);
 
+      this.limitRepAccountAccess(queryParams, userId);
 
       if (assign === "none") {
         _.extend(queryParams.filters, {
@@ -556,7 +556,8 @@ export default class QueryBuilder {
         _.extend(queryParams.filters, {
           tickleDate: null,
           employeeToRespond
-        }); params
+        });
+        params;
       } else if (state === "flagged") {
         _.extend(queryParams.filters, {
           flagCounter: {
@@ -840,7 +841,7 @@ export default class QueryBuilder {
     if (user) {
       tagIds = user.tagIds;
     }
-     if (Roles.userIsInRole(userId, RolesEnum.REP)) {
+    if (Roles.userIsInRole(userId, RolesEnum.REP)) {
       //Getting only the escalated accounts that are open and the rep is the author
       if (!tagIds) {
         tagIds = [];

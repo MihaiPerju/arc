@@ -4,87 +4,81 @@ export default class RouteService {
   static getRoutesByRole() {
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
       return [{
-        name: "dashboard",
-        label: "Dashboard",
-        icon: "dashboard"
-      },
-      {
-        name: "accounts/active",
-        label: "Active",
-        icon: "user"
-      },
-      {
-        name: "accounts/review",
-        label: "Review",
-        icon: "inbox"
-      },
-      {
-        name: "accounts/hold",
-        label: "On Hold",
-        icon: "hand-paper-o"
-      },
-      {
-        name: "accounts/archived",
-        label: "Archived",
-        icon: "archive"
-      },
-      {
-        name: "accounts/tickles",
-        label: "Tickles",
-        icon: "comments-o"
-      },
-      {
-        name: "accounts/unassigned",
-        label: "Unassigned",
-        icon: "question-circle-o"
-      },
-      {
-        name: "client/list",
-        label: "Clients",
-        icon: "users"
-      },
-      {
-        name: "admin/user/list",
-        label: "Users",
-        icon: "user-circle-o"
-      },
-      {
-        name: "rules/list",
-        label: "Rules",
-        icon: "file-text-o"
-      },
-      {
-        name: "code/list",
-        label: "Codes",
-        icon: "code-fork"
-      },
-      {
-        name: "reports/list",
-        label: "Reports",
-        icon: "file-text-o"
-      },
-      {
-        name: "letter-templates/list",
-        label: "Letter Templates",
-        icon: "window-restore"
-      },
-      {
-        name: "/letters/list",
-        label: "Letters",
-        icon: "copy"
-      },
-      {
-        name: "action/list",
-        label: "Actions",
-        icon: "thumb-tack"
-      },
-      {
-        name: "substate/list",
-        label: "Substates",
-        icon: "tasks"
-      },
-
-      {
+          name: "dashboard",
+          label: "Dashboard",
+          icon: "dashboard"
+        },
+        {
+          name: "accounts/active",
+          label: "Active",
+          icon: "user"
+        },
+        {
+          name: "accounts/review",
+          label: "Review",
+          icon: "inbox"
+        },
+        {
+          name: "accounts/hold",
+          label: "On Hold",
+          icon: "hand-paper-o"
+        },
+        {
+          name: "accounts/archived",
+          label: "Archived",
+          icon: "archive"
+        },
+        {
+          name: "accounts/tickles",
+          label: "Tickles",
+          icon: "comments-o"
+        },
+        {
+          name: "accounts/unassigned",
+          label: "Unassigned",
+          icon: "question-circle-o"
+        },
+        {
+          name: "client/list",
+          label: "Clients",
+          icon: "users"
+        },
+        {
+          name: "admin/user/list",
+          label: "Users",
+          icon: "user-circle-o"
+        },
+        {
+          name: "code/list",
+          label: "Codes",
+          icon: "code-fok"
+        },
+        {
+          name: "reports/list",
+          label: "Reports",
+          icon: "file-text-o"
+        },
+        {
+          name: "letter-templates/list",
+          label: "Letter Templates",
+          icon: "window-restore"
+        },
+        {
+          name: "/letters/list",
+          label: "Letters",
+          icon: "copy"
+        },
+        {
+          name: "action/list",
+          label: "Actions",
+          icon: "thumb-tack"
+        },
+        {
+          name: "substate/list",
+          label: "Substates",
+          icon: "tasks"
+        },
+        {
         name: "tags/list",
         label: "Tags",
         icon: "tags"
