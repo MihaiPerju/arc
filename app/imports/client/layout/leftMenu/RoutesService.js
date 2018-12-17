@@ -78,209 +78,213 @@ export default class RouteService {
           label: "Substates",
           icon: "tasks"
         },
-
         {
-          name: "tags/list",
-          label: "Tags",
-          icon: "tags"
-        },
-        {
-          name: "bulk/action",
-          label: "Bulk Action",
-          icon: "thumb-tack"
-        }
+        name: "tags/list",
+        label: "Tags",
+        icon: "tags"
+      },
+      {
+        name: "bulk/action",
+        label: "Bulk Action",
+        icon: "thumb-tack"
+      }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH)) {
       return [{
-          name: "dashboard",
-          label: "Dashboard",
-          icon: "dashboard"
-        },
-        {
-          name: "accounts/active",
-          label: "Active",
-          icon: "user"
-        },
-        {
-          name: "accounts/review",
-          label: "Review",
-          icon: "inbox"
-        },
-        {
-          name: "accounts/hold",
-          label: "On Hold",
-          icon: "hand-paper-o"
-        },
-        {
-          name: "accounts/archived",
-          label: "Archived",
-          icon: "archive"
-        },
-        {
-          name: "accounts/escalated",
-          label: "Escalations",
-          icon: "info"
-        },
-        {
-          name: "accounts/tickles",
-          label: "Tickles",
-          icon: "comments-o"
-        },
-        {
-          name: "accounts/unassigned",
-          label: "Unassigned",
-          icon: "question-circle-o"
-        },
-        {
-          name: "file/list",
-          label: "Files",
-          icon: "copy"
-        },
-        {
-          name: "client/list",
-          label: "Clients",
-          icon: "users"
-        },
-        {
-          name: "admin/user/list",
-          label: "Users",
-          icon: "user-circle-o"
-        },
-        {
-          name: "code/list",
-          label: "Codes",
-          icon: "code-fork"
-        },
-        {
-          name: "reports/list",
-          label: "Reports",
-          icon: "file-text-o"
-        },
-        {
-          name: "letter-templates/list",
-          label: "Templates",
-          icon: "window-restore"
-        },
-        {
-          name: "/letters/list",
-          label: "Letters",
-          icon: "copy"
-        },
-        {
-          name: "action/list",
-          label: "Actions",
-          icon: "thumb-tack"
-        },
-        {
-          name: "tags/list",
-          label: "Tags",
-          icon: "tags"
-        }
+        name: "dashboard",
+        label: "Dashboard",
+        icon: "dashboard"
+      },
+      {
+        name: "accounts/active",
+        label: "Active",
+        icon: "user"
+      },
+      {
+        name: "accounts/review",
+        label: "Review",
+        icon: "inbox"
+      },
+      {
+        name: "accounts/hold",
+        label: "On Hold",
+        icon: "hand-paper-o"
+      },
+      {
+        name: "accounts/archived",
+        label: "Archived",
+        icon: "archive"
+      },
+      {
+        name: "accounts/escalated",
+        label: "Escalations",
+        icon: "info"
+      },
+      {
+        name: "accounts/tickles",
+        label: "Tickles",
+        icon: "comments-o"
+      },
+      {
+        name: "accounts/unassigned",
+        label: "Unassigned",
+        icon: "question-circle-o"
+      },
+      {
+        name: "file/list",
+        label: "Files",
+        icon: "copy"
+      },
+      {
+        name: "client/list",
+        label: "Clients",
+        icon: "users"
+      },
+      {
+        name: "admin/user/list",
+        label: "Users",
+        icon: "user-circle-o"
+      },
+      {
+        name: "code/list",
+        label: "Codes",
+        icon: "code-fork"
+      },
+      {
+        name: "reports/list",
+        label: "Reports",
+        icon: "file-text-o"
+      },
+      {
+        name: "letter-templates/list",
+        label: "Templates",
+        icon: "window-restore"
+      },
+      {
+        name: "/letters/list",
+        label: "Letters",
+        icon: "copy"
+      },
+      {
+        name: "action/list",
+        label: "Actions",
+        icon: "thumb-tack"
+      },
+      {
+        name: "tags/list",
+        label: "Tags",
+        icon: "tags"
+      }
       ];
     } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       return [{
-          name: "dashboard",
-          label: "Dashboard",
-          icon: "dashboard"
-        },
-        {
-          name: "accounts/active",
-          label: "Active",
-          icon: "user"
-        },
-        {
-          name: "accounts/review",
-          label: "Review",
-          icon: "inbox"
-        },
-        {
-          name: "accounts/hold",
-          label: "On Hold",
-          icon: "hand-paper-o"
-        },
-        {
-          name: "accounts/archived",
-          label: "Archived",
-          icon: "archive"
-        },
-        {
-          name: "accounts/escalated",
-          label: "Escalations",
-          icon: "info"
-        },
-        {
-          name: "accounts/tickles",
-          label: "Tickles",
-          icon: "comments-o"
-        },
-        {
-          name: "accounts/unassigned",
-          label: "Unassigned",
-          icon: "question-circle-o"
-        },
-        {
-          name: "accounts/flagged",
-          label: "Flagged",
-          icon: "flag"
-        },
-        {
-          name: "client/list",
-          label: "Clients",
-          icon: "users"
-        },
-        {
-          name: "admin/user/list",
-          label: "Users",
-          icon: "user-circle-o"
-        },
-        {
-          name: "reports/list",
-          label: "Reports",
-          icon: "file-text-o"
-        },
+        name: "dashboard",
+        label: "Dashboard",
+        icon: "dashboard"
+      },
+      {
+        name: "accounts/active",
+        label: "Active",
+        icon: "user"
+      },
+      {
+        name: "accounts/review",
+        label: "Review",
+        icon: "inbox"
+      },
+      {
+        name: "accounts/hold",
+        label: "On Hold",
+        icon: "hand-paper-o"
+      },
+      {
+        name: "accounts/archived",
+        label: "Archived",
+        icon: "archive"
+      },
+      {
+        name: "accounts/escalated",
+        label: "Escalations",
+        icon: "info"
+      },
+      {
+        name: "accounts/tickles",
+        label: "Tickles",
+        icon: "comments-o"
+      },
+      {
+        name: "accounts/unassigned",
+        label: "Unassigned",
+        icon: "question-circle-o"
+      },
+      {
+        name: "accounts/flagged",
+        label: "Flagged",
+        icon: "flag"
+      },
+      {
+        name: "client/list",
+        label: "Clients",
+        icon: "users"
+      },
+      {
+        name: "admin/user/list",
+        label: "Users",
+        icon: "user-circle-o"
+      },
+      {
+        name: "reports/list",
+        label: "Reports",
+        icon: "file-text-o"
+      },
 
-        {
-          name: "/letters/list",
-          label: "Letters",
-          icon: "copy"
-        },
-        {
-          name: "action/list",
-          label: "Actions",
-          icon: "thumb-tack"
-        },
-        {
-          name: "tags/list",
-          label: "Tags",
-          icon: "tags"
-        }
+      {
+        name: "/letters/list",
+        label: "Letters",
+        icon: "copy"
+      },
+      {
+        name: "action/list",
+        label: "Actions",
+        icon: "thumb-tack"
+      },
+      {
+        name: "tags/list",
+        label: "Tags",
+        icon: "tags"
+      },
+      {
+        name: "bulk/action",
+        label: "Bulk Action",
+        icon: "thumb-tack"
+      }
       ];
     } else {
       return [{
-          name: "dashboard",
-          label: "Dashboard",
-          icon: "dashboard"
-        },
-        {
-          name: "accounts/active",
-          label: "Active",
-          icon: "user"
-        },
-        {
-          name: "accounts/review",
-          label: "Review",
-          icon: "inbox"
-        },
-        {
-          name: "accounts/escalated",
-          label: "Escalations",
-          icon: "info"
-        },
-        {
-          name: "accounts/tickles",
-          label: "Tickles",
-          icon: "comments-o"
-        }
+        name: "dashboard",
+        label: "Dashboard",
+        icon: "dashboard"
+      },
+      {
+        name: "accounts/active",
+        label: "Active",
+        icon: "user"
+      },
+      {
+        name: "accounts/review",
+        label: "Review",
+        icon: "inbox"
+      },
+      {
+        name: "accounts/escalated",
+        label: "Escalations",
+        icon: "info"
+      },
+      {
+        name: "accounts/tickles",
+        label: "Tickles",
+        icon: "comments-o"
+      }
       ];
     }
   }
