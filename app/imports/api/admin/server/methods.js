@@ -29,7 +29,7 @@ Meteor.methods({
   },
 
   "admin.editUser"(userId, { email, profile, tagIds }) {
-    Security.checkAdmin(this.userId);
+    Security.isAdminOrManager(this.userId);
 
     if (!userId) {
       throw new Meteor.Error("No user");

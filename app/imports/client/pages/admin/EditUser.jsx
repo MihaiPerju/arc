@@ -3,6 +3,7 @@ import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
 import TagsService from "./services/TagsService";
+import RolesEnum from "/imports/api/users/enums/roles";
 
 export default class EditUser extends Component {
   constructor() {
@@ -17,8 +18,8 @@ export default class EditUser extends Component {
     };
   }
 
-  onSubmit(formData) {
-    const { user } = this.props;
+  onSubmit(formData) { 
+     const { user } = this.props;
     this.setState({ isDisabled: true });
     Meteor.call("admin.editUser", user._id, formData, err => {
       if (!err) {
@@ -27,7 +28,7 @@ export default class EditUser extends Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    });
+    }); 
   }
 
   getTagList = () => {
@@ -53,7 +54,7 @@ export default class EditUser extends Component {
     const {  user } = this.props;
     const {  isDisabled } = this.state;
     user.email = user.emails[0].address;
-
+    
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -135,6 +136,16 @@ export default class EditUser extends Component {
                 />
                 <ErrorField name="profile.phoneNumber" />
               </div>
+              { user && user.roles && user.roles[0] == RolesEnum.REP && 
+                <div className="form-wrapper">
+                  <AutoField
+                    labelHidden={true}
+                    placeholder="Goal"
+                    name="profile.goal"
+                  />
+                  <ErrorField name="profile.goal" />
+                </div>
+              }
             </AutoForm>
           </div>
         </div>
@@ -148,6 +159,7 @@ const EditSchema = new SimpleSchema({
   "profile.firstName": { type: String },
   "profile.lastName": { type: String },
   "profile.phoneNumber": { type: String, optional: true },
+  "profile.goal": { type: Number, optional: true },
   email: {
     type: String,
     regEx: SimpleSchema.RegEx.Email

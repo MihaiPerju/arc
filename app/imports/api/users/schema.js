@@ -39,6 +39,10 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
+  "profile.goal": {
+    type: Number,
+    optional: true
+  },
   tagIds: {
     type: Array,
     optional: true
