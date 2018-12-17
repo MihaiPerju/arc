@@ -35,9 +35,14 @@ Meteor.methods({
   },
 
   "settings.get"(name) {
+    let settings = null;
     let userId = this.userId;
     Security.checkLoggedIn(userId);
-    return Settings.findOne({ name, userId });
+    settings = Settings.findOne({ name, userId });
+    if(!settings){
+      settings = Settings.findOne({ name });
+    }
+    return settings;
   },
 
   "managerSettings.get"(name) {
