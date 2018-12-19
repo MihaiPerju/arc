@@ -3,14 +3,16 @@ import Business from "/imports/api/business";
 import Uploads from "/imports/api/uploads/uploads/collection";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
+import Path from "path"
 
-Picker.route("/image/:path", function(params, req, res) {
+Picker.route("/image/:name", function(params, req, res) {
   const { root } = SettingsService.getSettings(settings.ROOT);
 
-  const { path } = params;
-  const filePath = root + Business.CLIENTS_FOLDER + path;
+  const { name} = params;
+  const filePath = Path.join(root,Business.CLIENTS_FOLDER, name);
+  console.log(name)
   const { mimeType } = Uploads.findOne({
-    path
+    name
   });
   if (!fs.existsSync(filePath)) {
     res.writeHead(404);
