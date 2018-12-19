@@ -64,6 +64,7 @@ const fileHandler = (req, store, root) => {
 
     filename =
       parts.slice(0, parts.length - 1) + "." + Random.id() + "." + extension;
+    filename = filename.replace(/\s/g, "");
 
     let movePath = root + filename;
     let fstream = fs.createWriteStream(movePath);
