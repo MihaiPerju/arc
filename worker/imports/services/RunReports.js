@@ -19,6 +19,7 @@ import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import { reportTypes } from "/imports/api/reports/enums/reportType";
 import AccountActions from "/imports/api/accountActions/collection";
+import moment from "moment";
 
 export default class RunReports {
   static run() {
@@ -204,12 +205,60 @@ export default class RunReports {
         var indexKey = objectKeys[1].slice(0, -1);
         var value = d[insuranceKey][indexKey][propKey];
         return `${value != undefined ? value : ""}`;
-      } else return `${d[key]}`;
+      } else if (key.includes("Date")) {
+        var value = d[key];
+        return `${value != undefined ? moment(value).format("MM/DD/YYYY, hh:mm a") : ""}`;
+      } 
+      else return `${d[key]}`;
     };
 
     // Render HTML
     const renderHtml = meta => {
-      const data = (
+      let dataCell = [];
+      
+      let dataCellNew = [];
+      meta.map((data, index) => {
+        let cnt = 1;
+        let userArray = [];
+        Object.keys(headers).map((item, indexCell) => {
+          let newObj = { d: data, headers: item }
+            userArray.push(newObj);
+        })
+        dataCellNew.push(userArray);
+      })
+
+      let pdfDataNew = ``;
+      //Table header
+      pdfDataNew += `<table style='font-family: arial, sans-serif; border-collapse: collapse; width: 100%; margin-bottom: 10px; padding: 10px;'>`;
+      pdfDataNew += `<tr>`
+      Object.keys(headers).map((item, indexCell) => {
+        if(!item.includes("metadata") &&  !item.includes("insurances") ) {
+          pdfDataNew += `<td style='text-align:left; font-size:9px; width:210px; padding: 12px; font-weight: bold;' >${item}</td>`;
+        }
+      })
+      pdfDataNew += `</tr>`
+      pdfDataNew += `</table>`;
+
+
+      dataCellNew.map((data, index) => {
+        pdfDataNew += `<table style='font-family: arial, sans-serif; border-collapse: collapse; border:1px solid #181472; width: 100%; margin-bottom: 10px; padding: 5px; border-bottom: 5px solid #181472;'>`;
+         /** Table Labels */
+         pdfDataNew += `<tr>`
+         data.map((res) => {
+          if(!res.headers.includes("metadata") &&  !res.headers.includes("insurances") ) {
+            let cellValue = bindColumn(res.d, res.headers);
+            if(!cellValue || cellValue == 'undefined' || cellValue == 'null') {
+              cellValue = '--';
+            }
+            pdfDataNew += `<td style='text-align:left; font-size:9px; width:100px; padding: 5px;' >${cellValue}</td>`;
+          }
+         })
+         pdfDataNew += `</tr>`
+        pdfDataNew += `</table>`;
+      })
+      return pdfDataNew;
+
+     /*  const data = (
         <Container>
           <Table textAlign="center" celled>
             <Table.Body>
@@ -231,13 +280,14 @@ export default class RunReports {
           </Table>
         </Container>
       );
-      return ReactDOMServer.renderToString(data);
+      return ReactDOMServer.renderToString(data); */
     };
 
     const reportContent = renderHtml(metadata);
 
     try {
-      pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+      let options = { format: 'A3', orientation: 'landscape', header: { height: "10mm" }, footer: { height: "10mm" } };
+      pdf.create(reportContent, options ).toFile(pdfFilePath, (err, res) => {
         if (err) {
           future.return(err);
         } else {
