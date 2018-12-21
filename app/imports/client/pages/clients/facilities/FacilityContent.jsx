@@ -6,7 +6,7 @@ import PlacementBlock from "./components/FacilityContent/PlacementBlock";
 import InventoryBlock from "./components/FacilityContent/InventoryBlock";
 import PaymentBlock from "./components/FacilityContent/PaymentBlock";
 import FacilityEdit from "/imports/client/pages/clients/facilities/FacilityEdit.jsx";
-import { roleGroups } from "/imports/api/users/enums/roles";
+import userRoles, { roleGroups } from "/imports/api/users/enums/roles";
 import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
@@ -118,17 +118,23 @@ export default class FacilityContent extends Component {
             {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
               <FacilityFiles facilityId={facility && facility._id} />
             )}
-            <PlacementBlock
-              facility={facility}
-              setTempRules={this.setTempRules}
-            />
-            <InventoryBlock
-              facility={inventoryFacility}
-              copyPlacementRules={this.copyPlacementRules}
-              resetImportForm={resetImportForm}
-              changeResetStatus={this.changeResetStatus}
-            />
-            <PaymentBlock facility={facility} />
+            {!Roles.userIsInRole(Meteor.userId(), userRoles.MANAGER) && (
+              <PlacementBlock
+                facility={facility}
+                setTempRules={this.setTempRules}
+              />
+            )}
+            {!Roles.userIsInRole(Meteor.userId(), userRoles.MANAGER) && (
+              <InventoryBlock
+                facility={inventoryFacility}
+                copyPlacementRules={this.copyPlacementRules}
+                resetImportForm={resetImportForm}
+                changeResetStatus={this.changeResetStatus}
+              />
+            )}
+            {!Roles.userIsInRole(Meteor.userId(), userRoles.MANAGER) && (
+              <PaymentBlock facility={facility} />
+            )}
           </div>
         )}
       </div>
