@@ -21,7 +21,6 @@ export default [
   { label: "User Phone", value: "User Phone" },
   { label: "Facility Zip", value: "Facility Zip" },
   { label: "Facility State", value: "Facility State" },
-  { label: "To", value: "To" },
   { label: "To Address 1", value: "To Address 1" },
   { label: "To Address 2", value: "To Address 2" },
   { label: "To City", value: "To City" },
@@ -125,9 +124,6 @@ export const variablesEnum = {
   },
   "To Address 1": {
     field: "toAddress1"
-  },
-  "To": {
-    field: "to"
   },
   "To Address 2": {
     field: "toAddress2"
