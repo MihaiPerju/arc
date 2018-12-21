@@ -22,7 +22,7 @@ createRoute(
     const { name } = logo;
 
     const { root } = SettingsService.getSettings(settings.ROOT);
-
+    
     let movePath = Path.join(root, FoldersEnum.CLIENTS_FOLDER, name);
     fs.renameSync(Path.join(root, name), movePath);
 

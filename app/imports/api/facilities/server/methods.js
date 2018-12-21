@@ -17,7 +17,7 @@ Meteor.methods({
     const queryParams = QueryBuilder.getFacilitiesParams(params);
     let filters = queryParams.filters;
     let options = queryParams.options;
-    options.fields = { name: 1 };
+    options.fields = { name: 1, logoPath: 1 };
     return Facilities.find(filters, options).fetch();
   },
 
@@ -159,5 +159,5 @@ Meteor.methods({
   "facilities.fetch"(clientId) {
     Security.checkLoggedIn(this.userId);
     return Facilities.find({ clientId: clientId }).fetch();
-  },
+  }
 });

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import classNames from "classnames";
-import { getImagePath } from "/imports/api/utils.js";
+import { getFacilityImagePath,getImagePath } from "/imports/api/utils.js";
 import { roleGroups } from "/imports/api/users/enums/roles";
 import Notifier from "/imports/client/lib/Notifier";
 import Dialog from "/imports/client/lib/ui/Dialog";
@@ -96,7 +96,7 @@ export default class FacilityContentHeader extends Component {
         <div className="row__header flex--helper flex-justify--space-between flex-align--start">
           <div className="row__wrapper flex--helper flex-align--center">
             {facility && facility.logoPath ? (
-              <img src={getImagePath(facility.logoPath)} />
+              <img src={getFacilityImagePath(facility.logoPath)} />
             ) : (
               <img
                 src="/assets/img/user.svg"
