@@ -168,6 +168,7 @@ export default class LetterTemplateListContainer extends Pager {
       templates
     } = this.state;
 
+    console.log(templatesSelected);
     if (!templates) {
       return <Loading />;
     }
