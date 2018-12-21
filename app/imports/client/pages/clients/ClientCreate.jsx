@@ -73,7 +73,6 @@ export default class CreateClient extends Component {
             <AutoForm
               schema={ClientSchema}
               onSubmit={this.onSubmit.bind(this)}
-              onChange={this.onChange}
               ref="form"
             >
               {this.state.error && (
