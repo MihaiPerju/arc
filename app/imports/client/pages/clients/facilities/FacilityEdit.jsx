@@ -15,7 +15,7 @@ import SelectUsersContainer from "/imports/client/pages/clients/facilities/compo
 import Loading from "/imports/client/lib/ui/Loading";
 import { frequencyOptions } from "/imports/api/facilities/enums/frequency";
 import { getToken } from "/imports/api/uploads/utils";
-import { getImagePath } from "/imports/api/utils";
+import { getFacilityImagePath } from "/imports/api/utils";
 import DropzoneComponent from "react-dropzone-component";
 import SimpleSchema from "simpl-schema";
 
@@ -169,7 +169,7 @@ export default class FacilityCreate extends Component {
                   <div className="text-center">
                     <img
                       className="lg-avatar img-circle border--light-grey"
-                      src={getImagePath(facility.logoPath)}
+                      src={getFacilityImagePath(facility.logoPath)}
                     />
                     <div className="btn-group m-t--10">
                       <a

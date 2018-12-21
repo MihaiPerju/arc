@@ -2,10 +2,6 @@ import { createRoute } from "/imports/api/uploads/server/router";
 import Facilities from "../../facilities/collection";
 import Uploads from "/imports/api/uploads/uploads/collection";
 import Security from "/imports/api/security/security.js";
-import fs from "fs";
-import Business from "/imports/api/business";
-import SettingsService from "/imports/api/settings/server/SettingsService";
-import settings from "/imports/api/settings/enums/settings";
 
 createRoute(
   "/uploads/facility-logo/:facilityId/:token",
@@ -21,14 +17,10 @@ createRoute(
 
     const [uploadId] = uploadLocal({});
 
-    const { root } = SettingsService.getSettings(settings.ROOT);
 
-    const { path } = Uploads.findOne({
+    const { name } = Uploads.findOne({
       _id: uploadId
     });
-
-    const movePath = root + Business.CLIENTS_FOLDER + path;
-    fs.renameSync(root + path, movePath);
 
     Facilities.update(
       {
@@ -36,7 +28,7 @@ createRoute(
       },
       {
         $set: {
-          logoPath: path
+          logoPath: name
         }
       }
     );

@@ -1,15 +1,13 @@
 import fs from "fs";
-import Business from "/imports/api/business";
 import Uploads from "/imports/api/uploads/uploads/collection";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
-import Path from "path"
+import Path from "path";
 
-Picker.route("/image/:name", function(params, req, res) {
+Picker.route("/facility-logo/:name", function(params, req, res) {
   const { root } = SettingsService.getSettings(settings.ROOT);
-
-  const { name} = params;
-  const filePath = Path.join(root,Business.CLIENTS_FOLDER, name);
+  const { name } = params;
+  const filePath = Path.join(root, name);
   const { mimeType } = Uploads.findOne({
     name
   });
