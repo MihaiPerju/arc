@@ -102,7 +102,7 @@ export default class AccountsService {
           assignee: { $arrayElemAt: ["$assignee", 0] },
           client: { $arrayElemAt: ["$client", 0] },
           facility: { $arrayElemAt: ["$facility", 0] },
-          tag: { $arrayElemAt: ["$tag", 0] },
+          tag: { $arrayElemAt: ["$tag", 0] }
         }
       },
       { $limit: 1 }
@@ -118,6 +118,9 @@ export default class AccountsService {
     let accounts = await AccountsRaw.aggregateSync([
       {
         $match: filters
+      },
+      {
+        $sample: { size: 20 }
       }
     ]).toArray();
 
@@ -137,7 +140,7 @@ export default class AccountsService {
         lockOwnerId: 1,
         lockTimestamp: 1,
         tickleDate: 1,
-        facilityId:1
+        facilityId: 1
       }
     });
   }
