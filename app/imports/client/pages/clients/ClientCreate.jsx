@@ -51,7 +51,15 @@ export default class CreateClient extends Component {
               disabled={isDisabled}
               className="btn--green"
             >
-               {isDisabled?<div> Loading<i className="icon-cog"/></div>:"Confirm & Save"}
+              {isDisabled ? (
+                <div>
+                  {" "}
+                  Loading
+                  <i className="icon-cog" />
+                </div>
+              ) : (
+                "Confirm & Save"
+              )}
             </button>
           </div>
         </div>
@@ -65,6 +73,7 @@ export default class CreateClient extends Component {
             <AutoForm
               schema={ClientSchema}
               onSubmit={this.onSubmit.bind(this)}
+              onChange={this.onChange}
               ref="form"
             >
               {this.state.error && (

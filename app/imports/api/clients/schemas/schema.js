@@ -49,6 +49,7 @@ export default new SimpleSchema({
   },
   statistics: {
     type: Object,
+    blackbox: true,
     defaultValue: {
       totalInventory: 0,
       newAccounts: 0,
@@ -56,11 +57,10 @@ export default new SimpleSchema({
       over180: 0,
       callActions: 0,
       escalations: {
-          totalDue: 0,
-          created: 0,
-          resolved: 0
+        totalDue: 0,
+        created: 0,
+        resolved: 0
       }
-    },
-    optional: true
+    }
   }
 });
