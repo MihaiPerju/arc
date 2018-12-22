@@ -99,14 +99,38 @@ export default class LetterService {
       settings.LETTERS_DIRECTORY
     );
 
-    let { attachmentIds, body, accountId } = Letters.findOne({ _id: letterId });
+    let { attachmentIds, body, accountId, letterValues } = Letters.findOne({
+      _id: letterId
+    });
     const { clientId } = Accounts.findOne({ _id: accountId });
     const { clientName } = Clients.findOne({ _id: clientId });
     const filePath =
       (root + letterDirectory).replace("//", "/") + letterId + ".pdf";
+    let QRData = clientName;
+    if (letterValues) {
+      let { to, toAddress1, toAddress2, toCity, toState, toZip } = letterValues;
+      if (to) {
+        QRData += " | " + to;
+      }
+      if (toAddress1) {
+        QRData += " | " + toAddress1;
+      }
+      if (toAddress2) {
+        QRData += " | " + toAddress2;
+      }
+      if (toCity) {
+        QRData += " | " + toCity;
+      }
+      if (toState) {
+        QRData += " | " + toState;
+      }
+      if (toZip) {
+        QRData += " | " + toZip;
+      }
+    }
     const future = new Future();
 
-    QRCode.toDataURL(clientName)
+    QRCode.toDataURL(QRData, { scale: 1 })
       .then(url => {
         body = ReactDOMServer.renderToString(<img src={url} />) + body;
         pdf.create(body).toFile(filePath, (err, res) => {
