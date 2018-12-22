@@ -388,6 +388,8 @@ export default class ParamsService {
   }
 
   static getProperAccounts(params, assign) {
+    console.log(Meteor.userId());
+    console.log(assign);
     if (assign === "none") {
       _.extend(params.filters, {
         assigneeId: {
