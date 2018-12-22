@@ -482,29 +482,24 @@ export default class QueryBuilder {
 
       if (assign === "none") {
         _.extend(queryParams.filters, {
-          assigneeId: {
-            $exists: true
-          },
-          workQueueId: {
-            $exists: true
-          }
+          $or: [
+            {
+              assigneeId: {
+                $exists: true
+              }
+            },
+            {
+              workQueueId: {
+                $exists: true
+              }
+            }
+          ]
         });
       } else if (assign) {
         const filterArr = assign.split(",");
         if (_.contains(filterArr, "assigneeId")) {
           _.extend(queryParams.filters, {
-            $or: [
-              {
-                workQueueId: {
-                  $in: filterArr
-                }
-              },
-              {
-                assigneeId: {
-                  $exists: true
-                }
-              }
-            ]
+            assigneeId: userId
           });
         } else {
           _.extend(queryParams.filters, {
