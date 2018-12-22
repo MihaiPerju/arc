@@ -106,8 +106,9 @@ export default class FacilityContentHeader extends Component {
             )}
             <div className="title truncate">{facility.name}</div>
           </div>
-          {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
+          {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH_MANAGER) && (
             <div className="btn-group flex--helper flex--wrap">
+             {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH_MANAGER) && (
               <button
                 type="button"
                 onClick={() => this.onEditFacility(facility)}
@@ -115,6 +116,8 @@ export default class FacilityContentHeader extends Component {
               >
                 Edit facility
               </button>
+             )}
+            {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
               <button
                 type="button"
                 onClick={() =>
@@ -124,6 +127,7 @@ export default class FacilityContentHeader extends Component {
               >
                 {facility.status ? "Disable facility" : "Enable facility"}
               </button>
+            )}
             </div>
           )}
         </div>

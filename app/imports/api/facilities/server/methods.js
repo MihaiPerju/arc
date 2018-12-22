@@ -28,7 +28,7 @@ Meteor.methods({
   },
 
   "facility.getOne"(_id) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     return Facilities.findOne({ _id });
   },
 
@@ -52,7 +52,7 @@ Meteor.methods({
   },
 
   "facility.update"(facility) {
-    Security.isAdminOrTech(this.userId);
+    Security.isAdminTechOrManager(this.userId);
     const facilityData = FacilitySchema.clean(facility);
     Facilities.update(
       {
