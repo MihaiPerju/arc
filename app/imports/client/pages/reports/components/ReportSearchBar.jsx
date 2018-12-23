@@ -7,6 +7,10 @@ import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Tags from "/imports/client/lib/Tags";
 import _ from "underscore";
+import typeOptions, {
+  allowedValues
+} from "/imports/client/pages/reports/enums/reportType";
+
 export default class ReportSearchBar extends Component {
   constructor() {
     super();
@@ -175,6 +179,12 @@ export default class ReportSearchBar extends Component {
                       title="Filter by"
                       closePortal={this.closeDialog}
                     >
+                      <AutoField
+                        labelHidden={true}
+                        name="type"
+                        options={typeOptions}
+                        placeholder="Type"
+                      />
                       <button
                         className="close-dialog"
                         onClick={this.closeDialog}
@@ -312,5 +322,10 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by report name"
+  },
+  type: {
+    type: String,
+    label: "Search by report type",
+    allowedValues
   }
 });
