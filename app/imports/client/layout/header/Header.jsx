@@ -51,7 +51,7 @@ class Header extends Component {
     const isRep = user && Roles.userIsInRole(user._id, RolesEnum.REP);
 
     return (
-      <div>
+      <div className="header-wrap">
         {user && (
           <header className="header-bar">
             <div className="header-bar__wrapper">
