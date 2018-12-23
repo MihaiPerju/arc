@@ -29,6 +29,10 @@ export default class ReportCreate extends Component {
   }
 
   onSubmitFilters = (filters, components, filterBuilderData) => {
+    if (!filterBuilderData.facilityId && !filterBuilderData.clientId) {
+      Notifier.error("Filters Should Include Client or Facility Filter");
+      return;
+    }
     //Setting state and creating/editing report
     this.setState({
       components,
