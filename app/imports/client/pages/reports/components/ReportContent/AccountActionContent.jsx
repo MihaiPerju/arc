@@ -69,18 +69,6 @@ export default class AccountActionContent extends Component {
       <ScrollSync>
         <div className="table-container flex--helper">
           <ScrollSyncPane>
-            <div className="table-container__left">
-              <div className="table-header truncate text-left table-field text-light-grey">
-                Actions
-              </div>
-              {accountActions.map((action, index) => (
-                <div key={index} className="table-field truncate">
-                  {"Action No." + (index + 1)}
-                </div>
-              ))}
-            </div>
-          </ScrollSyncPane>
-          <ScrollSyncPane>
             <div className="table-container__right">
               <div className="table-row">
                 {tableHeader.map((header, index) => {
