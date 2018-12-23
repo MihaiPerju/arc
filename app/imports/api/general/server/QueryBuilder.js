@@ -376,7 +376,7 @@ export default class QueryBuilder {
   static getReportsParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
-      let { name, facCode, ptType } = params.filters;
+      let { name, type } = params.filters;
       let { page, perPage } = params.options;
 
       this.getPagerOptions(queryParams, page, perPage);
@@ -389,22 +389,12 @@ export default class QueryBuilder {
           }
         });
       }
-      if (facCode) {
+      if (type) {
         _.extend(queryParams.filters, {
-          "filterBuilderData.facCode": {
-            $regex: `${facCode}.*`,
-            $options: "i"
-          }
+          type
         });
       }
-      if (ptType) {
-        _.extend(queryParams.filters, {
-          "filterBuilderData.ptType": {
-            $regex: `${ptType}.*`,
-            $options: "i"
-          }
-        });
-      }
+
       //Getting tags
       this.getTags(params, queryParams);
     }

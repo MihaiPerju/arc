@@ -33,6 +33,9 @@ export default class ReportSearchBar extends Component {
     if ("name" in params) {
       FlowRouter.setQueryParams({ name: params.name });
     }
+    if ("type" in params) {
+      FlowRouter.setQueryParams({ type: params.type });
+    }
   }
 
   openDropdown = () => {
@@ -179,12 +182,6 @@ export default class ReportSearchBar extends Component {
                       title="Filter by"
                       closePortal={this.closeDialog}
                     >
-                      <AutoField
-                        labelHidden={true}
-                        name="type"
-                        options={typeOptions}
-                        placeholder="Type"
-                      />
                       <button
                         className="close-dialog"
                         onClick={this.closeDialog}
@@ -193,6 +190,14 @@ export default class ReportSearchBar extends Component {
                       </button>
                       <div className="filter-bar">
                         <div className="select-wrapper">
+                          <div className="form-group flex--helper form-group__pseudo--3">
+                            <AutoField
+                              labelHidden={true}
+                              name="type"
+                              options={typeOptions}
+                              placeholder="Type"
+                            />
+                          </div>
                           <div className="flex--helper flex-justify--space-between">
                             <button
                               className="btn--red"
