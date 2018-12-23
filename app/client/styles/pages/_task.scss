@@ -2,8 +2,7 @@
 .pagination-bar {
   background: $color-white;
   padding: 7px 15px;
-  box-shadow: 0px -4px 9px 0px #ebe7e7;
-  border-top: 1px #e1e1e1 solid;
+  border-top: 2px #b7b7b7 solid;
   position: relative;
   height: 55px;
   display: flex;
@@ -12,20 +11,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+	font-weight: 800;
     width: 100%;
   }
 
   .btn-group {
-    .btn-next,
-    .btn-prev {
-      padding: 4px 9px;
-      font-size: 1.4rem;
-      background: #f2f1f1;
-      border: 1px #e1e1e1 solid;
-      color: $extra-light-grey;
+	> button {
+      padding: 0 30px;
+      font-size: 3rem;
+      background-color: orange;
+      border: 1px darken(orange, 20%) solid;
+      color: #fff;
+	  font-weight: 800;
       margin-left: 10px;
       &:hover {
-        color: $light-grey;
+		  background-color: lighten(orange, 10%);
+		  border-color: lighten(orange, 10%);
       }
     }
   }

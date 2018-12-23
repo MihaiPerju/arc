@@ -1,6 +1,9 @@
+.header-wrap {
+	height: 10vh;
+}
 .header-bar {
   width: 100%;
-  height: 80px;
+  height: 100%;
   box-shadow: $shadow-header;
   background-color: $color-white;
   border: 1px #ebebeb solid;
