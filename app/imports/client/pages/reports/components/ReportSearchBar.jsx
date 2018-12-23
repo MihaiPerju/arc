@@ -186,9 +186,6 @@ export default class ReportSearchBar extends Component {
       "btns--none": btnGroup && hideFilter
     });
 
-    console.log(createdAtMin);
-    console.log(createdAtMax);
-
     return (
       <AutoForm
         onChange={this.onChange}
