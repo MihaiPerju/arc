@@ -17,7 +17,7 @@ import Users from "/imports/api/users/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import AccountsService from "/imports/api/accounts/server/services/AccountsService";
-import StateEnum from '/imports/api/accounts/enums/states';
+import StateEnum from "/imports/api/accounts/enums/states";
 
 Meteor.methods({
   "accounts.get"(params) {
@@ -425,7 +425,7 @@ Meteor.methods({
       if (account.assignee) {
         data.addedBy = `${account.assignee.profile.firstName} ${
           account.assignee.profile.lastName
-          }`;
+        }`;
       } else if (account.workQueueId) {
         data.addedBy = account.tag.name;
       }
@@ -434,138 +434,128 @@ Meteor.methods({
     });
   },
   "accountsAssigned.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
-    let filter = { 'assigneeId': { $ne: null } };
+    let filter = { assigneeId: { $ne: null } };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (assigneeId && assigneeId != '-1')
-      filter['assigneeId'] = assigneeId;
+    if (assigneeId && assigneeId != "-1") filter["assigneeId"] = assigneeId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
     return Accounts.find(filter).fetch();
   },
 
-  async 'account.getAssignedPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
+  async "account.getAssignedPerHour"(
+    clientId,
+    facilityId,
+    assigneeId,
+    dateRangeFilter
+  ) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    let filter = { 'assigneeId': { $ne: null } };
+    let filter = { assigneeId: { $ne: null } };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (assigneeId && assigneeId != '-1')
-      filter['assigneeId'] = assigneeId;
+    if (assigneeId && assigneeId != "-1") filter["assigneeId"] = assigneeId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
-    const acccountsPerHour = await AccountsRaw.aggregateSync([{
-      $match: filter,
-    },
-    {
-      $group: {
-        _id: {
-          y: {
-            $year: '$createdAt'
-          },
-          m: {
-            $month: '$createdAt'
-          },
-          d: {
-            $dayOfMonth: '$createdAt'
-          },
-          h: {
-            $hour: '$createdAt'
-          },
-        },
-        total: {
-          $sum: 1
-        },
+    const acccountsPerHour = await AccountsRaw.aggregateSync([
+      {
+        $match: filter
       },
-    },
+      {
+        $group: {
+          _id: {
+            y: {
+              $year: "$createdAt"
+            },
+            m: {
+              $month: "$createdAt"
+            },
+            d: {
+              $dayOfMonth: "$createdAt"
+            },
+            h: {
+              $hour: "$createdAt"
+            }
+          },
+          total: {
+            $sum: 1
+          }
+        }
+      }
     ]).toArray();
     return ActionService.graphStandardizeData(acccountsPerHour);
   },
 
   "accountsArchived.get"(clientId, facilityId, dateRangeFilter) {
-    let filter = { 'state': StateEnum.ARCHIVED };
+    let filter = { state: StateEnum.ARCHIVED };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
     return Accounts.find(filter).fetch();
   },
 
-  async 'account.getArchivedPerHour'(clientId, facilityId, dateRangeFilter) {
+  async "account.getArchivedPerHour"(clientId, facilityId, dateRangeFilter) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    let filter = { 'state': StateEnum.ARCHIVED };
+    let filter = { state: StateEnum.ARCHIVED };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
-    const archivedAccountsPerHour = await AccountsRaw.aggregateSync([{
-      $match: filter,
-    },
-    {
-      $group: {
-        _id: {
-          y: {
-            $year: '$createdAt'
-          },
-          m: {
-            $month: '$createdAt'
-          },
-          d: {
-            $dayOfMonth: '$createdAt'
-          },
-          h: {
-            $hour: '$createdAt'
-          },
-        },
-        total: {
-          $sum: 1
-        },
+    const archivedAccountsPerHour = await AccountsRaw.aggregateSync([
+      {
+        $match: filter
       },
-    },
+      {
+        $group: {
+          _id: {
+            y: {
+              $year: "$createdAt"
+            },
+            m: {
+              $month: "$createdAt"
+            },
+            d: {
+              $dayOfMonth: "$createdAt"
+            },
+            h: {
+              $hour: "$createdAt"
+            }
+          },
+          total: {
+            $sum: 1
+          }
+        }
+      }
     ]).toArray();
     return ActionService.graphStandardizeData(archivedAccountsPerHour);
   },
 
   async "escalationResolved.get"(clientId, facilityId, dateRangeFilter) {
-    let filter = { 'employeeToRespond': { $ne: RolesEnum.MANAGER } };
+    let filter = { employeeToRespond: { $ne: RolesEnum.MANAGER } };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
     let AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
@@ -588,108 +578,104 @@ Meteor.methods({
   },
 
   async "escalationResolved.getPerHour"(clientId, facilityId, dateRangeFilter) {
-    let filter = { 'employeeToRespond': { $ne: RolesEnum.MANAGER } };
+    let filter = { employeeToRespond: { $ne: RolesEnum.MANAGER } };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
     let AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
-    const escalationsResolvedPerHour = await AccountsRaw.aggregateSync([{
-      $match: filter,
-    },
-    {
-      $group: {
-        _id: {
-          y: {
-            $year: '$createdAt'
-          },
-          m: {
-            $month: '$createdAt'
-          },
-          d: {
-            $dayOfMonth: '$createdAt'
-          },
-          h: {
-            $hour: '$createdAt'
-          },
-        },
-        total: {
-          $sum: 1
-        },
+    const escalationsResolvedPerHour = await AccountsRaw.aggregateSync([
+      {
+        $match: filter
       },
-    },
+      {
+        $group: {
+          _id: {
+            y: {
+              $year: "$createdAt"
+            },
+            m: {
+              $month: "$createdAt"
+            },
+            d: {
+              $dayOfMonth: "$createdAt"
+            },
+            h: {
+              $hour: "$createdAt"
+            }
+          },
+          total: {
+            $sum: 1
+          }
+        }
+      }
     ]).toArray();
     return ActionService.graphStandardizeData(escalationsResolvedPerHour);
   },
 
   "accountsHold.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
-    let filter = { 'assigneeId': { $ne: null }, state: StateEnum.HOLD };
+    let filter = { assigneeId: { $ne: null }, state: StateEnum.HOLD };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (assigneeId && assigneeId != '-1')
-      filter['assigneeId'] = assigneeId;
+    if (assigneeId && assigneeId != "-1") filter["assigneeId"] = assigneeId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
     return Accounts.find(filter).fetch();
   },
 
-  async 'account.getHoldAccountsPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
+  async "account.getHoldAccountsPerHour"(
+    clientId,
+    facilityId,
+    assigneeId,
+    dateRangeFilter
+  ) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
-    let filter = { 'assigneeId': { $ne: null }, state: StateEnum.HOLD };
+    let filter = { assigneeId: { $ne: null }, state: StateEnum.HOLD };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (assigneeId && assigneeId != '-1')
-      filter['assigneeId'] = assigneeId;
+    if (assigneeId && assigneeId != "-1") filter["assigneeId"] = assigneeId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
-    const holdAccountsPerHour = await AccountsRaw.aggregateSync([{
-      $match: filter,
-    },
-    {
-      $group: {
-        _id: {
-          y: {
-            $year: '$createdAt'
-          },
-          m: {
-            $month: '$createdAt'
-          },
-          d: {
-            $dayOfMonth: '$createdAt'
-          },
-          h: {
-            $hour: '$createdAt'
-          },
-        },
-        total: {
-          $sum: 1
-        },
+    const holdAccountsPerHour = await AccountsRaw.aggregateSync([
+      {
+        $match: filter
       },
-    },
+      {
+        $group: {
+          _id: {
+            y: {
+              $year: "$createdAt"
+            },
+            m: {
+              $month: "$createdAt"
+            },
+            d: {
+              $dayOfMonth: "$createdAt"
+            },
+            h: {
+              $hour: "$createdAt"
+            }
+          },
+          total: {
+            $sum: 1
+          }
+        }
+      }
     ]).toArray();
 
     return ActionService.graphStandardizeData(holdAccountsPerHour);
@@ -697,77 +683,75 @@ Meteor.methods({
 
   "agedAccounts.get"(clientId, facilityId, assigneeId, dateRangeFilter) {
     var dateTimeNow = moment();
-    var agedDate = new Date(dateTimeNow.add(180, 'days'));
+    var agedDate = new Date(dateTimeNow.add(180, "days"));
     var agedAccountsDateQuery = {
       $lt: agedDate
     };
 
-    let filter = { 'placementDate': agedAccountsDateQuery };
+    let filter = { placementDate: agedAccountsDateQuery };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (assigneeId && assigneeId != '-1')
-      filter['assigneeId'] = assigneeId;
+    if (assigneeId && assigneeId != "-1") filter["assigneeId"] = assigneeId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
     return Accounts.find(filter).fetch();
   },
 
-  async 'agedAccounts.getPerHour'(clientId, facilityId, assigneeId, dateRangeFilter) {
+  async "agedAccounts.getPerHour"(
+    clientId,
+    facilityId,
+    assigneeId,
+    dateRangeFilter
+  ) {
     const AccountsRaw = Accounts.rawCollection();
     AccountsRaw.aggregateSync = Meteor.wrapAsync(AccountsRaw.aggregate);
 
     var dateTimeNow = moment();
-    var agedDate = new Date(dateTimeNow.add(180, 'days'));
+    var agedDate = new Date(dateTimeNow.add(180, "days"));
     var agedAccountsDateQuery = {
       $lt: agedDate
     };
 
-    let filter = { 'placementDate': agedAccountsDateQuery };
+    let filter = { placementDate: agedAccountsDateQuery };
 
-    if (clientId && clientId != '-1')
-      filter['clientId'] = clientId;
+    if (clientId && clientId != "-1") filter["clientId"] = clientId;
 
-    if (facilityId && facilityId != '-1')
-      filter['facilityId'] = facilityId;
+    if (facilityId && facilityId != "-1") filter["facilityId"] = facilityId;
 
-    if (assigneeId && assigneeId != '-1')
-      filter['assigneeId'] = assigneeId;
+    if (assigneeId && assigneeId != "-1") filter["assigneeId"] = assigneeId;
 
-    if (dateRangeFilter)
-      filter['createdAt'] = dateRangeFilter;
+    if (dateRangeFilter) filter["createdAt"] = dateRangeFilter;
 
-    const agedAccountsPerHour = await AccountsRaw.aggregateSync([{
-      $match: filter,
-    },
-    {
-      $group: {
-        _id: {
-          y: {
-            $year: '$createdAt'
-          },
-          m: {
-            $month: '$createdAt'
-          },
-          d: {
-            $dayOfMonth: '$createdAt'
-          },
-          h: {
-            $hour: '$createdAt'
-          },
-        },
-        total: {
-          $sum: 1
-        },
+    const agedAccountsPerHour = await AccountsRaw.aggregateSync([
+      {
+        $match: filter
       },
-    },
+      {
+        $group: {
+          _id: {
+            y: {
+              $year: "$createdAt"
+            },
+            m: {
+              $month: "$createdAt"
+            },
+            d: {
+              $dayOfMonth: "$createdAt"
+            },
+            h: {
+              $hour: "$createdAt"
+            }
+          },
+          total: {
+            $sum: 1
+          }
+        }
+      }
     ]).toArray();
     return ActionService.graphStandardizeData(agedAccountsPerHour);
-  },
+  }
 });

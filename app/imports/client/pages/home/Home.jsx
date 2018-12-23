@@ -10,13 +10,12 @@ import Loading from "/imports/client/lib/ui/Loading";
 import RolesEnum from "../../../api/users/enums/roles";
 //import RepDashboard from "./components/RepDashboard";
 import ManagerDashboard from "./components/ManagerDashboard";
-import CHART_TYPE from './enums/chartType';
-import { dateRangeValues } from './enums/dateRange';
+import CHART_TYPE from "./enums/chartType";
+import { dateRangeValues } from "./enums/dateRange";
 import TechOrAdminDashboard from "./components/TechOrAdminDashboard";
 import UserDashboard from "./components/UserDashboard";
 
 export default class Home extends React.Component {
-
   constructor() {
     super();
     this.state = {
@@ -27,15 +26,24 @@ export default class Home extends React.Component {
       selectedDate: moment(),
       startDate: moment(),
       endDate: moment(),
-      selectedRep: '',
+      selectedRep: "",
       clients: [],
       facilities: [],
       users: [],
       chartTypes: [],
-      selectedChartType: '',
+      selectedChartType: "",
       dateRangeFilters: [],
       showCustomDateRange: false,
-      filters: { selectedClientId: '', selectedFacilityId: '', selectedChartType: '', selectedUserId: '', selectedDateRange: '', startDate: new Date(moment()), endDate: new Date(moment()) },
+      filters: {
+        selectedClientId: "",
+        selectedFacilityId: "",
+        selectedChartType: "",
+        selectedUserId: "",
+        selectedDateRange: "",
+        startDate: new Date(moment()),
+        endDate: new Date(moment())
+      },
+      total: 0
     };
   }
 
@@ -50,7 +58,7 @@ export default class Home extends React.Component {
 
   prepareDateRangeOptions() {
     let dateRangeFilters = dateRangeValues;
-    dateRangeFilters.unshift({ label: 'Select Date', value: -1 });
+    dateRangeFilters.unshift({ label: "Select Date", value: -1 });
     let selectedDateRange = dateRangeFilters[0].value;
     this.setState({ dateRangeFilters, selectedDateRange });
   }
@@ -58,8 +66,8 @@ export default class Home extends React.Component {
   prepareChartTypes() {
     let filters = this.state.filters;
     let chartTypes = this.state.chartTypes;
-    chartTypes.push({ value: 1, label: 'Line Chart', type: CHART_TYPE.Line });
-    chartTypes.push({ value: 2, label: 'Pie Chart', type: CHART_TYPE.Pie });
+    chartTypes.push({ value: 1, label: "Line Chart", type: CHART_TYPE.Line });
+    chartTypes.push({ value: 2, label: "Pie Chart", type: CHART_TYPE.Pie });
     filters.selectedChartType = chartTypes[0];
     this.setState({ chartTypes: chartTypes, filters });
   }
@@ -70,7 +78,7 @@ export default class Home extends React.Component {
         let clients = responseData.map(client => {
           return { label: client.clientName, value: client._id };
         });
-        clients.unshift({ label: 'All Clients', value: -1 });
+        clients.unshift({ label: "All Clients", value: -1 });
         this.setState({ clients });
       } else {
         Notifier.error(err.reason);
@@ -86,7 +94,7 @@ export default class Home extends React.Component {
           return { label: facility.name, value: facility._id };
         });
         if (facilities.length > 0) {
-          facilities.unshift({ label: 'All Facilities', value: -1 });
+          facilities.unshift({ label: "All Facilities", value: -1 });
         }
         this.setState({ facilities });
       } else {
@@ -101,7 +109,7 @@ export default class Home extends React.Component {
         let users = [];
         users = responseData;
         if (users.length > 0) {
-          users.unshift({ label: 'All Users', value: -1 });
+          users.unshift({ label: "All Users", value: -1 });
         }
         this.setState({ users });
       } else {
@@ -114,12 +122,22 @@ export default class Home extends React.Component {
     Meteor.call("users.getReps", (err, repsData) => {
       if (!err) {
         let reps = repsData.map(r => {
-          return { label: `${r.profile.firstName} ${r.profile.lastName}`, value: r._id };
+          return {
+            label: `${r.profile.firstName} ${r.profile.lastName}`,
+            value: r._id
+          };
         });
         let selectedRep = reps[0];
-        this.setState({ reps, isLoading: false, selectedRepId: selectedRep != undefined ? selectedRep.value : '' }, () => {
-          this.getAccountActions();
-        });
+        this.setState(
+          {
+            reps,
+            isLoading: false,
+            selectedRepId: selectedRep != undefined ? selectedRep.value : ""
+          },
+          () => {
+            this.getAccountActions();
+          }
+        );
       } else {
         Notifier.error(err.reason);
       }
@@ -131,10 +149,13 @@ export default class Home extends React.Component {
     let date = new Date(this.state.selectedDate);
     this.setState({ isLoadingGraph: true });
     setTimeout(() => {
-      Meteor.call("account.getActionPerHour", userId, date, (err, chartData) => {
+      Meteor.call("account.getActionPerHour", userId, date, (err, result) => {
         if (!err) {
+          const { graphData, total } = result;
           this.setState({
-            chartData, isLoadingGraph: false
+            chartData: graphData,
+            isLoadingGraph: false,
+            total
           });
         } else {
           Notifier.error(err.reason);
@@ -155,7 +176,7 @@ export default class Home extends React.Component {
 
   addGraphFilters = () => {
     this.onSubmit();
-  }
+  };
 
   onChange = newDate => {
     this.setState({ selectedDate: moment(newDate) });
@@ -194,27 +215,26 @@ export default class Home extends React.Component {
         var chartTypes = this.state.chartTypes;
         var chartType = chartTypes.find(p => p.value == value);
         var selectedChartType = chartTypes[0];
-        if (chartType)
-          selectedChartType = chartType;
+        if (chartType) selectedChartType = chartType;
 
         filters.selectedChartType = selectedChartType;
         this.setState({ filters });
         break;
       case "selectedDateRange":
         filters.selectedDateRange = value;
-        if (value === 'custom_range') {
+        if (value === "custom_range") {
           this.setState({ filters, showCustomDateRange: true });
-        }
-        else {
+        } else {
           this.setState({ filters, showCustomDateRange: false });
         }
         break;
       default:
         break;
     }
-  }
+  };
 
   renderGraph() {
+    const { total } = this.state;
     const options = {
       chart: {
         type: "line",
@@ -227,7 +247,7 @@ export default class Home extends React.Component {
         title: { text: "Number of Actions" }
       },
       title: {
-        text: "Rep Actions"
+        text: "Rep Actions (" + total + " Total)"
       },
       series: [
         {
@@ -256,7 +276,10 @@ export default class Home extends React.Component {
       return <ManagerDashboard filters={filters} />;
     }
 
-    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) || Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) {
+    if (
+      Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) ||
+      Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)
+    ) {
       return <TechOrAdminDashboard filters={filters} />;
     }
 
@@ -266,17 +289,18 @@ export default class Home extends React.Component {
   }
 
   render() {
-    const { clients } = this.state;
-
+    const { clients, chartData } = this.state;
     return (
       <div className="dashboard-content-container">
-        {
-          (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) || Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) || Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) &&
+        {(Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER) ||
+          Roles.userIsInRole(Meteor.userId(), RolesEnum.TECH) ||
+          Roles.userIsInRole(Meteor.userId(), RolesEnum.ADMIN)) && (
           <div className="dashboard-header-content">
-            <div className="dashboard-header-title">
-              FILTERS FOR DASHBOARD
-            </div>
-            <AutoForm schema={dashboardSchema} onChange={this.onHandleChange.bind(this)}>
+            <div className="dashboard-header-title">FILTERS FOR DASHBOARD</div>
+            <AutoForm
+              schema={dashboardSchema}
+              onChange={this.onHandleChange.bind(this)}
+            >
               <div>
                 <div className="flex--helper form-group__pseudo--3">
                   <div className="select-form select-box-width">
@@ -289,46 +313,16 @@ export default class Home extends React.Component {
                       />
                     </div>
                   </div>
-                  {/* {
-                  facilities.length > 0 ?
-                    <div className="select-form select-box-width m-l-10">
-                      <label className="dashboard-label">Facilities</label>
-                      <div className="m-t--5">
-                        <AutoField
-                          labelHidden={true}
-                          name="facilityId"
-                          options={facilities} />
-                      </div>
-                    </div> : null
-                }
-                {
-                  users.length > 0 ?
-                    <div className="select-form select-box-width m-l-10">
-                      <label className="dashboard-label">Users</label>
-                      <div className="m-t--5">
-                        <AutoField
-                          labelHidden={true}
-                          name="userId"
-                          options={users} />
-                      </div>
-                    </div> : null
-                } */}
                 </div>
               </div>
             </AutoForm>
           </div>
-        }
+        )}
         {this.renderDashboardBasedOnRoles()}
       </div>
     );
   }
 }
-
-// const heartBeatSchema = new SimpleSchema({
-//   userId: {
-//     type: String
-//   }
-// });
 
 const dashboardSchema = new SimpleSchema({
   clientId: {

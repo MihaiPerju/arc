@@ -411,7 +411,6 @@ export default class UserDashboard extends React.Component {
                   schema={schema}
                   model={model} style={{ width: '100%' }}
                 >
-
                   <div className="select-wrapper full-width">
                     <div className="flex--helper form-group__pseudo full-width">
                       <div className="select-form full-width">
