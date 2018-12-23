@@ -21,7 +21,7 @@ export default class ReportListContainer extends Pager {
       total: 0,
       range: {},
       substates: [],
-      tags: [],
+      tags: []
     });
     this.method = "reports.count";
     this.pollingMethod = null;
@@ -193,8 +193,8 @@ export default class ReportListContainer extends Pager {
       reports
     } = this.state;
 
-    if(!reports){
-      return <Loading/>
+    if (!reports) {
+      return <Loading />;
     }
 
     return (
