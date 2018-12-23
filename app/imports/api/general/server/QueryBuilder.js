@@ -376,7 +376,7 @@ export default class QueryBuilder {
   static getReportsParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
-      let { name, type } = params.filters;
+      let { name, type, createdAtMin, createdAtMax } = params.filters;
       let { page, perPage } = params.options;
 
       this.getPagerOptions(queryParams, page, perPage);
@@ -392,6 +392,18 @@ export default class QueryBuilder {
       if (type) {
         _.extend(queryParams.filters, {
           type
+        });
+      }
+      if (createdAtMin && createdAtMax) {
+        _.extend(queryParams.filters, {
+          createdAt: {
+            $gte: new Date(moment(new Date(createdAtMin)).startOf("day")),
+            $lt: new Date(
+              moment(new Date(createdAtMax))
+                .add(1, "day")
+                .startOf("day")
+            )
+          }
         });
       }
 

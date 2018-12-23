@@ -10,6 +10,10 @@ import _ from "underscore";
 import typeOptions, {
   allowedValues
 } from "/imports/client/pages/reports/enums/reportType";
+import DatePicker from "react-datepicker";
+import Notifier from "/imports/client/lib/Notifier";
+import FilterService from "/imports/client/lib/FilterService";
+import moment from "moment";
 
 export default class ReportSearchBar extends Component {
   constructor() {
@@ -18,7 +22,9 @@ export default class ReportSearchBar extends Component {
       dropdown: false,
       selectAll: false,
       model: {},
-      filter: false
+      filter: false,
+      createdAtMin: null,
+      createdAtMax: null
     };
   }
 
@@ -27,9 +33,19 @@ export default class ReportSearchBar extends Component {
   }
 
   onSubmit(params) {
+    const { createdAtMin, createdAtMax } = this.state;
+
     if (FlowRouter.current().queryParams.page != "1" && "name" in params) {
       this.props.setPagerInitial();
     }
+
+    FlowRouter.setQueryParams({
+      createdAtMin: FilterService.formatDate(createdAtMin)
+    });
+
+    FlowRouter.setQueryParams({
+      createdAtMax: FilterService.formatDate(createdAtMax)
+    });
     if ("name" in params) {
       FlowRouter.setQueryParams({ name: params.name });
     }
@@ -71,6 +87,20 @@ export default class ReportSearchBar extends Component {
     });
   };
 
+  onDateSelect = (selectedDate, field) => {
+    if (field === "createdAtMin") {
+      this.setState({ createdAtMin: selectedDate });
+    } else if (field === "createdAtMax") {
+      const { createdAtMin } = this.state;
+      if (selectedDate < createdAtMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      }
+      this.setState({ createdAtMax: selectedDate });
+    }
+  };
+
   getFilterParams = () => {
     const queryParams = FlowRouter.current().queryParams;
     const model = {};
@@ -78,6 +108,19 @@ export default class ReportSearchBar extends Component {
     if ("name" in queryParams) {
       model.name = queryParams.name;
     }
+
+    if ("createdAtMin" in queryParams) {
+      this.setState({
+        createdAtMin: moment(new Date(queryParams.createdAtMin))
+      });
+    }
+
+    if ("createdAtMax" in queryParams) {
+      this.setState({
+        createdAtMax: moment(new Date(queryParams.createdAtMax))
+      });
+    }
+
     this.setState({ model });
   };
 
@@ -91,6 +134,10 @@ export default class ReportSearchBar extends Component {
     FlowRouter.setQueryParams(appliedFilters);
     const { filters } = this.refs;
     filters.reset();
+    this.setState({
+      createdAtMin: null,
+      createdAtMax: null
+    });
     this.closeDialog();
   };
 
@@ -105,7 +152,15 @@ export default class ReportSearchBar extends Component {
     }
   };
   render() {
-    const { filter, dropdown, selectAll, model, dialogIsActive } = this.state;
+    const {
+      filter,
+      dropdown,
+      selectAll,
+      model,
+      dialogIsActive,
+      createdAtMin,
+      createdAtMax
+    } = this.state;
     const {
       options,
       btnGroup,
@@ -130,6 +185,9 @@ export default class ReportSearchBar extends Component {
       sort__none: hideSort,
       "btns--none": btnGroup && hideFilter
     });
+
+    console.log(createdAtMin);
+    console.log(createdAtMax);
 
     return (
       <AutoForm
@@ -196,6 +254,33 @@ export default class ReportSearchBar extends Component {
                               name="type"
                               options={typeOptions}
                               placeholder="Type"
+                            />
+
+                            <DatePicker
+                              calendarClassName="cc-datepicker"
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
+                              placeholderText="From created-at date"
+                              selected={createdAtMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "createdAtMin")
+                              }
+                              fixedHeight
+                            />
+                            <DatePicker
+                              calendarClassName="cc-datepicker"
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
+                              placeholderText="To created-at date"
+                              selected={createdAtMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "createdAtMax")
+                              }
+                              fixedHeight
                             />
                           </div>
                           <div className="flex--helper flex-justify--space-between">
