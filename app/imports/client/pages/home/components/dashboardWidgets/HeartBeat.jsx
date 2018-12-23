@@ -9,14 +9,13 @@ import Highcharts from "highcharts";
 import ReactHighcharts from "highcharts-react-official";
 
 export default class HeartBeat extends React.Component {
-
   state = {
     isLoading: true,
     isLoadingGraph: true,
     reps: [],
     chartData: [],
     selectedDate: moment(),
-    selectedRep: ''
+    selectedRep: ""
   };
 
   componentDidMount() {
@@ -27,12 +26,22 @@ export default class HeartBeat extends React.Component {
     Meteor.call("users.getReps", (err, repsData) => {
       if (!err) {
         let reps = repsData.map(r => {
-          return { label: `${r.profile.firstName} ${r.profile.lastName}`, value: r._id };
+          return {
+            label: `${r.profile.firstName} ${r.profile.lastName}`,
+            value: r._id
+          };
         });
         let selectedRep = reps[0];
-        this.setState({ reps, isLoading: false, selectedRepId: selectedRep != undefined ? selectedRep.value : '' }, () => {
-          this.getAccountActions();
-        });
+        this.setState(
+          {
+            reps,
+            isLoading: false,
+            selectedRepId: selectedRep != undefined ? selectedRep.value : ""
+          },
+          () => {
+            this.getAccountActions();
+          }
+        );
       } else {
         Notifier.error(err.reason);
       }
@@ -44,40 +53,42 @@ export default class HeartBeat extends React.Component {
     let date = new Date(this.state.selectedDate);
     this.setState({ isLoadingGraph: true });
     setTimeout(() => {
-      Meteor.call("account.getActionPerHour", userId, date, (err, chartData) => {
-        if (!err) {
-          this.setState({
-            chartData, isLoadingGraph: false
-          });
-        } else {
-          Notifier.error(err.reason);
+      Meteor.call(
+        "account.getActionPerHour",
+        userId,
+        date,
+        (err, chartData) => {
+          if (!err) {
+            this.setState({
+              chartData,
+              isLoadingGraph: false
+            });
+          } else {
+            Notifier.error(err.reason);
+          }
         }
-      });
+      );
     }, 1500);
   };
 
-  addGraphFilters = () => {
-    this.onSubmit();
-  }
-
   onChange = newDate => {
-    this.setState({ selectedDate: moment(newDate) });
+    this.setState({ selectedDate: moment(newDate) }, () => {
+      this.getAccountActions();
+    });
   };
 
-  onSubmit(params) {
-    if (params) {
-      this.setState({ selectedRepId: params.userId }, () => {
+  updateGraph = (key, value) => {
+    if (key === "userId") {
+      this.setState({ selectedRepId: value }, () => {
         this.getAccountActions();
       });
-    } else {
-      this.getAccountActions();
     }
-  }
+  };
 
   renderGraph() {
     const options = {
       chart: {
-        type: "line",
+        type: "line"
       },
       xAxis: {
         title: { text: "Hours" }
@@ -118,14 +129,14 @@ export default class HeartBeat extends React.Component {
             <div className="heart-beat-widget-title">Heart Beat</div>
           </div>
           <div className="heart-beat-widget-header-right">
-            <AutoForm ref="graphFilters" schema={heartBeatSchema} onSubmit={this.onSubmit.bind(this)}>
+            <AutoForm
+              ref="graphFilters"
+              schema={heartBeatSchema}
+              onChange={this.updateGraph}
+            >
               <div className="flex--helper form-group__pseudo--3">
                 <div className="select-form">
-                  <AutoField
-                    label="Reps:"
-                    name="userId"
-                    options={reps}
-                  />
+                  <AutoField label="Reps:" name="userId" options={reps} />
                 </div>
                 <div className="m-l-15">
                   <label>Select Date:</label>
@@ -143,9 +154,6 @@ export default class HeartBeat extends React.Component {
                     />
                   </div>
                 </div>
-                <button className="custom-submit-btn" onClick={this.addGraphFilters}>
-                  Submit
-                 </button>
               </div>
             </AutoForm>
           </div>
