@@ -347,8 +347,9 @@ export default class ParamsService {
 
   static getReportsParams() {
     let name = FlowRouter.getQueryParam("name");
-    let facCode = FlowRouter.getQueryParam("facCode");
-    let ptType = FlowRouter.getQueryParam("ptType");
+    let type = FlowRouter.getQueryParam("type");
+    let createdAtMin = FlowRouter.getQueryParam("createdAtMin");
+    let createdAtMax = FlowRouter.getQueryParam("createdAtMax");
     let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
@@ -357,9 +358,10 @@ export default class ParamsService {
     return {
       filters: {
         name,
-        facCode,
-        ptType,
-        tagIds
+        tagIds,
+        type,
+        createdAtMin,
+        createdAtMax
       },
       options: {
         page,

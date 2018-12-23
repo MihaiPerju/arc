@@ -7,6 +7,14 @@ import classNames from "classnames";
 import Dialog from "/imports/client/lib/ui/Dialog";
 import Tags from "/imports/client/lib/Tags";
 import _ from "underscore";
+import typeOptions, {
+  allowedValues
+} from "/imports/client/pages/reports/enums/reportType";
+import DatePicker from "react-datepicker";
+import Notifier from "/imports/client/lib/Notifier";
+import FilterService from "/imports/client/lib/FilterService";
+import moment from "moment";
+
 export default class ReportSearchBar extends Component {
   constructor() {
     super();
@@ -15,6 +23,8 @@ export default class ReportSearchBar extends Component {
       selectAll: false,
       model: {},
       filter: false,
+      createdAtMin: null,
+      createdAtMax: null
     };
   }
 
@@ -23,25 +33,24 @@ export default class ReportSearchBar extends Component {
   }
 
   onSubmit(params) {
-    const reportIdQueryParams = FlowRouter.getQueryParam("reportId");
+    const { createdAtMin, createdAtMax } = this.state;
 
     if (FlowRouter.current().queryParams.page != "1" && "name" in params) {
       this.props.setPagerInitial();
     }
+
+    FlowRouter.setQueryParams({
+      createdAtMin: FilterService.formatDate(createdAtMin)
+    });
+
+    FlowRouter.setQueryParams({
+      createdAtMax: FilterService.formatDate(createdAtMax)
+    });
     if ("name" in params) {
       FlowRouter.setQueryParams({ name: params.name });
     }
-    if ("facCode" in params) {
-      FlowRouter.setQueryParams({ facCode: params.facCode });
-    }
-
-    if ("ptType" in params) {
-      FlowRouter.setQueryParams({ ptType: params.ptType });
-    }
-    if (reportIdQueryParams) {
-      const { closeRightPanel } = this.props;
-      FlowRouter.setQueryParams({ reportId: null });
-      closeRightPanel();
+    if ("type" in params) {
+      FlowRouter.setQueryParams({ type: params.type });
     }
   }
 
@@ -78,6 +87,20 @@ export default class ReportSearchBar extends Component {
     });
   };
 
+  onDateSelect = (selectedDate, field) => {
+    if (field === "createdAtMin") {
+      this.setState({ createdAtMin: selectedDate });
+    } else if (field === "createdAtMax") {
+      const { createdAtMin } = this.state;
+      if (selectedDate < createdAtMin) {
+        Notifier.error(
+          "Maximum date should be greater or equal to minimum date"
+        );
+      }
+      this.setState({ createdAtMax: selectedDate });
+    }
+  };
+
   getFilterParams = () => {
     const queryParams = FlowRouter.current().queryParams;
     const model = {};
@@ -86,19 +109,24 @@ export default class ReportSearchBar extends Component {
       model.name = queryParams.name;
     }
 
-    if ("facCode" in queryParams) {
-      model.facCode = queryParams.facCode;
+    if ("createdAtMin" in queryParams) {
+      this.setState({
+        createdAtMin: moment(new Date(queryParams.createdAtMin))
+      });
     }
 
-    if ("ptType" in queryParams) {
-      model.ptType = queryParams.ptType;
+    if ("createdAtMax" in queryParams) {
+      this.setState({
+        createdAtMax: moment(new Date(queryParams.createdAtMax))
+      });
     }
+
     this.setState({ model });
   };
 
   showDialog = () => {
-    this.setState(() => ({ dialogIsActive: true }))
-  }
+    this.setState(() => ({ dialogIsActive: true }));
+  };
   resetFilters = () => {
     let appliedFilters = FlowRouter.current().queryParams;
     appliedFilters = _.omit(appliedFilters, "page", "tagIds");
@@ -106,6 +134,10 @@ export default class ReportSearchBar extends Component {
     FlowRouter.setQueryParams(appliedFilters);
     const { filters } = this.refs;
     filters.reset();
+    this.setState({
+      createdAtMin: null,
+      createdAtMax: null
+    });
     this.closeDialog();
   };
 
@@ -125,7 +157,9 @@ export default class ReportSearchBar extends Component {
       dropdown,
       selectAll,
       model,
-      dialogIsActive
+      dialogIsActive,
+      createdAtMin,
+      createdAtMax
     } = this.state;
     const {
       options,
@@ -149,7 +183,7 @@ export default class ReportSearchBar extends Component {
     const searchClasses = classNames("search-input", {
       full__width: btnGroup && !hideFilter,
       sort__none: hideSort,
-      'btns--none': btnGroup && hideFilter
+      "btns--none": btnGroup && hideFilter
     });
 
     return (
@@ -203,21 +237,47 @@ export default class ReportSearchBar extends Component {
                       title="Filter by"
                       closePortal={this.closeDialog}
                     >
-                      <button className="close-dialog" onClick={this.closeDialog}>
+                      <button
+                        className="close-dialog"
+                        onClick={this.closeDialog}
+                      >
                         <i className="icon-close" />
                       </button>
                       <div className="filter-bar">
                         <div className="select-wrapper">
                           <div className="form-group flex--helper form-group__pseudo--3">
                             <AutoField
-                              label="Facility code:"
-                              name="facCode"
-                              placeholder="Search by Facility Code"
+                              labelHidden={true}
+                              name="type"
+                              options={typeOptions}
+                              placeholder="Type"
                             />
-                            <AutoField
-                              label="Patient Type:"
-                              name="ptType"
-                              placeholder="Search by Patient Type"
+
+                            <DatePicker
+                              calendarClassName="cc-datepicker"
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
+                              placeholderText="From created-at date"
+                              selected={createdAtMin}
+                              onChange={date =>
+                                this.onDateSelect(date, "createdAtMin")
+                              }
+                              fixedHeight
+                            />
+                            <DatePicker
+                              calendarClassName="cc-datepicker"
+                              showMonthDropdown
+                              showYearDropdown
+                              yearDropdownItemNumber={4}
+                              todayButton={"Today"}
+                              placeholderText="To created-at date"
+                              selected={createdAtMax}
+                              onChange={date =>
+                                this.onDateSelect(date, "createdAtMax")
+                              }
+                              fixedHeight
                             />
                           </div>
                           <div className="flex--helper flex-justify--space-between">
@@ -240,11 +300,8 @@ export default class ReportSearchBar extends Component {
                   )}
                 </button>
               )}
-              {
-                tags.length ? <Tags tags={tags} /> : null
-              }
+              {tags.length ? <Tags tags={tags} /> : null}
             </div>
-
           </div>
         </div>
         {filter && <FilterBar options={options} />}
@@ -305,10 +362,10 @@ class BtnGroup extends Component {
             );
           })
         ) : (
-            <button>
-              <i className="icon-archive" />
-            </button>
-          )}
+          <button>
+            <i className="icon-archive" />
+          </button>
+        )}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
@@ -353,14 +410,9 @@ const schema = new SimpleSchema({
     optional: true,
     label: "Search by report name"
   },
-  facCode: {
+  type: {
     type: String,
-    optional: true,
-    label: "Search by Facility Code"
-  },
-  ptType: {
-    type: String,
-    optional: true,
-    label: "Search by Patient Type"
+    label: "Search by report type",
+    allowedValues
   }
 });
