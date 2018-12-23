@@ -347,8 +347,6 @@ export default class ParamsService {
 
   static getReportsParams() {
     let name = FlowRouter.getQueryParam("name");
-    let facCode = FlowRouter.getQueryParam("facCode");
-    let ptType = FlowRouter.getQueryParam("ptType");
     let tagIds = this.getTags();
 
     const page = FlowRouter.getQueryParam("page");
@@ -357,8 +355,6 @@ export default class ParamsService {
     return {
       filters: {
         name,
-        facCode,
-        ptType,
         tagIds
       },
       options: {

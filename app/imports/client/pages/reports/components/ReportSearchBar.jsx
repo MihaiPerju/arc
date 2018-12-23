@@ -14,7 +14,7 @@ export default class ReportSearchBar extends Component {
       dropdown: false,
       selectAll: false,
       model: {},
-      filter: false,
+      filter: false
     };
   }
 
@@ -23,25 +23,11 @@ export default class ReportSearchBar extends Component {
   }
 
   onSubmit(params) {
-    const reportIdQueryParams = FlowRouter.getQueryParam("reportId");
-
     if (FlowRouter.current().queryParams.page != "1" && "name" in params) {
       this.props.setPagerInitial();
     }
     if ("name" in params) {
       FlowRouter.setQueryParams({ name: params.name });
-    }
-    if ("facCode" in params) {
-      FlowRouter.setQueryParams({ facCode: params.facCode });
-    }
-
-    if ("ptType" in params) {
-      FlowRouter.setQueryParams({ ptType: params.ptType });
-    }
-    if (reportIdQueryParams) {
-      const { closeRightPanel } = this.props;
-      FlowRouter.setQueryParams({ reportId: null });
-      closeRightPanel();
     }
   }
 
@@ -85,20 +71,12 @@ export default class ReportSearchBar extends Component {
     if ("name" in queryParams) {
       model.name = queryParams.name;
     }
-
-    if ("facCode" in queryParams) {
-      model.facCode = queryParams.facCode;
-    }
-
-    if ("ptType" in queryParams) {
-      model.ptType = queryParams.ptType;
-    }
     this.setState({ model });
   };
 
   showDialog = () => {
-    this.setState(() => ({ dialogIsActive: true }))
-  }
+    this.setState(() => ({ dialogIsActive: true }));
+  };
   resetFilters = () => {
     let appliedFilters = FlowRouter.current().queryParams;
     appliedFilters = _.omit(appliedFilters, "page", "tagIds");
@@ -120,13 +98,7 @@ export default class ReportSearchBar extends Component {
     }
   };
   render() {
-    const {
-      filter,
-      dropdown,
-      selectAll,
-      model,
-      dialogIsActive
-    } = this.state;
+    const { filter, dropdown, selectAll, model, dialogIsActive } = this.state;
     const {
       options,
       btnGroup,
@@ -149,7 +121,7 @@ export default class ReportSearchBar extends Component {
     const searchClasses = classNames("search-input", {
       full__width: btnGroup && !hideFilter,
       sort__none: hideSort,
-      'btns--none': btnGroup && hideFilter
+      "btns--none": btnGroup && hideFilter
     });
 
     return (
@@ -203,23 +175,14 @@ export default class ReportSearchBar extends Component {
                       title="Filter by"
                       closePortal={this.closeDialog}
                     >
-                      <button className="close-dialog" onClick={this.closeDialog}>
+                      <button
+                        className="close-dialog"
+                        onClick={this.closeDialog}
+                      >
                         <i className="icon-close" />
                       </button>
                       <div className="filter-bar">
                         <div className="select-wrapper">
-                          <div className="form-group flex--helper form-group__pseudo--3">
-                            <AutoField
-                              label="Facility code:"
-                              name="facCode"
-                              placeholder="Search by Facility Code"
-                            />
-                            <AutoField
-                              label="Patient Type:"
-                              name="ptType"
-                              placeholder="Search by Patient Type"
-                            />
-                          </div>
                           <div className="flex--helper flex-justify--space-between">
                             <button
                               className="btn--red"
@@ -240,11 +203,8 @@ export default class ReportSearchBar extends Component {
                   )}
                 </button>
               )}
-              {
-                tags.length ? <Tags tags={tags} /> : null
-              }
+              {tags.length ? <Tags tags={tags} /> : null}
             </div>
-
           </div>
         </div>
         {filter && <FilterBar options={options} />}
@@ -305,10 +265,10 @@ class BtnGroup extends Component {
             );
           })
         ) : (
-            <button>
-              <i className="icon-archive" />
-            </button>
-          )}
+          <button>
+            <i className="icon-archive" />
+          </button>
+        )}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
@@ -352,15 +312,5 @@ const schema = new SimpleSchema({
     type: String,
     optional: true,
     label: "Search by report name"
-  },
-  facCode: {
-    type: String,
-    optional: true,
-    label: "Search by Facility Code"
-  },
-  ptType: {
-    type: String,
-    optional: true,
-    label: "Search by Patient Type"
   }
 });
