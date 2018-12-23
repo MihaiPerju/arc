@@ -9,7 +9,6 @@ import AgedAccounts from "./dashboardWidgets/AgedAccounts";
 import HeartBeat from "./dashboardWidgets/HeartBeat";
 
 export default class ManagerDashboard extends React.Component {
-
   state = {
     widgetSettings: null,
     isLoading: true
@@ -21,17 +20,23 @@ export default class ManagerDashboard extends React.Component {
 
   getManagerWidgetSettings() {
     this.setState({ isLoading: true });
-    Meteor.call("managerSettings.get", pages.WIDGET_SETTINGS, (err, responseData) => {
-      if (!err) {
-        this.setState({
-          widgetSettings: responseData ? responseData.widgetSetting : undefined,
-          isLoading: false
-        });
-      } else {
-        this.setState({ isLoading: false });
-        Notifier.error(err.reason);
+    Meteor.call(
+      "managerSettings.get",
+      pages.WIDGET_SETTINGS,
+      (err, responseData) => {
+        if (!err) {
+          this.setState({
+            widgetSettings: responseData
+              ? responseData.widgetSetting
+              : undefined,
+            isLoading: false
+          });
+        } else {
+          this.setState({ isLoading: false });
+          Notifier.error(err.reason);
+        }
       }
-    });
+    );
   }
 
   renderWidgets() {
@@ -51,7 +56,6 @@ export default class ManagerDashboard extends React.Component {
         <div className="dashboard-row">
           <AgedAccounts filters={filters} />
         </div>
-
       </div>
     );
   }
@@ -59,14 +63,14 @@ export default class ManagerDashboard extends React.Component {
   render() {
     const { isLoading } = this.state;
     return (
-      <div style={{ position: 'relative' }}>
-        {
-          !isLoading ?
-            this.renderWidgets() :
-            <div className="dashboard-content-center">
-              <Loading />
-            </div>
-        }
+      <div style={{ position: "relative" }}>
+        {!isLoading ? (
+          this.renderWidgets()
+        ) : (
+          <div className="dashboard-content-center">
+            <Loading />
+          </div>
+        )}
       </div>
     );
   }

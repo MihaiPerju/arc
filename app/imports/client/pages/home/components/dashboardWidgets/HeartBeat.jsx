@@ -15,7 +15,8 @@ export default class HeartBeat extends React.Component {
     reps: [],
     chartData: [],
     selectedDate: moment(),
-    selectedRep: ""
+    selectedRep: "",
+    total: 0
   };
 
   componentDidMount() {
@@ -53,21 +54,18 @@ export default class HeartBeat extends React.Component {
     let date = new Date(this.state.selectedDate);
     this.setState({ isLoadingGraph: true });
     setTimeout(() => {
-      Meteor.call(
-        "account.getActionPerHour",
-        userId,
-        date,
-        (err, chartData) => {
-          if (!err) {
-            this.setState({
-              chartData,
-              isLoadingGraph: false
-            });
-          } else {
-            Notifier.error(err.reason);
-          }
+      Meteor.call("account.getActionPerHour", userId, date, (err, result) => {
+        if (!err) {
+          const { graphData, total } = result;
+          this.setState({
+            chartData: graphData,
+            isLoadingGraph: false,
+            total
+          });
+        } else {
+          Notifier.error(err.reason);
         }
-      );
+      });
     }, 1500);
   };
 
@@ -86,6 +84,7 @@ export default class HeartBeat extends React.Component {
   };
 
   renderGraph() {
+    const { total } = this.state;
     const options = {
       chart: {
         type: "line"
@@ -97,7 +96,7 @@ export default class HeartBeat extends React.Component {
         title: { text: "Number of Actions" }
       },
       title: {
-        text: "Rep Actions"
+        text: "Rep Actions (" + total + " Total)"
       },
       series: [
         {

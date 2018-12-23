@@ -12,7 +12,8 @@ export default class ActivityGraph extends React.Component {
     this.state = {
       graphData: [],
       selectedDate: moment(),
-      isLoading: false
+      isLoading: false,
+      total: 0
     };
   }
 
@@ -24,11 +25,13 @@ export default class ActivityGraph extends React.Component {
   getAccountActions = date => {
     const { userId } = this.props;
     this.setState({ isLoading: true });
-    Meteor.call("account.getActionPerHour", userId, date, (err, graphData) => {
+    Meteor.call("account.getActionPerHour", userId, date, (err, result) => {
       if (!err) {
+        const { graphData, total } = result;
         this.setState({
           graphData,
-          isLoading: false
+          isLoading: false,
+          total
         });
       } else {
         this.setState({ isLoading: false });
@@ -44,10 +47,8 @@ export default class ActivityGraph extends React.Component {
     });
   };
 
- 
-
   renderGraph() {
-    const { graphData, isLoading } = this.state;
+    const { graphData, isLoading, total } = this.state;
     const options = {
       chart: {
         type: "line",
@@ -60,7 +61,7 @@ export default class ActivityGraph extends React.Component {
         title: { text: "Number of Action" }
       },
       title: {
-        text: "Actions"
+        text: "Actions (" + total + " Total)"
       },
       series: [
         {
@@ -76,12 +77,9 @@ export default class ActivityGraph extends React.Component {
           <ReactHighcharts highcharts={Highcharts} options={options} />
         </div>
       );
-    }
-    else {
+    } else {
       return <Loading />;
     }
-
-
   }
 
   render() {
@@ -91,7 +89,9 @@ export default class ActivityGraph extends React.Component {
       <div>
         <div className="activity-container-header">
           <div className="activity-container-header-left">
-            <div className="activity-container-title m-t--10">Activity Graph</div>
+            <div className="activity-container-title m-t--10">
+              Activity Graph
+            </div>
           </div>
           <div className="activity-container-header-right flex--helper form-group__pseudo--3">
             <div className="m-l-15">
