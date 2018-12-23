@@ -1,11 +1,13 @@
 .left-menu {
   width: 280px;
-  padding: 25px 15px;
   transition: width $transition300;
   flex-shrink: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 90vh;
+
   &.collapsed {
-    width: 75px;
+    width: 60px;
     .menu__item > a {
       padding-left: 30px;
       span {

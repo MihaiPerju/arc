@@ -108,12 +108,16 @@ export default class ReportEdit extends React.Component {
   };
 
   onSubmitFilters(filters, components, filterBuilderData) {
+    if (!filterBuilderData.facilityId && !filterBuilderData.clientId) {
+      Notifier.error("Filters Should Include Client or Facility Filter");
+      return;
+    }
     //Setting state and creating/editing report
-     this.setState({
+    this.setState({
       components,
       filterBuilderData,
       isDisabled: true
-    }); 
+    });
 
     const { generalInformation, shareReport } = this.state;
     _.extend(generalInformation, {
@@ -124,7 +128,7 @@ export default class ReportEdit extends React.Component {
 
     const { report } = this.props;
     const { _id } = report;
-     Meteor.call("report.update", { generalInformation, _id }, err => {
+    Meteor.call("report.update", { generalInformation, _id }, err => {
       if (!err) {
         Notifier.success("Report modified!");
         this.onSetEdit();
@@ -132,7 +136,7 @@ export default class ReportEdit extends React.Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    }); 
+    });
   }
 
   onSetEdit = () => {
