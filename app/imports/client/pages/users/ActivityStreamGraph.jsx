@@ -12,7 +12,8 @@ export default class ActivityStreamGraph extends React.Component {
     this.state = {
       graphData: [],
       selectedDate: moment(),
-      isLoading: false
+      isLoading: false,
+      total: 0
     };
   }
 
@@ -24,11 +25,13 @@ export default class ActivityStreamGraph extends React.Component {
   getAccountActions = date => {
     const { userId } = FlowRouter.current().params;
     this.setState({ isLoading: true });
-    Meteor.call("account.getActionPerHour", userId, date, (err, graphData) => {
+    Meteor.call("account.getActionPerHour", userId, date, (err, result) => {
       if (!err) {
+        const { graphData, total } = result;
         this.setState({
           graphData,
-          isLoading: false
+          isLoading: false,
+          total
         });
       } else {
         this.setState({ isLoading: false });
@@ -47,7 +50,7 @@ export default class ActivityStreamGraph extends React.Component {
   };
 
   renderGraph() {
-    const { graphData, isLoading } = this.state;
+    const { graphData, isLoading, total } = this.state;
     const options = {
       chart: {
         type: "line",
@@ -60,7 +63,7 @@ export default class ActivityStreamGraph extends React.Component {
         title: { text: "Number of Action" }
       },
       title: {
-        text: "Actions"
+        text: "Actions (" + total + " Total)"
       },
       series: [
         {
@@ -76,17 +79,13 @@ export default class ActivityStreamGraph extends React.Component {
           <ReactHighcharts highcharts={Highcharts} options={options} />
         </div>
       );
-    }
-    else {
+    } else {
       return <Loading />;
     }
-
-
   }
 
   render() {
     const { selectedDate } = this.state;
-
     return (
       <div>
         <div className="d-header">
@@ -110,7 +109,9 @@ export default class ActivityStreamGraph extends React.Component {
                 />
               </div>
             </div>
-            <button className="custom-submit-btn" onClick={this.onSubmit}>Submit </button>
+            <button className="custom-submit-btn" onClick={this.onSubmit}>
+              Submit{" "}
+            </button>
           </div>
         </div>
         {this.renderGraph()}

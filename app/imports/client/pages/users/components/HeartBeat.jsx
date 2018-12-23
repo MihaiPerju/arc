@@ -17,7 +17,8 @@ export default class HeartBeat extends React.Component {
       reps: [],
       chartData: [],
       selectedDate: moment(),
-      selectedRep: ''
+      selectedRep: "",
+      total: 0
     };
   }
 
@@ -25,18 +26,26 @@ export default class HeartBeat extends React.Component {
     this.getRepresentatives();
   }
 
- 
-
   getRepresentatives() {
     Meteor.call("users.getReps", (err, repsData) => {
       if (!err) {
         let reps = repsData.map(r => {
-          return { label: `${r.profile.firstName} ${r.profile.lastName}`, value: r._id };
+          return {
+            label: `${r.profile.firstName} ${r.profile.lastName}`,
+            value: r._id
+          };
         });
         let selectedRep = reps[0];
-        this.setState({ reps, isLoading: false, selectedRepId: selectedRep != undefined ? selectedRep.value : '' }, () => {
-          this.getAccountActions();
-        });
+        this.setState(
+          {
+            reps,
+            isLoading: false,
+            selectedRepId: selectedRep != undefined ? selectedRep.value : ""
+          },
+          () => {
+            this.getAccountActions();
+          }
+        );
       } else {
         Notifier.error(err.reason);
       }
@@ -47,10 +56,13 @@ export default class HeartBeat extends React.Component {
     let userId = this.state.selectedRepId;
     let date = new Date(this.state.selectedDate);
     this.setState({ isLoadingGraph: true });
-    Meteor.call("account.getActionPerHour", userId, date, (err, chartData) => {
+    Meteor.call("account.getActionPerHour", userId, date, (err, result) => {
       if (!err) {
+        const { graphData, total } = result;
         this.setState({
-          chartData, isLoadingGraph: false
+          chartData: graphData,
+          isLoadingGraph: false,
+          total
         });
       } else {
         Notifier.error(err.reason);
@@ -62,18 +74,18 @@ export default class HeartBeat extends React.Component {
     this.setState({ selectedRepId: userId }, () => {
       this.getAccountActions();
     });
-  }
+  };
 
   submit = () => {
     this.getAccountActions();
-  }
+  };
 
   onChange = newDate => {
     this.setState({ selectedDate: moment(newDate) });
   };
 
   render() {
-    const { chartData, reps, selectedDate } = this.state;
+    const { chartData, reps, selectedDate, total } = this.state;
     const options = {
       chart: {
         type: "line",
@@ -86,7 +98,7 @@ export default class HeartBeat extends React.Component {
         title: { text: "Number of Actions" }
       },
       title: {
-        text: "Rep Actions"
+        text: "Rep Actions (" + total + " Total)"
       },
       series: [
         {
@@ -97,47 +109,49 @@ export default class HeartBeat extends React.Component {
     };
     return (
       <div className="heart-beat">
-        {
-          !this.state.isLoading ?
-            <AutoForm schema={heartBeatSchema} onSubmit={this.submitData}>
-              <div className="flex--helper form-group__pseudo--3">
-                <div className="select-form">
-                  <AutoField
-                    label="Reps:"
-                    name="userId"
-                    options={reps}
+        {!this.state.isLoading ? (
+          <AutoForm schema={heartBeatSchema} onSubmit={this.submitData}>
+            <div className="flex--helper form-group__pseudo--3">
+              <div className="select-form">
+                <AutoField label="Reps:" name="userId" options={reps} />
+              </div>
+              <div className="m-l-15">
+                <label>Select Date:</label>
+                <div className="border-style">
+                  <DatePicker
+                    calendarClassName="cc-datepicker"
+                    showMonthDropdown
+                    showYearDropdown
+                    yearDropdownItemNumber={4}
+                    todayButton={"Today"}
+                    selected={selectedDate}
+                    onChange={this.onChange}
+                    placeholderText="Selected Date"
+                    fixedHeight
                   />
                 </div>
-                <div className="m-l-15">
-                  <label>Select Date:</label>
-                  <div className="border-style">
-                    <DatePicker
-                      calendarClassName="cc-datepicker"
-                      showMonthDropdown
-                      showYearDropdown
-                      yearDropdownItemNumber={4}
-                      todayButton={"Today"}
-                      selected={selectedDate}
-                      onChange={this.onChange}
-                      placeholderText="Selected Date"
-                      fixedHeight
-                    />
-                  </div>
-                </div>
-                <button type="submit" className="custom-submit-btn" onClick={this.submit}>
-                  Submit
-              </button>
               </div>
-            </AutoForm> : <Loading />
-        }
-        {
-          !this.state.isLoadingGraph ? <div className="m-t--20">
+              <button
+                type="submit"
+                className="custom-submit-btn"
+                onClick={this.submit}
+              >
+                Submit
+              </button>
+            </div>
+          </AutoForm>
+        ) : (
+          <Loading />
+        )}
+        {!this.state.isLoadingGraph ? (
+          <div className="m-t--20">
             <div>
               <ReactHighcharts highcharts={Highcharts} options={options} />
             </div>
-          </div> : <Loading />
-        }
-
+          </div>
+        ) : (
+          <Loading />
+        )}
       </div>
     );
   }
