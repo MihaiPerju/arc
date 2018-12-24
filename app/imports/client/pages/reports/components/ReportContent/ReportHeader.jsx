@@ -22,7 +22,8 @@ export default class ReportHeader extends Component {
       accountActions: [],
       isDisabled: false,
       isOpenedDropdown: false,
-      reportId: null
+      reportId: null,
+      mongoFilters: null
     };
     this.pollingMethod = null;
   }
@@ -53,12 +54,19 @@ export default class ReportHeader extends Component {
 
   componentWillReceiveProps(props) {
     const { report } = props;
-    const { _id } = report;
+    const { _id, mongoFilters } = report;
     if (this.state.reportId !== _id) {
       this.setState({ reportId: _id });
       this.getColumns();
       this.getAccounts(props);
     }
+    
+    if(this.state.mongoFilters !== mongoFilters) {
+      this.setState({mongoFilters});
+      this.getColumns();
+      this.getAccounts(props);
+    }
+
   }
 
   getColumns() {
