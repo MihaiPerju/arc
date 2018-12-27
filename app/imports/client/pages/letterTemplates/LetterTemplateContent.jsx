@@ -7,22 +7,25 @@ import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
 export default class LetterTemplateContent extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      edit: false
+      edit: false,
+      templateID: this.props.currentTemplate,
+      template: null
     };
     this.pollingMethod = null;
   }
 
   componentWillMount() {
+    this.getTemplate();
     this.pollingMethod = setInterval(() => {
       this.getTemplate();
     }, 3000);
   }
 
-  getTemplate() {
-    const { currentTemplate } = this.props;
+  getTemplate(passedID) {
+    const currentTemplate = passedID ? passedID : this.state.templateID;
     Meteor.call("template.getOne", currentTemplate, (err, template) => {
       if (!err) {
         this.setState({ template });
@@ -32,14 +35,27 @@ export default class LetterTemplateContent extends Component {
     });
   }
 
+    // If template changed we need to go fetch it right away
+    componentWillReceiveProps(nextProps) {
+      if(nextProps.currentTemplate === this.state.templateID)
+        return;
+    
+      this.setState({
+        edit: false, 
+        template: null, 
+        templateID: nextProps.currentTemplate,
+      });
+  
+      this.getTemplate(nextProps.currentTemplate);
+    }
+
   componentWillUnmount = () => {
     //Removing Interval
     clearInterval(this.pollingMethod);
   };
 
   setEdit = () => {
-    const { edit } = this.state;
-    this.setState({ edit: !edit });
+    this.setState({ edit: !this.state.edit });
   };
 
   render() {

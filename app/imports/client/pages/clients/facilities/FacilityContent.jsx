@@ -11,13 +11,15 @@ import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
 export default class FacilityContent extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       edit: false,
       copiedPlacementRules: {},
       inventoryFacility: null,
-      resetImportForm: false
+      resetImportForm: false,
+      facilityId: this.props.currentFacility,
+      facility: null
     };
     this.pollingMethod = null;
   }
@@ -30,20 +32,20 @@ export default class FacilityContent extends Component {
     }, 10000);
   }
 
-  getFacility() {
-    const { currentFacility } = this.props;
-    Meteor.call("facility.getOne", currentFacility, (err, facility) => {
+  getFacility(passedID) {
+    const facilityId = passedID ? passedID : this.state.facilityId;
+    Meteor.call("facility.getOne", facilityId, (err, facility) => {
       if (!err) {
         this.setState({ facility });
-        this.getRules();
+        this.getRules(facility);
       } else {
         Notifier.error(err.reason);
       }
     });
   }
 
-  getRules() {
-    const { facility } = this.state;
+  // WTH is going on here, this is garbage / second state set called by above getFacility(). This needs to be removed.
+  getRules(facility) {
     if (facility) {
       const { placementRules } = facility;
       this.setState({
@@ -51,6 +53,23 @@ export default class FacilityContent extends Component {
         inventoryFacility: facility
       });
     }
+  }
+
+  // If account changed we need to go fetch it right away
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.currentFacility === this.props.currentFacility)
+      return;
+  
+    this.setState({
+      edit: false, 
+      copiedPlacementRules: {}, 
+      inventoryFacility: null, 
+      resetImportForm: false, 
+      facilityId: nextProps.currentFacility,
+      facility: null
+    });
+
+    this.getFacility(nextProps.currentFacility);
   }
 
   componentWillUnmount = () => {
