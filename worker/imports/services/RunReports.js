@@ -36,8 +36,16 @@ export default class RunReports {
           }
         }
       );
-      //Create & Save .csv file
-      this.saveReport(job);
+
+      const { reportId } = job;
+      //checking the report type
+      const { type } = Reports.findOne({ _id: reportId });
+      if(type === reportTypes.ACCOUNT_ACTIONS) {
+          this.saveAccountActionReport(job);
+      } else {
+        //Create & Save .csv file
+        this.saveReport(job);
+      }
     }
   }
 
@@ -318,5 +326,285 @@ export default class RunReports {
     ])
       .pipe(stringifier)
       .pipe(file);
+  }
+
+
+
+  static getAccountActionColumns(reportId) {
+    let columns = {
+      accountNo: "Account Number",
+      actionType: "Account Type",
+      username: "User Name",
+      createdAt: "createdAt",
+      actionName: "Action Name",
+      reasonCode: "Reason Code"
+    };
+    
+    const filters = this.getFilters(reportId);
+    const customFieldArr = AccountActions.find(filters, {
+      fields: { customFields: 1, _id: 0 }
+    }).fetch();
+
+    customFieldArr.map(customData => {
+      _.map(customData["customFields"], (value, key) => {
+        columns[`customFields[${key}]`] = `Custom Fields : ${key}`;
+       })
+    })
+
+    return columns;
+  }
+
+  static async saveAccountActionReport({ reportId, _id }) {
+    const { root } = SettingsService.getSettings(settings.ROOT);
+
+    //Path to new file
+    const pathToSave = root + FoldersEnum.REPORTS_FOLDER;
+    //Check and see if folder for saving is missing
+    this.checkFolder(pathToSave);
+
+    const filePath = pathToSave + "/" + reportId + ".csv";
+    const pdfFilePath = pathToSave + "/" + reportId + ".pdf";
+    const future = new Future();
+    const file = fs.createWriteStream(filePath);
+
+    //Getting filters
+    let filters = this.getFilters(reportId);
+    
+    //Write file
+
+    let columns = this.getAccountActionColumns(reportId);
+
+    const AccountActionsNative = AccountActions.rawCollection(filters);
+    const stringifier = stringify({
+      columns,
+      header: true,
+      delimiter: ","
+    });
+
+
+
+    const AccountActionsRaw = AccountActions.rawCollection();
+    AccountActionsRaw.aggregateSync = Meteor.wrapAsync(
+      AccountActionsRaw.aggregate
+    );
+
+    let accountActionData = await AccountActionsRaw.aggregate([
+      {
+        $match: filters
+      },
+      {
+        $lookup: {
+          from: "actions",
+          localField: "actionId",
+          foreignField: "_id",
+          as: "action"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $lookup: {
+          from: "accounts",
+          localField: "accountId",
+          foreignField: "_id",
+          as: "account"
+        }
+      },
+      {
+        $addFields: {
+          action: { $arrayElemAt: ["$action", 0] },
+          user: { $arrayElemAt: ["$user", 0] },
+          account: { $arrayElemAt: ["$account", 0] }
+        }
+      },
+      {
+        $addFields: {
+          accountNo: "$account.acctNum",
+          actionType: "$type",
+          username: { $concat: [ "$user.profile.firstName", " ", "$user.profile.lastName" ] } ,
+          actionName: "$action.title",
+          createdAt: "$createdAt"
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          accountNo: 1,
+          actionType: 1,
+          username: 1,
+          actionName: 1,
+          createdAt: 1,
+          reasonCode: 1,
+          customFields: 1
+        }
+      }
+    ]).toArray();
+
+    let headers = this.getAccountActionColumns(reportId);
+    
+    const bindColumn = (d, key) => {
+      if (key.includes("customFields")) {
+        var customdataKeys = key.split("[");
+        var customdataKey = customdataKeys[0];
+        var subKey = customdataKeys[1].slice(0, -1);
+        var value = d[customdataKey][subKey];
+        return `${value != undefined ? value : ""}`;
+      } else return `${d[key]}`;
+    };
+
+    // Render HTML
+    const renderHtml = meta => {
+      const data = (
+        <Container>
+          <Table textAlign="center" celled>
+            <Table.Body>
+              <Table.Row>
+                {Object.keys(headers).map(item => (
+                  <Table.Cell key={item}>{item}</Table.Cell>
+                ))}
+              </Table.Row>
+              {meta.map((d, index) => (
+                <Table.Row key={index}>
+                  {Object.keys(headers).map((item, i) => {
+                    return (
+                      <Table.Cell key={i}>{bindColumn(d, item)}</Table.Cell>
+                    );
+                  })}
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </Container>
+      );
+      return ReactDOMServer.renderToString(data);
+    };
+
+    const reportContent = renderHtml(accountActionData);
+
+    try {
+      pdf.create(reportContent).toFile(pdfFilePath, (err, res) => {
+        if (err) {
+          future.return(err);
+        } else {
+          future.return(res);
+        }
+      });
+    } catch (err) {
+      JobQueue.update(
+        {
+          _id
+        },
+        {
+          $set: {
+            status: StatusEnum.FAILED
+          }
+        }
+      );
+      return;
+    }
+
+        //Catching error
+        stringifier.on("error", function(err) {
+          JobQueue.update(
+            {
+              _id
+            },
+            {
+              $set: {
+                status: StatusEnum.FAILED
+              }
+            }
+          );
+          return;
+        });
+    
+        stringifier.on(
+          "finish",
+          Meteor.bindEnvironment(() => {
+            const { reportId } = JobQueue.findOne({
+              _id
+            });
+            const { authorId } = Reports.findOne({
+              _id: reportId
+            });
+            JobQueue.update(
+              {
+                _id
+              },
+              {
+                $set: {
+                  status: StatusEnum.FINISHED
+                }
+              }
+            );
+            NotificationService.createReportNotification(authorId, reportId);
+          })
+        );
+
+      AccountActionsNative.aggregate([
+      {
+        $match: filters
+      },
+      {
+        $lookup: {
+          from: "actions",
+          localField: "actionId",
+          foreignField: "_id",
+          as: "action"
+        }
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $lookup: {
+          from: "accounts",
+          localField: "accountId",
+          foreignField: "_id",
+          as: "account"
+        }
+      },
+      {
+        $addFields: {
+          action: { $arrayElemAt: ["$action", 0] },
+          user: { $arrayElemAt: ["$user", 0] },
+          account: { $arrayElemAt: ["$account", 0] }
+        }
+      },
+      {
+        $addFields: {
+          accountNo: "$account.acctNum",
+          actionType: "$type",
+          username: { $concat: [ "$user.profile.firstName", " ", "$user.profile.lastName" ] } ,
+          actionName: "$action.title",
+          createdAt: "$createdAt"
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          accountNo: 1,
+          actionType: 1,
+          username: 1,
+          actionName: 1,
+          createdAt: 1,
+          reasonCode: 1,
+          customFields: 1
+        }
+      }
+    ])
+    .pipe(stringifier)
+    .pipe(file);
   }
 }
