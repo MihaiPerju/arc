@@ -10,20 +10,16 @@ export default class ReportContent extends Component {
     super();
     this.state = {
       edit: false,
-      isGraph: false
+      isGraph: false,
+      report: null
     };
-    this.pollingMethod = null;
   }
 
   componentWillMount() {
-    this.getReport();
-    this.pollingMethod = setInterval(() => {
-      this.getReport();
-    }, 3000);
+    this.getReport(this.props.currentReport);
   }
 
-  getReport() {
-    const { currentReport } = this.props;
+  getReport(currentReport) {
     Meteor.call("report.getOne", currentReport, (err, report) => {
       if (!err) {
         this.setState({ report });
@@ -33,10 +29,14 @@ export default class ReportContent extends Component {
     });
   }
 
-  componentWillUnmount = () => {
-    //Removing Interval
-    clearInterval(this.pollingMethod);
-  };
+  // If account changed we need to go fetch it right away
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.currentReport === this.props.currentReport)
+      return;
+
+    this.setState({edit: false, isGraph: false, report: null});
+    this.getReport(nextProps.currentReport);
+  }
 
   setEdit = () => {
     const { edit } = this.state;
@@ -51,7 +51,7 @@ export default class ReportContent extends Component {
   };
 
   render() {
-    const { edit, isGraph,report } = this.state;
+    const { edit, isGraph, report } = this.state;
     const { substates, closeRightPanel } = this.props;
 
     if (!report) {
