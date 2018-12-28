@@ -17,7 +17,7 @@ export default class Root extends Component {
 
   componentDidMount() {
     Meteor.call("settings.get", pages.LETTERS_DIRECTORY, (err, model) => {
-      if (!err) {
+      if (!err) { console.log(model)
         this.setState({ model });
       } else {
         Notifier.error(err.reason);
@@ -31,7 +31,7 @@ export default class Root extends Component {
   };
 
   onSubmit = data => {
-    data.name = pages.ROOT;
+    data.name = pages.LETTERS_DIRECTORY;
     Meteor.call("settings.update", data, err => {
       if (!err) {
         Notifier.success("Settings Updated!");
