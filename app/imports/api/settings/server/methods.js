@@ -5,6 +5,7 @@ import SettingsService from "./SettingsService";
 Meteor.methods({
   "settings.update"(data) {
     let userId = this.userId;
+    let settingUpdate = null;
     Security.checkAdmin(userId);
     const { name } = data;
 
@@ -30,7 +31,11 @@ Meteor.methods({
     }
 
     data.userId = userId;
-    Settings.update({ name, userId }, { $set: data });
+    settingUpdate = Settings.update({ name, userId }, { $set: data });
+    if(!settingUpdate) {
+      delete data.userId;
+      Settings.update({ name }, { $set: data });
+    }
     SettingsService.createDirectories();
   },
 
