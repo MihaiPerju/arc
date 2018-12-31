@@ -765,7 +765,7 @@ export default class QueryBuilder {
 
       if (medNo) {
         _.extend(queryParams.filters, {
-          medNo: +medNo
+          medNo: medNo
         });
       }
 
