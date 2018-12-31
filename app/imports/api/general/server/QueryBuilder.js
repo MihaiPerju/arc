@@ -517,7 +517,8 @@ export default class QueryBuilder {
           assigneeId: null,
           workQueueId: null,
           tickleDate: null,
-          employeeToRespond: null
+          employeeToRespond: null,
+          state : { $nin: [ stateEnum.ARCHIVED, stateEnum.HOLD ] }
         });
       } else if (state === "tickles") {
         _.extend(queryParams.filters, {
