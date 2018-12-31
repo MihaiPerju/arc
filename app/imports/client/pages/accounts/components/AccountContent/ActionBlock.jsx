@@ -32,8 +32,7 @@ export default class ActionBlock extends Component {
     let selectedFlag = {};
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
       selectedFlag =
-        flags.filter(flag => flag.flagActionId === id)[0].flag ||
-        {};
+        flags.filter(flag => flag.flagActionId === id)[0].flag || {};
     }
     this.setState({
       dialogIsActive: true,
@@ -74,7 +73,7 @@ export default class ActionBlock extends Component {
 
   isFlagChecked = actionId => {
     const { flags } = this.props.account;
-    const index = flags && flags.flagActionId === actionId && flags.isOpen
+    const index = flags && flags.flagActionId === actionId && flags.isOpen;
     /*   const index = flags.findIndex(flag => {
         const { flagAction } = flag;
         return (
@@ -131,10 +130,10 @@ export default class ActionBlock extends Component {
     this.setState({ isFlagApproved: !isFlagApproved });
   };
 
-  showFlags = actionId => {
+  shouldShowFlags = actionId => {
     const { flags } = this.props.account;
     if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
-      const index = flags && flags.flagActionId === actionId && !flags.isOpen
+      const index = flags && flags.flagActionId === actionId && !flags.isOpen;
       /* const index = flags.findIndex(flag => {
         const { flagAction } = flag;
         return (
@@ -151,7 +150,9 @@ export default class ActionBlock extends Component {
     if (userList && userList.length > 0) {
       let actionUser = userList.filter(user => user._id === userId);
       if (actionUser && actionUser[0]) {
-        return actionUser[0].profile.firstName + " " + actionUser[0].profile.lastName
+        return (
+          actionUser[0].profile.firstName + " " + actionUser[0].profile.lastName
+        );
       }
       return "";
     }
@@ -199,65 +200,71 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed.sort(function(a, b){return b.createdAt - a.createdAt}).map((actionPerformed, key) => {
-                const isRep = actionPerformed.userId
-                  ? Roles.userIsInRole(actionPerformed.userId, RolesEnum.REP)
-                  : false;
-                return (
-                  <div className="action-item" key={key}>
-                    <div className="action-info">
-                      <div className="info">
-                        <div className="name">
-                          {(isRep &&
-                            Roles.userIsInRole(
-                              userId,
-                              roleGroups.ADMIN_TECH_MANAGER
-                            )) ||
+              actionsPerformed
+                .sort(function(a, b) {
+                  return b.createdAt - a.createdAt;
+                })
+                .map((actionPerformed, key) => {
+                  const isRep = actionPerformed.userId
+                    ? Roles.userIsInRole(actionPerformed.userId, RolesEnum.REP)
+                    : false;
+                  return (
+                    <div className="action-item" key={key}>
+                      <div className="action-info">
+                        <div className="info">
+                          <div className="name">
+                            {(isRep &&
+                              Roles.userIsInRole(
+                                userId,
+                                roleGroups.ADMIN_TECH_MANAGER
+                              )) ||
                             (isRep && userId === actionPerformed.userId)
-                            ? actionPerformed.userId && (
-                              <a
-                                href={`/${actionPerformed.userId}/activity`}
-                              >
-                                {this.getUserInfo(actionPerformed.userId)}
-                              </a>
-                            )
-                            : actionPerformed.userId &&
-                            this.getUserInfo(actionPerformed.userId)}
+                              ? actionPerformed.userId && (
+                                  <a
+                                    href={`/${actionPerformed.userId}/activity`}
+                                  >
+                                    {this.getUserInfo(actionPerformed.userId)}
+                                  </a>
+                                )
+                              : actionPerformed.userId &&
+                                this.getUserInfo(actionPerformed.userId)}
+                          </div>
+                          <div className="text text-light-grey">
+                            <b>{actionPerformed.reasonCode}</b>:
+                            {actionPerformed.actionId &&
+                              this.getAction(actionPerformed.actionId).title}
+                          </div>
                         </div>
-                        <div className="text text-light-grey">
-                          <b>{actionPerformed.reasonCode}</b>:
+                        <div className="status archived">
                           {actionPerformed.actionId &&
-                            this.getAction(actionPerformed.actionId).title}
+                            this.getAction(actionPerformed.actionId).state}
                         </div>
                       </div>
-                      <div className="status archived">
-                        {actionPerformed.actionId &&
-                          this.getAction(actionPerformed.actionId).state}
+                      <div className="action-time">
+                        {moment(
+                          actionPerformed && actionPerformed.createdAt
+                        ).format("MMMM Do YYYY, hh:mm a")}
                       </div>
+                      {this.shouldShowFlags(actionPerformed._id) && (
+                        <div className="flag-item">
+                          <input
+                            checked={this.isFlagChecked(actionPerformed._id)}
+                            disabled={this.isDisabledForReps(
+                              actionPerformed._id
+                            )}
+                            onChange={() =>
+                              this.onOpenDialog(actionPerformed._id)
+                            }
+                            type="checkbox"
+                            id={`flag-action-${key}`}
+                            className="hidden"
+                          />
+                          <label htmlFor={`flag-action-${key}`} />
+                        </div>
+                      )}
                     </div>
-                    <div className="action-time">
-                      {moment(
-                        actionPerformed && actionPerformed.createdAt
-                      ).format("MMMM Do YYYY, hh:mm a")}
-                    </div>
-                    {this.showFlags(actionPerformed._id) && (
-                      <div className="flag-item">
-                        <input
-                          checked={this.isFlagChecked(actionPerformed._id)}
-                          disabled={this.isDisabledForReps(actionPerformed._id)}
-                          onChange={() =>
-                            this.onOpenDialog(actionPerformed._id)
-                          }
-                          type="checkbox"
-                          id={`flag-action-${key}`}
-                          className="hidden"
-                        />
-                        <label htmlFor={`flag-action-${key}`} />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                  );
+                })}
           </div>
           {dialogIsActive && (
             <Dialog

@@ -17,9 +17,10 @@ export default class NewAction extends Component {
       reasonCodes: [],
       loading: true,
       selectedActionId: null,
-      isDisabled: false
+      isDisabled: false,
+      loadingReasonCodes: false
     };
-}
+  }
 
   componentWillMount() {
     Meteor.call("actions.get", (err, actions) => {
@@ -48,10 +49,10 @@ export default class NewAction extends Component {
       accountIds,
       bulkOption
     } = this.props;
-    
+
     const selectedActionId = this.state.selectedActionId;
     const reasonCodes = this.state.reasonCodes;
- 
+
     if (bulkOption) {
       this.setState({ isDisabled: true });
       let accountList = bulkAssign ? false : accountIds;
@@ -95,8 +96,8 @@ export default class NewAction extends Component {
           Notifier.error(err.reason);
         }
         this.setState({ isDisabled: false });
-      }); 
-    } 
+      });
+    }
   };
 
   onHide = () => {
@@ -106,13 +107,15 @@ export default class NewAction extends Component {
 
   onHandleChange = (field, value) => {
     if (field == "actionId") {
+      this.setState({ loadingReasonCodes: true });
       Meteor.call(
         "reasonCodes.get",
         { actionId: value },
         (err, reasonCodes) => {
           if (!err) {
             this.setState({
-              reasonCodes
+              reasonCodes,
+              loadingReasonCodes: false
             });
           } else {
             Notifier.error(err.reason);
@@ -184,8 +187,8 @@ export default class NewAction extends Component {
       for (let input of action.inputs) {
         let optional = input.requirement === requirementTypes.OPTIONAL;
 
-        switch(input.type){
-          case 'date':
+        switch (input.type) {
+          case "date":
             _.extend(schema, {
               [input.label]: {
                 type: Date,
@@ -193,7 +196,7 @@ export default class NewAction extends Component {
               }
             });
             break;
-          case 'number':
+          case "number":
             _.extend(schema, {
               [input.label]: {
                 type: Number,
@@ -215,11 +218,17 @@ export default class NewAction extends Component {
   }
 
   render() {
-    const { isDisabled } = this.state;
+    const { isDisabled, loadingReasonCodes } = this.state;
 
-    const actionOptions = generateOptions(this.state.actions, '_id', 'title');
-    const reasonCodeOptions = generateOptions(this.state.reasonCodes, '_id', 'reason');
-    const selectedAction = this.state.actions.find(action => action._id === this.state.selectedActionId)
+    const actionOptions = generateOptions(this.state.actions, "_id", "title");
+    const reasonCodeOptions = generateOptions(
+      this.state.reasonCodes,
+      "_id",
+      "reason"
+    );
+    const selectedAction = this.state.actions.find(
+      action => action._id === this.state.selectedActionId
+    );
 
     const schema = this.getSchema(selectedAction);
 
@@ -247,6 +256,7 @@ export default class NewAction extends Component {
                 />
                 <ErrorField name="actionId" />
               </div>
+              {loadingReasonCodes && <Loading />}
               {reasonCodeOptions.length > 0 && (
                 <div className="select-group">
                   <SelectSimple

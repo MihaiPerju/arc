@@ -114,7 +114,8 @@ export default class AccountListContainer extends Pager {
   }
 
   getFacilityByAccount = () => {
-    const queryParams = ParamsService.getParams().filters;
+    const queryParams =
+      ParamsService.getParams() && ParamsService.getParams().filters;
     //get facility based on account number
     Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
       if (!err) {
@@ -132,8 +133,8 @@ export default class AccountListContainer extends Pager {
     this.setState({ accounts: null });
     const { currentRouteState } = this.state;
     const { state } = newProps;
-    
-    if(this.props.query !== newProps.query) {
+
+    if (this.props.query !== newProps.query) {
       this.setPagerInitial();
       this.listAccounts();
     }
