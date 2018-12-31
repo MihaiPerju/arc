@@ -132,6 +132,12 @@ export default class AccountListContainer extends Pager {
     this.setState({ accounts: null });
     const { currentRouteState } = this.state;
     const { state } = newProps;
+    
+    if(this.props.query !== newProps.query) {
+      this.setPagerInitial();
+      this.listAccounts();
+    }
+
     if (currentRouteState !== state) {
       this.closeRightPanel();
       this.setState({
