@@ -36,6 +36,7 @@ export default new SimpleSchema({
     defaultValue: new Date()
   },
   clientId: {
-    type: String
+    type: String,
+    optional: true
   }
 });
