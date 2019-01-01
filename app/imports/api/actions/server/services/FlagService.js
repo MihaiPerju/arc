@@ -5,15 +5,10 @@ import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import NotificationService from "/imports/api/notifications/server/services/NotificationService";
 import RolesEnum from "/imports/api/users/enums/roles";
 import flagTypesEnum from "/imports/api/accounts/enums/flagTypesEnum";
+import FlagOptions from "/imports/api/accountActions/enums/flagOptions";
 
 export default class FlagService {
-  static flagAction({
-    accountId,
-    userId,
-    flagReason,
-    actionId,
-    facilityId
-  }) {
+  static flagAction({ accountId, userId, flagReason, actionId, facilityId }) {
     const flagAction = AccountActions.findOne({
       actionId,
       type: actionTypesEnum.FLAG
@@ -23,9 +18,7 @@ export default class FlagService {
       throw new Meteor.Error("Action can't be flagged again");
     }
 
-    const {
-      clientId
-    } = Accounts.findOne({
+    const { clientId } = Accounts.findOne({
       _id: accountId
     });
     const flagActionData = {
@@ -46,13 +39,7 @@ export default class FlagService {
     );
   }
 
-  static flagComment({
-    accountId,
-    userId,
-    flagReason,
-    commentId,
-    facilityId
-  }) {
+  static flagComment({ accountId, userId, flagReason, commentId, facilityId }) {
     const flagAction = AccountActions.findOne({
       commentId,
       type: actionTypesEnum.FLAG
@@ -62,9 +49,7 @@ export default class FlagService {
       throw new Meteor.Error("Comment can't be flagged again");
     }
 
-    const {
-      clientId
-    } = Accounts.findOne({
+    const { clientId } = Accounts.findOne({
       _id: accountId
     });
     const flagActionData = {
@@ -93,17 +78,26 @@ export default class FlagService {
     };
 
     const userActionId = AccountActions.insert(userActionData);
+    if (flagActionData.actionId) {
+      AccountActions.update(
+        { _id: flagActionData.actionId },
+        { $set: { flagStatus: FlagOptions.FLAGGED } }
+      );
+    }
 
-    Accounts.update({
-      _id: accountId
-    }, {
-      $push: {
-        flagIds: userActionId
+    Accounts.update(
+      {
+        _id: accountId
       },
-      $inc: {
-        flagCounter: 1
+      {
+        $push: {
+          flagIds: userActionId
+        },
+        $inc: {
+          flagCounter: 1
+        }
       }
-    });
+    );
 
     this.sendNotification(facilityId, accountId, flagType);
   }
@@ -112,36 +106,43 @@ export default class FlagService {
     _id,
     flagResponse,
     managerId,
-    isFlagApproved
+    isFlagApproved,
+    selectedActionId
   }) {
-    AccountActions.update({
-      _id
-    }, {
-      $set: {
-        isOpen: false,
-        managerId,
-        flagResponse,
-        isFlagApproved
+    AccountActions.update(
+      {
+        _id
+      },
+      {
+        $set: {
+          isOpen: false,
+          managerId,
+          flagResponse,
+          isFlagApproved
+        }
       }
-    });
-    const {
-      accountId
-    } = AccountActions.findOne({
+    );
+    AccountActions.update(
+      { _id: selectedActionId },
+      { $set: { flagStatus: FlagOptions.RESOLVED } }
+    );
+    const { accountId } = AccountActions.findOne({
       _id
     });
-    Accounts.update({
-      _id: accountId
-    }, {
-      $inc: {
-        flagCounter: -1
+    Accounts.update(
+      {
+        _id: accountId
+      },
+      {
+        $inc: {
+          flagCounter: -1
+        }
       }
-    });
+    );
   }
 
   static sendNotification(facilityId, accountId, flagType) {
-    const {
-      allowedUsers
-    } = Facilities.findOne({
+    const { allowedUsers } = Facilities.findOne({
       _id: facilityId
     });
     if (allowedUsers) {

@@ -7,6 +7,8 @@ import SimpleSchema from "simpl-schema";
 import { AutoForm, ErrorField, LongTextField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
+import FlagOptions from "/imports/api/accountActions/enums/flagOptions";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class ActionBlock extends Component {
   constructor() {
@@ -16,7 +18,8 @@ export default class ActionBlock extends Component {
       dialogIsActive: false,
       selectedActionId: null,
       selectedFlag: {},
-      isFlagApproved: false
+      isFlagApproved: false,
+      loading: false
     };
   }
 
@@ -27,19 +30,27 @@ export default class ActionBlock extends Component {
     });
   };
 
-  onOpenDialog = id => {
-    const { flags } = this.props.account;
-    let selectedFlag = {};
+  onOpenDialog = actionId => {
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      selectedFlag =
-        flags.filter(flag => flag.flagActionId === id)[0].flag || {};
+      Meteor.call("flag.get", actionId, (err, selectedFlag) => {
+        if (!err) {
+          this.setState({
+            dialogIsActive: true,
+            selectedActionId: actionId,
+            selectedFlag,
+            isFlagApproved: false
+          });
+        } else {
+          Notifier.error(err.reason);
+        }
+      });
+    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      this.setState({
+        dialogIsActive: true,
+        selectedActionId: actionId,
+        isFlagApproved: false
+      });
     }
-    this.setState({
-      dialogIsActive: true,
-      selectedActionId: id,
-      selectedFlag,
-      isFlagApproved: false
-    });
   };
 
   onCloseDialog = () => {
@@ -51,6 +62,7 @@ export default class ActionBlock extends Component {
   };
 
   onFlagAdd = data => {
+    this.setState({ loading: true });
     const { account } = this.props;
     const { selectedActionId } = this.state;
     const { _id, facilityId } = account;
@@ -68,51 +80,29 @@ export default class ActionBlock extends Component {
         Notifier.error(err.error);
       }
       this.onCloseDialog();
+      this.setState({ loading: false });
     });
   };
 
-  isFlagChecked = actionId => {
-    const { flags } = this.props.account;
-    const index = flags && flags.flagActionId === actionId && flags.isOpen;
-    /*   const index = flags.findIndex(flag => {
-        const { flagAction } = flag;
-        return (
-          flagAction && flagAction.actionId === actionId && flagAction.isOpen
-        );
-      }); */
-    return index > -1 ? true : false;
+  isFlagChecked = action => {
+    return action.flagStatus === FlagOptions.FLAGGED ? true : false;
   };
 
-  isDisabledForReps = actionId => {
-    const { flags } = this.props.account;
+  isDisabled = action => {
     if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
-      const index = flags.flagActionId === actionId && flags.isOpen;
-      /* const index = flags.findIndex(flag => {
-        const { flagAction } = flag;
-        return flagAction.actionId === actionId && flagAction.isOpen;
-      }); */
-
-      return index > -1 ? true : false;
-    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
-      const index = flags && flags.flagActionId === actionId && flags.isOpen;
-      /* const index = flags.findIndex(flag => {
-        const { flagAction } = flag;
-        return (
-          flagAction && flagAction.actionId === actionId && flagAction.isOpen
-        );
-      }); */
-      return index === -1 ? true : false;
+      return action.flagStatus != null ? true : false;
     }
+    return false;
   };
 
   onUnflag = data => {
-    const { selectedFlag, isFlagApproved } = this.state;
+    const { selectedFlag, isFlagApproved, selectedActionId } = this.state;
     const { flagResponse } = data;
     const { closeRightPanel } = this.props;
-
+    this.setState({ loading: true });
     Meteor.call(
       "action.respondFlag",
-      { _id: selectedFlag._id, flagResponse, isFlagApproved },
+      { _id: selectedFlag._id, flagResponse, isFlagApproved, selectedActionId },
       err => {
         if (!err) {
           Notifier.success("Responded");
@@ -121,6 +111,7 @@ export default class ActionBlock extends Component {
           Notifier.error(err.error);
         }
         this.onCloseDialog();
+        this.setState({ loading: false });
       }
     );
   };
@@ -130,17 +121,11 @@ export default class ActionBlock extends Component {
     this.setState({ isFlagApproved: !isFlagApproved });
   };
 
-  shouldShowFlags = actionId => {
-    const { flags } = this.props.account;
-    if (Roles.userIsInRole(Meteor.userId(), roleGroups.MANAGER_REP)) {
-      const index = flags && flags.flagActionId === actionId && !flags.isOpen;
-      /* const index = flags.findIndex(flag => {
-        const { flagAction } = flag;
-        return (
-          flagAction && flagAction.actionId === actionId && !flagAction.isOpen
-        );
-      }); */
-      return index === -1 ? true : false;
+  shouldShowFlags = action => {
+    if (Roles.userIsInRole(Meteor.userId(), RolesEnum.REP)) {
+      return action.flagStatus == null ? true : false;
+    } else if (Roles.userIsInRole(Meteor.userId(), RolesEnum.MANAGER)) {
+      return action.flagStatus === FlagOptions.FLAGGED ? true : false;
     }
     return false;
   };
@@ -172,7 +157,12 @@ export default class ActionBlock extends Component {
   render() {
     const { account, closeRightPanel, freezeAccount } = this.props;
     const actionsPerformed = account.actions;
-    const { dialogIsActive, selectedFlag, isFlagApproved } = this.state;
+    const {
+      dialogIsActive,
+      selectedFlag,
+      isFlagApproved,
+      loading
+    } = this.state;
     const dialogClasses = classNames("account-dialog");
     const userId = Meteor.userId();
 
@@ -200,71 +190,63 @@ export default class ActionBlock extends Component {
           ) : null}
           <div className="action-list">
             {actionsPerformed &&
-              actionsPerformed
-                .sort(function(a, b) {
-                  return b.createdAt - a.createdAt;
-                })
-                .map((actionPerformed, key) => {
-                  const isRep = actionPerformed.userId
-                    ? Roles.userIsInRole(actionPerformed.userId, RolesEnum.REP)
-                    : false;
-                  return (
-                    <div className="action-item" key={key}>
-                      <div className="action-info">
-                        <div className="info">
-                          <div className="name">
-                            {(isRep &&
-                              Roles.userIsInRole(
-                                userId,
-                                roleGroups.ADMIN_TECH_MANAGER
-                              )) ||
-                            (isRep && userId === actionPerformed.userId)
-                              ? actionPerformed.userId && (
-                                  <a
-                                    href={`/${actionPerformed.userId}/activity`}
-                                  >
-                                    {this.getUserInfo(actionPerformed.userId)}
-                                  </a>
-                                )
-                              : actionPerformed.userId &&
-                                this.getUserInfo(actionPerformed.userId)}
-                          </div>
-                          <div className="text text-light-grey">
-                            <b>{actionPerformed.reasonCode}</b>:
-                            {actionPerformed.actionId &&
-                              this.getAction(actionPerformed.actionId).title}
-                          </div>
+              actionsPerformed.map((actionPerformed, key) => {
+                const isRep = actionPerformed.userId
+                  ? Roles.userIsInRole(actionPerformed.userId, RolesEnum.REP)
+                  : false;
+                return (
+                  <div className="action-item" key={key}>
+                    <div className="action-info">
+                      <div className="info">
+                        <div className="name">
+                          {(isRep &&
+                            Roles.userIsInRole(
+                              userId,
+                              roleGroups.ADMIN_TECH_MANAGER
+                            )) ||
+                          (isRep && userId === actionPerformed.userId)
+                            ? actionPerformed.userId && (
+                                <a href={`/${actionPerformed.userId}/activity`}>
+                                  {this.getUserInfo(actionPerformed.userId)}
+                                </a>
+                              )
+                            : actionPerformed.userId &&
+                              this.getUserInfo(actionPerformed.userId)}
                         </div>
-                        <div className="status archived">
+                        <div className="text text-light-grey">
+                          <b>{actionPerformed.reasonCode}</b>:
                           {actionPerformed.actionId &&
-                            this.getAction(actionPerformed.actionId).state}
+                            this.getAction(actionPerformed.actionId).title}
                         </div>
                       </div>
-                      <div className="action-time">
-                        {moment(
-                          actionPerformed && actionPerformed.createdAt
-                        ).format("MMMM Do YYYY, hh:mm a")}
+                      <div className="status archived">
+                        {actionPerformed.actionId &&
+                          this.getAction(actionPerformed.actionId).state}
                       </div>
-                      {this.shouldShowFlags(actionPerformed._id) && (
-                        <div className="flag-item">
-                          <input
-                            checked={this.isFlagChecked(actionPerformed._id)}
-                            disabled={this.isDisabledForReps(
-                              actionPerformed._id
-                            )}
-                            onChange={() =>
-                              this.onOpenDialog(actionPerformed._id)
-                            }
-                            type="checkbox"
-                            id={`flag-action-${key}`}
-                            className="hidden"
-                          />
-                          <label htmlFor={`flag-action-${key}`} />
-                        </div>
-                      )}
                     </div>
-                  );
-                })}
+                    <div className="action-time">
+                      {moment(
+                        actionPerformed && actionPerformed.createdAt
+                      ).format("MMMM Do YYYY, hh:mm a")}
+                    </div>
+                    {this.shouldShowFlags(actionPerformed) && (
+                      <div className="flag-item">
+                        <input
+                          checked={this.isFlagChecked(actionPerformed)}
+                          disabled={this.isDisabled(actionPerformed)}
+                          onChange={() =>
+                            this.onOpenDialog(actionPerformed._id)
+                          }
+                          type="checkbox"
+                          id={`flag-action-${key}`}
+                          className="hidden"
+                        />
+                        <label htmlFor={`flag-action-${key}`} />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
           </div>
           {dialogIsActive && (
             <Dialog
@@ -286,9 +268,13 @@ export default class ActionBlock extends Component {
                     <button className="btn-cancel" onClick={this.onCloseDialog}>
                       Cancel
                     </button>
-                    <button type="submit" className="btn--light-blue">
-                      Confirm & send
-                    </button>
+                    {loading ? (
+                      <Loading />
+                    ) : (
+                      <button type="submit" className="btn--light-blue">
+                        Confirm & send
+                      </button>
+                    )}
                   </div>
                 </AutoForm>
               )}
@@ -296,7 +282,7 @@ export default class ActionBlock extends Component {
                 <AutoForm onSubmit={this.onUnflag} schema={unFlagSchema}>
                   <div className="form-wrapper">
                     <b>Flagging reason</b>
-                    <div>{selectedFlag.flagReason}</div>
+                    <div>{selectedFlag && selectedFlag.flagReason}</div>
                   </div>
                   <div className="form-wrapper">
                     <LongTextField
@@ -316,9 +302,13 @@ export default class ActionBlock extends Component {
                     <button className="btn-cancel" onClick={this.onCloseDialog}>
                       Cancel
                     </button>
-                    <button type="submit" className="btn--light-blue">
-                      Confirm & send
-                    </button>
+                    {loading ? (
+                      <Loading />
+                    ) : (
+                      <button type="submit" className="btn--light-blue">
+                        Confirm & send
+                      </button>
+                    )}
                   </div>
                 </AutoForm>
               )}
