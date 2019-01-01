@@ -88,6 +88,7 @@ export default class ClientSingle extends Component {
           <img
             className="md-avatar img-circle"
             src={avatar ? getImagePath(avatar) : "/assets/img/user.svg"}
+            alt="Client Logo"
           />
         </div>
       </div>

@@ -17,7 +17,7 @@ export default class Root extends Component {
 
   componentDidMount() {
     Meteor.call("settings.get", pages.LETTERS_DIRECTORY, (err, model) => {
-      if (!err) { console.log(model)
+      if (!err) { 
         this.setState({ model });
       } else {
         Notifier.error(err.reason);

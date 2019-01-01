@@ -104,7 +104,6 @@ export default class ClientContentHeader extends Component {
     const { dialogIsActive, isAssigning, managers, isDisabled } = this.state;
 
     const managerIdsOptions = this.getManagerOptions(managers);
-
     return (
       <div className="header-block">
         <img
@@ -114,7 +113,7 @@ export default class ClientContentHeader extends Component {
               : "/assets/img/user.svg"
           }
           className="lg-avatar img-circle"
-          alt=""
+          alt="Client Logo"
         />
         <div className="header-block__wrapper">
           <div className="intro-row">

@@ -18,12 +18,13 @@ Picker.route("/image/:name", function(params, req, res) {
     res.writeHead(404);
     res.write("File Not Found");
     res.end();
-  }
-  const file = fs.readFileSync(filePath);
+  } else {
+    const file = fs.readFileSync(filePath);
 
-  res.writeHead(200, {
-    "Content-Type": mimeType,
-    "Content-Disposition": `attachment; filename=${params.path}.jpeg`
-  });
-  res.end(file);
+    res.writeHead(200, {
+      "Content-Type": mimeType,
+      "Content-Disposition": `attachment; filename=${params.path}.jpeg`
+    });
+    res.end(file);
+  }
 });
