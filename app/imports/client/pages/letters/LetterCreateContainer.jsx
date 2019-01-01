@@ -9,7 +9,7 @@ class LetterCreateContainer extends React.Component {
     super();
     this.state = {
       letterTemplates: [],
-      selectedTemplate: {},
+      selectedTemplateId: null,
       pdfAttachments: [],
       selectedAttachments: [],
       keywordsValues: {}
@@ -48,13 +48,6 @@ class LetterCreateContainer extends React.Component {
     return selectOptions;
   };
 
-  onSubmit = data => {
-    this.setState({
-      selectedTemplate: data.letterTemplate.templateData,
-      selectedAttachments: data.attachmentIds
-    });
-  };
-
   updateState = data => {
     const { selectedTemplate } = this.props;
     this.setState(data);
@@ -63,8 +56,11 @@ class LetterCreateContainer extends React.Component {
 
   componentWillReceiveProps = props => {
     const { selectedTemplate } = props;
-    this.getAttachments();
-    this.getKeywordsValues(selectedTemplate);
+    if (selectedTemplate._id != this.state.selectedTemplateId) {
+      this.getAttachments();
+      this.getKeywordsValues(selectedTemplate);
+      this.setState({ selectedTemplateId: selectedTemplate._id });
+    }
   };
 
   getAttachments() {
@@ -97,11 +93,7 @@ class LetterCreateContainer extends React.Component {
   render() {
     const { account, selectedTemplate, reset } = this.props;
     const { keywords, body, _id: letterId, name } = selectedTemplate;
-    const {
-      pdfAttachments,
-      selectedAttachments,
-      keywordsValues
-    } = this.state;
+    const { pdfAttachments, selectedAttachments, keywordsValues } = this.state;
 
     return (
       <div>
