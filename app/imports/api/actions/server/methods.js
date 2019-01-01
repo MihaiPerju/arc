@@ -3,6 +3,7 @@ import ActionService from "./services/ActionService";
 import FlagService from "./services/FlagService";
 import Security from "/imports/api/security/security";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
+import AccountActions from "/imports/api/accountActions/collection";
 
 Meteor.methods({
   "actions.list"(params) {
@@ -56,6 +57,9 @@ Meteor.methods({
   "action.createFlag"(data) {
     data.userId = this.userId;
     FlagService.flagAction(data);
+  },
+  "flag.get"(actionId) {
+    return AccountActions.findOne({ actionId });
   },
 
   "action.respondFlag"(data) {

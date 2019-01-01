@@ -1,5 +1,6 @@
 import Accounts from "/imports/api/accounts/collection";
 import RolesEnum from "/imports/api/users/enums/roles";
+import Users from "/imports/api/users/collection";
 
 Meteor.publish("unassignedAccounts", () => {
   let unassignedCount = new Counter(
@@ -58,22 +59,24 @@ Meteor.publish("tickledAccounts", tickleUserId => {
 });
 
 Meteor.publish("flaggedAccounts", flaggedUserId => {
-  let flaggedCount = new Counter(
-    "flaggedAccounts",
-    Accounts.find({
-      $and: [
-        {
-          flagCounter: {
-            $gt: 0
-          }
-        },
-        {
-          managerIds: {
-            $in: [flaggedUserId]
-          }
+  const user = Users.findOne({ _id: flaggedUserId });
+  let clientIds = [];
+
+  if (user) {
+    clientIds = user.clientIds;
+  }
+  const filters = {
+    $and: [
+      {
+        flagCounter: {
+          $gt: 0
         }
-      ]
-    })
-  );
+      },
+      {
+        clientId: { $in: clientIds }
+      }
+    ]
+  };
+  let flaggedCount = new Counter("flaggedAccounts", Accounts.find(filters));
   return flaggedCount;
 });

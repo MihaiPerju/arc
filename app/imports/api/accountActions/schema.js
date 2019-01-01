@@ -61,6 +61,10 @@ export default new SimpleSchema({
     type: String,
     optional: true
   },
+  flagStatus: {
+    type: String,
+    optional: true
+  },
   flagReason: {
     type: String,
     optional: true
