@@ -63,7 +63,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     return new SimpleSchema(schema);
   }
 
-  onSubmit = (field, value) => {
+  onChange = (field, value) => {
     let newState = {};
     newState[field] = value;
     this.props.onChange(newState);
@@ -160,7 +160,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     const { pdfAttachments, selectedAttachments } = this.props;
 
     const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
-    console.log(attachmentOptions);
     return (
       <div>
         {schema && (
@@ -168,7 +167,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             autosave
             schema={schema}
             model={account}
-            onChange={this.onSubmit}
+            onChange={this.onChange}
           >
             <SelectField
               className="select-helper"

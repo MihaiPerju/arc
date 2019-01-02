@@ -42,7 +42,7 @@ export default class LetterTemplatePreview extends React.Component {
       currentComponent,
       selectedLetter,
       keywordsValues,
-      keywords
+      isCompleted
     } = this.props;
     const letterBody = this.renderText();
 
@@ -56,6 +56,7 @@ export default class LetterTemplatePreview extends React.Component {
             <Divider />
             {currentComponent === "create" ? (
               <CreateLetter
+                isCompleted={isCompleted}
                 letterTemplateId={letterTemplateId}
                 letterTemplateName={letterTemplateName}
                 reset={reset}
@@ -63,7 +64,6 @@ export default class LetterTemplatePreview extends React.Component {
                 letterBody={letterBody}
                 selectedAttachments={selectedAttachments}
                 keywordsValues={keywordsValues}
-                hasKeywords={!!keywords.length}
               />
             ) : (
               <LetterEdit
@@ -75,7 +75,6 @@ export default class LetterTemplatePreview extends React.Component {
                 selectedAttachments={selectedAttachments}
                 selectedLetterId={selectedLetter._id}
                 keywordsValues={keywordsValues}
-                hasKeywords={!!keywords.length}
               />
             )}
           </div>

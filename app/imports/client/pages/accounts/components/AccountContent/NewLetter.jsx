@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getImagePath } from "/imports/api/utils";
-import { AutoForm, SelectField } from "uniforms-unstyled";
+import { AutoForm } from "uniforms-unstyled";
 import SimpleSchema from "simpl-schema";
 import LetterCreateContainer from "/imports/client/pages/letters/LetterCreateContainer.jsx";
 import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";

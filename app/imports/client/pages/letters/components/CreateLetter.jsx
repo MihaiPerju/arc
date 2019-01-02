@@ -50,30 +50,18 @@ export default class CreateLetter extends React.Component {
     return attachmentIds;
   }
 
-  doCheck = () => {
-    const { keywordsValues } = this.props;
-    for (let key in keywordsValues) {
-      if (!keywordsValues[key]) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   render() {
-    const { hasKeywords } = this.props;
+    const { isCompleted } = this.props;
     const { loading } = this.state;
-    const isDisabled = hasKeywords ? this.doCheck() : false;
     if (loading) {
       return <Loading />;
     }
+    if (!isCompleted) {
+      return <div />;
+    }
+
     return (
-      <button
-        style={isDisabled ? { cursor: "not-allowed" } : {}}
-        disabled={isDisabled}
-        onClick={this.createLetter}
-        className="btn--green btn-save"
-      >
+      <button onClick={this.createLetter} className="btn--green btn-save">
         Save
       </button>
     );
