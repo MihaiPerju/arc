@@ -42,18 +42,6 @@ export default class AccountSingle extends Component {
     });
   };
 
-  onFreeze = e => {
-    e.stopPropagation();
-    const { _id } = this.props.account;
-    Meteor.call("account.freeze", _id, err => {
-      if (!err) {
-        Notifier.success("Account Sent to be Processed!");
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
-  };
-
   render() {
     const { account, active, currentAccount, tags } = this.props;
 
@@ -69,11 +57,6 @@ export default class AccountSingle extends Component {
         <div className="check-item">
           <input type="checkbox" checked={active} className="hidden" />
           <label onClick={this.onCheck.bind(this)} />
-        </div>
-
-        <div onClick={this.onFreeze} className="mark-task">
-          <input type="checkbox" className="hidden" />
-          <label />
         </div>
 
         <div className="row__item margin-top-10 ">
