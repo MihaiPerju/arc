@@ -18,11 +18,11 @@ Picker.route("/pdf/:_id/:accountId/:token", function(params, req, res) {
   const { root } = SettingsService.getSettings(settings.ROOT);
 
   const { _id } = params;
-  const { path } = Uploads.findOne({
+  const { name } = Uploads.findOne({
     _id
   });
   if (
-    !fs.existsSync(root + Business.ACCOUNTS_FOLDER + accountId + "/" + path)
+    !fs.existsSync(root + Business.ACCOUNTS_FOLDER + accountId + "/" + name)
   ) {
     res.writeHead(404);
     res.write("File Not Found");
@@ -30,7 +30,7 @@ Picker.route("/pdf/:_id/:accountId/:token", function(params, req, res) {
   }
 
   let data = fs.readFileSync(
-    root + Business.ACCOUNTS_FOLDER + accountId + "/" + path
+    root + Business.ACCOUNTS_FOLDER + accountId + "/" + name
   );
 
   res.end(data);
