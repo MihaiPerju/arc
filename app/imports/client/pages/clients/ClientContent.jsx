@@ -15,12 +15,12 @@ export default class ClientContent extends Component {
       clientId: this.props.currentClient,
       client: null
     };
-    
+
     this.pollingMethod = null;
   }
 
   componentWillMount() {
-    this.getClient()
+    this.getClient();
 
     this.pollingMethod = setInterval(() => {
       this.getClient();
@@ -28,16 +28,15 @@ export default class ClientContent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.currentClient === this.props.currentClient)
-      return;
+    if (nextProps.currentClient === this.props.currentClient) return;
 
-    this.setState({clientId: nextProps.currentClient, client: null})
+    this.setState({ clientId: nextProps.currentClient, client: null });
     this.getClient(nextProps.currentClient);
   }
 
   componentWillUnmount() {
     clearInterval(this.pollingMethod);
-  };
+  }
 
   getClient(clientId) {
     const currentClient = clientId || this.state.clientId;
@@ -55,7 +54,6 @@ export default class ClientContent extends Component {
   };
 
   render() {
-
     if (!this.state.client) {
       return <Loading />;
     }

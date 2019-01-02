@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import WorkQueueContentHeader from "./WorkQueueContentHeader";
 import WorkQueueEdit from "../WorkQueueEdit";
-import WorkQueueContentDescription from "./WorkQueueContentDescription";
+import WorkQueueDescription from "./WorkQueueDescription";
 import { moduleNames } from "/imports/api/workQueues/enums/workQueues";
 import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
@@ -90,7 +90,7 @@ export default class WorkQueueContent extends Component {
             {workQueue &&
               workQueue.entities &&
               workQueue.entities.includes(moduleNames.WORK_QUEUE) && (
-                <WorkQueueContentDescription
+                <WorkQueueDescription
                   oldUsers={oldUsers}
                   newUsers={newUsers}
                   users={users}

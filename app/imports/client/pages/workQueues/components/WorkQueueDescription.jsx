@@ -5,7 +5,7 @@ import WorkQueueContentSingle from "./WorkQueueContentSingle";
 import Notifier from "/imports/client/lib/Notifier";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
 
-export default class WorkQueueContentDescription extends Component {
+export default class WorkQueueDescription extends Component {
   constructor() {
     super();
     this.state = {

@@ -133,9 +133,7 @@ export default class ClientContentHeader extends Component {
                 facilityHref={"/client/" + client._id + "/manage-facilities"}
                 ruleHref={"/client/" + client._id + "/manage-rules"}
                 regionHref={FlowRouter.url("region.list", { id: client._id })}
-                workQueueHref={FlowRouter.url("workQueue.list", {
-                  id: client._id
-                })}
+                workQueueHref={"/client/" + client._id + "/work-queues"}
                 onEdit={this.onEdit}
                 disableAction={() =>
                   this.disableAction(client._id, client.status)

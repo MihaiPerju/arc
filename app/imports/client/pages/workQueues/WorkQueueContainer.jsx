@@ -20,7 +20,7 @@ export default class WorkQueuesListContainer extends Pager {
       total: 0,
       range: {}
     });
-    this.method = "workQueue.count";
+    this.method = "workQueues.count";
     this.pollingMethod = null;
   }
 
@@ -47,7 +47,7 @@ export default class WorkQueuesListContainer extends Pager {
 
   listWorkQueues = () => {
     const params = ParamsService.getWorkQueuesParams();
-    Meteor.call("workQueue.list", params, (err, workQueues) => {
+    Meteor.call("workQueues.list", params, (err, workQueues) => {
       if (!err) {
         this.setState({ workQueues });
         this.updatePager();
@@ -132,12 +132,19 @@ export default class WorkQueuesListContainer extends Pager {
   };
 
   render() {
-    const { workQueuesSelected, currentWorkQueue, create, range, total, workQueues } = this.state;
+    const {
+      workQueuesSelected,
+      currentWorkQueue,
+      create,
+      range,
+      total,
+      workQueues
+    } = this.state;
 
     if (!workQueues) {
       return <Loading />;
     }
-    
+
     return (
       <div className="cc-container">
         <div

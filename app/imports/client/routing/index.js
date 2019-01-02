@@ -145,16 +145,9 @@ route(
 );
 
 //Work Queues
-import WorkQueueContainer from "/imports/client/pages/clients/workQueues/WorkQueueContainer.jsx";
+import WorkQueueContainer from "/imports/client/pages/workQueues/WorkQueueContainer.jsx";
 
-route(
-  "/client/:_id/manage-facilities",
-  WorkQueueContainer,
-  {},
-  {
-    name: "workQueue.list"
-  }
-);
+route("/client/:clientId/work-queues", WorkQueueContainer);
 
 //Codes
 import CodeListContainer from "/imports/client/pages/codes/CodeListContainer";

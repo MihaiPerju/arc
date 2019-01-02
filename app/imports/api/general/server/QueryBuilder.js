@@ -87,6 +87,26 @@ export default class QueryBuilder {
     return queryParams;
   }
 
+  static getWorkQueuesParams(params) {
+    let queryParams = { filters: {}, options: {} };
+    if (params) {
+      let { workQueueName } = params.filters;
+      let { page, perPage } = params.options;
+
+      this.getPagerOptions(queryParams, page, perPage);
+
+      if (workQueueName) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: workQueueName,
+            $options: "i"
+          }
+        });
+      }
+    }
+    return queryParams;
+  }
+
   static getRulesParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
@@ -518,7 +538,7 @@ export default class QueryBuilder {
           workQueueId: null,
           tickleDate: null,
           employeeToRespond: null,
-          state : { $nin: [ stateEnum.ARCHIVED, stateEnum.HOLD ] }
+          state: { $nin: [stateEnum.ARCHIVED, stateEnum.HOLD] }
         });
       } else if (state === "tickles") {
         _.extend(queryParams.filters, {
