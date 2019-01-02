@@ -17,7 +17,7 @@ export default class LetterSingle extends Component {
   setMailManually = letterId => {
     Meteor.call("letter.mailManually", letterId, err => {
       if (!err) {
-        Notifier.success("Letter is manually mailed");
+        Notifier.success("Status Changed!");
       }
     });
     this.changeStatus(letterId);

@@ -16,7 +16,7 @@ export default class LetterList extends Component {
       selectedLetter: null,
       letterTemplates: [],
       loadingLetterTemplates: true,
-      deletingLetterId: null
+      deletingLetterId: null,
     };
   }
 
@@ -97,7 +97,7 @@ export default class LetterList extends Component {
   onMarkManuallyMailed = _id => {
     Meteor.call("letter.updateStatus", _id, Statuses.MANUALLY_MAILED, err => {
       if (!err) {
-        Notifier.success("Letter is manually mailed");
+        Notifier.success("Status Changed!");
       } else {
         Notifier.error(err.reason);
       }
