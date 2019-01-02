@@ -28,7 +28,7 @@ export default class WorkQueueDescription extends Component {
     this.setState({ isDisabled: true });
     Meteor.call(
       "user.addWorkQueue",
-      { userIds, WorkQueueId: currentWorkQueue._id },
+      { userIds, workQueueId: currentWorkQueue._id },
       err => {
         if (!err) {
           Notifier.success("Successfully added !");

@@ -8,20 +8,5 @@ export default new SimpleSchema({
   clientId: {
     type: String,
     optional: true,
-  },
-  tagIds: {
-    type: Array,
-    optional: true,
-    defaultValue: []
-  },
-  "tagIds.$": {
-    type: String
-  }, 
-  entities: {
-    type: Array,
-    defaultValue: []
-  },
-  "entities.$": {
-    type: String
-  },
+  }
 });

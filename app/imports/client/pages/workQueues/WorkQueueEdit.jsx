@@ -3,14 +3,9 @@ import {
   AutoForm,
   AutoField,
   ErrorField,
-  SelectField
 } from "/imports/ui/forms";
 import WorkQueuesSchema from "/imports/api/workQueues/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import moduleListEnum, {
-  moduleNames
-} from "/imports/api/workQueues/enums/workQueues";
 
 export default class WorkQueueEdit extends React.Component {
   constructor() {
@@ -19,23 +14,9 @@ export default class WorkQueueEdit extends React.Component {
     this.state = {
       error: null,
       isDisabled: false,
-      clientOptions: []
     };
   }
-
-  componentDidMount() {
-    Meteor.call("clients.get", (err, clients) => {
-      if (!err) {
-        const clientOptions = clients.map(client => {
-          return { label: client.clientName, value: client._id };
-        });
-        this.setState({ clientOptions });
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
-  }
-
+  
   onSubmit(formData) {
     const { workQueue, setEdit } = this.props;
     this.setState({ isDisabled: true });
@@ -60,17 +41,9 @@ export default class WorkQueueEdit extends React.Component {
     setEdit();
   };
 
-  getOptions = () => {
-    return _.map(moduleListEnum, entities => ({
-      value: entities,
-      label: entities
-    }));
-  };
-
   render() {
     const { workQueue } = this.props;
-    const { isDisabled, clientOptions } = this.state;
-    const options = this.getOptions();
+    const { isDisabled } = this.state;
 
     return (
       <div className="create-form">
@@ -115,35 +88,6 @@ export default class WorkQueueEdit extends React.Component {
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
-
-              <div className="select-group">
-                <div className="form-wrapper">
-                  <SelectMulti
-                    className="form-select__multi select-tag__multi"
-                    placeholder="Select modules"
-                    labelHidden={true}
-                    name="entities"
-                    options={options}
-                  />
-                  <ErrorField name="entities" />
-                </div>
-              </div>
-
-              {workQueue &&
-                workQueue.entities &&
-                workQueue.entities.includes(moduleNames.WORK_QUEUE) && (
-                  <div className="select-group">
-                    <div className="form-wrapper">
-                      <SelectField
-                        placeholder="Select Client"
-                        labelHidden={true}
-                        options={clientOptions}
-                        name="clientId"
-                      />
-                      <ErrorField name="clientId" />
-                    </div>
-                  </div>
-                )}
             </AutoForm>
           </div>
         </div>

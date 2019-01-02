@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import WorkQueueContentHeader from "./WorkQueueContentHeader";
 import WorkQueueEdit from "../WorkQueueEdit";
 import WorkQueueDescription from "./WorkQueueDescription";
-import { moduleNames } from "/imports/api/workQueues/enums/workQueues";
 import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
@@ -11,7 +10,6 @@ export default class WorkQueueContent extends Component {
     super();
     this.state = {
       edit: false,
-      clientOptions: [],
       users: []
     };
     this.pollingMethod = null;
@@ -87,16 +85,12 @@ export default class WorkQueueContent extends Component {
               setEdit={this.setEdit}
               workQueue={workQueue}
             />
-            {workQueue &&
-              workQueue.entities &&
-              workQueue.entities.includes(moduleNames.WORK_QUEUE) && (
-                <WorkQueueDescription
-                  oldUsers={oldUsers}
-                  newUsers={newUsers}
-                  users={users}
-                  currentWorkQueue={workQueue}
-                />
-              )}
+            <WorkQueueDescription
+              oldUsers={oldUsers}
+              newUsers={newUsers}
+              users={users}
+              currentWorkQueue={workQueue}
+            />
           </div>
         )}
       </div>

@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Notifier from "/imports/client/lib/Notifier";
 import WorkQueuesSchema from "/imports/api/workQueues/schemas/schema";
 import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import moduleListEnum from "/imports/api/workQueues/enums/workQueues";
 
 export default class WorkQueueCreate extends Component {
   constructor() {
@@ -35,16 +33,8 @@ export default class WorkQueueCreate extends Component {
     close();
   };
 
-  getOptions = () => {
-    return _.map(moduleListEnum, entities => ({
-      value: entities,
-      label: entities
-    }));
-  };
-
   render() {
     const { isDisabled } = this.state;
-    const options = this.getOptions();
 
     return (
       <div className="create-form">
@@ -81,19 +71,6 @@ export default class WorkQueueCreate extends Component {
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
-              </div>
-
-              <div className="select-group">
-                <div className="form-wrapper">
-                  <SelectMulti
-                    className="form-select__multi select-tag__multi"
-                    placeholder="Select modules"
-                    labelHidden={true}
-                    name="entities"
-                    options={options}
-                  />
-                  <ErrorField name="entities" />
-                </div>
               </div>
             </AutoForm>
           </div>

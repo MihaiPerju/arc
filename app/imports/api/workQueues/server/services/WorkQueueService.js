@@ -3,6 +3,7 @@ import Users from "/imports/api/users/collection.js";
 
 export default class WorkQueueService {
   static createWorkQueue({ data, _id }) {
+    console.log(data);
     const workQueueId = WorkQueues.insert(data);
     if (_id) {
       this.addWorkQueueToUser({ _id, workQueueId });
@@ -11,6 +12,7 @@ export default class WorkQueueService {
   }
 
   static addWorkQueueToUser({ _id, workQueueId }) {
+    console.log(workQueueId);
     Users.update({ _id }, { $push: { workQueueIds: workQueueId } });
   }
 }

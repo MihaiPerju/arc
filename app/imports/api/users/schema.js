@@ -50,6 +50,13 @@ export default new SimpleSchema({
   "tagIds.$": {
     type: String
   },
+  workQueueIds: {
+    type: Array,
+    optional: true
+  },
+  "workQueueIds.$": {
+    type: String
+  },
   "profile.suspended": { type: Boolean, optional: true },
   avatar: { type: AvatarSchema, optional: true },
   clientIds: {
