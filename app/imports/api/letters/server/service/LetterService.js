@@ -16,6 +16,7 @@ import Statuses from "/imports/api/letters/enums/statuses.js";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 import Business from "/imports/api/business";
+import Path from "path";
 
 export default class LetterService {
   static createLetter(data) {
@@ -104,8 +105,8 @@ export default class LetterService {
     });
     const { clientId } = Accounts.findOne({ _id: accountId });
     const { clientName } = Clients.findOne({ _id: clientId });
-    const filePath =
-      (root + letterDirectory).replace("//", "/") + letterId + ".pdf";
+    const filePath = Path.join(root, letterDirectory, letterId + ".pdf");
+
     let QRData = clientName;
     if (letterValues) {
       let { to, toAddress1, toAddress2, toCity, toState, toZip } = letterValues;
@@ -153,24 +154,28 @@ export default class LetterService {
 
   static attachPdfs(filename, attachmentIds, accountId) {
     let { root } = SettingsService.getSettings(settings.ROOT);
-    let { letterDirectory } = SettingsService.getSettings(settings.ROOT);
+    let { letterDirectory } = SettingsService.getSettings(
+      settings.LETTERS_DIRECTORY
+    );
 
     let files = [filename];
 
     for (let _id of attachmentIds) {
-      const { path } = Uploads.findOne({
+      const { name } = Uploads.findOne({
         _id
       });
-      const attachmentPath =
-        root + Business.ACCOUNTS_FOLDER + accountId + "/" + path;
+      const attachmentPath = Path.join(
+        root,
+        Business.ACCOUNTS_FOLDER,
+        accountId,
+        name
+      );
       files.push(attachmentPath);
     }
 
-    let newFilename =
-      (root + letterDirectory).replace("//", "/") + Random.id() + ".pdf";
+    let newFilename = Path.join(root, letterDirectory, Random.id() + ".pdf");
     while (existsSync(newFilename)) {
-      newFilename =
-        (root + letterDirectory).replace("//", "/") + Random.id() + ".pdf";
+      newFilename = Path.join(root, letterDirectory, Random.id() + ".pdf");
     }
 
     PDFMerge(files, newFilename)
@@ -178,8 +183,7 @@ export default class LetterService {
         renameSync(newFilename, filename);
       })
       .catch(function(error) {
-        throw error;
-        //returns error
+        throw new Meteor.Error(error.message);
       });
   }
 }
