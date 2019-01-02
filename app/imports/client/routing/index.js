@@ -144,6 +144,18 @@ route(
   }
 );
 
+//Work Queues
+import WorkQueueContainer from "/imports/client/pages/clients/workQueues/WorkQueueContainer.jsx";
+
+route(
+  "/client/:_id/manage-facilities",
+  WorkQueueContainer,
+  {},
+  {
+    name: "workQueue.list"
+  }
+);
+
 //Codes
 import CodeListContainer from "/imports/client/pages/codes/CodeListContainer";
 import CodeEdit from "/imports/client/pages/codes/CodeEdit";

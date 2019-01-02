@@ -46,6 +46,7 @@ export default class ActionDropdown extends Component {
       facilityHref,
       regionHref,
       ruleHref,
+      workQueueHref,
       onEdit,
       disableAction,
       onOpenAssignDialog
@@ -74,6 +75,9 @@ export default class ActionDropdown extends Component {
               </li>
               <li className="action-item">
                 <a href={ruleHref}>Manage Rules</a>
+              </li>
+              <li className="action-item">
+                <a href={workQueueHref}>Manage Work Queues</a>
               </li>
               {Roles.userIsInRole(Meteor.userId(), roleGroups.ADMIN_TECH) && (
                 <li className="action-item">
