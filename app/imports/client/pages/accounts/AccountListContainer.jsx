@@ -36,7 +36,8 @@ export default class AccountListContainer extends Pager {
       facilitiesOption: false,
       sortOption: false,
       assignActions: false,
-      userOptions: []
+      userOptions: [],
+      loadingLockBreak: false
     };
 
     this.method = "accounts.count";
@@ -476,6 +477,7 @@ export default class AccountListContainer extends Pager {
   };
 
   breakLock = () => {
+    this.setState({ loadingLockBreak: true });
     const { lockedAccountId } = this.state;
     Meteor.call("account.breakLock", lockedAccountId, err => {
       if (err) {
@@ -484,6 +486,7 @@ export default class AccountListContainer extends Pager {
         this.setState({ currentAccount: lockedAccountId });
         this.closeDialog();
       }
+      this.setState({ loadingLockBreak: false });
     });
   };
 
@@ -511,7 +514,8 @@ export default class AccountListContainer extends Pager {
       sortOption,
       currentRouteState,
       assignActions,
-      userOptions
+      userOptions,
+      loadingLockBreak
     } = this.state;
     const options = this.getData(accounts);
     const icons = [
@@ -634,9 +638,13 @@ export default class AccountListContainer extends Pager {
               <button className="btn-cancel" onClick={this.closeDialog}>
                 Cancel
               </button>
-              <button className="btn--light-blue" onClick={this.breakLock}>
-                Confirm & break
-              </button>
+              {loadingLockBreak ? (
+                <Loading />
+              ) : (
+                <button className="btn--light-blue" onClick={this.breakLock}>
+                  Confirm & break
+                </button>
+              )}
             </div>
           </Dialog>
         )}
