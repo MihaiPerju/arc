@@ -1,8 +1,17 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class CreateLetter extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      loading: false
+    };
+  }
+
   createLetter = () => {
+    this.setState({ loading: true });
     const {
       letterBody,
       accountId,
@@ -29,6 +38,7 @@ export default class CreateLetter extends React.Component {
         Notifier.success("Letter successfully created!");
         reset();
       }
+      this.setState({ loading: false });
     });
   };
 
@@ -40,27 +50,18 @@ export default class CreateLetter extends React.Component {
     return attachmentIds;
   }
 
-  doCheck = () => {
-    const { keywordsValues } = this.props;
-    for (let key in keywordsValues) {
-      if (!keywordsValues[key]) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   render() {
-    const { hasKeywords } = this.props;
-    const isDisabled = hasKeywords ? this.doCheck() : false;
+    const { isCompleted } = this.props;
+    const { loading } = this.state;
+    if (loading) {
+      return <Loading />;
+    }
+    if (!isCompleted) {
+      return <div />;
+    }
+
     return (
-      <button
-        style={isDisabled ? { cursor: "not-allowed" } : {}}
-        disabled={isDisabled}
-        onClick={this.createLetter}
-        className="btn--green btn-save"
-      >
-        {" "}
+      <button onClick={this.createLetter} className="btn--green btn-save">
         Save
       </button>
     );

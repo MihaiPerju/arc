@@ -5,6 +5,7 @@ import EditLetter from "./EditLetter";
 import { getToken } from "/imports/api/uploads/utils";
 import Notifier from "/imports/client/lib/Notifier";
 import Statuses from "/imports/api/letters/enums/statuses.js";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class LetterList extends Component {
   constructor() {
@@ -14,7 +15,8 @@ export default class LetterList extends Component {
       editLetter: false,
       selectedLetter: null,
       letterTemplates: [],
-      loadingLetterTemplates: true
+      loadingLetterTemplates: true,
+      deletingLetterId: null
     };
   }
 
@@ -37,12 +39,13 @@ export default class LetterList extends Component {
   };
 
   handleDelete = letterId => {
+    this.setState({ deletingLetterId: letterId });
     Meteor.call("letter.delete", letterId, err => {
       if (err) {
         return Notifier.error(err.reason);
+      } else {
+        Notifier.success("Letter deleted!");
       }
-
-      Notifier.success("Letter deleted!");
     });
   };
 
@@ -108,7 +111,8 @@ export default class LetterList extends Component {
       editLetter,
       selectedLetter,
       letterTemplates,
-      createLetter
+      createLetter,
+      deletingLetterId
     } = this.state;
 
     return (
@@ -176,13 +180,17 @@ export default class LetterList extends Component {
                       >
                         <i className="icon-download" />
                       </button>
-                      {letter.status === Statuses.NEW && (
-                        <button
-                          className="btn-text--red"
-                          onClick={() => this.handleDelete(letter._id)}
-                        >
-                          <i className="icon-trash-o" />
-                        </button>
+                      {deletingLetterId == letter._id ? (
+                        <Loading />
+                      ) : (
+                        letter.status === Statuses.NEW && (
+                          <button
+                            className="btn-text--red"
+                            onClick={() => this.handleDelete(letter._id)}
+                          >
+                            <i className="icon-trash-o" />
+                          </button>
+                        )
                       )}
 
                       <LetterPreview id={letter._id} body={letter.body} />

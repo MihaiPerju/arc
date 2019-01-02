@@ -1,11 +1,6 @@
 import React from "react";
 import _ from "underscore";
-import {
-  AutoForm,
-  AutoField,
-  SelectField,
-  ErrorField
-} from "/imports/ui/forms";
+import { AutoForm, AutoField, SelectField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import AccountViewService from "/imports/client/pages/accounts/services/AccountViewService";
 import { variablesEnum } from "/imports/api/letterTemplates/enums/variablesEnum";
@@ -68,14 +63,14 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     return new SimpleSchema(schema);
   }
 
-  onSubmit = (field, value) => {
+  onChange = (field, value) => {
     let newState = {};
     newState[field] = value;
     this.props.onChange(newState);
   };
 
   getAttachmentOptions = enums => {
-    return _.map(enums, (value) => {
+    return _.map(enums, value => {
       return { value: value._id, label: AccountViewService.getPdfName(value) };
     });
   };
@@ -84,7 +79,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     const { templateKeywords } = this.props;
     if (templateKeywords) {
       const fields = [];
- 
+
       templateKeywords.forEach((keyword, index) => {
         if (variablesEnum[keyword]) {
           fields.push(
@@ -165,7 +160,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
     const { pdfAttachments, selectedAttachments } = this.props;
 
     const attachmentOptions = this.getAttachmentOptions(pdfAttachments);
-
     return (
       <div>
         {schema && (
@@ -173,7 +167,7 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             autosave
             schema={schema}
             model={account}
-            onChange={this.onSubmit}
+            onChange={this.onChange}
           >
             <SelectField
               className="select-helper"
@@ -190,8 +184,6 @@ export default class GenerateLetterTemplateInputs extends React.Component {
             ) : (
               ""
             )}
-
-            <ErrorField name="attachmentIds" />
 
             {fields}
           </AutoForm>

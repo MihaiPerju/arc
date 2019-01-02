@@ -1,8 +1,17 @@
 import React from "react";
 import Notifier from "/imports/client/lib/Notifier";
+import Loading from "/imports/client/lib/ui/Loading";
 
 export default class LetterEdit extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      loading: false
+    };
+  }
+
   editLetter = () => {
+    this.setState({ loading: true });
     const {
       letterBody,
       accountId,
@@ -20,7 +29,7 @@ export default class LetterEdit extends React.Component {
       attachmentIds,
       letterTemplateId,
       letterValues: keywordsValues
-    }; 
+    };
 
     Meteor.call("letter.update", selectedLetterId, data, err => {
       if (err) {
@@ -29,6 +38,7 @@ export default class LetterEdit extends React.Component {
         Notifier.success("Letter successfully updated !");
         reset();
       }
+      this.setState({ loading: false });
     });
   };
 
@@ -52,7 +62,11 @@ export default class LetterEdit extends React.Component {
 
   render() {
     const { hasKeywords } = this.props;
+    const { loading } = this.state;
     let isDisabled = hasKeywords ? this.doCheck() : false;
+    if (loading) {
+      return <Loading />;
+    }
     return (
       <button
         style={isDisabled ? { cursor: "not-allowed" } : {}}

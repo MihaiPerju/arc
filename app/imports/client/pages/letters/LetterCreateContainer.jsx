@@ -3,16 +3,19 @@ import Notifier from "/imports/client/lib/Notifier";
 import LetterTemplatePreview from "./components/LetterTemplatePreview";
 import GenerateLetterTemplateInputs from "./components/GenerateLetterTemplateInputs";
 import { variablesEnum } from "/imports/api/letterTemplates/enums/variablesEnum";
+import Loading from "/imports/client/lib/ui/Loading";
 
 class LetterCreateContainer extends React.Component {
   constructor() {
     super();
     this.state = {
       letterTemplates: [],
-      selectedTemplate: {},
+      selectedTemplateId: null,
       pdfAttachments: [],
       selectedAttachments: [],
-      keywordsValues: {}
+      keywordsValues: {},
+      isCompleted: false,
+      loading: false
     };
   }
 
@@ -48,23 +51,24 @@ class LetterCreateContainer extends React.Component {
     return selectOptions;
   };
 
-  onSubmit = data => {
-    this.setState({
-      selectedTemplate: data.letterTemplate.templateData,
-      selectedAttachments: data.attachmentIds
-    });
-  };
-
   updateState = data => {
     const { selectedTemplate } = this.props;
-    this.setState(data);
+    this.setState(data, () => {
+      this.checkCompleteness();
+    });
     this.getKeywordsValues(selectedTemplate);
   };
 
   componentWillReceiveProps = props => {
     const { selectedTemplate } = props;
-    this.getAttachments();
-    this.getKeywordsValues(selectedTemplate);
+    if (selectedTemplate._id != this.state.selectedTemplateId) {
+      this.setState({ loading: true });
+      this.getAttachments();
+      this.getKeywordsValues(selectedTemplate);
+      this.setState({ selectedTemplateId: selectedTemplate._id }, () => {
+        this.setState({ loading: false });
+      });
+    }
   };
 
   getAttachments() {
@@ -91,7 +95,20 @@ class LetterCreateContainer extends React.Component {
         keywordsValues[value] = this.state[value];
       }
     });
-    this.setState({ keywordsValues });
+    this.setState({ keywordsValues }, () => {
+      this.setState({ loading: false });
+    });
+  };
+
+  checkCompleteness = () => {
+    const { keywordsValues } = this.state;
+    for (let key in keywordsValues) {
+      if (!this.state[key]) {
+        this.setState({ isCompleted: false });
+        return;
+      }
+    }
+    this.setState({ isCompleted: true });
   };
 
   render() {
@@ -100,9 +117,14 @@ class LetterCreateContainer extends React.Component {
     const {
       pdfAttachments,
       selectedAttachments,
-      keywordsValues
+      keywordsValues,
+      isCompleted,
+      loading
     } = this.state;
 
+    if (loading) {
+      return <Loading />;
+    }
     return (
       <div>
         <div
@@ -116,6 +138,7 @@ class LetterCreateContainer extends React.Component {
               selectedAttachments={selectedAttachments}
               pdfAttachments={pdfAttachments}
               templateKeywords={keywords}
+              keywordsValues={keywordsValues}
               onChange={this.updateState}
             />
           </div>
@@ -130,7 +153,7 @@ class LetterCreateContainer extends React.Component {
               selectedAttachments={selectedAttachments}
               currentComponent="create"
               keywordsValues={keywordsValues}
-              keywords={keywords}
+              isCompleted={isCompleted}
             />
           </div>
         </div>
