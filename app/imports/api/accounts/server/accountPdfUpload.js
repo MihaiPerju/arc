@@ -3,7 +3,7 @@ import { createRoute } from "/imports/api/uploads/server/router";
 import Uploads from "/imports/api/uploads/uploads/collection";
 import Business from "/imports/api/business";
 import * as Path from "path";
-import fs from "fs";
+import fs, { existsSync } from "fs";
 import SettingsService from "/imports/api/settings/server/SettingsService";
 import settings from "/imports/api/settings/enums/settings";
 
@@ -23,6 +23,17 @@ createRoute(
     const [uploadId] = uploadLocal({ accountId });
     const { name, path } = Uploads.findOne({ _id: uploadId });
     const movePath = Path.join(root, Business.ACCOUNTS_FOLDER, accountId, name);
+
+    let destinationDirectory = Path.join(
+      root,
+      Business.ACCOUNTS_FOLDER,
+      accountId
+    );
+
+    console.log(existsSync(destinationDirectory));
+    if (!existsSync(destinationDirectory)) {
+      fs.mkdirSync(destinationDirectory);
+    }
 
     fs.renameSync(path, movePath);
 
