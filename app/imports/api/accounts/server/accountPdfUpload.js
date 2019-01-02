@@ -30,7 +30,6 @@ createRoute(
       accountId
     );
 
-    console.log(existsSync(destinationDirectory));
     if (!existsSync(destinationDirectory)) {
       fs.mkdirSync(destinationDirectory);
     }
