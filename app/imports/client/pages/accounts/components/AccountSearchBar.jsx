@@ -76,7 +76,7 @@ export default class AccountSearchBar extends Component {
       }
     });
     Meteor.call(
-      "users.getWithTags",
+      "users.getWithWorkQueues",
       { roles: { $in: [RolesEnum.REP] } },
       (err, res) => {
         if (!err) {

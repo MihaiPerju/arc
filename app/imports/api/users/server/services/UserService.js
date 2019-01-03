@@ -11,10 +11,10 @@ export default class UserService {
       },
       {
         $lookup: {
-          from: "tags",
-          localField: "tagIds",
+          from: "workQueues",
+          localField: "workQueueIds",
           foreignField: "_id",
-          as: "tags"
+          as: "workQueues"
         }
       }
     ]).toArray();
@@ -32,10 +32,10 @@ export default class UserService {
       },
       {
         $lookup: {
-          from: "tags",
-          localField: "tagIds",
+          from: "workQueues",
+          localField: "workQueueIds",
           foreignField: "_id",
-          as: "tags"
+          as: "workQueues"
         }
       },
       {

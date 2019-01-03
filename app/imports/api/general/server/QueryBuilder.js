@@ -504,7 +504,6 @@ export default class QueryBuilder {
       }
 
       this.limitRepAccountAccess(queryParams, userId);
-
       if (assign === "none") {
         _.extend(queryParams.filters, {
           $or: [
@@ -857,15 +856,15 @@ export default class QueryBuilder {
 
   static limitRepAccountAccess(queryParams, userId = "") {
     const user = Users.findOne({ _id: userId });
-    let tagIds = [];
+    let workQueueIds = [];
 
     if (user) {
-      tagIds = user.tagIds;
+      workQueueIds = user.workQueueIds;
     }
     if (Roles.userIsInRole(userId, RolesEnum.REP)) {
       //Getting only the escalated accounts that are open and the rep is the author
-      if (!tagIds) {
-        tagIds = [];
+      if (!workQueueIds) {
+        workQueueIds = [];
       }
       _.extend(queryParams.filters, {
         $or: [
@@ -874,7 +873,7 @@ export default class QueryBuilder {
           },
           {
             workQueueId: {
-              $in: tagIds
+              $in: workQueueIds
             }
           }
         ]

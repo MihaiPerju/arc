@@ -48,23 +48,26 @@ export default class AccountListContainer extends Pager {
   componentWillMount() {
     this.nextPage(0);
     Meteor.call(
-      "user.getWithTags",
+      "user.getWithWorkQueues",
       {
         _id: Meteor.userId()
       },
       (err, user) => {
         if (!err) {
-          const tags = user.tags || [];
+          const workQueues = user.workQueues || [];
           let assignFilterArr = ["assigneeId"];
           let dropdownOptions = [
             { label: "Personal Accounts", filter: "assigneeId" }
           ];
 
-          _.each(tags, tag => {
-            assignFilterArr.push(tag._id);
-            dropdownOptions.push({ label: tag.name, filter: tag._id });
+          _.each(workQueues, workQueue => {
+            assignFilterArr.push(workQueue._id);
+            dropdownOptions.push({
+              label: workQueue.name,
+              filter: workQueue._id
+            });
           });
-          this.setState({ tags, assignFilterArr, dropdownOptions });
+          this.setState({ workQueues, assignFilterArr, dropdownOptions });
         } else {
           let assignFilterArr = ["assigneeId", "workQueueId"];
           let dropdownOptions = [
@@ -397,7 +400,7 @@ export default class AccountListContainer extends Pager {
   };
 
   getProperAccounts = assign => {
-    let { tags, assignFilterArr } = this.state;
+    let { workQueues, assignFilterArr } = this.state;
 
     if (_.contains(assignFilterArr, assign)) {
       assignFilterArr.splice(assignFilterArr.indexOf(assign), 1);
@@ -405,8 +408,8 @@ export default class AccountListContainer extends Pager {
       assignFilterArr.push(assign);
     }
     this.setState({ assignFilterArr });
-    if (tags.length !== 0) {
-      if (assignFilterArr.length === tags.length + 1) {
+    if (workQueues.length !== 0) {
+      if (assignFilterArr.length === workQueues.length + 1) {
         FlowRouter.setQueryParams({ assign: null });
       } else if (assignFilterArr.length === 0) {
         FlowRouter.setQueryParams({ assign: "none" });
@@ -414,7 +417,7 @@ export default class AccountListContainer extends Pager {
         FlowRouter.setQueryParams({ assign: assignFilterArr.toString() });
       }
     } else {
-      if (assignFilterArr.length === tags.length + 2) {
+      if (assignFilterArr.length === workQueues.length + 2) {
         FlowRouter.setQueryParams({ assign: null });
       } else if (assignFilterArr.length === 0) {
         FlowRouter.setQueryParams({ assign: "none" });
