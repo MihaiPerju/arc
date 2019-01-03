@@ -3,6 +3,7 @@ import {
   AutoForm,
   AutoField,
   ErrorField,
+  HiddenField
 } from "/imports/ui/forms";
 import WorkQueuesSchema from "/imports/api/workQueues/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
@@ -13,10 +14,10 @@ export default class WorkQueueEdit extends React.Component {
 
     this.state = {
       error: null,
-      isDisabled: false,
+      isDisabled: false
     };
   }
-  
+
   onSubmit(formData) {
     const { workQueue, setEdit } = this.props;
     this.setState({ isDisabled: true });
@@ -44,6 +45,7 @@ export default class WorkQueueEdit extends React.Component {
   render() {
     const { workQueue } = this.props;
     const { isDisabled } = this.state;
+    const clientId = FlowRouter.current().params.clientId;
 
     return (
       <div className="create-form">
@@ -88,6 +90,7 @@ export default class WorkQueueEdit extends React.Component {
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
+              <HiddenField value={clientId} name="clientId" />
             </AutoForm>
           </div>
         </div>

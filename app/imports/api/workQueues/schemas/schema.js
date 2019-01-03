@@ -3,10 +3,9 @@ import SimpleSchema from "simpl-schema";
 export default new SimpleSchema({
   name: {
     type: String,
-    optional: true,
+    optional: true
   },
   clientId: {
-    type: String,
-    optional: true,
+    type: String
   }
 });
