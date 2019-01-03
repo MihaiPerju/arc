@@ -14,6 +14,7 @@ export default class RegionContent extends Component {
   }
 
   componentWillMount() {
+    this.getRegion();
     this.pollingMethod = setInterval(() => {
       this.getRegion();
     }, 3000);
@@ -34,8 +35,11 @@ export default class RegionContent extends Component {
     //Removing Interval
     clearInterval(this.pollingMethod);
   };
-  componentWillReceiveProps() {
-    this.setState({ edit: false });
+  componentWillReceiveProps(newProps) {
+    if(this.state.region && this.state.region._id !== newProps.currentRegion) {
+      this.setState({ edit: false, region: null });
+      this.getRegion();
+    }
   }
 
   setEdit = () => {
