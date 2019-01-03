@@ -21,7 +21,7 @@ class MyProfile extends React.Component {
             <div className="intro-block text-center">
               <div className="intro-block__wrapper">
                 <i className="icon-user" />
-                <div className="text-light-grey">User name</div>
+                <div className="text-light-grey">User Name</div>
                 <div className="action-name">
                   {user.profile
                     ? user.profile.firstName + " " + user.profile.lastName
@@ -38,7 +38,7 @@ class MyProfile extends React.Component {
                 <div className="status">{user.getEmail()}</div>
               </div>
               <div className="text-block">
-                <div className="text-light-grey text-label">Phone number</div>
+                <div className="text-light-grey text-label">Phone Number</div>
                 <p>
                   {user.profile ? user.profile.phoneNumber : "No Phone Number"}
                 </p>
