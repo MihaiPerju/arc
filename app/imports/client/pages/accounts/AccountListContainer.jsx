@@ -447,6 +447,8 @@ export default class AccountListContainer extends Pager {
       (err, tags) => {
         if (!err) {
           this.setState({ tags });
+        } else {
+          Notifier.error(err.reason);
         }
       }
     );

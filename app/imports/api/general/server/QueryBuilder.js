@@ -90,7 +90,7 @@ export default class QueryBuilder {
   static getWorkQueuesParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
-      let { workQueueName } = params.filters;
+      let { workQueueName, clientId } = params.filters;
       let { page, perPage } = params.options;
 
       this.getPagerOptions(queryParams, page, perPage);
@@ -102,6 +102,9 @@ export default class QueryBuilder {
             $options: "i"
           }
         });
+      }
+      if (clientId) {
+        _.extend(queryParams.filters, { clientId });
       }
     }
     return queryParams;

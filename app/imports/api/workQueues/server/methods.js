@@ -3,7 +3,7 @@ import Users from "/imports/api/users/collection.js";
 import RolesEnum, { roleGroups } from "/imports/api/users/enums/roles";
 import WorkQueueService from "/imports/api/workQueues/server/services/WorkQueueService";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
-import Accounts from '/imports/api/accounts/collection';
+import Accounts from "/imports/api/accounts/collection";
 
 Meteor.methods({
   "workQueues.list"(params) {
@@ -24,7 +24,9 @@ Meteor.methods({
     return WorkQueues.findOne({ _id });
   },
 
-  "workQueues.get"(filters = {}) {
+  "workQueues.get"(data = {}) {
+    let filters = WorkQueueService.filter(data);
+    console.log(filters);
     return WorkQueues.find(filters).fetch();
   },
 
@@ -75,12 +77,15 @@ Meteor.methods({
 
   "user.removeWorkQueues"({ userIds, workQueueId }) {
     if (Roles.userIsInRole(this.userId, roleGroups.ADMIN_TECH_MANAGER)) {
-      Users.update({ _id: { $in: userIds } }, { $pull: { workQueueIds: workQueueId } });
+      Users.update(
+        { _id: { $in: userIds } },
+        { $pull: { workQueueIds: workQueueId } }
+      );
     } else {
       throw new Meteor.Error(
         "not-allowed",
         "You do not have the correct roles for this!"
       );
     }
-  },
+  }
 });

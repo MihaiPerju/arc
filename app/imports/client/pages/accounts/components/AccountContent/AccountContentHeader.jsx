@@ -8,6 +8,7 @@ import commaNumber from "comma-number";
 export default class AccountContentHeader extends Component {
   getAssignee() {
     const { account } = this.props;
+    console.log(account);
     if (account && account.assignee) {
       const { profile } = account.assignee;
       const currentUserId = Meteor.userId();
@@ -31,8 +32,8 @@ export default class AccountContentHeader extends Component {
           </div>
         );
       }
-    } else if (account && account.tag) {
-      return <div className="label label--grey">{account.tag.name}</div>;
+    } else if (account && account.workQueue) {
+      return <div className="label label--grey">{account.workQueue.name}</div>;
     }
     return <div className="label label--red">Unassigned</div>;
   }

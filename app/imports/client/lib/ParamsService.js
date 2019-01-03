@@ -302,13 +302,14 @@ export default class ParamsService {
   }
   static getWorkQueuesParams() {
     let workQueueName = FlowRouter.getQueryParam("workQueueName");
-
+    let clientId = FlowRouter.current().params.clientId;
     const page = FlowRouter.getQueryParam("page");
     const perPage = 13;
 
     return {
       filters: {
-        workQueueName
+        workQueueName,
+        clientId
       },
       options: {
         page,

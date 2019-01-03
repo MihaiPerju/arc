@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import TagContentHeader from "./TagContentHeader";
 import TagEdit from "../TagEdit";
-import TagContentDescription from "./TagContentDescription";
-import { moduleNames } from "/imports/api/tags/enums/tags";
 import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
@@ -69,9 +67,8 @@ export default class TagContent extends Component {
   };
 
   render() {
-    const { tag, edit, users } = this.state;
+    const { tag, edit } = this.state;
 
-    const { taggedUsers, untaggedUsers } = this.sortUsers();
     if (!tag) {
       return <Loading />;
     }
@@ -82,16 +79,6 @@ export default class TagContent extends Component {
         ) : (
           <div>
             <TagContentHeader setEdit={this.setEdit} tag={tag} />
-            {tag &&
-              tag.entities &&
-              tag.entities.includes(moduleNames.WORK_QUEUE) && (
-                <TagContentDescription
-                  taggedUsers={taggedUsers}
-                  untaggedUsers={untaggedUsers}
-                  users={users}
-                  currentTag={tag}
-                />
-              )}
           </div>
         )}
       </div>
