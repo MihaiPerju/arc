@@ -10,7 +10,9 @@ export default class TagContent extends Component {
     this.state = {
       edit: false,
       clientOptions: [],
-      users: []
+      users: [],
+      currentTag: null,
+      loading: true
     };
     this.pollingMethod = null;
   }
@@ -22,11 +24,19 @@ export default class TagContent extends Component {
     }, 3000);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentTag !== this.state.currentTag) {
+      this.setState({ loading: true, currentTag: nextProps.currentTag }, () => {
+        this.getData();
+      });
+    }
+  }
+
   getData() {
     const { currentTag } = this.props;
     Meteor.call("tag.getOne", currentTag, (err, tag) => {
       if (!err) {
-        this.setState({ tag });
+        this.setState({ tag, loading: false });
       } else {
         Notifier.error(err.reason);
       }
@@ -34,7 +44,7 @@ export default class TagContent extends Component {
 
     Meteor.call("users.get", { roles: { $in: ["rep"] } }, (err, users) => {
       if (!err) {
-        this.setState({ users });
+        this.setState({ users, loading: false });
       } else {
         Notifier.error(err.reason);
       }
@@ -67,9 +77,8 @@ export default class TagContent extends Component {
   };
 
   render() {
-    const { tag, edit } = this.state;
-
-    if (!tag) {
+    const { tag, edit, loading } = this.state;
+    if (!tag || loading) {
       return <Loading />;
     }
     return (
