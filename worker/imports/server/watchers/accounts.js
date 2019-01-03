@@ -2,6 +2,15 @@ import Accounts from "/imports/api/accounts/collection";
 import RulesEngine from "../../services/RulesEngine";
 
 Meteor.startup(function() {
+  //Process all the accounts in pending stream
+  const accounts = Accounts.find(
+    { isPending: true },
+    { fields: { _id: 1 } }
+  ).fetch();
+  for (let account of accounts) {
+    RulesEngine.run(account._id);
+  }
+
   //Launch Change Stream
   const AccountsNative = Accounts.rawCollection();
 
