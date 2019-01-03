@@ -26,7 +26,6 @@ Meteor.methods({
 
   "workQueues.get"(data = {}) {
     let filters = WorkQueueService.filter(data);
-    console.log(filters);
     return WorkQueues.find(filters).fetch();
   },
 
