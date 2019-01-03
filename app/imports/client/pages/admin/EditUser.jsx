@@ -18,8 +18,8 @@ export default class EditUser extends Component {
     };
   }
 
-  onSubmit(formData) { 
-     const { user } = this.props;
+  onSubmit(formData) {
+    const { user } = this.props;
     this.setState({ isDisabled: true });
     Meteor.call("admin.editUser", user._id, formData, err => {
       if (!err) {
@@ -28,7 +28,7 @@ export default class EditUser extends Component {
         Notifier.error(err.reason);
       }
       this.setState({ isDisabled: false });
-    }); 
+    });
   }
 
   getTagList = () => {
@@ -51,10 +51,10 @@ export default class EditUser extends Component {
   };
 
   render() {
-    const {  user } = this.props;
-    const {  isDisabled } = this.state;
+    const { user } = this.props;
+    const { isDisabled } = this.state;
     user.email = user.emails[0].address;
-    
+
     return (
       <div className="create-form">
         <div className="create-form__bar">
@@ -131,12 +131,12 @@ export default class EditUser extends Component {
               <div className="form-wrapper">
                 <AutoField
                   labelHidden={true}
-                  placeholder="Phone number"
+                  placeholder="Phone Number"
                   name="profile.phoneNumber"
                 />
                 <ErrorField name="profile.phoneNumber" />
               </div>
-              { user && user.roles && user.roles[0] == RolesEnum.REP && 
+              {user && user.roles && user.roles[0] == RolesEnum.REP && (
                 <div className="form-wrapper">
                   <AutoField
                     labelHidden={true}
@@ -145,7 +145,7 @@ export default class EditUser extends Component {
                   />
                   <ErrorField name="profile.goal" />
                 </div>
-              }
+              )}
             </AutoForm>
           </div>
         </div>

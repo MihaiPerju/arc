@@ -30,7 +30,7 @@ export default class UserContentHeader extends React.Component {
             alt=""
           />
           <div className="info">
-            <div className="text-light-grey">User name</div>
+            <div className="text-light-grey">User Name</div>
             <div className="text-blue email">
               {(isRep &&
                 Roles.userIsInRole(

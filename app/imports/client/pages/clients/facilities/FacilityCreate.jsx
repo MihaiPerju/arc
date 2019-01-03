@@ -272,19 +272,19 @@ class NewContact extends Component {
           </div>
         </div>
         <div className="form-wrapper">
-          <input type="text" placeholder="Client name" />
+          <input type="text" placeholder="Client Name" />
         </div>
         <div className="form-wrapper">
-          <input type="text" placeholder="First name" />
+          <input type="text" placeholder="First Name" />
         </div>
         <div className="form-wrapper">
-          <input type="text" placeholder="Phone number" />
+          <input type="text" placeholder="Phone Number" />
         </div>
         <div className="form-wrapper">
           <input type="text" placeholder="Email" />
         </div>
         <div className="form-wrapper">
-          <input type="text" placeholder="Phone number" />
+          <input type="text" placeholder="Phone Number" />
         </div>
         <div className="form-wrapper">
           <input type="text" placeholder="Email" />
