@@ -10,8 +10,7 @@ import Accounts from "/imports/api/accounts/collection";
 import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import Users from "../../users/collection";
 import ClientService from "/imports/api/clients/server/services/ClientService";
-import Tags from "/imports/api/tags/collection.js";
-import { moduleNames } from "/imports/api/tags/enums/tags";
+import WorkQueues from "/imports/api/workQueues/collection.js";
 
 Meteor.methods({
   "client.create"(data) {
@@ -265,13 +264,12 @@ Meteor.methods({
 
   "client.getWorkQueue"(clientId) {
     Security.isAdminTechOrManager(this.userId);
-    let workQueue = [];
 
-    let tagDetails = Tags.find(
-      { clientId: clientId, entities: { $in: [moduleNames.WORK_QUEUE] } },
-      { fields: { _id: 1, name: 1 } }
+    let workQueueDetails = WorkQueues.find(
+      { clientId },
+      { fields: { name: 1 } }
     ).fetch();
-    return tagDetails;
+    return workQueueDetails;
   },
 
   "clients.fetch"() {
