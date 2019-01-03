@@ -10,7 +10,6 @@ import SimpleSchema from "simpl-schema";
 import Notifier from "/imports/client/lib/Notifier";
 import WorkQueueService from "./../../services/WorkQueueService";
 import Loading from "/imports/client/lib/ui/Loading";
-import { moduleNames } from "/imports/api/tags/enums/tags";
 import PagerService from "/imports/client/lib/PagerService";
 import NewAction from "./NewAction";
 
@@ -29,21 +28,16 @@ export default class AccountActioning extends React.Component {
   }
 
   componentWillMount() {
-    Meteor.call(
-      "tags.get",
-      {
-        entities: { $in: [moduleNames.WORK_QUEUE] }
-      },
-      (err, res) => {
-        if (!err) {
-          const workQueueOptions = WorkQueueService.createOptions(res);
-          this.setState({
-            workQueueOptions,
-            loadingWorkQueues: false
-          });
-        }
+    const { accountIds } = this.props;
+    Meteor.call("workQueues.get", { accountIds }, (err, res) => {
+      if (!err) {
+        const workQueueOptions = WorkQueueService.createOptions(res);
+        this.setState({
+          workQueueOptions,
+          loadingWorkQueues: false
+        });
       }
-    );
+    });
 
     this.props.bulkAssign
       ? this.setState({ userOptions: [] })

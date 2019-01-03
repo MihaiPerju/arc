@@ -144,6 +144,11 @@ route(
   }
 );
 
+//Work Queues
+import WorkQueueContainer from "/imports/client/pages/workQueues/WorkQueueContainer.jsx";
+
+route("/client/:clientId/work-queues", WorkQueueContainer);
+
 //Codes
 import CodeListContainer from "/imports/client/pages/codes/CodeListContainer";
 import CodeEdit from "/imports/client/pages/codes/CodeEdit";

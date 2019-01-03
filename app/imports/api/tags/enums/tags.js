@@ -7,8 +7,7 @@ const moduleList = [
   "Actions",
   "Substates",
   "Account",
-  "Tags",
-  "Work Queue"
+  "Tags"
 ];
 
 const moduleNames = {
@@ -21,8 +20,7 @@ const moduleNames = {
   SUBSTATES: "Substates",
   ACCOUNT: "Account",
   TAGS: "Tags",
-  FILES: "Files",
-  WORK_QUEUE: "Work Queue"
+  FILES: "Files"
 };
 
 export default moduleList;

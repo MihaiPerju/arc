@@ -1,15 +1,15 @@
 import React, { Component } from "react";
-import TagContentHeader from "./TagContentHeader";
-import TagEdit from "../TagEdit";
+import WorkQueueContentHeader from "./WorkQueueContentHeader";
+import WorkQueueEdit from "../WorkQueueEdit";
+import WorkQueueDescription from "./WorkQueueDescription";
 import Notifier from "/imports/client/lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
 
-export default class TagContent extends Component {
+export default class WorkQueueContent extends Component {
   constructor() {
     super();
     this.state = {
       edit: false,
-      clientOptions: [],
       users: []
     };
     this.pollingMethod = null;
@@ -23,10 +23,10 @@ export default class TagContent extends Component {
   }
 
   getData() {
-    const { currentTag } = this.props;
-    Meteor.call("tag.getOne", currentTag, (err, tag) => {
+    const { currentWorkQueue } = this.props;
+    Meteor.call("workQueue.getOne", currentWorkQueue, (err, workQueue) => {
       if (!err) {
-        this.setState({ tag });
+        this.setState({ workQueue });
       } else {
         Notifier.error(err.reason);
       }
@@ -52,33 +52,45 @@ export default class TagContent extends Component {
   };
 
   sortUsers = () => {
-    const taggedUsers = [],
-      untaggedUsers = [];
-    const { tag, users } = this.state;
+    const oldUsers = [],
+      newUsers = [];
+    const { workQueue, users } = this.state;
     _.map(users, user => {
-      const index = user.tagIds ? user.tagIds.indexOf(tag && tag._id) : -1;
+      const index = user.workQueueIds
+        ? user.workQueueIds.indexOf(workQueue && workQueue._id)
+        : -1;
       if (index > -1) {
-        taggedUsers.push(user);
+        oldUsers.push(user);
       } else {
-        untaggedUsers.push(user);
+        newUsers.push(user);
       }
     });
-    return { taggedUsers, untaggedUsers };
+    return { oldUsers, newUsers };
   };
 
   render() {
-    const { tag, edit } = this.state;
+    const { workQueue, edit, users } = this.state;
 
-    if (!tag) {
+    const { oldUsers, newUsers } = this.sortUsers();
+    if (!workQueue) {
       return <Loading />;
     }
     return (
       <div className="main-content tag-content">
         {edit ? (
-          <TagEdit setEdit={this.setEdit} tag={tag} />
+          <WorkQueueEdit setEdit={this.setEdit} workQueue={workQueue} />
         ) : (
           <div>
-            <TagContentHeader setEdit={this.setEdit} tag={tag} />
+            <WorkQueueContentHeader
+              setEdit={this.setEdit}
+              workQueue={workQueue}
+            />
+            <WorkQueueDescription
+              oldUsers={oldUsers}
+              newUsers={newUsers}
+              users={users}
+              currentWorkQueue={workQueue}
+            />
           </div>
         )}
       </div>

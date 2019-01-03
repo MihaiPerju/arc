@@ -1,10 +1,6 @@
 import React, { Component } from "react";
 import SimpleSchema from "simpl-schema";
-import {
-  AutoForm,
-  ErrorField,
-  SelectField
-} from "/imports/ui/forms";
+import { AutoForm, ErrorField, SelectField } from "/imports/ui/forms";
 import Notifier from "/imports/client/lib/Notifier";
 import DropzoneComponent from "react-dropzone-component";
 import { getToken } from "/imports/api/uploads/utils";
@@ -37,20 +33,14 @@ export default class AssignByWorkQueue extends Component {
       }
     });
 
-    Meteor.call(
-      "tags.get",
-      {
-        entities: { $in: [moduleNames.WORK_QUEUE] }
-      },
-      (err, res) => {
-        if (!err) {
-          const workQueueOptions = WorkQueueService.createOptions(res);
-          this.setState({
-            workQueueOptions
-          });
-        }
+    Meteor.call("workQueues.get", (err, res) => {
+      if (!err) {
+        const workQueueOptions = WorkQueueService.createOptions(res);
+        this.setState({
+          workQueueOptions
+        });
       }
-    );
+    });
   }
 
   componentDidMount() {

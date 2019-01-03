@@ -300,6 +300,23 @@ export default class ParamsService {
       }
     };
   }
+  static getWorkQueuesParams() {
+    let workQueueName = FlowRouter.getQueryParam("workQueueName");
+    let clientId = FlowRouter.current().params.clientId;
+    const page = FlowRouter.getQueryParam("page");
+    const perPage = 13;
+
+    return {
+      filters: {
+        workQueueName,
+        clientId
+      },
+      options: {
+        page,
+        perPage
+      }
+    };
+  }
 
   static getRegionsParams() {
     let regionName = FlowRouter.getQueryParam("regionName");

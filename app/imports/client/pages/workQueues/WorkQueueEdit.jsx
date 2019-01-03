@@ -3,42 +3,27 @@ import {
   AutoForm,
   AutoField,
   ErrorField,
+  HiddenField
 } from "/imports/ui/forms";
-import TagsSchema from "/imports/api/tags/schemas/schema";
+import WorkQueuesSchema from "/imports/api/workQueues/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
-import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import moduleListEnum from "/imports/api/tags/enums/tags";
 
-export default class TagEdit extends React.Component {
+export default class WorkQueueEdit extends React.Component {
   constructor() {
     super();
 
     this.state = {
       error: null,
-      isDisabled: false,
-      clientOptions: []
+      isDisabled: false
     };
   }
 
-  componentDidMount() {
-    Meteor.call("clients.get", (err, clients) => {
-      if (!err) {
-        const clientOptions = clients.map(client => {
-          return { label: client.clientName, value: client._id };
-        });
-        this.setState({ clientOptions });
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
-  }
-
   onSubmit(formData) {
-    const { tag, setEdit } = this.props;
+    const { workQueue, setEdit } = this.props;
     this.setState({ isDisabled: true });
-    Meteor.call("tag.edit", tag._id, formData, err => {
+    Meteor.call("workQueue.edit", workQueue._id, formData, err => {
       if (!err) {
-        Notifier.success("Tag saved !");
+        Notifier.success("Work Queue saved !");
         setEdit();
       } else {
         Notifier.error("An error occurred!");
@@ -47,7 +32,7 @@ export default class TagEdit extends React.Component {
     });
   }
 
-  onEditTag = () => {
+  onEditWorkQueue = () => {
     const { form } = this.refs;
     form.submit();
   };
@@ -57,17 +42,10 @@ export default class TagEdit extends React.Component {
     setEdit();
   };
 
-  getOptions = () => {
-    return _.map(moduleListEnum, entities => ({
-      value: entities,
-      label: entities
-    }));
-  };
-
   render() {
-    const { tag } = this.props;
-    const { isDisabled} = this.state;
-    const options = this.getOptions();
+    const { workQueue } = this.props;
+    const { isDisabled } = this.state;
+    const clientId = FlowRouter.current().params.clientId;
 
     return (
       <div className="create-form">
@@ -79,7 +57,7 @@ export default class TagEdit extends React.Component {
             <button
               style={isDisabled ? { cursor: "not-allowed" } : {}}
               disabled={isDisabled}
-              onClick={this.onEditTag}
+              onClick={this.onEditWorkQueue}
               className="btn--green"
             >
               {isDisabled ? (
@@ -98,31 +76,21 @@ export default class TagEdit extends React.Component {
         <div>
           <div className="action-block m-t--20">
             <div className="header__block">
-              <div className="title-block text-uppercase">Tag information</div>
+              <div className="title-block text-uppercase">
+                Work Queue information
+              </div>
             </div>
             <AutoForm
-              schema={TagsSchema}
+              schema={WorkQueuesSchema}
               onSubmit={this.onSubmit.bind(this)}
               ref="form"
-              model={tag}
+              model={workQueue}
             >
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
-
-              <div className="select-group">
-                <div className="form-wrapper">
-                  <SelectMulti
-                    className="form-select__multi select-tag__multi"
-                    placeholder="Select modules"
-                    labelHidden={true}
-                    name="entities"
-                    options={options}
-                  />
-                  <ErrorField name="entities" />
-                </div>
-              </div>
+              <HiddenField value={clientId} name="clientId" />
             </AutoForm>
           </div>
         </div>

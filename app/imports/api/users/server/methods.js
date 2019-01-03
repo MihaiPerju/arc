@@ -30,11 +30,11 @@ Meteor.methods({
     Uploads.remove(_id);
   },
 
-  "users.getWithTags"(filters = {}) {
+  "users.getWithWorkQueues"(filters = {}) {
     return UserService.getUsers(filters);
   },
 
-  "user.getWithTags"(filters = {}) {
+  "user.getWithWorkQueues"(filters = {}) {
     return UserService.getUser(filters);
   },
 

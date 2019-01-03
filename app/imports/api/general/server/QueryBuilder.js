@@ -87,6 +87,29 @@ export default class QueryBuilder {
     return queryParams;
   }
 
+  static getWorkQueuesParams(params) {
+    let queryParams = { filters: {}, options: {} };
+    if (params) {
+      let { workQueueName, clientId } = params.filters;
+      let { page, perPage } = params.options;
+
+      this.getPagerOptions(queryParams, page, perPage);
+
+      if (workQueueName) {
+        _.extend(queryParams.filters, {
+          name: {
+            $regex: workQueueName,
+            $options: "i"
+          }
+        });
+      }
+      if (clientId) {
+        _.extend(queryParams.filters, { clientId });
+      }
+    }
+    return queryParams;
+  }
+
   static getRulesParams(params) {
     let queryParams = { filters: {}, options: {} };
     if (params) {
@@ -481,7 +504,6 @@ export default class QueryBuilder {
       }
 
       this.limitRepAccountAccess(queryParams, userId);
-
       if (assign === "none") {
         _.extend(queryParams.filters, {
           $or: [
@@ -518,7 +540,7 @@ export default class QueryBuilder {
           workQueueId: null,
           tickleDate: null,
           employeeToRespond: null,
-          state : { $nin: [ stateEnum.ARCHIVED, stateEnum.HOLD ] }
+          state: { $nin: [stateEnum.ARCHIVED, stateEnum.HOLD] }
         });
       } else if (state === "tickles") {
         _.extend(queryParams.filters, {
@@ -834,15 +856,15 @@ export default class QueryBuilder {
 
   static limitRepAccountAccess(queryParams, userId = "") {
     const user = Users.findOne({ _id: userId });
-    let tagIds = [];
+    let workQueueIds = [];
 
     if (user) {
-      tagIds = user.tagIds;
+      workQueueIds = user.workQueueIds;
     }
     if (Roles.userIsInRole(userId, RolesEnum.REP)) {
       //Getting only the escalated accounts that are open and the rep is the author
-      if (!tagIds) {
-        tagIds = [];
+      if (!workQueueIds) {
+        workQueueIds = [];
       }
       _.extend(queryParams.filters, {
         $or: [
@@ -851,7 +873,7 @@ export default class QueryBuilder {
           },
           {
             workQueueId: {
-              $in: tagIds
+              $in: workQueueIds
             }
           }
         ]

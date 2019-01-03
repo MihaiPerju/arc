@@ -67,10 +67,10 @@ export default class AccountsService {
       },
       {
         $lookup: {
-          from: "tags",
+          from: "workQueues",
           localField: "workQueueId",
           foreignField: "_id",
-          as: "tag"
+          as: "workQueue"
         }
       },
       {
@@ -102,7 +102,7 @@ export default class AccountsService {
           assignee: { $arrayElemAt: ["$assignee", 0] },
           client: { $arrayElemAt: ["$client", 0] },
           facility: { $arrayElemAt: ["$facility", 0] },
-          tag: { $arrayElemAt: ["$tag", 0] }
+          workQueue: { $arrayElemAt: ["$workQueue", 0] }
         }
       },
       { $limit: 1 }
