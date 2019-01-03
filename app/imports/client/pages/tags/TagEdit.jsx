@@ -3,12 +3,11 @@ import {
   AutoForm,
   AutoField,
   ErrorField,
-  SelectField
 } from "/imports/ui/forms";
 import TagsSchema from "/imports/api/tags/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
 import SelectMulti from "/imports/client/lib/uniforms/SelectMulti.jsx";
-import moduleListEnum, { moduleNames } from "/imports/api/tags/enums/tags";
+import moduleListEnum from "/imports/api/tags/enums/tags";
 
 export default class TagEdit extends React.Component {
   constructor() {
@@ -67,7 +66,7 @@ export default class TagEdit extends React.Component {
 
   render() {
     const { tag } = this.props;
-    const { isDisabled, clientOptions } = this.state;
+    const { isDisabled} = this.state;
     const options = this.getOptions();
 
     return (
@@ -124,22 +123,6 @@ export default class TagEdit extends React.Component {
                   <ErrorField name="entities" />
                 </div>
               </div>
-
-              {tag &&
-                tag.entities &&
-                tag.entities.includes(moduleNames.WORK_QUEUE) && (
-                  <div className="select-group">
-                    <div className="form-wrapper">
-                      <SelectField
-                        placeholder="Select Client"
-                        labelHidden={true}
-                        options={clientOptions}
-                        name="clientId"
-                      />
-                      <ErrorField name="clientId" />
-                    </div>
-                  </div>
-                )}
             </AutoForm>
           </div>
         </div>

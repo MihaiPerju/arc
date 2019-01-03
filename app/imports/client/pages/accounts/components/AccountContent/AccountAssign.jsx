@@ -4,7 +4,6 @@ import { AutoForm, AutoField, ErrorField } from "/imports/ui/forms";
 import WorkQueueService from "../../services/WorkQueueService";
 import Notifier from "../../../../lib/Notifier";
 import Loading from "/imports/client/lib/ui/Loading";
-import { moduleNames } from "/imports/api/tags/enums/tags";
 import OptionsGenerator from "/imports/api/users/helpers/OptionsGenerator";
 
 export default class AccountAssign extends React.Component {
@@ -23,6 +22,7 @@ export default class AccountAssign extends React.Component {
   closeDialog = () => {
     const { close } = this.props;
     close();
+    this.setState({ workQueueOptions: [] });
   };
 
   showQueueForm = () => {
@@ -51,22 +51,15 @@ export default class AccountAssign extends React.Component {
         Notifier.error(err.reason);
       }
     });
-
-    Meteor.call(
-      "tags.get",
-      {
-        entities: { $in: [moduleNames.WORK_QUEUE] }
-      },
-      (err, res) => {
-        if (!err) {
-          const workQueueOptions = WorkQueueService.createOptions(res);
-          this.setState({
-            workQueueOptions,
-            loadingWorkQueues: false
-          });
-        }
+    Meteor.call("workQueues.get", { accountId }, (err, res) => {
+      if (!err) {
+        const workQueueOptions = WorkQueueService.createOptions(res);
+        this.setState({
+          workQueueOptions,
+          loadingWorkQueues: false
+        });
       }
-    );
+    });
   }
 
   assignToUser = ({ assigneeId }) => {
