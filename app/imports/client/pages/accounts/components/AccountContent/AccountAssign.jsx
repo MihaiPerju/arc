@@ -52,15 +52,21 @@ export default class AccountAssign extends React.Component {
       }
     });
 
-    Meteor.call("workQueues.get", { accountId }, (err, res) => {
-      if (!err) {
-        const workQueueOptions = WorkQueueService.createOptions(res);
-        this.setState({
-          workQueueOptions,
-          loadingWorkQueues: false
-        });
+    Meteor.call(
+      "tags.get",
+      {
+        entities: { $in: [moduleNames.WORK_QUEUE] }
+      },
+      (err, res) => {
+        if (!err) {
+          const workQueueOptions = WorkQueueService.createOptions(res);
+          this.setState({
+            workQueueOptions,
+            loadingWorkQueues: false
+          });
+        }
       }
-    });
+    );
   }
 
   assignToUser = ({ assigneeId }) => {

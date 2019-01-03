@@ -8,7 +8,6 @@ import commaNumber from "comma-number";
 export default class AccountContentHeader extends Component {
   getAssignee() {
     const { account } = this.props;
-    console.log(account);
     if (account && account.assignee) {
       const { profile } = account.assignee;
       const currentUserId = Meteor.userId();

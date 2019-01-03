@@ -25,6 +25,20 @@ export default class WorkQueueService {
         console.log(error);
       }
     }
+    if (data.accountIds) {
+      try {
+        let accounts = Accounts.find(
+          { _id: { $in: data.accountIds } },
+          { fields: { clientId: 1 } }
+        ).fetch();
+        let clientIds = accounts.map(account => {
+          return account.clientId;
+        });
+        _.extend(filters, { clientId: { $all: clientIds } });
+      } catch (error) {
+        console.log(error);
+      }
+    }
     return filters;
   }
 }

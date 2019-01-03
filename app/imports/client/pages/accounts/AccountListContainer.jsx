@@ -566,6 +566,7 @@ export default class AccountListContainer extends Pager {
             <AccountAssigning
               assignToUser={false}
               assignToWorkQueue={true}
+              accountsSelected={accountsSelected}
               assignAction={false}
               accountIds={accountsSelected}
               closeDialog={this.closeAssignWQ}
