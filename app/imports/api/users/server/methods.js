@@ -76,6 +76,24 @@ Meteor.methods({
     }).fetch();
   },
 
+  "reps.getForWorkQueue"(clientId) {
+    //Get facilities by clientId
+    let facilityProjection = { fields: { allowedUsers: 1 } };
+    let facilities = Facilities.find({ clientId }, facilityProjection).fetch();
+    let userIds = [];
+
+    //Get userIds that are allowed at all facilities
+    for (let facility of facilities) {
+      if (facility.allowedUsers) {
+        userIds = userIds.concat(facility.allowedUsers);
+      }
+    }
+
+    //Get the users that are allowed at facility level
+    let userProjection = { fields: { profile: 1, roles: 1 } };
+    return Users.find({ _id: { $in: userIds } }, userProjection).fetch();
+  },
+
   "users.getManagers"() {
     return Users.find({
       roles: RolesEnum.MANAGER
@@ -145,7 +163,5 @@ Meteor.methods({
       _id: userId
     });
     return user;
-  },
-
-
+  }
 });

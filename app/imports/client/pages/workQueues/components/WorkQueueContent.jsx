@@ -31,8 +31,8 @@ export default class WorkQueueContent extends Component {
         Notifier.error(err.reason);
       }
     });
-
-    Meteor.call("users.get", { roles: { $in: ["rep"] } }, (err, users) => {
+    const clientId = FlowRouter.current().params.clientId;
+    Meteor.call("reps.getForWorkQueue", clientId, (err, users) => {
       if (!err) {
         this.setState({ users });
       } else {
