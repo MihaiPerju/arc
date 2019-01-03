@@ -9,6 +9,7 @@ export default class UserContent extends Component {
     super();
     this.state = {
       edit: false,
+      loading: true
     };
     this.pollingMethod = null;
   }
@@ -24,11 +25,22 @@ export default class UserContent extends Component {
 
     Meteor.call("user.getOne", currentUser, (err, user) => {
       if (!err) {
-        this.setState({ user });
+        this.setState({ user, loading: false });
       } else {
         Notifier.error(err.reason);
       }
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.currentUser !== this.state.currentUser) {
+      this.setState(
+        { loading: true, currentUser: nextProps.currentUser },
+        () => {
+          this.getUser();
+        }
+      );
+    }
   }
 
   componentWillUnmount = () => {
@@ -42,8 +54,8 @@ export default class UserContent extends Component {
   };
 
   render() {
-    const { edit, user } = this.state;
-    if (!user) {
+    const { edit, user, loading } = this.state;
+    if (!user || loading) {
       return <Loading />;
     }
     return (
