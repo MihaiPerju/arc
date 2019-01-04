@@ -219,7 +219,7 @@ export default class NewAction extends Component {
 
   render() {
     const { isDisabled, loadingReasonCodes } = this.state;
-
+    const { labelHidden } = this.props;
     const actionOptions = generateOptions(this.state.actions, "_id", "title");
     const reasonCodeOptions = generateOptions(
       this.state.reasonCodes,
@@ -250,7 +250,7 @@ export default class NewAction extends Component {
               <div className="select-group">
                 <SelectSimple
                   name="actionId"
-                  labelHidden={false}
+                  labelHidden={labelHidden}
                   options={actionOptions}
                   placeholder="actions"
                 />

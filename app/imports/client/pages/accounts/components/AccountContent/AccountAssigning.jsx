@@ -104,6 +104,7 @@ export default class AccountActioning extends React.Component {
     const {
       options,
       assignToUser,
+      assignAction,
       bulkAssign,
       facilitiesOption,
       assignToWorkQueue,
@@ -122,7 +123,8 @@ export default class AccountActioning extends React.Component {
     }
     return (
       <div className="meta-dialog">
-        <h1>Assign account:</h1>
+        {assignAction ? <h1>Bulk Action:</h1> : <h1>Assign account:</h1>}
+
         {assignToUser ? (
           <AutoForm //model={model}
             schema={assignSchema}
@@ -207,11 +209,12 @@ export default class AccountActioning extends React.Component {
             </div>
           </AutoForm>
         ) : (
-          <div className="action-block">
+          <div>
             <NewAction
               freezeAccount={false}
               closeRightPanel={false}
               hide={this.closeDialog}
+              labelHidden={true}
               account={false}
               accountIds={accountIds}
               bulkAssign={bulkAssign}
