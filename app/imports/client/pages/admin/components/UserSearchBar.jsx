@@ -104,7 +104,7 @@ export default class UserSearchBar extends Component {
     const searchClasses = classNames("search-input", {
       full__width: btnGroup && !hideFilter,
       sort__none: hideSort,
-      'btns--none': btnGroup && hideFilter
+      "btns--none": btnGroup && hideFilter
     });
 
     return (
@@ -211,19 +211,14 @@ class BtnGroup extends Component {
 
     return (
       <div className={btnClasses}>
-        {icons ? (
-          icons.map((element,index) => {
+        {icons &&
+          icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon} />
               </button>
             );
-          })
-        ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
+          })}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />

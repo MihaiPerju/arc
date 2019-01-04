@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {AutoForm, AutoField} from "/imports/ui/forms";
+import React, { Component } from "react";
+import { AutoForm, AutoField } from "/imports/ui/forms";
 import SimpleSchema from "simpl-schema";
 import Dropdown from "/imports/client/lib/Dropdown";
 import Tags from "/imports/client/lib/Tags";
@@ -28,7 +28,7 @@ export default class ActionSearchBar extends Component {
     }
 
     if ("title" in params) {
-      FlowRouter.setQueryParams({title: params.title});
+      FlowRouter.setQueryParams({ title: params.title });
     }
   }
 
@@ -56,7 +56,7 @@ export default class ActionSearchBar extends Component {
   };
 
   selectAll = () => {
-    const {selectAll} = this.state;
+    const { selectAll } = this.state;
     this.setState({
       selectAll: !selectAll
     });
@@ -70,15 +70,11 @@ export default class ActionSearchBar extends Component {
       model.title = queryParams.title;
     }
 
-    this.setState({model});
+    this.setState({ model });
   };
 
   render() {
-    const {
-      dropdown,
-      selectAll,
-      model
-    } = this.state;
+    const { dropdown, selectAll, model } = this.state;
     const {
       btnGroup,
       deleteAction,
@@ -100,7 +96,7 @@ export default class ActionSearchBar extends Component {
     const searchClasses = classNames("search-input", {
       full__width: btnGroup && !hideFilter,
       sort__none: hideSort,
-      'btns--none': btnGroup && hideFilter
+      "btns--none": btnGroup && hideFilter
     });
 
     return (
@@ -115,9 +111,9 @@ export default class ActionSearchBar extends Component {
         <div className="search-bar">
           {!hideSort && (
             <div className={classes} ref={this.nodeRef}>
-              <div className={btnSelectClasses} onClick={this.selectAll}/>
+              <div className={btnSelectClasses} onClick={this.selectAll} />
               <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
-                <i className="icon-angle-down"/>
+                <i className="icon-angle-down" />
               </div>
               {dropdown && (
                 <Dropdown
@@ -148,12 +144,10 @@ export default class ActionSearchBar extends Component {
             <div className="filter-block">
               {!hideFilter && (
                 <button>
-                  <i className="icon-filter"/>
+                  <i className="icon-filter" />
                 </button>
               )}
-              {
-                tags.length ? <Tags tags={tags}/> : <div />
-              }
+              {tags.length ? <Tags tags={tags} /> : <div />}
             </div>
           </div>
         </div>
@@ -173,7 +167,7 @@ class BtnGroup extends Component {
 
   componentDidMount() {
     setTimeout(() => {
-      this.setState({in: true});
+      this.setState({ in: true });
     }, 1);
   }
 
@@ -197,30 +191,25 @@ class BtnGroup extends Component {
   };
 
   render() {
-    const {deleteAction, icons} = this.props;
-    const {dialogIsActive} = this.state;
+    const { deleteAction, icons } = this.props;
+    const { dialogIsActive } = this.state;
     const btnClasses = classNames("btn-group flex--helper", {
       in: this.state.in
     });
 
     return (
       <div className={btnClasses}>
-        {icons ? (
-          icons.map((element,index) => {
+        {icons &&
+          icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
-                <i className={"icon-" + element.icon}/>
+                <i className={"icon-" + element.icon} />
               </button>
             );
-          })
-        ) : (
-          <button>
-            <i className="icon-archive"/>
-          </button>
-        )}
+          })}
         {deleteAction && (
           <button onClick={this.deleteAction}>
-            <i className="icon-trash-o"/>
+            <i className="icon-trash-o" />
           </button>
         )}
         {dialogIsActive && (
