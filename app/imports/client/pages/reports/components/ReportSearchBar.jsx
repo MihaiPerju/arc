@@ -353,19 +353,14 @@ class BtnGroup extends Component {
 
     return (
       <div className={btnClasses}>
-        {icons ? (
+        {icons &&
           icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
                 <i className={"icon-" + element.icon} />
               </button>
             );
-          })
-        ) : (
-          <button>
-            <i className="icon-archive" />
-          </button>
-        )}
+          })}
         {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />

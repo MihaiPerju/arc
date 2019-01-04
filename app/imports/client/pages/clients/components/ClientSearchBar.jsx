@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { AutoForm, AutoField } from '/imports/ui/forms';
-import SimpleSchema from 'simpl-schema';
-import Dropdown from '/imports/client/lib/Dropdown';
-import Tags from '/imports/client/lib/Tags';
-import classNames from 'classnames';
-import moment from 'moment';
-import Dialog from '/imports/client/lib/ui/Dialog';
-import DatePicker from 'react-datepicker';
-import Notifier from '/imports/client/lib/Notifier';
-import FilterService from '/imports/client/lib/FilterService';
+import React, { Component } from "react";
+import { AutoForm, AutoField } from "/imports/ui/forms";
+import SimpleSchema from "simpl-schema";
+import Dropdown from "/imports/client/lib/Dropdown";
+import Tags from "/imports/client/lib/Tags";
+import classNames from "classnames";
+import moment from "moment";
+import Dialog from "/imports/client/lib/ui/Dialog";
+import DatePicker from "react-datepicker";
+import Notifier from "/imports/client/lib/Notifier";
+import FilterService from "/imports/client/lib/FilterService";
 
 export default class ClientSearchBar extends Component {
   constructor() {
@@ -19,7 +19,7 @@ export default class ClientSearchBar extends Component {
       selectAll: false,
       createdAtMin: null,
       createdAtMax: null,
-      model: {},
+      model: {}
     };
   }
 
@@ -29,27 +29,27 @@ export default class ClientSearchBar extends Component {
 
   onSubmit() {
     const { createdAtMin, createdAtMax } = this.state;
-    if (FlowRouter.current().queryParams.page != '1') {
+    if (FlowRouter.current().queryParams.page != "1") {
       this.props.setPagerInitial();
     }
 
     FlowRouter.setQueryParams({
-      createdAtMin: FilterService.formatDate(createdAtMin),
+      createdAtMin: FilterService.formatDate(createdAtMin)
     });
 
     FlowRouter.setQueryParams({
-      createdAtMax: FilterService.formatDate(createdAtMax),
+      createdAtMax: FilterService.formatDate(createdAtMax)
     });
   }
 
   openDropdown = () => {
     if (!this.state.dropdown) {
-      document.addEventListener('click', this.outsideClick, false);
+      document.addEventListener("click", this.outsideClick, false);
     } else {
-      document.removeEventListener('click', this.outsideClick, false);
+      document.removeEventListener("click", this.outsideClick, false);
     }
     this.setState({
-      dropdown: !this.state.dropdown,
+      dropdown: !this.state.dropdown
     });
   };
 
@@ -68,18 +68,18 @@ export default class ClientSearchBar extends Component {
   selectAll = () => {
     const { selectAll } = this.state;
     this.setState({
-      selectAll: !selectAll,
+      selectAll: !selectAll
     });
   };
 
   onDateSelect = (selectedDate, field) => {
-    if (field === 'createdAtMin') {
+    if (field === "createdAtMin") {
       this.setState({ createdAtMin: selectedDate });
-    } else if (field === 'createdAtMax') {
+    } else if (field === "createdAtMax") {
       const { createdAtMin } = this.state;
       if (selectedDate < createdAtMin) {
         Notifier.error(
-          'Maximum date should be greater or equal to minimum date'
+          "Maximum date should be greater or equal to minimum date"
         );
       }
       this.setState({ createdAtMax: selectedDate });
@@ -89,13 +89,13 @@ export default class ClientSearchBar extends Component {
   openDialog = e => {
     e.preventDefault();
     this.setState({
-      dialogIsActive: true,
+      dialogIsActive: true
     });
   };
 
   closeDialog = () => {
     this.setState({
-      dialogIsActive: false,
+      dialogIsActive: false
     });
   };
 
@@ -106,7 +106,7 @@ export default class ClientSearchBar extends Component {
   };
 
   onChange = (field, value) => {
-    if (field === 'clientName') {
+    if (field === "clientName") {
       FlowRouter.setQueryParams({ clientName: value });
     }
   };
@@ -115,23 +115,23 @@ export default class ClientSearchBar extends Component {
     const queryParams = FlowRouter.current().queryParams;
     const model = {};
 
-    if ('clientName' in queryParams) {
+    if ("clientName" in queryParams) {
       model.clientName = queryParams.clientName;
     }
 
-    if ('createdAtMin' in queryParams) {
+    if ("createdAtMin" in queryParams) {
       this.setState({
-        createdAtMin: moment(new Date(queryParams.createdAtMin)),
+        createdAtMin: moment(new Date(queryParams.createdAtMin))
       });
     }
 
-    if ('createdAtMax' in queryParams) {
+    if ("createdAtMax" in queryParams) {
       this.setState({
-        createdAtMax: moment(new Date(queryParams.createdAtMax)),
+        createdAtMax: moment(new Date(queryParams.createdAtMax))
       });
     }
 
-    if ('tagIds' in queryParams) {
+    if ("tagIds" in queryParams) {
       model.tagIds = queryParams.tagIds;
     }
 
@@ -144,7 +144,7 @@ export default class ClientSearchBar extends Component {
     filters.reset();
     this.setState({
       createdAtMin: null,
-      createdAtMax: null,
+      createdAtMax: null
     });
     this.closeDialog();
   };
@@ -156,7 +156,7 @@ export default class ClientSearchBar extends Component {
       selectAll,
       createdAtMin,
       createdAtMax,
-      model,
+      model
     } = this.state;
     const {
       btnGroup,
@@ -165,19 +165,19 @@ export default class ClientSearchBar extends Component {
       icons,
       getProperAccounts,
       hideSort,
-      tags,
+      tags
     } = this.props;
     const classes = classNames({
-      'select-type': true,
-      open: dropdown,
+      "select-type": true,
+      open: dropdown
     });
     const btnSelectClasses = classNames({
-      'btn-select': true,
-      active: selectAll,
+      "btn-select": true,
+      active: selectAll
     });
-    const searchClasses = classNames('search-input', {
+    const searchClasses = classNames("search-input", {
       full__width: btnGroup,
-      sort__none: hideSort,
+      sort__none: hideSort
     });
 
     return (
@@ -189,27 +189,29 @@ export default class ClientSearchBar extends Component {
         model={model}
       >
         <div className="search-bar">
-          {!hideSort &&
+          {!hideSort && (
             <div className={classes} ref={this.nodeRef}>
               <div className={btnSelectClasses} onClick={this.selectAll} />
               <div className="btn-toggle-dropdown" onClick={this.openDropdown}>
                 <i className="icon-angle-down" />
               </div>
-              {dropdown &&
+              {dropdown && (
                 <Dropdown
                   toggleDropdown={this.openDropdown}
                   getProperAccounts={getProperAccounts}
                   options={dropdownOptions}
-                />}
-            </div>}
+                />
+              )}
+            </div>
+          )}
           <div className="search-bar__wrapper flex--helper">
-            {btnGroup
-              ? <BtnGroup
+            {btnGroup ? (
+              <BtnGroup
                 getProperAccounts={getProperAccounts}
                 icons={icons}
                 deleteAction={deleteAction}
               />
-              : null}
+            ) : null}
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
@@ -223,7 +225,7 @@ export default class ClientSearchBar extends Component {
             <div className="filter-block flex--helper">
               <button onClick={this.openDialog.bind(this)}>
                 <i className="icon-filter" />
-                {dialogIsActive &&
+                {dialogIsActive && (
                   <Dialog
                     className="account-dialog filter-dialog"
                     closePortal={this.closeDialog}
@@ -240,11 +242,12 @@ export default class ClientSearchBar extends Component {
                             showMonthDropdown
                             showYearDropdown
                             yearDropdownItemNumber={4}
-                            todayButton={'Today'}
+                            todayButton={"Today"}
                             placeholderText="From created-at date"
                             selected={createdAtMin}
                             onChange={date =>
-                              this.onDateSelect(date, 'createdAtMin')}
+                              this.onDateSelect(date, "createdAtMin")
+                            }
                             fixedHeight
                           />
                           <DatePicker
@@ -252,11 +255,12 @@ export default class ClientSearchBar extends Component {
                             showMonthDropdown
                             showYearDropdown
                             yearDropdownItemNumber={4}
-                            todayButton={'Today'}
+                            todayButton={"Today"}
                             placeholderText="To created-at date"
                             selected={createdAtMax}
                             onChange={date =>
-                              this.onDateSelect(date, 'createdAtMax')}
+                              this.onDateSelect(date, "createdAtMax")
+                            }
                             fixedHeight
                           />
                         </div>
@@ -276,7 +280,8 @@ export default class ClientSearchBar extends Component {
                         </div>
                       </div>
                     </div>
-                  </Dialog>}
+                  </Dialog>
+                )}
               </button>
               {tags.length ? <Tags tags={tags} /> : <div />}
             </div>
@@ -292,7 +297,7 @@ class BtnGroup extends Component {
     super();
     this.state = {
       in: false,
-      dialogIsActive: false,
+      dialogIsActive: false
     };
   }
 
@@ -304,19 +309,19 @@ class BtnGroup extends Component {
 
   deleteAction = () => {
     this.setState({
-      dialogIsActive: true,
+      dialogIsActive: true
     });
   };
 
   closeDialog = () => {
     this.setState({
-      dialogIsActive: false,
+      dialogIsActive: false
     });
   };
 
   confirmDelete = () => {
     this.setState({
-      dialogIsActive: false,
+      dialogIsActive: false
     });
     this.props.deleteAction();
   };
@@ -324,28 +329,26 @@ class BtnGroup extends Component {
   render() {
     const { deleteAction, icons } = this.props;
     const { dialogIsActive } = this.state;
-    const btnClasses = classNames('btn-group flex--helper', {
-      in: this.state.in,
+    const btnClasses = classNames("btn-group flex--helper", {
+      in: this.state.in
     });
 
     return (
       <div className={btnClasses}>
-        {icons
-          ? icons.map((element,index) => {
+        {icons &&
+          icons.map((element, index) => {
             return (
               <button onClick={element.method} key={index}>
-                <i className={'icon-' + element.icon} />
+                <i className={"icon-" + element.icon} />
               </button>
             );
-          })
-          : <button>
-            <i className="icon-archive" />
-          </button>}
-        {deleteAction &&
+          })}
+        {deleteAction && (
           <button onClick={this.deleteAction}>
             <i className="icon-trash-o" />
-          </button>}
-        {dialogIsActive &&
+          </button>
+        )}
+        {dialogIsActive && (
           <Dialog
             title="Confirm"
             className="account-dialog"
@@ -362,7 +365,8 @@ class BtnGroup extends Component {
                 Confirm & delete
               </button>
             </div>
-          </Dialog>}
+          </Dialog>
+        )}
       </div>
     );
   }
@@ -371,16 +375,16 @@ class BtnGroup extends Component {
 const schema = new SimpleSchema({
   facilityId: {
     type: String,
-    optional: true,
+    optional: true
   },
   assigneeId: {
     type: String,
     optional: true,
-    label: 'Filter by assignee',
+    label: "Filter by assignee"
   },
   clientName: {
     type: String,
     optional: true,
-    label: 'Search by client name',
-  },
+    label: "Search by client name"
+  }
 });
