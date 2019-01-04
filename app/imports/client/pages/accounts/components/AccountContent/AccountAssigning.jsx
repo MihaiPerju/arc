@@ -123,7 +123,9 @@ export default class AccountActioning extends React.Component {
     }
     return (
       <div className="meta-dialog">
-        {assignAction ? <h1>Bulk Action:</h1> : <h1>Assign account:</h1>}
+        {assignAction && <h1>Bulk Action</h1>}
+        {assignToUser && <h1>Assign User</h1>}
+        {assignToWorkQueue && <h1>Assign Work Queue</h1>}
 
         {assignToUser ? (
           <AutoForm //model={model}
