@@ -1,85 +1,90 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import Condition from './Condition';
-import QueryParser from './helpers/QueryParser';
-import './styles.css';
+import PropTypes from "prop-types";
+import React from "react";
+import Condition from "./Condition";
+import QueryParser from "./helpers/QueryParser";
+import "./styles.css";
 
-function buildDefaultConfig (config) {
+function buildDefaultConfig(config) {
   const defConfig = config || {};
-  defConfig.query = defConfig.query ? defConfig.query : '()';
+  defConfig.query = defConfig.query ? defConfig.query : "()";
   defConfig.operators = defConfig.operators
     ? defConfig.operators
     : [
-        {operator: '=', label: 'Equals'},
-        {operator: '!=', label: 'Not equal to'},
-        {operator: '>', label: 'Greater than'},
-        {operator: '>=', label: 'Greater than or equal to'},
-        {operator: '<', label: 'Less than'},
-        {operator: '<=', label: 'Less than or equal to'},
-        {operator: 'contains', label: 'Contains'},
-        {operator: 'startsWith', label: 'Starts with'},
-        {operator: 'endsWith', label: 'Ends with'},
-        {operator: '!', label: 'Not exists'},
-        {operator: '!!', label: 'Exists'},
+        { operator: "=", label: "Equals" },
+        { operator: "!=", label: "Not equal to" },
+        { operator: ">", label: "Greater than" },
+        { operator: ">=", label: "Greater than or equal to" },
+        { operator: "<", label: "Less than" },
+        { operator: "<=", label: "Less than or equal to" },
+        { operator: "contains", label: "Contains" },
+        { operator: "startsWith", label: "Starts with" },
+        { operator: "endsWith", label: "Ends with" },
+        { operator: "!", label: "Not exists" },
+        { operator: "!!", label: "Exists" }
       ];
   defConfig.combinators = defConfig.combinators
     ? defConfig.combinators
-    : [{combinator: 'AND', label: 'And'}, {combinator: 'OR', label: 'Or'}];
-  defConfig.animation = defConfig.animation ? defConfig.animation : 'none';
+    : [{ combinator: "AND", label: "And" }, { combinator: "OR", label: "Or" }];
+  defConfig.animation = defConfig.animation ? defConfig.animation : "none";
   defConfig.styles = defConfig.styles
     ? defConfig.styles
     : {
-        primaryBtn: 'btn-edit btn--white queryButtonPrimary',
-        deleteBtn: 'queryButtonDelete',
-        rule: 'rule',
-        condition: 'condition',
-        select: 'querySelect',
-        input: 'queryInput',
-        txtArea: 'queryText',
-        error: 'error',
+        primaryBtn: "btn-edit btn--white queryButtonPrimary",
+        deleteBtn: "queryButtonDelete",
+        rule: "rule",
+        condition: "condition",
+        select: "querySelect",
+        input: "queryInput",
+        txtArea: "queryText",
+        error: "error"
       };
   return defConfig;
 }
 
-function fillDefaultButtonsText (buttonsText) {
+function fillDefaultButtonsText(buttonsText) {
   const defBtnText = buttonsText || {};
-  defBtnText.addRule = defBtnText.addRule ? defBtnText.addRule : '+ Add Rule';
-  defBtnText.addGroup = defBtnText.addGroup ? defBtnText.addGroup : '+ Add Group';
-  defBtnText.clear = defBtnText.clear ? defBtnText.clear : 'Clear';
-  defBtnText.delete = defBtnText.delete ? defBtnText.delete : 'Delete';
+  defBtnText.addRule = defBtnText.addRule
+    ? defBtnText.addRule
+    : "+ Add Condition";
+  defBtnText.addGroup = defBtnText.addGroup
+    ? defBtnText.addGroup
+    : "+ Add Group";
+  defBtnText.clear = defBtnText.clear ? defBtnText.clear : "Clear";
+  defBtnText.delete = defBtnText.delete ? defBtnText.delete : "Delete";
   return defBtnText;
 }
 
 class TwoWayQuerybuilder extends React.Component {
-  constructor (props) {
-    super (props);
-    this.config = buildDefaultConfig (props.config);
-    this.buttonsText = fillDefaultButtonsText (props.buttonsText);
+  constructor(props) {
+    super(props);
+    this.config = buildDefaultConfig(props.config);
+    this.buttonsText = fillDefaultButtonsText(props.buttonsText);
     const defaultData = {
       combinator: this.config.combinators[0].combinator,
-      nodeName: '1',
-      rules: [],
+      nodeName: "1",
+      rules: []
     };
     this.state = {
-      data: this.config.query === '()'
-        ? defaultData
-        : QueryParser.parseToData (this.config.query, this.config),
-      query: this.config.query === '()' ? null : this.config.query,
+      data:
+        this.config.query === "()"
+          ? defaultData
+          : QueryParser.parseToData(this.config.query, this.config),
+      query: this.config.query === "()" ? null : this.config.query
     };
-    this.handleChange = this.handleChange.bind (this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange (data) {
+  handleChange(data) {
     const queryObj = {};
     queryObj.data = data;
-    queryObj.query = QueryParser.parseToQuery (data);
-    this.setState ({query: queryObj.query});
+    queryObj.query = QueryParser.parseToQuery(data);
+    this.setState({ query: queryObj.query });
     if (this.props.onChange) {
-      this.props.onChange (queryObj);
+      this.props.onChange(queryObj);
     }
   }
 
-  render () {
+  render() {
     return (
       <div>
         <Condition
@@ -99,11 +104,11 @@ TwoWayQuerybuilder.propTypes = {
   buttonsText: PropTypes.object,
   config: PropTypes.object,
   fields: PropTypes.array.isRequired,
-  onChange: PropTypes.func,
+  onChange: PropTypes.func
 };
 
 TwoWayQuerybuilder.defaultProps = {
-  buttonsText: {},
+  buttonsText: {}
 };
 
 export default TwoWayQuerybuilder;
