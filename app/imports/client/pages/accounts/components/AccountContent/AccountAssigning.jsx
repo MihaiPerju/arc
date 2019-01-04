@@ -12,6 +12,7 @@ import WorkQueueService from "./../../services/WorkQueueService";
 import Loading from "/imports/client/lib/ui/Loading";
 import PagerService from "/imports/client/lib/PagerService";
 import NewAction from "./NewAction";
+import ParamsService from "/imports/client/lib/ParamsService";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -28,20 +29,34 @@ export default class AccountActioning extends React.Component {
   }
 
   componentWillMount() {
-    const { accountIds } = this.props;
-    Meteor.call("workQueues.get", { accountIds }, (err, res) => {
-      if (!err) {
-        const workQueueOptions = WorkQueueService.createOptions(res);
-        this.setState({
-          workQueueOptions,
-          loadingWorkQueues: false
-        });
-      }
-    });
+    const { accountIds, assignToUser, assignAction } = this.props;
+    if(!this.props.bulkAssign) {
+      Meteor.call("workQueues.get", { accountIds }, (err, res) => {
+        if (!err) {
+          const workQueueOptions = WorkQueueService.createOptions(res);
+          this.setState({
+            workQueueOptions,
+            loadingWorkQueues: false
+          });
+        }
+      }); 
+    }
+    
+    if(assignToUser || assignAction) {  this.setState({ loadingWorkQueues: false }); }
 
     this.props.bulkAssign
       ? this.setState({ userOptions: [] })
       : this.setState({ userOptions: this.props.options });
+  }
+
+  componentWillReceiveProps(newProps) {
+    if(newProps.workQueueOption) {
+      const workQueueOptions = WorkQueueService.createOptions(newProps.workQueueOption);
+      this.setState({
+        workQueueOptions: workQueueOptions,
+        loadingWorkQueues: false
+      });
+    }
   }
 
   closeDialog = () => {
@@ -52,7 +67,7 @@ export default class AccountActioning extends React.Component {
   assignToUser = ({ assigneeId }) => {
     const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
-    const params = bulkAssign ? PagerService.getParams().filters : false;
+    const params = bulkAssign ? ParamsService.getAccountParams() : false;
     Meteor.call(
       "account.assignUser.bulk",
       { accountIds, assigneeId, params },
@@ -71,7 +86,7 @@ export default class AccountActioning extends React.Component {
   assignToWorkQueue = ({ workQueueId }) => {
     const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
-    const params = bulkAssign ? PagerService.getParams().filters : false;
+    const params = bulkAssign ? ParamsService.getAccountParams() : false;
     Meteor.call(
       "account.assignWorkQueue.bulk",
       { accountIds, workQueueId, params },
@@ -220,7 +235,7 @@ export default class AccountActioning extends React.Component {
               account={false}
               accountIds={accountIds}
               bulkAssign={bulkAssign}
-              params={bulkAssign ? PagerService.getParams().filters : false}
+              params={bulkAssign ? ParamsService.getAccountParams() : false}
               bulkOption={true}
             />
           </div>

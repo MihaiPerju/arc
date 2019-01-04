@@ -18,6 +18,8 @@ import QueryBuilder from "/imports/api/general/server/QueryBuilder";
 import actionTypesEnum from "/imports/api/accounts/enums/actionTypesEnum";
 import AccountsService from "/imports/api/accounts/server/services/AccountsService";
 import StateEnum from "/imports/api/accounts/enums/states";
+import WorkQueues from "/imports/api/workQueues/collection";
+import WorkQueueService from "/imports/api/workQueues/server/services/WorkQueueService";
 
 Meteor.methods({
   "accounts.get"(params) {
@@ -67,8 +69,11 @@ Meteor.methods({
 
   "account.assignUser.bulk"({ accountIds, assigneeId, params }) {
     if (params) {
+      let userId = this.userId;
+      const queryParams = QueryBuilder.getAccountParams(params, userId);
+      let filters = queryParams.filters;
       accountIds = [];
-      let accountIdList = Accounts.find(params).fetch();
+      let accountIdList = Accounts.find(filters).fetch();
       _.map(accountIdList, account => {
         accountIds.push(account._id);
       });
@@ -111,8 +116,11 @@ Meteor.methods({
   },
   "account.assignWorkQueue.bulk"({ accountIds, workQueueId, params }) {
     if (params) {
+      let userId = this.userId;
+      const queryParams = QueryBuilder.getAccountParams(params, userId);
+      let filters = queryParams.filters;
       accountIds = [];
-      let accountIdList = Accounts.find(params).fetch();
+      let accountIdList = Accounts.find(filters).fetch();
       _.map(accountIdList, account => {
         accountIds.push(account._id);
       });
@@ -135,6 +143,25 @@ Meteor.methods({
         }
       );
     }
+  },
+
+  "account.workQueueList"(params) {
+   
+      let userId = this.userId;
+      const queryParams = QueryBuilder.getAccountParams(params, userId);
+      let filters = queryParams.filters;
+      let accountIds = [];
+      let accountIdList = Accounts.find(filters).fetch();
+      _.map(accountIdList, account => {
+        accountIds.push(account._id);
+      });
+
+      if(accountIds.length > 0 ) {
+        let data = {};
+        data.accountIds = accountIds;
+        let filters = WorkQueueService.filter(data);
+        return WorkQueues.find(filters).fetch();
+      }
   },
 
   "account.attachment.remove"(_id, attachmentId) {
@@ -355,8 +382,11 @@ Meteor.methods({
     );
   },
 
-  "account.facility"(params) {
-    let accounts = Accounts.find(params).fetch();
+  "account.facility"(params) {  
+    let userId = this.userId;
+    const queryParams = QueryBuilder.getAccountParams(params, userId);
+    let filters = queryParams.filters;
+    let accounts = Accounts.find(filters).fetch();
     let facilityList = [];
     let facilityObj = [];
     _.map(accounts, account => {
@@ -409,10 +439,13 @@ Meteor.methods({
     accounts
   ) {
     let accountIdList = [];
+    let userId = this.userId;
     if (accounts) {
       accountIdList = Accounts.find({ _id: { $in: accounts } }).fetch();
     } else {
-      accountIdList = Accounts.find(params).fetch();
+      const queryParams = QueryBuilder.getAccountParams(params, userId);
+      let filters = queryParams.filters;
+      accountIdList = Accounts.find(filters).fetch();
     }
 
     _.map(accountIdList, account => {
@@ -426,7 +459,7 @@ Meteor.methods({
         data.addedBy = `${account.assignee.profile.firstName} ${
           account.assignee.profile.lastName
         }`;
-      } else if (account.workQueueId) {
+      } else if (account.workQueueId && account.tag) {
         data.addedBy = account.tag.name;
       }
 
