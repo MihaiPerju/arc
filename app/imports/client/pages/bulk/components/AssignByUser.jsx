@@ -31,15 +31,31 @@ export default class AssignByUser extends Component {
   onSubmit(params) { }
 
   getFacilityByAccount = () => {
-    Meteor.call("account.facility", {}, (err, facilitiesOption) => {
+     Meteor.call("facilities.get", (err, facilitiesOption) => {
       if (!err) {
-        this.setState({
-          facilitiesOption
-        });
+
+        if (facilitiesOption.length > 0) {
+          let facilityObj = [];
+          _.map(facilitiesOption, facilityDetail => {
+            let res = {
+              label: facilityDetail.name,
+              value: facilityDetail._id
+            };
+            facilityObj.push(res);
+          });
+          this.setState({
+            facilitiesOption : facilityObj
+          });
+        } else {
+          this.setState({
+            facilitiesOption
+          });
+        }
+
       } else {
         Notifier.error(err.reason);
       }
-    });
+    }); 
   };
 
   onHandleChange(field, value) {

@@ -54,7 +54,7 @@ createRoute(
             filePath: fileName,
             userId: user._id,
             clientId: postData.clientId,
-            actionId: JSON.parse(postData.actionId),
+            actionId: postData.actionId,
             assignType: postData.assignType
           };
           break;
