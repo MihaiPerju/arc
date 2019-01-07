@@ -125,7 +125,6 @@ export default class AccountListContainer extends Pager {
     Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
       if (!err) {
         this.setState({
-          assignUser: true,
           facilitiesOption
         });
       } else {
@@ -345,6 +344,7 @@ export default class AccountListContainer extends Pager {
       const accounts = this.getAccounts(this.state.accountsSelected);
       this.getUserOptions(accounts);
     }
+    this.setState({  assignUser: true });
   };
   closeAssignUser = () => {
     this.setState({

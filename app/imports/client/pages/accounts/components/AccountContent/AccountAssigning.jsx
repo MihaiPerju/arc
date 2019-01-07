@@ -24,12 +24,13 @@ export default class AccountActioning extends React.Component {
       workQueueOptions: [],
       loadingWorkQueues: true,
       isDisabled: false,
-      userOptions: false
+      userOptions: false,
+      loadingUserOptions: false
     };
   }
 
   componentWillMount() {
-    const { accountIds, assignToUser, assignAction } = this.props;
+    const { accountIds, assignToUser, assignAction, facilitiesOption } = this.props;
     if(!this.props.bulkAssign) {
       Meteor.call("workQueues.get", { accountIds }, (err, res) => {
         if (!err) {
@@ -41,8 +42,8 @@ export default class AccountActioning extends React.Component {
         }
       }); 
     }
-    
-    if(assignToUser || assignAction) {  this.setState({ loadingWorkQueues: false }); }
+
+    if((assignToUser && facilitiesOption) || assignAction) {  this.setState({ loadingWorkQueues: false }); }
 
     this.props.bulkAssign
       ? this.setState({ userOptions: [] })
@@ -56,6 +57,9 @@ export default class AccountActioning extends React.Component {
         workQueueOptions: workQueueOptions,
         loadingWorkQueues: false
       });
+    }
+    if(newProps.assignToUser && newProps.facilitiesOption) { 
+      this.setState({ loadingWorkQueues: false });
     }
   }
 
@@ -105,9 +109,10 @@ export default class AccountActioning extends React.Component {
 
   onHandleChange(field, value) {
     if (field == "facilityId") {
+      this.setState({ loadingUserOptions: true });
       Meteor.call("account.facility.user", value, (err, userOptions) => {
         if (!err) {
-          this.setState({ userOptions });
+          this.setState({ userOptions, loadingUserOptions: false });
         } else {
           this.setState({ userOptions: [] });
         }
@@ -130,7 +135,8 @@ export default class AccountActioning extends React.Component {
       workQueueOptions,
       loadingWorkQueues,
       isDisabled,
-      userOptions
+      userOptions,
+      loadingUserOptions
     } = this.state;
 
     if (loadingWorkQueues) {
@@ -159,6 +165,7 @@ export default class AccountActioning extends React.Component {
                 <ErrorField name="facilityId" />
               </div>
             )}
+            {loadingUserOptions ? <Loading /> :
             <div className="form-wrapper select-item">
               <SelectField
                 labelHidden={true}
@@ -168,6 +175,7 @@ export default class AccountActioning extends React.Component {
               />
               <ErrorField name="assigneeId" />
             </div>
+            }
             <div className="btn-group">
               <button className="btn-cancel" onClick={this.closeDialog}>
                 Cancel
