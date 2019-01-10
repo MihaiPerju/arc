@@ -37,7 +37,8 @@ export default class AccountListContainer extends Pager {
       sortOption: false,
       assignActions: false,
       userOptions: [],
-      loadingLockBreak: false
+      loadingLockBreak: false,
+      workQueueOption: false
     };
 
     this.method = "accounts.count";
@@ -119,13 +120,27 @@ export default class AccountListContainer extends Pager {
 
   getFacilityByAccount = () => {
     const queryParams =
-      ParamsService.getParams() && ParamsService.getParams().filters;
+      ParamsService.getAccountParams();
     //get facility based on account number
     Meteor.call("account.facility", queryParams, (err, facilitiesOption) => {
       if (!err) {
         this.setState({
-          assignUser: true,
           facilitiesOption
+        });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
+  };
+
+  getWorkQueueByAccount = () => {
+    const queryParams =
+      ParamsService.getAccountParams();
+    //get facility based on account number
+    Meteor.call("account.workQueueList", queryParams, (err, workQueueOption) => {
+      if (!err) { 
+        this.setState({
+          workQueueOption
         });
       } else {
         Notifier.error(err.reason);
@@ -329,6 +344,7 @@ export default class AccountListContainer extends Pager {
       const accounts = this.getAccounts(this.state.accountsSelected);
       this.getUserOptions(accounts);
     }
+    this.setState({  assignUser: true });
   };
   closeAssignUser = () => {
     this.setState({
@@ -338,6 +354,9 @@ export default class AccountListContainer extends Pager {
   };
 
   assignToWorkQueue = () => {
+    if (this.state.bulkAssign) {
+      this.getWorkQueueByAccount();
+    } 
     this.setState({
       assignWQ: true
     });
@@ -520,7 +539,8 @@ export default class AccountListContainer extends Pager {
       currentRouteState,
       assignActions,
       userOptions,
-      loadingLockBreak
+      loadingLockBreak,
+      workQueueOption
     } = this.state;
     const options = this.getData(accounts);
     const icons = [
@@ -563,6 +583,7 @@ export default class AccountListContainer extends Pager {
               uncheckAccountList={this.uncheckAccountList}
               bulkAssign={bulkAssign}
               facilitiesOption={facilitiesOption}
+              workQueueOption={false}
             />
           )}
           {assignWQ && (
@@ -577,6 +598,7 @@ export default class AccountListContainer extends Pager {
               uncheckAccountList={this.uncheckAccountList}
               bulkAssign={bulkAssign}
               facilitiesOption={false}
+              workQueueOption={workQueueOption}
             />
           )}
           {assignActions && (
@@ -590,6 +612,7 @@ export default class AccountListContainer extends Pager {
               uncheckAccountList={this.uncheckAccountList}
               bulkAssign={bulkAssign}
               facilitiesOption={false}
+              workQueueOption={false}
             />
           )}
 

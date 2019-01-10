@@ -62,7 +62,7 @@ export default new SimpleSchema({
     optional: true
   },
   actionId: {
-    type: Object,
+    type: String,
     blackbox: true,
     optional: true
   },

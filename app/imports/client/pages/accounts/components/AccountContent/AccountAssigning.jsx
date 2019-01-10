@@ -12,6 +12,7 @@ import WorkQueueService from "./../../services/WorkQueueService";
 import Loading from "/imports/client/lib/ui/Loading";
 import PagerService from "/imports/client/lib/PagerService";
 import NewAction from "./NewAction";
+import ParamsService from "/imports/client/lib/ParamsService";
 
 export default class AccountActioning extends React.Component {
   constructor() {
@@ -23,25 +24,43 @@ export default class AccountActioning extends React.Component {
       workQueueOptions: [],
       loadingWorkQueues: true,
       isDisabled: false,
-      userOptions: false
+      userOptions: false,
+      loadingUserOptions: false
     };
   }
 
   componentWillMount() {
-    const { accountIds } = this.props;
-    Meteor.call("workQueues.get", { accountIds }, (err, res) => {
-      if (!err) {
-        const workQueueOptions = WorkQueueService.createOptions(res);
-        this.setState({
-          workQueueOptions,
-          loadingWorkQueues: false
-        });
-      }
-    });
+    const { accountIds, assignToUser, assignAction, facilitiesOption } = this.props;
+    if(!this.props.bulkAssign) {
+      Meteor.call("workQueues.get", { accountIds }, (err, res) => {
+        if (!err) {
+          const workQueueOptions = WorkQueueService.createOptions(res);
+          this.setState({
+            workQueueOptions,
+            loadingWorkQueues: false
+          });
+        }
+      }); 
+    }
+
+    if((assignToUser && facilitiesOption) || assignAction) {  this.setState({ loadingWorkQueues: false }); }
 
     this.props.bulkAssign
       ? this.setState({ userOptions: [] })
       : this.setState({ userOptions: this.props.options });
+  }
+
+  componentWillReceiveProps(newProps) {
+    if(newProps.workQueueOption) {
+      const workQueueOptions = WorkQueueService.createOptions(newProps.workQueueOption);
+      this.setState({
+        workQueueOptions: workQueueOptions,
+        loadingWorkQueues: false
+      });
+    }
+    if(newProps.assignToUser && newProps.facilitiesOption) { 
+      this.setState({ loadingWorkQueues: false });
+    }
   }
 
   closeDialog = () => {
@@ -52,7 +71,7 @@ export default class AccountActioning extends React.Component {
   assignToUser = ({ assigneeId }) => {
     const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
-    const params = bulkAssign ? PagerService.getParams().filters : false;
+    const params = bulkAssign ? ParamsService.getAccountParams() : false;
     Meteor.call(
       "account.assignUser.bulk",
       { accountIds, assigneeId, params },
@@ -71,7 +90,7 @@ export default class AccountActioning extends React.Component {
   assignToWorkQueue = ({ workQueueId }) => {
     const { accountIds, uncheckAccountList, bulkAssign } = this.props;
     this.setState({ isDisabled: true });
-    const params = bulkAssign ? PagerService.getParams().filters : false;
+    const params = bulkAssign ? ParamsService.getAccountParams() : false;
     Meteor.call(
       "account.assignWorkQueue.bulk",
       { accountIds, workQueueId, params },
@@ -90,9 +109,10 @@ export default class AccountActioning extends React.Component {
 
   onHandleChange(field, value) {
     if (field == "facilityId") {
+      this.setState({ loadingUserOptions: true });
       Meteor.call("account.facility.user", value, (err, userOptions) => {
         if (!err) {
-          this.setState({ userOptions });
+          this.setState({ userOptions, loadingUserOptions: false });
         } else {
           this.setState({ userOptions: [] });
         }
@@ -115,7 +135,8 @@ export default class AccountActioning extends React.Component {
       workQueueOptions,
       loadingWorkQueues,
       isDisabled,
-      userOptions
+      userOptions,
+      loadingUserOptions
     } = this.state;
 
     if (loadingWorkQueues) {
@@ -144,6 +165,7 @@ export default class AccountActioning extends React.Component {
                 <ErrorField name="facilityId" />
               </div>
             )}
+            {loadingUserOptions ? <Loading /> :
             <div className="form-wrapper select-item">
               <SelectField
                 labelHidden={true}
@@ -153,6 +175,7 @@ export default class AccountActioning extends React.Component {
               />
               <ErrorField name="assigneeId" />
             </div>
+            }
             <div className="btn-group">
               <button className="btn-cancel" onClick={this.closeDialog}>
                 Cancel
@@ -220,7 +243,7 @@ export default class AccountActioning extends React.Component {
               account={false}
               accountIds={accountIds}
               bulkAssign={bulkAssign}
-              params={bulkAssign ? PagerService.getParams().filters : false}
+              params={bulkAssign ? ParamsService.getAccountParams() : false}
               bulkOption={true}
             />
           </div>

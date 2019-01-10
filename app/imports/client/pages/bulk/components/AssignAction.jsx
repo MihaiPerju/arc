@@ -224,19 +224,20 @@ export default class AssignAction extends Component {
       selectedActionId,
       reasonCodes,
       customFieldValue,
-      clientId
+      clientId,
+      reasonCode
     } = this.state;
 
     let reqParams = {
       assignType: pages.ASSIGN_ACTION,
-      actionId: JSON.stringify(selectedActionId),
+      actionId: selectedActionId,
       clientId: clientId
     };
     if (customFieldValue) {
       reqParams.customFields = JSON.stringify(customFieldValue);
     }
-    if (reasonCodes && reasonCodes.length != 0)
-      reqParams.reasonCodes = reasonCodes;
+    if (reasonCode && reasonCode.length != 0)
+      reqParams.reasonCodes = reasonCode;
 
     let retParams = {
       params: reqParams,
