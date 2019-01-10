@@ -158,14 +158,14 @@ export default class FacilityCreate extends Component {
                 />
                 <ErrorField name="state" />
               </div>
-              <div className="form-wrapper">
+              {/* <div className="form-wrapper">
                 <AutoField
                   labelHidden={true}
                   placeholder="Sftp state"
                   name="sftpPath"
                 />
                 <ErrorField name="sftpPath" />
-              </div>
+              </div> */}
               <div className="form-wrapper">
                 <AutoField
                   labelHidden={true}
