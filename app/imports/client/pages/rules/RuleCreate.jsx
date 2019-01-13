@@ -28,7 +28,7 @@ export default class RuleCreate extends React.Component {
       actionOptions: []
     };
   }
-
+ 
   componentWillMount() {
     this.getPriority();
   }

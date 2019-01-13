@@ -7,5 +7,8 @@ export default new SimpleSchema({
   },
   clientId: {
     type: String
+  },
+  facilityId: {
+    type: String
   }
 });
