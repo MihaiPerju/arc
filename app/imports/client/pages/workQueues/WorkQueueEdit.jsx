@@ -7,6 +7,7 @@ import {
 } from "/imports/ui/forms";
 import WorkQueuesSchema from "/imports/api/workQueues/schemas/schema";
 import Notifier from "/imports/client/lib/Notifier";
+import SelectSimple from "/imports/client/lib/uniforms/SelectSimple.jsx";
 
 export default class WorkQueueEdit extends React.Component {
   constructor() {
@@ -16,6 +17,20 @@ export default class WorkQueueEdit extends React.Component {
       error: null,
       isDisabled: false
     };
+  }
+
+  componentWillMount() {
+    let clientId = FlowRouter._current.params.clientId;
+    Meteor.call("facilities.getNames", { clientId }, (err, facilities) => {
+      if (!err) {
+        let facilityOptions = facilities.map(facility => {
+          return { value: facility._id, label: facility.name };
+        });
+        this.setState({ facilityOptions });
+      } else {
+        Notifier.error(err.reason);
+      }
+    });
   }
 
   onSubmit(formData) {
@@ -44,7 +59,7 @@ export default class WorkQueueEdit extends React.Component {
 
   render() {
     const { workQueue } = this.props;
-    const { isDisabled } = this.state;
+    const { isDisabled, facilityOptions } = this.state;
     const clientId = FlowRouter.current().params.clientId;
 
     return (
@@ -89,6 +104,17 @@ export default class WorkQueueEdit extends React.Component {
               <div className="form-wrapper">
                 <AutoField labelHidden={true} placeholder="Name" name="name" />
                 <ErrorField name="name" />
+              </div>
+              <div className="select-wrapper">
+                <div className="select-form">
+                  <SelectSimple
+                    labelHidden={true}
+                    placeholder="Select Facility"
+                    name="facilityId"
+                    options={facilityOptions}
+                  />
+                  <ErrorField name="facilityId" />
+                </div>
               </div>
               <HiddenField value={clientId} name="clientId" />
             </AutoForm>

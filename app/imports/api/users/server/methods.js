@@ -76,18 +76,11 @@ Meteor.methods({
     }).fetch();
   },
 
-  "reps.getForWorkQueue"(clientId) {
+  "reps.getForWorkQueue"(facilityId) {
     //Get facilities by clientId
     let facilityProjection = { fields: { allowedUsers: 1 } };
-    let facilities = Facilities.find({ clientId }, facilityProjection).fetch();
-    let userIds = [];
-
-    //Get userIds that are allowed at all facilities
-    for (let facility of facilities) {
-      if (facility.allowedUsers) {
-        userIds = userIds.concat(facility.allowedUsers);
-      }
-    }
+    let facility = Facilities.findOne({ _id: facilityId }, facilityProjection);
+    let userIds = facility.allowedUsers;
 
     //Get the users that are allowed at facility level
     let userProjection = { fields: { profile: 1, roles: 1 } };

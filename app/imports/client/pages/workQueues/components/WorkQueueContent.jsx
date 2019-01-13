@@ -27,14 +27,14 @@ export default class WorkQueueContent extends Component {
     Meteor.call("workQueue.getOne", currentWorkQueue, (err, workQueue) => {
       if (!err) {
         this.setState({ workQueue });
-      } else {
-        Notifier.error(err.reason);
-      }
-    });
-    const clientId = FlowRouter.current().params.clientId;
-    Meteor.call("reps.getForWorkQueue", clientId, (err, users) => {
-      if (!err) {
-        this.setState({ users });
+        let { facilityId } = workQueue;
+        Meteor.call("reps.getForWorkQueue", facilityId, (err, users) => {
+          if (!err) {
+            this.setState({ users });
+          } else {
+            Notifier.error(err.reason);
+          }
+        });
       } else {
         Notifier.error(err.reason);
       }
