@@ -227,7 +227,7 @@ export default class ReportEdit extends React.Component {
             >
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   placeholder="Report name"
                   name="name"
                 />
@@ -235,7 +235,7 @@ export default class ReportEdit extends React.Component {
               </div>
               <div className="form-wrapper">
                 <SelectField
-                  labelHidden={true}
+                  
                   placeholder="Select type"
                   name="type"
                   options={options}

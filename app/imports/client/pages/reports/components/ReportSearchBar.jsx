@@ -221,7 +221,7 @@ export default class ReportSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="name"
                   placeholder="Search"
                 />
@@ -247,7 +247,7 @@ export default class ReportSearchBar extends Component {
                         <div className="select-wrapper">
                           <div className="form-group flex--helper form-group__pseudo--3">
                             <AutoField
-                              labelHidden={true}
+                              
                               name="type"
                               options={typeOptions}
                               placeholder="Type"

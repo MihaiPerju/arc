@@ -158,7 +158,7 @@ export default class AccountActioning extends React.Component {
               <div className="form-wrapper select-item">
                 <SelectField
                   name="facilityId"
-                  labelHidden={true}
+                  // 
                   options={facilitiesOption}
                   placeholder="Select Facility"
                 />
@@ -168,7 +168,7 @@ export default class AccountActioning extends React.Component {
             {loadingUserOptions ? <Loading /> :
             <div className="form-wrapper select-item">
               <SelectField
-                labelHidden={true}
+                // 
                 name="assigneeId"
                 placeholder="Select Users"
                 options={userOptions}
@@ -205,7 +205,7 @@ export default class AccountActioning extends React.Component {
           >
             <div className="form-wrapper select-item">
               <AutoField
-                labelHidden={true}
+                // 
                 name="workQueueId"
                 options={workQueueOptions}
               />
@@ -239,7 +239,7 @@ export default class AccountActioning extends React.Component {
               freezeAccount={false}
               closeRightPanel={false}
               hide={this.closeDialog}
-              labelHidden={true}
+              // 
               account={false}
               accountIds={accountIds}
               bulkAssign={bulkAssign}

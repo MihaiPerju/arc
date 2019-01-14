@@ -67,13 +67,13 @@ export default class CodeCreate extends Component {
                 <div className="error">{this.state.error}</div>
               )}
               <div className="form-wrapper">
-                <AutoField labelHidden={true} placeholder="Code" name="code" />
+                <AutoField  placeholder="Code" name="code" />
                 <ErrorField name="code" />
               </div>
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   placeholder="Action"
                   name="action"
                 />
@@ -83,7 +83,7 @@ export default class CodeCreate extends Component {
               <div className="select-group">
                 <div className="form-wrapper">
                   <AutoField
-                    labelHidden={true}
+                    
                     name="type"
                     initialValue={CodeEnum.CARC}
                   />
@@ -93,7 +93,7 @@ export default class CodeCreate extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   placeholder="Description"
                   name="description"
                 />
@@ -102,7 +102,7 @@ export default class CodeCreate extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   placeholder="Description short"
                   name="description_short"
                 />
@@ -111,7 +111,7 @@ export default class CodeCreate extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   placeholder="Denial Action"
                   name="denial_action"
                 />

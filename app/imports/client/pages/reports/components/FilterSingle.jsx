@@ -82,7 +82,7 @@ export default class FiltersSingle extends React.Component {
       return (
         <div className="select-wrapper m-t--0">
           <SelectMulti
-            labelHidden={true}
+            
             placeholder="Select filter"
             name={name}
             options={name === "state" ? stateOptions : substateOptions}
@@ -98,7 +98,7 @@ export default class FiltersSingle extends React.Component {
             <div className="input-datetime">
               <DateField
                 placeholder="Select start date"
-                labelHidden={true}
+                
                 name={`${name}Start`}
                 disabled={this.state.disableDateField}
               />
@@ -106,7 +106,7 @@ export default class FiltersSingle extends React.Component {
 
               <DateField
                 placeholder="Select finish date"
-                labelHidden={true}
+                
                 name={`${name}End`}
                 disabled={this.state.disableDateField}
               />
@@ -116,7 +116,7 @@ export default class FiltersSingle extends React.Component {
           <div className="float-right" style={{ paddingLeft: '20px' }}>
             <div className="select-wrapper border-style m-t--0">
               <SelectField
-                labelHidden={true}
+                
                 name={`${name}DateSpan`}
                 placeholder="Select Date Span"
                 options={this.state.dateSpanOptions}
@@ -134,14 +134,14 @@ export default class FiltersSingle extends React.Component {
       return (
         <div className="form-wrapper__i">
           <AutoField
-            labelHidden={true}
+            
             placeholder="Type minimum value"
             name={`${name}Start`}
           />
           <ErrorField name={`${name}Start`} />
 
           <AutoField
-            labelHidden={true}
+            
             placeholder="Type maximum value"
             name={`${name}End`}
           />
@@ -154,7 +154,7 @@ export default class FiltersSingle extends React.Component {
       return (
         <div className="check-group">
           <SelectField
-            labelHidden={true}
+            
             name={name}
             options={this.getOptions(name)}
           />
@@ -166,7 +166,7 @@ export default class FiltersSingle extends React.Component {
       <div>
         <div className="form-wrapper__i">
           <AutoField
-            labelHidden={true}
+            
             placeholder="Type your filter"
             name={name}
           />
@@ -174,7 +174,7 @@ export default class FiltersSingle extends React.Component {
         </div>
         <div className="select-wrapper">
           <AutoField
-            labelHidden={true}
+            
             placeholder="Select matching pattern"
             name={`${name}Match`}
           />

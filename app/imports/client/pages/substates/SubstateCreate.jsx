@@ -83,7 +83,7 @@ export default class SubstateCreate extends Component {
               <div className="select-group">
                 <div className="form-wrapper">
                   <SelectField
-                    labelHidden={true}
+                    
                     name="stateName"
                     placeholder="State"
                     options={states}
@@ -93,7 +93,7 @@ export default class SubstateCreate extends Component {
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   type="text"
                   placeholder="Substate name"
                   name="name"
@@ -102,7 +102,7 @@ export default class SubstateCreate extends Component {
               </div>
               <div className="form-wrapper">
                 <LongTextField
-                  labelHidden={true}
+                  
                   type="text"
                   placeholder="Description"
                   name="description"

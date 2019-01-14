@@ -143,7 +143,7 @@ export default class UserSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  // 
                   name="email"
                   placeholder="Search"
                 />

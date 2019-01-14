@@ -93,7 +93,7 @@ export default class Thresholds extends Component {
               <div className="select_label">Satisfactory :</div>
                 <div className="select-form border-style">
                   <SelectField
-                    labelHidden={true}
+                    
                     placeholder="Satisfactory"
                     label="Satisfactory"
                     name="satisfactory"
@@ -112,7 +112,7 @@ export default class Thresholds extends Component {
                 <div className="select_label">Unsatisfactory :</div>
                 <div className="select-form border-style">
                   <SelectField
-                    labelHidden={true}
+                    
                     placeholder="Unsatisfactory"
                     label="Unsatisfactory"
                     name="unsatisfactory"
@@ -131,7 +131,7 @@ export default class Thresholds extends Component {
                 <div className="select_label">Acceptance Ratio :</div>
                 <div className="select-form border-style">
                   <SelectField
-                    labelHidden={true}
+                    
                     placeholder="Acceptance Ratio"
                     label="Acceptance Ratio"
                     name="acceptanceRatio"

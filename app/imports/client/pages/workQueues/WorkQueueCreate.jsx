@@ -89,13 +89,13 @@ export default class WorkQueueCreate extends Component {
               ref="form"
             >
               <div className="form-wrapper">
-                <AutoField labelHidden={true} placeholder="Name" name="name" />
+                <AutoField placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
               <div className="select-wrapper">
                 <div className="select-form">
                   <SelectSimple
-                    labelHidden={true}
+                    
                     placeholder="Select Facility"
                     name="facilityId"
                     options={facilityOptions}

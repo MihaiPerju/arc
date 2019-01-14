@@ -98,7 +98,7 @@ export default class Root extends Component {
             >
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="smtp.serverAddress"
                   placeholder="Server Address"
                 />
@@ -107,7 +107,7 @@ export default class Root extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="smtp.port"
                   placeholder="Port"
                 />
@@ -117,7 +117,7 @@ export default class Root extends Component {
               <div className="select-wrapper">
                 <div className="select-form">
                   <SelectField
-                    labelHidden={true}
+                    
                     placeholder="SSL"
                     label="SSL"
                     name="smtp.ssl"
@@ -136,7 +136,7 @@ export default class Root extends Component {
                     placeholder="Authentication"
                     label="Authentication"
                     name="smtp.authentication"
-                    labelHidden={true}
+                    
                     allowedValues={[
                       "Authentication Account",
                       "Anonymous Account"
@@ -150,7 +150,7 @@ export default class Root extends Component {
                 <div>
                   <div className="form-wrapper">
                     <AutoField
-                      labelHidden={true}
+                      
                       name="smtp.username"
                       placeholder="Username"
                     />
@@ -159,7 +159,7 @@ export default class Root extends Component {
 
                   <div className="form-wrapper">
                     <AutoField
-                      labelHidden={true}
+                      
                       name="smtp.password"
                       placeholder="Password"
                       type="password"

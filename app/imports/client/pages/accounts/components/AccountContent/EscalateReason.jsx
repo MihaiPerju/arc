@@ -59,7 +59,7 @@ export default class EscalateReason extends Component {
             <div className="form-group">
               <AutoField
                 className="text-area"
-                labelHidden={true}
+                // 
                 placeholder="Type escalate reason..."
                 name="content"
               />

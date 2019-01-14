@@ -307,7 +307,7 @@ export default class Home extends React.Component {
                     <label className="dashboard-label">Clients</label>
                     <div className="m-t--5">
                       <AutoField
-                        labelHidden={true}
+                        
                         name="clientId"
                         options={clients}
                       />

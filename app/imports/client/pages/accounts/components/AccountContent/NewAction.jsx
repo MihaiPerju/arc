@@ -260,7 +260,7 @@ export default class NewAction extends Component {
               {reasonCodeOptions.length > 0 && (
                 <div className="select-group">
                   <SelectSimple
-                    labelHidden={true}
+                    
                     name="reasonCode"
                     options={reasonCodeOptions}
                   />

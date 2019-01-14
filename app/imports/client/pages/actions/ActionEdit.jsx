@@ -154,7 +154,7 @@ export default class ActionEdit extends React.Component {
                 )}
                 <div className="form-wrapper">
                   <AutoField
-                    labelHidden={true}
+                    // 
                     placeholder="Title"
                     name="title"
                   />
@@ -163,7 +163,7 @@ export default class ActionEdit extends React.Component {
 
                 <div className="form-wrapper">
                   <LongTextField
-                    labelHidden={true}
+                    
                     placeholder="Description"
                     name="description"
                   />
@@ -186,7 +186,7 @@ export default class ActionEdit extends React.Component {
                             RolesEnum.MANAGER
                           )}
                           placeholder="Substate"
-                          labelHidden={true}
+                          
                           name="substateId"
                           options={substatesOptions}
                         />
@@ -201,7 +201,7 @@ export default class ActionEdit extends React.Component {
                         <div className="form-wrapper">
                           <SelectField
                             placeholder="Select type"
-                            labelHidden={true}
+                            
                             options={inputTypesEnum}
                             name="type"
                           />
@@ -210,7 +210,7 @@ export default class ActionEdit extends React.Component {
 
                         <div className="form-wrapper">
                           <AutoField
-                            labelHidden={true}
+                            // 
                             name="label"
                             placeholder="label"
                           />
@@ -219,7 +219,7 @@ export default class ActionEdit extends React.Component {
 
                         <div className="form-wrapper">
                           <SelectField
-                            labelHidden={true}
+                            
                             name="requirement"
                             options={requirementOptions}
                             label="Mandatory"

@@ -313,7 +313,7 @@ export default class AssignAction extends Component {
                     <div className="select-form border-style">
                       <SelectField
                         name="clientId"
-                        labelHidden={true}
+                        
                         options={clientOptions}
                         placeholder="Select Client"
                         value={clientId}
@@ -327,7 +327,7 @@ export default class AssignAction extends Component {
                     <div className="select-form border-style">
                       <SelectSimple
                         name="actionId"
-                        labelHidden={true}
+                        
                         options={actionOptions}
                         placeholder="actions"
                       />
@@ -340,7 +340,7 @@ export default class AssignAction extends Component {
                       <div className="select_label">Reason Code :</div>
                       <div className="select-form border-style">
                         <SelectSimple
-                          labelHidden={true}
+                          
                           name="reasonCode"
                           options={reasonCodeOptions}
                           value={reasonCode}
@@ -373,7 +373,7 @@ export default class AssignAction extends Component {
               {/* reasonCodeOptions.length > 0 && (
                 <div className="select-group">
                   <SelectSimple
-                    labelHidden={true}
+                    
                     name="reasonCode"
                     options={reasonCodeOptions}
                   />

@@ -146,7 +146,7 @@ export default class RegionSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="regionName"
                   placeholder="Search"
                 />

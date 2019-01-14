@@ -107,7 +107,7 @@ export default class TagEdit extends React.Component {
               model={tag}
             >
               <div className="form-wrapper">
-                <AutoField labelHidden={true} placeholder="Name" name="name" />
+                <AutoField placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
 
@@ -116,7 +116,7 @@ export default class TagEdit extends React.Component {
                   <SelectMulti
                     className="form-select__multi select-tag__multi"
                     placeholder="Select modules"
-                    labelHidden={true}
+                    
                     name="entities"
                     options={options}
                   />

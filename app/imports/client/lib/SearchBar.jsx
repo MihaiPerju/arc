@@ -136,7 +136,7 @@ export default class SearchBar extends Component {
             >
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="clientName"
                   placeholder="Search"
                 />

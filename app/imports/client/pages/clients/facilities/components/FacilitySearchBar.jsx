@@ -199,7 +199,7 @@ export default class FacilitySearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="facilityName"
                   placeholder="Search"
                 />

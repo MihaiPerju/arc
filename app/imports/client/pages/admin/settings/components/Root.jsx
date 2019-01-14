@@ -77,7 +77,7 @@ export default class Root extends Component {
             >
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="root"
                   placeholder="Root Directory"
                 />

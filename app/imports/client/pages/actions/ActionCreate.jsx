@@ -110,7 +110,7 @@ export default class ActionCreate extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  // 
                   placeholder="Title"
                   name="title"
                 />
@@ -119,7 +119,7 @@ export default class ActionCreate extends Component {
 
               <div className="form-wrapper">
                 <LongTextField
-                  labelHidden={true}
+                  
                   placeholder="Description"
                   name="description"
                 />
@@ -139,7 +139,7 @@ export default class ActionCreate extends Component {
                   <div className="form-wrapper">
                     <SelectSimple
                       placeholder="Substate"
-                      labelHidden={true}
+                      
                       name="substateId"
                       options={substatesOptions}
                     />
@@ -154,7 +154,7 @@ export default class ActionCreate extends Component {
                     <div className="form-wrapper">
                       <SelectField
                         placeholder="Select type"
-                        labelHidden={true}
+                        
                         options={inputTypesEnum}
                         name="type"
                       />
@@ -162,7 +162,7 @@ export default class ActionCreate extends Component {
                     </div>
                     <div className="form-wrapper">
                       <AutoField
-                        labelHidden={true}
+                        // 
                         name="label"
                         placeholder="label"
                       />
@@ -170,7 +170,7 @@ export default class ActionCreate extends Component {
                     </div>
                     <div className="form-wrapper">
                       <SelectField
-                        labelHidden={true}
+                        
                         options={requirementOptions}
                         name="requirement"
                         label="Mandatory"

@@ -103,7 +103,7 @@ export default class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  // // 
                   placeholder="First name"
                   name="profile.firstName"
                 />
@@ -112,7 +112,7 @@ export default class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  // 
                   placeholder="Last name"
                   name="profile.lastName"
                 />
@@ -121,7 +121,7 @@ export default class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  // 
                   placeholder="Email"
                   name="email"
                 />
@@ -130,7 +130,7 @@ export default class EditUser extends Component {
 
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  // 
                   placeholder="Phone Number"
                   name="profile.phoneNumber"
                 />
@@ -139,7 +139,7 @@ export default class EditUser extends Component {
               {user && user.roles && user.roles[0] == RolesEnum.REP && (
                 <div className="form-wrapper">
                   <AutoField
-                    labelHidden={true}
+                    // 
                     placeholder="Goal"
                     name="profile.goal"
                   />

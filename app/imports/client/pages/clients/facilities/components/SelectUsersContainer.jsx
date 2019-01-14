@@ -45,7 +45,7 @@ export default class SelectUsersContainer extends React.Component {
       <div className="select-group">
         <div className="form-wrapper">
           <SelectMulti
-            labelHidden={true}
+            
             placeholder="Allowed Users"
             name="allowedUsers"
             options={users}

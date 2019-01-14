@@ -128,7 +128,7 @@ export default class WorkQueueSearchBar extends Component {
             <div className={searchClasses}>
               <div className="form-group">
                 <AutoField
-                  labelHidden={true}
+                  
                   name="workQueueName"
                   placeholder="Search"
                 />

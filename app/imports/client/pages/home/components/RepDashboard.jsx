@@ -378,7 +378,7 @@ export default class RepDashboard extends React.Component {
                   <div className="flex--helper form-group__pseudo full-width">
                     <div className="select-form full-width">
                       <SelectField
-                        labelHidden={true}
+                        
                         name="type"
                         options={actionTypes}
                         placeholder="Select Action Type"

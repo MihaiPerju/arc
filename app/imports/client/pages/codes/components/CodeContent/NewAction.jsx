@@ -55,7 +55,7 @@ export default class NewAction extends Component {
             <div className="select-row">
               <div className="select-group">
                 <SelectSimple
-                  labelHidden={true}
+                  
                   name="action"
                   options={actions}
                 />

@@ -91,7 +91,7 @@ export default class EditLetterTemplate extends React.Component {
             >
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   type="text"
                   placeholder="Letter name"
                   name="name"
@@ -100,7 +100,7 @@ export default class EditLetterTemplate extends React.Component {
               </div>
               <div className="form-wrapper">
                 <LongTextField
-                  labelHidden={true}
+                  
                   placeholder="Description"
                   name="description"
                 />
@@ -112,7 +112,7 @@ export default class EditLetterTemplate extends React.Component {
               <div className="select-group">
                 <div className="form-wrapper">
                   <SelectField
-                    labelHidden={true}
+                    
                     name="category"
                     placeholder="Category"
                     options={categories}

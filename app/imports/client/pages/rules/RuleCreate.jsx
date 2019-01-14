@@ -139,7 +139,7 @@ export default class RuleCreate extends React.Component {
               <div className="select-wrapper">
                 <div className="select-form">
                   <SelectSimple
-                    labelHidden={true}
+                    
                     placeholder="Select Facility"
                     name="facilityId"
                     options={facilityOptions}
@@ -152,7 +152,7 @@ export default class RuleCreate extends React.Component {
                 <div className="form-wrapper">
                   <AutoField
                     value={model.priority}
-                    labelHidden={true}
+                    
                     placeholder="Priority"
                     name="priority"
                   />
@@ -161,12 +161,12 @@ export default class RuleCreate extends React.Component {
               )}
 
               <div className="form-wrapper">
-                <AutoField labelHidden={true} placeholder="Name" name="name" />
+                <AutoField placeholder="Name" name="name" />
                 <ErrorField name="name" />
               </div>
               <div className="form-wrapper">
                 <AutoField
-                  labelHidden={true}
+                  
                   placeholder="Description"
                   name="description"
                 />
@@ -178,7 +178,7 @@ export default class RuleCreate extends React.Component {
               <div className="select-wrapper">
                 <div className="select-form">
                   <AutoField
-                    labelHidden={true}
+                    
                     options={triggerOptions}
                     placeholder="Select a Type of Update"
                     name="triggerType"
@@ -191,7 +191,7 @@ export default class RuleCreate extends React.Component {
                 <div className="select-wrapper">
                   <div className="select-form">
                     <SelectSimple
-                      labelHidden={true}
+                      
                       placeholder="Select Action"
                       options={actionOptions}
                       name="actionId"
@@ -205,7 +205,7 @@ export default class RuleCreate extends React.Component {
                 <div className="select-wrapper">
                   <div className="select-form">
                     <SelectSimple
-                      labelHidden={true}
+                      
                       placeholder="Select User"
                       name="assigneeId"
                       options={userOptions}
@@ -219,7 +219,7 @@ export default class RuleCreate extends React.Component {
                 <div className="select-wrapper">
                   <div className="select-form">
                     <SelectSimple
-                      labelHidden={true}
+                      
                       placeholder="Select Work Queue"
                       options={workQueueOptions}
                       name="workQueueId"
@@ -235,7 +235,7 @@ export default class RuleCreate extends React.Component {
                     <div className="select-form">
                       <AutoField
                         options={fieldsOptions}
-                        labelHidden={true}
+                        
                         placeholder="Select Field"
                         name="editField"
                       />
@@ -245,7 +245,7 @@ export default class RuleCreate extends React.Component {
                   <div className="select-wrapper">
                     <div className="select-form">
                       <AutoField
-                        labelHidden={true}
+                        
                         placeholder="New Value"
                         name="editValue"
                       />

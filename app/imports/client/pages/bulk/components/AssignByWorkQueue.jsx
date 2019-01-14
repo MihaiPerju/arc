@@ -160,7 +160,7 @@ export default class AssignByWorkQueue extends Component {
                     <div className="select-form border-style">
                       <SelectField
                         name="clientId"
-                        labelHidden={true}
+                        
                         options={clientOptions}
                         placeholder="Select Client"
                         value={clientId}
@@ -173,7 +173,7 @@ export default class AssignByWorkQueue extends Component {
                     <div className="select-form border-style">
                       <SelectField
                         name="workQueueId"
-                        labelHidden={true}
+                        
                         options={workQueueOptions}
                         placeholder="Select Group"
                         value={workQueueId}

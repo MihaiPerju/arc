@@ -104,7 +104,7 @@ export default class TagContentDescription extends Component {
                 <SelectMulti
                   className="form-select__multi"
                   placeholder="Select Users"
-                  labelHidden={true}
+                  
                   name="userIds"
                   options={options}
                 />

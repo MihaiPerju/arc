@@ -183,7 +183,7 @@ export default class ClientContentHeader extends Component {
               <div className="select-group">
                 <div className="form-wrapper">
                   <SelectMulti
-                    labelHidden={true}
+                    
                     placeholder="Managers"
                     name="managerIds"
                     options={managerIdsOptions}

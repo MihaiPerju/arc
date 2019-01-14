@@ -147,7 +147,7 @@ export default class AssignByUser extends Component {
                   <div className="select_label">Select Facility :</div>
                   <div className="select-form border-style">
                     <SelectField
-                      labelHidden={true}
+                      
                       name="facilityId"
                       placeholder="Select Facility"
                       options={facilitiesOption}
@@ -161,7 +161,7 @@ export default class AssignByUser extends Component {
                   <div className="select_label">Select Users :</div>
                   <div className="select-form border-style">
                     <SelectField
-                      labelHidden={true}
+                      
                       name="assigneeId"
                       placeholder="Select Users"
                       options={userOptions}
